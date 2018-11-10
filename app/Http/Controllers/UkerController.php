@@ -13,8 +13,8 @@ class UkerController extends Controller
      */
     public function index()
     {
-        $models=\App\UnitKerja::all();
-        return view('index',compact('UnitKerjas'));
+        $datas = \App\UnitKerja::all();
+        return view('index',compact('datas'));
     }
 
     /**
@@ -36,14 +36,14 @@ class UkerController extends Controller
     public function store(Request $request)
     {
         //
-        $models= new \App\UnitKerja;
-        $models->kode=$request->get('kode');
-        $models->nama=$request->get('nama');
-        $models->created_by=1;
-        $models->updated_by=1;
-        $models->save();
+        $model= new \App\UnitKerja;
+        $model->kode=$request->get('kode');
+        $model->nama=$request->get('nama');
+        $model->created_by=1;
+        $model->updated_by=1;
+        $model->save();
         
-        return redirect('UnitKerjas')->with('success', 'Information has been added');
+        return redirect('uker')->with('success', 'Information has been added');
     }
 
     /**
@@ -66,7 +66,7 @@ class UkerController extends Controller
     public function edit($id)
     {
         $model = \App\UnitKerja::find($id);
-        return view('edit',compact('UnitKerja','id'));
+        return view('edit',compact('model','id'));
     }
 
     /**
@@ -79,12 +79,12 @@ class UkerController extends Controller
     public function update(Request $request, $id)
     {
         $model= \App\UnitKerja::find($id);
-        $model->name=$request->get('name');
-        $model->email=$request->get('email');
-        $model->number=$request->get('number');
-        $model->office=$request->get('office');
+        $model->kode=$request->get('kode');
+        $model->nama=$request->get('nama');
+        $model->created_by=1;
+        $model->updated_by=1;
         $model->save();
-        return redirect('UnitKerjas');
+        return redirect('uker');
     }
 
     /**
@@ -97,6 +97,6 @@ class UkerController extends Controller
     {
         $model = \App\UnitKerja::find($id);
         $model->delete();
-        return redirect('UnitKerjas')->with('success','Information has been  deleted');
+        return redirect('uker')->with('success','Information has been  deleted');
     }
 }

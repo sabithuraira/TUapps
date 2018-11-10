@@ -8,42 +8,24 @@
   <body>
     <div class="container">
       <h2>Edit A Form</h2><br  />
-        <form method="post" action="{{action('PassportController@update', $id)}}">
+        <form method="post" action="{{action('UkerController@update', $id)}}">
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
           <div class="col-md-4"></div>
           <div class="form-group col-md-4">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" value="{{$passport->name}}">
+            <label for="kode">Kode:</label>
+            <input type="text" class="form-control" name="kode" value="{{$model->kode}}">
           </div>
         </div>
         <div class="row">
           <div class="col-md-4"></div>
             <div class="form-group col-md-4">
-              <label for="email">Email</label>
-              <input type="text" class="form-control" name="email" value="{{$passport->email}}">
+              <label for="nama">Nama</label>
+              <input type="text" class="form-control" name="nama" value="{{$model->nama}}">
             </div>
           </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-              <label for="number">Phone Number:</label>
-              <input type="text" class="form-control" name="number" value="{{$passport->number}}">
-            </div>
-          </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-            <div class="form-group col-md-4" style="margin-left:38px">
-                <lable>Passport Office</lable>
-                <select name="office">
-                  <option value="Mumbai"  @if($passport->office=="Mumbai") selected @endif>Mumbai</option>
-                  <option value="Chennai"  @if($passport->office=="Chennai") selected @endif>Chennai</option>
-                  <option value="Delhi" @if($passport->office=="Delhi") selected @endif>Delhi</option>  
-                  <option value="Bangalore" @if($passport->office=="Bangalore") selected @endif>Bangalore</option>
-                </select>
-            </div>
-        </div>
+        
         <div class="row">
           <div class="col-md-4"></div>
           <div class="form-group col-md-4" style="margin-top:60px">

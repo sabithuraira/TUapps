@@ -14,55 +14,24 @@
   </head>
   <body>
     <div class="container">
-      <h2>Passport Appointment System</h2><br/>
+      <h2>Tambah Unit Kerja</h2><br/>
       <form method="post" action="{{url('uker')}}" enctype="multipart/form-data">
         @csrf
         <div class="row">
           <div class="col-md-4"></div>
           <div class="form-group col-md-4">
-            <label for="Name">Name:</label>
-            <input type="text" class="form-control" name="name">
+            <label for="Kode">Kode:</label>
+            <input type="text" class="form-control" name="kode">
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
             <div class="form-group col-md-4">
-              <label for="Email">Email:</label>
-              <input type="text" class="form-control" name="email">
-            </div>
-          </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-              <label for="Number">Phone Number:</label>
-              <input type="text" class="form-control" name="number">
-            </div>
-          </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <input type="file" name="filename">    
-         </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <strong>Date : </strong>  
-            <input class="date form-control"  type="text" id="datepicker" name="date">   
-         </div>
-        </div>
-         <div class="row">
-          <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-                <lable>Passport Office</lable>
-                <select name="office">
-                  <option value="Mumbai">Mumbai</option>
-                  <option value="Chennai">Chennai</option>
-                  <option value="Delhi">Delhi</option>  
-                  <option value="Bangalore">Bangalore</option>  
-                </select>
+              <label for="Nam">Nama:</label>
+              <input type="text" class="form-control" name="nama">
             </div>
         </div>
+         
         <div class="row">
           <div class="col-md-4"></div>
           <div class="form-group col-md-4" style="margin-top:60px">
