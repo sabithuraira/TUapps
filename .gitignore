@@ -14,3 +14,6 @@ yarn-error.log
 .env
 .phpunit.result.cache
 resources/assets
+public/assets
+public/lucid
+composer.phar
