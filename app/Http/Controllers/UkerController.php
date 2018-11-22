@@ -14,7 +14,7 @@ class UkerController extends Controller
     public function index()
     {
         $datas = \App\UnitKerja::all();
-        return view('index',compact('datas'));
+        return view('uker.index',compact('datas'));
     }
 
     /**
@@ -24,7 +24,7 @@ class UkerController extends Controller
      */
     public function create()
     {
-        return view('create');
+        return view('uker.create');
     }
 
     /**
@@ -66,7 +66,7 @@ class UkerController extends Controller
     public function edit($id)
     {
         $model = \App\UnitKerja::find($id);
-        return view('edit',compact('model','id'));
+        return view('uker.edit',compact('model','id'));
     }
 
     /**
