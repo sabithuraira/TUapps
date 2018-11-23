@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UkerRequest;
 
 class UkerController extends Controller
 {
@@ -30,12 +31,17 @@ class UkerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UkerRequest $request)
     {
-        //
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('uker/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
         $model= new \App\UnitKerja;
         $model->kode=$request->get('kode');
         $model->nama=$request->get('nama');

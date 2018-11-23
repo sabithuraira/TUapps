@@ -1,37 +1,36 @@
 @extends('main')
 
 @section('content')
-    <div class="container">
-      <h2>Tambah Unit Kerja</h2><br/>
-      <form method="post" action="{{url('uker')}}" enctype="multipart/form-data">
-        @csrf
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <label for="Kode">Kode:</label>
-            <input type="text" class="form-control" name="kode">
+<div class="row clearfix">
+  <div class="col-md-12">
+      <div class="card">
+          <div class="header">
+              <h2>Tambah Unit Kerja</h2>
           </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-              <label for="Nam">Nama:</label>
-              <input type="text" class="form-control" name="nama">
-            </div>
-        </div>
-         
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4" style="margin-top:60px">
-            <button type="submit" class="btn btn-success">Submit</button>
+          <div class="body">
+              <form method="post" action="{{url('uker')}}" enctype="multipart/form-data">
+              @csrf
+                  <div class="form-group">
+                      <label>Kode:</label>
+                      <input type="text" class="form-control {{($errors->first('kode') ? ' parsley-error' : '')}}" name="kode" value="{{ old('kode') }}" >
+                      @foreach ($errors->get('kode') as $msg)
+                          <p class="text-danger">{{ $msg }}</p>
+                      @endforeach
+                      
+                  </div>
+
+                  <div class="form-group">
+                      <label>Nama:</label>
+                      <input type="text" class="form-control {{($errors->first('nama') ? ' parsley-error' : '')}}" name="nama" value="{{ old('nama') }}" >
+                      @foreach ($errors->get('nama') as $msg)
+                          <p class="text-danger">{{ $msg }}</p>
+                      @endforeach
+                  </div>
+                  <br>
+                  <button type="submit" class="btn btn-primary">Simpan</button>
+              </form>
           </div>
-        </div>
-      </form>
-    </div>
-    <script type="text/javascript">  
-        $('#datepicker').datepicker({ 
-            autoclose: true,   
-            format: 'dd-mm-yyyy'  
-         });  
-    </script>
+      </div>
+  </div>
+</div>
 @endsection
