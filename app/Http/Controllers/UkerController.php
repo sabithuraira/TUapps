@@ -14,7 +14,8 @@ class UkerController extends Controller
      */
     public function index()
     {
-        $datas = \App\UnitKerja::all();
+        $datas = \App\UnitKerja::paginate(3);
+        $datas->withPath('uker');
         return view('uker.index',compact('datas'));
     }
 
@@ -82,8 +83,14 @@ class UkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UkerRequest $request, $id)
     {
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('uker/edit',$id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
         $model= \App\UnitKerja::find($id);
         $model->kode=$request->get('kode');
         $model->nama=$request->get('nama');

@@ -24,7 +24,7 @@ class UkerRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode' => 'required|max:255',
+            'kode' => 'required|unique:unit_kerjas|max:255',
             'nama' => 'required',
         ];
     }
@@ -33,6 +33,7 @@ class UkerRequest extends FormRequest
     {
         return [
             'kode.required' => ':attribute tidak boleh kosong',
+            'kode.unique' => ':attribute sudah ada',
             'nama.required' => ':attribute tidak boleh kosong',
         ];
     }
