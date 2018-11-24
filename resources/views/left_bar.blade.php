@@ -16,17 +16,8 @@
                 </div>
                 <hr>
                 <ul class="row list-unstyled">
-                    <li class="col-4">
-                        <small>Sales</small>
-                        <h6>456</h6>
-                    </li>
-                    <li class="col-4">
-                        <small>Order</small>
-                        <h6>1350</h6>
-                    </li>
-                    <li class="col-4">
-                        <small>Revenue</small>
-                        <h6>$2.13B</h6>
+                    <li class="col-12">
+                        <h6>#KaloBukanKitaSiapaLagi</h6>
                     </li>
                 </ul>
             </div>
@@ -44,16 +35,9 @@
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">                            
                             <li class="active">
-                                <a href="#Dashboard" class="has-arrow"><i class="icon-home"></i> <span>Dashboard</span></a>
-                                <ul>
-                                    <li class="active"><a href="index.html">Analytical</a></li>                                    
-                                    <li><a href="index2.html">Demographic</a></li>
-                                    <li><a href="index3.html">Hospital</a></li>
-                                    <li><a href="index4.html">University</a></li>
-                                    <li><a href="index5.html">Real Estate</a></li>
-                                    <li><a href="index6.html">Project</a></li>
-                                    <li><a href="index7.html">Cryptocurrency</a></li>
-                                    <li><a href="index8.html">eCommerce</a></li>
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
+                                <ul>                                  
+                                    <li><a href="{{url('uker')}}">Unit Kerja</a></li>
                                 </ul>
                             </li>
                             <li>
