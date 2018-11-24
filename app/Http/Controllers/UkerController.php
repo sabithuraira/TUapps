@@ -14,15 +14,20 @@ class UkerController extends Controller
      */
     public function index(Request $request)
     {
-        $datas = \App\UnitKerja::paginate(3);
+        $keyword = $request->get('search');
+        $datas = \App\UnitKerja::where('nama', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('kode', 'LIKE', '%' . $keyword . '%')
+            ->paginate(3);
+        // $datas = \App\UnitKerja::paginate(3);
         $datas->withPath('uker');
+        $datas->appends($request->all());
 
         if ($request->ajax()) {
             // return view('uker.list', ['datas' => $datas])->render();  
             return \Response::json(\View::make('uker.list', array('datas' => $datas))->render());
         }
 
-        return view('uker.index',compact('datas'));
+        return view('uker.index',compact('datas', 'keyword'));
     }
 
     /**
