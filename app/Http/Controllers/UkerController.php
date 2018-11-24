@@ -12,10 +12,16 @@ class UkerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $datas = \App\UnitKerja::paginate(3);
         $datas->withPath('uker');
+
+        if ($request->ajax()) {
+            // return view('uker.list', ['datas' => $datas])->render();  
+            return \Response::json(\View::make('uker.list', array('datas' => $datas))->render());
+        }
+
         return view('uker.index',compact('datas'));
     }
 

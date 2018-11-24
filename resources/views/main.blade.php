@@ -69,5 +69,6 @@
 
 <script src="{!! asset('assets/bundles/mainscripts.bundle.js') !!}"></script>
 <script src="{!! asset('assets/js/index.js') !!}"></script>
+@yield('scripts')
 </body>
 </html>
