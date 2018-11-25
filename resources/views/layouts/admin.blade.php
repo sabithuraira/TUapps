@@ -35,9 +35,9 @@
 <!-- Overlay For Sidebars -->
 
 <div id="wrapper">
-    @include('header')
+    @include('layouts.header')
 
-    @include('left_bar')
+    @include('layouts.left_bar')
 
     <div id="main-content">
         <div class="container-fluid">

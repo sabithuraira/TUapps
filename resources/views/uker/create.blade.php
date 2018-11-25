@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layouts.admin')
 
 @section('breadcrumb')
 <ul class="breadcrumb">
