@@ -1,5 +1,12 @@
 @extends('main')
 
+@section('breadcrumb')
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
+    <li class="breadcrumb-item">Unit Kerja</li>
+</ul>
+@endsection
+
 @section('content')
     <div class="container">
       <br />
@@ -30,7 +37,6 @@
       </div>
     </div>
   </div>
-
 @endsection
 
 @section('scripts')

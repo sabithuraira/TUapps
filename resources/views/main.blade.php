@@ -43,11 +43,8 @@
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">
-                    <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>                            
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ul>
+                    <div class="col-lg-5 col-md-8 col-sm-12">
+                        @yield('breadcrumb')
                     </div>    
                 </div>
             </div>

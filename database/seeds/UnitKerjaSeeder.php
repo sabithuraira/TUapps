@@ -5,8 +5,6 @@ use Illuminate\Database\Seeder;
 class UnitKerjaSeeder extends Seeder {
     public function run()
     {
-        // DB::table('users')->delete();
-
         \App\UnitKerja::create(['kode' => '1601', 'nama'=>'Ogan Komering Ulu', 'created_by'=>1, 'updated_by'=>1]);
         \App\UnitKerja::create(['kode' => '1602', 'nama'=>'Ogan Komering Ilir', 'created_by'=>1, 'updated_by'=>1]);
         \App\UnitKerja::create(['kode' => '1603', 'nama'=>'Muara Enim', 'created_by'=>1, 'updated_by'=>1]);

@@ -1,5 +1,13 @@
 @extends('main')
 
+@section('breadcrumb')
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
+    <li class="breadcrumb-item"><a href="{{url('uker')}}">Unit Kerja</a></li>                            
+    <li class="breadcrumb-item">{{ $model->nama }}</li>
+</ul>
+@endsection
+
 @section('content')
 <div class="row clearfix">
   <div class="col-md-12">

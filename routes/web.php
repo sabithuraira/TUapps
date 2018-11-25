@@ -16,3 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource('uker','UkerController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

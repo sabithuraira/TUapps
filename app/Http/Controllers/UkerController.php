@@ -17,13 +17,12 @@ class UkerController extends Controller
         $keyword = $request->get('search');
         $datas = \App\UnitKerja::where('nama', 'LIKE', '%' . $keyword . '%')
             ->orWhere('kode', 'LIKE', '%' . $keyword . '%')
-            ->paginate(3);
-        // $datas = \App\UnitKerja::paginate(3);
+            ->paginate();
+
         $datas->withPath('uker');
         $datas->appends($request->all());
 
         if ($request->ajax()) {
-            // return view('uker.list', ['datas' => $datas])->render();  
             return \Response::json(\View::make('uker.list', array('datas' => $datas))->render());
         }
 
