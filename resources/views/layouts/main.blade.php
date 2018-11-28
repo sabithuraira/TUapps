@@ -47,14 +47,24 @@
                 <form id="navbar-search" class="navbar-form search-form">
                     <input value="" class="form-control" placeholder="Search here..." type="text">
                     <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
-                </form>                
+                </form>    
+                
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                        
+                        <li>
+                            <a href="{{url('login')}}" class="icon-menu d-none d-sm-block rightbar_btn"><i class="icon-login"></i> Login</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+
             </div>
 
-            <div class="navbar-btn">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                    <i class="lnr lnr-menu fa fa-bars"></i>
-                </button>
-            </div>
+                
+
+
         </div>
     </nav>
     
