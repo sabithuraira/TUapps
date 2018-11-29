@@ -16,6 +16,7 @@
 // });
 
 Route::resource('uker','UkerController');
+Route::resource('user','UserController');
 
 Auth::routes();
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UkerRequest;
 
 class UkerController extends Controller
@@ -61,8 +62,8 @@ class UkerController extends Controller
         $model= new \App\UnitKerja;
         $model->kode=$request->get('kode');
         $model->nama=$request->get('nama');
-        $model->created_by=1;
-        $model->updated_by=1;
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
         $model->save();
         
         return redirect('uker')->with('success', 'Information has been added');
@@ -109,8 +110,7 @@ class UkerController extends Controller
         $model= \App\UnitKerja::find($id);
         $model->kode=$request->get('kode');
         $model->nama=$request->get('nama');
-        $model->created_by=1;
-        $model->updated_by=1;
+        $model->updated_by=Auth::id();
         $model->save();
         return redirect('uker');
     }

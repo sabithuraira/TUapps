@@ -53,7 +53,40 @@
                     <ul class="nav navbar-nav">
                         
                         <li>
+                        @if (Auth::check())
+                            <div class="user-account margin-0">
+                                <div class="dropdown mt-0">
+                                    <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown">
+                                        <img src="{!! asset('lucid/assets/images/user.png') !!}" class="rounded-circle user-photo" alt="User Profile Picture">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right account">
+                                        <li>
+                                            <span>Welcome,</span>
+                                            <strong>{{ Auth::user()->name }}</strong>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="page-profile2.html"><i class="icon-user"></i>My Profile</a></li>
+                                        <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                                        <li class="divider"></li>
+
+                                        <li>
+                                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                            <!-- <a href="{{url('logout')}}"><i class="icon-power"></i>Logout</a> -->
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        @else
                             <a href="{{url('login')}}" class="icon-menu d-none d-sm-block rightbar_btn"><i class="icon-login"></i> Login</a>
+                        @endif
                         </li>
                         
                     </ul>

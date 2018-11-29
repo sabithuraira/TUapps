@@ -20,7 +20,7 @@
               @csrf
                   <div class="form-group">
                       <label>Kode:</label>
-                      <input type="text" class="form-control {{($errors->first('kode') ? ' parsley-error' : '')}}" name="kode" value="{{ old('kode') }}" autofocus>
+                      <input type="text" class="form-control {{($errors->first('kode') ? ' parsley-error' : '')}}" name="kode" value="{{ old('kode') }}" >
                       @foreach ($errors->get('kode') as $msg)
                           <p class="text-danger">{{ $msg }}</p>
                       @endforeach
