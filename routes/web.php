@@ -16,6 +16,7 @@
 // });
 
 Route::resource('uker','UkerController');
+Route::resource('type_kredit','TypeKreditController');
 Route::resource('user','UserController');
 
 Auth::routes();
