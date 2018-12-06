@@ -17,6 +17,7 @@
 
 Route::resource('uker','UkerController');
 Route::resource('type_kredit','TypeKreditController');
+Route::resource('rincian_kredit','RincianKreditController');
 Route::resource('user','UserController');
 
 Auth::routes();

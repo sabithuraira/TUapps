@@ -46,7 +46,8 @@
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                                 <ul>                                  
                                     <li><a href="{{url('uker')}}">Unit Kerja</a></li>
-                                    <li><a href="{{url('type_kredit')}}">Peruntukan Unit Kerja</a></li>
+                                    <li><a href="{{url('type_kredit')}}">Peruntukan Angka Kredit</a></li>
+                                    <li><a href="{{url('rincian_kredit')}}">Rincian Angka Kredit</a></li>
                                     <li><a href="{{url('user')}}">User</a></li>
                                 </ul>
                             </li>
