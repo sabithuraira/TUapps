@@ -19,9 +19,20 @@
 <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css') !!}">
 <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/toastr/toastr.min.css') !!}">
 
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css') !!}">
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/multi-select/css/multi-select.css') !!}">
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css') !!}">
+
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}" />
+
 <!-- MAIN CSS -->
 <link rel="stylesheet" href="{!! asset('assets/css/main.css') !!}">
 <link rel="stylesheet" href="{!! asset('assets/css/color_skins.css') !!}">
+
+
+
+
+
 </head>
 <body class="theme-cyan">
 
@@ -64,8 +75,16 @@
 <script src="{!! asset('assets/bundles/knob.bundle.js') !!}"></script> <!-- Jquery Knob-->
 <script src="{!! asset('lucid/assets/vendor/toastr/toastr.js') !!}"></script>
 
+
+<script src="{!! asset('lucid/assets/vendor/multi-select/js/jquery.multi-select.js') !!}"></script> <!-- Multi Select Plugin Js -->
+<script src="{!! asset('lucid/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js') !!}"></script> <!-- Bootstrap Tags Input Plugin Js --> 
+
+<script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script> <!-- Select2 Js -->
 <script src="{!! asset('assets/bundles/mainscripts.bundle.js') !!}"></script>
 <script src="{!! asset('assets/js/index.js') !!}"></script>
 @yield('scripts')
 </body>
 </html>
+
+
