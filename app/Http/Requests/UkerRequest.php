@@ -32,9 +32,9 @@ class UkerRequest extends FormRequest
     public function messages()
     {
         return [
-            'kode.required' => ':attribute tidak boleh kosong',
-            'kode.unique' => ':attribute sudah ada',
-            'nama.required' => ':attribute tidak boleh kosong',
+            // 'kode.required' => ':attribute tidak boleh kosong',
+            // 'kode.unique' => ':attribute sudah ada',
+            // 'nama.required' => ':attribute tidak boleh kosong',
         ];
     }
 

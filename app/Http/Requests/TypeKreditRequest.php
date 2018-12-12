@@ -33,7 +33,7 @@ class TypeKreditRequest extends FormRequest
     public function messages()
     {
         return [
-            'uraian.required' => ':attribute tidak boleh kosong',
+            // 'uraian.required' => ':attribute tidak boleh kosong',
             // 'created_by.unique' => ':attribute sudah ada',
             // 'updated_by.required' => ':attribute tidak boleh kosong',
         ];

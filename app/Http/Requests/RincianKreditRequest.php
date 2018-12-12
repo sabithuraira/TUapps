@@ -33,9 +33,9 @@ class RincianKreditRequest extends FormRequest
     public function messages()
     {
         return [
-            'uraian.required' => ':attribute tidak boleh kosong',
-            'jenis.unique' => ':attribute sudah ada',
-            'kode.required' => ':attribute tidak boleh kosong',
+            // 'uraian.required' => ':attribute tidak boleh kosong',
+            // 'jenis.unique' => ':attribute sudah ada',
+            // 'kode.required' => ':attribute tidak boleh kosong',
         ];
     }
 
@@ -45,6 +45,7 @@ class RincianKreditRequest extends FormRequest
             'uraian' => 'Uraian',
             'jenis' => 'Peruntukan',
             'Kode' => 'Kode',
+            'induk' => 'Induk',
         ];
     }
 }

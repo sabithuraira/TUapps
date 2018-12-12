@@ -41,7 +41,8 @@ class RincianKreditController extends Controller
      */
     public function create()
     {
-        return view('rincian_kredit.create');
+        $model= new \App\RincianKredit;
+        return view('rincian_kredit.create', compact('model'));
     }
 
     /**

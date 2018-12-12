@@ -12,4 +12,14 @@ class RincianKredit extends Model
     {
         return $this->hasOne('App\TypeKredit', 'id', 'jenis');
     }
+    
+    public function attributes()
+    {
+        return [
+            'uraian' => 'Uraian',
+            'jenis' => 'Peruntukan',
+            'kode' => 'Kode',
+            'induk' => 'Induk',
+        ];
+    }
 }

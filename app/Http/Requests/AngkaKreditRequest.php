@@ -37,13 +37,13 @@ class AngkaKreditRequest extends FormRequest
     public function messages()
     {
         return [
-            'butir_kegiatan.required' => ':attribute tidak boleh kosong',
-            'jenis.unique' => ':attribute sudah ada',
-            'satuan_hasil.required' => ':attribute tidak boleh kosong',
-            'kode.required' => ':attribute tidak boleh kosong',
-            'angka_kredit.required' => ':attribute tidak boleh kosong',
-            'pelaksana.required' => ':attribute tidak boleh kosong',
-            'bukti_fisik.required' => ':attribute tidak boleh kosong',
+            // 'butir_kegiatan.required' => ':attribute tidak boleh kosong',
+            // 'jenis.unique' => ':attribute sudah ada',
+            // 'satuan_hasil.required' => ':attribute tidak boleh kosong',
+            // 'kode.required' => ':attribute tidak boleh kosong',
+            // 'angka_kredit.required' => ':attribute tidak boleh kosong',
+            // 'pelaksana.required' => ':attribute tidak boleh kosong',
+            // 'bukti_fisik.required' => ':attribute tidak boleh kosong',
         ];
     }
 

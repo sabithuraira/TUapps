@@ -42,7 +42,8 @@ class UkerController extends Controller
      */
     public function create()
     {
-        return view('uker.create');
+        $model= new \App\UnitKerja;
+        return view('uker.create',compact('model'));
     }
 
     /**

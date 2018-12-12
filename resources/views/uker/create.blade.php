@@ -18,24 +18,7 @@
           <div class="body">
               <form method="post" action="{{url('uker')}}" enctype="multipart/form-data">
               @csrf
-                  <div class="form-group">
-                      <label>Kode:</label>
-                      <input type="text" class="form-control {{($errors->first('kode') ? ' parsley-error' : '')}}" name="kode" value="{{ old('kode') }}" autofocus>
-                      @foreach ($errors->get('kode') as $msg)
-                          <p class="text-danger">{{ $msg }}</p>
-                      @endforeach
-                      
-                  </div>
-
-                  <div class="form-group">
-                      <label>Nama:</label>
-                      <input type="text" class="form-control {{($errors->first('nama') ? ' parsley-error' : '')}}" name="nama" value="{{ old('nama') }}" >
-                      @foreach ($errors->get('nama') as $msg)
-                          <p class="text-danger">{{ $msg }}</p>
-                      @endforeach
-                  </div>
-                  <br>
-                  <button type="submit" class="btn btn-primary">Simpan</button>
+              @include('uker._form')
               </form>
           </div>
       </div>

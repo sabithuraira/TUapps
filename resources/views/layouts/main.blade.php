@@ -95,9 +95,6 @@
 
             </div>
 
-                
-
-
         </div>
     </nav>
     
@@ -108,159 +105,12 @@
                 <div class="navbar-collapse align-items-center collapse" id="navbar">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown active">
-                            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                <i class="icon-speedometer"></i> Dashboard
+                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown">
+                                <i class="icon-home"></i> Home
                             </a>
-                            <ul class="dropdown-menu animated bounceIn">
-                                <li class="nav-item active"><a href="index.html">Analytical</a></li>                                    
-                                <li class="nav-item"><a href="index2.html">Demographic</a></li>
-                                <li class="nav-item"><a href="index3.html">Hospital</a></li>
-                                <li class="nav-item"><a href="index4.html">University</a></li>
-                                <li class="nav-item"><a href="index5.html">Real Estate</a></li>
-                                <li class="nav-item"><a href="index6.html">Project</a></li>
-                                <li class="nav-item"><a href="index7.html">Cryptocurrency</a></li>
-                                <li class="nav-item"><a href="index8.html">eCommerce</a></li>
-                            </ul>
                         </li>
                         <li class="nav-item dropdown mega-menu">
-                            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-grid"></i> <span>Prosedur</span></a>
-                            <div class="dropdown-menu mega-main padding-0 animated fadeIn">
-                                <div class="row">
-                                    <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>Map</label></li>
-                                                <li><a href="map-google.html">Google Map</a></li>
-                                                <li><a href="map-yandex.html">Yandex Map</a></li>
-                                                <li><a href="map-jvectormap.html">jVector Map</a></li>
-                                            </ul>
-                                            <ul class="list-unstyled">
-                                                <li><label>Chart</label></li>
-                                                <li><a href="chart-morris.html">Morris</a> </li>
-                                                <li><a href="chart-flot.html">Flot</a> </li>
-                                                <li><a href="chart-chartjs.html">ChartJS</a> </li>                                    
-                                                <li><a href="chart-jquery-knob.html">Jquery Knob</a> </li>
-                                                <li><a href="chart-sparkline.html">Sparkline Chart</a></li>
-                                                <li><a href="chart-peity.html">Peity</a></li>
-                                                <li><a href="chart-c3.html">C3 Charts</a></li>
-                                                <li><a href="chart-gauges.html">Gauges</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>File Manager</label></li>
-                                                <li><a href="file-dashboard.html">Dashboard</a></li>
-                                                <li><a href="file-documents.html">Documents</a></li>
-                                                <li><a href="file-media.html">Media</a></li>
-                                                <li><a href="file-images.html">Images</a></li>
-                                            </ul>
-                                            <ul class="list-unstyled">
-                                                <li><label>Widgets</label></li>
-                                                <li><a href="widgets-statistics.html">Statistics</a></li>
-                                                <li><a href="widgets-data.html">Data</a></li>
-                                                <li><a href="widgets-chart.html">Chart</a></li>
-                                                <li><a href="widgets-weather.html">Weather</a></li>
-                                                <li><a href="widgets-social.html">Social</a></li>
-                                                <li><a href="widgets-blog.html">Blog</a></li>
-                                                <li><a href="widgets-ecommerce.html">eCommerce</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>Blog</label></li>
-                                                <li><a href="blog-dashboard.html">Dashboard</a></li>
-                                                <li><a href="blog-post.html">New Post</a></li>
-                                                <li><a href="blog-list.html">Blog List</a></li>
-                                                <li><a href="blog-details.html">Blog Detail</a></li>
-                                            </ul>
-                                            <ul class="list-unstyled">
-                                                <li><label>App</label></li>
-                                                <li><a href="app-inbox.html">Inbox</a></li>
-                                                <li><a href="app-chat.html">Chat</a></li>
-                                                <li><a href="app-calendar.html">Calendar</a></li>                                    
-                                                <li><a href="app-contact.html">Contact list</a></li>
-                                                <li><a href="app-contact-grid.html">Contact Card</a></li>
-                                                <li><a href="app-taskboard.html">Taskboard</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-4 hidden-sm">
-                                        <div class="img-box" style="background-image: url({!! asset('lucid/assets/images/menu-img/1.jpg') !!})"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown mega-menu">
-                            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-docs"></i> <span>Kegiatan</span></a>
-                            <div class="dropdown-menu mega-main padding-0 animated fadeIn">
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-4 hidden-sm">
-                                        <div class="img-box" style="background-image: url({!! asset('lucid/assets/images/menu-img/7.jpg') !!})"></div>
-                                    </div>
-                                    <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>Pages</label></li>
-                                                <li><a href="page-blank.html">Blank Page</a> </li>
-                                                <li><a href="page-profile.html">Profile</a></li>
-                                                <li><a href="page-profile2.html">Profile</a></li>
-                                                <li><a href="page-gallery.html">Image Gallery</a> </li>
-                                                <li><a href="page-gallery2.html">Image Gallery</a> </li>
-                                                <li><a href="page-timeline.html">Timeline</a></li>
-                                                <li><a href="page-timeline-h.html">Horizontal Timeline</a></li>
-                                                <li><a href="page-pricing.html">Pricing</a></li>
-                                                <li><a href="page-invoices.html">Invoices</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>Pages</label></li>
-                                                <li><a href="page-invoices2.html">Invoices</a></li>
-                                                <li><a href="page-search-results.html">Search Results</a></li>
-                                                <li><a href="page-helper-class.html">Helper Classes</a></li>
-                                                <li><a href="page-teams-board.html">Teams Board</a></li>
-                                                <li><a href="page-projects-list.html">Projects List</a></li>
-                                                <li><a href="page-maintenance.html">Maintenance</a></li>
-                                                <li><a href="page-testimonials.html">Testimonials</a></li>
-                                                <li><a href="page-faq.html">FAQ</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4">
-                                        <div class="mega-list">
-                                            <ul class="list-unstyled">
-                                                <li><label>Tables</label></li>
-                                                <li><a href="table-basic.html">Tables Example</a> </li>
-                                                <li><a href="table-normal.html">Normal Tables</a> </li>
-                                                <li><a href="table-jquery-datatable.html">Jquery Datatables</a> </li>
-                                                <li><a href="table-editable.html">Editable Tables</a> </li>
-                                                <li><a href="table-color.html">Tables Color</a> </li>
-                                                <li><a href="table-filter.html">Table Filter</a></li>
-                                                <li><a href="table-dragger.html">Table dragger</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-lock"></i> <span>Informasi</span></a>
-                            <ul class="dropdown-menu animated bounceIn">                                    
-                                <li><a href="page-login.html">Login</a></li>
-                                <li><a href="page-register.html">Register</a></li>
-                                <li><a href="page-lockscreen.html">Lockscreen</a></li>
-                                <li><a href="page-forgot-password.html">Forgot Password</a></li>
-                                <li><a href="page-404.html">Page 404</a></li>
-                                <li><a href="page-403.html">Page 403</a></li>
-                                <li><a href="page-500.html">Page 500</a></li>
-                                <li><a href="page-503.html">Page 503</a></li>
-                            </ul>
+                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="icon-speedometer"></i> <span>Dashboard</span></a>
                         </li>
                     </ul>
                 </div>

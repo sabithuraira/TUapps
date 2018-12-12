@@ -18,16 +18,7 @@
           <div class="body">
               <form method="post" action="{{url('type_kredit')}}" enctype="multipart/form-data">
               @csrf
-                  <div class="form-group">
-                      <label>Uraian:</label>
-                      <input type="text" class="form-control {{($errors->first('uraian') ? ' parsley-error' : '')}}" name="uraian" value="{{ old('uraian') }}" autofocus>
-                      @foreach ($errors->get('uraian') as $msg)
-                          <p class="text-danger">{{ $msg }}</p>
-                      @endforeach
-                      
-                  </div>
-                  <br>
-                  <button type="submit" class="btn btn-primary">Simpan</button>
+              @include('type_kredit._form')
               </form>
           </div>
       </div>

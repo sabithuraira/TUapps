@@ -41,9 +41,10 @@ class AngkaKreditController extends Controller
      */
     public function create()
     {
+        $model= new \App\AngkaKredit;
         $item_jenis = \App\TypeKredit::all();
         return view('angka_kredit.create', 
-            compact('item_jenis'));
+            compact('item_jenis', 'model'));
     }
 
     /**

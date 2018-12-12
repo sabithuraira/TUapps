@@ -41,7 +41,8 @@ class TypeKreditController extends Controller
      */
     public function create()
     {
-        return view('type_kredit.create');
+        $model= new \App\TypeKredit;
+        return view('type_kredit.create',compact('model'));
     }
 
     /**
