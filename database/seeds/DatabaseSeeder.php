@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UnitKerjaSeeder::class,
             TypeKreditsTableSeeder::class,
             RincianKreditTableSeeder::class,
+            UsersAdminSeeder::class,
         ]);
     }
 }

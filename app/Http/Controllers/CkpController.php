@@ -23,7 +23,8 @@ class CkpController extends Controller
      */
     public function create()
     {
-        //
+        $model= new \App\Ckp;
+        return view('ckp.create', compact('model'));
     }
 
     /**
