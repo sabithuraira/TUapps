@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">Angka Kredit</li>
+    <li class="breadcrumb-item">CKP</li>
 </ul>
 @endsection
 
@@ -18,17 +18,76 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('AngkaKreditController@create')}}" class="btn btn-info">Tambah</a>
+          <a href="{{action('CkpController@create')}}" class="btn btn-info">Buat CKP</a>
           <br/><br/>
           <form action="{{url('ckp')}}" method="get">
-            <div class="input-group mb-3">
-                    
-                    @csrf
-                    <input type="text" class="form-control" name="search" id="search" value="{{ $keyword }}" placeholder="Search..">
+          <div class="row clearfix">
+                <div class="col-lg-3 col-md-12 left-box">
+                    <div class="form-group">
+                        <label>Tipe:</label>
 
-                    <div class="input-group-append">
-                        <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
+                        <div class="input-group">
+                          <select class="form-control"  name="type" id="type">
+                              <option value="">- Pilih Type -</option>
+                              @foreach ($model->listType as $key=>$value)
+                                  <option value="{{ $key }}" 
+                                    @if ($type == $key)
+                                          selected="selected"
+                                      @endif >{{ $value }}</option>
+                              @endforeach
+                          </select>
+
+                        </div>
                     </div>
+                </div>
+
+                
+                <div class="col-lg-4 col-md-12 left-box">
+                    <div class="form-group">
+                        <label>Bulan:</label>
+
+                        <div class="input-group">
+                          <select class="form-control"  name="month" id="month">
+                                @foreach ( config('app.months') as $key=>$value)
+                                    <option value="{{ $key }}" 
+                                      @if ($month == $key)
+                                            selected="selected"
+                                        @endif >{{ $value }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12 right-box">
+                    <div class="form-group">
+                        <label>Tahun:</label>
+
+                        <div class="input-group">
+                          <select class="form-control"  name="year" id="year">
+                              @for ($i=2018;$i<=date('Y');$i++)
+                                  <option value="{{ $i }}" 
+                                    @if ($year == $i)
+                                          selected="selected"
+                                      @endif >{{ $i }}</option>
+                              @endfor
+                          </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2 col-md-12 right-box">
+                    <div class="form-group">
+                        <label>&nbsp</label>
+
+                          <div class="input-group-append">                                            
+                            <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
+                          </div>
+                        </div>
+                    </div>
+                </div>
             </div>
           </form>
           <section class="datas">
@@ -40,5 +99,4 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" src="{!! asset('js/pagination.js') !!}"></script>
 @endsection

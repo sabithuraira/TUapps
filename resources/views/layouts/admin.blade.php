@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<title>OGAN</title>
+<title>MUSI</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="{!! asset('assets/css/color_skins.css') !!}">
 
 
+@yield('css')
 
 
 
@@ -39,7 +40,7 @@
 <!-- Page Loader -->
 <div class="page-loader-wrapper">
     <div class="loader">
-        <div class="m-t-30"><img src="{!! asset('lucid/assets/images/logo-icon.svg') !!}" width="48" height="48" alt="Lucid"></div>
+        <div class="m-t-30"><img src="{!! asset('lucid/assets/images/logo-icon.svg') !!}" width="48" height="48" alt="Musi.."></div>
         <p>Please wait...</p>        
     </div>
 </div>

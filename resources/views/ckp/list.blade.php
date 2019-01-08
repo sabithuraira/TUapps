@@ -7,42 +7,59 @@
         @else
             <thead>
                 <tr>
-                <th>{{ $datas[0]->attributes()['uraian'] }}</th>
-                <th>{{ $datas[0]->attributes()['kode'] }}</th>
-                <th>{{ $datas[0]->attributes()['butir_kegiatan'] }}</th>
-                <th>{{ $datas[0]->attributes()['satuan_hasil'] }}</th>
-                <th>{{ $datas[0]->attributes()['ckp'] }}</th>
-                <th>{{ $datas[0]->attributes()['batas_penilaian'] }}</th>
-                <th>{{ $datas[0]->attributes()['pelaksana'] }}</th>
-                <th>{{ $datas[0]->attributes()['bukti_fisik'] }}</th>
-                <th colspan="2">Action</th>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">{{ $datas[0]->attributes()['uraian'] }}</th>
+                    <th rowspan="2">{{ $datas[0]->attributes()['satuan'] }}</th>
+                    
+                    @if (type==1)
+                        <th rowspan="2">Target Kuantitas</th>
+                    @else  
+                        <th colspan="3">Kuantitas</th>
+                        <th rowspan="2">Tingkat Kualitas</th>
+                    @endif     
+                    <th rowspan="2">{{ $datas[0]->attributes()['kode_butir'] }}</th>
+                    <th rowspan="2">{{ $datas[0]->attributes()['angka_kredit'] }}</th>
+                    <th rowspan="2">{{ $datas[0]->attributes()['keterangan'] }}</th>
                 </tr>
+
+
+                @if (type==1)
+                <tr>
+                    <th>Target</th>
+                    <th>Realisasi</th>
+                    <th>%</th>
+                </tr>
+                @endif 
+
+
             </thead>
             <tbody>
+                @php
+                    $i = 1;
+                @endphp
                 @foreach($datas as $data)
-                <tr>
-                    <td>{{$data['Jenis']['uraian']}}</td>
-                    <td>{{$data['kode']}}</td>
-                    <td>{{$data['butir_kegiatan']}}</td>
-                    <td>{{$data['satuan_hasil']}}</td>
-                    <td>{{$data['ckp']}}</td>
-                    <td>{{$data['batas_penilaian']}}</td>
-                    <td>{{$data['pelaksana']}}</td>
-                    <td>{{$data['bukti_fisik']}}</td>
-                    
-                    <td><a href="{{action('AngkaKreditController@edit', $data['id'])}}" class="btn btn-warning">Edit</a></td>
-                    <td>
-                    <form action="{{action('AngkaKreditController@destroy', $data['id'])}}" method="post">
-                        @csrf
-                        <input name="_method" type="hidden" value="DELETE">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                    </td>
-                </tr>
+                    @php
+                        $i++;
+                    @endphp
+                    <tr>
+                        <td>{{$data['uraian']}}</td>
+                        <td>{{$data['satuan']}}</td>
+                        
+                        @if (type==1)
+                            <td>{{$data['target_kuantitas']}}</td>
+                        @else
+                            <td>{{$data['target_kuantitas']}}</td>
+                            <td>{{$data['realisasi_kuantitas']}}</td>
+                            <td>{{ $data['realisasi_kuantitas']/$data['target_kuantitas']*100 }} %</td>
+                            <td>{{$data['kualitas']}}</td>
+                        @endif 
+                        <td>{{$data['kode_butir']}}</td>
+                        <td>{{$data['angka_kredit']}}</td>
+                        <td>{{$data['keterangan']}}</td>
+                    </tr>
                 @endforeach
                 
             </tbody>
         @endif
     </table>
-    {{ $datas->links() }} 
 </div>

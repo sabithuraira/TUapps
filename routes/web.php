@@ -21,6 +21,7 @@ Route::resource('rincian_kredit','RincianKreditController');
 Route::resource('angka_kredit','AngkaKreditController');
 Route::resource('user','UserController');
 Route::resource('ckp','CkpController');
+Route::post('ckp/data_ckp', 'CkpController@dataCkp');
 
 Auth::routes();
 

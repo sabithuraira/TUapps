@@ -3,8 +3,8 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
-    <li class="breadcrumb-item"><a href="{{url('ckp')}}">Angka Kredit</a></li>                            
-    <li class="breadcrumb-item">Tambah Data</li>
+    <li class="breadcrumb-item"><a href="{{url('ckp')}}">CKP</a></li>                            
+    <li class="breadcrumb-item">Buat CKP</li>
 </ul>
 @endsection
 
@@ -13,9 +13,9 @@
   <div class="col-md-12">
       <div class="card">
           <div class="header">
-              <h2>Tambah Rincian Angka Kredit</h2>
+              <h2>Buat CKP</h2>
           </div>
-          <div class="body">
+          <div class="body" id="app_vue">
               <form method="post" action="{{url('ckp')}}" enctype="multipart/form-data">
               @csrf
               @include('ckp._form')
