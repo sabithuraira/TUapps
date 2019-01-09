@@ -30,15 +30,9 @@ class Ckp extends Model
     }
 
     public function CkpBulanan($type, $bulan, $year){
-        // $sql = "SELECT mp.id as pos_id, mp.name, GROUP_CONCAT(
-                    //         DISTINCT CONCAT(ap.title," : ", ip.data) 
-                    //         ) as rincian_form, GROUP_CONCAT(ap.title), GROUP_CONCAT(ip.data) FROM relasi_pos rp
-                    // RIGHT JOIN `master_pos` as mp ON mp.id = rp.pos_id
-                    //     JOIN `attribute_pos` as ap ON ap.id = rp.attribute_pos_id
-                    //     LEFT JOIN `input_pos` as ip ON ip.relasi_id = rp.id
-                    //     GROUP BY mp.id, mp.name";
+        $datas = array();
 
-        return DB::table('ckps')
+        $datas['utama'] = DB::table('ckps')
             // ->rightJoin('master_pos', 'master_pos.id', '=', 'relasi_pos.pos_id')
             // ->join('attribute_pos', 'attribute_pos.id', '=', 'relasi_pos.attribute_pos_id')
             // ->leftJoin('input_pos', function($join) use ($tanggal, $shift)
@@ -51,8 +45,21 @@ class Ckp extends Model
                 ['ckps.month', '=', $bulan],
                 ['ckps.year', '=', $year],
                 ['ckps.type', '=', $type],
+                ['ckps.jenis', '=', 1],
             ])
             ->orderBy('ckps.jenis')
             ->get();
+            
+        $datas['tambahan'] = DB::table('ckps')
+            ->where([
+                ['ckps.month', '=', $bulan],
+                ['ckps.year', '=', $year],
+                ['ckps.type', '=', $type],
+                ['ckps.jenis', '=', 2],
+            ])
+            ->orderBy('ckps.jenis')
+            ->get();
+
+        return $datas;
     }
 }

@@ -86,14 +86,38 @@ class CkpController extends Controller
      */
     public function store(Request $request)
     {
-        // $month = date('m');
-        // $year = date('Y');
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $type = 1;
+        $total_utama = 1;
+        $total_tambahan = 1;
 
-        // if(strlen($request->get('month'))>0)
-        //     $month = $request->get('month');
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+        
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+            
+        if(strlen($request->get('type'))>0)
+            $type = $request->get('type');
+            
+        if(strlen($request->get('total_utama'))>0)
+            $total_utama = $request->get('total_utama');
+                        
+        if(strlen($request->get('total_tambahan'))>0)
+            $total_tambahan = $request->get('total_tambahan');
+            
+        $model = new \App\Ckp;
+        $datas = $model->CkpBulanan($type, $month, $year);
 
-        // if(strlen($request->get('year'))>0)
-        //     $year = $request->get('year');
+        foreach($datas['utama'] as $data){
+
+        }
+        
+        foreach($datas['tambahan'] as $data){
+            
+        }
         
         // $rekanans = \App\RekananSampah::where('is_active', '=', '1')->get();
 
