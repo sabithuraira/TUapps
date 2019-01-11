@@ -92,37 +92,37 @@
                 <tr><td :colspan="total_column">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                     <td>@{{ index+1 }}</td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" :value="data.uraian"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" :value="data.satuan"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
                     <template v-if="type==2">
-                        <td><input class="form-control  form-control-sm" type="text":name="'u_realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text":name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :name="'u_kualitas'+data.id" :value="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" :value="data.kode_butir"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" :value="data.angka_kredit"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" :value="data.keterangan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
                 </tr>
                 
                 <tr><td :colspan="total_column">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                     <td>@{{ index+1 }}</td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" :value="data.uraian"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" :value="data.satuan"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
                     <template v-if="type==2">
-                        <td><input class="form-control  form-control-sm" type="text":name="'t_realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text":name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :name="'t_kualitas'+data.id" :value="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" :value="data.kode_butir"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" :value="data.angka_kredit"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" :value="data.keterangan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
                 
                 </tr>
 
