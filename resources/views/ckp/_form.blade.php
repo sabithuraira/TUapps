@@ -55,8 +55,8 @@
                 </div>
 
             </div>
-            <input type="hidden" name="total_tambahan" :v-model="total_tambahan">
-            <input type="hidden" name="total_utama" :v-model="total_utama">
+            <input type="hidden" name="total_tambahan" v-model="total_tambahan">
+            <input type="hidden" name="total_utama" v-model="total_utama">
     <hr/>
     <button type="submit" class="btn btn-primary float-right">Simpan</button>
     <br/><br/>
@@ -92,43 +92,37 @@
                 <tr><td :colspan="total_column">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                     <td>@{{ index+1 }}</td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'uraian'+data.id" :value="data.uraian"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'satuan'+data.id" :value="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" :value="data.uraian"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" :value="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
                     
-                    <td v-if="type==1">
-                        <input class="form-control  form-control-sm" type="text" :id="'target_kuantitas'+data.id" :value="data.target_kuantitas">
-                    </td>
-                    <template v-else>
-                        <td><input class="form-control  form-control-sm" type="text" :id="'target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
-                        <td><input class="form-control  form-control-sm" type="text":id="'realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
+                    <template v-if="type==2">
+                        <td><input class="form-control  form-control-sm" type="text":name="'u_realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :id="'kualitas'+data.id" :value="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text" :name="'u_kualitas'+data.id" :value="data.kualitas"></td>
                     </template>
 
-                    <td><input class="form-control  form-control-sm" type="text" :id="'kode_butir'+data.id" :value="data.kode_butir"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'angka_kredit'+data.id" :value="data.angka_kredit"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'keterangan'+data.id" :value="data.keterangan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" :value="data.kode_butir"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" :value="data.angka_kredit"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" :value="data.keterangan"></td>
                 </tr>
                 
                 <tr><td :colspan="total_column">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                     <td>@{{ index+1 }}</td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'uraian'+data.id" :value="data.uraian"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'satuan'+data.id" :value="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" :value="data.uraian"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" :value="data.satuan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
                     
-                    <td v-if="type==1">
-                        <input class="form-control  form-control-sm" type="text" :id="'target_kuantitas'+data.id" :value="data.target_kuantitas">
-                    </td>
-                    <template v-else>
-                        <td><input class="form-control  form-control-sm" type="text" :id="'target_kuantitas'+data.id" :value="data.target_kuantitas"></td>
-                        <td><input class="form-control  form-control-sm" type="text":id="'realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
+                    <template v-if="type==2">
+                        <td><input class="form-control  form-control-sm" type="text":name="'t_realisasi_kuantitas'+data.id" :value="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :id="'kualitas'+data.id" :value="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="text" :name="'t_kualitas'+data.id" :value="data.kualitas"></td>
                     </template>
 
-                    <td><input class="form-control  form-control-sm" type="text" :id="'kode_butir'+data.id" :value="data.kode_butir"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'angka_kredit'+data.id" :value="data.angka_kredit"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :id="'keterangan'+data.id" :value="data.keterangan"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" :value="data.kode_butir"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" :value="data.angka_kredit"></td>
+                    <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" :value="data.keterangan"></td>
                 
                 </tr>
 
@@ -200,12 +194,15 @@ var vm = new Vue({
                 self.kegiatan_tambahan = data.datas.tambahan;
 
                 self.kegiatan_utama.push({
-                    'id': 'au'+self.kegiatan_utama.length,
+                    'id': 'au'+(self.total_utama),
                 });
                 
                 self.kegiatan_tambahan.push({
-                    'id': 'au'+this.kegiatan_tambahan.length,
+                    'id': 'at'+(self.total_tambahan),
                 });
+
+                console.log(self.kegiatan_utama);
+                console.log(self.kegiatan_tambahan);
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
@@ -216,21 +213,19 @@ var vm = new Vue({
         addData: function (event) {
             var self = this;
             if (event) {
-                // alert(event.currentTarget.id)
                 if(event.currentTarget.id=='add-utama')
                 {
-                    this.kegiatan_utama.push({
-                        'id': 'au'+this.kegiatan_utama.length,
-                    });
                     self.total_utama++;
+                    self.kegiatan_utama.push({
+                        'id': 'au'+(self.total_utama),
+                    });
                 }
                 else{
-                    this.kegiatan_tambahan.push({
-                        'id': 'at'+this.kegiatan_tambahan.length,
-                    });
                     self.total_tambahan++;
+                    self.kegiatan_tambahan.push({
+                        'id': 'at'+(self.total_tambahan),
+                    });
                 }
-
             }
         }
     }
