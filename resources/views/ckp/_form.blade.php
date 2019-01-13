@@ -167,7 +167,7 @@ var vm = new Vue({
         total_column: function () {
             if(this.type==1)
                 return 7;
-            eles
+            else
                 return 10;
         }
     },
