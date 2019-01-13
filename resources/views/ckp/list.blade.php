@@ -104,6 +104,17 @@ var vm = new Vue({
                 return 10;
         }
     },
+    watch: {
+        type: function (val) {
+            this.setDatas();
+        },
+        month: function (val) {
+            this.setDatas();
+        },
+        year: function (val) {
+            this.setDatas();
+        },
+    },
     methods: {
         setDatas: function(){
             var self = this;
@@ -137,19 +148,6 @@ var vm = new Vue({
 });
 
     $(document).ready(function() {
-        vm.setDatas();
-    });
-
-
-    $('#month').change(function() {
-        vm.setDatas();
-    });
-
-    $('#year').change(function() {
-        vm.setDatas();
-    });
-  
-    $('#type').change(function() {
         vm.setDatas();
     });
 </script>
