@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class CkpController extends Controller
 {
@@ -77,6 +78,49 @@ class CkpController extends Controller
         return view('ckp.create', compact('month', 
             'year', 'model'));
     }
+
+    public function print(Request $request)
+    {
+        // $datas=array();
+        // $month = date('m');
+        // $year = date('Y');
+        // $type = 1;
+        // $total_utama = 0;
+        // $total_tambahan = 0;
+
+        // if(strlen($request->get('month'))>0)
+        //     $month = $request->get('month');
+
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $type = 1;
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+            
+        if(strlen($request->get('type'))>0)
+            $type = $request->get('type');
+        
+
+        $model = new \App\Ckp;
+        $datas = $model->CkpBulanan($type, $month, $year);
+
+        
+        $pdf = PDF::loadView('ckp.pdfview', compact('month', 
+            'year', 'type', 'model', 'datas'))
+            ->setPaper('a4');
+            // ->setOrientation('portrait');
+        return $pdf->download('pdfview.pdf');
+
+        // print_r($datas);die();
+        // return view('ckp.pdfview', compact('month', 
+        //     'year', 'type', 'model', 'datas'));
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -243,17 +287,6 @@ class CkpController extends Controller
         
         return redirect('ckp')->with('success', 'Information has been added');
     
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
