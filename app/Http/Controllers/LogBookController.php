@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
-class CkpController extends Controller
+class LogBookController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
     
-    public function dataCkp(Request $request){
+    public function dataLogBook(Request $request){
         $datas=array();
         $month = date('m');
         $year = date('Y');
@@ -29,8 +29,8 @@ class CkpController extends Controller
             $type = $request->get('type');
         
 
-        $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $model = new \App\LogBook;
+        $datas = $model->LogBookRekap($type, $month, $year);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -44,23 +44,15 @@ class CkpController extends Controller
     public function index(Request $request)
     {
         $datas=array();
-        $month = date('m');
-        $year = date('Y');
-        $type = 1;
+        $tanggal = date('Y-m-d');
 
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-        
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-            
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
+        if(strlen($request->get('tanggal'))>0)
+            $tanggal = $request->get('tanggal');
 
-        $model = new \App\Ckp;
+        $model = new \App\LogBook;
 
-        return view('ckp.index', compact('model', 'month', 
-            'year', 'type'));
+        return view('log_book.index', compact('model', 
+            'tanggal', 'datas'));
     }
 
     /**
@@ -73,9 +65,9 @@ class CkpController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $model = new \App\Ckp;
+        $model = new \App\LogBook;
 
-        return view('ckp.create', compact('month', 
+        return view('log_book.create', compact('month', 
             'year', 'model'));
     }
 
@@ -106,11 +98,11 @@ class CkpController extends Controller
             $type = $request->get('type');
         
 
-        $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $model = new \App\LogBook;
+        $datas = $model->LogBookBulanan($type, $month, $year);
 
         
-        $pdf = PDF::loadView('ckp.pdfview', compact('month', 
+        $pdf = PDF::loadView('log_book.pdfview', compact('month', 
             'year', 'type', 'model', 'datas'))
             ->setPaper('a4');
             // ->setOrientation('portrait');
@@ -118,7 +110,7 @@ class CkpController extends Controller
         return $pdf->download('pdfview.pdf');
 
         // print_r($datas);die();
-        // return view('ckp.pdfview', compact('month', 
+        // return view('log_book.pdfview', compact('month', 
         //     'year', 'type', 'model', 'datas'));
     }
 
@@ -153,13 +145,13 @@ class CkpController extends Controller
         if(strlen($request->get('total_tambahan'))>0)
             $total_tambahan = $request->get('total_tambahan');
             
-        $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $model = new \App\LogBook;
+        $datas = $model->LogBookBulanan($type, $month, $year);
 
         foreach($datas['utama'] as $data){
             if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
                 
-                $model_utama = \App\Ckp::find($data->id);
+                $model_utama = \App\LogBook::find($data->id);
                 $model_utama->uraian = $request->get('u_uraian'.$data->id);
                 $model_utama->satuan = $request->get('u_satuan'.$data->id);
                 $model_utama->target_kuantitas = $request->get('u_target_kuantitas'.$data->id);
@@ -177,7 +169,7 @@ class CkpController extends Controller
         foreach($datas['tambahan'] as $data){
             if(strlen($request->get('t_uraian'.$data->id))>0 && strlen($request->get('t_satuan'.$data->id))>0 && strlen($request->get('t_target_kuantitas'.$data->id))>0){
                 
-                $model_tambahan = \App\Ckp::find($data->id);
+                $model_tambahan = \App\LogBook::find($data->id);
                 $model_tambahan->uraian = $request->get('t_uraian'.$data->id);
                 $model_tambahan->satuan = $request->get('t_satuan'.$data->id);
                 $model_tambahan->target_kuantitas = $request->get('t_target_kuantitas'.$data->id);
@@ -192,7 +184,7 @@ class CkpController extends Controller
 
         for($i=1;$i<=$total_utama;++$i){
             if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
-                $model_utama = new \App\Ckp;
+                $model_utama = new \App\LogBook;
                 
                 $model_utama->user_id = Auth::id();
                 $model_utama->month = $request->get('month');
@@ -221,7 +213,7 @@ class CkpController extends Controller
         for($i=1;$i<=$total_tambahan;++$i){
             if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
                 
-                $model_tambahan = new \App\Ckp;
+                $model_tambahan = new \App\LogBook;
                 
                 $model_tambahan->user_id = Auth::id();
                 $model_tambahan->month = $request->get('month');
@@ -286,7 +278,7 @@ class CkpController extends Controller
         //     }
         // }
         
-        return redirect('ckp')->with('success', 'Information has been added');
+        return redirect('log_book')->with('success', 'Information has been added');
     
     }
 

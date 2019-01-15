@@ -20,6 +20,8 @@ Route::resource('type_kredit','TypeKreditController');
 Route::resource('rincian_kredit','RincianKreditController');
 Route::resource('angka_kredit','AngkaKreditController');
 Route::resource('user','UserController');
+Route::resource('log_book','LogBookController');
+
 Route::resource('ckp','CkpController')->except(['show']);
 
 // Route::resource('attribute_pos','AttributePosController')->except(['show']);
