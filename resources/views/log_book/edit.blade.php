@@ -3,8 +3,8 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
-    <li class="breadcrumb-item"><a href="{{url('log_book')}}">Peruntukan Angka Kredit</a></li>                            
-    <li class="breadcrumb-item">{{ $model->uraian }}</li>
+    <li class="breadcrumb-item"><a href="{{url('log_book')}}">Log Book</a></li>                            
+    <li class="breadcrumb-item">{{ $model->tanggal }}</li>
 </ul>
 @endsection
 
@@ -16,7 +16,7 @@
               <h2>Perbaharui Log Book</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{action('AngkaKreditController@update', $id)}}" enctype="multipart/form-data">
+              <form method="post" action="{{action('LogBookController@update', $id)}}" enctype="multipart/form-data">
               @csrf
                 <input name="_method" type="hidden" value="PATCH">
                 @include('log_book._form')

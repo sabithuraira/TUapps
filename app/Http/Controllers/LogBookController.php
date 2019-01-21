@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PDF;
+use App\Http\Requests\LogBookRequest;
 
 class LogBookController extends Controller
 {
@@ -57,6 +57,7 @@ class LogBookController extends Controller
     public function create()
     {
         $model = new \App\LogBook;
+        $model->tanggal = date('Y-m-d');
 
         return view('log_book.create', compact('model'));
     }
@@ -67,7 +68,7 @@ class LogBookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LogBookRequest $request)
     {
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('log_book/create')
@@ -78,7 +79,7 @@ class LogBookController extends Controller
         $model= new \App\LogBook;
         $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
         $model->isi=$request->get('isi');
-        $model->is_approve=0;
+        $model->is_approve=2;
         $model->catatan_approve='';
         $model->user_id = Auth::id();
         $model->created_by=Auth::id();
@@ -96,7 +97,8 @@ class LogBookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $model = \App\LogBook::find($id);
+        return view('log_book.edit',compact('model','id'));
     }
 
     /**
@@ -106,10 +108,36 @@ class LogBookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LogBookRequest $request, $id)
     {
-        //
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('log_book/edit',$id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $model= \App\LogBook::find($id);
+        $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
+        $model->isi=$request->get('isi');
+        $model->updated_by=Auth::id();
+        $model->save();
+
+        return redirect('log_book');
     }
+
+    public function show($id)
+    {
+        $model = \App\LogBook::find($id);
+        return view('log_book.show',compact('model','id'));
+    }
+
+    
+    public function print($id)
+    {
+        $model = \App\LogBook::find($id);
+        return view('log_book.print',compact('model','id'));
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -118,7 +146,9 @@ class LogBookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        $model = \App\LogBook::find($id);
+        $model->delete();
+        return redirect('log_book')->with('success','Information has been  deleted');
     }
 }

@@ -2,7 +2,7 @@
     <label>{{ $model->attributes()['tanggal'] }}:</label>
     
     <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-        <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" value="{{ old('tanggal', $model->tanggal) }}">
+        <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" value="{{ old('tanggal', date('m/d/Y', strtotime($model->tanggal))) }}">
         <div class="input-group-append">                                            
             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
         </div>
@@ -37,7 +37,7 @@
 <script>
     $(function() {
         var initContent = {!! json_encode($model->isi) !!};
-        $('#isi').text(initContent);
+        $('#isi').summernote('code', initContent);
     });
 </script>
 

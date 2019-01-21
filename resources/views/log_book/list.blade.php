@@ -2,11 +2,12 @@
     <table class="table m-b-0">
         <thead>
             <tr>
-                <th rowspan="2">No</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['tanggal'] }}</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['isi'] }}</th>
+                <th>No</th>
+                <th class="text-center">{{ $model->attributes()['tanggal'] }}</th>
+                <th class="text-center">{{ $model->attributes()['isi'] }}</th>
 
-                <th class="text-center" rowspan="2">{{ $model->attributes()['is_approve'] }}</th>
+                <th class="text-center">{{ $model->attributes()['is_approve'] }}</th>
+                <th class="text-center"></th>
             </tr>
         </thead>
 
@@ -17,6 +18,12 @@
                 <td v-html="data.isi"></td>
                 <td class="text-center"  v-if="data.is_approve==0">belum disetujui</td>
                 <td class="text-center"  v-else>sudah disetujui</td>
+
+                <td>
+                    <a :href="url_log_book+'/'+data.id+'/edit'" class="btn btn-warning"><i class="icon-pencil"></i></a>    
+                    <a :href="url_log_book+'/'+data.id+''" class="btn btn-info"><i class="fa fa-search"></i></a>    
+            
+                </td>
             </tr>
         </tbody>
     </table>
@@ -51,15 +58,8 @@ var vm = new Vue({
       datas: [],
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
+      url_log_book: {!! json_encode(url('/log_book/')) !!},
     },
-    // watch: {
-    //     start: function (val) {
-    //         this.setDatas();
-    //     },
-    //     end: function (val) {
-    //         this.setDatas();
-    //     },
-    // },
     methods: {
         setDatas: function(){
             var self = this;
@@ -79,7 +79,6 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
-                // console.log(JSON.stringify(data));
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

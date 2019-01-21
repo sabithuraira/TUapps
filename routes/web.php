@@ -22,6 +22,7 @@ Route::resource('angka_kredit','AngkaKreditController');
 Route::resource('user','UserController');
 Route::resource('log_book','LogBookController');
 Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
+Route::get('log_book/{id}/print', 'LogBookController@print');
 
 Route::resource('ckp','CkpController')->except(['show']);
 
