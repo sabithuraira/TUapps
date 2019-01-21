@@ -13,7 +13,7 @@
   <div class="col-md-12">
       <div class="card">
           <div class="header">
-              <h2>Perbaharui Peruntukan Angka Kredit</h2>
+              <h2>Perbaharui Log Book</h2>
           </div>
           <div class="body">
               <form method="post" action="{{action('AngkaKreditController@update', $id)}}" enctype="multipart/form-data">

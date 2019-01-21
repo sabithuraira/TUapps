@@ -21,6 +21,7 @@ Route::resource('rincian_kredit','RincianKreditController');
 Route::resource('angka_kredit','AngkaKreditController');
 Route::resource('user','UserController');
 Route::resource('log_book','LogBookController');
+Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
 
 Route::resource('ckp','CkpController')->except(['show']);
 

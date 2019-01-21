@@ -72,7 +72,6 @@
 <script src="{!! asset('assets/bundles/libscripts.bundle.js') !!}"></script>    
 <script src="{!! asset('assets/bundles/vendorscripts.bundle.js') !!}"></script>
 
-<script src="{!! asset('assets/bundles/chartist.bundle.js') !!}"></script>
 <script src="{!! asset('assets/bundles/knob.bundle.js') !!}"></script> <!-- Jquery Knob-->
 <script src="{!! asset('lucid/assets/vendor/toastr/toastr.js') !!}"></script>
 

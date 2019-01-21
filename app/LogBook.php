@@ -32,7 +32,7 @@ class LogBook extends Model
                 ['log_books.tanggal', '>=', $start_date],
                 ['log_books.tanggal', '<=', $end_date],
             ])
-            ->orderBy('log_books.id')
+            ->orderBy('log_books.tanggal')
             ->get();
 
         return $datas;

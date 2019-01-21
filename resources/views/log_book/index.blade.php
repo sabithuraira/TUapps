@@ -29,10 +29,10 @@
                         <label>Rentang Waktu:</label>
                            
                         <div class="input-daterange input-group" data-provide="datepicker">
-                            <input type="text" class="input-sm form-control" name="start">
+                            <input type="text" class="input-sm form-control" v-model="start" id="start">
                             <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
                             
-                            <input type="text" class="input-sm form-control" name="end">
+                            <input type="text" class="input-sm form-control" v-model="end" id="end">
                         </div>
 
                     </div>
@@ -41,69 +41,9 @@
             </div>
 
           <section class="datas">
+            @include('log_book.list')
           </section>
       </div>
     </div>
   </div>
-@endsection
-
-
-@section('scripts')
-<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
-<script src="{!! asset('assets/bundles/libscripts.bundle.js') !!}"></script>
-<script>
-    
-var vm = new Vue({  
-    el: "#app_vue",
-    data:  {
-      datas: [],
-      tanggal: parseInt({!! json_encode($tanggal) !!}),
-    },
-    watch: {
-        // type: function (val) {
-        //     this.setDatas();
-        // },
-        // month: function (val) {
-        //     this.setDatas();
-        // },
-        // year: function (val) {
-        //     this.setDatas();
-        // },
-    },
-    methods: {
-        setDatas: function(){
-            var self = this;
-            $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
-            $.ajax({
-                url : "{{ url('/ckp/data_ckp/') }}",
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    month: self.month, 
-                    year: self.year, 
-                    type: self.type,
-                },
-            }).done(function (data) {
-                self.datas = data.datas.utama;
-
-
-                $('#wait_progres').modal('hide');
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
-        }
-    }
-});
-
-$(document).ready(function() {
-    vm.setDatas();
-});
-</script>
 @endsection

@@ -15,22 +15,17 @@ class LogBookController extends Controller
     
     public function dataLogBook(Request $request){
         $datas=array();
-        $month = date('m');
-        $year = date('Y');
-        $type = 1;
+        $start = date('Y-m-d');
+        $end = date('Y-m-d');
 
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
+        if(strlen($request->get('start'))>0)
+            $start =  date("Y-m-d", strtotime($request->get('start')));
 
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-            
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
-        
+        if(strlen($request->get('end'))>0)
+            $end =  date("Y-m-d", strtotime($request->get('end')));
 
         $model = new \App\LogBook;
-        $datas = $model->LogBookRekap($type, $month, $year);
+        $datas = $model->LogBookRekap($start, $end);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -44,15 +39,14 @@ class LogBookController extends Controller
     public function index(Request $request)
     {
         $datas=array();
-        $tanggal = date('Y-m-d');
 
-        if(strlen($request->get('tanggal'))>0)
-            $tanggal = $request->get('tanggal');
+        $start = date('m/d/Y');
+        $end = date('m/d/Y');
 
         $model = new \App\LogBook;
 
         return view('log_book.index', compact('model', 
-            'tanggal', 'datas'));
+            'datas', 'start', 'end'));
     }
 
     /**
@@ -62,58 +56,10 @@ class LogBookController extends Controller
      */
     public function create()
     {
-        $month = date('m');
-        $year = date('Y');
-
         $model = new \App\LogBook;
 
-        return view('log_book.create', compact('month', 
-            'year', 'model'));
+        return view('log_book.create', compact('model'));
     }
-
-    public function print(Request $request)
-    {
-        // $datas=array();
-        // $month = date('m');
-        // $year = date('Y');
-        // $type = 1;
-        // $total_utama = 0;
-        // $total_tambahan = 0;
-
-        // if(strlen($request->get('month'))>0)
-        //     $month = $request->get('month');
-
-        $datas=array();
-        $month = date('m');
-        $year = date('Y');
-        $type = 1;
-
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-            
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
-        
-
-        $model = new \App\LogBook;
-        $datas = $model->LogBookBulanan($type, $month, $year);
-
-        
-        $pdf = PDF::loadView('log_book.pdfview', compact('month', 
-            'year', 'type', 'model', 'datas'))
-            ->setPaper('a4');
-            // ->setOrientation('portrait');
-            
-        return $pdf->download('pdfview.pdf');
-
-        // print_r($datas);die();
-        // return view('log_book.pdfview', compact('month', 
-        //     'year', 'type', 'model', 'datas'));
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -123,163 +69,23 @@ class LogBookController extends Controller
      */
     public function store(Request $request)
     {
-        $datas=array();
-        $month = date('m');
-        $year = date('Y');
-        $type = 1;
-        $total_utama = 0;
-        $total_tambahan = 0;
-
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-        
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-            
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
-            
-        if(strlen($request->get('total_utama'))>0)
-            $total_utama = $request->get('total_utama');
-                        
-        if(strlen($request->get('total_tambahan'))>0)
-            $total_tambahan = $request->get('total_tambahan');
-            
-        $model = new \App\LogBook;
-        $datas = $model->LogBookBulanan($type, $month, $year);
-
-        foreach($datas['utama'] as $data){
-            if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
-                
-                $model_utama = \App\LogBook::find($data->id);
-                $model_utama->uraian = $request->get('u_uraian'.$data->id);
-                $model_utama->satuan = $request->get('u_satuan'.$data->id);
-                $model_utama->target_kuantitas = $request->get('u_target_kuantitas'.$data->id);
-
-                $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitas'.$data->id);
-                $model_utama->kualitas = $request->get('u_kualitas'.$data->id);
-
-                $model_utama->kode_butir = $request->get('u_kode_butir'.$data->id);
-                $model_utama->angka_kredit = $request->get('u_angka_kredit'.$data->id);
-                $model_utama->keterangan = $request->get('u_kredit'.$data->id);
-                $model_utama->save();
-            }
-        }
-        
-        foreach($datas['tambahan'] as $data){
-            if(strlen($request->get('t_uraian'.$data->id))>0 && strlen($request->get('t_satuan'.$data->id))>0 && strlen($request->get('t_target_kuantitas'.$data->id))>0){
-                
-                $model_tambahan = \App\LogBook::find($data->id);
-                $model_tambahan->uraian = $request->get('t_uraian'.$data->id);
-                $model_tambahan->satuan = $request->get('t_satuan'.$data->id);
-                $model_tambahan->target_kuantitas = $request->get('t_target_kuantitas'.$data->id);
-                $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitas'.$data->id);
-                $model_tambahan->kualitas = $request->get('t_kualitas'.$data->id);
-                $model_tambahan->kode_butir = $request->get('t_kode_butir'.$data->id);
-                $model_tambahan->angka_kredit = $request->get('t_angka_kredit'.$data->id);
-                $model_tambahan->keterangan = $request->get('t_kredit'.$data->id);
-                $model_tambahan->save();
-            }
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('log_book/create')
+                        ->withErrors($validator)
+                        ->withInput();
         }
 
-        for($i=1;$i<=$total_utama;++$i){
-            if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
-                $model_utama = new \App\LogBook;
-                
-                $model_utama->user_id = Auth::id();
-                $model_utama->month = $request->get('month');
-                $model_utama->year = $request->get('year');
-                $model_utama->type = $request->get('type');
-                $model_utama->jenis = 1;
-
-                $model_utama->uraian = $request->get('u_uraianau'.$i);
-                $model_utama->satuan = $request->get('u_satuanau'.$i);
-                $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
-
-                $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
-                $model_utama->kualitas = $request->get('u_kualitasau'.$i);
-
-                $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
-                $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
-                $model_utama->keterangan = $request->get('u_kreditau'.$i);
-
-                $model_utama->created_by=Auth::id();
-                $model_utama->updated_by=Auth::id();
-                $model_utama->save();
-            }
-        }
-
-        
-        for($i=1;$i<=$total_tambahan;++$i){
-            if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
-                
-                $model_tambahan = new \App\LogBook;
-                
-                $model_tambahan->user_id = Auth::id();
-                $model_tambahan->month = $request->get('month');
-                $model_tambahan->year = $request->get('year');
-                $model_tambahan->type = $request->get('type');
-                $model_tambahan->jenis = 2;
-
-                $model_tambahan->uraian = $request->get('t_uraianat'.$i);
-                $model_tambahan->satuan = $request->get('t_satuanat'.$i);
-                $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
-                
-                $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
-                $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
-                    
-                $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
-                $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
-                $model_tambahan->keterangan = $request->get('t_kreditat'.$i);
-
-                $model_tambahan->created_by=Auth::id();
-                $model_tambahan->updated_by=Auth::id();
-                $model_tambahan->save();
-            }
-        }
-        
-        // $rekanans = \App\RekananSampah::where('is_active', '=', '1')->get();
-
-        // for($d=1; $d<=31; $d++)
-        // {
-        //     $time=mktime(12, 0, 0, $month, $d, $year);          
-        //     if (date('m', $time)==$month)
-        //     {
-        //         // $datas[]=array('label'=> date('D, d-M', $time), 'd'=>$d);
-        //         foreach($rekanans as $rekanan){
-        //             $j_name =  'jumlah'.$rekanan->id;
-        //             $r_name =  'rate'.$rekanan->id;
-
-        //             if($request->has($j_name.'-'.$d) && $request->has($r_name.'-'.$d)){
-        //                 if(strlen($request->get($j_name.'-'.$d))>0 && strlen($request->get($r_name.'-'.$d))>0)
-        //                 {
-        //                     $tanggal = $year.'-'.$month.'-'.$d;
-        //                     $model = \App\PengangkutanSampah::where([
-        //                         ['rekanan_id', '=', $rekanan->id],
-        //                         ['tanggal', '=', DB::raw("'$tanggal'")],
-        //                     ])
-        //                     ->first();
-            
-        //                     if($model === null){
-        //                         $model= new \App\PengangkutanSampah;
-        //                         $model->rekanan_id=$rekanan->id;
-        //                         $model->tanggal=$tanggal;
-        //                         $model->created_by=Auth::id();
-        //                         $model->company_id=Auth::user()->company_id;
-        //                     }
-        //                     $model->jumlah = $request->get($j_name.'-'.$d);
-        //                     $model->rate = $request->get($r_name.'-'.$d);
-        //                     $model->updated_by=Auth::id();
-        //                     $model->save();
-        //                 }
-        //             }
-        //             // $month = $request->get('month');
-        //         }
-        //     }
-        // }
+        $model= new \App\LogBook;
+        $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
+        $model->isi=$request->get('isi');
+        $model->is_approve=0;
+        $model->catatan_approve='';
+        $model->user_id = Auth::id();
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
         
         return redirect('log_book')->with('success', 'Information has been added');
-    
     }
 
     /**

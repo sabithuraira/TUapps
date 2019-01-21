@@ -3,64 +3,21 @@
         <thead>
             <tr>
                 <th rowspan="2">No</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</th>
-                
-                <th v-if="type==1" class="text-center" rowspan="2">Target Kuantitas</th>
-                <template v-else>
-                    <th class="text-center" colspan="3">Kuantitas</th>
-                    <th class="text-center" rowspan="2">Tingkat Kualitas</th>
-                </template>
+                <th class="text-center" rowspan="2">{{ $model->attributes()['tanggal'] }}</th>
+                <th class="text-center" rowspan="2">{{ $model->attributes()['isi'] }}</th>
 
-                <th class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</th>
-                <th class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</th>
-            </tr>
-
-            <tr v-show="type!=1">
-                <th class="text-center" >Target</th>
-                <th class="text-center" >Realisasi</th>
-                <th class="text-center" >%</th>
+                <th class="text-center" rowspan="2">{{ $model->attributes()['is_approve'] }}</th>
             </tr>
         </thead>
 
         <tbody>
-            <tr><td :colspan="total_column">UTAMA</td></tr>
-            <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
+            <tr v-for="(data, index) in datas" :key="data.id">
                 <td>@{{ index+1 }}</td>
-                <td>@{{ data.uraian }}</td>
-                <td>@{{data.satuan }}</td>
-                <td>@{{data.target_kuantitas }}</td>
-                
-                <template v-if="type==2">
-                    <td>@{{ data.realisasi_kuantitas }}</td>
-                    <td>%</td>
-                    <td>@{{ data.kualitas }}</td>
-                </template>
-
-                <td>@{{ data.kode_butir }}</td>
-                <td>@{{ data.angka_kredit }}</td>
-                <td>@{{ data.keterangan }}</td>
+                <td>@{{ data.tanggal }}</td>
+                <td v-html="data.isi"></td>
+                <td class="text-center"  v-if="data.is_approve==0">belum disetujui</td>
+                <td class="text-center"  v-else>sudah disetujui</td>
             </tr>
-            
-            <tr><td :colspan="total_column">TAMBAHAN</td></tr>
-            <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
-                <td>@{{ index+1 }}</td>
-                <td>@{{ data.uraian }}</td>
-                <td>@{{data.satuan }}</td>
-                <td>@{{data.target_kuantitas }}</td>
-                
-                <template v-if="type==2">
-                    <td>@{{ data.realisasi_kuantitas }}</td>
-                    <td>%</td>
-                    <td>@{{ data.kualitas }}</td>
-                </template>
-
-                <td>@{{ data.kode_butir }}</td>
-                <td>@{{ data.angka_kredit }}</td>
-                <td>@{{ data.keterangan }}</td>
-            </tr>
-
         </tbody>
     </table>
 </div>
@@ -77,6 +34,7 @@
     </div>
 </div>
 
+
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
@@ -84,37 +42,24 @@
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script>
+    
 var vm = new Vue({  
     el: "#app_vue",
     data:  {
-      kegiatan_utama: [],
-      kegiatan_tambahan: [],
-      type: 1,
-      month: parseInt({!! json_encode($month) !!}),
-      year: {!! json_encode($year) !!},
-      total_utama: 1,
-      total_tambahan: 1,
+      datas: [],
+      start: {!! json_encode($start) !!},
+      end: {!! json_encode($end) !!},
     },
-    computed: {
-        total_column: function () {
-            if(this.type==1)
-                return 7;
-            else
-                return 10;
-        }
-    },
-    watch: {
-        type: function (val) {
-            this.setDatas();
-        },
-        month: function (val) {
-            this.setDatas();
-        },
-        year: function (val) {
-            this.setDatas();
-        },
-    },
+    // watch: {
+    //     start: function (val) {
+    //         this.setDatas();
+    //     },
+    //     end: function (val) {
+    //         this.setDatas();
+    //     },
+    // },
     methods: {
         setDatas: function(){
             var self = this;
@@ -129,15 +74,12 @@ var vm = new Vue({
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    month: self.month, 
-                    year: self.year, 
-                    type: self.type,
+                    start: self.start, 
+                    end: self.end, 
                 },
             }).done(function (data) {
-                self.kegiatan_utama = data.datas.utama;
-                self.kegiatan_tambahan = data.datas.tambahan;
-
-
+                self.datas = data.datas;
+                // console.log(JSON.stringify(data));
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -147,8 +89,19 @@ var vm = new Vue({
     }
 });
 
-    $(document).ready(function() {
-        vm.setDatas();
-    });
+$(document).ready(function() {
+    vm.setDatas();
+});
+
+$('#start').change(function() {
+    vm.start = this.value;
+    vm.setDatas();
+});
+
+
+$('#end').change(function() {
+    vm.end = this.value;
+    vm.setDatas();
+});
 </script>
 @endsection
