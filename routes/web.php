@@ -15,6 +15,36 @@
 //     return view('welcome');
 // });
 
+
+Route::get('testa', function () {
+    $value = Cache::get('CommunityBPS');
+    print_r($value);
+
+    $value2 = Cookie::get('CommunityBPS');
+    print_r($value2);
+
+    $cookie = '';
+    if(isset($_COOKIE["CommunityBPS"])){
+        $cookie = $_COOKIE["CommunityBPS"];
+    }
+    print_r($cookie);
+
+    $service_url    = 'http://pbd.bps.go.id/simpeg_api/bps16';
+	$curl           = curl_init($service_url);
+	$curl_post_data = array(
+        "apiKey" => '4vl8i/WeNeRlRxM4KDk93VqdT0/LZ9g+GBITo+OiHVs=',
+        "kategori"=> 'view_pegawai',
+        "kdkab" => '01'
+	);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl, CURLOPT_POST, true);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
+	$curl_response = curl_exec($curl);
+	print_r($curl_response);
+	curl_close($curl);
+});
+
+
 Route::resource('uker','UkerController');
 Route::resource('type_kredit','TypeKreditController');
 Route::resource('rincian_kredit','RincianKreditController');
@@ -34,3 +64,4 @@ Route::get('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('guest', 'HomeController@guest')->name('guest');

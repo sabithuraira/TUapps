@@ -23,16 +23,7 @@
 <body class="theme-blush">
 	<!-- WRAPPER -->
 	<div id="wrapper">
-		<div class="vertical-align-wrap">
-			<div class="vertical-align-middle auth-main">
-				<div class="auth-box">
-                    <div class="top">
-                        <img src="{!! asset('lucid/assets/images/logo-white.svg') !!}" alt="Lucid">
-                    </div>
-                    @yield('content')
-				</div>
-			</div>
-		</div>
+        @yield('content')	
 	</div>
 	<!-- END WRAPPER -->
 </body>

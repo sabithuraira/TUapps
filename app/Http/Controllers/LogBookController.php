@@ -130,14 +130,12 @@ class LogBookController extends Controller
         $model = \App\LogBook::find($id);
         return view('log_book.show',compact('model','id'));
     }
-
     
     public function print($id)
     {
         $model = \App\LogBook::find($id);
         return view('log_book.print',compact('model','id'));
     }
-
 
     /**
      * Remove the specified resource from storage.
