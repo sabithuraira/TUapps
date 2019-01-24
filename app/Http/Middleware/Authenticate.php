@@ -26,13 +26,7 @@ class Authenticate extends Middleware
             //340055914
             $c_nip = substr($c_cookie, 0 ,9);
 
-            $service_url    = 'http://pbd.bps.go.id/simpeg_api/bps16';
-            $curl           = curl_init($service_url);
-            $curl_post_data = array(
-                "apiKey" => '4vl8i/WeNeRlRxM4KDk93VqdT0/LZ9g+GBITo+OiHVs=',
-                "kategori"=> 'view_pegawai',
-                "nip" => $c_nip,
-            );
+           
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
