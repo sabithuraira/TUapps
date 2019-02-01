@@ -178,64 +178,45 @@
                 </div>
                 <div class="col-lg-8 col-md-12">
                     <div class="card">
-                        <div class="header">
-                            <h2>Data Managed</h2>
-                            <ul class="header-dropdown">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another Action</a></li>
-                                        <li><a href="javascript:void(0);">Something else</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
                         <div class="body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h2>1,523</h2>
-                                    <p>External Records</p>                                    
+                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100" src="https://placeimg.com/640/480/any" alt="First slide">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>First slide label</h5>
+                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                                        </div>
+                                     </div>
+
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="https://placeimg.com/480/480/any" alt="Second slide">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>Second slide label</h5>
+                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="https://placeimg.com/640/480/any" alt="Third slide">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>Third slide label</h5>
+                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="sparkline m-b-20" data-type="bar" data-width="97%" data-height="60px" data-bar-Width="3" data-bar-Spacing="8" data-bar-Color="#00ced1">2,-1,5,6,4,8,7,-5,6,2,3,5,6,2,-3,4,-2</div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover m-b-0">
-                                    <tbody>
-                                        <tr>
-                                            <th><i class="fa fa-circle text-success"></i></th>
-                                            <td>Twitter</td>
-                                            <td><span>862 Records</span></td>
-                                            <td>35% <i class="fa fa-caret-up "></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="fa fa-circle text-info"></i></th>
-                                            <td>Facebook</td>
-                                            <td><span>451 Records</span></td>
-                                            <td>15% <i class="fa fa-caret-up "></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="fa fa-circle text-warning"></i></th>
-                                            <td>Mailchimp</td>
-                                            <td><span>502 Records</span></td>
-                                            <td>20% <i class="fa fa-caret-down"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="fa fa-circle text-danger"></i></th>
-                                            <td>Google</td>
-                                            <td><span>502 Records</span></td>
-                                            <td>20% <i class="fa fa-caret-up "></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="fa fa-circle "></i></th>
-                                            <td>Other</td>
-                                            <td><span>237 Records</span></td>
-                                            <td>10% <i class="fa fa-caret-down"></i></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
                         </div>
                     </div>
