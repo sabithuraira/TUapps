@@ -12,6 +12,18 @@ class CkpController extends Controller
     {
         $this->middleware('auth');
     }
+
+    // public function print($id){
+    //     $model= \App\Sppk::find($id);
+
+    //     $pdf = PDF::loadView('sppk.print', compact('model', 
+    //         'id'))
+    //         ->setPaper('a4');
+    //         // ->setOrientation('portrait');
+    //     return $pdf->download('pdfview.pdf');
+
+    //     // return view('sppk.print',compact('model','id'));
+    // }
     
     public function dataCkp(Request $request){
         $datas=array();
@@ -79,7 +91,7 @@ class CkpController extends Controller
             'year', 'model'));
     }
 
-    public function print(Request $request)
+    public function print()
     {
         // $datas=array();
         // $month = date('m');
@@ -96,14 +108,14 @@ class CkpController extends Controller
         $year = date('Y');
         $type = 1;
 
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
+        // if(strlen($request->get('month'))>0)
+        //     $month = $request->get('month');
 
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
+        // if(strlen($request->get('year'))>0)
+        //     $year = $request->get('year');
             
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
+        // if(strlen($request->get('type'))>0)
+        //     $type = $request->get('type');
         
 
         $model = new \App\Ckp;
@@ -194,7 +206,7 @@ class CkpController extends Controller
             if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
                 $model_utama = new \App\Ckp;
                 
-                $model_utama->user_id = Auth::id();
+                $model_utama->user_id =  Auth::user()->email;
                 $model_utama->month = $request->get('month');
                 $model_utama->year = $request->get('year');
                 $model_utama->type = $request->get('type');
@@ -223,7 +235,7 @@ class CkpController extends Controller
                 
                 $model_tambahan = new \App\Ckp;
                 
-                $model_tambahan->user_id = Auth::id();
+                $model_tambahan->user_id = Auth::user()->email;
                 $model_tambahan->month = $request->get('month');
                 $model_tambahan->year = $request->get('year');
                 $model_tambahan->type = $request->get('type');

@@ -94,12 +94,12 @@
                     <td>@{{ index+1 }}</td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
                     <template v-if="type==2">
-                        <td><input class="form-control  form-control-sm" type="text":name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
@@ -112,12 +112,12 @@
                     <td>@{{ index+1 }}</td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
-                    <td><input class="form-control  form-control-sm" type="text" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
                     <template v-if="type==2">
-                        <td><input class="form-control  form-control-sm" type="text":name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                         <td>%</td>
-                        <td><input class="form-control  form-control-sm" type="text" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
@@ -162,6 +162,7 @@ var vm = new Vue({
       year: {!! json_encode($year) !!},
       total_utama: 1,
       total_tambahan: 1,
+      pathname : (window.location.pathname).replace("/create", ""),
     },
     computed: {
         total_column: function () {
@@ -192,7 +193,7 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : "{{ url('/ckp/data_ckp/') }}",
+                url : self.pathname+"/data_ckp",
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -211,9 +212,6 @@ var vm = new Vue({
                 self.kegiatan_tambahan.push({
                     'id': 'at'+(self.total_tambahan),
                 });
-
-                console.log(self.kegiatan_utama);
-                console.log(self.kegiatan_tambahan);
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

@@ -81,7 +81,7 @@ class LogBookController extends Controller
         $model->isi=$request->get('isi');
         $model->is_approve=2;
         $model->catatan_approve='';
-        $model->user_id = Auth::id();
+        $model->user_id = Auth::user()->email;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();

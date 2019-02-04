@@ -95,6 +95,7 @@ var vm = new Vue({
       year: {!! json_encode($year) !!},
       total_utama: 1,
       total_tambahan: 1,
+      pathname : window.location.pathname,
     },
     computed: {
         total_column: function () {
@@ -125,7 +126,7 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : "{{ url('/ckp/data_ckp/') }}",
+                url : self.pathname+"/data_ckp",
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -136,7 +137,6 @@ var vm = new Vue({
             }).done(function (data) {
                 self.kegiatan_utama = data.datas.utama;
                 self.kegiatan_tambahan = data.datas.tambahan;
-
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

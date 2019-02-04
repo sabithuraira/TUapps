@@ -59,6 +59,7 @@ var vm = new Vue({
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
       url_log_book: {!! json_encode(url('/log_book/')) !!},
+      pathname : window.location.pathname,
     },
     methods: {
         setDatas: function(){
@@ -70,7 +71,8 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : "{{ url('/log_book/data_log_book/') }}",
+                url : self.pathname+"/data_log_book",
+                // url : "{{ url('/log_book/data_log_book/') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{
