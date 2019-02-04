@@ -18,3 +18,4 @@ public/assets
 public/lucid
 composer.phar
 public/assets_hmenu
+app/Http/Middleware/Authenticate.php

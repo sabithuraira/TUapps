@@ -20,8 +20,8 @@
                 <td class="text-center"  v-else>sudah disetujui</td>
 
                 <td>
-                    <a :href="url_log_book+'/'+data.id+'/edit'" class="btn btn-warning"><i class="icon-pencil"></i></a>    
-                    <a :href="url_log_book+'/'+data.id+''" class="btn btn-info"><i class="fa fa-search"></i></a>    
+                    <a :href="url_log_book+'/'+data.id+'/edit'"><i class="icon-pencil text-info"></i></a>    
+                    <a :href="url_log_book+'/'+data.id+''"><i class="fa fa-search text-default"></i></a>    
             
                 </td>
             </tr>

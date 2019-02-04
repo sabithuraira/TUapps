@@ -10,7 +10,7 @@
                     <th>{{ $datas[0]->attributes()['jenis'] }}</th>
                     <th>{{ $datas[0]->attributes()['kode'] }}</th>
                     <th>{{ $datas[0]->attributes()['uraian'] }}</th>
-                <th colspan="2">Action</th>
+                <th class="text-center" colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,12 +20,12 @@
                     <td>{{$data['kode']}}</td>
                     <td>{{$data['uraian']}}</td>
                     
-                    <td><a href="{{action('RincianKreditController@edit', $data['id'])}}" class="btn btn-warning">Edit</a></td>
-                    <td>
+                    <td class="text-center"><a href="{{action('RincianKreditController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
+                    <td class="text-center">
                     <form action="{{action('RincianKreditController@destroy', $data['id'])}}" method="post">
                         @csrf
                         <input name="_method" type="hidden" value="DELETE">
-                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <button type="submit"><i class="icon-trash text-danger"></i></button>
                     </form>
                     </td>
                 </tr>

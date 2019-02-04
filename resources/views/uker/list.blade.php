@@ -9,7 +9,7 @@
                 <tr>
                 <th>Kode</th>
                 <th>Nama</th>
-                <th colspan="2">Action</th>
+                <th class="text-center" colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,12 +18,12 @@
                     <td>{{$data['kode']}}</td>
                     <td>{{$data['nama']}}</td>
                     
-                    <td><a href="{{action('UkerController@edit', $data['id'])}}" class="btn btn-warning">Edit</a></td>
-                    <td>
+                    <td class="text-center"><a href="{{action('UkerController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
+                    <td class="text-center">
                     <form action="{{action('UkerController@destroy', $data['id'])}}" method="post">
                         @csrf
                         <input name="_method" type="hidden" value="DELETE">
-                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <button type="submit"><i class="icon-trash text-danger"></i></button>
                     </form>
                     </td>
                 </tr>
