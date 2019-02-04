@@ -59,6 +59,16 @@
                                     <li><a href="{{url('ckp')}}">CKP</a></li>
                                 </ul>
                             </li>
+
+                            
+                            <li>
+                                <a href="#User" class="has-arrow"><i class="icon-user-following"></i> <span>Manajemen User</span></a>
+                                <ul>
+                                    <li><a href="{{url('log_book')}}">Roles</a></li>
+                                    <li><a href="{{url('ckp')}}">Permission</a></li>
+                                    <li><a href="{{url('ckp')}}">User</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </nav>
                 </div>

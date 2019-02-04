@@ -37,6 +37,9 @@ Route::post('ckp/data_ckp', 'CkpController@dataCkp');
 // Route::get('ckp/print', 'CkpController@print');
 Route::get('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
+//SPATIE
+Route::resource('role','RoleController');
+
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
