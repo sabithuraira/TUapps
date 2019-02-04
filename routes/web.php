@@ -39,6 +39,7 @@ Route::get('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
 //SPATIE
 Route::resource('role','RoleController');
+Route::resource('permission','PermissionController');
 
 Auth::routes();
 
