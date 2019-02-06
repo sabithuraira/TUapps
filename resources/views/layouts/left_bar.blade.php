@@ -66,7 +66,7 @@
                                 <ul>
                                     <li><a href="{{url('role')}}">Roles</a></li>
                                     <li><a href="{{url('permission')}}">Permission</a></li>
-                                    <li><a href="{{url('ckp')}}">User</a></li>
+                                    <li><a href="{{url('user_role')}}">User Role</a></li>
                                 </ul>
                             </li>
                         </ul>
