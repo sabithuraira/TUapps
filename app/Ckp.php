@@ -29,7 +29,7 @@ class Ckp extends Model
         return array(1 => 'Kegiatan Utama', 2 => 'Kegiatan Tambahan');
     }
 
-    public function CkpBulanan($type, $bulan, $year){
+    public function CkpBulanan($type, $bulan, $year,$user){
         $datas = array();
 
         $datas['utama'] = DB::table('ckps')
@@ -46,6 +46,7 @@ class Ckp extends Model
                 ['ckps.year', '=', $year],
                 ['ckps.type', '=', $type],
                 ['ckps.jenis', '=', 1],
+                ['ckps.user_id', '=', $user],
             ])
             ->orderBy('ckps.jenis')
             ->get();
@@ -56,6 +57,7 @@ class Ckp extends Model
                 ['ckps.year', '=', $year],
                 ['ckps.type', '=', $type],
                 ['ckps.jenis', '=', 2],
+                ['ckps.user_id', '=', $user],
             ])
             ->orderBy('ckps.jenis')
             ->get();

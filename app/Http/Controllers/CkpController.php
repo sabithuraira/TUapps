@@ -27,6 +27,8 @@ class CkpController extends Controller
     
     public function dataCkp(Request $request){
         $datas=array();
+        $user = Auth::user();
+        $user_id =  Auth::user()->email;
         $month = date('m');
         $year = date('Y');
         $type = 1;
@@ -42,7 +44,7 @@ class CkpController extends Controller
         
 
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -91,47 +93,54 @@ class CkpController extends Controller
             'year', 'model'));
     }
 
-    public function print()
+    public function print(Request $request)
     {
-        // $datas=array();
-        // $month = date('m');
-        // $year = date('Y');
-        // $type = 1;
-        // $total_utama = 0;
-        // $total_tambahan = 0;
-
-        // if(strlen($request->get('month'))>0)
-        //     $month = $request->get('month');
+        $user = Auth::user();
+        $user_id =  Auth::user()->email;
 
         $datas=array();
         $month = date('m');
         $year = date('Y');
         $type = 1;
 
-        // if(strlen($request->get('month'))>0)
-        //     $month = $request->get('month');
+        if(strlen($request->get('p_month'))>0)
+            $month = $request->get('p_month');
 
-        // if(strlen($request->get('year'))>0)
-        //     $year = $request->get('year');
+        if(strlen($request->get('p_year'))>0)
+            $year = $request->get('p_year');
             
-        // if(strlen($request->get('type'))>0)
-        //     $type = $request->get('type');
+        if(strlen($request->get('p_type'))>0)
+            $type = $request->get('p_type');
+            
+        if(strlen($request->get('p_user'))>0){
+            $user_id = $request->get('p_user');
+            $user = \App\User::where('email', '=', $user_id)->first();
+        }
         
 
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
 
-        
-        $pdf = PDF::loadView('ckp.pdfview', compact('month', 
-            'year', 'type', 'model', 'datas'))
-            ->setPaper('a4');
-            // ->setOrientation('portrait');
+        $monthName = date("F", mktime(0, 0, 0, $month, 10));
+        $last_day_month  = date('t', mktime(0, 0, 0, $month, 10)); //date("t");
+        $first_working_day = date('d F Y', strtotime("+0 weekday $monthName $year"));
+        $last_working_day = date('d F Y', strtotime('last weekday '.date("F Y", strtotime('next month '.$monthName.' '.$year))));
+
+         
+        $pdf = PDF::loadView('ckp.print', compact('month', 
+            'year', 'type', 'model', 'datas', 'user', 
+            'monthName', 'last_day_month',
+            'first_working_day', 'last_working_day'))
+            ->setPaper('a4', 'landscape');
             
-        return $pdf->download('pdfview.pdf');
+        return $pdf->download('print.pdf');
 
         // print_r($datas);die();
-        // return view('ckp.pdfview', compact('month', 
-        //     'year', 'type', 'model', 'datas'));
+
+        // return view('ckp.print', compact('month', 
+        //     'year', 'type', 'model', 'datas', 'user', 
+        //     'monthName', 'last_day_month',
+        //     'first_working_day', 'last_working_day'));
     }
 
 
@@ -143,6 +152,9 @@ class CkpController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $user_id =  Auth::user()->email;
+
         $datas=array();
         $month = date('m');
         $year = date('Y');
@@ -166,7 +178,7 @@ class CkpController extends Controller
             $total_tambahan = $request->get('total_tambahan');
             
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year);
+        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
 
         foreach($datas['utama'] as $data){
             if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){

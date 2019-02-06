@@ -1,4 +1,13 @@
 <div class="table-responsive">
+
+     <form action="{{action('CkpController@print')}}" method="post">
+        @csrf 
+        <input type="hidden"  v-model="type" name="p_type">
+        <input type="hidden"  v-model="month" name="p_month">
+        <input type="hidden"  v-model="year" name="p_year">
+        <button class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Cetak CKP &nbsp</button>
+    </form>
+    <br/><br/>
     <table class="table m-b-0">
         <thead>
             <tr>
@@ -143,12 +152,44 @@ var vm = new Vue({
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
             });
-        }
+        },
+        // cetakCkp: function(){
+        //     var self = this;
+
+        //     $('#wait_progres').modal('show');
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //         }
+        //     })
+        //     $.ajax({
+        //         url : self.pathname+"/print",
+        //         method : 'post',
+        //         dataType: 'json',
+        //         data:{
+        //             month: self.month, 
+        //             year: self.year, 
+        //             type: self.type,
+        //         },
+        //     }).done(function (data) {
+
+        //         $('#wait_progres').modal('hide');
+        //     }).fail(function (msg) {
+        //         console.log(JSON.stringify(msg));
+        //         $('#wait_progres').modal('hide');
+        //     });
+        // }
     }
 });
 
     $(document).ready(function() {
         vm.setDatas();
     });
+
+    
+    // $('#cetak').click(function(e) {
+    //         e.preventDefault();
+    //     vm.cetakCkp();
+    // });
 </script>
 @endsection

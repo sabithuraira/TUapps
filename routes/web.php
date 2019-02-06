@@ -35,7 +35,7 @@ Route::resource('ckp','CkpController')->except(['show']);
 // Route::resource('attribute_pos','AttributePosController')->except(['show']);
 Route::post('ckp/data_ckp', 'CkpController@dataCkp');
 // Route::get('ckp/print', 'CkpController@print');
-Route::get('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
+Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
 //SPATIE
 Route::resource('role','RoleController');

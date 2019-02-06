@@ -4,12 +4,11 @@
 <head>
 
 <!-- VENDOR CSS -->
-<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap/css/bootstrap.min.css') !!}">
-<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/font-awesome/css/font-awesome.min.css') !!}">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<!-- <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap/css/bootstrap.min.css') !!}"> -->
+<!-- <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/font-awesome/css/font-awesome.min.css') !!}"> -->
 
-<!-- MAIN CSS -->
-<link rel="stylesheet" href="{!! asset('assets/css/main.css') !!}">
-<link rel="stylesheet" href="{!! asset('assets/css/color_skins.css') !!}">
 </head>
 <body class="theme-cyan">
 

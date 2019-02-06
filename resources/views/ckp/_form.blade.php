@@ -67,7 +67,7 @@
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
-                    <th class="text-center" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
+                    <th class="text-center" style="width: 40%" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</th>
                     
                     <th v-if="type==1" class="text-center" rowspan="2">Target Kuantitas</th>
