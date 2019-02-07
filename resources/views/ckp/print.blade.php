@@ -100,8 +100,13 @@
         @php
             $no_column = 1;
             $total_column = ($type==1) ? 7 : 10;
-            $total_jumlah_column = ($type==1) ? 6 : 9;
-            $total_rata_column = ($type==1) ? 3 : 6;
+            $total_jumlah_column = ($type==1) ? 5 : 8;
+            $total_rata_column = ($type==1) ? 3 : 5;
+
+            $total_ak = 0;
+            $total_kegiatan = 0;
+            $total_p_kuantitas = 0;
+            $total_p_kualitas = 0;
         @endphp
 
         <tr align="center">
@@ -123,7 +128,15 @@
         
         <tr><td colspan="{{ $total_column }}"><b>UTAMA</b></td></tr>
         @foreach($datas['utama'] as $key=>$data)
-        
+            @php
+                $total_kegiatan++;
+                $total_ak += $data->angka_kredit;
+
+                if($type==2){
+                    $total_p_kuantitas = ($data->target_kuantitas/$data->realisasi_kuantitas*100);
+                    $total_p_kualitas = $data->kualitas ;
+                }
+            @endphp
             <tr>
                 <td align="center">{{ $key+1 }}</td>
                 <td>{{$data->uraian }}</td>
@@ -132,7 +145,7 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>%</td>
+                    <td>{{ ($data->target_kuantitas/$data->realisasi_kuantitas*100) }} %</td>
                     <td>{{ $data->kualitas }}</td>
                 @endif
 
@@ -145,7 +158,15 @@
         
         <tr><td colspan="{{ $total_column }}"><b>TAMBAHAN</b></td></tr>
         @foreach($datas['tambahan'] as $key=>$data)
-        
+            @php
+                $total_kegiatan++;
+                $total_ak += $data->angka_kredit;
+
+                if($type==2){
+                    $total_p_kuantitas = ($data->target_kuantitas/$data->realisasi_kuantitas*100);
+                    $total_p_kualitas = $data->kualitas ;
+                }
+            @endphp
             <tr>
                 <td align="center">{{ $key+1 }}</td>
                 <td>{{$data->uraian }}</td>
@@ -164,23 +185,34 @@
             </tr>
         @endforeach
 
+        @php
+            $p_kuantitas = ($total_kegiatan==0) ? 0 : $total_p_kuantitas/$total_kegiatan;
+            $p_kualitas = ($total_kegiatan==0) ? 0 : $total_p_kualitas/$total_kegiatan;
+        @endphp
         
         <tr align="center">
             <td colspan="{{ $total_jumlah_column }}"><b>JUMLAH</b></td>
-            <td>100</td>
+            <td>{{ $total_ak }}</td>
+            <td></td>
         </tr>
 
         @if ($type!=1)
         <tr align="center">
             <td colspan="{{ $total_rata_column }}"><b>RATA-RATA</b></td>
-            <td>100</td>
-            <td>100</td>
+            <td>{{ $p_kuantitas }}</td>
+            <td>{{ $p_kualitas }}</td>
+            <td></td>
+            <td></td>
             <td></td>
         </tr>
         
         <tr align="center">
             <td colspan="{{ $total_rata_column }}"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
-            <td colspan="2">100</td>
+            <td colspan="2">
+                {{ ($p_kuantitas+$p_kualitas)/2 }}
+            </td>
+            <td></td>
+            <td></td>
             <td></td>
         </tr>
         @endif
@@ -190,7 +222,7 @@
   <br/>
   <table width="30%">
       
-    @if ($type!=1)
+    @if ($type==1)
         <tr><td><b>Kesepakatan Target</b></td></tr>
         <tr><td>Tanggal : {{ $first_working_day }}</td></tr>
     @else
@@ -217,8 +249,8 @@
             <p>Pejabat Penilai</p>
             <br/>
             <br/>
-            ( Bambang Sri Yuwono)<br/>
-            NIP.  19671112 199101 1 001<br/>
+            ( {{ $user->pimpinan->name }} )<br/>
+            NIP.   {{ $user->pimpinan->nip_baru }} <br/>
         </td>
         <td width="15%"></td>
     </tr>

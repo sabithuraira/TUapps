@@ -14,7 +14,7 @@
         </article>
         <div class="margin-top-30">
             <a href="http://community.bps.go.id/" class="btn btn-info"><i class="icon-globe"></i> <span>Website Community</span></a>
-            <a href="http://community.bps.go.id/" class="btn btn-info"><i class="fa fa-home"></i> <span>kembali ke Beranda</span></a>
+            <a href="http://s.bps.go.id/musi" class="btn btn-info"><i class="fa fa-home"></i> <span>kembali ke Beranda</span></a>
         </div>
     </div>
     </div>

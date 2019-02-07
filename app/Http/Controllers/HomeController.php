@@ -23,7 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return redirect('ckp');
+        // return view('home');
     }
 
     public function guest(){
