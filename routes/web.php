@@ -17,7 +17,20 @@
 
 
 Route::get('testa', function () {
-    
+    $service_url    = env('SIMPEG_URL');
+    $curl           = curl_init($service_url);
+    $curl_post_data = array(
+        "apiKey" => env('SIMPEG_KEY'),
+        "kategori"=> 'view_pegawai',
+    );
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
+    $curl_response = json_decode(curl_exec($curl));
+
+    foreach($cur_response['pegawai'] as $value){
+        print_r($value);
+    }
 });
 
 
