@@ -9,8 +9,10 @@
         "barryvdh/laravel-dompdf": "^0.8.3",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
+        "graham-campbell/flysystem": "^5.1",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
+        "league/flysystem-webdav": "^1.0",
         "spatie/laravel-permission": "^2.30"
     },
     "require-dev": {

@@ -41,7 +41,14 @@
             <div class="tab-content p-l-0 p-r-0">
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
-                        <ul id="main-menu" class="metismenu">                            
+                        <ul id="main-menu" class="metismenu">   
+                            <li class="active">
+                                <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
+                                <ul>
+                                    <li><a href="{{url('log_book')}}">Log Book</a></li>
+                                    <li><a href="{{url('ckp')}}">CKP</a></li>
+                                </ul>
+                            </li>                         
                             <li class="active">
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                                 <ul>                                  
@@ -52,14 +59,6 @@
                                     <li><a href="{{url('user')}}">User</a></li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
-                                <ul>
-                                    <li><a href="{{url('log_book')}}">Log Book</a></li>
-                                    <li><a href="{{url('ckp')}}">CKP</a></li>
-                                </ul>
-                            </li>
-
                             
                             <li>
                                 <a href="#User" class="has-arrow"><i class="icon-user-following"></i> <span>Manajemen User</span></a>
