@@ -133,8 +133,8 @@
                 $total_ak += $data->angka_kredit;
 
                 if($type==2){
-                    $total_p_kuantitas = ($data->target_kuantitas/$data->realisasi_kuantitas*100);
-                    $total_p_kualitas = $data->kualitas ;
+                    $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
+                    $total_p_kualitas += $data->kualitas ;
                 }
             @endphp
             <tr>
@@ -146,7 +146,7 @@
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
                     <td>{{ ($data->target_kuantitas/$data->realisasi_kuantitas*100) }} %</td>
-                    <td>{{ $data->kualitas }}</td>
+                    <td>{{ $data->kualitas }} %</td>
                 @endif
 
                 <td>{{ $data->kode_butir }}</td>
@@ -163,8 +163,8 @@
                 $total_ak += $data->angka_kredit;
 
                 if($type==2){
-                    $total_p_kuantitas = ($data->target_kuantitas/$data->realisasi_kuantitas*100);
-                    $total_p_kualitas = $data->kualitas ;
+                    $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
+                    $total_p_kualitas += $data->kualitas ;
                 }
             @endphp
             <tr>
@@ -175,8 +175,8 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>%</td>
-                    <td>{{ $data->kualitas }}</td>
+                    <td>{{ ($data->target_kuantitas/$data->realisasi_kuantitas*100) }} %</td>
+                    <td>{{ $data->kualitas }} %</td>
                 @endif
 
                 <td>{{ $data->kode_butir }}</td>
@@ -186,8 +186,8 @@
         @endforeach
 
         @php
-            $p_kuantitas = ($total_kegiatan==0) ? 0 : $total_p_kuantitas/$total_kegiatan;
-            $p_kualitas = ($total_kegiatan==0) ? 0 : $total_p_kualitas/$total_kegiatan;
+            $p_kuantitas = ($total_kegiatan==0) ? 0 : round($total_p_kuantitas/$total_kegiatan,2);
+            $p_kualitas = ($total_kegiatan==0) ? 0 : round($total_p_kualitas/$total_kegiatan,2);
         @endphp
         
         <tr align="center">

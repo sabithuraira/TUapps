@@ -58,7 +58,11 @@
             <input type="hidden" name="total_tambahan" v-model="total_tambahan">
             <input type="hidden" name="total_utama" v-model="total_utama">
     <hr/>
+    <a href="#" id="salin" class="btn btn-secondary">
+        <i class="fa fa-copy"></i> Salin @{{ ckp_label }}
+    </a> 
     <button type="submit" class="btn btn-primary float-right">Simpan</button>
+    
     <br/><br/>
     <section class="datas">
 
@@ -170,6 +174,10 @@ var vm = new Vue({
                 return 7;
             else
                 return 10;
+        },
+        ckp_label: function() {
+            if(this.type==1) return 'CKP-R';
+            else return 'CKP-T';
         }
     },
     watch: {
@@ -219,6 +227,93 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
+        salinDatas: function(){
+            var self = this;
+
+                if(self.kegiatan_utama.length==1){
+                var anti_type = 1;
+                if(self.type==1)
+                    anti_type = 2;
+
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                })
+                $.ajax({
+                    url : self.pathname+"/data_ckp",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        month: self.month, 
+                        year: self.year, 
+                        type: anti_type,
+                    },
+                }).done(function (data) {
+                    // console.log(data);
+                    // var salin_utama = data.datas.utama;
+                    // var salin_tambahan = data.datas.tambahan;
+                    self.kegiatan_utama.splice(-1,1);
+                    self.kegiatan_tambahan.splice(-1,1);
+
+                    for(i=0;i<data.datas.utama.length;++i){
+                        var current_utama = data.datas.utama[i];
+                        self.total_utama++;
+                        self.kegiatan_utama.push({
+                            'id': 'au'+(self.kegiatan_utama.length+1),
+                            'uraian' : current_utama.uraian,
+                            'angka_kredit': current_utama.angka_kredit,
+                            'keterangan': current_utama.keterangan,
+                            'kode_butir': current_utama.kode_butir,
+                            'kualitas': current_utama.kualitas,
+                            'realisasi_kuantitas': current_utama.realisasi_kuantitas,
+                            'satuan': current_utama.satuan,
+                            'target_kuantitas': current_utama.target_kuantitas,
+                            'type': current_utama.type,
+                        });
+                    }
+
+                    for(i=0;i<data.datas.tambahan.length;++i){
+                        var current_tambahan = data.datas.tambahan[i];
+                        self.total_utama++;
+                        self.kegiatan_tambahan.push({
+                            'id': 'at'+(self.kegiatan_tambahan.length+1),
+                            'uraian' : current_utama.uraian,
+                            'angka_kredit': current_tambahan.angka_kredit,
+                            'keterangan': current_tambahan.keterangan,
+                            'kode_butir': current_tambahan.kode_butir,
+                            'kualitas': current_tambahan.kualitas,
+                            'realisasi_kuantitas': current_tambahan.realisasi_kuantitas,
+                            'satuan': current_tambahan.satuan,
+                            'target_kuantitas': current_tambahan.target_kuantitas,
+                            'type': current_tambahan.type,
+                        });
+                    }
+
+                    
+                    self.kegiatan_utama.push({
+                        'id': 'au'+(self.kegiatan_utama.length+1),
+                    });
+                    
+                    self.kegiatan_tambahan.push({
+                        'id': 'at'+(self.kegiatan_tambahan.length+1),
+                    });
+                    
+                    // self.kegiatan_tambahan.push({
+                    //     'id': 'at'+(self.total_tambahan),
+                    // });
+
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            }
+            else{
+                alert("CKP sudah memiliki rincian, penyalinan data gagal!");
+            }
+        },
         addData: function (event) {
             var self = this;
             if (event) {
@@ -248,12 +343,21 @@ var vm = new Vue({
     $('#month').change(function() {
         vm.setDatas();
     });
+    
+    $('#salin').click(function(e) {
+        e.preventDefault();
+        vm.salinDatas();
+    });
 
     $('#year').change(function() {
         vm.setDatas();
     });
   
     $('#type').change(function() {
+        vm.setDatas();
+    });
+    
+    $('#month').change(function() {
         vm.setDatas();
     });
 </script>

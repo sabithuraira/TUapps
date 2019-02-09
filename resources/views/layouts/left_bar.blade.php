@@ -48,8 +48,9 @@
                                     <li><a href="{{url('log_book')}}">Log Book</a></li>
                                     <li><a href="{{url('ckp')}}">CKP</a></li>
                                 </ul>
-                            </li>                         
-                            <li class="active">
+                            </li>
+                                                   
+                            <li>
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                                 <ul>                                  
                                     <li><a href="{{url('uker')}}">Unit Kerja</a></li>

@@ -39,12 +39,12 @@
                 <td>@{{ index+1 }}</td>
                 <td>@{{ data.uraian }}</td>
                 <td>@{{data.satuan }}</td>
-                <td>@{{data.target_kuantitas }}</td>
+                <td class="text-center">@{{data.target_kuantitas }}</td>
                 
                 <template v-if="type==2">
-                    <td>@{{ data.realisasi_kuantitas }}</td>
-                    <td>%</td>
-                    <td>@{{ data.kualitas }}</td>
+                    <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
+                    <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                    <td class="text-center">@{{ data.kualitas }} %</td>
                 </template>
 
                 <td>@{{ data.kode_butir }}</td>
@@ -57,12 +57,12 @@
                 <td>@{{ index+1 }}</td>
                 <td>@{{ data.uraian }}</td>
                 <td>@{{data.satuan }}</td>
-                <td>@{{data.target_kuantitas }}</td>
+                <td class="text-center">@{{data.target_kuantitas }}</td>
                 
                 <template v-if="type==2">
-                    <td>@{{ data.realisasi_kuantitas }}</td>
-                    <td>%</td>
-                    <td>@{{ data.kualitas }}</td>
+                    <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
+                    <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                    <td class="text-center">@{{ data.kualitas }} %</td>
                 </template>
 
                 <td>@{{ data.kode_butir }}</td>

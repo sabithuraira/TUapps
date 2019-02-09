@@ -216,57 +216,80 @@ class CkpController extends Controller
 
         for($i=1;$i<=$total_utama;++$i){
             if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
-                $model_utama = new \App\Ckp;
+                $is_valid_by_type = true;
+
+                if($request->get('type')==2){
+                    if(strlen($request->get('u_realisasi_kuantitasau'.$i))==0 || strlen($request->get('u_kualitasau'.$i))==0){
+                        $is_valid_by_type = false;        
+                    }
+                } 
                 
-                $model_utama->user_id =  Auth::user()->email;
-                $model_utama->month = $request->get('month');
-                $model_utama->year = $request->get('year');
-                $model_utama->type = $request->get('type');
-                $model_utama->jenis = 1;
+                if($is_valid_by_type){
+                    $model_utama = new \App\Ckp;
+                    
+                    $model_utama->user_id =  Auth::user()->email;
+                    $model_utama->month = $request->get('month');
+                    $model_utama->year = $request->get('year');
+                    $model_utama->type = $request->get('type');
+                    $model_utama->jenis = 1;
 
-                $model_utama->uraian = $request->get('u_uraianau'.$i);
-                $model_utama->satuan = $request->get('u_satuanau'.$i);
-                $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
+                    $model_utama->uraian = $request->get('u_uraianau'.$i);
+                    $model_utama->satuan = $request->get('u_satuanau'.$i);
+                    $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
 
-                $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
-                $model_utama->kualitas = $request->get('u_kualitasau'.$i);
+                    if($request->get('type')==2){
+                        $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
+                        $model_utama->kualitas = $request->get('u_kualitasau'.$i);
+                    }
 
-                $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
-                $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
-                $model_utama->keterangan = $request->get('u_kreditau'.$i);
+                    $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
+                    $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
+                    $model_utama->keterangan = $request->get('u_kreditau'.$i);
 
-                $model_utama->created_by=Auth::id();
-                $model_utama->updated_by=Auth::id();
-                $model_utama->save();
+                    $model_utama->created_by=Auth::id();
+                    $model_utama->updated_by=Auth::id();
+                    $model_utama->save();
+                }
             }
         }
 
         
         for($i=1;$i<=$total_tambahan;++$i){
             if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
-                
-                $model_tambahan = new \App\Ckp;
-                
-                $model_tambahan->user_id = Auth::user()->email;
-                $model_tambahan->month = $request->get('month');
-                $model_tambahan->year = $request->get('year');
-                $model_tambahan->type = $request->get('type');
-                $model_tambahan->jenis = 2;
+                $is_valid_by_type = true;
 
-                $model_tambahan->uraian = $request->get('t_uraianat'.$i);
-                $model_tambahan->satuan = $request->get('t_satuanat'.$i);
-                $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
+                if($request->get('type')==2){
+                    if(strlen($request->get('t_realisasi_kuantitasat'.$i))==0 || strlen($request->get('t_kualitasat'.$i))==0){
+                        $is_valid_by_type = false;        
+                    }
+                } 
                 
-                $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
-                $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
+                if($is_valid_by_type){
+                    $model_tambahan = new \App\Ckp;
                     
-                $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
-                $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
-                $model_tambahan->keterangan = $request->get('t_kreditat'.$i);
+                    $model_tambahan->user_id = Auth::user()->email;
+                    $model_tambahan->month = $request->get('month');
+                    $model_tambahan->year = $request->get('year');
+                    $model_tambahan->type = $request->get('type');
+                    $model_tambahan->jenis = 2;
 
-                $model_tambahan->created_by=Auth::id();
-                $model_tambahan->updated_by=Auth::id();
-                $model_tambahan->save();
+                    $model_tambahan->uraian = $request->get('t_uraianat'.$i);
+                    $model_tambahan->satuan = $request->get('t_satuanat'.$i);
+                    $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
+                    
+                    if($request->get('type')==2){
+                        $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
+                        $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
+                    }
+                        
+                    $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
+                    $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
+                    $model_tambahan->keterangan = $request->get('t_kreditat'.$i);
+
+                    $model_tambahan->created_by=Auth::id();
+                    $model_tambahan->updated_by=Auth::id();
+                    $model_tambahan->save();
+                }
             }
         }
         

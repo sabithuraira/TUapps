@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UkerRequest;
-use GrahamCampbell\Flysystem\Facades\Flysystem;
 
 class UkerController extends Controller
 {
@@ -101,30 +100,20 @@ class UkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function update(UkerRequest $request, $id)
-    public function update(Request $request, $id)
+    public function update(UkerRequest $request, $id)
     {
-        if ($request->hasFile('nama')) {
-            $file = $request->file('nama');
-            $name = time() . $file->getClientOriginalName();
-            $filePath = 'prosedur/' . $name;
-            Flysystem::connection('webdav')
-                    ->put($filePath, file_get_contents($file));
-            print_r('iudah');
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('uker/edit',$id)
+                        ->withErrors($validator)
+                        ->withInput();
         }
-
-        // if (isset($request->validator) && $request->validator->fails()) {
-        //     return redirect('uker/edit',$id)
-        //                 ->withErrors($validator)
-        //                 ->withInput();
-        // }
         
-        // $model= \App\UnitKerja::find($id);
-        // $model->kode=$request->get('kode');
-        // $model->nama=$request->get('nama');
-        // $model->updated_by=Auth::id();
-        // $model->save();
-        // return redirect('uker');
+        $model= \App\UnitKerja::find($id);
+        $model->kode=$request->get('kode');
+        $model->nama=$request->get('nama');
+        $model->updated_by=Auth::id();
+        $model->save();
+        return redirect('uker');
     }
 
     /**
