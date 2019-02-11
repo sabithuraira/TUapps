@@ -89,7 +89,8 @@ class LogBookController extends Controller
         $model->updated_by=Auth::id();
         $model->save();
         
-        return redirect('log_book')->with('success', 'Information has been added');
+        // return redirect('/log_book')->with('success', 'Information has been added');
+        return redirect('log_book');
     }
 
     /**
@@ -125,7 +126,7 @@ class LogBookController extends Controller
         $model->updated_by=Auth::id();
         $model->save();
 
-        return redirect('log_book');
+        return redirect('/log_book')->with('success', 'Information has been updated');
     }
 
     public function show($id)

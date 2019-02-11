@@ -58,7 +58,7 @@ var vm = new Vue({
       datas: [],
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
-      url_log_book: {!! json_encode(url('/log_book/')) !!},
+      url_log_book: window.location.pathname,
       pathname : window.location.pathname,
     },
     methods: {
@@ -80,7 +80,6 @@ var vm = new Vue({
                     end: self.end, 
                 },
             }).done(function (data) {
-                console.log(data);
                 self.datas = data.datas;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

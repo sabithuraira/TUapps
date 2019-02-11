@@ -26,8 +26,6 @@
 <button type="submit" class="btn btn-primary">Simpan</button>
 
 @section('css')
-    <meta name="_token" content="{{csrf_token()}}" />
-    <meta name="csrf-token" content="@csrf">
     <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/summernote/dist/summernote.css') !!}">
 @endsection
 
@@ -40,5 +38,4 @@
         $('#isi').summernote('code', initContent);
     });
 </script>
-
 @endsection
