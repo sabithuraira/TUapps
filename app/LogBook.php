@@ -24,13 +24,14 @@ class LogBook extends Model
         return array(1 => 'Sudah disetujui', 2 => 'Belum disetujui');
     }
 
-    public function LogBookRekap($start_date, $end_date){
+    public function LogBookRekap($start_date, $end_date, $user_id){
         $datas = array();
 
         $datas = DB::table('log_books')
             ->where([
                 ['log_books.tanggal', '>=', $start_date],
                 ['log_books.tanggal', '<=', $end_date],
+                ['log_books.user_id', '=', $user_id],
             ])
             ->orderBy('log_books.tanggal')
             ->get();

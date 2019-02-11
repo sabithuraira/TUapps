@@ -17,6 +17,9 @@ class LogBookController extends Controller
         $datas=array();
         $start = date('Y-m-d');
         $end = date('Y-m-d');
+        
+        $user = Auth::user();
+        $user_id =  Auth::user()->email;
 
         if(strlen($request->get('start'))>0)
             $start =  date("Y-m-d", strtotime($request->get('start')));
@@ -25,7 +28,7 @@ class LogBookController extends Controller
             $end =  date("Y-m-d", strtotime($request->get('end')));
 
         $model = new \App\LogBook;
-        $datas = $model->LogBookRekap($start, $end);
+        $datas = $model->LogBookRekap($start, $end, $user_id);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }

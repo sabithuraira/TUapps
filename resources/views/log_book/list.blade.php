@@ -80,6 +80,7 @@ var vm = new Vue({
                     end: self.end, 
                 },
             }).done(function (data) {
+                console.log(data);
                 self.datas = data.datas;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
