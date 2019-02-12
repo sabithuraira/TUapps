@@ -126,12 +126,12 @@ class CkpController extends Controller
         $first_working_day = date('d F Y', strtotime("+0 weekday $monthName $year"));
         $last_working_day = date('d F Y', strtotime('last weekday '.date("F Y", strtotime('next month '.$monthName.' '.$year))));
 
-         
         $pdf = PDF::loadView('ckp.print', compact('month', 
             'year', 'type', 'model', 'datas', 'user', 
             'monthName', 'last_day_month',
             'first_working_day', 'last_working_day'))
             ->setPaper('a4', 'landscape');
+        
 
         return $pdf->download('print.pdf');
 

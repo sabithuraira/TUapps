@@ -53,7 +53,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <input type="hidden" name="total_tambahan" v-model="total_tambahan">
             <input type="hidden" name="total_utama" v-model="total_utama">

@@ -42,31 +42,31 @@
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">   
-                            <li class="active">
+                            <li class="{{ (request()->is('log_book*') || request()->is('ckp*')) ? 'active' : '' }}">
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                                 <ul>
-                                    <li><a href="{{url('log_book')}}">Log Book</a></li>
-                                    <li><a href="{{url('ckp')}}">CKP</a></li>
+                                    <li class="{{ request()->is('log_book*') ? 'active' : '' }}"><a href="{{ url('log_book') }}">Log Book</a></li>
+                                    <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a></li>
                                 </ul>
                             </li>
                                                    
-                            <li>
+                            <li class="{{ (request()->is('uker*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                                 <ul>                                  
-                                    <li><a href="{{url('uker')}}">Unit Kerja</a></li>
-                                    <li><a href="{{url('angka_kredit')}}">Angka Kredit</a></li>
-                                    <li><a href="{{url('type_kredit')}}">Peruntukan Angka Kredit</a></li>
-                                    <li><a href="{{url('rincian_kredit')}}">Rincian Angka Kredit</a></li>
-                                    <li><a href="{{url('user')}}">User</a></li>
+                                    <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{url('uker')}}">Unit Kerja</a></li>
+                                    <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a href="{{url('angka_kredit')}}">Angka Kredit</a></li>
+                                    <li class="{{ request()->is('type_kredit*') ? 'active' : '' }}"><a href="{{url('type_kredit')}}">Peruntukan Angka Kredit</a></li>
+                                    <li class="{{ request()->is('rincian_kredit*') ? 'active' : '' }}"><a href="{{url('rincian_kredit')}}">Rincian Angka Kredit</a></li>
+                                    <li class="{{ request()->is('user*') ? 'active' : '' }}"><a href="{{url('user')}}">User</a></li>
                                 </ul>
                             </li>
                             
-                            <li>
+                            <li class="{{ (request()->is('role*') || request()->is('permission*') || request()->is('user_role*')) ? 'active' : '' }}">
                                 <a href="#User" class="has-arrow"><i class="icon-user-following"></i> <span>Manajemen User</span></a>
                                 <ul>
-                                    <li><a href="{{url('role')}}">Roles</a></li>
-                                    <li><a href="{{url('permission')}}">Permission</a></li>
-                                    <li><a href="{{url('user_role')}}">User Role</a></li>
+                                    <li class="{{ request()->is('role*') ? 'active' : '' }}"><a href="{{url('role')}}">Roles</a></li>
+                                    <li class="{{ request()->is('permission*') ? 'active' : '' }}"><a href="{{url('permission')}}">Permission</a></li>
+                                    <li class="{{ request()->is('user_role*') ? 'active' : '' }}"><a href="{{url('user_role')}}">User Role</a></li>
                                 </ul>
                             </li>
                         </ul>
