@@ -12,9 +12,6 @@
 <div class="row clearfix">
   <div class="col-md-12">
       <div class="card">
-          <div class="header">
-              <h2>Buat CKP</h2>
-          </div>
           <div class="body" id="app_vue">
               <form method="post" action="{{url('ckp')}}" enctype="multipart/form-data">
               @csrf

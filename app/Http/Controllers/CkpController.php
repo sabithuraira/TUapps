@@ -132,7 +132,7 @@ class CkpController extends Controller
             'monthName', 'last_day_month',
             'first_working_day', 'last_working_day'))
             ->setPaper('a4', 'landscape');
-            
+
         return $pdf->download('print.pdf');
 
         // print_r($datas);die();

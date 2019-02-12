@@ -70,7 +70,20 @@
                 <td>@{{ data.keterangan }}</td>
             </tr>
 
+            <template v-if="type==2">
+                <tr>
+                    <td colspan="5"><h4>JUMLAH</h4></td>
+                    <td class="text-center">@{{ total_kuantitas }} %</td>
+                    <td class="text-center">@{{ total_kualitas }} %</td>
+                    
+
+                    <td colspan="3"></td>
+                </tr>
+            </template>
+
         </tbody>
+
+        
     </table>
 </div>
 
@@ -105,6 +118,8 @@ var vm = new Vue({
       total_utama: 1,
       total_tambahan: 1,
       pathname : window.location.pathname,
+    //   total_kuantitas: 0,
+    //   total_kualitas: 0,
     },
     computed: {
         total_column: function () {
@@ -112,6 +127,36 @@ var vm = new Vue({
                 return 7;
             else
                 return 10;
+        },
+        total_kuantitas: function(){
+            var result = 0;
+
+            for(i=0;i<this.kegiatan_utama.length;++i){
+                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined') 
+                    result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+            }
+            
+            for(i=0;i<this.kegiatan_tambahan.length;++i){
+                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
+                    result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+            }
+
+            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
+        },
+        total_kualitas: function(){
+            var result = 0;
+
+            for(i=0;i<this.kegiatan_utama.length;++i){
+                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined') 
+                    result+= parseInt(this.kegiatan_utama[i].kualitas);
+            }
+            
+            for(i=0;i<this.kegiatan_tambahan.length;++i){
+                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined')
+                    result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+            }
+
+            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
         }
     },
     watch: {
@@ -146,6 +191,33 @@ var vm = new Vue({
             }).done(function (data) {
                 self.kegiatan_utama = data.datas.utama;
                 self.kegiatan_tambahan = data.datas.tambahan;
+
+                // var t_kuantitas = 0;
+                // var t_kualitas = 0;
+
+                // for(i=0;i<self.kegiatan_utama.length;++i){
+                //     // console.log(self.kegiatan_utama[i].kualitas);
+                //     if(typeof self.kegiatan_utama[i].target_kuantitas !== 'undefined') 
+                //         t_kuantitas+= (self.kegiatan_utama[i].realisasi_kuantitas/self.kegiatan_utama[i].target_kuantitas*100)
+                
+                //     if(self.kegiatan_utama[i].kualitas != null) 
+                //         t_kualitas+= self.kegiatan_utama[i].kualitas;
+                // }
+
+                // for(i=0;i<self.kegiatan_tambahan.length;++i){
+                //     // console.log(self.kegiatan_tambahan[i].kualitas);
+                //     if(typeof self.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
+                //         t_kuantitas+= (self.kegiatan_tambahan[i].realisasi_kuantitas/self.kegiatan_tambahan[i].target_kuantitas*100)
+                    
+                //     if(self.kegiatan_tambahan[i].kualitas != null)
+                //         t_kualitas+= self.kegiatan_tambahan[i].kualitas;
+                // }
+
+                // console.log(t_kualitas);
+                // console.log(t_kuantitas);
+
+                // self.total_kuantitas = t_kuantitas/(self.kegiatan_utama.length+self.kegiatan_tambahan.length);
+                // self.total_kualitas = t_kualitas/(self.kegiatan_utama.length+self.kegiatan_tambahan.length);
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

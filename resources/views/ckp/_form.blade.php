@@ -11,7 +11,7 @@
                 <div class="col-lg-4 col-md-12 left-box">
 
                     <div class="form-group">
-                        <label>Tipe:</label>
+                        <label>Jenis:</label>
 
                         <div class="input-group">
                           <select class="form-control  form-control-sm"  v-model="type" name="type">
@@ -60,7 +60,12 @@
     <hr/>
     <a href="#" id="salin" class="btn btn-secondary">
         <i class="fa fa-copy"></i> Salin @{{ ckp_label }}
-    </a> 
+    </a>
+    
+    <!-- <a href="#" id="cetak" class="btn btn-dark">
+        <i class="icon-printer"></i> &nbsp Cetak CKP &nbsp
+    </a> -->
+
     <button type="submit" class="btn btn-primary float-right">Simpan</button>
     
     <br/><br/>
@@ -95,14 +100,16 @@
             <tbody>
                 <tr><td :colspan="total_column">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
-                    <td>@{{ index+1 }}</td>
+                    <td>
+                        @{{ index+1 }}
+                    </td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
                     <template v-if="type==2">
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                        <td>%</td>
+                        <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
@@ -120,7 +127,7 @@
                     
                     <template v-if="type==2">
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                        <td>%</td>
+                        <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
                     </template>
 
@@ -130,6 +137,17 @@
                 
                 </tr>
 
+
+                <template v-if="type==2">
+                    <tr>
+                        <td colspan="5"><h4>JUMLAH</h4></td>
+                        <td class="text-center">@{{ total_kuantitas }} %</td>
+                        <td class="text-center">@{{ total_kualitas }} %</td>
+                        
+
+                        <td colspan="3"></td>
+                    </tr>
+                </template>
             </tbody>
         </table>
       </div>
@@ -178,6 +196,37 @@ var vm = new Vue({
         ckp_label: function() {
             if(this.type==1) return 'CKP-R';
             else return 'CKP-T';
+        },
+       
+        total_kuantitas: function(){
+            var result = 0;
+
+            for(i=0;i<this.kegiatan_utama.length;++i){
+                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined') 
+                    result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+            }
+            
+            for(i=0;i<this.kegiatan_tambahan.length;++i){
+                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
+                    result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+            }
+
+            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length-2)).toFixed(2);
+        },
+        total_kualitas: function(){
+            var result = 0;
+
+            for(i=0;i<this.kegiatan_utama.length;++i){
+                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined') 
+                    result+= parseInt(this.kegiatan_utama[i].kualitas);
+            }
+            
+            for(i=0;i<this.kegiatan_tambahan.length;++i){
+                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined')
+                    result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+            }
+
+            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length-2)).toFixed(2);
         }
     },
     watch: {
@@ -331,7 +380,34 @@ var vm = new Vue({
                     });
                 }
             }
-        }
+        },
+        cetakDatas: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : self.pathname+"/print",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    p_month: self.month, 
+                    p_year: self.year, 
+                    p_type: self.type,
+                },
+            }).done(function (data) {
+                // window.location = self.pathname+"/print";
+                // $('#cetak').html(data);
+
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
     }
 });
 
@@ -347,6 +423,11 @@ var vm = new Vue({
     $('#salin').click(function(e) {
         e.preventDefault();
         vm.salinDatas();
+    });
+    
+    $('#cetak').click(function(e) {
+        e.preventDefault();
+        vm.cetakDatas();
     });
 
     $('#year').change(function() {
