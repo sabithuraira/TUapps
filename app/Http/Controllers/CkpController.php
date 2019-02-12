@@ -333,7 +333,7 @@ class CkpController extends Controller
         //     }
         // }
         
-        return redirect('ckp')->with('success', 'Information has been added');
+        return redirect('/ckp')->with('success', 'Information has been added');
     
     }
 
