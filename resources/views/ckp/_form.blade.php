@@ -100,6 +100,9 @@
                 <tr><td :colspan="total_column">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                     <td>
+                        <template v-if="is_delete(data.id)">
+                            <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                        </template>
                         @{{ index+1 }}
                     </td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
@@ -119,7 +122,12 @@
                 
                 <tr><td :colspan="total_column">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                 <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
-                    <td>@{{ index+1 }}</td>
+                    <td>
+                        <template v-if="is_delete(data.id)">
+                            <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                        </template>
+                        @{{ index+1 }}
+                    </td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
@@ -240,6 +248,10 @@ var vm = new Vue({
         },
     },
     methods: {
+        is_delete: function(params){
+            if(isNaN(params)) return false;
+            else return true;
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');
@@ -379,6 +391,34 @@ var vm = new Vue({
                     });
                 }
             }
+        },
+
+        
+        delData: function () {
+            var self = this;
+
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : self.pathname+"/data_ckp",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month, 
+                    year: self.year, 
+                    type: self.type,
+                },
+            }).done(function (data) {
+
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
         },
         cetakDatas: function(){
             var self = this;
