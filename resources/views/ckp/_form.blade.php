@@ -101,7 +101,7 @@
                 <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                     <td>
                         <template v-if="is_delete(data.id)">
-                            <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                            <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                         </template>
                         @{{ index+1 }}
                     </td>
@@ -124,7 +124,7 @@
                 <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                     <td>
                         <template v-if="is_delete(data.id)">
-                            <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                            <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                         </template>
                         @{{ index+1 }}
                     </td>
@@ -141,7 +141,6 @@
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
-                
                 </tr>
 
 
@@ -290,26 +289,27 @@ var vm = new Vue({
         salinDatas: function(){
             var self = this;
 
-                if(self.kegiatan_utama.length==1){
-                var anti_type = 1;
-                if(self.type==1)
-                    anti_type = 2;
+            if(self.kegiatan_utama.length==1){
+            var anti_type = 1;
+            if(self.type==1)
+                anti_type = 2;
 
-                $('#wait_progres').modal('show');
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                })
-                $.ajax({
-                    url : self.pathname+"/data_ckp",
-                    method : 'post',
-                    dataType: 'json',
-                    data:{
-                        month: self.month, 
-                        year: self.year, 
-                        type: anti_type,
-                    },
+            $('#wait_progres').modal('show');
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : self.pathname+"/data_ckp",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month, 
+                    year: self.year, 
+                    type: anti_type,
+                },
                 }).done(function (data) {
                     // console.log(data);
                     // var salin_utama = data.datas.utama;
@@ -359,10 +359,6 @@ var vm = new Vue({
                     self.kegiatan_tambahan.push({
                         'id': 'at'+(self.kegiatan_tambahan.length+1),
                     });
-                    
-                    // self.kegiatan_tambahan.push({
-                    //     'id': 'at'+(self.total_tambahan),
-                    // });
 
                     $('#wait_progres').modal('hide');
                 }).fail(function (msg) {
@@ -394,9 +390,13 @@ var vm = new Vue({
         },
 
         
-        delData: function () {
+        delData: function (idnya) {
             var self = this;
 
+            // data-jenis="tambahan" :data-id="data.id"
+            // var idnya = e.currentTarget.data("id");
+            // var jenis = $(e).data("jenis");
+            
             $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
@@ -404,15 +404,11 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : self.pathname+"/data_ckp",
-                method : 'post',
+                url : self.pathname+"/"+idnya,
+                method : 'delete',
                 dataType: 'json',
-                data:{
-                    month: self.month, 
-                    year: self.year, 
-                    type: self.type,
-                },
             }).done(function (data) {
+                window.location.reload(true);
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

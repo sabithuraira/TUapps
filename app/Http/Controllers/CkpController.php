@@ -368,6 +368,8 @@ class CkpController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $model = \App\Ckp::find($id);
+        $model->delete();
+        return response()->json(['success'=>'Sukses']);
     }
 }
