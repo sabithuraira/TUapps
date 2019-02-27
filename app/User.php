@@ -42,23 +42,36 @@ class User extends Authenticatable
 
     public function getPimpinanAttribute(){
         if($this->kdstjab<4){
-            $bos = $this::where([
-                ['kdorg', '=', $this->kdorg],
-                ['kdesl', '=', 4], 
-                ['kdprop', '=', $this->kdprop], 
-                ['kdkab', '=', $this->kdkab], 
-            ])->first();
-
-            if($bos!=null) return $bos;
-            else{
+            if($this->kdstjab==2 && $this->kdgol>32){
                 $bos = $this->getEselon3();
-
+    
                 if($bos!=null) return $bos;
                 else{
                     $bos = $this->getEselon2();
                     
                     if($bos!=null) return $bos;
                     else return $this->getBosRI();
+                }
+            }
+            else{
+                $bos = $this::where([
+                    ['kdorg', '=', $this->kdorg],
+                    ['kdesl', '=', 4], 
+                    ['kdprop', '=', $this->kdprop], 
+                    ['kdkab', '=', $this->kdkab], 
+                ])->first();
+    
+                if($bos!=null) return $bos;
+                else{
+                    $bos = $this->getEselon3();
+    
+                    if($bos!=null) return $bos;
+                    else{
+                        $bos = $this->getEselon2();
+                        
+                        if($bos!=null) return $bos;
+                        else return $this->getBosRI();
+                    }
                 }
             }
         }
