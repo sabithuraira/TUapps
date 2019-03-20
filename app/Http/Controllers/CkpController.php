@@ -110,7 +110,7 @@ class CkpController extends Controller
             $year = $request->get('p_year');
             
         if(strlen($request->get('p_type'))>0)
-            $type = $request->get('p_type');
+            $type = $_POST['action'];
             
         if(strlen($request->get('p_user'))>0){
             $user_id = $request->get('p_user');
@@ -119,7 +119,7 @@ class CkpController extends Controller
         
 
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
+        $datas = $model->CkpBulanan(1, $month, $year, $user_id);
 
         $monthName = date("F", mktime(0, 0, 0, $month, 10));
         $last_day_month  = date('t', mktime(0, 0, 0, $month, 10)); //date("t");
@@ -168,9 +168,6 @@ class CkpController extends Controller
         if(strlen($request->get('year'))>0)
             $year = $request->get('year');
             
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
-            
         if(strlen($request->get('total_utama'))>0)
             $total_utama = $request->get('total_utama');
                         
@@ -218,11 +215,11 @@ class CkpController extends Controller
             if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
                 $is_valid_by_type = true;
 
-                if($request->get('type')==2){
-                    if(strlen($request->get('u_realisasi_kuantitasau'.$i))==0 || strlen($request->get('u_kualitasau'.$i))==0){
-                        $is_valid_by_type = false;        
-                    }
-                } 
+                // if($request->get('type')==2){
+                //     if(strlen($request->get('u_realisasi_kuantitasau'.$i))==0 || strlen($request->get('u_kualitasau'.$i))==0){
+                //         $is_valid_by_type = false;        
+                //     }
+                // } 
                 
                 if($is_valid_by_type){
                     $model_utama = new \App\Ckp;
@@ -230,17 +227,17 @@ class CkpController extends Controller
                     $model_utama->user_id =  Auth::user()->email;
                     $model_utama->month = $request->get('month');
                     $model_utama->year = $request->get('year');
-                    $model_utama->type = $request->get('type');
+                    $model_utama->type = 1;
                     $model_utama->jenis = 1;
 
                     $model_utama->uraian = $request->get('u_uraianau'.$i);
                     $model_utama->satuan = $request->get('u_satuanau'.$i);
                     $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
 
-                    if($request->get('type')==2){
+                    // if($request->get('type')==2){
                         $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
                         $model_utama->kualitas = $request->get('u_kualitasau'.$i);
-                    }
+                    // }
 
                     $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
                     $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
@@ -258,11 +255,11 @@ class CkpController extends Controller
             if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
                 $is_valid_by_type = true;
 
-                if($request->get('type')==2){
-                    if(strlen($request->get('t_realisasi_kuantitasat'.$i))==0 || strlen($request->get('t_kualitasat'.$i))==0){
-                        $is_valid_by_type = false;        
-                    }
-                } 
+                // if($request->get('type')==2){
+                //     if(strlen($request->get('t_realisasi_kuantitasat'.$i))==0 || strlen($request->get('t_kualitasat'.$i))==0){
+                //         $is_valid_by_type = false;        
+                //     }
+                // } 
                 
                 if($is_valid_by_type){
                     $model_tambahan = new \App\Ckp;
@@ -270,17 +267,17 @@ class CkpController extends Controller
                     $model_tambahan->user_id = Auth::user()->email;
                     $model_tambahan->month = $request->get('month');
                     $model_tambahan->year = $request->get('year');
-                    $model_tambahan->type = $request->get('type');
+                    $model_tambahan->type = 1;
                     $model_tambahan->jenis = 2;
 
                     $model_tambahan->uraian = $request->get('t_uraianat'.$i);
                     $model_tambahan->satuan = $request->get('t_satuanat'.$i);
                     $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
                     
-                    if($request->get('type')==2){
+                    // if($request->get('type')==2){
                         $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
                         $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
-                    }
+                    // }
                         
                     $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
                     $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
@@ -292,46 +289,6 @@ class CkpController extends Controller
                 }
             }
         }
-        
-        // $rekanans = \App\RekananSampah::where('is_active', '=', '1')->get();
-
-        // for($d=1; $d<=31; $d++)
-        // {
-        //     $time=mktime(12, 0, 0, $month, $d, $year);          
-        //     if (date('m', $time)==$month)
-        //     {
-        //         // $datas[]=array('label'=> date('D, d-M', $time), 'd'=>$d);
-        //         foreach($rekanans as $rekanan){
-        //             $j_name =  'jumlah'.$rekanan->id;
-        //             $r_name =  'rate'.$rekanan->id;
-
-        //             if($request->has($j_name.'-'.$d) && $request->has($r_name.'-'.$d)){
-        //                 if(strlen($request->get($j_name.'-'.$d))>0 && strlen($request->get($r_name.'-'.$d))>0)
-        //                 {
-        //                     $tanggal = $year.'-'.$month.'-'.$d;
-        //                     $model = \App\PengangkutanSampah::where([
-        //                         ['rekanan_id', '=', $rekanan->id],
-        //                         ['tanggal', '=', DB::raw("'$tanggal'")],
-        //                     ])
-        //                     ->first();
-            
-        //                     if($model === null){
-        //                         $model= new \App\PengangkutanSampah;
-        //                         $model->rekanan_id=$rekanan->id;
-        //                         $model->tanggal=$tanggal;
-        //                         $model->created_by=Auth::id();
-        //                         $model->company_id=Auth::user()->company_id;
-        //                     }
-        //                     $model->jumlah = $request->get($j_name.'-'.$d);
-        //                     $model->rate = $request->get($r_name.'-'.$d);
-        //                     $model->updated_by=Auth::id();
-        //                     $model->save();
-        //                 }
-        //             }
-        //             // $month = $request->get('month');
-        //         }
-        //     }
-        // }
         
         return redirect('/ckp')->with('success', 'Information has been added');
     

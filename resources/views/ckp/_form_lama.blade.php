@@ -8,7 +8,24 @@
   <div class="body">
 
              <div class="row clearfix">
-                <div class="col-lg-6 col-md-12 left-box">
+                <div class="col-lg-4 col-md-12 left-box">
+
+                    <div class="form-group">
+                        <label>Jenis:</label>
+
+                        <div class="input-group">
+                          <select class="form-control  form-control-sm"  v-model="type" name="type">
+                              @foreach ($model->listType as $key=>$value)
+                                  <option value="{{ $key }}">{{ $value }}</option>
+                              @endforeach
+                          </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-lg-4 col-md-12 left-box">
                     <div class="form-group">
                         <label>Bulan:</label>
 
@@ -23,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-md-12 right-box">
+                <div class="col-lg-4 col-md-12 right-box">
                     <div class="form-group">
                         <label>Tahun:</label>
 
@@ -40,6 +57,13 @@
             <input type="hidden" name="total_tambahan" v-model="total_tambahan">
             <input type="hidden" name="total_utama" v-model="total_utama">
     <hr/>
+    <a href="#" id="salin" class="btn btn-secondary">
+        <i class="fa fa-copy"></i> Salin @{{ ckp_label }}
+    </a>
+    
+    <!-- <a href="#" id="cetak" class="btn btn-dark">
+        <i class="icon-printer"></i> &nbsp Cetak CKP &nbsp
+    </a> -->
 
     <button type="submit" class="btn btn-primary float-right">Simpan</button>
     
@@ -54,15 +78,18 @@
                     <th class="text-center" style="width: 40%" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</th>
                     
-                    <th class="text-center" colspan="3">Kuantitas</th>
-                    <th class="text-center" rowspan="2">Tingkat Kualitas</th>
+                    <th v-if="type==1" class="text-center" rowspan="2">Target Kuantitas</th>
+                    <template v-else>
+                        <th class="text-center" colspan="3">Kuantitas</th>
+                        <th class="text-center" rowspan="2">Tingkat Kualitas</th>
+                    </template>
 
                     <th class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</th>
                 </tr>
 
-                <tr>
+                <tr v-show="type!=1">
                     <th class="text-center" >Target</th>
                     <th class="text-center" >Realisasi</th>
                     <th class="text-center" >%</th>
@@ -82,10 +109,12 @@
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
-                    <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                    <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                    <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
-                    
+                    <template v-if="type==2">
+                        <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                        <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
+                    </template>
+
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
@@ -103,17 +132,19 @@
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                     
-                    <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                    <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                    <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
-                    
+                    <template v-if="type==2">
+                        <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                        <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
+                        <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
+                    </template>
+
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
                 </tr>
 
 
-                <template>
+                <template v-if="type==2">
                     <tr>
                         <td colspan="5"><h4>JUMLAH</h4></td>
                         <td class="text-center">@{{ total_kuantitas }} %</td>
@@ -157,12 +188,17 @@ var vm = new Vue({
       type: 1,
       month: parseInt({!! json_encode($month) !!}),
       year: {!! json_encode($year) !!},
-      total_utama: 10,
-      total_tambahan: 2,
-      total_column: 10,
+      total_utama: 1,
+      total_tambahan: 1,
       pathname : (window.location.pathname).replace("/create", ""),
     },
     computed: {
+        total_column: function () {
+            if(this.type==1)
+                return 7;
+            else
+                return 10;
+        },
         ckp_label: function() {
             if(this.type==1) return 'CKP-R';
             else return 'CKP-T';
@@ -236,20 +272,13 @@ var vm = new Vue({
                 self.kegiatan_utama = data.datas.utama;
                 self.kegiatan_tambahan = data.datas.tambahan;
 
-                var selisih_utama = self.total_utama - self.kegiatan_utama.length;
-                var selisih_tambahan = self.total_tambahan - self.kegiatan_tambahan.length;
-
-                for(i=1;i<=selisih_utama;++i){
-                    self.kegiatan_utama.push({
-                        'id': 'au'+(i),
-                    });
-                }
-
-                for(i=1;i<=selisih_tambahan;++i){
-                    self.kegiatan_tambahan.push({
-                        'id': 'at'+(i),
-                    });
-                }
+                self.kegiatan_utama.push({
+                    'id': 'au'+(self.total_utama),
+                });
+                
+                self.kegiatan_tambahan.push({
+                    'id': 'at'+(self.total_tambahan),
+                });
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
@@ -282,6 +311,9 @@ var vm = new Vue({
                     type: anti_type,
                 },
                 }).done(function (data) {
+                    // console.log(data);
+                    // var salin_utama = data.datas.utama;
+                    // var salin_tambahan = data.datas.tambahan;
                     self.kegiatan_utama.splice(-1,1);
                     self.kegiatan_tambahan.splice(-1,1);
 
@@ -356,8 +388,14 @@ var vm = new Vue({
                 }
             }
         },
+
+        
         delData: function (idnya) {
             var self = this;
+
+            // data-jenis="tambahan" :data-id="data.id"
+            // var idnya = e.currentTarget.data("id");
+            // var jenis = $(e).data("jenis");
             
             $('#wait_progres').modal('show');
             $.ajaxSetup({

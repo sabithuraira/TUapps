@@ -145,7 +145,7 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>{{ ($data->target_kuantitas/$data->realisasi_kuantitas*100) }} %</td>
+                    <td>{{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %</td>
                     <td>{{ $data->kualitas }} %</td>
                 @endif
 
@@ -175,7 +175,7 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>{{ ($data->target_kuantitas/$data->realisasi_kuantitas*100) }} %</td>
+                    <td>{{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %</td>
                     <td>{{ $data->kualitas }} %</td>
                 @endif
 

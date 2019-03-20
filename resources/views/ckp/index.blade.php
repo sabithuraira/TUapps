@@ -23,24 +23,9 @@
           
 
           <div class="row clearfix">
-                <div class="col-lg-4 col-md-12 left-box">
-
-                    <div class="form-group">
-                        <label>Tipe:</label>
-
-                        <div class="input-group">
-                          <select class="form-control  form-control-sm"  v-model="type" name="type">
-                              @foreach ($model->listType as $key=>$value)
-                                  <option value="{{ $key }}">{{ $value }}</option>
-                              @endforeach
-                          </select>
-
-                        </div>
-                    </div>
-                </div>
 
                 
-                <div class="col-lg-4 col-md-12 left-box">
+                <div class="col-lg-6 col-md-12 left-box">
                     <div class="form-group">
                         <label>Bulan:</label>
 
@@ -55,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-12 right-box">
+                <div class="col-lg-6 col-md-12 right-box">
                     <div class="form-group">
                         <label>Tahun:</label>
 

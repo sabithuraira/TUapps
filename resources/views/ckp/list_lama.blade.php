@@ -5,9 +5,7 @@
         <input type="hidden"  v-model="type" name="p_type">
         <input type="hidden"  v-model="month" name="p_month">
         <input type="hidden"  v-model="year" name="p_year">
-        <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak CKP-R &nbsp</button>
-        <span class="float-right">&nbsp &nbsp</span>
-        <button name="action" class="float-right" type="submit" value="1"><i class="icon-printer"></i>&nbsp Cetak CKP-T &nbsp</button>
+        <button class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Cetak CKP &nbsp</button>
     </form>
     <br/><br/>
     <table class="table m-b-0">
@@ -17,15 +15,18 @@
                 <th class="text-center" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</th>
                 
+                <th v-if="type==1" class="text-center" rowspan="2">Target Kuantitas</th>
+                <template v-else>
                     <th class="text-center" colspan="3">Kuantitas</th>
                     <th class="text-center" rowspan="2">Tingkat Kualitas</th>
-                
+                </template>
+
                 <th class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</th>
             </tr>
 
-            <tr>
+            <tr v-show="type!=1">
                 <th class="text-center" >Target</th>
                 <th class="text-center" >Realisasi</th>
                 <th class="text-center" >%</th>
@@ -40,10 +41,12 @@
                 <td>@{{data.satuan }}</td>
                 <td class="text-center">@{{data.target_kuantitas }}</td>
                 
+                <template v-if="type==2">
                     <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                     <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
                     <td class="text-center">@{{ data.kualitas }} %</td>
-                
+                </template>
+
                 <td>@{{ data.kode_butir }}</td>
                 <td>@{{ data.angka_kredit }}</td>
                 <td>@{{ data.keterangan }}</td>
@@ -56,16 +59,18 @@
                 <td>@{{data.satuan }}</td>
                 <td class="text-center">@{{data.target_kuantitas }}</td>
                 
+                <template v-if="type==2">
                     <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                     <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
                     <td class="text-center">@{{ data.kualitas }} %</td>
-                
+                </template>
+
                 <td>@{{ data.kode_butir }}</td>
                 <td>@{{ data.angka_kredit }}</td>
                 <td>@{{ data.keterangan }}</td>
             </tr>
 
-            <template>
+            <template v-if="type==2">
                 <tr>
                     <td colspan="5"><h4>JUMLAH</h4></td>
                     <td class="text-center">@{{ total_kuantitas }} %</td>
@@ -112,12 +117,17 @@ var vm = new Vue({
       year: {!! json_encode($year) !!},
       total_utama: 1,
       total_tambahan: 1,
-      total_column: 10,
       pathname : window.location.pathname,
     //   total_kuantitas: 0,
     //   total_kualitas: 0,
     },
     computed: {
+        total_column: function () {
+            if(this.type==1)
+                return 7;
+            else
+                return 10;
+        },
         total_kuantitas: function(){
             var result = 0;
 
@@ -137,14 +147,12 @@ var vm = new Vue({
             var result = 0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                console.log(this.kegiatan_utama[i].kualitas);
-                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
+                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined') 
                     result+= parseInt(this.kegiatan_utama[i].kualitas);
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                console.log(this.kegiatan_tambahan[i].kualitas);
-                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
+                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined')
                     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
             }
 
