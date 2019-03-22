@@ -33,6 +33,8 @@ Route::resource('user','UserController');
 Route::resource('log_book','LogBookController');
 Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
 Route::get('log_book/{id}/print', 'LogBookController@print');
+Route::get('log_book/{id}/komentar', 'LogBookController@dataKomentar');
+Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
 
 Route::resource('ckp','CkpController')->except(['show']);
 

@@ -15,6 +15,22 @@
 </div>
 
 <div class="form-group">
+    <label>{{ $model->attributes()['waktu'] }}:</label>
+    <select class="form-control {{($errors->first('waktu') ? ' parsley-error' : '')}}"  name="waktu">
+        <option>- Pilih Waktu -</option>
+        @foreach ($item_waktu as $iwaktu)
+            <option  value="{{ $iwaktu['id'] }}" 
+                @if ($iwaktu['id'] == old('waktu', $model->waktu))
+                    selected="selected"
+                @endif>
+                {{ $iwaktu['waktu'] }}
+            </option>
+        @endforeach
+    </select>
+    @foreach ($errors->get('waktu') as $msg)<p class="text-danger">{{ $msg }}</p>@endforeach
+</div>
+
+<div class="form-group">
     <label>{{ $model->attributes()['isi'] }}:</label>
     <textarea id="isi" class="summernote form-control {{($errors->first('isi') ? ' parsley-error' : '')}}" name="isi" value="{{ old('isi', $model->isi) }}" data-provide="markdown" rows="10"></textarea>
     @foreach ($errors->get('isi') as $msg)

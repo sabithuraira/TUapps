@@ -15,6 +15,7 @@ class LogBookController extends Controller
     
     public function dataLogBook(Request $request){
         $datas=array();
+        $all_dates = array();
         $start = date('Y-m-d');
         $end = date('Y-m-d');
         
@@ -27,12 +28,47 @@ class LogBookController extends Controller
         if(strlen($request->get('end'))>0)
             $end =  date("Y-m-d", strtotime($request->get('end')));
 
-        $model = new \App\LogBook;
+        $model = new \App\LogBook; 
+        
+        for ($i=strtotime($start); $i<=strtotime($end); $i+=86400) {
+            $all_dates[] = array(
+                'val'   => date("Y-m-d", $i),
+                'label' => date("l, d F Y", $i)
+            );  
+        }
+
+        $list_times = \App\MasterTime::all();
+
         $datas = $model->LogBookRekap($start, $end, $user_id);
 
-        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+        return response()->json(['success'=>'Sukses', 
+            'datas'=>$datas, 
+            'all_dates'=>$all_dates,
+            'list_times'=>$list_times
+        ]);
     }
 
+    public function dataKomentar($id){
+        $data = \App\LogBook::find($id);
+        $result = "";
+
+        if($data!=null) $result = $data->catatan_approve;
+
+        return response()->json(['success'=>'Sukses', 'result'=>$result]);
+    }
+
+    public function saveKomentar(Request $request)
+    {
+        // print_r($request->get('id'));die();
+        $data = \App\LogBook::find($request->get('id'));
+        if($data!=null){
+            $data->catatan_approve=$request->get('catatan_approve');
+            $data->pimpinan_by = Auth::user()->email;
+            $data->save();
+        }
+        
+        return response()->json(['success'=>'Sukses']);
+    }
 
     /**
      * Display a listing of the resource.
@@ -61,8 +97,9 @@ class LogBookController extends Controller
     {
         $model = new \App\LogBook;
         $model->tanggal = date('Y-m-d');
+        $item_waktu = \App\MasterTime::all();
 
-        return view('log_book.create', compact('model'));
+        return view('log_book.create', compact('model', 'item_waktu'));
     }
 
     /**
@@ -84,6 +121,7 @@ class LogBookController extends Controller
         $model->isi=$request->get('isi');
         $model->is_approve=2;
         $model->catatan_approve='';
+        $model->waktu=$request->get('waktu');
         $model->user_id = Auth::user()->email;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
@@ -102,7 +140,9 @@ class LogBookController extends Controller
     public function edit($id)
     {
         $model = \App\LogBook::find($id);
-        return view('log_book.edit',compact('model','id'));
+        $item_waktu = \App\MasterTime::all();
+
+        return view('log_book.edit',compact('model','id', 'item_waktu'));
     }
 
     /**
@@ -123,6 +163,7 @@ class LogBookController extends Controller
         $model= \App\LogBook::find($id);
         $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
         $model->isi=$request->get('isi');
+        $model->waktu=$request->get('waktu');
         $model->updated_by=Auth::id();
         $model->save();
 

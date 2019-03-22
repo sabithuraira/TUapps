@@ -1,29 +1,29 @@
 <div class="table-responsive">
     <table class="table m-b-0">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th class="text-center">{{ $model->attributes()['tanggal'] }}</th>
-                <th class="text-center">{{ $model->attributes()['isi'] }}</th>
-
-                <th class="text-center">{{ $model->attributes()['is_approve'] }}</th>
-                <th class="text-center"></th>
+        <tbody v-for="(data, index) in all_dates" :key="data.val">
+            <tr >
+                <th colspan="3">
+                    @{{ data.label }}
+                </th>
             </tr>
-        </thead>
 
-        <tbody>
-            <tr v-for="(data, index) in datas" :key="data.id">
-                <td>@{{ index+1 }}</td>
-                <td>@{{ data.tanggal }}</td>
-                <td v-html="data.isi"></td>
-                <td class="text-center"  v-if="data.is_approve==0">belum disetujui</td>
-                <td class="text-center"  v-else>sudah disetujui</td>
-
+            <tr v-for="(data2, index2) in list_times" :key="data2.id">
                 <td>
-                    <a :href="url_log_book+'/'+data.id+'/edit'"><i class="icon-pencil text-info"></i></a>    
-                    <a :href="url_log_book+'/'+data.id+''"><i class="fa fa-search text-default"></i></a>    
-            
+                    <template v-if="getId(data.val, data2.id)!=0">
+                        <i v-on:click="redirectEdit" class="text-primary icon-pencil" :data-id="getId(data.val, data2.id)"></i>
+                        &nbsp
+                        <i v-on:click="komentar" data-toggle="modal" data-target="#form_modal" class="btn_comment text-success icon-bubbles" :data-id="getId(data.val, data2.id)"></i>
+                    </template>
+                    
+                    <template v-if="getId(data.val, data2.id)==0">
+                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                    </template>
+
+                    &nbsp &nbsp &nbsp
+                    @{{ data2.waktu }}
                 </td>
+                <td v-html="showIsi(data.val, data2.id)"></td>
+                <td v-html="showKomentar(data.val, data2.id)"></td>
             </tr>
         </tbody>
     </table>
@@ -36,6 +36,34 @@
             <div class="modal-body">
                 <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200" height="200" alt="Loading..."></div>
                 <h4 class="text-center">Please wait...</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="form_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="myModalLabel">Catatan Pimpinan</span>
+            </div>
+            
+            <div class="modal-body">
+                <table class="table table-hover table-bordered table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="hidden" v-model="id_row"/>
+                                <textarea class="form-control" v-model="catatan_approve" data-provide="markdown" rows="10"></textarea>
+                            </td>  
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button v-on:click="saveKomentar" class="btn btn-primary" data-dismiss="modal" id="btn-submit">Save changes</button>
             </div>
         </div>
     </div>
@@ -60,8 +88,75 @@ var vm = new Vue({
       end: {!! json_encode($end) !!},
       url_log_book: window.location.pathname,
       pathname : window.location.pathname,
+      all_dates: [],
+      list_times: [],
+      catatan_approve: '',
+      id_row: 0,
     },
     methods: {
+        redirectEdit: function(event){
+            var self = this;
+            if (event) {
+                self.id_row = event.currentTarget.dataset.id;
+                window.location.replace(self.pathname+"/"+self.id_row+"/edit");
+            }
+        },
+        komentar: function (event) {
+            var self = this;
+            if (event) {
+                self.id_row = event.currentTarget.dataset.id;
+
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                })
+                $.ajax({
+                    url : self.pathname+"/"+self.id_row+"/komentar",
+                    // method : 'post',
+                    dataType: 'json',
+                    // data:{
+                    //     start: self.start, 
+                    //     end: self.end, 
+                    // },
+                }).done(function (data) {
+                    self.catatan_approve = data.result;
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+
+            }
+        },
+        saveKomentar: function (event) {
+            var self = this;
+            if (event) {
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                })
+                $.ajax({
+                    url : self.pathname+"/save_komentar",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        id: self.id_row, 
+                        catatan_approve: self.catatan_approve,
+                    },
+                }).done(function (data) {
+                    $('#wait_progres').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+
+            }
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');
@@ -81,17 +176,51 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
+                self.all_dates = data.all_dates;
+                self.list_times = data.list_times;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
             });
-        }
+        },
+        showIsi: function(tanggal, waktu){
+            var self = this;
+            const rowData = self.datas.find(el => (el.tanggal == tanggal && el.waktu == waktu));
+
+            if(rowData!=undefined) result=rowData.isi;
+            else result = '';
+
+            return result;
+        },
+        showKomentar: function(tanggal, waktu){
+            var self = this;
+            const rowData = self.datas.find(el =>  (el.tanggal == tanggal && el.waktu == waktu));
+
+            if(rowData!=undefined) result=rowData.catatan_approve;
+            else result = '';
+
+            return result;
+        },
+        getId: function(tanggal, waktu){
+            var self = this;
+            const rowData = self.datas.find(el =>  (el.tanggal == tanggal && el.waktu == waktu));
+
+            if(rowData!=undefined) result=rowData.id;
+            else result = 0;
+
+            return result;
+        },
     }
 });
 
 $(document).ready(function() {
     vm.setDatas();
+});
+
+$('#btn_comment').click(function() {
+    $('#form_modal').modal('show');
+    vm.id_row = 0;
 });
 
 $('#start').change(function() {

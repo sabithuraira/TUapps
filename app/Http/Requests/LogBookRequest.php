@@ -26,6 +26,7 @@ class LogBookRequest extends FormRequest
         return [
             'tanggal' => 'required',
             'isi' => 'required',
+            'waktu' => 'required',
         ];
     }
 
@@ -42,7 +43,8 @@ class LogBookRequest extends FormRequest
             'tanggal' => 'Tanggal',
             'isi' => 'Isi',
             'is_approve' => 'Status Approve',
-            'catatan_approve' => 'Catatan',
+            'waktu' =>  'Waktu',
+            'catatan_approve' => 'Catatan Pimpinan',
             'created_by' => 'Dibuat oleh',
             'updated_by' => 'Terkahir diperbaharui oleh',
             'created_at' => 'Dibuat pada',

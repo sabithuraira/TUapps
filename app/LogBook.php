@@ -25,6 +25,7 @@ class LogBook extends Model
     }
 
     public function LogBookRekap($start_date, $end_date, $user_id){
+        $result = array();
         $datas = array();
 
         $datas = DB::table('log_books')
@@ -36,6 +37,21 @@ class LogBook extends Model
             ->orderBy('log_books.tanggal')
             ->get();
 
-        return $datas;
+        foreach($datas as $key=>$value){
+            $result[]=array(
+                'id'                =>$value->id,
+                'user_id'           =>$value->user_id,
+                'tanggal'           =>$value->tanggal,
+                'isi'               =>$value->isi,
+                'catatan_approve'   =>$value->catatan_approve,
+                'created_by'        =>$value->created_by,
+                'updated_by'        =>$value->updated_by,
+                'waktu'             =>$value->waktu,
+            );
+        }
+
+        // print_r($result);die();
+
+        return $result;
     }
 }
