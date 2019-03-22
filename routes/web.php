@@ -48,6 +48,8 @@ Route::resource('role','RoleController');
 Route::resource('permission','PermissionController');
 Route::resource('user_role','UserRoleController');
 
+Route::resource('pegawai_anda','PegawaiAndaController');
+
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');

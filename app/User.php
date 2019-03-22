@@ -130,6 +130,10 @@ class User extends Authenticatable
 
     function getPegawaiAnda(){
         $pegawai = array();
+        // print_r('hai');
+        // print_r($this->kdstjab);
+        // print_r($this->kdesl);
+        // die();
 
         if($this->kdstjab==4){
             if($this->kdesl==4){
@@ -138,7 +142,7 @@ class User extends Authenticatable
                     ['kdstjab', '<>', 4], 
                     ['kdprop', '=', $this->kdprop], 
                     ['kdkab', '=', $this->kdkab], 
-                ])->get();
+                ])->paginate();
             }
             else if($this->kdesl==3){
                 $pegawai = $this::where([
@@ -146,16 +150,21 @@ class User extends Authenticatable
                     ['kdstjab', '<>', 3], 
                     ['kdprop', '=', $this->kdprop], 
                     ['kdkab', '=', $this->kdkab], 
-                ])->get();
+                ])->paginate();
             }
-            else if($this->kdesl==2){
+            else{
                 $pegawai = $this::where([
                     [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)],
                     ['kdstjab', '<>', 2], 
                     ['kdprop', '=', $this->kdprop], 
                     // ['kdkab', '=', $this->kdkab], 
-                ])->get();
+                ])->paginate();
             }
+        }
+        else{
+            $pegawai = $this::where([
+                ['kdstjab', '=', '999'],
+            ])->paginate();
         }
 
         return $pegawai;

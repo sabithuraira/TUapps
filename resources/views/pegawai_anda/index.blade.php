@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">Peruntukan Angka Kredit</li>
+    <li class="breadcrumb-item">Pegawai Anda</li>
 </ul>
 @endsection
 
@@ -18,9 +18,8 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('RincianKreditController@create')}}" class="btn btn-info">Tambah</a>
           <br/><br/>
-          <form action="{{url('rincian_kredit')}}" method="get">
+          <form action="{{url('pegawai_anda')}}" method="get">
             <div class="input-group mb-3">
                     
                     @csrf
@@ -32,7 +31,7 @@
             </div>
           </form>
           <section class="datas">
-            @include('rincian_kredit.list')
+            @include('pegawai_anda.list')
           </section>
       </div>
     </div>
