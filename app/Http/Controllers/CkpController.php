@@ -33,6 +33,10 @@ class CkpController extends Controller
         $year = date('Y');
         $type = 1;
 
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+
         if(strlen($request->get('month'))>0)
             $month = $request->get('month');
 
@@ -45,6 +49,10 @@ class CkpController extends Controller
 
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan($type, $month, $year, $user_id);
+
+        // print_r($datas);
+        // print_r($user_id);
+        // die();
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }

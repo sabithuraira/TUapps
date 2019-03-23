@@ -11,12 +11,10 @@
                 <td>
                     <template v-if="getId(data.val, data2.id)!=0">
                         <i v-on:click="redirectEdit" class="text-primary icon-pencil" :data-id="getId(data.val, data2.id)"></i>
-                        &nbsp
-                        <i v-on:click="komentar" data-toggle="modal" data-target="#form_modal" class="btn_comment text-success icon-bubbles" :data-id="getId(data.val, data2.id)"></i>
                     </template>
                     
                     <template v-if="getId(data.val, data2.id)==0">
-                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                        &nbsp &nbsp &nbsp
                     </template>
 
                     &nbsp &nbsp &nbsp
@@ -113,13 +111,12 @@ var vm = new Vue({
                     }
                 })
                 $.ajax({
-                    url : self.pathname+"/"+self.id_row+"/komentar",
-                    // method : 'post',
+                    url : self.pathname+"/komentar",
+                    method : 'post',
                     dataType: 'json',
-                    // data:{
-                    //     start: self.start, 
-                    //     end: self.end, 
-                    // },
+                    data:{
+                        id: self.id_row,
+                    },
                 }).done(function (data) {
                     self.catatan_approve = data.result;
                     $('#wait_progres').modal('hide');

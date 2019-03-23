@@ -24,4 +24,27 @@ class PegawaiAndaController extends Controller
 
         return view('pegawai_anda.index',compact('datas', 'keyword'));
     }
+
+    public function profile($id)
+    {
+        $model = \App\User::find($id);
+
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $type = 1;
+
+        $ckp = new \App\Ckp;
+
+        $lb_datas=array();
+
+        $start = date('m/d/Y');
+        $end = date('m/d/Y');
+
+        $lb_model = new \App\LogBook;
+
+        return view('pegawai_anda.profile',compact('model','id', 'ckp', 'month', 
+            'year', 'type',
+            'start', 'end', 'lb_model'));
+    }
 }

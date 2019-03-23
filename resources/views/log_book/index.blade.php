@@ -41,7 +41,7 @@
             </div>
 
           <section class="datas">
-            @include('log_book.list')
+              @include('log_book.list')
           </section>
       </div>
     </div>

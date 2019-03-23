@@ -28,6 +28,9 @@ class LogBookController extends Controller
         if(strlen($request->get('end'))>0)
             $end =  date("Y-m-d", strtotime($request->get('end')));
 
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+
         $model = new \App\LogBook; 
         
         for ($i=strtotime($start); $i<=strtotime($end); $i+=86400) {
@@ -48,7 +51,12 @@ class LogBookController extends Controller
         ]);
     }
 
-    public function dataKomentar($id){
+    public function dataKomentar(Request $request){
+        $id = 0;
+
+        if(strlen($request->get('id'))>0)
+            $id = $request->get('id');
+
         $data = \App\LogBook::find($id);
         $result = "";
 
