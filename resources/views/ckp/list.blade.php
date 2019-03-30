@@ -137,13 +137,13 @@ var vm = new Vue({
             var result = 0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                console.log(this.kegiatan_utama[i].kualitas);
+                // console.log(this.kegiatan_utama[i].kualitas);
                 if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
                     result+= parseInt(this.kegiatan_utama[i].kualitas);
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                console.log(this.kegiatan_tambahan[i].kualitas);
+                // console.log(this.kegiatan_tambahan[i].kualitas);
                 if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
                     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
             }

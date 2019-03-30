@@ -18,6 +18,11 @@ class LogBook extends Model
     {
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    public function Ckp()
+    {
+        return $this->hasOne('App\Ckp', 'flag_ckp', 'id');
+    }
     
     public function getListApproveAttribute()
     {

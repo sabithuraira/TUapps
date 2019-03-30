@@ -124,12 +124,25 @@ class LogBookController extends Controller
                         ->withInput();
         }
 
-        $model= new \App\LogBook;
-        $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
+        $tanggal = date("Y-m-d", strtotime($request->get('tanggal')));
+
+        $model = \App\LogBook::where([
+                    ['tanggal', '=', $tanggal],
+                    ['waktu', '=', $request->get('waktu')],
+            ])
+            ->first();
+
+        if($model===null){
+            $model= new \App\LogBook;    
+            $model->tanggal= $tanggal;
+            $model->waktu=$request->get('waktu');
+        }
+        
         $model->isi=$request->get('isi');
         $model->is_approve=2;
         $model->catatan_approve='';
-        $model->waktu=$request->get('waktu');
+        if($request->get('flag_ckp')!='')
+            $model->flag_ckp =  $request->get('flag_ckp');
         $model->user_id = Auth::user()->email;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
@@ -170,7 +183,9 @@ class LogBookController extends Controller
 
         $model= \App\LogBook::find($id);
         $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
-        $model->isi=$request->get('isi');
+        $model->isi = $request->get('isi');
+        if($request->get('flag_ckp')!='')
+            $model->flag_ckp =  $request->get('flag_ckp');
         $model->waktu=$request->get('waktu');
         $model->updated_by=Auth::id();
         $model->save();

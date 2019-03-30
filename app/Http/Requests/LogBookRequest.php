@@ -44,6 +44,7 @@ class LogBookRequest extends FormRequest
             'isi' => 'Isi',
             'is_approve' => 'Status Approve',
             'waktu' =>  'Waktu',
+            'flag_ckp'  => 'Referensi CKP',
             'catatan_approve' => 'Catatan Pimpinan',
             'created_by' => 'Dibuat oleh',
             'updated_by' => 'Terkahir diperbaharui oleh',
