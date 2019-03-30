@@ -76,10 +76,6 @@
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>
-    $(function() {
-        var initContent = {!! json_encode($model->isi) !!};
-        $('#isi').summernote('code', initContent);
-    });
 
     var vm = new Vue({  
         el: "#app_vue",
@@ -87,13 +83,12 @@
             list_ckp: [],
             month: new Date().getMonth() + 1,
             year: new Date().getFullYear(),
+            // waktu: ({!! json_encode($model->waktu) !!}!='') ? parseInt({!! json_encode($model->waktu) !!}) : 1,
             pathname : window.location.pathname,
         },
         methods: {
             setCkp: function(){
                 var self = this;
-                console.log(self.month);
-                console.log(self.year);
 
                 $('#wait_progres').modal('show');
                 $.ajaxSetup({
@@ -138,9 +133,10 @@
     });
 
     $(document).ready(function() {
-        console.log("hai");
-        console.log(vm.month);
         vm.setCkp();
+
+        var initContent = {!! json_encode($model->isi) !!};
+        $('#isi').summernote('code', initContent);
     });
 </script>
 @endsection

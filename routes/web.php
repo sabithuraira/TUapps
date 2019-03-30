@@ -24,12 +24,19 @@ Route::get('testa', function () {
     die();
 });
 
+Route::group(['middleware' => ['role:superadmin']], function () {    
+    Route::resource('uker','UkerController');
+    Route::resource('type_kredit','TypeKreditController');
+    Route::resource('rincian_kredit','RincianKreditController');
+    Route::resource('angka_kredit','AngkaKreditController');
+    Route::resource('user','UserController');
 
-Route::resource('uker','UkerController');
-Route::resource('type_kredit','TypeKreditController');
-Route::resource('rincian_kredit','RincianKreditController');
-Route::resource('angka_kredit','AngkaKreditController');
-Route::resource('user','UserController');
+    //SPATIE
+    Route::resource('role','RoleController');
+    Route::resource('permission','PermissionController');
+    Route::resource('user_role','UserRoleController');
+});
+
 Route::resource('log_book','LogBookController');
 Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
 Route::get('log_book/{id}/print', 'LogBookController@print');
@@ -42,11 +49,6 @@ Route::resource('ckp','CkpController')->except(['show']);
 Route::post('ckp/data_ckp', 'CkpController@dataCkp');
 // Route::get('ckp/print', 'CkpController@print');
 Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
-
-//SPATIE
-Route::resource('role','RoleController');
-Route::resource('permission','PermissionController');
-Route::resource('user_role','UserRoleController');
 
 Route::resource('pegawai_anda','PegawaiAndaController');
 Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
