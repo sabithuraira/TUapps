@@ -18,7 +18,7 @@
           <div class="body">
               <form method="post" action="{{url('angka_kredit')}}" enctype="multipart/form-data">
               @csrf
-              @include('angka_kredit._form')
+              @include('surat_km._form')
               </form>
           </div>
       </div>

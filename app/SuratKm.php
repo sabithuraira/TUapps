@@ -12,4 +12,9 @@ class SuratKm extends Model
     {
         return (new \App\Http\Requests\SuratKmRequest())->attributes();
     }
+
+    public function getListJenisAttribute()
+    {
+        return array(1 => 'Surat Masuk', 2 => 'Surat Keluar');
+    }
 }

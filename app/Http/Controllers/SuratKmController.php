@@ -39,6 +39,7 @@ class SuratKmController extends Controller
     public function create()
     {
         $model= new \App\SuratKm;
+        $model->tanggal = date('Y-m-d');
         return view('surat_km.create',compact('model'));
     }
 

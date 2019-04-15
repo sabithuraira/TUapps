@@ -37,6 +37,7 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('user_role','UserRoleController');
 });
 
+Route::resource('surat_km','SuratKmController');
 Route::resource('log_book','LogBookController');
 Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
 Route::get('log_book/{id}/print', 'LogBookController@print');

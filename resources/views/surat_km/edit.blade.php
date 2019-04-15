@@ -13,7 +13,7 @@
   <div class="col-md-12">
       <div class="card">
           <div class="header">
-              <h2>Perbaharui Peruntukan Surat</h2>
+              <h2>Perbaharui Surat</h2>
           </div>
           <div class="body">
               <form method="post" action="{{action('SuratKmController@update', $id)}}" enctype="multipart/form-data">
