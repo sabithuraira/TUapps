@@ -16,7 +16,7 @@
               <h2>Tambah Rincian Surat</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{url('angka_kredit')}}" enctype="multipart/form-data">
+              <form method="post" action="{{url('surat_km')}}" enctype="multipart/form-data">
               @csrf
               @include('surat_km._form')
               </form>

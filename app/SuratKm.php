@@ -15,6 +15,6 @@ class SuratKm extends Model
 
     public function getListJenisAttribute()
     {
-        return array(1 => 'Surat Masuk', 2 => 'Surat Keluar');
+        return array(1 => 'Surat Masuk', 2 => 'Surat Keluar', 3=>'Memorandum');
     }
 }
