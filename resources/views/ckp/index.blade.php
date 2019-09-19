@@ -21,7 +21,6 @@
           <a href="{{action('CkpController@create')}}" class="btn btn-info">Buat CKP</a>
           <br/><br/>
           
-
           <div class="row clearfix">
 
                 

@@ -37,11 +37,16 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('user_role','UserRoleController');
 });
 
+
+Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
+    Route::resource('jadwal_dinas','JadwalDinasController');
+});
+
 Route::resource('surat_km','SuratKmController');
 Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
 Route::resource('log_book','LogBookController');
 Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
-Route::get('log_book/{id}/print', 'LogBookController@print');
+Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
 Route::post('log_book/komentar', 'LogBookController@dataKomentar');
 Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
 
