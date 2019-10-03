@@ -7,7 +7,6 @@
         @else
             <thead>
                 <tr>
-                    <th></th>
                     <th>{{ $datas[0]->attributes()['nomor_urut'] }}</th>
                     <th>{{ $datas[0]->attributes()['alamat'] }}</th>
                     <th>{{ $datas[0]->attributes()['tanggal'] }}</th>

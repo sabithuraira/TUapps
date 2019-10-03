@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['jenis_surat'] }}:</label>
-                <select class="form-control {{($errors->first('jenis_surat') ? ' parsley-error' : '')}}" v-model="jenis_surat" name="jenis_surat" id="jenis_surat">
+                <select class="form-control {{($errors->first('jenis_surat') ? ' parsley-error' : '')}}" v-model="jenis_surat" name="jenis_surat" @change="setNomor">
                     <option value="">- Pilih Jenis Surat -</option>
                     @foreach ($model->listJenis as $key=>$value)
                         <option value="{{ $key }}" 
@@ -21,8 +21,8 @@
         <div class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['tanggal'] }}:</label>
-                <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                    <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" v-model="tanggal" id="tanggal">
+                <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
+                    <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" id="tanggal" v-model="tanggal">
                     <div class="input-group-append">                                            
                         <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                     </div>
@@ -70,7 +70,8 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['nomor_urut'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('nomor_urut') ? ' parsley-error' : '')}}" name="nomor_urut"  readonly v-model="nomor_urut">
+                <input type="text" class="form-control {{($errors->first('nomor_urut') ? ' parsley-error' : '')}}" name="nomor_urut"  v-model="nomor_urut">
+                <p class="text-info">Nomor urut dibuat otomatis, kecuali karena keadaan khusus harap tidak merubah isian ini.</p>
                 @foreach ($errors->get('nomor_urut') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -109,10 +110,10 @@
 @endsection
 
 @section('scripts')
-<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script>
-var vm = new Vue({  
+var vm = new Vue({
     el: "#app_vue",
     data:  {
         jenis_surat: {!! json_encode($model->jenis_surat) !!},
@@ -124,6 +125,7 @@ var vm = new Vue({
         setNomor: function(){
             var self = this;
             $('#wait_progres').modal('show');
+            console.log(self.tanggal);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -150,16 +152,14 @@ var vm = new Vue({
     }
 });
 
-    $(document).ready(function() {
-        // vm.setDatas();
-    });
+$(document).ready(function() {
+    vm.setNomor();
+});
 
-    $('#tanggal').change(function() {
+$('.date').datepicker()
+    .on('changeDate', function(e) {
+        vm.tanggal = $('#tanggal').val();
         vm.setNomor();
-    });
-
-    $('#jenis_surat').change(function() {
-        vm.setNomor();
-    });
+});
 </script>
 @endsection

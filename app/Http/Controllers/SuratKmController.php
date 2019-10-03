@@ -58,17 +58,18 @@ class SuratKmController extends Controller
                     [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
                     ['jenis_surat', '=', $jenis_surat],
                 ])
-                ->orderBy('tanggal', 'desc')
+                ->orderBy('nomor_urut', 'desc')
                 ->first();
             
             if($last_data!=null) $total = $last_data->nomor_urut + 1;
+            else $total = 1;
         }
         else{
             $first_after = \App\SuratKm::where([
                     ['tanggal', '>', $tanggal],
                     ['jenis_surat', '=', $jenis_surat],
                 ])
-                ->orderBy('tanggal', 'asc')
+                ->orderBy('nomor_urut', 'asc')
                 ->first();
 
             $first_number_after = $first_after->nomor_urut;
@@ -90,7 +91,10 @@ class SuratKmController extends Controller
 
             $alphabet = range('A', 'Z');
             
-            $total = $current_number.'.'.$alphabet[$total_current_number];
+            if($current_number==0 || $total_current_number<=0)
+                $total = 0;
+            else
+                $total = $current_number.'.'.$alphabet[$total_current_number-1];
         }
 
         return response()->json(['success'=>'Sukses', 'total'=>$total]);
@@ -105,6 +109,7 @@ class SuratKmController extends Controller
     {
         $model= new \App\SuratKm;
         $model->tanggal = date('Y-m-d');
+        $model->jenis_surat = 1;
         return view('surat_km.create',compact('model'));
     }
 

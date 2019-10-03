@@ -6,7 +6,9 @@
             </div>
 
             <div class="navbar-brand">
-                <a href="index.html"><img src="{!! asset('lucid/assets/images/logo.svg') !!}" alt="Lucid Logo" class="img-responsive logo"></a>                
+                <a href="#">
+                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" alt="Lucid Logo" class="img-responsive logo">
+                </a>            
             </div>
             
             <div class="navbar-right">
@@ -15,7 +17,7 @@
                     <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
                 </form>                
 
-                <div id="navbar-menu">
+                <!-- <div id="navbar-menu">
                     <ul class="nav navbar-nav">
                         <li>
                             <a href="file-dashboard.html" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="fa fa-folder-open-o"></i></a>
@@ -106,7 +108,9 @@
                             </ul>
                         </li>
                     </ul>
-                </div>
+                </div> -->
+
+
             </div>
         </div>
     </nav>
