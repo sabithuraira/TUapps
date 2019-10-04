@@ -59,6 +59,16 @@
                                 <a href="{{ url('surat_km') }}" > <i class="fa fa-car"></i><span>Dinas Luar</span></a>
                             </li> -->
 
+                            
+                            @role('superadmin')
+                                <li class="{{ (request()->is('uker*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
+                                    <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang Persediaan</span></a>
+                                    <ul>                                  
+                                        <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a href="{{url('master_barang')}}">Master Barang</a></li>
+                                    </ul>
+                                </li>
+                            @endrole  
+
                             @role('superadmin')
                                 <li class="{{ (request()->is('uker*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
                                     <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>

@@ -42,6 +42,11 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::resource('jadwal_dinas','JadwalDinasController');
 });
 
+
+Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
+    Route::resource('master_barang','MasterBarangController');
+});
+
 Route::resource('surat_km','SuratKmController');
 Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
 Route::resource('log_book','LogBookController');
