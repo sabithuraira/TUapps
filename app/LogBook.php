@@ -43,6 +43,9 @@ class LogBook extends Model
             ->get();
 
         foreach($datas as $key=>$value){
+            $label_ckp = '';
+            if(Ckp::find($value->flag_ckp)!=null)
+                $label_ckp = Ckp::find($value->flag_ckp)->uraian;
             $result[]=array(
                 'id'                =>$value->id,
                 'user_id'           =>$value->user_id,
@@ -52,10 +55,10 @@ class LogBook extends Model
                 'created_by'        =>$value->created_by,
                 'updated_by'        =>$value->updated_by,
                 'waktu'             =>$value->waktu,
+                'flag_ckp'          =>$value->flag_ckp,
+                'label_ckp'         =>$label_ckp,
             );
         }
-
-        // print_r($result);die();
 
         return $result;
     }

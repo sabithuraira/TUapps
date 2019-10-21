@@ -39,9 +39,8 @@
     </div>
 
     <div class="form-group">
-        <label>{{ $model->attributes()['flag_ckp'] }}:</label>
-        <select class="form-control {{($errors->first('flag_ckp') ? ' parsley-error' : '')}}"  name="flag_ckp">
-            <option value=''>Pilih CKP</option>
+        <label>{{ $model->attributes()['flag_ckp'] }} (Pilih rincian CKP yang merujuk pada catatan ini):</label>
+        <select class="form-control {{($errors->first('flag_ckp') ? ' parsley-error' : '')}}" name="flag_ckp" v-model="flag_ckp">
             <option v-for="(data, index) in list_ckp" :value="data.id" :key="data.id">
                 @{{ data.uraian }}
             </option>
@@ -51,7 +50,6 @@
 
     <br>
     <button type="submit" class="btn btn-primary">Simpan</button>
-
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -83,6 +81,7 @@
             list_ckp: [],
             month: new Date().getMonth() + 1,
             year: new Date().getFullYear(),
+            flag_ckp: {!! json_encode($model->flag_ckp) !!},
             // waktu: ({!! json_encode($model->waktu) !!}!='') ? parseInt({!! json_encode($model->waktu) !!}) : 1,
             pathname : window.location.pathname,
         },

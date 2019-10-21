@@ -18,6 +18,7 @@
                     </template>
 
                     &nbsp &nbsp &nbsp
+                    
                     @{{ data2.waktu }}
                 </td>
                 <td v-html="showIsi(data.val, data2.id)"></td>
@@ -151,7 +152,6 @@ var vm = new Vue({
                     console.log(JSON.stringify(msg));
                     $('#wait_progres').modal('hide');
                 });
-
             }
         },
         setDatas: function(){
@@ -185,8 +185,20 @@ var vm = new Vue({
             var self = this;
             const rowData = self.datas.find(el => (el.tanggal == tanggal && el.waktu == waktu));
 
-            if(rowData!=undefined) result=rowData.isi;
-            else result = '';
+            if(rowData!=undefined) 
+            {
+                result=rowData.isi;
+                // console.log(JSON.stringify(rowData));
+                if(rowData.flag_ckp!=null){
+                    result += '<p><u>';
+                    result += '[Referensi CKP: '+rowData.label_ckp + ']';
+                    result += '</u></p>';
+                }
+            }
+            else 
+            { 
+                result = '';
+            }
 
             return result;
         },
