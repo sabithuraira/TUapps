@@ -140,8 +140,15 @@ class CkpController extends Controller
             'first_working_day', 'last_working_day'))
             ->setPaper('a4', 'landscape');
         
+        $nama_file = 'CKP_';
+        if($type==1)
+            $nama_file .= 'T_';
+        else
+            $nama_file .= 'R_';
 
-        return $pdf->download('print.pdf');
+        $nama_file .= $month . '.pdf';
+
+        return $pdf->download($nama_file);
 
         // print_r($datas);die();
 
