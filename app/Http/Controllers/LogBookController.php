@@ -184,8 +184,11 @@ class LogBookController extends Controller
         $model= \App\LogBook::find($id);
         $model->tanggal= date("Y-m-d", strtotime($request->get('tanggal')));
         $model->isi = $request->get('isi');
-        if($request->get('flag_ckp')!='')
+        
+        // if($request->get('flag_ckp')!=''){
             $model->flag_ckp =  $request->get('flag_ckp');
+        // }
+        
         $model->waktu=$request->get('waktu');
         $model->updated_by=Auth::id();
         $model->save();
