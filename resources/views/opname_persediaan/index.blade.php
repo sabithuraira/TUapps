@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container" id="app_vue">
       <br />
       @if (\Session::has('success'))
         <div class="alert alert-success">
@@ -99,4 +99,59 @@
 <script src="{!! asset('lucid/assets/vendor/bootstrap-markdown/bootstrap-markdown.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
+
+
+
+<script>
+var vm = new Vue({  
+    el: "#app_vue",
+    data:  {
+      datas: [],
+      month: parseInt({!! json_encode($month) !!}),
+      year: {!! json_encode($year) !!},
+      pathname : window.location.pathname,
+    },
+    watch: {
+        month: function (val) {
+            this.setDatas();
+        },
+        year: function (val) {
+            this.setDatas();
+        },
+    },
+    methods: {
+        setDatas: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : self.pathname+"/data_ckp",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month, 
+                    year: self.year, 
+                    type: self.type,
+                },
+            }).done(function (data) {
+                self.kegiatan_utama = data.datas.utama;
+                self.kegiatan_tambahan = data.datas.tambahan;
+
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+    }
+});
+
+    $(document).ready(function() {
+        vm.setDatas();
+    });
+</script>
 @endsection
