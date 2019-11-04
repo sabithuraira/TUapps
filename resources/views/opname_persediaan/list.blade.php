@@ -1,5 +1,5 @@
-<div id="load" class="table-responsive">
-    <table class="table m-b-0">
+<div id="load">
+    <table class="table table-bordered">
         @if (count($datas)==0)
             <thead>
                 <tr><th>Tidak ditemukan data</th></tr>
@@ -7,32 +7,46 @@
         @else
             <thead>
                 <tr>
-                <th>{{ $datas[0]->attributes()['nama_barang'] }}</th>
-                <th>{{ $datas[0]->attributes()['satuan'] }}</th>
-                <th>{{ $datas[0]->attributes()['harga_satuan'] }}</th>
-                <th class="text-center" colspan="2">Action</th>
+                    <th>No</th>
+                    <th>Nama Barang</th>
+                    <th colspan="2">Saldo {{ config('app.months')[$month-1] }}</th>
+                    <th colspan="2">Tambah {{ config('app.months')[$month] }}</th>
+                    <th colspan="2">Kurang {{ config('app.months')[$month] }}</th>
+                    <th colspan="2">Saldo {{ config('app.months')[$month] }}</th>
+                    <th>Harga Satuan (Rp)</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($datas as $data)
+                @php
+                    $label_op_awal = "op_awal_".$month;
+                    $label_op_tambah = "op_tambah_".$month;
+                @endphp
+                
+                @foreach($datas as $key=>$data)
                 <tr>
-                    <td>{{$data['nama_barang']}}</td>
-                    <td>{{$data['satuan']}}</td>
-                    <td>Rp. {{ number_format($data['harga_satuan'],2,",",".") }}</td>
+                    <td>{{ $key+1 }}. </td>
+                    <td>{{ $data->nama_barang }}</td>
                     
-                    <td class="text-center"><a href="{{action('MasterBarangController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
-                    <td class="text-center">
-                    <form action="{{action('MasterBarangController@destroy', $data['id'])}}" method="post">
-                        @csrf
-                        <input name="_method" type="hidden" value="DELETE">
-                        <button type="submit"><i class="icon-trash text-danger"></i></button>
-                    </form>
+                    <td>
+                        {{ 
+                            $data->$label_op_awal
+                        }}
                     </td>
+                    <td>{{ $data->satuan }}</td>
+                    
+                    <td>{{ $data->$label_op_tambah }}</td>
+                    <td>{{ $data->satuan }}</td>
+                    
+                    <td></td>
+                    <td>{{ $data->satuan }}</td>
+                    
+                    <td></td>
+                    <td>{{ $data->satuan }}</td>
+
+                    <td>{{ $data->harga_satuan }}</td>
                 </tr>
                 @endforeach
-                
             </tbody>
         @endif
     </table>
-    {{ $datas->links() }} 
 </div>

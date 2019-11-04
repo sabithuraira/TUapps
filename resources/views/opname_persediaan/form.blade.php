@@ -3,7 +3,8 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">OPNAME PERSEDIAAN</li>
+    <li class="breadcrumb-item"><a href="{{url('opname_persediaan')}}"> OPNAME PERSEDIAAN</a></li>                  
+    <li class="breadcrumb-item">Penambahan Barang</li>
 </ul>
 @endsection
 
