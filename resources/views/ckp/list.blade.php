@@ -184,76 +184,17 @@ var vm = new Vue({
                 self.kegiatan_utama = data.datas.utama;
                 self.kegiatan_tambahan = data.datas.tambahan;
 
-                // var t_kuantitas = 0;
-                // var t_kualitas = 0;
-
-                // for(i=0;i<self.kegiatan_utama.length;++i){
-                //     // console.log(self.kegiatan_utama[i].kualitas);
-                //     if(typeof self.kegiatan_utama[i].target_kuantitas !== 'undefined') 
-                //         t_kuantitas+= (self.kegiatan_utama[i].realisasi_kuantitas/self.kegiatan_utama[i].target_kuantitas*100)
-                
-                //     if(self.kegiatan_utama[i].kualitas != null) 
-                //         t_kualitas+= self.kegiatan_utama[i].kualitas;
-                // }
-
-                // for(i=0;i<self.kegiatan_tambahan.length;++i){
-                //     // console.log(self.kegiatan_tambahan[i].kualitas);
-                //     if(typeof self.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
-                //         t_kuantitas+= (self.kegiatan_tambahan[i].realisasi_kuantitas/self.kegiatan_tambahan[i].target_kuantitas*100)
-                    
-                //     if(self.kegiatan_tambahan[i].kualitas != null)
-                //         t_kualitas+= self.kegiatan_tambahan[i].kualitas;
-                // }
-
-                // console.log(t_kualitas);
-                // console.log(t_kuantitas);
-
-                // self.total_kuantitas = t_kuantitas/(self.kegiatan_utama.length+self.kegiatan_tambahan.length);
-                // self.total_kualitas = t_kualitas/(self.kegiatan_utama.length+self.kegiatan_tambahan.length);
-
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
             });
         },
-        // cetakCkp: function(){
-        //     var self = this;
-
-        //     $('#wait_progres').modal('show');
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        //         }
-        //     })
-        //     $.ajax({
-        //         url : self.pathname+"/print",
-        //         method : 'post',
-        //         dataType: 'json',
-        //         data:{
-        //             month: self.month, 
-        //             year: self.year, 
-        //             type: self.type,
-        //         },
-        //     }).done(function (data) {
-
-        //         $('#wait_progres').modal('hide');
-        //     }).fail(function (msg) {
-        //         console.log(JSON.stringify(msg));
-        //         $('#wait_progres').modal('hide');
-        //     });
-        // }
     }
 });
 
     $(document).ready(function() {
         vm.setDatas();
     });
-
-    
-    // $('#cetak').click(function(e) {
-    //         e.preventDefault();
-    //     vm.cetakCkp();
-    // });
 </script>
 @endsection

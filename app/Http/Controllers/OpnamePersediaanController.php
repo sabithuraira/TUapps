@@ -18,12 +18,6 @@ class OpnamePersediaanController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-            
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);
 
@@ -62,12 +56,6 @@ class OpnamePersediaanController extends Controller
     {
         $month = date('m');
         $year = date('Y');
-
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-            
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
 
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);

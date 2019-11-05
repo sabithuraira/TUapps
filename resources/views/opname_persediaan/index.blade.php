@@ -25,10 +25,10 @@
             <div class="input-group mb-3">
                     
                 @csrf
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Bulan:</label>
-                        <select class="form-control" name="month">
+                        <select class="form-control" name="month" v-model="month">
                             <option value="">- Pilih Bulan -</option>
                             @foreach ( config('app.months') as $key=>$value)
                                 <option value="{{ $key }}" 
@@ -40,10 +40,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Tahun:</label>
-                        <select class="form-control" name="year">
+                        <select class="form-control" name="year" v-model="year">
                             <option value="">- Pilih Tahun -</option>
                             @for($i=2019;$i<=date('Y');++$i)
                                 <option value="{{ $i }}" 
@@ -54,16 +54,6 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="col-md-2 left">
-                    <div class="form-group">
-                        <label>&nbsp</label>  
-                        <div class="input-group-append">
-                            <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
           </form>
           <section class="datas">
@@ -100,8 +90,6 @@
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
 
-
-
 <script>
 var vm = new Vue({  
     el: "#app_vue",
@@ -110,6 +98,14 @@ var vm = new Vue({
       month: parseInt({!! json_encode($month) !!}),
       year: {!! json_encode($year) !!},
       pathname : window.location.pathname,
+    },
+    computed: {
+        label_op_awal: function () {
+            return "op_awal_" + this.month
+        },
+        label_op_tambah: function () {
+            return "op_tambah_" + this.month
+        }
     },
     watch: {
         month: function (val) {
@@ -129,17 +125,15 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : self.pathname+"/data_ckp",
+                url : self.pathname+"/load_data",
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    month: self.month, 
-                    year: self.year, 
-                    type: self.type,
+                    month: self.month,
+                    year: self.year,
                 },
             }).done(function (data) {
-                self.kegiatan_utama = data.datas.utama;
-                self.kegiatan_tambahan = data.datas.tambahan;
+                self.datas = data.datas;
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
@@ -150,8 +144,8 @@ var vm = new Vue({
     }
 });
 
-    $(document).ready(function() {
-        vm.setDatas();
-    });
+$(document).ready(function() {
+    vm.setDatas();
+});
 </script>
 @endsection

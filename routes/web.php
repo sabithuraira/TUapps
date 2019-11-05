@@ -46,7 +46,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
-    Route::post('opname_persediaan/data_ckp', 'CkpController@dataCkp');
+    Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
 });
 
 Route::resource('surat_km','SuratKmController');
