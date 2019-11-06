@@ -19,18 +19,17 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('OpnamePersediaanController@create')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <span>Penambahan</span></a>
-          <a href="{{action('OpnamePersediaanController@create')}}" class="btn btn-danger"><i class="fa fa-minus-circle"></i> <span>Pengurangan</span></a>
+          <a href="{{action('OpnamePersediaanController@index')}}" class="btn btn-primary"><i class="fa fa-list"></i> <span>Rekap Persediaan</span></a>
           <br/><br/>
           
             <form method="post" action="{{url('opname_persediaan')}}" enctype="multipart/form-data">
                 <div class="input-group mb-3">
                         
                     @csrf
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Bulan:</label>
-                            <select class="form-control" name="month">
+                            <select class="form-control" name="month" v-model="month">
                                 <option value="">- Pilih Bulan -</option>
                                 @foreach ( config('app.months') as $key=>$value)
                                     <option value="{{ $key }}" 
@@ -42,10 +41,10 @@
                         </div>
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Tahun:</label>
-                            <select class="form-control" name="year">
+                            <select class="form-control" name="year" v-model="year">
                                 <option value="">- Pilih Tahun -</option>
                                 @for($i=2019;$i<=date('Y');++$i)
                                     <option value="{{ $i }}" 
@@ -54,15 +53,6 @@
                                         @endif >{{ $i }}</option>
                                 @endfor
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 left">
-                        <div class="form-group">
-                            <label>&nbsp</label>  
-                            <div class="input-group-append">
-                                <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
-                            </div>
                         </div>
                     </div>
 

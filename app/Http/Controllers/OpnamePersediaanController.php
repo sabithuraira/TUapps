@@ -18,8 +18,6 @@ class OpnamePersediaanController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $model = new \App\Opnamepersediaan();
-        $datas = $model->OpnameRekap($month, $year);
 
         // dd($datas);
 
@@ -57,9 +55,6 @@ class OpnamePersediaanController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $model = new \App\Opnamepersediaan();
-        $datas = $model->OpnameRekap($month, $year);
-
         return view('opname_persediaan.form',compact('datas', 'year', 'month'));
     }
 
@@ -69,24 +64,53 @@ class OpnamePersediaanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MasterBarangRequest $request)
+    public function store(Request $request)
     {
-        if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('master_barang/create')
-                        ->withErrors($validator)
-                        ->withInput();
+        
+        $month = date('m');
+        $year = date('Y');
+        
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+        
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+        
+        $model = new \App\Opnamepersediaan();
+        $datas = $model->OpnameRekap($month, $year);
+
+        $label_op_awal =  "op_awal_".$month;
+        $label_op_tambah =  "op_tambah_".$month;
+
+        foreach($datas as $data){
+            if(strlen($request->get('tambah_'.$data->id))>0){
+                
+                $model = \App\Opnamepersediaan::where('id_barang', '=' ,$data->id)
+                            ->where('bulan', '=', $month)
+                            ->where('tahun', '=', $year)
+                            ->first();
+
+                if($model==null) {
+                    $model= new \App\Opnamepersediaan;
+                    $model->created_by=Auth::id();
+                }
+
+                $model->id_barang = $data->id;
+                $model->nama_barang = $data->nama_barang;
+                $model->bulan = $month;
+                $model->tahun = $year;
+
+                $model->saldo_awal = (int)$data->$label_op_awal;
+                $model->harga_awal = (int)$data->$label_op_awal*(int)$data->harga_satuan;
+                
+                $model->saldo_tambah = (int)$request->get('tambah_'.$data->id);
+                $model->harga_tambah = (int)$request->get('tambah_'.$data->id)*(int)$data->harga_satuan;
+                
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
         }
-        // dd($request->get('harga_satuan'));
         
-        $model= new \App\MasterBarang;
-        $model->nama_barang=$request->get('nama_barang');
-        $model->unit_kerja= Auth::user()->kdprop.Auth::user()->kdkab;
-        $model->satuan=$request->get('satuan');
-        $model->harga_satuan=$request->get('harga_satuan');
-        $model->created_by=Auth::id();
-        $model->updated_by=Auth::id();
-        $model->save();
-        
-        return redirect('master_barang')->with('success', 'Data berhasil ditambahkan');
+        return redirect('opname_persediaan')->with('success', 'Data berhasil ditambahkan');
     }
 }
