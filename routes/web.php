@@ -47,6 +47,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
     Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
+    Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');
 });
 
 Route::resource('surat_km','SuratKmController');

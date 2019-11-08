@@ -17,15 +17,12 @@ class OpnamePersediaanController extends Controller
     {
         $month = date('m');
         $year = date('Y');
+        $master_barang = \App\MasterBarang::all();
+        $unit_kerja = \App\UnitKerja::all();
 
 
-        // dd($datas);
-
-        if ($request->ajax()) {
-            return \Response::json(\View::make('opname_persediaan.list', array('datas' => $datas))->render());
-        }
-
-        return view('opname_persediaan.index',compact('datas', 'year', 'month'));
+        return view('opname_persediaan.index',compact('master_barang','unit_kerja', 
+                'year', 'month'));
     }
 
     public function loadData(Request $request){
@@ -112,5 +109,29 @@ class OpnamePersediaanController extends Controller
         }
         
         return redirect('opname_persediaan')->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function storeBarangKeluar(Request $request){
+        $model = new \App\OpnamePengurangan;
+        if($request->form_id_data!=0)
+            $model = \App\OpnamePengurangan::find($request->form_id_data);
+        $model->bulan = $request->form_month;
+        $model->tahun = $request->form_year;
+        $model->id_barang = $request->form_id_barang;
+        $model->jumlah_kurang = $request->form_jumlah;
+
+        $model_barang = \App\MasterBarang::find($request->form_id_barang);
+        if($model_barang!=null)
+            $model->harga_kurang = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
+        else
+            $model->harga_kurang = 0;
+
+        $model->unit_kerja = $request->form_unit_kerja;
+        $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
+
+        return response()->json(['success'=>'Data berhasil ditambah']);
     }
 }

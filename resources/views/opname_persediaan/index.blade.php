@@ -19,7 +19,7 @@
       <div class="card">
         <div class="body">
           <a href="{{action('OpnamePersediaanController@create')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <span>Penambahan</span></a>
-          <a href="{{action('OpnamePersediaanController@create')}}" class="btn btn-danger"><i class="fa fa-minus-circle"></i> <span>Pengurangan</span></a>
+          <a href="#" role="button" v-on:click="addBarangKeluar"  class="btn btn-danger" data-toggle="modal" data-target="#add_pengurangan"><i class="fa fa-minus-circle"></i> <span>Barang Keluar</span></a>
           <br/><br/>
           <form action="{{url('opname_persediaan')}}" method="get">
             <div class="input-group mb-3">
@@ -74,6 +74,69 @@
         </div>
     </div>
 
+    
+    <div class="modal fade" id="add_pengurangan" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="title" id="defaultModalLabel">Tambah Barang Keluar</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-line">
+
+                            <select class="form-control"  v-model="form_id_barang" autofocus>
+                                <option value="">- Pilih Barang -</option>
+                                @foreach ($master_barang as $key=>$value)
+                                    <option value="{{ $value->id }}">{{ $value->nama_barang }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+                    <input type="hidden" v-model="form_id_data">
+                       
+                    <div class="form-group">
+                        <div class="form-line">
+                            <input type="number" v-model="form_jumlah" class="form-control" placeholder="Jumlah barang">
+                        </div>
+                    </div> 
+
+                    <div class="form-group">
+                        <div class="form-line">
+                            <select class="form-control"  v-model="form_unit_kerja" autofocus>
+                                <option value="">- Pilih Unit Kerja -</option>
+                                @foreach ($unit_kerja as $key=>$value)
+                                    <option value="{{ $value->id }}">{{ $value->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-line">
+                            <select class="form-control"  v-model="form_tanggal" autofocus>
+                                <option value="">- Pilih Tanggal -</option>
+                                @for($i=1;$i<=31;++$i)
+                                    <option value="{{ $i }}">{{ $i }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="add-btn">Add</button>
+                    <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
   </div>
 @endsection
 
@@ -98,6 +161,11 @@ var vm = new Vue({
       month: parseInt({!! json_encode($month) !!}),
       year: {!! json_encode($year) !!},
       pathname : window.location.pathname,
+      form_id_data: '',
+      form_id_barang: '',
+      form_jumlah: '',
+      form_unit_kerja: '',
+      form_tanggal: ''
     },
     computed: {
         label_op_awal: function () {
@@ -141,11 +209,52 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
+        addBarangKeluar: function (event) {
+            var self = this;
+            if (event) {
+                self.form_id_data = '';
+                self.form_id_barang = '';
+                self.form_jumlah = '';
+                self.form_unit_kerja = '';
+                self.form_tanggal = '';
+            }
+        },
+        saveBarangKeluar: function () {
+            var self = this;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : "{{ url('/opname_persediaan/store_barang_keluar/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    form_id_data: self.form_id_data,
+                    form_month: self.month,
+                    form_year: self.year,
+                    form_id_barang: self.form_id_barang, 
+                    form_jumlah: self.form_jumlah, 
+                    form_unit_kerja: self.form_unit_kerja,
+                    form_tanggal: self.form_tanggal, 
+                },
+            }).done(function (data) {
+                $('#add_pengurangan').modal('hide');
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+            });
+        },
     }
 });
 
 $(document).ready(function() {
     vm.setDatas();
+});
+
+$( "#add-btn" ).click(function(e) {
+    vm.saveBarangKeluar();
 });
 </script>
 @endsection
