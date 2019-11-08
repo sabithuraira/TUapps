@@ -202,6 +202,7 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
+                console.log(self.datas);
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

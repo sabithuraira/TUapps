@@ -22,7 +22,7 @@
                 <td>@{{ data[label_op_tambah] }}</td>
                 <td>@{{ data.satuan }}</td>
                 
-                <td></td>
+                <td>@{{ data.pengeluaran }}</td>
                 <td>@{{ data.satuan }}</td>
                 
                 <td>@{{ parseInt(data[label_op_awal])+parseInt(data[label_op_tambah]) }}</td>

@@ -63,7 +63,6 @@ class OpnamePersediaanController extends Controller
      */
     public function store(Request $request)
     {
-        
         $month = date('m');
         $year = date('Y');
         

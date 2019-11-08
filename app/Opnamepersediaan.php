@@ -25,7 +25,10 @@ class Opnamepersediaan extends Model
                 SUM(CASE WHEN o.bulan =  $i THEN o.saldo_tambah ELSE 0 END) st_$i";
         // }
 
-        $sql = "SELECT mb.id, mb.nama_barang, mb.harga_satuan, mb.satuan $label_select
+        $sql = "SELECT mb.id, mb.nama_barang, mb.harga_satuan, mb.satuan,
+            IFNULL((SELECT SUM(harga_kurang) FROM opname_pengurangan WHERE id_barang=mb.id AND 
+                bulan= $i AND tahun= $year),0) as pengeluaran  
+            $label_select
                 
             FROM master_barangs mb
             LEFT JOIN (
