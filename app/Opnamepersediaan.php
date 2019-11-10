@@ -26,7 +26,7 @@ class Opnamepersediaan extends Model
         // }
 
         $sql = "SELECT mb.id, mb.nama_barang, mb.harga_satuan, mb.satuan,
-            IFNULL((SELECT SUM(harga_kurang) FROM opname_pengurangan WHERE id_barang=mb.id AND 
+            IFNULL((SELECT SUM(jumlah_kurang) FROM opname_pengurangan WHERE id_barang=mb.id AND 
                 bulan= $i AND tahun= $year),0) as pengeluaran  
             $label_select
                 

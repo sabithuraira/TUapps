@@ -21,6 +21,16 @@ class OpnamePersediaanController extends Controller
         $unit_kerja = \App\UnitKerja::all();
 
 
+        // $model = new \App\Opnamepersediaan();
+        // $datas = $model->OpnameRekap($month, $year);
+        // foreach($datas as $key=>$value){
+        //     $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
+        //                                     ->where('bulan', '=', $month)
+        //                                     ->where('tahun', '=', $year)                                            
+        //                                     ->get();
+        // }
+
+        // dd($datas);
         return view('opname_persediaan.index',compact('master_barang','unit_kerja', 
                 'year', 'month'));
     }
@@ -38,6 +48,14 @@ class OpnamePersediaanController extends Controller
 
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);
+        foreach($datas as $key=>$value){
+            $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
+                                            ->where('bulan', '=', $month)
+                                            ->where('tahun', '=', $year)   
+                                            ->with('unitKerja')                                         
+                                            ->get();
+        }
+        
 
         return response()->json(['success'=>'1', 'datas'=>$datas]);
     }

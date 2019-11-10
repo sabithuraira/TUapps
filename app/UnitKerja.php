@@ -15,4 +15,9 @@ class UnitKerja extends Model
             'nama' => 'Nama',
         ];
     }
+
+    public function opnamePengurangans()
+    {
+        return $this->hasMany('App\OpnamePengurangan');
+    }
 }

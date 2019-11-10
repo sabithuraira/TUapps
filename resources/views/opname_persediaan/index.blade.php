@@ -220,6 +220,18 @@ var vm = new Vue({
                 self.form_tanggal = '';
             }
         },
+        updateBarangKeluar: function (event) {
+            var self = this;
+            if (event) {
+                self.form_id_data = event.target.getAttribute('data-id');
+                self.form_id_barang = event.target.getAttribute('data-idbarang');
+                self.form_jumlah = event.target.getAttribute('data-jumlah');
+                self.form_unit_kerja = event.target.getAttribute('data-unitkerja');
+                self.form_tanggal = event.target.getAttribute('data-tanggal');
+
+                console.log(self.form_id_data);
+            }
+        },
         saveBarangKeluar: function () {
             var self = this;
             $.ajaxSetup({
