@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Opnamepersediaan extends Model
 {
@@ -12,6 +13,47 @@ class Opnamepersediaan extends Model
     public function attributes()
     {
         return (new \App\Http\Requests\OpnamepersediaanRequest())->attributes();
+    }
+
+    public function triggerNextMonth($month, $year, $id_barang, $saldo, $harga, $nama){
+        $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
+                        ->where('bulan', '=', ($month+1))
+                        ->where('tahun', '=', $year)
+                        ->first();
+
+        if($month==12){
+            $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
+                            ->where('bulan', '=', 1)
+                            ->where('tahun', '=', ($year+1))
+                            ->first();
+        }
+        
+        if($model_next==null) {
+            $model_next= new \App\Opnamepersediaan;
+            $model_next->id_barang = $id_barang;
+
+            if($month==12){
+                $model_next->bulan = 1;
+                $model_next->tahun = ($year+1);
+            }
+            else{
+                $model_next->bulan = ($month+1);
+                $model_next->tahun = $year;
+            }
+
+            $model_next->created_by=Auth::id();
+            $model_next->saldo_tambah = 0;
+            $model_next->harga_tambah = 0;
+        }
+
+        $model_next->nama_barang = $nama;
+
+        $model_next->saldo_awal = $saldo;
+        $model_next->harga_awal = $saldo*$harga;
+        $model_next->updated_by=Auth::id();
+
+        $model_next->save();
+
     }
 
     public function OpnameRekap($i, /*$end_month,*/ $year){

@@ -206,8 +206,6 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
-                console.log(self.datas);
-
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -238,6 +236,7 @@ var vm = new Vue({
         },
         saveBarangKeluar: function () {
             var self = this;
+            $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -261,10 +260,12 @@ var vm = new Vue({
                 window.location.reload(false); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
+            $('#wait_progres').modal('hide');
             });
         },
         deleteBarangKeluar: function () {
             var self = this;
+            $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -282,6 +283,7 @@ var vm = new Vue({
                 window.location.reload(false); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
             });
         },
     }
