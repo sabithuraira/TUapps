@@ -79,12 +79,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="title" id="defaultModalLabel">Tambah Barang Keluar</h4>
+                    <h4 class="title" id="defaultModalLabel">Form Barang Keluar</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        Barang: 
                         <div class="form-line">
-
                             <select class="form-control"  v-model="form_id_barang" autofocus>
                                 <option value="">- Pilih Barang -</option>
                                 @foreach ($master_barang as $key=>$value)
@@ -98,12 +98,14 @@
                     <input type="hidden" v-model="form_id_data">
                        
                     <div class="form-group">
+                        Jumlah
                         <div class="form-line">
                             <input type="number" v-model="form_jumlah" class="form-control" placeholder="Jumlah barang">
                         </div>
                     </div> 
 
                     <div class="form-group">
+                        Unit Kerja:
                         <div class="form-line">
                             <select class="form-control"  v-model="form_unit_kerja" autofocus>
                                 <option value="">- Pilih Unit Kerja -</option>
@@ -117,6 +119,7 @@
                     </div>
 
                     <div class="form-group">
+                        Tanggal:
                         <div class="form-line">
                             <select class="form-control"  v-model="form_tanggal" autofocus>
                                 <option value="">- Pilih Tanggal -</option>
@@ -130,7 +133,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="add-btn">Add</button>
+                    <button type="button" class="btn btn-primary" id="add-btn">SAVE</button>
+                    <button  v-show="form_id_data!=''" type="button" class="btn btn-danger" id="delete-btn">DELETE</button>
                     <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
@@ -227,9 +231,9 @@ var vm = new Vue({
                 self.form_id_barang = event.target.getAttribute('data-idbarang');
                 self.form_jumlah = event.target.getAttribute('data-jumlah');
                 self.form_unit_kerja = event.target.getAttribute('data-unitkerja');
-                self.form_tanggal = event.target.getAttribute('data-tanggal');
+                var temp_tanggal = event.target.getAttribute('data-tanggal');
+                self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
 
-                console.log(self.form_id_data);
             }
         },
         saveBarangKeluar: function () {
@@ -259,6 +263,27 @@ var vm = new Vue({
                 console.log(JSON.stringify(msg));
             });
         },
+        deleteBarangKeluar: function () {
+            var self = this;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : "{{ url('/opname_persediaan/delete_barang_keluar/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    form_id_data: self.form_id_data,
+                },
+            }).done(function (data) {
+                $('#add_pengurangan').modal('hide');
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+            });
+        },
     }
 });
 
@@ -268,6 +293,10 @@ $(document).ready(function() {
 
 $( "#add-btn" ).click(function(e) {
     vm.saveBarangKeluar();
+});
+
+$( "#delete-btn" ).click(function(e) {
+    vm.deleteBarangKeluar();
 });
 </script>
 @endsection

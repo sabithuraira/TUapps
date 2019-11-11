@@ -130,8 +130,9 @@ class OpnamePersediaanController extends Controller
 
     public function storeBarangKeluar(Request $request){
         $model = new \App\OpnamePengurangan;
-        if($request->form_id_data!=0)
+        if($request->form_id_data!=0 && $request->form_id_data!='')
             $model = \App\OpnamePengurangan::find($request->form_id_data);
+
         $model->bulan = $request->form_month;
         $model->tahun = $request->form_year;
         $model->id_barang = $request->form_id_barang;
@@ -149,6 +150,19 @@ class OpnamePersediaanController extends Controller
         $model->updated_by=Auth::id();
         $model->save();
 
+        return response()->json(['success'=>'Data berhasil ditambah']);
+    }
+
+    public function deleteBarangKeluar(Request $request){
+        $msg = "";
+        if($request->form_id_data!=0 && $request->form_id_data!='')
+        {
+            $model = \App\OpnamePengurangan::find($request->form_id_data);
+            if($model!=null){
+                $model->delete();
+            }
+        }
+        
         return response()->json(['success'=>'Data berhasil ditambah']);
     }
 }
