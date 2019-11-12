@@ -60,15 +60,13 @@
                             </li> -->
 
                             
-                            @role('superadmin')
-                                <li class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*')) ? 'active' : '' }}">
-                                    <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang Persediaan</span></a>
-                                    <ul>                                  
-                                        <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a href="{{url('master_barang')}}">Master Barang</a></li>
-                                        <li class="{{ request()->is('opname_persediaan*') ? 'active' : '' }}"><a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
-                                    </ul>
-                                </li>
-                            @endrole  
+                            <li class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*')) ? 'active' : '' }}">
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang Persediaan</span></a>
+                                <ul>                                  
+                                    <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a href="{{url('master_barang')}}">Master Barang</a></li>
+                                    <li class="{{ request()->is('opname_persediaan*') ? 'active' : '' }}"><a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
+                                </ul>
+                            </li>
 
                             @role('superadmin')
                                 <li class="{{ (request()->is('uker*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">

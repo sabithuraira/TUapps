@@ -1,5 +1,5 @@
 <div id="load">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-sm">
         <thead>
             <tr class="text-center">
                 <th>No</th>
@@ -27,10 +27,12 @@
                     
                     <ul v-if="parseInt(data.pengeluaran)>0">
                         <li v-for="item in data.list_keluar" class="text-left">
-                            <a href="#" v-on:click="updateBarangKeluar" :data-id="item.id" 
-                                :data-idbarang="item.id_barang" :data-jumlah="item.jumlah_kurang" 
-                                :data-unitkerja="item.unit_kerja.id" :data-tanggal="item.tanggal"
-                                data-toggle="modal" data-target="#add_pengurangan"> (@{{ item.jumlah_kurang }}) @{{ item.unit_kerja.nama }}</a>
+                            <small>
+                                <a href="#" v-on:click="updateBarangKeluar" :data-id="item.id" 
+                                    :data-idbarang="item.id_barang" :data-jumlah="item.jumlah_kurang" 
+                                    :data-unitkerja="item.unit_kerja.id" :data-tanggal="item.tanggal"
+                                    data-toggle="modal" data-target="#add_pengurangan"> (@{{ item.jumlah_kurang }}) @{{ item.unit_kerja.nama }}</a>
+                            </small>
                         </li>
                     </ul>
                 </td>

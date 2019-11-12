@@ -32,12 +32,12 @@ class User extends Authenticatable
 
     public function getFotoUrlAttribute(){
         $nip_id = substr($this->email, -5);
-        if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+        // if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
             return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-        }
-        else{
-            return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
-        }
+        // }
+        // else{
+        //     return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+        // }
     }
 
     public function getPimpinanAttribute(){
@@ -175,9 +175,7 @@ class User extends Authenticatable
     function is_foto_exist($url){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$url);
-        // don't download content
         curl_setopt($ch, CURLOPT_NOBODY, 1);
-        //for https setting
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -192,5 +190,7 @@ class User extends Authenticatable
         {
             return false;
         }
+        // $headers=get_headers($url);
+        // return stripos($headers[0],"200 OK")?true:false;
     }
 }
