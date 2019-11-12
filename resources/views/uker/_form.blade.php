@@ -9,8 +9,7 @@
 
 <div class="form-group">
     <label>{{ $model->attributes()['nama'] }}:</label>
-    <!-- <input type="text" class="form-control {{($errors->first('nama') ? ' parsley-error' : '')}}" name="nama" value="{{ old('nama', $model->nama) }}" > -->
-    <input type="file" class="form-control {{($errors->first('nama') ? ' parsley-error' : '')}}" name="nama" value="{{ old('nama', $model->nama) }}">    
+    <input type="text" class="form-control {{($errors->first('nama') ? ' parsley-error' : '')}}" name="nama" value="{{ old('nama', $model->nama) }}" >
     @foreach ($errors->get('nama') as $msg)
         <p class="text-danger">{{ $msg }}</p>
     @endforeach

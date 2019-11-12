@@ -18,7 +18,12 @@ class OpnamePersediaanController extends Controller
         $month = date('m');
         $year = date('Y');
         $master_barang = \App\MasterBarang::all();
-        $unit_kerja = \App\UnitKerja::all();
+
+        $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',1)->get();
+
+        if(Auth::user()->kdkab=='00'){
+            $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',0)->get();
+        }
 
         return view('opname_persediaan.index',compact('master_barang','unit_kerja', 
                 'year', 'month'));
@@ -136,7 +141,11 @@ class OpnamePersediaanController extends Controller
         else
             $model->harga_kurang = 0;
 
-        $model->unit_kerja = $request->form_unit_kerja;
+        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,'16'.Auth::user()->kdkab)
+                            ->first();
+        $model->unit_kerja = $model_unit_kerja->id;
+
+        $model->unit_kerja4 = $request->form_unit_kerja;
         $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
