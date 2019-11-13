@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPegawaiToJadwalTable extends Migration
+class AddKelengkapanJadwaldinasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddPegawaiToJadwalTable extends Migration
      */
     public function up()
     {
-        Schema::table('jadwal_dinas', function (Blueprint $table) {
-            $table->string('pegawai_id');
+        Schema::table('jadwal_tugas', function (Blueprint $table) {
+            $table->integer('is_lpd');
+            $table->integer('is_kelengkapan');
+            $table->integer('is_lunas');
         });
     }
 
@@ -25,8 +27,6 @@ class AddPegawaiToJadwalTable extends Migration
      */
     public function down()
     {
-        Schema::table('jadwal', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

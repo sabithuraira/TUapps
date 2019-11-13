@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\JadwalDinasRequest;
+use App\Http\Requests\JadwalTugasRequest;
 
-class JadwalDinasController extends Controller
+class JadwalTugasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,21 +16,21 @@ class JadwalDinasController extends Controller
     public function index(Request $request)
     {
         // $keyword = $request->get('search');
-        // $datas = \App\JadwalDinas::where('nama_kegiatan', 'LIKE', '%' . $keyword . '%')
+        // $datas = \App\JadwalTugas::where('nama_kegiatan', 'LIKE', '%' . $keyword . '%')
         //     ->paginate();
 
-        // $datas->withPath('jadwal_dinas');
+        // $datas->withPath('jadwal_tugas');
         // $datas->appends($request->all());
 
         // if ($request->ajax()) {
-        //     return \Response::json(\View::make('jadwal_dinas.list', array('datas' => $datas))->render());
+        //     return \Response::json(\View::make('jadwal_tugas.list', array('datas' => $datas))->render());
         // }
 
-        // return view('jadwal_dinas.index',compact('datas', 'keyword'));
+        // return view('jadwal_tugas.index',compact('datas', 'keyword'));
         $month = date('m');
         $year = date('Y');
 
-        return view('jadwal_dinas.index',compact('month', 'year'));
+        return view('jadwal_tugas.index',compact('month', 'year'));
     }
 
     /**
@@ -40,9 +40,9 @@ class JadwalDinasController extends Controller
      */
     public function create()
     {
-        $model= new \App\JadwalDinas;
+        $model= new \App\JadwalTugas;
         $item_jenis = \App\TypeKredit::all();
-        return view('jadwal_dinas.create', 
+        return view('jadwal_tugas.create', 
             compact('item_jenis', 'model'));
     }
 
@@ -52,21 +52,21 @@ class JadwalDinasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JadwalDinasRequest $request)
+    public function store(JadwalTugasRequest $request)
     {
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('jadwal_dinas/create')
+            return redirect('jadwal_tugas/create')
                         ->withErrors($validator)
                         ->withInput();
         }
 
-        $model= new \App\JadwalDinas;
+        $model= new \App\JadwalTugas;
         $model->uraian=$request->get('uraian');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
         
-        return redirect('jadwal_dinas')->with('success', 'Information has been added');
+        return redirect('jadwal_tugas')->with('success', 'Information has been added');
     }
 
     /**
@@ -88,8 +88,8 @@ class JadwalDinasController extends Controller
      */
     public function edit($id)
     {
-        $model = \App\JadwalDinas::find($id);
-        return view('jadwal_dinas.edit',compact('model','id'));
+        $model = \App\JadwalTugas::find($id);
+        return view('jadwal_tugas.edit',compact('model','id'));
     }
 
     /**
@@ -99,19 +99,19 @@ class JadwalDinasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(JadwalDinasRequest $request, $id)
+    public function update(JadwalTugasRequest $request, $id)
     {
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('jadwal_dinas/edit',$id)
+            return redirect('jadwal_tugas/edit',$id)
                         ->withErrors($validator)
                         ->withInput();
         }
         
-        $model= \App\JadwalDinas::find($id);
+        $model= \App\JadwalTugas::find($id);
         $model->uraian=$request->get('uraian');
         $model->updated_by=Auth::id();
         $model->save();
-        return redirect('jadwal_dinas');
+        return redirect('jadwal_tugas');
     }
 
     /**
@@ -122,8 +122,8 @@ class JadwalDinasController extends Controller
      */
     public function destroy($id)
     {
-        $model = \App\JadwalDinas::find($id);
+        $model = \App\JadwalTugas::find($id);
         $model->delete();
-        return redirect('jadwal_dinas')->with('success','Information has been  deleted');
+        return redirect('jadwal_tugas')->with('success','Information has been  deleted');
     }
 }

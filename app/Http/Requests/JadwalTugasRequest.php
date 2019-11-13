@@ -29,6 +29,13 @@ class JadwalDinasRequest extends FormRequest
             'tanggal_selesai' => 'required',
             'pegawai_id' => 'required',
             'penjelasan' => 'required',
+            'nomor' => 'required',
+            'is_kepala' => 'required',
+            'pejabat_ttd' => 'required',
+            'is_lpd' => 'required',
+            'is_kelengkapan' => 'required',
+            'is_lunas' => 'required',
+
         ];
     }
 
@@ -46,14 +53,14 @@ class JadwalDinasRequest extends FormRequest
             'tanggal_mulai' => 'Tanggal Mulai',
             'tanggal_berakhir' => 'Tanggal Berakhir',
             'penjelasan' => 'Penjelasan',
-            'print_no' => 'Nomor Surat',
-            'print_unit_kerja' => 'Unit Kera',
-            'print_ttd' => 'Tanda Tangan',
-            'print_is_kepala' => 'Apakah persetujuan kepala?',
-            'print_ttd_nip' => 'NIP. ',
+
+            'nomor' => 'Nomor Surat',
+            'pejabat_ttd' => 'Tanda Tangan',
+            'is_kepala' => 'Apakah persetujuan kepala?',
+    
             'is_lpd' => 'Status LPD',
             'is_kelengkapan' => 'Status Kelengkapan',
-            'is_lunas_bayar' => 'Apakah telah lunas?',
+            'is_lunas' => 'Apakah telah lunas?',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',
             'pegawai_id' => 'Pegawai',
