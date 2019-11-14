@@ -141,7 +141,7 @@ class OpnamePersediaanController extends Controller
         else
             $model->harga_kurang = 0;
 
-        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,'16'.Auth::user()->kdkab)
+        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
                             ->first();
         $model->unit_kerja = $model_unit_kerja->id;
 

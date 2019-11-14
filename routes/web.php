@@ -52,7 +52,12 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 // });
 
 
+/////////////////JADWAL TUGAS
 Route::resource('jadwal_tugas','JadwalTugasController');
+Route::post('jadwal_tugas/calendar', 'JadwalTugasController@calendar');
+Route::post('jadwal_tugas/list_pegawai', 'JadwalTugasController@listPegawai');
+Route::post('jadwal_tugas/list_kegiatan', 'JadwalTugasController@listKegiatan');
+/////////////////
 
 
 Route::resource('surat_km','SuratKmController');

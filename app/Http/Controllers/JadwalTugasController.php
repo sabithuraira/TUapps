@@ -15,23 +15,51 @@ class JadwalTugasController extends Controller
      */
     public function index(Request $request)
     {
-        // $keyword = $request->get('search');
-        // $datas = \App\JadwalTugas::where('nama_kegiatan', 'LIKE', '%' . $keyword . '%')
-        //     ->paginate();
+        $unit_kerja = \App\UnitKerja::all();
 
-        // $datas->withPath('jadwal_tugas');
-        // $datas->appends($request->all());
-
-        // if ($request->ajax()) {
-        //     return \Response::json(\View::make('jadwal_tugas.list', array('datas' => $datas))->render());
-        // }
-
-        // return view('jadwal_tugas.index',compact('datas', 'keyword'));
-        $month = date('m');
-        $year = date('Y');
-
-        return view('jadwal_tugas.index',compact('month', 'year'));
+        $cur_unit_kerja =  \App\UnitKerja::where('kode','=',config('app.kode_prov').Auth::user()->kdkab)->first()->id;
+        return view('jadwal_tugas.index', compact(
+            'unit_kerja', 'cur_unit_kerja'
+        ));
     }
+
+    public function calendar(Request $request)
+    {
+        $unit_kerja = \App\UnitKerja::all();
+
+        $cur_unit_kerja =  \App\UnitKerja::where('kode','=',config('app.kode_prov').Auth::user()->kdkab)->first()->id;
+        return view('jadwal_tugas.calendar', compact(
+            'unit_kerja', 'cur_unit_kerja'
+        ));
+    }
+
+	public function listPegawai(Request $request){
+        $kode_unit_kerja = config('app.kode_prov').'00';
+
+        if(strlen($request->get('unit_kerja'))>0){
+            $model_uk = \App\UnitKerja::find($request->get('unit_kerja'));
+            if($model_uk!=null)
+                $kode_unit_kerja = $model_uk->kode;
+        }
+
+        $datas = \App\User::where(
+                    'kdprop', '=', substr($kode_unit_kerja,0,2),
+                    'kdkab','=',substr($kode_unit_kerja,2));
+
+        return response()->json(['success'=>'1', 'datas'=>$datas]);
+    }
+    
+	public function listkegiatan(Request $request){
+        $month=1;
+        if(strlen($request->get('month'))>0){
+            $month = $request->get('month');
+        }
+
+        $model = new \App\JadwalTugas();
+        $data = $model->listKegiatanByMonth($month);
+
+        return response()->json(['data'=>$data]);
+	}
 
     /**
      * Show the form for creating a new resource.
