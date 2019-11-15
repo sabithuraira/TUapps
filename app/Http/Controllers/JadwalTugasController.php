@@ -42,9 +42,9 @@ class JadwalTugasController extends Controller
                 $kode_unit_kerja = $model_uk->kode;
         }
 
-        $datas = \App\User::where(
-                    'kdprop', '=', substr($kode_unit_kerja,0,2),
-                    'kdkab','=',substr($kode_unit_kerja,2));
+        $datas = \App\User::where('kdprop', '=', substr($kode_unit_kerja,0,2))
+                    ->where('kdkab','=',substr($kode_unit_kerja,2))
+                    ->get();
 
         return response()->json(['success'=>'1', 'datas'=>$datas]);
     }
@@ -69,9 +69,18 @@ class JadwalTugasController extends Controller
     public function create()
     {
         $model= new \App\JadwalTugas;
-        $item_jenis = \App\TypeKredit::all();
+        $list_pegawai = \App\User::where('kdprop', '=', config('app.kode_prov'))
+                    ->where('kdkab','=',Auth::user()->kdkab)
+                    ->get();
+
+                    
+        $list_pejabat = \App\User::where('kdprop', '=', config('app.kode_prov'))
+                    ->where('kdkab','=',Auth::user()->kdkab)
+                    ->where('kdesl',"<=",2)
+                    ->get();
+
         return view('jadwal_tugas.create', 
-            compact('item_jenis', 'model'));
+            compact('list_pegawai', 'model', 'list_pejabat'));
     }
 
     /**

@@ -45,6 +45,17 @@
 
     <div class="card">
         <div class="body">
+        
+            <div class="mailbox-controls">
+                
+                <div>
+                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
+                    
+                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-success btn-sm"><i class='fa fa-plus'></i> Tambah Jadwal Tugas</a>
+                </div>
+                <!-- /.pull-right -->
+            </div>
+            <br/>
             <div class="mailbox-controls">
                 <b>Kalender Jadwal Tugas - </b>
                 
@@ -67,8 +78,6 @@
                             <option value="{{ $i }}" >{{ $i }}</option>
                         @endfor
                     </select>
-                
-                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
                 </div>
                 <!-- /.pull-right -->
             </div>
@@ -76,12 +85,9 @@
 
         <div class="box-body">
             <div class="scrollme"> 
-                <table class="table table-bordered">
-                    <thead id="tablehead">
-                    </thead>
-
-                    <tbody id="tablebody">
-                    </tbody>
+                <table class="table table-bordered table-sm">
+                    <thead v-html="html_header"></thead>
+                    <tbody v-html="html_body"></tbody>
                 </table>
             </div>
         </div>
@@ -103,11 +109,7 @@
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-
 <script>
-var thead = $("#tablehead");
-var tbody = $("#tablebody");
-
 var vm = new Vue({  
     el: "#calendar_tag",
     data: {
@@ -119,6 +121,8 @@ var vm = new Vue({
         year: new Date().getFullYear(),
         unit_kerja:  parseInt({!! json_encode($cur_unit_kerja) !!}),
         pathname:  window.location.pathname,
+        html_header: '',
+        html_body: '',
     },
     computed: {
         generateEmptyId: function(){    
@@ -141,13 +145,12 @@ var vm = new Vue({
             this.grabListName();
         },
     },
-    
     methods: {
         grabListName: function(){
             var self = this;
-            thead.children().remove();
-            tbody.children().remove();
 
+            self.html_header = '';
+            self.html_body = '';
             $('#wait_progres').modal('show');
 
             $.ajaxSetup({
@@ -211,44 +214,40 @@ var vm = new Vue({
         setCellJadwal: function(data){
             var self = this;
             
-            if(data.start_date==data.end_date){
-                $("#id"+data.nip+" td").eq(data.start_date+1).addClass("red");
+            if(self.data.start_date==self.data.end_date){
+                $("#id"+self.data.nip+" td").eq(self.data.start_date+1).addClass("red");
             }
             else{
-                var total_jadwal = data.end_date - data.start_date + 1;
-                var start_cell= $("#id"+data.nip+" td").eq(parseInt(data.start_date)+1);
+                var total_jadwal = self.data.end_date - self.data.start_date + 1;
+                var start_cell= $("#id"+self.data.nip+" td").eq(parseInt(self.data.start_date)+1);
                 
                 start_cell.attr('colspan',total_jadwal);
                 start_cell.addClass("red");
-                start_cell.append(data.judul);
+                start_cell.append(self.data.judul);
                 
-                for(var d=parseInt(data.start_date)+1;d<=parseInt(data.end_date);++d){
-                    $("#id"+data.nip+" td").eq(d+1).remove();
+                for(var d=parseInt(self.data.start_date)+1;d<=parseInt(self.data.end_date);++d){
+                    $("#id"+self.data.nip+" td").eq(d+1).remove();
                 }
             }
         },
         generateHeader: function(){
             var self = this;
-            
-            var str_head ='<th style="width: 20px"></th><th></th>';
+            self.html_header ='<th style="width: 20px"></th><th></th>';
             for(var i=1;i<=self.total_day;++i){
-                str_head += '<th style="width: 30px">'+i+'</th>';
+                self.html_header += '<th style="width: 30px">'+i+'</th>';
             }
-
-            thead.append(str_head);
         },
         generateBody: function(){
             var self = this;
-            
-            for(var i=0 ;i < self.list_name.length; ++i){
-                var str_body = '<tr id="id'+self.list_name[i].id+'"><td>'+(i+1)+'.</td>';
-                str_body += '<td class="gray">'+self.list_name[i].name+'</td>';
-                str_body += generateEmptyTd();
-                str_body += '</tr>';
+            self.html_body = '';
 
-                tbody.append(str_body);
+            for(var i=0 ;i < self.list_name.length; ++i){
+                self.html_body += '<tr id="id'+self.list_name[i].id+'"><td>'+(i+1)+'.</td>';
+                self.html_body += '<td class="gray">'+self.list_name[i].name+'</td>';
+                self.html_body += self.generateEmptyId;
+                self.html_body += '</tr>';
             }
-        }, 
+        },
     }
 });
 

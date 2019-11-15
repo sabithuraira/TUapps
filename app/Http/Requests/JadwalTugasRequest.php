@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class JadwalDinasRequest extends FormRequest
+class JadwalTugasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -51,16 +51,16 @@ class JadwalDinasRequest extends FormRequest
         return [
             'nama_kegiatan' => 'Nama Kegiatan',
             'tanggal_mulai' => 'Tanggal Mulai',
-            'tanggal_berakhir' => 'Tanggal Berakhir',
+            'tanggal_selesai' => 'Tanggal Selesai',
             'penjelasan' => 'Penjelasan',
 
             'nomor' => 'Nomor Surat',
-            'pejabat_ttd' => 'Tanda Tangan',
+            'pejabat_ttd' => 'Pejabat Pemberi Tanda Tangan',
             'is_kepala' => 'Apakah persetujuan kepala?',
     
-            'is_lpd' => 'Status LPD',
-            'is_kelengkapan' => 'Status Kelengkapan',
-            'is_lunas' => 'Apakah telah lunas?',
+            'is_lpd' => 'Kelengkapan LPD',
+            'is_kelengkapan' => 'Kelengkapan Dokumen Lainnya',
+            'is_lunas' => 'Pelunasan Pembayaran',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',
             'pegawai_id' => 'Pegawai',

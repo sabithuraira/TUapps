@@ -1,72 +1,114 @@
+<div class="row clearfix">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>{{ $model->attributes()['pegawai_id'] }}:</label>
+            <select class="form-control {{($errors->first('pegawai_id') ? ' parsley-error' : '')}}"  name="pegawai_id">
+                @foreach ($list_pegawai as $pegawai)
+                    <option  value="{{ $pegawai->email }}" 
+                        @if ($pegawai->email == old('pegawai_id', $model->pegawai_id))
+                            selected="selected"
+                        @endif>
+                        {{ $pegawai->nip_baru }} - {{ $pegawai->name }}
+                    </option>
+                @endforeach
+            </select>
+            @foreach ($errors->get('pegawai_id') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+            @endforeach
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>{{ $model->attributes()['nomor'] }}:</label>
+            <input type="text" class="form-control {{($errors->first('nomor') ? ' parsley-error' : '')}}" name="nomor" value="{{ old('nomor', $model->nomor) }}">
+            @foreach ($errors->get('nomor') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+            @endforeach
+        </div>
+    </div>
+</div>
+
 <div class="form-group">
-    <label>{{ $model->attributes()['jenis'] }}:</label>
-    <select class="form-control {{($errors->first('jenis') ? ' parsley-error' : '')}}"  name="jenis" autofocus>
-        <option>- Pilih Peruntukan -</option>
-        @foreach ($item_jenis as $ijenis)
-            <option value="{{ $ijenis['id'] }}">{{ $ijenis['jenis'] }}</option>
+    <label>{{ $model->attributes()['nama_kegiatan'] }}:</label>
+    <input type="text" class="form-control {{($errors->first('nama_kegiatan') ? ' parsley-error' : '')}}" name="nama_kegiatan" value="{{ old('nama_kegiatan', $model->nama_kegiatan) }}">
+    @foreach ($errors->get('nama_kegiatan') as $msg)
+        <p class="text-danger">{{ $msg }}</p>
+    @endforeach
+</div>
+
+<div class="form-group">
+    <label>{{ $model->attributes()['penjelasan'] }}:</label>
+    <input type="text" class="form-control {{($errors->first('penjelasan') ? ' parsley-error' : '')}}" name="penjelasan" value="{{ old('penjelasan', $model->penjelasan) }}">
+    @foreach ($errors->get('penjelasan') as $msg)
+        <p class="text-danger">{{ $msg }}</p>
+    @endforeach
+</div>
+
+<div class="form-group">
+    <label>Tanggal:</label>
+        <div class="input-daterange input-group" data-provide="datepicker">
+            
+            <input type="text" class="input-sm form-control {{($errors->first('tanggal_mulai') ? ' parsley-error' : '')}}" name="tanggal_mulai" value="{{ old('tanggal_mulai', $model->tanggal_mulai) }}">
+            @foreach ($errors->get('tanggal_mulai') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+            @endforeach
+
+            <span class="input-group-addon"> &nbsp s/d &nbsp </span>
+
+            <input type="text" class="form-control {{($errors->first('tanggal_selesai') ? ' parsley-error' : '')}}" name="tanggal_selesai" value="{{ old('tanggal_selesai', $model->tanggal_selesai) }}">
+            @foreach ($errors->get('tanggal_selesai') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+            @endforeach
+        </div>
+    </label>
+</div>
+
+<input type="hidden" name="is_kepala" value="1">
+
+
+<div class="form-group">
+    <label>{{ $model->attributes()['pejabat_ttd'] }}:</label>
+    <select class="form-control {{($errors->first('pejabat_ttd') ? ' parsley-error' : '')}}"  name="pejabat_ttd">
+        @foreach ($list_pejabat as $pejabat)
+            <option  value="{{ $pejabat->email }}" 
+                @if ($pejabat->email == old('pejabat_ttd', $model->pejabat_ttd))
+                    selected="selected"
+                @endif>
+                {{ $pejabat->nip_baru }} - {{ $pejabat->name }}
+            </option>
         @endforeach
     </select>
-    @foreach ($errors->get('jenis') as $msg)<p class="text-danger">{{ $msg }}</p>@endforeach
-</div>
-
-<div class="form-group">
-    <label>{{ $model->attributes()['kode'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('kode') ? ' parsley-error' : '')}}" name="kode" value="{{ old('kode', $model->kode) }}">
-    @foreach ($errors->get('kode') as $msg)
+    @foreach ($errors->get('pejabat_ttd') as $msg)
         <p class="text-danger">{{ $msg }}</p>
     @endforeach
 </div>
 
 <div class="form-group">
-    <label>{{ $model->attributes()['butir_kegiatan'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('butir_kegiatan') ? ' parsley-error' : '')}}" name="butir_kegiatan" value="{{ old('butir_kegiatan', $model->butir_kegiatan) }}">
-    @foreach ($errors->get('butir_kegiatan') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
+    <label>STATUS: </label>
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="is_lpd">
+        <span>{{ $model->attributes()['is_lpd'] }}</span>
+    </label>
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="is_kelengkapan">
+        <span>{{ $model->attributes()['is_kelengkapan'] }}</span>
+    </label>
+    <label class="fancy-checkbox">
+        <input type="checkbox" name="is_lunas">
+        <span>{{ $model->attributes()['is_lunas'] }}</span>
+    </label>
+    <p id="error-checkbox"></p>
 </div>
 
-<div class="form-group">
-    <label>{{ $model->attributes()['satuan_hasil'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('satuan_hasil') ? ' parsley-error' : '')}}" name="satuan_hasil" value="{{ old('satuan_hasil', $model->satuan_hasil) }}">
-    @foreach ($errors->get('satuan_hasil') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
-</div>
-
-
-<div class="form-group">
-    <label>{{ $model->attributes()['jadwal_dinas'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('jadwal_dinas') ? ' parsley-error' : '')}}" name="jadwal_dinas" value="{{ old('jadwal_dinas', $model->jadwal_dinas) }}">
-    @foreach ($errors->get('jadwal_dinas') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
-</div>
-
-
-<div class="form-group">
-    <label>{{ $model->attributes()['batas_penilaian'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('batas_penilaian') ? ' parsley-error' : '')}}" name="batas_penilaian" value="{{ old('batas_penilaian', $model->batas_penilaian) }}">
-    @foreach ($errors->get('batas_penilaian') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
-</div>
-
-
-<div class="form-group">
-    <label>{{ $model->attributes()['pelaksana'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('pelaksana') ? ' parsley-error' : '')}}" name="pelaksana" value="{{ old('pelaksana', $model->pelaksana) }}">
-    @foreach ($errors->get('pelaksana') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
-</div>
-
-
-<div class="form-group">
-    <label>{{ $model->attributes()['bukti_fisik'] }}:</label>
-    <input type="text" class="form-control {{($errors->first('bukti_fisik') ? ' parsley-error' : '')}}" name="bukti_fisik" value="{{ old('bukti_fisik', $model->bukti_fisik) }}">
-    @foreach ($errors->get('bukti_fisik') as $msg)
-        <p class="text-danger">{{ $msg }}</p>
-    @endforeach
-</div>
 <br>
 <button type="submit" class="btn btn-primary">Simpan</button>
+
+@section('css')
+  <meta name="_token" content="{{csrf_token()}}" />
+  <meta name="csrf-token" content="@csrf">
+@endsection
+
+@section('scripts')
+<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
+@endsection
