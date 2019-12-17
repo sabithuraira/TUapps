@@ -162,6 +162,10 @@ var vm = new Vue({
     data:  {
       datas: [],
       month: parseInt({!! json_encode($month) !!}),
+      months: [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+      ],
       year: {!! json_encode($year) !!},
       pathname : window.location.pathname,
       form_id_data: '',

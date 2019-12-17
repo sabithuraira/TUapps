@@ -4,10 +4,10 @@
             <tr class="text-center">
                 <th>No</th>
                 <th>Nama Barang</th>
-                <th colspan="2">Saldo {{ config('app.months')[$month-1] }}</th>
-                <th colspan="2">Tambah {{ config('app.months')[$month] }}</th>
-                <th>Kurang {{ config('app.months')[$month] }}</th>
-                <th colspan="2">Saldo {{ config('app.months')[$month] }}</th>
+                <th colspan="2">Saldo @{{ months[month-2] }}</th>
+                <th colspan="2">Tambah  @{{ months[month-1] }}</th>
+                <th>Kurang  @{{ months[month-1] }}</th>
+                <th colspan="2">Saldo  @{{ months[month-1] }}</th>
                 <th>Harga Satuan (Rp)</th>
             </tr>
         </thead>
