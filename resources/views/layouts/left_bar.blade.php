@@ -67,7 +67,8 @@
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang Persediaan</span></a>
                                 <ul>                                  
                                     <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a href="{{url('master_barang')}}">Master Barang</a></li>
-                                    <li class="{{ request()->is('opname_persediaan*') ? 'active' : '' }}"><a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
+                                    <li class="{{ (request()->is('opname_persediaan') || request()->is('opname_persediaan/create')) ? 'active' : '' }}"><a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
+                                    <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a href="{{url('opname_persediaan/kartu_kendali')}}">Kartu Kendali</a></li>
                                 </ul>
                             </li>
 

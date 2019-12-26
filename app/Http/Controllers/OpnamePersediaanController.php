@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MasterBarangRequest;
+use PDF;
 
 class OpnamePersediaanController extends Controller
 {
@@ -29,6 +30,47 @@ class OpnamePersediaanController extends Controller
                 'year', 'month'));
     }
 
+    public function print_persediaan(Request $request)
+    {
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+
+        if(strlen($request->get('p_month'))>0)
+            $month = $request->get('p_month');
+
+        if(strlen($request->get('p_year'))>0)
+            $year = $request->get('p_year');
+
+        $monthName = date("F", mktime(0, 0, 0, $month, 10));
+        $last_day_month  = date('t', mktime(0, 0, 0, $month, 10));
+
+        $prevMonthName = date("F", mktime(0, 0, 0, ($month-1), 10));
+        $last_day_prev_month  = date('t', mktime(0, 0, 0, ($month-1), 10));
+        
+        $model = new \App\Opnamepersediaan();
+        $datas = $model->OpnameRekap($month, $year);
+        foreach($datas as $key=>$value){
+            $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
+                                            ->where('bulan', '=', $month)
+                                            ->where('tahun', '=', $year)   
+                                            ->with('unitKerja')                                         
+                                            ->get();
+        }
+
+        // dd($datas);
+
+        $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
+            'year', 'type', 'datas', 'monthName', 'last_day_month',
+            'prevMonthName', 'last_day_prev_month'))
+            ->setPaper('a4', 'landscape');
+        
+        $nama_file = 'opname_persediaan_';
+        $nama_file .= $month .'_'.$year.'_'. '.pdf';
+
+        return $pdf->download($nama_file);
+    }
+
     public function loadData(Request $request){
         $datas=array();
         $month = date('m');
@@ -50,8 +92,28 @@ class OpnamePersediaanController extends Controller
                                             ->get();
         }
         
-
         return response()->json(['success'=>'1', 'datas'=>$datas]);
+    }
+
+    
+
+    public function print_kartukendali(Request $request)
+    {
+    }
+
+    public function kartu_kendali(Request $request){
+        $barang = 0;
+        $month = date('m');
+        $year = date('Y');
+        
+        $list_barang = \App\MasterBarang::all();
+
+        return view('opname_persediaan.kartu_kendali',compact('barang','month', 
+                'year', 'list_barang'));
+    }
+
+    public function cetak_kartu_kendali(Request $request){
+        
     }
 
     /**

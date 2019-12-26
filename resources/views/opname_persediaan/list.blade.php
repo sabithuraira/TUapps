@@ -1,4 +1,12 @@
 <div id="load">
+
+    <form action="{{action('OpnamePersediaanController@print_persediaan')}}" method="post">
+        @csrf 
+        <input type="hidden"  v-model="month" name="p_month">
+        <input type="hidden"  v-model="year" name="p_year">
+        <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak &nbsp</button>
+    </form>
+    <br/><br/>
     <table class="table table-bordered table-sm">
         <thead>
             <tr class="text-center">
