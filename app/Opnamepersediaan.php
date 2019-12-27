@@ -87,7 +87,7 @@ class Opnamepersediaan extends Model
 
     public function KartuKendali($barang, $month, $year){
         $sql = "SELECT op.id, op.id_barang, op.jumlah_kurang, op.harga_kurang, op.tanggal ,
-            uk4.nama, mb.nama_barang, mb.harga_satuan   
+            uk4.nama    
             FROM opname_pengurangan op, master_barangs mb, 
                 unit_kerja4 uk4  
             WHERE 

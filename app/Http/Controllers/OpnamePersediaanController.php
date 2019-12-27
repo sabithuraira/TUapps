@@ -123,9 +123,39 @@ class OpnamePersediaanController extends Controller
             $barang = $request->get('barang');
 
         $model = new \App\Opnamepersediaan();
-        $datas = $model->KartuKendali($barang, $month, $year);
         
-        return response()->json(['success'=>'1', 'datas'=>$datas]);
+        $persediaan = \App\OpnamePersediaan::where('id_barang', '=' ,$barang)
+                ->where('bulan', '=', $month)
+                ->where('tahun', '=', $year)   
+                ->first();
+
+        $detail_barang = \App\MasterBarang::find($barang);
+        $datas = $model->KartuKendali($barang, $month, $year);
+
+        $saldo_jumlah = $persediaan->saldo_awal;
+        $saldo_harga = $persediaan->harga_awal;
+
+        $jumlah_keluar = 0;
+        $jumlah_harga_keluar = 0;
+
+        foreach($datas as $key=>$value){
+            $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah_kurang;
+            $datas[$key]->saldo_harga = $saldo_harga - $value->harga_kurang;
+
+            $saldo_jumlah = $datas[$key]->saldo_jumlah;
+            $saldo_harga = $datas[$key]->saldo_harga;
+
+            $jumlah_keluar += $value->jumlah_kurang;
+            $jumlah_harga_keluar += $value->harga_kurang;
+        }
+
+        $persediaan->j_keluar = $jumlah_keluar;
+        $persediaan->j_harga_keluar = $jumlah_harga_keluar;
+        $persediaan->j_saldo_jumlah = $saldo_jumlah;
+        $persediaan->j_saldo_harga = $saldo_harga;
+        
+        return response()->json(['success'=>'1', 'datas'=>$datas, 
+            'persediaan'=>$persediaan, 'detail_barang'=>$detail_barang]);
     }
 
     public function print_kartukendali(Request $request)

@@ -102,6 +102,8 @@
       el: "#app_vue",
       data:  {
         datas: [],
+        persediaan: {},
+        detail_barang: {},
         month: parseInt({!! json_encode($month) !!}),
         year: parseInt({!! json_encode($year) !!}),
         barang: parseInt({!! json_encode($barang) !!}),
@@ -170,7 +172,9 @@
                   },
               }).done(function (data) {
                   self.datas = data.datas;
-                  console.log(data.datas);
+                  self.persediaan = data.persediaan;
+                  self.detail_barang = data.detail_barang;
+                  // console.log(data.persediaan);
                   $('#wait_progres').modal('hide');
               }).fail(function (msg) {
                   console.log(JSON.stringify(msg));
