@@ -241,5 +241,9 @@ return [
         11 => 'November',
         12 => 'Desember',
     ],
+    'short_months' => [
+        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des',
+      ],
     'kode_prov' => '16',
 ];

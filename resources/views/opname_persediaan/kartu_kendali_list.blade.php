@@ -72,7 +72,7 @@
                 <td>@{{ persediaan.saldo_tambah }}</td>
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
                 <td>@{{ moneyFormat(persediaan.harga_tambah) }}</td>
-
+                
                 <td>@{{ persediaan.j_keluar }}</td>
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
                 <td>@{{ moneyFormat(persediaan.j_harga_keluar) }}</td>

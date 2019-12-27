@@ -58,8 +58,6 @@ class OpnamePersediaanController extends Controller
                                             ->get();
         }
 
-        // dd($datas);
-
         $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
             'year', 'type', 'datas', 'monthName', 'last_day_month',
             'prevMonthName', 'last_day_prev_month'))
@@ -160,6 +158,65 @@ class OpnamePersediaanController extends Controller
 
     public function print_kartukendali(Request $request)
     {
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $barang = \App\MasterBarang::first()->id;
+
+        if(strlen($request->get('p_month'))>0)
+            $month = $request->get('p_month');
+
+        if(strlen($request->get('p_year'))>0)
+            $year = $request->get('p_year');
+            
+        if(strlen($request->get('p_barang'))>0)
+            $barang = $request->get('p_barang');
+
+        $model = new \App\Opnamepersediaan();
+        
+        $persediaan = \App\OpnamePersediaan::where('id_barang', '=' ,$barang)
+                ->where('bulan', '=', $month)
+                ->where('tahun', '=', $year)   
+                ->first();
+
+        $detail_barang = \App\MasterBarang::find($barang);
+        $datas = $model->KartuKendali($barang, $month, $year);
+
+        $saldo_jumlah = $persediaan->saldo_awal;
+        $saldo_harga = $persediaan->harga_awal;
+
+        $jumlah_keluar = 0;
+        $jumlah_harga_keluar = 0;
+
+        foreach($datas as $key=>$value){
+            $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah_kurang;
+            $datas[$key]->saldo_harga = $saldo_harga - $value->harga_kurang;
+
+            $saldo_jumlah = $datas[$key]->saldo_jumlah;
+            $saldo_harga = $datas[$key]->saldo_harga;
+
+            $jumlah_keluar += $value->jumlah_kurang;
+            $jumlah_harga_keluar += $value->harga_kurang;
+        }
+
+        $persediaan->j_keluar = $jumlah_keluar;
+        $persediaan->j_harga_keluar = $jumlah_harga_keluar;
+        $persediaan->j_saldo_jumlah = $saldo_jumlah;
+        $persediaan->j_saldo_harga = $saldo_harga;
+        
+        $monthName = date("F", mktime(0, 0, 0, $month, 10));
+
+        // dd($barang);
+
+        $pdf = PDF::loadView('opname_persediaan.print_kartukendali', compact('month', 
+            'year', 'barang', 'datas', 'detail_barang', 'persediaan',
+            'monthName'))
+            ->setPaper('a4', 'landscape');
+        
+        $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
+        $nama_file .= $month .'_'.$year.'_'. '.pdf';
+
+        return $pdf->download($nama_file);
     }
 
     /**
