@@ -16,6 +16,6 @@ class OpnamePengurangan extends Model
 
     public function unitKerja()
     {
-        return $this->belongsTo('App\UnitKerja4', 'unit_kerja');
+        return $this->belongsTo('App\UnitKerja4', 'unit_kerja4');
     }
 }

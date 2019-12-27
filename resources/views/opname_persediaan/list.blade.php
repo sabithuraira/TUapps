@@ -48,7 +48,7 @@
                 <td>@{{ parseInt(data[label_op_awal])+parseInt(data[label_op_tambah])-parseInt(data.pengeluaran) }}</td>
                 <td>@{{ data.satuan }}</td>
 
-                <td>@{{ data.harga_satuan }}</td>
+                <td align="right">@{{ moneyFormat(data.harga_satuan) }}</td>
             </tr>
         </tbody>
     </table>

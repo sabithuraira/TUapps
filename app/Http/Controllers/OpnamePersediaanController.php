@@ -95,14 +95,8 @@ class OpnamePersediaanController extends Controller
         return response()->json(['success'=>'1', 'datas'=>$datas]);
     }
 
-    
-
-    public function print_kartukendali(Request $request)
-    {
-    }
-
     public function kartu_kendali(Request $request){
-        $barang = 0;
+        $barang = \App\MasterBarang::first()->id;
         $month = date('m');
         $year = date('Y');
         
@@ -112,8 +106,30 @@ class OpnamePersediaanController extends Controller
                 'year', 'list_barang'));
     }
 
-    public function cetak_kartu_kendali(Request $request){
+    public function loadKartukendali(Request $request)
+    { 
+        $datas=array();
+        $barang = \App\MasterBarang::first()->id;
+        $month = date('m');
+        $year = date('Y');
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+            
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+            
+        if(strlen($request->get('barang'))>0)
+            $barang = $request->get('barang');
+
+        $model = new \App\Opnamepersediaan();
+        $datas = $model->KartuKendali($barang, $month, $year);
         
+        return response()->json(['success'=>'1', 'datas'=>$datas]);
+    }
+
+    public function print_kartukendali(Request $request)
+    {
     }
 
     /**

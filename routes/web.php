@@ -50,7 +50,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');
     Route::post('opname_persediaan/delete_barang_keluar', 'OpnamePersediaanController@deleteBarangKeluar');
     Route::get('opname_persediaan/kartu_kendali', 'OpnamePersediaanController@kartu_kendali');
-    Route::post('opname_persediaan/cetak_kartu_kendali', 'OpnamePersediaanController@cetak_kartu_kendali');
+    Route::post('opname_persediaan/load_kartukendali', 'OpnamePersediaanController@loadKartukendali');
     Route::post('opname_persediaan/print_persediaan',array('as'=>'print_persediaan','uses'=>'OpnamePersediaanController@print_persediaan'));
     Route::post('opname_persediaan/print_kartukendali',array('as'=>'print_kartukendali','uses'=>'OpnamePersediaanController@print_kartukendali'));
 // });
