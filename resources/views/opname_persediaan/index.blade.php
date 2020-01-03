@@ -18,7 +18,8 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('OpnamePersediaanController@create')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <span>Penambahan</span></a>
+          <a href="#" role="button" v-on:click="addBarangMasuk"  class="btn btn-primary" data-toggle="modal" data-target="#add_pengurangan"><i class="fa fa-plus-circle"></i> <span>Penambahan</span></a>
+          
           <a href="#" role="button" v-on:click="addBarangKeluar"  class="btn btn-danger" data-toggle="modal" data-target="#add_pengurangan"><i class="fa fa-minus-circle"></i> <span>Barang Keluar</span></a>
           <br/><br/>
           <form action="{{url('opname_persediaan')}}" method="get">
@@ -104,7 +105,7 @@
                         </div>
                     </div> 
 
-                    <div class="form-group">
+                    <div v-if="form_current_jenis==2" class="form-group">
                         Unit Kerja:
                         <div class="form-line">
                             <select class="form-control"  v-model="form_unit_kerja" autofocus>
@@ -114,6 +115,13 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+
+                    <div v-if="form_current_jenis==1" class="form-group">
+                        Nama Penyedia:
+                        <div class="form-line">
+                            <input type="text" v-model="form_nama_penyedia" class="form-control" placeholder="Nama Penyedia">
                         </div>
                     </div>
 
@@ -139,6 +147,7 @@
             </div>
         </div>
     </div>
+
 
   </div>
 @endsection
@@ -172,7 +181,9 @@ var vm = new Vue({
       form_id_barang: '',
       form_jumlah: '',
       form_unit_kerja: '',
-      form_tanggal: ''
+      form_nama_penyedia: '',
+      form_tanggal: '',
+      form_current_jenis: 1, //1 penambahan, 2 pengurangan
     },
     computed: {
         label_op_awal: function () {
@@ -218,6 +229,7 @@ var vm = new Vue({
         addBarangKeluar: function (event) {
             var self = this;
             if (event) {
+                self.form_current_jenis = 2;
                 self.form_id_data = '';
                 self.form_id_barang = '';
                 self.form_jumlah = '';
@@ -228,6 +240,7 @@ var vm = new Vue({
         updateBarangKeluar: function (event) {
             var self = this;
             if (event) {
+                self.form_current_jenis = 2;
                 self.form_id_data = event.target.getAttribute('data-id');
                 self.form_id_barang = event.target.getAttribute('data-idbarang');
                 self.form_jumlah = event.target.getAttribute('data-jumlah');
@@ -237,7 +250,33 @@ var vm = new Vue({
 
             }
         },
-        saveBarangKeluar: function () {
+        
+        addBarangMasuk: function (event) {
+            var self = this;
+            if (event) {
+                self.form_current_jenis = 1;
+                self.form_id_data = '';
+                self.form_id_barang = '';
+                self.form_jumlah = '';
+                self.form_nama_penyedia = '';
+                self.form_tanggal = '';
+            }
+        },
+        updateBarangMasuk: function (event) {
+            var self = this;
+            if (event) {
+                self.form_current_jenis = 1;
+                self.form_id_data = event.target.getAttribute('data-id');
+                self.form_id_barang = event.target.getAttribute('data-idbarang');
+                self.form_jumlah = event.target.getAttribute('data-jumlah');
+                self.form_nama_penyedia = event.target.getAttribute('data-namapenyedia');
+                var temp_tanggal = event.target.getAttribute('data-tanggal');
+                self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
+
+            }
+        },
+
+        saveBarangKeluarMasuk: function () {
             var self = this;
             $('#wait_progres').modal('show');
             $.ajaxSetup({
@@ -245,26 +284,51 @@ var vm = new Vue({
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             })
-            $.ajax({
-                url : "{{ url('/opname_persediaan/store_barang_keluar/') }}",
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    form_id_data: self.form_id_data,
-                    form_month: self.month,
-                    form_year: self.year,
-                    form_id_barang: self.form_id_barang, 
-                    form_jumlah: self.form_jumlah, 
-                    form_unit_kerja: self.form_unit_kerja,
-                    form_tanggal: self.form_tanggal, 
-                },
-            }).done(function (data) {
-                $('#add_pengurangan').modal('hide');
-                window.location.reload(false); 
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-            $('#wait_progres').modal('hide');
-            });
+
+            if(self.form_current_jenis==1){
+                $.ajax({
+                    url : "{{ url('/opname_persediaan/store_barang_masuk/') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        form_id_data: self.form_id_data,
+                        form_month: self.month,
+                        form_year: self.year,
+                        form_id_barang: self.form_id_barang, 
+                        form_jumlah: self.form_jumlah, 
+                        form_nama_penyedia: self.form_nama_penyedia,
+                        form_tanggal: self.form_tanggal, 
+                    },
+                }).done(function (data) {
+                    $('#add_pengurangan').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+                });
+            }
+            else{
+                $.ajax({
+                    url : "{{ url('/opname_persediaan/store_barang_keluar/') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        form_id_data: self.form_id_data,
+                        form_month: self.month,
+                        form_year: self.year,
+                        form_id_barang: self.form_id_barang, 
+                        form_jumlah: self.form_jumlah, 
+                        form_unit_kerja: self.form_unit_kerja,
+                        form_tanggal: self.form_tanggal, 
+                    },
+                }).done(function (data) {
+                    $('#add_pengurangan').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+                });
+            }
         },
         deleteBarangKeluar: function () {
             var self = this;
@@ -311,7 +375,7 @@ $(document).ready(function() {
 });
 
 $( "#add-btn" ).click(function(e) {
-    vm.saveBarangKeluar();
+    vm.saveBarangKeluarMasuk();
 });
 
 $( "#delete-btn" ).click(function(e) {

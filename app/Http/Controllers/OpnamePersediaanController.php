@@ -338,6 +338,56 @@ class OpnamePersediaanController extends Controller
         return response()->json(['success'=>'Data berhasil ditambah']);
     }
 
+    public function storeBarangMasuk(Request $request){
+        $model = new \App\OpnamePenambahan;
+        if($request->form_id_data!=0 && $request->form_id_data!='')
+            $model = \App\OpnamePenambahan::find($request->form_id_data);
+
+        $model->bulan = $request->form_month;
+        $model->tahun = $request->form_year;
+        $model->id_barang = $request->form_id_barang;
+        $model->jumlah_tambah = $request->form_jumlah;
+
+        $model_barang = \App\MasterBarang::find($request->form_id_barang);
+        //////////////////////////////////////
+        if($model_barang!=null)
+            $model->harga_tambah = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
+        else
+            $model->harga_tambah = 0;
+        ///////////////////////////////////////
+
+        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
+                            ->first();
+        $model->unit_kerja = $model_unit_kerja->id;
+
+        $model->nama_penyedia = $request->form_nama_penyedia;
+        $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        if($model->save())
+        {
+            $model_op = \App\OpnamePenambahan::where('id_barang', '=' ,$request->form_id_barang)
+                    ->where('bulan', '=', $request->form_month)
+                    ->where('tahun', '=', $request->form_year)
+                    ->first();
+
+            $jumlah_tambah = \App\OpnamePenambahan::where('id_barang', '=' ,$request->form_id_barang)
+                            ->where('bulan', '=', $request->form_month)
+                            ->where('tahun', '=', $request->form_year)
+                            ->sum("jumlah_tambah");
+                            
+            $jumlah_saldo = 0 - (int)$jumlah_tambah;
+                   
+            if($model_op!=null) $jumlah_saldo = ($jumlah_saldo + $model_op->saldo_awal + $model_op->saldo_tambah);
+                
+            $model_o = new \App\Opnamepersediaan();
+            $model_o->triggerNextMonth($request->form_month, $request->form_year, $request->form_id_barang, 
+                $jumlah_saldo, (int)$model_barang->harga_satuan, $model_barang->nama_barang);
+        }
+
+        return response()->json(['success'=>'Data berhasil ditambah']);
+    }
+
     public function deleteBarangKeluar(Request $request){
         $msg = "";
         if($request->form_id_data!=0 && $request->form_id_data!='')
