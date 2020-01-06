@@ -15,45 +15,84 @@ class Opnamepersediaan extends Model
         return (new \App\Http\Requests\OpnamepersediaanRequest())->attributes();
     }
 
-    public function triggerNextMonth($month, $year, $id_barang, $saldo, $harga, $nama){
-        $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
-                        ->where('bulan', '=', ($month+1))
-                        ->where('tahun', '=', $year)
-                        ->first();
+    public function triggerPersediaan($id_barang, $month, $year, $nama_barang){
+        $model_op = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
+                    ->where('bulan', '=', $month)
+                    ->where('tahun', '=', $year)
+                    ->first();
 
-        if($month==12){
-            $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
-                            ->where('bulan', '=', 1)
-                            ->where('tahun', '=', ($year+1))
-                            ->first();
+        if($model_op==null) {
+            $model_op= new \App\Opnamepersediaan;
+            $model_op->id_barang = $id_barang;
+            $model_op->nama_barang = $nama_barang;
+            $model_op->bulan = $month;
+            $model_op->tahun = $year;
+            $model_op->saldo_awal = 0;
+            $model_op->harga_awal = 0;
+            $model_op->created_by=Auth::id();
+            $model_op->updated_by=Auth::id();
         }
-        
-        if($model_next==null) {
-            $model_next= new \App\Opnamepersediaan;
-            $model_next->id_barang = $id_barang;
+
+        $jumlah_kurang = \App\OpnamePengurangan::where('id_barang', '=' ,$id_barang)
+                        ->where('bulan', '=', $month)
+                        ->where('tahun', '=', $year)
+                        ->sum("jumlah_kurang");
+                        
+        $jumlah_harga_kurang = \App\OpnamePengurangan::where('id_barang', '=' ,$id_barang)
+                    ->where('bulan', '=', $month)
+                    ->where('tahun', '=', $year)
+                    ->sum("harga_kurang");
+
+        $jumlah_tambah = \App\OpnamePenambahan::where('id_barang', '=' ,$id_barang)
+                        ->where('bulan', '=', $month)
+                        ->where('tahun', '=', $year)
+                        ->sum("jumlah_tambah");
+                        
+        $jumlah_harga_tambah = \App\OpnamePenambahan::where('id_barang', '=' ,$id_barang)
+                        ->where('bulan', '=', $month)
+                        ->where('tahun', '=', $year)
+                        ->sum("harga_tambah");
+
+        $model_op->saldo_tambah = $jumlah_tambah;
+        $model_op->harga_tambah = $jumlah_harga_tambah;
+        $model_op->saldo_kurang = $jumlah_kurang;
+        $model_op->harga_kurang = $jumlah_harga_kurang;
+
+        if($model_op->save()){
+            $jumlah_next_saldo = $model_op->saldo_awal + $model_op->saldo_tambah - $model_op->saldo_kurang;
+            $jumlah_next_harga = $model_op->harga_awal + $model_op->harga_tambah - $model_op->harga_kurang;
+                
+            $next_month = ($month+1);
+            $next_year = $year;
 
             if($month==12){
-                $model_next->bulan = 1;
-                $model_next->tahun = ($year+1);
-            }
-            else{
-                $model_next->bulan = ($month+1);
-                $model_next->tahun = $year;
+                $next_month = 1;
+                $next_year = ($year+1);
             }
 
-            $model_next->created_by=Auth::id();
-            $model_next->saldo_tambah = 0;
-            $model_next->harga_tambah = 0;
+            $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
+                        ->where('bulan', '=', $next_month)
+                        ->where('tahun', '=', $next_year)
+                        ->first();
+
+            if($model_next==null) {
+                $model_next= new \App\Opnamepersediaan;
+                $model_next->id_barang = $id_barang;
+                $model_next->bulan = $next_month;
+                $model_next->tahun = $next_year;
+                $model_next->created_by=Auth::id();
+                $model_next->saldo_tambah = 0;
+                $model_next->harga_tambah = 0;
+                $model_next->saldo_kurang = 0;
+                $model_next->harga_kurang = 0;
+            }
+
+            $model_next->nama_barang = $nama_barang;
+            $model_next->saldo_awal = $jumlah_next_saldo;
+            $model_next->harga_awal = $jumlah_next_harga;
+            $model_next->updated_by=Auth::id();
+            $model_next->save();
         }
-
-        $model_next->nama_barang = $nama;
-
-        $model_next->saldo_awal = $saldo;
-        $model_next->harga_awal = $saldo*$harga;
-        $model_next->updated_by=Auth::id();
-
-        $model_next->save();
-
     }
 
     public function OpnameRekap($i, /*$end_month,*/ $year){

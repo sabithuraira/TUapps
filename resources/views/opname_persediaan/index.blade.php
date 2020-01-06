@@ -117,9 +117,16 @@
                             </select>
                         </div>
                     </div>
+                    
+                    <div v-if="form_current_jenis==1" class="form-group">
+                        Total Harga (Rp):
+                        <div class="form-line">
+                            <input type="number" v-model="form_total_harga" class="form-control" placeholder="Total Harga">
+                        </div>
+                    </div>
 
                     <div v-if="form_current_jenis==1" class="form-group">
-                        Nama Penyedia:
+                        Penyedia:
                         <div class="form-line">
                             <input type="text" v-model="form_nama_penyedia" class="form-control" placeholder="Nama Penyedia">
                         </div>
@@ -182,6 +189,7 @@ var vm = new Vue({
       form_jumlah: '',
       form_unit_kerja: '',
       form_nama_penyedia: '',
+      form_total_harga: '',
       form_tanggal: '',
       form_current_jenis: 1, //1 penambahan, 2 pengurangan
     },
@@ -259,6 +267,7 @@ var vm = new Vue({
                 self.form_id_barang = '';
                 self.form_jumlah = '';
                 self.form_nama_penyedia = '';
+                self.form_total_harga = '';
                 self.form_tanggal = '';
             }
         },
@@ -269,6 +278,7 @@ var vm = new Vue({
                 self.form_id_data = event.target.getAttribute('data-id');
                 self.form_id_barang = event.target.getAttribute('data-idbarang');
                 self.form_jumlah = event.target.getAttribute('data-jumlah');
+                self.form_total_harga = event.target.getAttribute('data-totalharga');
                 self.form_nama_penyedia = event.target.getAttribute('data-namapenyedia');
                 var temp_tanggal = event.target.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
@@ -296,8 +306,9 @@ var vm = new Vue({
                         form_year: self.year,
                         form_id_barang: self.form_id_barang, 
                         form_jumlah: self.form_jumlah, 
+                        form_total_harga: self.form_total_harga,
                         form_nama_penyedia: self.form_nama_penyedia,
-                        form_tanggal: self.form_tanggal, 
+                        form_tanggal: self.form_tanggal,
                     },
                 }).done(function (data) {
                     $('#add_pengurangan').modal('hide');

@@ -316,23 +316,9 @@ class OpnamePersediaanController extends Controller
         $model->updated_by=Auth::id();
         if($model->save())
         {
-            $model_op = \App\Opnamepersediaan::where('id_barang', '=' ,$request->form_id_barang)
-                    ->where('bulan', '=', $request->form_month)
-                    ->where('tahun', '=', $request->form_year)
-                    ->first();
-
-            $jumlah_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$request->form_id_barang)
-                            ->where('bulan', '=', $request->form_month)
-                            ->where('tahun', '=', $request->form_year)
-                            ->sum("jumlah_kurang");
-                            
-            $jumlah_saldo = 0 - (int)$jumlah_keluar;
-                   
-            if($model_op!=null) $jumlah_saldo = ($jumlah_saldo + $model_op->saldo_awal + $model_op->saldo_tambah);
-                
             $model_o = new \App\Opnamepersediaan();
-            $model_o->triggerNextMonth($request->form_month, $request->form_year, $request->form_id_barang, 
-                $jumlah_saldo, (int)$model_barang->harga_satuan, $model_barang->nama_barang);
+            $model_o->triggerPersediaan($request->form_id_barang, $request->form_month, 
+                    $request->form_year, $model_barang->nama_barang);
         }
 
         return response()->json(['success'=>'Data berhasil ditambah']);
@@ -349,13 +335,11 @@ class OpnamePersediaanController extends Controller
         $model->jumlah_tambah = $request->form_jumlah;
 
         $model_barang = \App\MasterBarang::find($request->form_id_barang);
-        //////////////////////////////////////
-        if($model_barang!=null)
-            $model->harga_tambah = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
-        else
-            $model->harga_tambah = 0;
-        ///////////////////////////////////////
-
+        // if($model_barang!=null)
+        //     $model->harga_tambah = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
+        // else
+        $model->harga_tambah = $request->form_total_harga;
+        
         $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
                             ->first();
         $model->unit_kerja = $model_unit_kerja->id;
@@ -366,23 +350,9 @@ class OpnamePersediaanController extends Controller
         $model->updated_by=Auth::id();
         if($model->save())
         {
-            $model_op = \App\OpnamePenambahan::where('id_barang', '=' ,$request->form_id_barang)
-                    ->where('bulan', '=', $request->form_month)
-                    ->where('tahun', '=', $request->form_year)
-                    ->first();
-
-            $jumlah_tambah = \App\OpnamePenambahan::where('id_barang', '=' ,$request->form_id_barang)
-                            ->where('bulan', '=', $request->form_month)
-                            ->where('tahun', '=', $request->form_year)
-                            ->sum("jumlah_tambah");
-                            
-            $jumlah_saldo = 0 - (int)$jumlah_tambah;
-                   
-            if($model_op!=null) $jumlah_saldo = ($jumlah_saldo + $model_op->saldo_awal + $model_op->saldo_tambah);
-                
             $model_o = new \App\Opnamepersediaan();
-            $model_o->triggerNextMonth($request->form_month, $request->form_year, $request->form_id_barang, 
-                $jumlah_saldo, (int)$model_barang->harga_satuan, $model_barang->nama_barang);
+            $model_o->triggerPersediaan($request->form_id_barang, $request->form_month, 
+                    $request->form_year, $model_barang->nama_barang);
         }
 
         return response()->json(['success'=>'Data berhasil ditambah']);
