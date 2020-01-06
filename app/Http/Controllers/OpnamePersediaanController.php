@@ -93,6 +93,42 @@ class OpnamePersediaanController extends Controller
         return response()->json(['success'=>'1', 'datas'=>$datas]);
     }
 
+    public function loadRincian(Request $request){
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $id_barang = 0;
+        $jenis = 1; //1penambahan, 2pengurangan
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+            
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+            
+        if(strlen($request->get('id_barang'))>0)
+            $id_barang = $request->get('id_barang');
+            
+        if(strlen($request->get('jenis'))>0)
+            $jenis = $request->get('jenis');
+
+        if($jenis==1){
+            $datas = \App\OpnamePenambahan::where('id_barang', '=' ,$id_barang)
+                ->where('bulan', '=', $month)
+                ->where('tahun', '=', $year)                                
+                ->get();
+        }
+        else{
+            $datas = \App\OpnamePengurangan::where('id_barang', '=' ,$id_barang)
+                ->where('bulan', '=', $month)
+                ->where('tahun', '=', $year)   
+                ->with('unitKerja')                                         
+                ->get();
+        }
+        
+        return response()->json(['success'=>'1', 'datas'=>$datas]);
+    }
+
     public function kartu_kendali(Request $request){
         $barang = \App\MasterBarang::first()->id;
         $month = date('m');
@@ -364,34 +400,40 @@ class OpnamePersediaanController extends Controller
         {
             $model = \App\OpnamePengurangan::find($request->form_id_data);
             if($model!=null){
-                /////////////////
                 $id_barang = $model->id_barang;
                 $bulan = $model->bulan;
                 $tahun = $model->tahun;
 
                 if($model->delete()){
-
-                    $model_op = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
-                                ->where('bulan', '=', $bulan)
-                                ->where('tahun', '=', $tahun)
-                                ->first();
-
-                    $jumlah_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$id_barang)
-                                    ->where('bulan', '=', $bulan)
-                                    ->where('tahun', '=', $tahun)
-                                    ->sum("jumlah_kurang");
-                                    
-                    $jumlah_saldo = 0 - (int)$jumlah_keluar;
-                        
-                    if($model_op!=null) $jumlah_saldo = ($jumlah_saldo + $model_op->saldo_awal + $model_op->saldo_tambah);
-                        
                     $model_barang = \App\MasterBarang::find($id_barang);
                     $model_o = new \App\Opnamepersediaan();
-                    $model_o->triggerNextMonth($bulan, $tahun, $id_barang, 
-                                $jumlah_saldo, (int)$model_barang->harga_satuan, $model_barang->nama_barang);
-                    
+                    $model_o->triggerPersediaan($id_barang, $bulan, 
+                            $tahun, $model_barang->nama_barang);
                 }
-                ////////////////
+            }
+        }
+        
+        return response()->json(['success'=>'Data berhasil ditambah']);
+    }
+
+    
+    public function deleteBarangMasuk(Request $request){
+        $msg = "";
+        if($request->form_id_data!=0 && $request->form_id_data!='')
+        {
+            $model = \App\OpnamePenambahan::find($request->form_id_data);
+            if($model!=null){
+                $id_barang = $model->id_barang;
+                $bulan = $model->bulan;
+                $tahun = $model->tahun;
+
+                if($model->delete())
+                {
+                    $model_barang = \App\MasterBarang::find($id_barang);
+                    $model_o = new \App\Opnamepersediaan();
+                    $model_o->triggerPersediaan($id_barang, $bulan, 
+                            $tahun, $model_barang->nama_barang);
+                }
             }
         }
         

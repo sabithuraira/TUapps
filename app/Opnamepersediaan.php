@@ -95,20 +95,21 @@ class Opnamepersediaan extends Model
         }
     }
 
-    public function OpnameRekap($i, /*$end_month,*/ $year){
+    public function OpnameRekap($i, $year){
         $label_select = "";
         $label_join = "";
 
         // for($i=$start_month;$i<=$end_month;$i++){
-            $label_select .= ", IFNULL(op.sa_$i,0) as op_awal_$i, IFNULL(op.st_$i,0) as op_tambah_$i";
+            $label_select .= ", IFNULL(op.saldo_awal,0) as op_awal,
+                IFNULL(op.saldo_kurang,0) as op_kurang, 
+                IFNULL(op.saldo_tambah,0) as op_tambah";
 
-            $label_join .= ",SUM(CASE WHEN o.bulan =  $i THEN o.saldo_awal ELSE 0 END) sa_$i,
-                SUM(CASE WHEN o.bulan =  $i THEN o.saldo_tambah ELSE 0 END) st_$i";
+            $label_join .= ",SUM(CASE WHEN o.bulan =  $i THEN o.saldo_awal ELSE 0 END) saldo_awal,
+                SUM(CASE WHEN o.bulan =  $i THEN o.saldo_kurang ELSE 0 END) saldo_kurang,
+                SUM(CASE WHEN o.bulan =  $i THEN o.saldo_tambah ELSE 0 END) saldo_tambah";
         // }
 
-        $sql = "SELECT mb.id, mb.nama_barang, mb.harga_satuan, mb.satuan,
-            IFNULL((SELECT SUM(jumlah_kurang) FROM opname_pengurangan WHERE id_barang=mb.id AND 
-                bulan= $i AND tahun= $year),0) as pengeluaran  
+        $sql = "SELECT mb.id, mb.nama_barang, mb.harga_satuan, mb.satuan
             $label_select
                 
             FROM master_barangs mb

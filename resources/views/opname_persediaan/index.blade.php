@@ -177,6 +177,7 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
       datas: [],
+      list_detail: [],
       month: parseInt({!! json_encode($month) !!}),
       months: [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -192,13 +193,18 @@ var vm = new Vue({
       form_total_harga: '',
       form_tanggal: '',
       form_current_jenis: 1, //1 penambahan, 2 pengurangan
+      current_nama_barang: '',
     },
     computed: {
-        label_op_awal: function () {
-            return "op_awal_" + this.month
-        },
-        label_op_tambah: function () {
-            return "op_tambah_" + this.month
+        headerOnDetail: function () {
+            var result = 'Detail Barang ';
+            if(this.form_current_jenis==1) result += "Masuk "
+            else result += "Keluar "
+
+            result += this.months[this.month] + " " + this.year;
+            result += " (" + this.current_nama_barang + ")"
+
+            return result
         }
     },
     watch: {
@@ -210,6 +216,37 @@ var vm = new Vue({
         },
     },
     methods: {
+        detailTambah: function(event){
+            var self = this;
+            $('#wait_progres').modal('show');
+            
+            self.form_current_jenis= event.currentTarget.getAttribute('data-jenis');
+            let id_barang =  event.currentTarget.getAttribute('data-idbarang');
+            self.current_nama_barang = event.currentTarget.getAttribute('data-namabarang');
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : self.pathname+"/load_rincian",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month,
+                    year: self.year,
+                    id_barang: id_barang,
+                    jenis: self.form_current_jenis
+                },
+            }).done(function (data) {
+                self.list_detail = data.datas;
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');
@@ -247,18 +284,18 @@ var vm = new Vue({
         },
         updateBarangKeluar: function (event) {
             var self = this;
+            $('#detail_tambah').modal('hide');
             if (event) {
                 self.form_current_jenis = 2;
-                self.form_id_data = event.target.getAttribute('data-id');
-                self.form_id_barang = event.target.getAttribute('data-idbarang');
-                self.form_jumlah = event.target.getAttribute('data-jumlah');
-                self.form_unit_kerja = event.target.getAttribute('data-unitkerja');
-                var temp_tanggal = event.target.getAttribute('data-tanggal');
+                self.form_id_data = event.currentTarget.getAttribute('data-id');
+                self.form_id_barang = event.currentTarget.getAttribute('data-idbarang');
+                self.form_jumlah = event.currentTarget.getAttribute('data-jumlah');
+                self.form_unit_kerja = event.currentTarget.getAttribute('data-unitkerja');
+                var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
 
             }
         },
-        
         addBarangMasuk: function (event) {
             var self = this;
             if (event) {
@@ -273,14 +310,15 @@ var vm = new Vue({
         },
         updateBarangMasuk: function (event) {
             var self = this;
+            $('#detail_tambah').modal('hide');
             if (event) {
                 self.form_current_jenis = 1;
-                self.form_id_data = event.target.getAttribute('data-id');
-                self.form_id_barang = event.target.getAttribute('data-idbarang');
-                self.form_jumlah = event.target.getAttribute('data-jumlah');
-                self.form_total_harga = event.target.getAttribute('data-totalharga');
-                self.form_nama_penyedia = event.target.getAttribute('data-namapenyedia');
-                var temp_tanggal = event.target.getAttribute('data-tanggal');
+                self.form_id_data = event.currentTarget.getAttribute('data-id');
+                self.form_id_barang = event.currentTarget.getAttribute('data-idbarang');
+                self.form_jumlah = event.currentTarget.getAttribute('data-jumlah');
+                self.form_total_harga = event.currentTarget.getAttribute('data-totalharga');
+                self.form_nama_penyedia = event.currentTarget.getAttribute('data-namapenyedia');
+                var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
 
             }
@@ -341,7 +379,7 @@ var vm = new Vue({
                 });
             }
         },
-        deleteBarangKeluar: function () {
+        deleteBarang: function () {
             var self = this;
             $('#wait_progres').modal('show');
             $.ajaxSetup({
@@ -349,20 +387,47 @@ var vm = new Vue({
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 }
             })
-            $.ajax({
-                url : "{{ url('/opname_persediaan/delete_barang_keluar/') }}",
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    form_id_data: self.form_id_data,
-                },
-            }).done(function (data) {
-                $('#add_pengurangan').modal('hide');
-                window.location.reload(false); 
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
+
+            if(self.form_current_jenis==1){
+                $.ajax({
+                    url : "{{ url('/opname_persediaan/delete_barang_masuk/') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        form_id_data: self.form_id_data,
+                    },
+                }).done(function (data) {
+                    $('#add_pengurangan').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            }
+            else{
+                $.ajax({
+                    url : "{{ url('/opname_persediaan/delete_barang_keluar/') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        form_id_data: self.form_id_data,
+                    },
+                }).done(function (data) {
+                    $('#add_pengurangan').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            }
+            
+        },
+        dateOnlyFormat:function(tanggal){
+          var self = this;
+          var toDate = new Date(tanggal);
+          var date_label = toDate.getDate();
+
+          return date_label;
         },
         moneyFormat:function(amount){
           var decimalCount = 2;
@@ -390,7 +455,7 @@ $( "#add-btn" ).click(function(e) {
 });
 
 $( "#delete-btn" ).click(function(e) {
-    vm.deleteBarangKeluar();
+    vm.deleteBarang();
 });
 </script>
 @endsection
