@@ -80,7 +80,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="title" id="defaultModalLabel">Form Barang Keluar</h4>
+                    <b v-if="form_current_jenis==2" class="title" id="defaultModalLabel">Form Barang Keluar</b>
+                    <b v-if="form_current_jenis==1" class="title" id="defaultModalLabel">Form Barang Masuk</b>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">

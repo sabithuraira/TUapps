@@ -61,28 +61,22 @@
     </thead>
 
     <tbody>
-        @php 
-            $label_op_awal = 'op_awal_'.$month;
-            $label_op_tambah = 'op_tambah_'.$month;
-        @endphp
         @foreach($datas as $key=>$data)
             <tr>
                 <td align="center">{{ $key+1 }}</td>
                 <td>{{ $data->nama_barang }}</td>
-                <td>{{ $data->$label_op_awal }}</td>
+                <td>{{ $data->op_awal }}</td>
                 <td>{{ $data->satuan }}</td>
-                <td>{{ $data->$label_op_tambah }}</td>
+                <td>{{ $data->op_tambah }}</td>
                 <td>{{ $data->satuan }}</td>
-                <td>{{ $data->pengeluaran }}</td>
+                <td>{{ $data->op_kurang }}</td>
                 <td>{{ $data->satuan }}</td>
                 
-                <td>{{ ((int)$data->$label_op_awal+(int)$data->$label_op_tambah-(int)$data->pengeluaran) }}</td>
+                <td>{{ ((int)$data->op_awal+(int)$data->op_tambah-(int)$data->op_kurang) }}</td>
                 <td>{{ $data->satuan }}</td>
                 <td align="right">{{  number_format($data->harga_satuan,2,",",".") }}</td>
             </tr>
         @endforeach
-
-        
     </tbody>
   </table>
 </body>

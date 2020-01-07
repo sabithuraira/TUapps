@@ -30,23 +30,6 @@ class OpnamePersediaanController extends Controller
                 'year', 'month'));
     }
 
-    // public function list_keluar(Request $request)
-    // {
-    //     $id_barang = $request->get('search');
-    //     $datas = \App\OpnamePengurangan::where('nama_barang', 'LIKE', '%' . $keyword . '%')
-    //         ->orWhere('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
-    //         ->paginate();
-
-    //     $datas->withPath('master_barang');
-    //     $datas->appends($request->all());
-
-    //     if ($request->ajax()) {
-    //         return \Response::json(\View::make('master_barang.list', array('datas' => $datas))->render());
-    //     }
-
-    //     return view('master_barang.index',compact('datas', 'keyword'));
-    // }
-
     public function print_persediaan(Request $request)
     {
         $datas=array();
@@ -67,13 +50,6 @@ class OpnamePersediaanController extends Controller
         
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);
-        foreach($datas as $key=>$value){
-            $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
-                                            ->where('bulan', '=', $month)
-                                            ->where('tahun', '=', $year)   
-                                            ->with('unitKerja')                                         
-                                            ->get();
-        }
 
         $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
             'year', 'type', 'datas', 'monthName', 'last_day_month',
@@ -99,13 +75,13 @@ class OpnamePersediaanController extends Controller
 
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);
-        foreach($datas as $key=>$value){
-            $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
-                                            ->where('bulan', '=', $month)
-                                            ->where('tahun', '=', $year)   
-                                            ->with('unitKerja')                                         
-                                            ->get();
-        }
+        // foreach($datas as $key=>$value){
+        //     $datas[$key]->list_keluar = \App\OpnamePengurangan::where('id_barang', '=' ,$value->id)
+        //                                     ->where('bulan', '=', $month)
+        //                                     ->where('tahun', '=', $year)   
+        //                                     ->with('unitKerja')                                         
+        //                                     ->get();
+        // }
         
         return response()->json(['success'=>'1', 'datas'=>$datas]);
     }
