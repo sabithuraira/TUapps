@@ -126,15 +126,17 @@ class Opnamepersediaan extends Model
     }
 
     public function KartuKendali($barang, $month, $year){
-        $sql = "SELECT op.id, op.id_barang, op.jumlah_kurang, op.harga_kurang, op.tanggal ,
-            uk4.nama    
-            FROM opname_pengurangan op, master_barangs mb, 
-                unit_kerja4 uk4  
-            WHERE 
-                op.id_barang = mb.id AND 
-                op.unit_kerja4 = uk4.id AND 
-                id_barang=$barang AND bulan = $month 
-                AND tahun= $year";
+        $sql = "SELECT op.id as id, jumlah_kurang as jumlah,
+                        uk.nama as label, harga_kurang as harga, tanggal, 2 as jenis 
+                    FROM `opname_pengurangan` op, unit_kerja4 uk WHERE 
+                    bulan=$month AND tahun=$year AND id_barang=$barang
+                    AND op.unit_kerja4=uk.id
+                UNION
+                SELECT id, jumlah_tambah as jumlah,
+                        nama_penyedia, harga_tambah as harga, tanggal, 1 as jenis
+                    FROM `opname_penambahan` WHERE 
+                    bulan=$month AND tahun=$year AND id_barang=$barang
+                    ORDER BY tanggal";
 
         $result = DB::select(DB::raw($sql));
         return $result;

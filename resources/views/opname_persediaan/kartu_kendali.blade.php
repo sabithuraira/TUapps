@@ -174,7 +174,7 @@
                   self.datas = data.datas;
                   self.persediaan = data.persediaan;
                   self.detail_barang = data.detail_barang;
-                  // console.log(data.persediaan);
+                  console.log(data.persediaan);
                   $('#wait_progres').modal('hide');
               }).fail(function (msg) {
                   console.log(JSON.stringify(msg));

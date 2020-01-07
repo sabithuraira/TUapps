@@ -13,7 +13,7 @@
     }
 
     tr, td{
-        padding-left: 8px;
+        padding-left: 4px;
     }
 
     .table-border{
@@ -65,8 +65,8 @@
                 <td>HARGA SATUAN (Rp.)</td>
                 <td>JUMLAH (Rp.)</td>
                 <td>JUMLAH BARANG</td>
-                <td>HARGA SATUAN (Rp.)</td>
                 <td>JUMLAH (Rp.)</td>
+                <td>HARGA SATUAN (Rp.)</td>
             </tr>
             
             <tr align="center">
@@ -96,12 +96,21 @@
             @foreach ($datas as $key=>$data)
                 <tr align="right">
                     <td align="center">{{ date('d-M', strtotime($data->tanggal)) }}</td>
-                    <td>{{ $data->nama }}</td>
-                    <td></td><td></td><td></td>
+                    <td align="left">{{ $data->label }}</td>
+
+                    @if ($data->jenis==2)
+                        <td></td><td></td><td></td>
+                        <td>{{ $data->jumlah }}</td>
+                        <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
+                        <td>{{ number_format($data->harga,2,",",".") }}</td>
+                    @endif
                     
-                    <td>{{ $data->jumlah_kurang }}</td>
-                    <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
-                    <td>{{ number_format($data->harga_kurang,2,",",".") }}</td>
+                    @if ($data->jenis==1)
+                        <td>{{ $data->jumlah }}</td>
+                        <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
+                        <td>{{ number_format($data->harga,2,",",".") }}</td>
+                        <td></td><td></td><td></td>
+                    @endif
                     
                     <td>{{ $data->saldo_jumlah }}</td>
                     <td>{{ number_format($data->saldo_harga,2,",",".") }}</td>
@@ -115,16 +124,14 @@
                 <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
                 <td>{{ number_format($persediaan->harga_tambah,2,",",".") }}</td>
 
-                <td>{{ $persediaan->j_keluar }}</td>
+                <td>{{ $persediaan->saldo_keluar }}</td>
                 <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
-                <td>{{ number_format($persediaan->j_harga_keluar,2,",",".") }}</td>
+                <td>{{ number_format($persediaan->harga_kurang,2,",",".") }}</td>
                 
-                <td>{{ $persediaan->j_saldo_jumlah }}</td>
-                <td>{{ number_format($persediaan->j_saldo_harga,2,",",".") }}</td>
+                <td>{{ $persediaan->saldo_tambah+$persediaan->saldo_awal-$persediaan->saldo_kurang }}</td>
+                <td>{{ number_format(((float)$persediaan->harga_tambah+(float)$persediaan->harga_awal-(float)$persediaan->harga_kurang),2,",",".") }}</td>
                 <td>{{ number_format($detail_barang->harga_satuan,2,",",".") }}</td>
             </tr>
-
-            
         </tbody>
     </table>
     </body>

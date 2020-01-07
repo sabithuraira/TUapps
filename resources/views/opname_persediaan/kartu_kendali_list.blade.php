@@ -26,8 +26,8 @@
                 <th>HARGA SATUAN (Rp.)</th>
                 <th>JUMLAH (Rp.)</th>
                 <th>JUMLAH BARANG</th>
-                <th>HARGA SATUAN (Rp.)</th>
                 <th>JUMLAH (Rp.)</th>
+                <th>HARGA SATUAN (Rp.)</th>
             </tr>
             
             <tr class="text-center">
@@ -54,13 +54,23 @@
             </tr>
             <tr align="right" v-for="(data, index) in datas" :key="data.id">
                 <td align="center">@{{ dateFormat(data.tanggal) }}</td>
-                <td>@{{ data.nama }}</td>
-                <td></td><td></td><td></td>
+                <td align="left">@{{ data.label }}</td>
+                <template v-if="data.jenis==2">
+                    <td></td><td></td><td></td>
+                    
+                    <td>@{{ data.jumlah }}</td>
+                    <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
+                    <td>@{{ moneyFormat(data.harga) }}</td>
+                </template>
                 
-                <td>@{{ data.jumlah_kurang }}</td>
-                <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
-                <td>@{{ moneyFormat(data.harga_kurang) }}</td>
-                
+                <template v-if="data.jenis==1">
+                    <td>@{{ data.jumlah }}</td>
+                    <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
+                    <td>@{{ moneyFormat(data.harga) }}</td>
+
+                    <td></td><td></td><td></td>    
+                </template>
+
                 <td>@{{ data.saldo_jumlah }}</td>
                 <td>@{{ moneyFormat(data.saldo_harga) }}</td>
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
@@ -73,12 +83,14 @@
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
                 <td>@{{ moneyFormat(persediaan.harga_tambah) }}</td>
                 
-                <td>@{{ persediaan.j_keluar }}</td>
+                <td>@{{ persediaan.saldo_kurang }}</td>
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
-                <td>@{{ moneyFormat(persediaan.j_harga_keluar) }}</td>
+                <td>@{{ moneyFormat(persediaan.harga_kurang) }}</td>
                 
-                <td>@{{ persediaan.j_saldo_jumlah }}</td>
-                <td>@{{ moneyFormat(persediaan.j_saldo_harga) }}</td>
+                <td>@{{ persediaan.saldo_tambah+persediaan.saldo_awal-persediaan.saldo_kurang }}</td>
+                <td>
+                    @{{ moneyFormat(parseFloat(persediaan.harga_tambah)+parseFloat(persediaan.harga_awal)-parseFloat(persediaan.harga_kurang))  }}
+                </td>
                 <td>@{{ moneyFormat(detail_barang.harga_satuan) }}</td>
             </tr>
         </tbody>

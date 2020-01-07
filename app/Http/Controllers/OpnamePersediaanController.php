@@ -30,6 +30,23 @@ class OpnamePersediaanController extends Controller
                 'year', 'month'));
     }
 
+    // public function list_keluar(Request $request)
+    // {
+    //     $id_barang = $request->get('search');
+    //     $datas = \App\OpnamePengurangan::where('nama_barang', 'LIKE', '%' . $keyword . '%')
+    //         ->orWhere('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+    //         ->paginate();
+
+    //     $datas->withPath('master_barang');
+    //     $datas->appends($request->all());
+
+    //     if ($request->ajax()) {
+    //         return \Response::json(\View::make('master_barang.list', array('datas' => $datas))->render());
+    //     }
+
+    //     return view('master_barang.index',compact('datas', 'keyword'));
+    // }
+
     public function print_persediaan(Request $request)
     {
         $datas=array();
@@ -164,29 +181,28 @@ class OpnamePersediaanController extends Controller
                 ->first();
 
         $detail_barang = \App\MasterBarang::find($barang);
+
         $datas = $model->KartuKendali($barang, $month, $year);
 
         $saldo_jumlah = $persediaan->saldo_awal;
         $saldo_harga = $persediaan->harga_awal;
 
-        $jumlah_keluar = 0;
-        $jumlah_harga_keluar = 0;
+        $total_jumlah = 0;
+        $total_harga = 0;
 
         foreach($datas as $key=>$value){
-            $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah_kurang;
-            $datas[$key]->saldo_harga = $saldo_harga - $value->harga_kurang;
+            if($value->jenis==2){
+                $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
+                $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+            }
+            else{
+                $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
+                $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
+            }
 
             $saldo_jumlah = $datas[$key]->saldo_jumlah;
             $saldo_harga = $datas[$key]->saldo_harga;
-
-            $jumlah_keluar += $value->jumlah_kurang;
-            $jumlah_harga_keluar += $value->harga_kurang;
         }
-
-        $persediaan->j_keluar = $jumlah_keluar;
-        $persediaan->j_harga_keluar = $jumlah_harga_keluar;
-        $persediaan->j_saldo_jumlah = $saldo_jumlah;
-        $persediaan->j_saldo_harga = $saldo_harga;
         
         return response()->json(['success'=>'1', 'datas'=>$datas, 
             'persediaan'=>$persediaan, 'detail_barang'=>$detail_barang]);
@@ -216,33 +232,30 @@ class OpnamePersediaanController extends Controller
                 ->first();
 
         $detail_barang = \App\MasterBarang::find($barang);
+
         $datas = $model->KartuKendali($barang, $month, $year);
 
         $saldo_jumlah = $persediaan->saldo_awal;
         $saldo_harga = $persediaan->harga_awal;
 
-        $jumlah_keluar = 0;
-        $jumlah_harga_keluar = 0;
+        $total_jumlah = 0;
+        $total_harga = 0;
 
         foreach($datas as $key=>$value){
-            $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah_kurang;
-            $datas[$key]->saldo_harga = $saldo_harga - $value->harga_kurang;
+            if($value->jenis==2){
+                $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
+                $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+            }
+            else{
+                $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
+                $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
+            }
 
             $saldo_jumlah = $datas[$key]->saldo_jumlah;
             $saldo_harga = $datas[$key]->saldo_harga;
-
-            $jumlah_keluar += $value->jumlah_kurang;
-            $jumlah_harga_keluar += $value->harga_kurang;
         }
-
-        $persediaan->j_keluar = $jumlah_keluar;
-        $persediaan->j_harga_keluar = $jumlah_harga_keluar;
-        $persediaan->j_saldo_jumlah = $saldo_jumlah;
-        $persediaan->j_saldo_harga = $saldo_harga;
         
         $monthName = date("F", mktime(0, 0, 0, $month, 10));
-
-        // dd($barang);
 
         $pdf = PDF::loadView('opname_persediaan.print_kartukendali', compact('month', 
             'year', 'barang', 'datas', 'detail_barang', 'persediaan',
@@ -250,7 +263,7 @@ class OpnamePersediaanController extends Controller
             ->setPaper('a4', 'landscape');
         
         $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
-        $nama_file .= $month .'_'.$year.'_'. '.pdf';
+        $nama_file .= $month .'_'.$year.'.pdf';
 
         return $pdf->download($nama_file);
     }
