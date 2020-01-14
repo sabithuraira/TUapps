@@ -360,10 +360,11 @@ class OpnamePersediaanController extends Controller
         $model->jumlah_tambah = $request->form_jumlah;
 
         $model_barang = \App\MasterBarang::find($request->form_id_barang);
-        // if($model_barang!=null)
-        //     $model->harga_tambah = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
-        // else
-        $model->harga_tambah = $request->form_total_harga;
+        if($model_barang!=null)
+            $model->harga_tambah = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
+        else
+            $model->harga_tambah = 0;
+        // $model->harga_tambah = $request->form_total_harga;
         
         $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
                             ->first();
