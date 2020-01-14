@@ -46,6 +46,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 // Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
+    Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
     Route::post('opname_persediaan/load_rincian', 'OpnamePersediaanController@loadRincian');
     Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');

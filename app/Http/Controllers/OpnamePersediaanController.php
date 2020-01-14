@@ -9,6 +9,16 @@ use PDF;
 
 class OpnamePersediaanController extends Controller
 {
+    public function aeik(){
+        $keluars = \App\OpnamePengurangan::all();
+
+        foreach($keluars as $value){
+            $detail_barang = \App\MasterBarang::find($value->id_barang);
+            $value->harga_kurang = ($value->jumlah_kurang*$detail_barang->harga_satuan);
+            $value->save();
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
