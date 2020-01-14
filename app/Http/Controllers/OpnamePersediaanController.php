@@ -10,11 +10,11 @@ use PDF;
 class OpnamePersediaanController extends Controller
 {
     public function aeik(){
-        $keluars = \App\OpnamePengurangan::all();
+        $keluars = \App\OpnamePenambahan::all();
 
         foreach($keluars as $value){
             $detail_barang = \App\MasterBarang::find($value->id_barang);
-            $value->harga_kurang = ($value->jumlah_kurang*$detail_barang->harga_satuan);
+            $value->harga_tambah = ($value->jumlah_tambah*$detail_barang->harga_satuan);
             $value->save();
         }
     }

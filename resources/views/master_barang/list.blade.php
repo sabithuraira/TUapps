@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{$data['nama_barang']}}</td>
                     <td>{{$data['satuan']}}</td>
-                    <td>Rp. {{ number_format($data['harga_satuan'],2,",",".") }}</td>
+                    <td>Rp. {{ number_format($data['harga_satuan'],0,",",".") }}</td>
                     
                     <td class="text-center"><a href="{{action('MasterBarangController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
                     <td class="text-center">

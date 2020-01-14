@@ -418,7 +418,7 @@ var vm = new Vue({
           return date_label;
         },
         moneyFormat:function(amount){
-          var decimalCount = 2;
+          var decimalCount = 0;
           var decimal = ".";
           var thousands = ",";
           decimalCount = Math.abs(decimalCount);

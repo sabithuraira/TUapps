@@ -74,7 +74,7 @@
                 
                 <td>{{ ((int)$data->op_awal+(int)$data->op_tambah-(int)$data->op_kurang) }}</td>
                 <td>{{ $data->satuan }}</td>
-                <td align="right">{{  number_format($data->harga_satuan,2,",",".") }}</td>
+                <td align="right">{{  number_format($data->harga_satuan,0,",",".") }}</td>
             </tr>
         @endforeach
     </tbody>
