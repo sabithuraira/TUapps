@@ -106,31 +106,33 @@ class Opnamepersediaan extends Model
             if($y==$c_year){
                 for($m =$month;$m<=$c_month-1;++$m){
                     $next_month = $m + 1;
+                    $next_year = $y;
 
-                    $sql_where = "id_barang = $id_barang AND bulan = $m AND tahun = $y";
-                    $sql_where_next = "id_barang = $id_barang AND bulan = $next_month AND tahun = $y";
+                    // $sql_where = "id_barang = $id_barang AND bulan = $m AND tahun = $y";
+                    // $sql_where_next = "id_barang = $id_barang AND bulan = $next_month AND tahun = $next_year";
 
-                    $sqlnya = "IF EXISTS(SELECT * FROM opname_persediaan WHERE $sql_where_next) 
-                        THEN
-                            UPDATE opname_persediaan,
-                                (SELECT 
-                                    (saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
-                                    (harga_awal+harga_tambah-harga_kurang) as total_harga    
-                                FROM opname_persediaan WHERE $sql_where) AS prev_data 
-                            SET saldo_awal = prev_data.total_saldo, harga_awal = prev_data.total_harga  
-                            WHERE $sql_where_next ;
-                        ELSE 
-                            INSERT INTO opname_persediaan 
-                            (id_barang, nama_barang, bulan, saldo_awal, harga_awal, saldo_tambah, harga_tambah, 
-                            created_by, updated_by, tahun, saldo_kurang, harga_kurang) 
-                            (SELECT $id_barang, $nama_barang, $next_month, 
-                                (saldo_awal+saldo_tambah-saldo_kurang),
-                                (harga_awal+harga_tambah-harga_kurang),
-                                0, 0 , $user_id, $user_id, $y, 0, 0
-                            FROM opname_persediaan WHERE $sql_where);
-                        END IF;";
+                    // $sqlnya = "IF EXISTS(SELECT * FROM opname_persediaan WHERE $sql_where_next) 
+                    //     THEN
+                    //         UPDATE opname_persediaan,
+                    //             (SELECT 
+                    //                 (saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
+                    //                 (harga_awal+harga_tambah-harga_kurang) as total_harga    
+                    //             FROM opname_persediaan WHERE $sql_where) AS prev_data 
+                    //         SET saldo_awal = prev_data.total_saldo, harga_awal = prev_data.total_harga  
+                    //         WHERE $sql_where_next ;
+                    //     ELSE 
+                    //         INSERT INTO opname_persediaan 
+                    //         (id_barang, nama_barang, bulan, saldo_awal, harga_awal, saldo_tambah, harga_tambah, 
+                    //         created_by, updated_by, tahun, saldo_kurang, harga_kurang) 
+                    //         (SELECT $id_barang, $nama_barang, $next_month, 
+                    //             (saldo_awal+saldo_tambah-saldo_kurang),
+                    //             (harga_awal+harga_tambah-harga_kurang),
+                    //             0, 0 , $user_id, $user_id, $next_year, 0, 0
+                    //         FROM opname_persediaan WHERE $sql_where);
+                    //     END IF;";
                             
-                    DB::statement(DB::raw($sqlnya));
+                    // DB::statement(DB::raw($sqlnya));
+                    DB::statement('call updatePersediaan(?, ?, ?, ?, ?, ?, ?)',[$m, $y, $id_barang, $nama_barang, $user_id, $next_month, $next_year]);
                 }
             }
             else{
@@ -144,30 +146,7 @@ class Opnamepersediaan extends Model
                         $next_year = $y;
                     }
 
-                    $sql_where = "id_barang = $id_barang AND bulan = $m AND tahun = $y";
-                    $sql_where_next = "id_barang = $id_barang AND bulan = $next_month AND tahun = $next_year";
-
-                    $sqlnya = "IF EXISTS(SELECT * FROM opname_persediaan WHERE $sql_where_next) 
-                        THEN
-                            UPDATE opname_persediaan,
-                                (SELECT 
-                                    (saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
-                                    (harga_awal+harga_tambah-harga_kurang) as total_harga    
-                                FROM opname_persediaan WHERE $sql_where) AS prev_data 
-                            SET saldo_awal = prev_data.total_saldo, harga_awal = prev_data.total_harga  
-                            WHERE $sql_where_next ;
-                        ELSE 
-                            INSERT INTO opname_persediaan 
-                            (id_barang, nama_barang, bulan, saldo_awal, harga_awal, saldo_tambah, harga_tambah, 
-                            created_by, updated_by, tahun, saldo_kurang, harga_kurang) 
-                            (SELECT $id_barang, $nama_barang, $next_month, 
-                                (saldo_awal+saldo_tambah-saldo_kurang),
-                                (harga_awal+harga_tambah-harga_kurang),
-                                0, 0 , $user_id, $user_id, $y, 0, 0
-                            FROM opname_persediaan WHERE $sql_where);
-                        END IF";
-                        
-                    DB::statement(DB::raw($sqlnya));
+                    DB::statement('call updatePersediaan(?, ?, ?, ?, ?, ?, ?)',[$m, $y, $id_barang, $nama_barang, $user_id, $next_month, $next_year]);
                 }
             }
 
