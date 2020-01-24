@@ -59,39 +59,119 @@ class Opnamepersediaan extends Model
         $model_op->harga_kurang = $jumlah_harga_kurang;
 
         if($model_op->save()){
-            $jumlah_next_saldo = $model_op->saldo_awal + $model_op->saldo_tambah - $model_op->saldo_kurang;
-            $jumlah_next_harga = $model_op->harga_awal + $model_op->harga_tambah - $model_op->harga_kurang;
+            $this->triggerAllMonth($id_barang, $month, $year, $nama_barang);
+            // $jumlah_next_saldo = $model_op->saldo_awal + $model_op->saldo_tambah - $model_op->saldo_kurang;
+            // $jumlah_next_harga = $model_op->harga_awal + $model_op->harga_tambah - $model_op->harga_kurang;
                 
-            $next_month = ($month+1);
-            $next_year = $year;
+            // $next_month = ($month+1);
+            // $next_year = $year;
 
-            if($month==12){
-                $next_month = 1;
-                $next_year = ($year+1);
+            // if($month==12){
+            //     $next_month = 1;
+            //     $next_year = ($year+1);
+            // }
+
+            // $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
+            //             ->where('bulan', '=', $next_month)
+            //             ->where('tahun', '=', $next_year)
+            //             ->first();
+
+            // if($model_next==null) {
+            //     $model_next= new \App\Opnamepersediaan;
+            //     $model_next->id_barang = $id_barang;
+            //     $model_next->bulan = $next_month;
+            //     $model_next->tahun = $next_year;
+            //     $model_next->created_by=Auth::id();
+            //     $model_next->saldo_tambah = 0;
+            //     $model_next->harga_tambah = 0;
+            //     $model_next->saldo_kurang = 0;
+            //     $model_next->harga_kurang = 0;
+            // }
+
+            // $model_next->nama_barang = $nama_barang;
+            // $model_next->saldo_awal = $jumlah_next_saldo;
+            // $model_next->harga_awal = $jumlah_next_harga;
+            // $model_next->updated_by=Auth::id();
+            // $model_next->save();
+        }
+    }
+
+    //trigger all table persediaan value depend on previous month
+    public function triggerAllMonth($id_barang, $month, $year, $nama_barang){
+        $c_year = date('Y');
+        $c_month = date('n');
+        $user_id = Auth::id();
+
+        for($y = $year;$y<=$c_year;++$y){
+            if($y==$c_year){
+                for($m =$month;$m<=$c_month-1;++$m){
+                    $next_month = $m + 1;
+
+                    $sql_where = "id_barang = $id_barang AND bulan = $m AND tahun = $y";
+                    $sql_where_next = "id_barang = $id_barang AND bulan = $next_month AND tahun = $y";
+
+                    $sqlnya = "IF EXISTS(SELECT * FROM opname_persediaan WHERE $sql_where_next) 
+                        THEN
+                            UPDATE opname_persediaan,
+                                (SELECT 
+                                    (saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
+                                    (harga_awal+harga_tambah-harga_kurang) as total_harga    
+                                FROM opname_persediaan WHERE $sql_where) AS prev_data 
+                            SET saldo_awal = prev_data.total_saldo, harga_awal = prev_data.total_harga  
+                            WHERE $sql_where_next ;
+                        ELSE 
+                            INSERT INTO opname_persediaan 
+                            (id_barang, nama_barang, bulan, saldo_awal, harga_awal, saldo_tambah, harga_tambah, 
+                            created_by, updated_by, tahun, saldo_kurang, harga_kurang) 
+                            (SELECT $id_barang, $nama_barang, $next_month, 
+                                (saldo_awal+saldo_tambah-saldo_kurang),
+                                (harga_awal+harga_tambah-harga_kurang),
+                                0, 0 , $user_id, $user_id, $y, 0, 0
+                            FROM opname_persediaan WHERE $sql_where);
+                        END IF;";
+                            
+                    DB::statement(DB::raw($sqlnya));
+                }
+            }
+            else{
+                for($m = $month;$m<=12;++$m){
+                    if($m==12){
+                        $next_month = 1;
+                        $next_year = $y + 1;
+                    }
+                    else{
+                        $next_month = $m + 1;
+                        $next_year = $y;
+                    }
+
+                    $sql_where = "id_barang = $id_barang AND bulan = $m AND tahun = $y";
+                    $sql_where_next = "id_barang = $id_barang AND bulan = $next_month AND tahun = $next_year";
+
+                    $sqlnya = "IF EXISTS(SELECT * FROM opname_persediaan WHERE $sql_where_next) 
+                        THEN
+                            UPDATE opname_persediaan,
+                                (SELECT 
+                                    (saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
+                                    (harga_awal+harga_tambah-harga_kurang) as total_harga    
+                                FROM opname_persediaan WHERE $sql_where) AS prev_data 
+                            SET saldo_awal = prev_data.total_saldo, harga_awal = prev_data.total_harga  
+                            WHERE $sql_where_next ;
+                        ELSE 
+                            INSERT INTO opname_persediaan 
+                            (id_barang, nama_barang, bulan, saldo_awal, harga_awal, saldo_tambah, harga_tambah, 
+                            created_by, updated_by, tahun, saldo_kurang, harga_kurang) 
+                            (SELECT $id_barang, $nama_barang, $next_month, 
+                                (saldo_awal+saldo_tambah-saldo_kurang),
+                                (harga_awal+harga_tambah-harga_kurang),
+                                0, 0 , $user_id, $user_id, $y, 0, 0
+                            FROM opname_persediaan WHERE $sql_where);
+                        END IF";
+                        
+                    DB::statement(DB::raw($sqlnya));
+                }
             }
 
-            $model_next = \App\Opnamepersediaan::where('id_barang', '=' ,$id_barang)
-                        ->where('bulan', '=', $next_month)
-                        ->where('tahun', '=', $next_year)
-                        ->first();
-
-            if($model_next==null) {
-                $model_next= new \App\Opnamepersediaan;
-                $model_next->id_barang = $id_barang;
-                $model_next->bulan = $next_month;
-                $model_next->tahun = $next_year;
-                $model_next->created_by=Auth::id();
-                $model_next->saldo_tambah = 0;
-                $model_next->harga_tambah = 0;
-                $model_next->saldo_kurang = 0;
-                $model_next->harga_kurang = 0;
-            }
-
-            $model_next->nama_barang = $nama_barang;
-            $model_next->saldo_awal = $jumlah_next_saldo;
-            $model_next->harga_awal = $jumlah_next_harga;
-            $model_next->updated_by=Auth::id();
-            $model_next->save();
+            $month = 1;
         }
     }
 

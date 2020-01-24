@@ -51,6 +51,13 @@
                                 <a href="{{ url('pegawai_anda') }}" > <i class="icon-users"></i><span>Pegawai Anda</span></a>
                             </li>
 
+                            <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Rapat/Pertemuan</span></a>
+                                <ul>                                  
+                                    <li class="{{ request()->is('meeting*') ? 'active' : '' }}"><a href="{{url('meeting')}}">Daftar</a></li>
+                                </ul>
+                            </li>
+
                             <li class="{{ (request()->is('surat_km*')) ? 'active' : '' }}">
                                 <a href="{{ url('surat_km') }}" > <i class="icon-users"></i><span>Surat Menyurat</span></a>
                             </li>
