@@ -10,12 +10,22 @@ use PDF;
 class OpnamePersediaanController extends Controller
 {
     public function aeik(){
-        $keluars = \App\OpnamePenambahan::all();
+        // $keluars = \App\OpnamePen::all();
 
-        foreach($keluars as $value){
-            $detail_barang = \App\MasterBarang::find($value->id_barang);
-            $value->harga_tambah = ($value->jumlah_tambah*$detail_barang->harga_satuan);
-            $value->save();
+        // foreach($keluars as $value){
+        //     $detail_barang = \App\MasterBarang::find($value->id_barang);
+        //     $value->harga_tambah = ($value->jumlah_tambah*$detail_barang->harga_satuan);
+        //     $value->save();
+        // }
+        
+        $model = new \App\Opnamepersediaan();
+        $all_barang = \App\MasterBarang::all();
+
+        foreach($all_barang as $value){
+            $model->triggerAllMonth($value->id, 11, 2019, $value->nama_barang);
+            // $detail_barang = \App\MasterBarang::find($value->id_barang);
+            // $value->harga_tambah = ($value->jumlah_tambah*$detail_barang->harga_satuan);
+            // $value->save();
         }
     }
 

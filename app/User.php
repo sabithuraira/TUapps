@@ -32,12 +32,13 @@ class User extends Authenticatable
 
     public function getFotoUrlAttribute(){
         $nip_id = substr($this->email, -5);
-        // if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+        // $nip_id = '10080'; //10080 55914
+        if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
             return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-        // }
-        // else{
-        //     return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
-        // }
+        }
+        else{
+            return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+        }
     }
 
     public function getPimpinanAttribute(){

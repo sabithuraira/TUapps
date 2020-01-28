@@ -7,15 +7,11 @@
 
             <div class="navbar-brand">
                 <a href="#">
-                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" alt="Lucid Logo" class="img-responsive logo">
+                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" alt="Lucid Logo" style="width:50px" class="img-responsive logo">
                 </a>            
             </div>
             
-            <div class="navbar-right">
-                <form id="navbar-search" class="navbar-form search-form">
-                    <input value="" class="form-control" placeholder="Search here..." type="text">
-                    <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
-                </form>                
+            <div class="navbar-right">               
 
                 <!-- <div id="navbar-menu">
                     <ul class="nav navbar-nav">

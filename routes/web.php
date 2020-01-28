@@ -88,6 +88,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
 
     Route::resource('meeting','MeetingController');
+    Route::post('meeting/load_pegawai','MeetingController@loadPegawai');
 });
 
 Auth::routes();

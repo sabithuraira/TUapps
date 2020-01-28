@@ -29,6 +29,20 @@ class MeetingController extends Controller
         return view('meeting.index',compact('datas', 'keyword'));
     }
 
+    public function loadPegawai(Request $request){
+        $keyword = '';
+
+        if(strlen($request->get('keyword'))>0)
+            $keyword = $request->get('keyword');
+
+        $model = \App\User::all();
+        if(strlen($keyword)>0){
+            $model = \App\User::where('name', 'LIKE', '%' . $keyword . '%')->get();
+        }
+        
+        return response()->json(['success'=>'1', 'datas'=>$model]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
