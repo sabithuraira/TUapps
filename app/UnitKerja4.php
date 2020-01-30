@@ -10,9 +10,6 @@ class UnitKerja4 extends Model
 
     public function attributes()
     {
-        return [
-            'is_kabupaten' => 'Apakah Kabupaten',
-            'nama' => 'Nama',
-        ];
+        return (new \App\Http\Requests\Uker4Request())->attributes();
     }
 }

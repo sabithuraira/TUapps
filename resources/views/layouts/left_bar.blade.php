@@ -80,10 +80,11 @@
                             </li>
 
                             @role('superadmin')
-                                <li class="{{ (request()->is('uker*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
+                                <li class="{{ (request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
                                     <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                                     <ul>                                  
                                         <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{url('uker')}}">Unit Kerja</a></li>
+                                        <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{url('uker4')}}">Unit Kerja 4</a></li>
                                         <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a href="{{url('angka_kredit')}}">Angka Kredit</a></li>
                                         <li class="{{ request()->is('type_kredit*') ? 'active' : '' }}"><a href="{{url('type_kredit')}}">Peruntukan Angka Kredit</a></li>
                                         <li class="{{ request()->is('rincian_kredit*') ? 'active' : '' }}"><a href="{{url('rincian_kredit')}}">Rincian Angka Kredit</a></li>

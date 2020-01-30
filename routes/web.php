@@ -26,6 +26,7 @@ Route::get('testa', function () {
 
 Route::group(['middleware' => ['role:superadmin']], function () {    
     Route::resource('uker','UkerController');
+    Route::resource('uker4','Uker4Controller');
     Route::resource('type_kredit','TypeKreditController');
     Route::resource('rincian_kredit','RincianKreditController');
     Route::resource('angka_kredit','AngkaKreditController');
