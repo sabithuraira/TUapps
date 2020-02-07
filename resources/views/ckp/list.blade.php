@@ -10,25 +10,32 @@
         <button name="action" class="float-right" type="submit" value="1"><i class="icon-printer"></i>&nbsp Cetak CKP-T &nbsp</button>
     </form>
     <br/><br/>
-    <table class="table m-b-0">
+    <table class="table table-sm table-bordered m-b-0">
         <thead>
             <tr>
                 <th rowspan="2">No</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['uraian'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</th>
                 
-                    <th class="text-center" colspan="3">Kuantitas</th>
-                    <th class="text-center" rowspan="2">Tingkat Kualitas</th>
+                <th class="text-center" colspan="3">Kuantitas</th>
+                <th class="text-center" rowspan="2">Tingkat Kualitas</th>
+                <th class="text-center" colspan="5">Pengukuran</th>
                 
                 <th class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</th>
                 <th class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</th>
+                <th class="text-center" rowspan="2">Catatan Koreksi</th>
             </tr>
 
             <tr>
                 <th class="text-center" >Target</th>
                 <th class="text-center" >Realisasi</th>
                 <th class="text-center" >%</th>
+                <th class="text-center">Kecepatan</th>
+                <th class="text-center">Ketuntasan</th>
+                <th class="text-center">Ketepatan</th>
+                <th class="text-center">rata2</th>
+                <th class="text-center">Penilaian Pimpinan</th>
             </tr>
         </thead>
 
@@ -40,10 +47,16 @@
                 <td>@{{data.satuan }}</td>
                 <td class="text-center">@{{data.target_kuantitas }}</td>
                 
-                    <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                    <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
-                    <td class="text-center">@{{ data.kualitas }} %</td>
+                <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
+                <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                <td class="text-center">@{{ data.kualitas }} %</td>
                 
+                <td>@{{ data.kecepatan }}</td>
+                <td>@{{ data.ketepatan }}</td>
+                <td>@{{ data.ketuntasan }}</td>
+                <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                <td>@{{ data.penilaian_pimpinan }}</td>
+
                 <td>@{{ data.kode_butir }}</td>
                 <td>@{{ data.angka_kredit }}</td>
                 <td>@{{ data.keterangan }}</td>
@@ -67,7 +80,7 @@
 
             <template>
                 <tr>
-                    <td colspan="5"><h4>JUMLAH</h4></td>
+                    <td colspan="5"><b>JUMLAH</b></td>
                     <td class="text-center">@{{ total_kuantitas }} %</td>
                     <td class="text-center">@{{ total_kualitas }} %</td>
                     
@@ -97,6 +110,21 @@
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
+  
+<style type="text/css">
+    * {
+        font-family: Segoe UI, Arial, sans-serif;
+    }
+    table{
+        font-size: small;
+        border-collapse: collapse;
+    }
+
+    tfoot tr td{
+        font-weight: bold;
+        font-size: small;
+    }
+</style>
 @endsection
 
 @section('scripts')

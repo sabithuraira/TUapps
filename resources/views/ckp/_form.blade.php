@@ -46,8 +46,8 @@
     <br/><br/>
     <section class="datas">
 
-      <div class="table-responsive">
-        <table class="table m-b-0">
+      <div class="table-responsive-sm">
+        <table class="table table-sm table-bordered m-b-0">
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
@@ -56,16 +56,24 @@
                     
                     <th class="text-center" colspan="3">Kuantitas</th>
                     <th class="text-center" rowspan="2">Tingkat Kualitas</th>
+                    <th class="text-center" colspan="5">Pengukuran</th>
 
                     <th class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</th>
                     <th class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</th>
+                    <th class="text-center" rowspan="2">Catatan Koreksi</th>
                 </tr>
 
                 <tr>
-                    <th class="text-center" >Target</th>
-                    <th class="text-center" >Realisasi</th>
-                    <th class="text-center" >%</th>
+                    <th class="text-center">Target</th>
+                    <th class="text-center">Realisasi</th>
+                    <th class="text-center">%</th>
+
+                    <th class="text-center">Kecepatan</th>
+                    <th class="text-center">Ketuntasan</th>
+                    <th class="text-center">Ketepatan</th>
+                    <th class="text-center">rata2</th>
+                    <th class="text-center">Penilaian Pimpinan</th>
                 </tr>
             </thead>
 
@@ -86,6 +94,12 @@
                     <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
                     
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_kecepatan'+data.id" v-model="data.kecepatan"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
+                    <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
+
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
@@ -107,6 +121,12 @@
                     <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
                     <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
                     
+                    <td><input class="form-control  form-control-sm" type="number" :name="'t_kecepatan'+data.id" v-model="data.kecepatan"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
+                    <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                    <td><input class="form-control  form-control-sm" type="number" :name="'u_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
+
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                     <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
