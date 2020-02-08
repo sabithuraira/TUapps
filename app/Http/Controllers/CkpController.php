@@ -96,9 +96,10 @@ class CkpController extends Controller
         $year = date('Y');
 
         $model = new \App\Ckp;
-
+        $list_iki = \App\Iki::where('user_id', '=', Auth::user()->email)->get();
+        
         return view('ckp.create', compact('month', 
-            'year', 'model'));
+            'year', 'model', 'list_iki'));
     }
 
     public function print(Request $request)
@@ -149,13 +150,6 @@ class CkpController extends Controller
         $nama_file .= $month . '.pdf';
 
         return $pdf->download($nama_file);
-
-        // print_r($datas);die();
-
-        // return view('ckp.print', compact('month', 
-        //     'year', 'type', 'model', 'datas', 'user', 
-        //     'monthName', 'last_day_month',
-        //     'first_working_day', 'last_working_day'));
     }
 
 
@@ -206,6 +200,14 @@ class CkpController extends Controller
                 $model_utama->kode_butir = $request->get('u_kode_butir'.$data->id);
                 $model_utama->angka_kredit = $request->get('u_angka_kredit'.$data->id);
                 $model_utama->keterangan = $request->get('u_kredit'.$data->id);
+                
+                $model_utama->kecepatan = $request->get('u_kecepatan'.$data->id);
+                $model_utama->ketepatan = $request->get('u_ketepatan'.$data->id);
+                $model_utama->ketuntasan = $request->get('u_ketuntasan'.$data->id);
+                $model_utama->penilaian_pimpinan = $request->get('u_penilaian_pimpinan'.$data->id);
+                $model_utama->catatan_koreksi = $request->get('u_catatan_koreksi'.$data->id);
+                $model_utama->iki = $request->get('u_iki'.$data->id);
+
                 $model_utama->save();
             }
         }
@@ -222,6 +224,14 @@ class CkpController extends Controller
                 $model_tambahan->kode_butir = $request->get('t_kode_butir'.$data->id);
                 $model_tambahan->angka_kredit = $request->get('t_angka_kredit'.$data->id);
                 $model_tambahan->keterangan = $request->get('t_kredit'.$data->id);
+
+                $model_tambahan->kecepatan = $request->get('t_kecepatan'.$data->id);
+                $model_tambahan->ketepatan = $request->get('t_ketepatan'.$data->id);
+                $model_tambahan->ketuntasan = $request->get('t_ketuntasan'.$data->id);
+                $model_tambahan->penilaian_pimpinan = $request->get('t_penilaian_pimpinan'.$data->id);
+                $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksi'.$data->id);
+                $model_tambahan->iki = $request->get('t_iki'.$data->id);
+
                 $model_tambahan->save();
             }
         }
@@ -229,12 +239,6 @@ class CkpController extends Controller
         for($i=1;$i<=$total_utama;++$i){
             if(strlen($request->get('u_uraianau'.$i))>0 && strlen($request->get('u_satuanau'.$i))>0 && strlen($request->get('u_target_kuantitasau'.$i))>0){
                 $is_valid_by_type = true;
-
-                // if($request->get('type')==2){
-                //     if(strlen($request->get('u_realisasi_kuantitasau'.$i))==0 || strlen($request->get('u_kualitasau'.$i))==0){
-                //         $is_valid_by_type = false;        
-                //     }
-                // } 
                 
                 if($is_valid_by_type){
                     $model_utama = new \App\Ckp;
@@ -249,14 +253,19 @@ class CkpController extends Controller
                     $model_utama->satuan = $request->get('u_satuanau'.$i);
                     $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
 
-                    // if($request->get('type')==2){
-                        $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
-                        $model_utama->kualitas = $request->get('u_kualitasau'.$i);
-                    // }
+                    $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitasau'.$i);
+                    $model_utama->kualitas = $request->get('u_kualitasau'.$i);
 
                     $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
                     $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
                     $model_utama->keterangan = $request->get('u_kreditau'.$i);
+
+                    $model_utama->kecepatan = $request->get('u_kecepatanau'.$i);
+                    $model_utama->ketepatan = $request->get('u_ketepatanau'.$i);
+                    $model_utama->ketuntasan = $request->get('u_ketuntasanau'.$i);
+                    $model_utama->penilaian_pimpinan = $request->get('u_penilaian_pimpinanau'.$i);
+                    $model_utama->catatan_koreksi = $request->get('u_catatan_koreksiau'.$i);
+                    $model_utama->iki = $request->get('u_ikiau'.$i);
 
                     $model_utama->created_by=Auth::id();
                     $model_utama->updated_by=Auth::id();
@@ -269,12 +278,6 @@ class CkpController extends Controller
         for($i=1;$i<=$total_tambahan;++$i){
             if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
                 $is_valid_by_type = true;
-
-                // if($request->get('type')==2){
-                //     if(strlen($request->get('t_realisasi_kuantitasat'.$i))==0 || strlen($request->get('t_kualitasat'.$i))==0){
-                //         $is_valid_by_type = false;        
-                //     }
-                // } 
                 
                 if($is_valid_by_type){
                     $model_tambahan = new \App\Ckp;
@@ -289,14 +292,19 @@ class CkpController extends Controller
                     $model_tambahan->satuan = $request->get('t_satuanat'.$i);
                     $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
                     
-                    // if($request->get('type')==2){
-                        $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
-                        $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
-                    // }
-                        
+                    $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
+                    $model_tambahan->kualitas = $request->get('t_kualitasat'.$i);
+                    
                     $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
                     $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
                     $model_tambahan->keterangan = $request->get('t_kreditat'.$i);
+
+                    $model_tambahan->kecepatan = $request->get('t_kecepatanat'.$i);
+                    $model_tambahan->ketepatan = $request->get('t_ketepatanat'.$i);
+                    $model_tambahan->ketuntasan = $request->get('t_ketuntasanat'.$i);
+                    $model_tambahan->penilaian_pimpinan = $request->get('t_penilaian_pimpinanat'.$i);
+                    $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksiat'.$i);
+                    $model_tambahan->iki = $request->get('t_ikiat'.$i);
 
                     $model_tambahan->created_by=Auth::id();
                     $model_tambahan->updated_by=Auth::id();
