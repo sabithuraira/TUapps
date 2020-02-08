@@ -78,12 +78,15 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
 
+    //CKP
     Route::resource('ckp','CkpController')->except(['show']);
-
     // Route::resource('attribute_pos','AttributePosController')->except(['show']);
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     // Route::get('ckp/print', 'CkpController@print');
     Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
+
+    //IKI
+    Route::post('iki','IkiController@store');
 
     Route::resource('pegawai_anda','PegawaiAndaController');
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');

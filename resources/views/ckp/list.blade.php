@@ -125,7 +125,9 @@
                         <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
-                        <td>@{{ data.iki }}</td>
+                        <td>
+                            <span>@{{ data.iki_label }}</span>
+                        </td>
                     </tr>
                     
                     <tr><td colspan="9">TAMBAHAN</td></tr>
@@ -172,14 +174,6 @@
         table{
             font-size: small;
             border-collapse: collapse;
-        }
-        
-        th.freeze, td.freeze
-        {
-            /* position:sticky;
-            left:0px;
-            z-index: 1; */
-            width: 1000px;
         }
 
         tfoot tr td{

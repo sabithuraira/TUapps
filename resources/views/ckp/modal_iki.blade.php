@@ -22,7 +22,8 @@
                             </tr>
                         </tbody>
                     </table>
-
+                    <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="addIki"><span class="fa fa-plus"></span> &nbspTambah IKI Baru</button>
+                                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>

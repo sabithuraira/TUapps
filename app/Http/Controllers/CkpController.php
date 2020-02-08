@@ -46,13 +46,8 @@ class CkpController extends Controller
         if(strlen($request->get('type'))>0)
             $type = $request->get('type');
         
-
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan($type, $month, $year, $user_id);
-
-        // print_r($datas);
-        // print_r($user_id);
-        // die();
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }

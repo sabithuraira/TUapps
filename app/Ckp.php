@@ -19,6 +19,11 @@ class Ckp extends Model
         return $this->hasOne('App\User', 'id', 'user_id');
     }
     
+    public function IkiRel()
+    {
+        return $this->hasOne('App\Iki', 'id', 'iki');
+    }
+    
     public function getListTypeAttribute()
     {
         return array(1 => 'CKP-T', 2 => 'CKP-R');
@@ -33,7 +38,7 @@ class Ckp extends Model
         $datas = array();
 
         $datas['utama'] = DB::table('ckps')
-            // ->rightJoin('master_pos', 'master_pos.id', '=', 'relasi_pos.pos_id')
+            ->rightJoin('iki', 'ckps.iki', '=', 'iki.id')
             // ->join('attribute_pos', 'attribute_pos.id', '=', 'relasi_pos.attribute_pos_id')
             // ->leftJoin('input_pos', function($join) use ($tanggal, $shift)
             //     {
@@ -48,10 +53,12 @@ class Ckp extends Model
                 ['ckps.jenis', '=', 1],
                 ['ckps.user_id', '=', $user],
             ])
+            ->select('ckps.*', 'iki.iki_label')
             ->orderBy('ckps.jenis')
             ->get();
             
         $datas['tambahan'] = DB::table('ckps')
+            ->rightJoin('iki', 'ckps.iki', '=', 'iki.id')
             ->where([
                 ['ckps.month', '=', $bulan],
                 ['ckps.year', '=', $year],
@@ -59,6 +66,7 @@ class Ckp extends Model
                 ['ckps.jenis', '=', 2],
                 ['ckps.user_id', '=', $user],
             ])
+            ->select('ckps.*', 'iki.iki_label')
             ->orderBy('ckps.jenis')
             ->get();
 

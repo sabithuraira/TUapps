@@ -200,6 +200,7 @@
 </div>
 
 @include('ckp.modal_iki')
+@include('ckp.modal_addiki')
 
 <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -227,7 +228,7 @@ var vm = new Vue({
       total_tambahan: 2,
       pathname : (window.location.pathname).replace("/create", ""),
       list_iki: {!! json_encode($list_iki) !!},
-      cur_index: 0, cur_jenis: 't',
+      cur_index: 0, cur_jenis: 't', form_iki_label: '',
     },
     computed: {
         ckp_label: function() {
@@ -281,22 +282,48 @@ var vm = new Vue({
             if(isNaN(params)) return false;
             else return true;
         },
+        addIki: function(){
+            var self = this;
+            $('#select_iki').modal('hide');
+            $('#add_iki').modal('show');
+        },
+        saveIki: function(){
+            var self = this;
+
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+
+            $.ajax({
+                url : "{{ url('/iki/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    iki_label: self.form_iki_label,
+                },
+            }).done(function (data) {
+                $('#add_iki').modal('hide');
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
         pilihIki: function(event){
             var self = this;
             if (event) {
                 let index_data = parseInt(event.currentTarget.getAttribute('data-index'));
                 let cur_iki = self.list_iki[index_data];
-                console.log(self.cur_index);
-                console.log(self.cur_jenis);
                 if(self.cur_jenis=='t'){
-                    self.kegiatan_tambahan[self.cur_index].iki = cur_iki.id;
-                    self.kegiatan_tambahan[self.cur_index].iki_label = cur_iki.iki_label;
-                    console.log(self.kegiatan_tambahan);
+                    self.$set(self.kegiatan_tambahan[self.cur_index], 'iki', cur_iki.id);
+                    self.$set(self.kegiatan_tambahan[self.cur_index], 'iki_label', cur_iki.iki_label);
                 }
                 else{
-                    self.kegiatan_utama[self.cur_index].iki = cur_iki.id;
-                    self.kegiatan_utama[self.cur_index].iki_label = cur_iki.iki_label;
-                    console.log(self.kegiatan_utama);
+                    self.$set(self.kegiatan_utama[self.cur_index], 'iki', cur_iki.id);
+                    self.$set(self.kegiatan_utama[self.cur_index], 'iki_label', cur_iki.iki_label);
                 }
                 $('#select_iki').modal('hide');
             }
@@ -308,7 +335,6 @@ var vm = new Vue({
                 self.cur_jenis = idu.substr(0,1);
                 self.cur_index = parseInt(idu.substr(5));
                 
-
                 $('#select_iki').modal('show');
             }
         },
