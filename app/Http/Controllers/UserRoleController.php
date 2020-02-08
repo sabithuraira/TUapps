@@ -20,10 +20,10 @@ class UserRoleController extends Controller
         $datas = \App\User::where('name', 'LIKE', '%' . $keyword . '%')
             ->paginate();
 
-        $datas->withPath('user');
+        $datas->withPath('user_role');
         $datas->appends($request->all());
         if ($request->ajax()) {
-            return \Response::json(\View::make('user.list', array('datas' => $datas))->render());
+            return \Response::json(\View::make('user_role.list', array('datas' => $datas))->render());
         }
         return view('user_role.index',compact('datas', 'keyword'));
     }

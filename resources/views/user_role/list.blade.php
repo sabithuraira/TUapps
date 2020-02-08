@@ -38,4 +38,6 @@
             </tbody>
         @endif
     </table>
+    
+    {{ $datas->links() }} 
 </div>

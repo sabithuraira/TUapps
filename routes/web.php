@@ -44,7 +44,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 });
 
 
-// Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
+Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
@@ -58,9 +58,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('opname_persediaan/load_kartukendali', 'OpnamePersediaanController@loadKartukendali');
     Route::post('opname_persediaan/print_persediaan',array('as'=>'print_persediaan','uses'=>'OpnamePersediaanController@print_persediaan'));
     Route::post('opname_persediaan/print_kartukendali',array('as'=>'print_kartukendali','uses'=>'OpnamePersediaanController@print_kartukendali'));
-// });
-
-
+});
 
 Route::group(['middleware' => 'auth'], function(){
     /////////////////JADWAL TUGAS

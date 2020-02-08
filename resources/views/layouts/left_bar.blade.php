@@ -69,7 +69,7 @@
                                 </ul>
                             </li>
 
-                            
+                            @hasanyrole('superadmin|subbag-umum')
                             <li class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*')) ? 'active' : '' }}">
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang Persediaan</span></a>
                                 <ul>                                  
@@ -78,6 +78,7 @@
                                     <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a href="{{url('opname_persediaan/kartu_kendali')}}">Kartu Kendali</a></li>
                                 </ul>
                             </li>
+                            @endhasanyrole
 
                             @role('superadmin')
                                 <li class="{{ (request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">

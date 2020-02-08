@@ -21,7 +21,7 @@
           <a href="#" id="btn-tambah" class="btn btn-info">Tambah</a>
           <br/><br/>
 
-          <form action="{{url('prosedur')}}" method="get">
+          <form action="{{url('user_role')}}" method="get">
             <div class="input-group mb-3">
                     
                     @csrf
