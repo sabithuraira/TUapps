@@ -31,23 +31,11 @@ class LogBookController extends Controller
         if(strlen($request->get('user_id'))>0)
             $user_id = $request->get('user_id');
 
-        $model = new \App\LogBook; 
-        
-        for ($i=strtotime($start); $i<=strtotime($end); $i+=86400) {
-            $all_dates[] = array(
-                'val'   => date("Y-m-d", $i),
-                'label' => date("l, d F Y", $i)
-            );  
-        }
-
-        $list_times = \App\MasterTime::all();
-
+        $model = new \App\LogBook;
         $datas = $model->LogBookRekap($start, $end, $user_id);
 
         return response()->json(['success'=>'Sukses', 
-            'datas'=>$datas, 
-            'all_dates'=>$all_dates,
-            'list_times'=>$list_times
+            'datas'=>$datas,
         ]);
     }
 

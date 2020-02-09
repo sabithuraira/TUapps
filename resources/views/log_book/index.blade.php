@@ -18,7 +18,7 @@
 
       <div class="card" id="app_vue">
         <div class="body">
-          <a href="{{action('LogBookController@create')}}" class="btn btn-info">Tambah Log Book</a>
+          <a href="{{action('LogBookController@create')}}" class="btn btn-sm btn-info"><span class="fa fa-plus"></span> Tambah Log Book</a>
           <br/><br/>
           
 
@@ -26,7 +26,7 @@
                 <div class="col-lg-12 col-md-12 left-box">
 
                     <div class="form-group">
-                        <label>Rentang Waktu:</label>
+                        <label>Tampilkan pada:</label>
                            
                         <div class="input-daterange input-group" data-provide="datepicker">
                             <input type="text" class="input-sm form-control" v-model="start" id="start">

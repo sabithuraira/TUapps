@@ -19,16 +19,6 @@ class LogBook extends Model
         return $this->hasOne('App\User', 'id', 'user_id');
     }
 
-    public function Ckp()
-    {
-        return $this->hasOne('App\Ckp', 'flag_ckp', 'id');
-    }
-    
-    public function getListApproveAttribute()
-    {
-        return array(1 => 'Sudah disetujui', 2 => 'Belum disetujui');
-    }
-
     public function LogBookRekap($start_date, $end_date, $user_id){
         $result = array();
         $datas = array();
@@ -43,20 +33,17 @@ class LogBook extends Model
             ->get();
 
         foreach($datas as $key=>$value){
-            $label_ckp = '';
-            if(Ckp::find($value->flag_ckp)!=null)
-                $label_ckp = Ckp::find($value->flag_ckp)->uraian;
             $result[]=array(
                 'id'                =>$value->id,
                 'user_id'           =>$value->user_id,
-                'tanggal'           =>$value->tanggal,
+                'tanggal'           =>date('d M Y', strtotime($value->tanggal)),
+                'waktu_mulai'       =>date('h:i', strtotime($value->waktu_mulai)),
+                'waktu_selesai'     =>date('h:i', strtotime($value->waktu_selesai)),
                 'isi'               =>$value->isi,
-                'catatan_approve'   =>$value->catatan_approve,
+                'hasil'             =>$value->hasil,
+                'catatan_pimpinan'  =>$value->catatan_pimpinan,
                 'created_by'        =>$value->created_by,
                 'updated_by'        =>$value->updated_by,
-                'waktu'             =>$value->waktu,
-                'flag_ckp'          =>$value->flag_ckp,
-                'label_ckp'         =>$label_ckp,
             );
         }
 

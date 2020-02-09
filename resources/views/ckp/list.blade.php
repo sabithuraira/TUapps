@@ -144,8 +144,6 @@
                         <td>@{{ data.iki }}</td>
                     </tr>
                 </tbody>
-
-                
             </table>
         </div>
 
@@ -168,18 +166,9 @@
   <meta name="csrf-token" content="@csrf">
     
     <style type="text/css">
-        * {
-            font-family: Segoe UI, Arial, sans-serif;
-        }
-        table{
-            font-size: small;
-            border-collapse: collapse;
-        }
-
-        tfoot tr td{
-            font-weight: bold;
-            font-size: small;
-        }
+        * {font-family: Segoe UI, Arial, sans-serif;}
+        table{font-size: small;border-collapse: collapse;}
+        tfoot tr td{font-weight: bold;font-size: small;}
     </style>
 @endsection
 

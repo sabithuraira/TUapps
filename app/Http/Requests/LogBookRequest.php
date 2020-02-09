@@ -26,7 +26,8 @@ class LogBookRequest extends FormRequest
         return [
             'tanggal' => 'required',
             'isi' => 'required',
-            'waktu' => 'required',
+            'waktu_mulai' => 'required',
+            'waktu_selesai' => 'required',
         ];
     }
 
@@ -41,11 +42,11 @@ class LogBookRequest extends FormRequest
         return [
             'user_id' => 'User',
             'tanggal' => 'Tanggal',
+            'waktu_mulai' => 'Mulai',
+            'waktu_selesai' => 'Selesai',
             'isi' => 'Isi',
-            'is_approve' => 'Status Approve',
-            'waktu' =>  'Waktu',
-            'flag_ckp'  => 'Referensi CKP',
-            'catatan_approve' => 'Catatan Pimpinan',
+            'hasil' => 'Yang dihasilkan',
+            'catatan_pimpinan' => 'Catatan Pimpinan',
             'created_by' => 'Dibuat oleh',
             'updated_by' => 'Terkahir diperbaharui oleh',
             'created_at' => 'Dibuat pada',
