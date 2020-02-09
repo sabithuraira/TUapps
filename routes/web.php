@@ -86,8 +86,10 @@ Route::group(['middleware' => 'auth'], function(){
     //IKI
     Route::post('iki','IkiController@store');
 
+    //PEGAWAI ANDA
     Route::resource('pegawai_anda','PegawaiAndaController');
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
+    Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
 
     Route::resource('meeting','MeetingController');
     Route::post('meeting/load_pegawai','MeetingController@loadPegawai');

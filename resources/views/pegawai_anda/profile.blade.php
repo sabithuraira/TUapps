@@ -31,190 +31,28 @@
                 </div>
             </div>
 
-            <div>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp">CKP</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="ckp">
 
-                        
-                        <div class="row clearfix">
-
-                                
-                            <div class="col-lg-6 col-md-12 left-box">
-                                <div class="form-group">
-                                    <label>Bulan:</label>
-
-                                    <div class="input-group">
-                                    <select class="form-control  form-control-sm"  v-model="ckp_month" name="ckp_month">
-                                            @foreach ( config('app.months') as $key=>$value)
-                                                <option value="{{ $key }}">{{ $value }}</option>
-                                            @endforeach
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-12 right-box">
-                                <div class="form-group">
-                                    <label>Tahun:</label>
-
-                                    <div class="input-group">
-                                    <select class="form-control  form-control-sm"  v-model="ckp_year" name="ckp_year">
-                                        @for ($i=2019;$i<=date('Y');$i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <section class="datas">
-
-                            <div class="table-responsive">
-                                
-                                <br/><br/>
-                                <table class="table m-b-0">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">No</th>
-                                            <th class="text-center" rowspan="2">{{ $ckp->attributes()['uraian'] }}</th>
-                                            <th class="text-center" rowspan="2">{{ $ckp->attributes()['satuan'] }}</th>
-                                            
-                                                <th class="text-center" colspan="3">Kuantitas</th>
-                                                <th class="text-center" rowspan="2">Tingkat Kualitas</th>
-                                            
-                                            <th class="text-center" rowspan="2">{{ $ckp->attributes()['kode_butir'] }}</th>
-                                            <th class="text-center" rowspan="2">{{ $ckp->attributes()['angka_kredit'] }}</th>
-                                            <th class="text-center" rowspan="2">{{ $ckp->attributes()['keterangan'] }}</th>
-                                        </tr>
-
-                                        <tr>
-                                            <th class="text-center" >Target</th>
-                                            <th class="text-center" >Realisasi</th>
-                                            <th class="text-center" >%</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr><td :colspan="total_column">UTAMA</td></tr>
-                                        <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
-                                            <td>@{{ index+1 }}</td>
-                                            <td>@{{ data.uraian }}</td>
-                                            <td>@{{data.satuan }}</td>
-                                            <td class="text-center">@{{data.target_kuantitas }}</td>
-                                            
-                                                <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                                                <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
-                                                <td class="text-center">@{{ data.kualitas }} %</td>
-                                            
-                                            <td>@{{ data.kode_butir }}</td>
-                                            <td>@{{ data.angka_kredit }}</td>
-                                            <td>@{{ data.keterangan }}</td>
-                                        </tr>
-                                        
-                                        <tr><td :colspan="total_column">TAMBAHAN</td></tr>
-                                        <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
-                                            <td>@{{ index+1 }}</td>
-                                            <td>@{{ data.uraian }}</td>
-                                            <td>@{{data.satuan }}</td>
-                                            <td class="text-center">@{{data.target_kuantitas }}</td>
-                                            
-                                                <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                                                <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
-                                                <td class="text-center">@{{ data.kualitas }} %</td>
-                                            
-                                            <td>@{{ data.kode_butir }}</td>
-                                            <td>@{{ data.angka_kredit }}</td>
-                                            <td>@{{ data.keterangan }}</td>
-                                        </tr>
-
-                                        <template>
-                                            <tr>
-                                                <td colspan="5"><h4>JUMLAH</h4></td>
-                                                <td class="text-center">@{{ total_kuantitas }} %</td>
-                                                <td class="text-center">@{{ total_kualitas }} %</td>
-                                                
-
-                                                <td colspan="3"></td>
-                                            </tr>
-                                        </template>
-
-                                    </tbody>
-
-                                
-                                </table>
-                            </div>    
-
-
-                        </section>
-
-
+            <form method="post" action="{{url('pegawai_anda/'.$id.'/store')}}" enctype="multipart/form-data">
+                @csrf
+                
+                <div>
+                
+                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                    <br/>
+                    <hr/>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp">CKP UTAMA</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ckp_penilaian">CKP PENILAIAN</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li> -->
+                    </ul>
+                    <div class="tab-content">
+                        @include('pegawai_anda.ckp_utama')
+                        @include('pegawai_anda.ckp_penilaian')
                     </div>
-                    
-                    <div class="tab-pane" id="log_book">
-                    
-
-                        <div class="row clearfix">
-                            <div class="col-lg-12 col-md-12 left-box">
-
-                                <div class="form-group">
-                                    <label>Rentang Waktu:</label>
-                                    
-                                    <div class="input-daterange input-group" data-provide="datepicker">
-                                        <input type="text" class="input-sm form-control" v-model="start" id="start">
-                                        <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
-                                        
-                                        <input type="text" class="input-sm form-control" v-model="end" id="end">
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <section class="datas">
-
-                            <div class="table-responsive">
-                                <table class="table m-b-0">
-                                    <tbody v-for="(data, index) in all_dates" :key="data.val">
-                                        <tr >
-                                            <th colspan="3">
-                                                @{{ data.label }}
-                                            </th>
-                                        </tr>
-
-                                        <tr v-for="(data2, index2) in list_times" :key="data2.id">
-                                            <td>
-                                                <template v-if="getId(data.val, data2.id)!=0">
-                                                    <i v-on:click="komentar" data-toggle="modal" data-target="#form_modal" class="btn_comment text-success icon-bubbles" :data-id="getId(data.val, data2.id)"></i>
-                                                </template>
-                                                
-                                                <template v-if="getId(data.val, data2.id)==0">
-                                                    &nbsp &nbsp &nbsp
-                                                </template>
-
-                                                &nbsp &nbsp &nbsp
-                                                @{{ data2.waktu }}
-                                            </td>
-                                            <td v-html="showIsi(data.val, data2.id)"></td>
-                                            <td v-html="showKomentar(data.val, data2.id)"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                        </section>
-
-                    </div>
+                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                    <br/>
                 </div>
-            </div>
+            </form>
       </div>
     </div>
   </div>
@@ -266,6 +104,12 @@
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
+  
+    <style type="text/css">
+        * {font-family: Segoe UI, Arial, sans-serif;}
+        table{font-size: small;border-collapse: collapse;}
+        tfoot tr td{font-weight: bold;font-size: small;}
+    </style>
 @endsection
 
 

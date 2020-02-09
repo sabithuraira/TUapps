@@ -19,12 +19,12 @@
                         <span class="list-name">{{ $data['nmwil'] }}</span>
                         <span class="text-muted">{{ $data['nmorg'] }}</span>
                     </td>
-                    <td>
+                    <!-- <td>
                         <div class="text-success">
                             23 <i class="fa fa-long-arrow-up"></i>
                         </div>
                         <div class="text-muted">up</div>
-                    </td>
+                    </td> -->
                     
                     <td class="text-center">
                         <a href="{{action('PegawaiAndaController@profile', $data['id'])}}"><i class="fa fa-search text-info"></i></a>

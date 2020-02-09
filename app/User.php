@@ -131,10 +131,6 @@ class User extends Authenticatable
 
     function getPegawaiAnda(){
         $pegawai = array();
-        // print_r('hai');
-        // print_r($this->kdstjab);
-        // print_r($this->kdesl);
-        // die();
 
         if($this->kdstjab==4){
             if($this->kdesl==4){

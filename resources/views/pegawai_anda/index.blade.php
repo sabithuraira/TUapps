@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 <ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
+    <li class="breadcrumb-item"><a href="{{url('/pegawai_anda')}}"><i class="icon-home"></i></a></li>                     
     <li class="breadcrumb-item">Pegawai Anda</li>
 </ul>
 @endsection
@@ -18,17 +18,6 @@
 
       <div class="card">
         <div class="body">
-          <br/><br/>
-          <form action="{{url('pegawai_anda')}}" method="get">
-            <div class="input-group mb-3">
-              @csrf
-              <input type="text" class="form-control" name="search" id="search" value="{{ $keyword }}" placeholder="Search..">
-
-              <div class="input-group-append">
-                  <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
-              </div>
-            </div>
-          </form>
           <section class="datas">
             @include('pegawai_anda.list')
           </section>
