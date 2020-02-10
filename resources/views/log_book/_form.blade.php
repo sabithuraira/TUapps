@@ -70,7 +70,6 @@
 @endsection
 
 @section('scripts')
-<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>

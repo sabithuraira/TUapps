@@ -9,7 +9,7 @@
                     Tanggal:
                     <div class="form-line">
                         <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                            <input type="text" id="tanggal" name="tanggal" v-model="form_tanggal">
+                            <input type="text" id="form_tanggal" name="tanggal">
                             <div class="input-group-append">                                            
                                 <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                             </div>
@@ -18,50 +18,51 @@
                 </div>
                 <input type="hidden" v-model="form_id">
                     
+                <div class="form-group demo-masked-input">
+                    Waktu mulai - selesai
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-line">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-clock"></i></span>
+                                    </div>
+                                    <input type="time" class="form-control" v-model="form_waktu_mulai" placeholder="12:05 AM">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            
+                            <div class="form-line">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-clock"></i></span>
+                                    </div>
+                                    <input type="time" class="form-control" v-model="form_waktu_selesai" placeholder="12:05 AM">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    Jumlah
+                    Isi:
                     <div class="form-line">
-                        <input type="number" v-model="form_jumlah" class="form-control" placeholder="Jumlah barang">
+                        <textarea type="text" v-model="form_isi" class="form-control" rows=3></textarea>
                     </div>
                 </div>
-
-                <div v-if="form_current_jenis==2" class="form-group">
-                    Unit Kerja:
-                    <div class="form-line">
-                        <select class="form-control"  v-model="form_unit_kerja" autofocus>
-                            <option value="">- Pilih Unit Kerja -</option>
-                            @foreach ($unit_kerja as $key=>$value)
-                                <option value="{{ $value->id }}">{{ $value->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div v-if="form_current_jenis==1" class="form-group">
-                    Penyedia:
-                    <div class="form-line">
-                        <input type="text" v-model="form_nama_penyedia" class="form-control" placeholder="Nama Penyedia">
-                    </div>
-                </div>
-
+                
                 <div class="form-group">
-                    Tanggal:
+                    Hasil:
                     <div class="form-line">
-                        <select class="form-control"  v-model="form_tanggal" autofocus>
-                            <option value="">- Pilih Tanggal -</option>
-                            @for($i=1;$i<=31;++$i)
-                                <option value="{{ $i }}">{{ $i }}
-                                </option>
-                            @endfor
-                        </select>
+                        <textarea type="text" v-model="form_hasil" class="form-control" rows=3></textarea>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="add-btn">SAVE</button>
-                <button  v-show="form_id_data!=''" type="button" class="btn btn-danger" id="delete-btn">DELETE</button>
+                <button type="button" class="btn btn-primary" v-on:click="saveLogBook">SAVE</button>
                 <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
             </div>
         </div>

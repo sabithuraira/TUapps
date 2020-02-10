@@ -8,7 +8,6 @@
                 <th class="text-center">Selesai</th>
                 <th class="text-center">{{ $model->attributes()['isi'] }}</th>
                 <th class="text-center">{{ $model->attributes()['hasil'] }}</th>
-                <th class="text-center">{{ $model->attributes()['catatan_pimpinan'] }}</th>
             </tr>
         </thead>
 
@@ -20,7 +19,6 @@
                 <td class="text-center">@{{ data.waktu_selesai }}</td>
                 <td>@{{ data.isi }}</td>
                 <td>@{{ data.hasil }}</td>
-                <td>@{{ data.catatan_approve }}</td>
             </tr>
         </tbody>
     </table>
@@ -43,8 +41,6 @@
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
-
-  
     <style type="text/css">
         * {font-family: Segoe UI, Arial, sans-serif;}
         table{font-size: small;border-collapse: collapse;}
@@ -55,6 +51,8 @@
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script> <!-- Input Mask Plugin Js --> 
+<script src="{!! asset('lucid/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js') !!}"></script>
 <script>
     
 var vm = new Vue({  
@@ -65,9 +63,48 @@ var vm = new Vue({
         end: {!! json_encode($end) !!},
         pathname : window.location.pathname,
         form_id: 0, form_tanggal: '', form_waktu_mulai: '', form_waktu_selesai: '',
-        form_isi: '', form_hasil: '', form_catatan_pimpinan: '',
+        form_isi: '', form_hasil: '',
     },
     methods: {
+        addLogBook: function (event) {
+            var self = this;
+            if (event) {
+                self.form_id = 0;
+                self.form_tanggal = '';
+                self.form_waktu_mulai = '';
+                self.form_waktu_selesai = '';
+                self.form_isi = '';
+                self.form_hasil = '';
+            }
+        },
+        saveLogBook: function () {
+            var self = this;
+
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')}
+            })
+
+            $.ajax({
+                url :  self.pathname,
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    id: self.form_id,
+                    tanggal: self.form_tanggal,
+                    waktu_mulai: self.form_waktu_mulai,
+                    waktu_selesai: self.form_waktu_selesai, 
+                    isi: self.form_isi, 
+                    hasil: self.form_hasil,
+                },
+            }).done(function (data) {
+                $('#add_logbooks').modal('hide');
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+            $('#wait_progres').modal('hide');
+            });
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');
@@ -96,6 +133,9 @@ var vm = new Vue({
 });
 
 $(document).ready(function() {
+    var $demoMaskedInput = $('.demo-masked-input');
+    $demoMaskedInput.find('.time24').inputmask('hh:mm', { placeholder: '__:__ _m', alias: 'time24', hourFormat: '24' });
+    
     vm.setDatas();
 });
 
@@ -104,10 +144,14 @@ $('#start').change(function() {
     vm.setDatas();
 });
 
-
 $('#end').change(function() {
     vm.end = this.value;
     vm.setDatas();
+});
+
+
+$('#form_tanggal').change(function() {
+    vm.form_tanggal = this.value;
 });
 </script>
 @endsection

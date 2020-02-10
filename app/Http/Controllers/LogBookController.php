@@ -104,40 +104,20 @@ class LogBookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LogBookRequest $request)
+    public function store(Request $request)
     {
-        if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('log_book/create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-
-        $tanggal = date("Y-m-d", strtotime($request->get('tanggal')));
-
-        $model = \App\LogBook::where([
-                    ['tanggal', '=', $tanggal],
-                    ['waktu', '=', $request->get('waktu')],
-            ])
-            ->first();
-
-        if($model===null){
-            $model= new \App\LogBook;    
-            $model->tanggal= $tanggal;
-            $model->waktu=$request->get('waktu');
-        }
-        
-        $model->isi=$request->get('isi');
-        $model->is_approve=2;
-        $model->catatan_approve='';
-        if($request->get('flag_ckp')!='')
-            $model->flag_ckp =  $request->get('flag_ckp');
-        $model->user_id = Auth::user()->email;
+        $model= new \App\LogBook;
+        $model->user_id= Auth::user()->email;
+        $model->tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
+        $model->waktu_mulai = date("h:i", strtotime($request->get('waktu_mulai')));
+        $model->waktu_selesai = date("h:i", strtotime($request->get('waktu_selesai')));
+        $model->isi = $request->get('isi');
+        $model->hasil = $request->get('hasil');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
         
-        // return redirect('/log_book')->with('success', 'Information has been added');
-        return redirect('log_book');
+        return response()->json(['success'=>'Data berhasil ditambah']);
     }
 
     /**
