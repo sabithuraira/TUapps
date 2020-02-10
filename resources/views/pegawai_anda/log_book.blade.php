@@ -18,29 +18,26 @@
 
     <section class="datas">
         <div class="table-responsive">
-            <table class="table m-b-0">
-                <tbody v-for="(data, index) in all_dates" :key="data.val">
-                    <tr >
-                        <th colspan="3">
-                            @{{ data.label }}
-                        </th>
+            <table class="table table-sm table-bordered m-b-0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th class="text-center">Tanggal</th>
+                        <th class="text-center">Mulai</th>
+                        <th class="text-center">Selesai</th>
+                        <th class="text-center">Isi</th>
+                        <th class="text-center">Hasil</th>
                     </tr>
+                </thead>
 
-                    <tr v-for="(data2, index2) in list_times" :key="data2.id">
-                        <td>
-                            <template v-if="getId(data.val, data2.id)!=0">
-                                <i v-on:click="komentar" data-toggle="modal" data-target="#form_modal" class="btn_comment text-success icon-bubbles" :data-id="getId(data.val, data2.id)"></i>
-                            </template>
-                            
-                            <template v-if="getId(data.val, data2.id)==0">
-                                &nbsp &nbsp &nbsp
-                            </template>
-
-                            &nbsp &nbsp &nbsp
-                            @{{ data2.waktu }}
-                        </td>
-                        <td v-html="showIsi(data.val, data2.id)"></td>
-                        <td v-html="showKomentar(data.val, data2.id)"></td>
+                <tbody>
+                    <tr v-for="(data, index) in datas" :key="data.id">
+                        <td>@{{ index+1 }}</td>
+                        <td class="text-center">@{{ data.tanggal }}</td>
+                        <td class="text-center">@{{ data.waktu_mulai }}</td>
+                        <td class="text-center">@{{ data.waktu_selesai }}</td>
+                        <td>@{{ data.isi }}</td>
+                        <td>@{{ data.hasil }}</td>
                     </tr>
                 </tbody>
             </table>

@@ -3,11 +3,11 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th class="text-center">{{ $model->attributes()['tanggal'] }}</th>
+                <th class="text-center">Tanggal</th>
                 <th class="text-center">Mulai</th>
                 <th class="text-center">Selesai</th>
-                <th class="text-center">{{ $model->attributes()['isi'] }}</th>
-                <th class="text-center">{{ $model->attributes()['hasil'] }}</th>
+                <th class="text-center">Isi</th>
+                <th class="text-center">Hasil</th>
             </tr>
         </thead>
 

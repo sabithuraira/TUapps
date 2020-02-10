@@ -43,11 +43,12 @@
                     <ul class="nav nav-tabs">
                         <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp">CKP UTAMA</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ckp_penilaian">CKP PENILAIAN</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li> -->
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li>
                     </ul>
                     <div class="tab-content">
                         @include('pegawai_anda.ckp_utama')
                         @include('pegawai_anda.ckp_penilaian')
+                        @include('pegawai_anda.log_book')
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     <br/>
@@ -133,8 +134,6 @@ var vm = new Vue({
       datas: [],
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
-      all_dates: [],
-      list_times: [],
       catatan_approve: '',
       id_row: 0,
     },
@@ -285,8 +284,6 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
-                self.all_dates = data.all_dates;
-                self.list_times = data.list_times;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
