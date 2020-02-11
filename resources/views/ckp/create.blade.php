@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 <ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
+    <li class="breadcrumb-item"><i class="icon-home"></i></li>
     <li class="breadcrumb-item"><a href="{{url('ckp')}}">CKP</a></li>                            
     <li class="breadcrumb-item">Buat CKP</li>
 </ul>

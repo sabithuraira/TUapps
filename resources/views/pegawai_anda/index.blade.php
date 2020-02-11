@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 <ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{url('/pegawai_anda')}}"><i class="icon-home"></i></a></li>                     
+    <li class="breadcrumb-item"><a href="#"><i class="icon-home"></i></a></li>                     
     <li class="breadcrumb-item">Pegawai Anda</li>
 </ul>
 @endsection

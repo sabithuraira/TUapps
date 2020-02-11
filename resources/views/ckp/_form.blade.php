@@ -40,7 +40,10 @@
             <input type="hidden" name="total_utama" v-model="total_utama">
     <hr/>
 
-    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+    <div>
+        <p class="text-muted font-italic font-weight-lighter float-left">*Isian penilaian hanya dilakukan oleh pimpinan langsung.</p>
+        <button type="submit" class="btn btn-primary float-right">Simpan</button>
+    </div>
     
     <br/><br/>
     <section class="datas">
@@ -90,7 +93,7 @@
                                 
                                 <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                                 <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas"></td>
+                                <td>@{{ data.kualitas }}</td>
 
                                 <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
                                 <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
@@ -111,7 +114,7 @@
                                 
                                 <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
                                 <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas"></td>
+                                <td>@{{ data.kualitas }}</td>
 
                                 <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
                                 <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
@@ -158,13 +161,12 @@
                             <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                                 <td>@{{ index+1 }}</td>
                                 <td><div style="width:300px"></div>@{{ data.uraian }}</td>
-                                
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_kecepatan'+data.id" v-model="data.kecepatan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
-                                <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'u_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
+                                <td>@{{ data. kecepatan }}</td>
+                                <td>@{{ data. ketepatan }}</td>
+                                <td>@{{ data. ketuntasan }}</td>
+                                <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
+                                <td>@{{ data.penilaian_pimpinan }}</td>
+                                <td>@{{ data.catatan_koreksi }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'u_iki'+index">...</button>
                                     <input type="hidden" :name="'u_iki'+data.id" v-model="data.iki">
@@ -176,13 +178,12 @@
                             <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                                 <td>@{{ index+1 }}</td>
                                 <td>@{{ data.uraian }}</td>
-                                
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_kecepatan'+data.id" v-model="data.kecepatan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_ketepatan'+data.id" v-model="data.ketepatan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
-                                <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
+                                <td>@{{ data. kecepatan }}</td>
+                                <td>@{{ data. ketepatan }}</td>
+                                <td>@{{ data. ketuntasan }}</td>
+                                <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
+                                <td>@{{ data.penilaian_pimpinan }}</td>
+                                <td>@{{ data.catatan_koreksi }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'t_iki'+index">...</button>
                                     <input type="hidden" :name="'t_iki'+data.id" v-model="data.iki">
@@ -278,6 +279,13 @@ var vm = new Vue({
         },
     },
     methods: {
+        nilaiRata2: function(val1, val2, val3){
+            if(typeof val1 == 'undefined') val1 = 0;
+            if(typeof val2 == 'undefined') val2 = 0;
+            if(typeof val3 == 'undefined') val3 = 0;
+
+            return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
+        },
         is_delete: function(params){
             if(isNaN(params)) return false;
             else return true;
