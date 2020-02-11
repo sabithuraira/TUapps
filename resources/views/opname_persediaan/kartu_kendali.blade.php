@@ -134,7 +134,6 @@
           var toDate = new Date(tanggal);
           var date_label = toDate.getDate();
           var monthIndex = toDate.getMonth();
-          // var year = date.getFullYear();
 
           return date_label + '-' + self.short_months[monthIndex];
         },
@@ -174,8 +173,10 @@
                   self.datas = data.datas;
                   self.persediaan = data.persediaan;
                   self.detail_barang = data.detail_barang;
-                  console.log(data.persediaan);
-                  $('#wait_progres').modal('hide');
+                    if(typeof self.persediaan.saldo_awal=='undefined'){
+                        alert("Barang ini belum tersedia pada bulan yang dipilih");
+                    }
+                $('#wait_progres').modal('hide');
               }).fail(function (msg) {
                   console.log(JSON.stringify(msg));
                   $('#wait_progres').modal('hide');

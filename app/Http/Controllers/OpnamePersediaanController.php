@@ -178,28 +178,33 @@ class OpnamePersediaanController extends Controller
 
         $detail_barang = \App\MasterBarang::find($barang);
 
-        $datas = $model->KartuKendali($barang, $month, $year);
+        if($persediaan!=null){
+            $datas = $model->KartuKendali($barang, $month, $year);
 
-        $saldo_jumlah = $persediaan->saldo_awal;
-        $saldo_harga = $persediaan->harga_awal;
-
-        $total_jumlah = 0;
-        $total_harga = 0;
-
-        foreach($datas as $key=>$value){
-            if($value->jenis==2){
-                $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
-                $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+            $saldo_jumlah = $persediaan->saldo_awal;
+            $saldo_harga = $persediaan->harga_awal;
+    
+            $total_jumlah = 0;
+            $total_harga = 0;
+    
+            foreach($datas as $key=>$value){
+                if($value->jenis==2){
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+                }
+                else{
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
+                }
+    
+                $saldo_jumlah = $datas[$key]->saldo_jumlah;
+                $saldo_harga = $datas[$key]->saldo_harga;
             }
-            else{
-                $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
-                $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
-            }
-
-            $saldo_jumlah = $datas[$key]->saldo_jumlah;
-            $saldo_harga = $datas[$key]->saldo_harga;
         }
-        
+        else{
+            $persediaan = (object) array();
+        }
+            
         return response()->json(['success'=>'1', 'datas'=>$datas, 
             'persediaan'=>$persediaan, 'detail_barang'=>$detail_barang]);
     }
@@ -229,26 +234,31 @@ class OpnamePersediaanController extends Controller
 
         $detail_barang = \App\MasterBarang::find($barang);
 
-        $datas = $model->KartuKendali($barang, $month, $year);
+        if($persediaan!=null){
+            $datas = $model->KartuKendali($barang, $month, $year);
 
-        $saldo_jumlah = $persediaan->saldo_awal;
-        $saldo_harga = $persediaan->harga_awal;
+            $saldo_jumlah = $persediaan->saldo_awal;
+            $saldo_harga = $persediaan->harga_awal;
 
-        $total_jumlah = 0;
-        $total_harga = 0;
+            $total_jumlah = 0;
+            $total_harga = 0;
 
-        foreach($datas as $key=>$value){
-            if($value->jenis==2){
-                $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
-                $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+            foreach($datas as $key=>$value){
+                if($value->jenis==2){
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+                }
+                else{
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
+                }
+
+                $saldo_jumlah = $datas[$key]->saldo_jumlah;
+                $saldo_harga = $datas[$key]->saldo_harga;
             }
-            else{
-                $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
-                $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
-            }
-
-            $saldo_jumlah = $datas[$key]->saldo_jumlah;
-            $saldo_harga = $datas[$key]->saldo_harga;
+        }
+        else{
+            $persediaan = (object) array();
         }
         
         $monthName = date("F", mktime(0, 0, 0, $month, 10));

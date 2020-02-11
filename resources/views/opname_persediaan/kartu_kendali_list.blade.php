@@ -1,5 +1,4 @@
 <div id="load">
-
     <form action="{{action('OpnamePersediaanController@print_kartukendali')}}" method="post">
         @csrf 
         <input type="hidden"  v-model="month" name="p_month">
