@@ -90,7 +90,7 @@ class PegawaiAndaController extends Controller
 
         $lb_datas=array();
 
-        $start = date('m/d/Y');
+        $start = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."-1 month" ));
         $end = date('m/d/Y');
 
         return view('pegawai_anda.profile',compact('model','id', 'ckp', 'month', 

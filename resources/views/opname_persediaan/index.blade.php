@@ -282,7 +282,6 @@ var vm = new Vue({
                 self.form_unit_kerja = event.currentTarget.getAttribute('data-unitkerja');
                 var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
-
             }
         },
         addBarangMasuk: function (event) {

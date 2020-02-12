@@ -75,7 +75,7 @@ class LogBookController extends Controller
     {
         $datas=array();
 
-        $start = date('m/d/Y');
+        $start = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."-1 month" ));
         $end = date('m/d/Y');
 
         $model = new \App\LogBook;
