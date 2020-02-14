@@ -106,14 +106,18 @@ class LogBookController extends Controller
      */
     public function store(Request $request)
     {
-        $model= new \App\LogBook;
-        $model->user_id= Auth::user()->email;
+        $model = \App\LogBook::find($request->get("id"));
+        if($model==null){
+            $model = new \App\LogBook;
+            $model->user_id= Auth::user()->email;
+            $model->created_by=Auth::id();
+        }
+
         $model->tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
         $model->waktu_mulai = date("h:i", strtotime($request->get('waktu_mulai')));
         $model->waktu_selesai = date("h:i", strtotime($request->get('waktu_selesai')));
         $model->isi = $request->get('isi');
         $model->hasil = $request->get('hasil');
-        $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
         

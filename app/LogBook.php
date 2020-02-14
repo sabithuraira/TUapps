@@ -37,6 +37,7 @@ class LogBook extends Model
                 'id'                =>$value->id,
                 'user_id'           =>$value->user_id,
                 'tanggal'           =>date('d M Y', strtotime($value->tanggal)),
+                'real_tanggal'      =>date('m/d/Y', strtotime($value->tanggal)),
                 'waktu_mulai'       =>date('h:i', strtotime($value->waktu_mulai)),
                 'waktu_selesai'     =>date('h:i', strtotime($value->waktu_selesai)),
                 'isi'               =>$value->isi,

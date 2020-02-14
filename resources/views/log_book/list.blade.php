@@ -13,7 +13,15 @@
 
         <tbody>
             <tr v-for="(data, index) in datas" :key="data.id">
-                <td>@{{ index+1 }}</td>
+                <td>
+                    <a href="#" role="button" v-on:click="updateLogBook" data-toggle="modal" 
+                            :data-id="data.id" :data-tanggal="data.real_tanggal" 
+                            :data-waktu_mulai="data.waktu_mulai" :data-waktu_selesai="data.waktu_selesai" 
+                            :data-isi="data.isi" :data-hasil="data.hasil" 
+                            data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
+                    &nbsp
+                    @{{ index+1 }}
+                </td>
                 <td class="text-center">@{{ data.tanggal }}</td>
                 <td class="text-center">@{{ data.waktu_mulai }}</td>
                 <td class="text-center">@{{ data.waktu_selesai }}</td>
@@ -77,13 +85,23 @@ var vm = new Vue({
                 self.form_hasil = '';
             }
         },
+        updateLogBook: function (event) {
+            var self = this;
+            if (event) {
+                self.form_id = event.currentTarget.getAttribute('data-id');
+                self.form_tanggal = event.currentTarget.getAttribute('data-tanggal');
+                $('#form_tanggal').val(self.form_tanggal);
+                self.form_waktu_mulai = event.currentTarget.getAttribute('data-waktu_mulai');
+                self.form_waktu_selesai = event.currentTarget.getAttribute('data-waktu_selesai');
+                self.form_isi = event.currentTarget.getAttribute('data-isi');
+                self.form_hasil = event.currentTarget.getAttribute('data-hasil');
+            }
+        },
         saveLogBook: function () {
             var self = this;
 
             $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')}
-            })
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
             $.ajax({
                 url :  self.pathname,
@@ -102,7 +120,7 @@ var vm = new Vue({
                 window.location.reload(false); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
-            $('#wait_progres').modal('hide');
+                $('#wait_progres').modal('hide');
             });
         },
         setDatas: function(){
