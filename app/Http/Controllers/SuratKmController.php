@@ -20,6 +20,7 @@ class SuratKmController extends Controller
         $datas = \App\SuratKm::where('nomor_urut', 'LIKE', '%' . $keyword . '%')
             ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
             ->orWhere('perihal', 'LIKE', '%' . $keyword . '%')
+            ->orderBy('created_at', 'desc')
             ->paginate();
 
         $datas->withPath('surat_km');

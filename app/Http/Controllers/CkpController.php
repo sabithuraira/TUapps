@@ -120,7 +120,6 @@ class CkpController extends Controller
             $user_id = $request->get('p_user');
             $user = \App\User::where('email', '=', $user_id)->first();
         }
-        
 
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan(1, $month, $year, $user_id);
