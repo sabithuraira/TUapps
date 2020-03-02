@@ -91,8 +91,6 @@
     </div>
     
     <div class="tab-pane" id="penilaian">
-    
-
         <div class="table-responsive">
             <table class="table table-sm table-bordered m-b-0">
                 <thead>

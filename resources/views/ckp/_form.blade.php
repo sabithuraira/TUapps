@@ -238,33 +238,43 @@ var vm = new Vue({
         },
         total_kuantitas: function(){
             var result = 0;
+            var jumlah_kegiatan=0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined') 
+                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
                     result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                    jumlah_kegiatan++;
+                }
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
+                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
                     result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                    jumlah_kegiatan++;
+                }
             }
 
-            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length-2)).toFixed(2);
+            return parseFloat(result/jumlah_kegiatan).toFixed(2);
         },
         total_kualitas: function(){
             var result = 0;
+            var jumlah_kegiatan=0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined') 
+                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined') {
                     result+= parseInt(this.kegiatan_utama[i].kualitas);
+                    jumlah_kegiatan++;
+                }
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined')
+                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined'){
                     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+                    jumlah_kegiatan++;
+                }
             }
 
-            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length-2)).toFixed(2);
+            return parseFloat(result/(jumlah_kegiatan)).toFixed(2);
         }
     },
     watch: {

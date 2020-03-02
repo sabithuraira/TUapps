@@ -38,7 +38,7 @@ class Ckp extends Model
         $datas = array();
 
         $datas['utama'] = DB::table('ckps')
-            ->rightJoin('iki', 'ckps.iki', '=', 'iki.id')
+            ->leftJoin('iki', 'ckps.iki', '=', 'iki.id')
             // ->join('attribute_pos', 'attribute_pos.id', '=', 'relasi_pos.attribute_pos_id')
             // ->leftJoin('input_pos', function($join) use ($tanggal, $shift)
             //     {
@@ -58,7 +58,7 @@ class Ckp extends Model
             ->get();
             
         $datas['tambahan'] = DB::table('ckps')
-            ->rightJoin('iki', 'ckps.iki', '=', 'iki.id')
+            ->leftJoin('iki', 'ckps.iki', '=', 'iki.id')
             ->where([
                 ['ckps.month', '=', $bulan],
                 ['ckps.year', '=', $year],
