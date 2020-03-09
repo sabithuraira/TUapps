@@ -17,20 +17,64 @@ class SuratKmController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $datas = \App\SuratKm::where('nomor_urut', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate();
+        
+        $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
+            ->orderBy('created_at', 'desc')->paginate();
+            
+        $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
+            ->orderBy('created_at', 'desc')->paginate();
+            
+        $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
+            ->orderBy('created_at', 'desc')->paginate();
+        
+        if(strlen($keyword)>0){
+            $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%');
+                    })
+                )
+                ->orderBy('created_at', 'desc')->paginate();
 
-        $datas->withPath('surat_km');
-        $datas->appends($request->all());
+            $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%');
+                    })
+                )
+                ->orderBy('created_at', 'desc')->paginate();
 
-        if ($request->ajax()) {
-            return \Response::json(\View::make('surat_km.list', array('datas' => $datas))->render());
+            $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%');
+                    })
+                )
+                ->orderBy('created_at', 'desc')->paginate();
         }
 
-        return view('surat_km.index',compact('datas', 'keyword'));
+        $surat_masuk->withPath('surat_km');
+        $surat_masuk->appends($request->all());
+        
+        $surat_keluar->withPath('surat_km');
+        $surat_keluar->appends($request->all());
+        
+        $memorandum->withPath('surat_km');
+        $memorandum->appends($request->all());
+
+        // if ($request->ajax()) {
+        //     return \Response::json(\View::make('surat_km.list', array(
+        //         'surat_masuk' => $surat_masuk, 'surat_keluar'=> $surat_keluar, 'memorandum'=>$memorandum))
+        //         ->render());
+        // }
+
+        return view('surat_km.index',compact('surat_masuk','surat_keluar', 'memorandum', 'keyword'));
     }
 
     public function getNomorUrut(Request $request){

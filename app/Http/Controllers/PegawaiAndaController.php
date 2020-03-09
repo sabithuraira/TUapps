@@ -45,7 +45,7 @@ class PegawaiAndaController extends Controller
             $year = $request->get('year');
             
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
+        $datas = $model->CkpBulanan($type, $month, $year, $user->email);
 
         foreach($datas['utama'] as $data){
             // if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){

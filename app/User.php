@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function getPimpinanAttribute(){
         if($this->kdstjab<4){
-            if($this->kdstjab==2 && $this->kdgol>32){
+            if($this->kdstjab==2 && $this->kdgol>32 && $this->kdgol<40){
                 $bos = $this->getEselon3();
     
                 if($bos!=null) return $bos;
@@ -53,6 +53,12 @@ class User extends Authenticatable
                     if($bos!=null) return $bos;
                     else return $this->getBosRI();
                 }
+            }
+            else if($this->kdstjab==2 && $this->kdgol>40){
+                $bos = $this->getEselon2();
+                
+                if($bos!=null) return $bos;
+                else return $this->getBosRI();
             }
             else{
                 $bos = $this::where([

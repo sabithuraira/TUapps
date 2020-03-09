@@ -51,7 +51,7 @@
     </tr>
   </table>
 
-  <h3 align="center">CAPAIAN KINERJA PEGAWAI TAHUN 2019</h3>
+  <h3 align="center">CAPAIAN KINERJA PEGAWAI TAHUN {{ $year }}</h3>
 
   <table width="100%">
     <tr><td width="15%">Satuan Organisasi</td><td>: {{ $user->nmorg }}</td></tr>
@@ -232,7 +232,6 @@
   </table>
   
   <br/>
-
   
   <table width="100%">
     <tr>
