@@ -45,10 +45,18 @@
             </div>
         </div>
         
-        <div  v-show="jenis_surat==2 || jenis_surat==3" class="col-md-6 left">
+        <div class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['nomor_petunjuk'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('nomor_petunjuk') ? ' parsley-error' : '')}}" name="nomor_petunjuk" value="{{ old('nomor_petunjuk', $model->nomor_petunjuk) }}">
+                <select class="form-control {{($errors->first('nomor_petunjuk') ? ' parsley-error' : '')}}" name="nomor_petunjuk">
+                    <option value="">- Pilih Jenis Surat -</option>
+                    @foreach ($model->listPetunjuk as $key=>$value)
+                        <option value="{{ $key }}" 
+                            @if ($key == old('nomor_petunjuk', $model->nomor_petunjuk))
+                                selected="selected"
+                            @endif >{{ $value }} - {{ $key }}</option>
+                    @endforeach
+                </select>
                 @foreach ($errors->get('nomor_petunjuk') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach

@@ -58,7 +58,7 @@ class SuratKmRequest extends FormRequest
             'tanggal' => 'Tanggal',
             'nomor' => 'Nomor',
             'perihal' => 'Perihal',
-            'nomor_petunjuk' => 'Nomor Petunjuk',
+            'nomor_petunjuk' => 'Petunjuk',
             'jenis_surat' => 'Jenis Surat',
         ];
     }
