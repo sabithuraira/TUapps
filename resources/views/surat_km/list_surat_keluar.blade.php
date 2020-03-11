@@ -22,7 +22,7 @@
                         <td>{{$data['nomor_urut']}}</td>
                         <td>
                             @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
-                                {{ $data->listPetunjuk[$data['nomor_petunjuk']] }}
+                                {{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}
                             @endif
                         </td>
                         <td>{{$data['alamat']}}</td>
