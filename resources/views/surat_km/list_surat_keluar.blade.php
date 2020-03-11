@@ -10,7 +10,6 @@
                     <tr>
                         <th>{{ $surat_keluar[0]->attributes()['nomor_urut'] }}</th>
                         <th>Isi</th>
-                        <th>{{ $surat_keluar[0]->attributes()['tanggal'] }}</th>
                         <th class="text-center" colspan="2">Action</th>
                     </tr>
                 </thead>
@@ -19,6 +18,7 @@
                     <tr>
                         <td>{{$data['nomor_urut']}}</td>
                         <td>
+                            <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                             <h6 class="margin-0">Perihal: {{$data['perihal']}}</h6>
                             @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
                                 <p class="text-muted">{{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}</p>
@@ -26,7 +26,6 @@
                             <span>Alamat: {{$data['alamat']}}</span>
 
                         </td>
-                        <td>{{$data['tanggal']}}</td>
                         <td class="text-center"><a href="{{action('SuratKmController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
                         <td class="text-center">
                         <form action="{{action('SuratKmController@destroy', $data['id'])}}" method="post">
