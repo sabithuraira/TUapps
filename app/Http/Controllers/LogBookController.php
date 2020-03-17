@@ -84,6 +84,65 @@ class LogBookController extends Controller
             'datas', 'start', 'end'));
     }
 
+    public function send_to_ckp(Request $request){
+        if($request->form_id_data!=''){
+            $model = \App\LogBook::find($request->form_id_data);
+
+            $model_ckp = new \App\Ckp;
+            $model_ckp->user_id = $model->user_id;
+            $model_ckp->month   = date('n', strtotime($model->tanggal));
+            $model_ckp->year    = date('Y', strtotime($model->tanggal));
+            $model_ckp->type    =1;
+            $model_ckp->jenis   =$request->jenis;
+            $model_ckp->uraian  =$model->isi;
+            $model_ckp->satuan  ='';
+            $model_ckp->target_kuantitas  = 0;
+            $model_ckp->realisasi_kuantitas  = 0;
+            $model_ckp->kualitas=0;
+            
+            $model_ckp->created_by=Auth::id();
+            $model_ckp->updated_by=Auth::id();
+            
+            if($model_ckp->save()){
+                $model->ckp_id=$model_ckp->id;
+                $model->save();
+            }
+
+            return response()->json(['result'=>'Data berhasil dikirim ke CKP']);
+        }
+        else{
+            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+
+        $model->bulan = $request->form_month;
+        $model->tahun = $request->form_year;
+        $model->id_barang = $request->form_id_barang;
+        $model->jumlah_kurang = $request->form_jumlah;
+
+        $model_barang = \App\MasterBarang::find($request->form_id_barang);
+        if($model_barang!=null)
+            $model->harga_kurang = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
+        else
+            $model->harga_kurang = 0;
+
+        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
+                            ->first();
+        $model->unit_kerja = $model_unit_kerja->id;
+
+        $model->unit_kerja4 = $request->form_unit_kerja;
+        $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        if($model->save())
+        {
+            $model_o = new \App\Opnamepersediaan();
+            $model_o->triggerPersediaan($request->form_id_barang, $request->form_month, 
+                    $request->form_year, $model_barang->nama_barang);
+        }
+
+        return response()->json(['success'=>'Data berhasil ditambah']);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

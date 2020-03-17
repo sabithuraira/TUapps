@@ -45,6 +45,7 @@ class LogBook extends Model
                 'catatan_pimpinan'  =>$value->catatan_pimpinan,
                 'created_by'        =>$value->created_by,
                 'updated_by'        =>$value->updated_by,
+                'ckp_id'            =>$value->ckp_id,
             );
         }
 

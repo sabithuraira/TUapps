@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
+    Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
 
     //CKP
     Route::resource('ckp','CkpController')->except(['show']);

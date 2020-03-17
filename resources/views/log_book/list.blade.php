@@ -8,6 +8,7 @@
                 <th class="text-center">Selesai</th>
                 <th class="text-center">Isi</th>
                 <th class="text-center">Hasil</th>
+                <th></th>
             </tr>
         </thead>
 
@@ -27,12 +28,33 @@
                 <td class="text-center">@{{ data.waktu_selesai }}</td>
                 <td>@{{ data.isi }}</td>
                 <td>@{{ data.hasil }}</td>
+                <td class="text-center">
+                    <a v-if="data.ckp_id==null || data.ckp_id==''" href="#" role="button" v-on:click="sendCkpId" 
+                            data-toggle="modal" :data-id="data.id" 
+                            data-target="#send_ckp"> 
+                        <i class="icon-arrow-up"></i>
+                        <p class='text-muted small'>Jadikan CKP</p>
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
 </div>
 
 @include('log_book.modal_form')
+<div class="modal fade" id="send_ckp" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">Masukkan Log Book pada:</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" v-on:click="sendToCkp(1)">Kegiatan Utama</button>
+                <button type="button" class="btn btn-primary" v-on:click="sendToCkp(2)">Kegiatan Tambahan</button>
+                <button type="button" class="btn btn-simple" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -72,6 +94,7 @@ var vm = new Vue({
         pathname : window.location.pathname,
         form_id: 0, form_tanggal: '', form_waktu_mulai: '', form_waktu_selesai: '',
         form_isi: '', form_hasil: '',
+        ckp_id: 0,
     },
     methods: {
         addLogBook: function (event) {
@@ -117,6 +140,35 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 $('#add_logbooks').modal('hide');
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        sendCkpId: function (event) {
+            var self = this;
+            if (event) {
+                self.ckp_id = event.currentTarget.getAttribute('data-id');
+            }
+        },
+        sendToCkp: function (jenis) {
+            var self = this;
+
+            $('#send_ckp').modal('hide');
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  self.pathname + '/send_to_ckp',
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    form_id_data: self.ckp_id,
+                    jenis: jenis,
+                },
+            }).done(function (data) {
+                $('#wait_progress').modal('hide');
                 window.location.reload(false); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
