@@ -3,12 +3,10 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th class="text-center">Tanggal</th>
-                <th class="text-center">Mulai</th>
-                <th class="text-center">Selesai</th>
+                <th></th>
+                <th class="text-center">Waktu</th>
                 <th class="text-center">Isi</th>
                 <th class="text-center">Hasil</th>
-                <th></th>
             </tr>
         </thead>
 
@@ -23,11 +21,6 @@
                     &nbsp
                     @{{ index+1 }}
                 </td>
-                <td class="text-center">@{{ data.tanggal }}</td>
-                <td class="text-center">@{{ data.waktu_mulai }}</td>
-                <td class="text-center">@{{ data.waktu_selesai }}</td>
-                <td>@{{ data.isi }}</td>
-                <td>@{{ data.hasil }}</td>
                 <td class="text-center">
                     <a v-if="data.ckp_id==null || data.ckp_id==''" href="#" role="button" v-on:click="sendCkpId" 
                             data-toggle="modal" :data-id="data.id" 
@@ -36,6 +29,12 @@
                         <p class='text-muted small'>Jadikan CKP</p>
                     </a>
                 </td>
+                <td class="text-center">
+                    @{{ data.tanggal }}
+                    <p class="text-muted">Pukul: @{{ data.waktu_mulai }} - @{{ data.waktu_selesai }}</p>
+                </td>
+                <td>@{{ data.isi }}</td>
+                <td>@{{ data.hasil }}</td>
             </tr>
         </tbody>
     </table>

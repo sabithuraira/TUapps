@@ -4,201 +4,195 @@
   </div><br />
 @endif
 
-<div class="card">
-    <div class="body">
-             <div class="row clearfix">
-                <div class="col-lg-6 col-md-12 left-box">
-                    <div class="form-group">
-                        <label>Bulan:</label>
+<div class="row clearfix">
+    <div class="col-lg-6 col-md-12 left-box">
+        <div class="form-group">
+            <label>Bulan:</label>
 
-                        <div class="input-group">
-                          <select class="form-control  form-control-sm"  v-model="month" name="month">
-                                @foreach ( config('app.months') as $key=>$value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-12 right-box">
-                    <div class="form-group">
-                        <label>Tahun:</label>
-
-                        <div class="input-group">
-                          <select class="form-control  form-control-sm"  v-model="year" name="year">
-                              @for ($i=2019;$i<=date('Y');$i++)
-                                  <option value="{{ $i }}">{{ $i }}</option>
-                              @endfor
-                          </select>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+                <select class="form-control  form-control-sm"  v-model="month" name="month">
+                    @foreach ( config('app.months') as $key=>$value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
             </div>
-            <input type="hidden" name="total_tambahan" v-model="total_tambahan">
-            <input type="hidden" name="total_utama" v-model="total_utama">
-    <hr/>
-
-    <div>
-        <p class="text-muted font-italic font-weight-lighter float-left">*Isian penilaian hanya dilakukan oleh pimpinan langsung.</p>
-        <button type="submit" class="btn btn-primary float-right">Simpan</button>
+        </div>
     </div>
-    
-    <br/><br/>
-    <section class="datas">
 
-        
-        <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#utama">UTAMA</a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#penilaian">PENILAIAN</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane show active" id="utama">
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered m-b-0">
-                        <thead>
-                            <tr>
-                                <td rowspan="2">No</td>
-                                <td class="text-center" style="width: 60%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
-                                <td class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</td>
-                                
-                                <td class="text-center" colspan="3">Kuantitas</td>
-                                <td class="text-center" rowspan="2">Tingkat Kualitas</td>
+    <div class="col-lg-6 col-md-12 right-box">
+        <div class="form-group">
+            <label>Tahun:</label>
 
-                                <td class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</td>
-                                <td class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</td>
-                                <td class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-center">Target</td>
-                                <td class="text-center">Realisasi</td>
-                                <td class="text-center">%</td>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr><td colspan="10">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
-                            <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
-                                <td>
-                                    <template v-if="is_delete(data.id)">
-                                        <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                                    </template>
-                                    @{{ index+1 }}
-                                </td>
-                                <td><div style="width:300px"></div><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
-                                
-                                <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                                <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                                <td>@{{ data.kualitas }}</td>
-
-                                <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
-                            </tr>
-                            
-                            <tr><td :colspan="10">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
-                            <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
-                                <td class="freeze">
-                                    <template v-if="is_delete(data.id)">
-                                        <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                                    </template>
-                                    @{{ index+1 }}
-                                </td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
-                                
-                                <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                                <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100) }}%</td>
-                                <td>@{{ data.kualitas }}</td>
-
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
-                                <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
-                            </tr>
-
-
-                            <template>
-                                <tr>
-                                    <td colspan="5"><h4>JUMLAH</h4></td>
-                                    <td class="text-center">@{{ total_kuantitas }} %</td>
-                                    <td class="text-center">@{{ total_kualitas }} %</td>
-                                    <td colspan="3"></td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="input-group">
+                <select class="form-control  form-control-sm"  v-model="year" name="year">
+                    @for ($i=2019;$i<=date('Y');$i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </select>
             </div>
-            
-            <div class="tab-pane" id="penilaian">
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered m-b-0">
-                        <thead>
-                            <tr>
-                                <td rowspan="2">No</td>
-                                <td class="text-center" style="width: 60%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
-                                <td class="text-center" colspan="5">Pengukuran</td>
-                                <td class="text-center" rowspan="2">Catatan Koreksi</td>
-                                <td class="text-center" rowspan="2">IKI</td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-center">Kecepatan</td>
-                                <td class="text-center">Ketuntasan</td>
-                                <td class="text-center">Ketepatan</td>
-                                <td class="text-center">rata2</td>
-                                <td class="text-center">Penilaian Pimpinan</td>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr><td colspan="9">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
-                            <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
-                                <td>@{{ index+1 }}</td>
-                                <td><div style="width:300px"></div>@{{ data.uraian }}</td>
-                                <td>@{{ data. kecepatan }}</td>
-                                <td>@{{ data. ketepatan }}</td>
-                                <td>@{{ data. ketuntasan }}</td>
-                                <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
-                                <td>@{{ data.penilaian_pimpinan }}</td>
-                                <td>@{{ data.catatan_koreksi }}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'u_iki'+index">...</button>
-                                    <input type="hidden" :name="'u_iki'+data.id" v-model="data.iki">
-                                    <br/>@{{ data.iki_label }}
-                                </td>
-                            </tr>
-                            
-                            <tr><td colspan="9">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
-                            <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
-                                <td>@{{ index+1 }}</td>
-                                <td>@{{ data.uraian }}</td>
-                                <td>@{{ data. kecepatan }}</td>
-                                <td>@{{ data. ketepatan }}</td>
-                                <td>@{{ data. ketuntasan }}</td>
-                                <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
-                                <td>@{{ data.penilaian_pimpinan }}</td>
-                                <td>@{{ data.catatan_koreksi }}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'t_iki'+index">...</button>
-                                    <input type="hidden" :name="'t_iki'+data.id" v-model="data.iki">
-                                    <br/>@{{ data.iki_label }}
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>    
-    </section>
-  </div>
+        </div>
+    </div>
 </div>
+<input type="hidden" name="total_tambahan" v-model="total_tambahan">
+<input type="hidden" name="total_utama" v-model="total_utama">
+
+<div>
+    <p class="text-muted font-italic font-weight-lighter float-left">*Isian penilaian hanya dilakukan oleh pimpinan langsung.</p>
+    <button type="submit" class="btn btn-primary float-right">Simpan</button>
+</div>
+
+<br/><br/>
+<section class="datas">
+
+    
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#utama">UTAMA</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#penilaian">PENILAIAN</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="utama">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered m-b-0">
+                    <thead>
+                        <tr>
+                            <td rowspan="2">No</td>
+                            <td class="text-center" style="width: 50%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
+                            <td class="text-center" style="width: 15%" rowspan="2">{{ $model->attributes()['satuan'] }}</td>
+                            
+                            <td class="text-center" colspan="3">Kuantitas</td>
+                            <td class="text-center" rowspan="2">Tingkat Kualitas</td>
+
+                            <td class="text-center" rowspan="2">{{ $model->attributes()['kode_butir'] }}</td>
+                            <td class="text-center" rowspan="2">{{ $model->attributes()['angka_kredit'] }}</td>
+                            <td class="text-center" rowspan="2">{{ $model->attributes()['keterangan'] }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-center">Target</td>
+                            <td class="text-center">Realisasi</td>
+                            <td class="text-center">%</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr><td colspan="10">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
+                            <td>
+                                <template v-if="is_delete(data.id)">
+                                    <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                                </template>
+                                @{{ index+1 }}
+                            </td>
+                            <td><div style="width:300px"></div><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
+                            <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
+                            
+                            <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                            <td>@{{ data.kualitas }}</td>
+
+                            <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
+                        </tr>
+                        
+                        <tr><td :colspan="10">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
+                            <td class="freeze">
+                                <template v-if="is_delete(data.id)">
+                                    <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                                </template>
+                                @{{ index+1 }}
+                            </td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
+                            <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
+                            
+                            <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
+                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                            <td>@{{ data.kualitas }}</td>
+
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
+                        </tr>
+
+
+                        <template>
+                            <tr>
+                                <td colspan="5"><h4>JUMLAH</h4></td>
+                                <td class="text-center">@{{ total_kuantitas }} %</td>
+                                <td class="text-center">@{{ total_kualitas }} %</td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-pane" id="penilaian">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered m-b-0">
+                    <thead>
+                        <tr>
+                            <td rowspan="2">No</td>
+                            <td class="text-center" style="width: 60%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
+                            <td class="text-center" colspan="5">Pengukuran</td>
+                            <td class="text-center" rowspan="2">Catatan Koreksi</td>
+                            <td class="text-center" rowspan="2">IKI</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-center">Kecepatan</td>
+                            <td class="text-center">Ketuntasan</td>
+                            <td class="text-center">Ketepatan</td>
+                            <td class="text-center">rata2</td>
+                            <td class="text-center">Penilaian Pimpinan</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr><td colspan="9">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
+                            <td>@{{ index+1 }}</td>
+                            <td><div style="width:300px"></div>@{{ data.uraian }}</td>
+                            <td>@{{ data. kecepatan }}</td>
+                            <td>@{{ data. ketepatan }}</td>
+                            <td>@{{ data. ketuntasan }}</td>
+                            <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
+                            <td>@{{ data.penilaian_pimpinan }}</td>
+                            <td>@{{ data.catatan_koreksi }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'u_iki'+index">...</button>
+                                <input type="hidden" :name="'u_iki'+data.id" v-model="data.iki">
+                                <br/>@{{ data.iki_label }}
+                            </td>
+                        </tr>
+                        
+                        <tr><td colspan="9">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
+                            <td>@{{ index+1 }}</td>
+                            <td>@{{ data.uraian }}</td>
+                            <td>@{{ data. kecepatan }}</td>
+                            <td>@{{ data. ketepatan }}</td>
+                            <td>@{{ data. ketuntasan }}</td>
+                            <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
+                            <td>@{{ data.penilaian_pimpinan }}</td>
+                            <td>@{{ data.catatan_koreksi }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="showIki" :data-idu="'t_iki'+index">...</button>
+                                <input type="hidden" :name="'t_iki'+data.id" v-model="data.iki">
+                                <br/>@{{ data.iki_label }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
+</section>
 
 @include('ckp.modal_iki')
 @include('ckp.modal_addiki')
@@ -549,9 +543,6 @@ var vm = new Vue({
                     p_type: self.type,
                 },
             }).done(function (data) {
-                // window.location = self.pathname+"/print";
-                // $('#cetak').html(data);
-
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -610,5 +601,15 @@ var vm = new Vue({
             font-weight: bold;
             font-size: small;
         }
+
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
     </style>
 @endsection
