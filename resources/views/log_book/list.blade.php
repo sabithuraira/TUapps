@@ -81,8 +81,7 @@
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
-<script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script> <!-- Input Mask Plugin Js --> 
-<script src="{!! asset('lucid/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
 <script>
     
 var vm = new Vue({  
@@ -203,9 +202,7 @@ var vm = new Vue({
 });
 
 $(document).ready(function() {
-    var $demoMaskedInput = $('.demo-masked-input');
-    $demoMaskedInput.find('.time24').inputmask('hh:mm', { placeholder: '__:__ _m', alias: 'time24', hourFormat: '24' });
-    
+     $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
     vm.setDatas();
 });
 
@@ -219,9 +216,16 @@ $('#end').change(function() {
     vm.setDatas();
 });
 
-
 $('#form_tanggal').change(function() {
     vm.form_tanggal = this.value;
+});
+
+$('#form_waktu_mulai').change(function() {
+    vm.form_waktu_mulai = this.value;
+});
+
+$('#form_waktu_selesai').change(function() {
+    vm.form_waktu_selesai = this.value;
 });
 </script>
 @endsection

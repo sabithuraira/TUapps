@@ -27,7 +27,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-clock"></i></span>
                                     </div>
-                                    <input type="time" class="form-control" v-model="form_waktu_mulai" placeholder="12:05 AM">
+                                    <input type="text" class="form-control time24" id="form_waktu_mulai" v-model="form_waktu_mulai" placeholder="Ex: 12:05">
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="icon-clock"></i></span>
                                     </div>
-                                    <input type="time" class="form-control" v-model="form_waktu_selesai" placeholder="12:05 AM">
+                                    <input type="text" class="form-control time24" id="form_waktu_selesai" v-model="form_waktu_selesai" placeholder="Ex: 22:35">
                                 </div>
                             </div>
                         </div>
