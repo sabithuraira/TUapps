@@ -91,6 +91,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $model = \App\User::find($id);
+        $model->delete();
+        return redirect('user')->with('success','Information has been  deleted');
     }
 }
