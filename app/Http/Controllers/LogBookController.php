@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LogBookRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LogBookController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function downloadExcel($tanggal, $unit_kerja)
+    {
+        return Excel::download(new \App\Exports\LogBookExport($tanggal, $unit_kerja), 'log_book.xlsx');
     }
     
     public function dataLogBook(Request $request){
@@ -82,6 +88,25 @@ class LogBookController extends Controller
 
         return view('log_book.index', compact('model', 
             'datas', 'start', 'end'));
+    }
+
+    public function rekap_pegawai(Request $request){
+        $tanggal = date('Y-m-d');
+        $unit_kerja = Auth::user()->kdkab;
+
+        if(strlen($request->get('tanggal'))>0){
+            $tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
+        }
+        
+        if(strlen($request->get('unit_kerja'))>0){
+            $unit_kerja= $request->get('unit_kerja');
+        }
+
+        $model = new \App\LogBook;
+        $datas = $model->RekapPerUnitKerjaPerHari($unit_kerja, $tanggal);
+
+        return view('log_book.rekap_pegawai', compact('model', 'unit_kerja',
+            'tanggal', 'datas'));
     }
 
     public function send_to_ckp(Request $request){

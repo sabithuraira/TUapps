@@ -70,12 +70,16 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('surat_km','SuratKmController');
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
-    Route::resource('log_book','LogBookController');
+
+    //////////////////////////
+    Route::resource('log_book','LogBookController')->except(['show']);
     Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
+    Route::get('log_book/rekap_pegawai', 'LogBookController@rekap_pegawai');
+    Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
 
     //CKP
     Route::resource('ckp','CkpController')->except(['show']);

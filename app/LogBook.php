@@ -19,6 +19,23 @@ class LogBook extends Model
         return $this->hasOne('App\User', 'id', 'user_id');
     }
 
+    //rekap per unit kerja per hari
+    public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal){
+        $sql = "SELECT u.id, u.name, u.nip_baru,
+            GROUP_CONCAT(log_books.isi) isi, 
+            GROUP_CONCAT(log_books.hasil) hasil
+            
+            FROM `users` u 
+            LEFT JOIN log_books ON log_books.user_id=u.email AND  log_books.tanggal='$tanggal'
+            
+            WHERE kdkab = '$unit_kerja'
+            GROUP BY u.id, u.name, u.nip_baru";
+            
+        $result = DB::select(DB::raw($sql));
+        return $result;
+    }
+
+    //rekap per pegawai dalam rentang waktu tertentu
     public function LogBookRekap($start_date, $end_date, $user_id){
         $result = array();
         $datas = array();

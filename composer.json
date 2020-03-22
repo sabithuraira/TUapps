@@ -12,6 +12,7 @@
         "graham-campbell/flysystem": "^5.1",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
+        "maatwebsite/excel": "^3.1",
         "league/flysystem-webdav": "^1.0",
         "spatie/laravel-permission": "^2.30"
     },

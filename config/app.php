@@ -244,4 +244,22 @@ return [
         'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des',
       ],
     'kode_prov' => '16',
+    'unit_kerjas' => [
+        '00' => 'Provinsi Sumatera Selatan',
+        '01' => 'Kabupaten OKU',
+        '02' => 'Kabupaten OKI',
+        '03' => 'Kabupaten Muara Enim',
+        '04' => 'Kabupaten Lahat',
+        '05' => 'Kabupaten Musi Rawas',
+        '06' => 'Kabupaten Musi Banyuasin',
+        '07' => 'Kabupaten Banyuasin',
+        '08' => 'Kabupaten OKU Selatan',
+        '09' => 'Kabupaten OKU Timur',
+        '10' => 'Kabupaten Ogan Ilir',
+        '11' => 'Kabupaten Empat Lawang',
+        '71' => 'Kota Palembang',
+        '72' => 'Kota Prabumulih',
+        '73' => 'Kota Pagaralam',
+        '74' => 'Kota Lubuklinggau',
+    ]
 ];
