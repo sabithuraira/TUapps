@@ -19,8 +19,8 @@
                 <td>{{ $key+1 }} </td>
                 <td>{{ $data->name }}</td>
                 <td>{{ $data->nip_baru }}</td>
-                <td>{{ $data->isi }}</td>
-                <td>{{ $data->hasil }}</td>
+                <td>{!! $data->isi !!}</td>
+                <td>{!! $data->hasil !!}</td>
                 
             </tr>
             @endforeach
