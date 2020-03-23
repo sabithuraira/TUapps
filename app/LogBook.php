@@ -21,15 +21,16 @@ class LogBook extends Model
 
     //rekap per unit kerja per hari
     public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal){
-        $sql = "SELECT u.id, u.name, u.nip_baru,
+        $sql = "SELECT u.id, u.name, u.nip_baru, u.kdorg,
             GROUP_CONCAT(log_books.isi SEPARATOR '<br/>') isi, 
             GROUP_CONCAT(log_books.hasil SEPARATOR '<br/>') hasil
             
             FROM `users` u 
             LEFT JOIN log_books ON log_books.user_id=u.email AND  log_books.tanggal='$tanggal'
             
-            WHERE kdkab = '$unit_kerja'
-            GROUP BY u.id, u.name, u.nip_baru";
+            WHERE kdkab = '$unit_kerja' 
+            GROUP BY u.id, u.name, u.nip_baru, u.kdorg 
+            ORDER by kdorg";
             
         $result = DB::select(DB::raw($sql));
         return $result;
@@ -55,8 +56,8 @@ class LogBook extends Model
                 'user_id'           =>$value->user_id,
                 'tanggal'           =>date('d M Y', strtotime($value->tanggal)),
                 'real_tanggal'      =>date('m/d/Y', strtotime($value->tanggal)),
-                'waktu_mulai'       =>date('h:i', strtotime($value->waktu_mulai)),
-                'waktu_selesai'     =>date('h:i', strtotime($value->waktu_selesai)),
+                'waktu_mulai'       =>date('H:i', strtotime($value->waktu_mulai)),
+                'waktu_selesai'     =>date('H:i', strtotime($value->waktu_selesai)),
                 'isi'               =>$value->isi,
                 'hasil'             =>$value->hasil,
                 'catatan_pimpinan'  =>$value->catatan_pimpinan,
