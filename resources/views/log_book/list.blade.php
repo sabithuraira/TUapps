@@ -121,28 +121,34 @@ var vm = new Vue({
         saveLogBook: function () {
             var self = this;
 
-            $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_mulai.length==0 || self.form_isi.length==0){
+                alert("Pastikan isian tanggal, waku mulai - selesai dan isi telah diisi");
+            }
+            else{
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
-            $.ajax({
-                url :  self.pathname,
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    id: self.form_id,
-                    tanggal: self.form_tanggal,
-                    waktu_mulai: self.form_waktu_mulai,
-                    waktu_selesai: self.form_waktu_selesai, 
-                    isi: self.form_isi, 
-                    hasil: self.form_hasil,
-                },
-            }).done(function (data) {
-                $('#add_logbooks').modal('hide');
-                window.location.reload(false); 
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
+                $.ajax({
+                    url :  self.pathname,
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        id: self.form_id,
+                        tanggal: self.form_tanggal,
+                        waktu_mulai: self.form_waktu_mulai,
+                        waktu_selesai: self.form_waktu_selesai, 
+                        isi: self.form_isi, 
+                        hasil: self.form_hasil,
+                    },
+                }).done(function (data) {
+                    $('#add_logbooks').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            }
         },
         sendCkpId: function (event) {
             var self = this;
