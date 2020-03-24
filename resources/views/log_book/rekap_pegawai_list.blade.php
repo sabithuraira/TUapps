@@ -1,7 +1,7 @@
 <div id="load">
     <br/><br/>
-    <div class="table-responsive-sm">
-        <table class="table table-bordered table-sm">
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered m-b-0">
             <thead>
                 <tr class="text-center">
                     <th>No</th>
@@ -18,7 +18,7 @@
                     <td>{{ $key+1 }} </td>
                     <td>{{ $data->name }}</td>
                     <td>{{ $data->nip_baru }}</td>
-                    <td>{!! $data->isi !!}</td>
+                    <td class="specifictd">{!! $data->isi !!}</td>
                     <td>{!! $data->hasil !!}</td>
                     
                 </tr>

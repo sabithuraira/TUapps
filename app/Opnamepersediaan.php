@@ -102,8 +102,8 @@ class Opnamepersediaan extends Model
         $c_month = date('n');
         $user_id = Auth::id();
 
-        for($y = $year;$y<=$c_year;++$y){
-            if($y==$c_year){
+        for($y = $year;$y<=($c_year+1);++$y){
+            if($y==($c_year+1)){
                 for($m =$month;$m<=$c_month-1;++$m){
                     $next_month = $m + 1;
                     $next_year = $y;

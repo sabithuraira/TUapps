@@ -2,8 +2,7 @@
     <table class="table table-sm table-bordered m-b-0">
         <thead>
             <tr>
-                <th>No</th>
-                <th></th>
+                <th>No</th><th></th>
                 <th class="text-center">Waktu</th>
                 <th class="text-center">Isi</th>
                 <th class="text-center">Hasil</th>
@@ -127,7 +126,6 @@ var vm = new Vue({
                 alert("Pastikan isian tanggal, waku mulai - selesai dan isi telah diisi");
             }
             else{
-                
                 $('#wait_progres').modal('show');
                 $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
