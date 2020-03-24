@@ -79,6 +79,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
     Route::get('log_book/rekap_pegawai', 'LogBookController@rekap_pegawai');
+    Route::get('log_book/destroy_logbook/{id}', 'LogBookController@destroy_logbook');
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
 
     //CKP

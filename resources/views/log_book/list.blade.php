@@ -18,6 +18,8 @@
                             :data-waktu_mulai="data.waktu_mulai" :data-waktu_selesai="data.waktu_selesai" 
                             :data-isi="data.isi" :data-hasil="data.hasil" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
+                    &nbsp;
+                    <a :data-id="data.id" v-on:click="delLogBook(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                     &nbsp
                     @{{ index+1 }}
                 </td>
@@ -150,6 +152,30 @@ var vm = new Vue({
                 });
             }
         },
+
+        delLogBook: function (idnya) {
+            if (confirm('anda yakin mau menghapus data ini?')) {
+                var self = this;
+
+                $('#send_ckp').modal('hide');
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                $.ajax({
+                    url :  self.pathname + '/destroy_logbook/' + idnya,
+                    method : 'get',
+                    dataType: 'json',
+                }).done(function (data) {
+                    $('#wait_progress').modal('hide');
+                    window.location.reload(false); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            }
+        },
+
+
         sendCkpId: function (event) {
             var self = this;
             if (event) {
@@ -209,6 +235,7 @@ var vm = new Vue({
 $(document).ready(function() {
      $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
     vm.setDatas();
+    
 });
 
 $('#start').change(function() {

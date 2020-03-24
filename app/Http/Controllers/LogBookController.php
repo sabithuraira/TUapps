@@ -168,6 +168,13 @@ class LogBookController extends Controller
         return response()->json(['success'=>'Data berhasil ditambah']);
     }
 
+    public function destroy_logbook($id)
+    {
+        $model = \App\LogBook::find($id);
+        $model->delete();
+        return response()->json(['success'=>'Sukses']);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
