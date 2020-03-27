@@ -19,7 +19,7 @@
                         <td>{{$data['nomor_urut']}}</td>
                         <td>
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
-                            <h6 class="margin-0">Perihal: {{$data['perihal']}}</h6>
+                            <h6 class="margin-0" style="wrap-text: true">Perihal: {{$data['perihal']}}</h6>
                             @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
                                 <p class="text-muted">{{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}</p>
                             @endif

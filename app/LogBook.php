@@ -20,10 +20,10 @@ class LogBook extends Model
     }
 
     //rekap per unit kerja per hari
-    public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal){
+    public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal, $separate=' <br/> '){
         $sql = "SELECT u.id, u.name, u.nip_baru, u.kdorg,
-            GROUP_CONCAT(log_books.isi SEPARATOR '<br/>') isi, 
-            GROUP_CONCAT(log_books.hasil SEPARATOR '<br/>') hasil
+            GROUP_CONCAT(log_books.isi SEPARATOR '$separate') isi, 
+            GROUP_CONCAT(log_books.hasil SEPARATOR '$separate') hasil
             
             FROM `users` u 
             LEFT JOIN log_books ON log_books.user_id=u.email AND  log_books.tanggal='$tanggal'

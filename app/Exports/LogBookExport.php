@@ -19,7 +19,7 @@ class LogBookExport implements FromView
     public function view(): View
     {
         $model = new \App\LogBook;
-        $datas = $model->RekapPerUnitKerjaPerHari($this->unit_kerja, $this->tanggal);
+        $datas = $model->RekapPerUnitKerjaPerHari($this->unit_kerja, $this->tanggal, 'bps1600bps');
 
         return view('exports.log_book', [
             'datas' => $datas
