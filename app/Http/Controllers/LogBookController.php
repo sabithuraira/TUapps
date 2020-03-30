@@ -91,22 +91,27 @@ class LogBookController extends Controller
     }
 
     public function rekap_pegawai(Request $request){
-        $tanggal = date('Y-m-d');
-        $unit_kerja = Auth::user()->kdkab;
+        if(strlen(Auth::user()->kdesl)>0 || Auth::user()->hasRole('superadmin')){
+            $tanggal = date('Y-m-d');
+            $unit_kerja = Auth::user()->kdkab;
 
-        if(strlen($request->get('tanggal'))>0){
-            $tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
+            if(strlen($request->get('tanggal'))>0){
+                $tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
+            }
+            
+            if(strlen($request->get('unit_kerja'))>0){
+                $unit_kerja= $request->get('unit_kerja');
+            }
+
+            $model = new \App\LogBook;
+            $datas = $model->RekapPerUnitKerjaPerHari($unit_kerja, $tanggal);
+
+            return view('log_book.rekap_pegawai', compact('model', 'unit_kerja',
+                'tanggal', 'datas'));
         }
-        
-        if(strlen($request->get('unit_kerja'))>0){
-            $unit_kerja= $request->get('unit_kerja');
+        else{
+            abort(403, 'Anda tidak berhak mengakses halaman ini');
         }
-
-        $model = new \App\LogBook;
-        $datas = $model->RekapPerUnitKerjaPerHari($unit_kerja, $tanggal);
-
-        return view('log_book.rekap_pegawai', compact('model', 'unit_kerja',
-            'tanggal', 'datas'));
     }
 
     public function send_to_ckp(Request $request){

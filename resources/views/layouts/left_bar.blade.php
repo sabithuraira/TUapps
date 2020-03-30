@@ -44,7 +44,10 @@
                                 <ul>
                                     <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a></li>
                                     <li class="{{ request()->is('log_book*') ? 'active' : '' }}"><a href="{{ url('log_book') }}">Log Book</a></li>
+                                    
+                                    @if(strlen(auth()->user()->kdesl)>0 || auth()->user()->hasRole('superadmin'))
                                     <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a href="{{ url('log_book/rekap_pegawai') }}">Rekap Kerja Seluruh Pegawai</a></li>
+                                    @endif
                                 </ul>
                             </li>
 
