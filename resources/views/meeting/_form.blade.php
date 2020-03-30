@@ -33,7 +33,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <input type="text" class="form-control datetime {{($errors->first('waktu_mulai') ? ' parsley-error' : '')}}" name="waktu_mulai" value="{{ old('waktu_mulai', date('d-m-Y h:i', strtotime($model->waktu_mulai))) }}"  placeholder="Ex: 30-07-2019 23:59">
+                            <input type="text" class="form-control datetime {{($errors->first('waktu_mulai') ? ' parsley-error' : '')}}" name="waktu_mulai" value="{{ old('waktu_mulai', date('d-m-Y H:i', strtotime($model->waktu_mulai))) }}"  placeholder="Ex: 30-07-2019 23:59">
                         </div>
                         @foreach ($errors->get('waktu_mulai') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
@@ -49,7 +49,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <input type="text" class="form-control datetime {{($errors->first('waktu_selesai') ? ' parsley-error' : '')}}" name="waktu_selesai" value="{{ old('waktu_selesai', date('d-m-Y h:i', strtotime($model->waktu_selesai))) }}"  placeholder="Ex: 30-07-2019 23:59">
+                            <input type="text" class="form-control datetime {{($errors->first('waktu_selesai') ? ' parsley-error' : '')}}" name="waktu_selesai" value="{{ old('waktu_selesai', date('d-m-Y H:i', strtotime($model->waktu_selesai))) }}"  placeholder="Ex: 30-07-2019 23:59">
                             <!-- <input type="text" class="form-control datetime" placeholder="Ex: 30/07/2016 23:59"> -->
                         </div>
 

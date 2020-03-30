@@ -92,8 +92,8 @@ class MeetingController extends Controller
         $model->deskripsi =$request->get('deskripsi');
         $model->notulen =$request->get('notulen');
         $model->keterangan =$request->get('keterangan');
-        $model->waktu_mulai = date('Y-m-d h:i:s', strtotime($request->get('waktu_mulai').':00'));
-        $model->waktu_selesai = date('Y-m-d h:i:s', strtotime($request->get('waktu_selesai').':00'));
+        $model->waktu_mulai = date('Y-m-d H:i:s', strtotime($request->get('waktu_mulai').':00'));
+        $model->waktu_selesai = date('Y-m-d H:i:s', strtotime($request->get('waktu_selesai').':00'));
 
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
@@ -106,8 +106,8 @@ class MeetingController extends Controller
                     $model_peserta->pegawai_id =  $request->get('p_emailau'.$i);
                     $model_peserta->keterangan =  '';
                     $model_peserta->kehadiran =  1;
-                    $model_peserta->created_by =  Auth::id();;
-                    $model_peserta->updated_by =  Auth::id();;
+                    $model_peserta->created_by =  Auth::id();
+                    $model_peserta->updated_by =  Auth::id();
                     $model_peserta->nip_baru =  $request->get('p_nip_baruau'.$i);
                     $model_peserta->name =  $request->get('p_nameau'.$i);
                     $model_peserta->nmjab =  $request->get('p_nmjabau'.$i);
@@ -157,16 +157,46 @@ class MeetingController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
+
+        $total_peserta = $request->get('total_peserta');
         
         $model= \App\Meeting::find($id);
         $model->judul =$request->get('judul');
         $model->deskripsi =$request->get('deskripsi');
         $model->notulen =$request->get('notulen');
         $model->keterangan =$request->get('keterangan');
-        $model->waktu_mulai =$request->get('waktu_mulai');
-        $model->waktu_selesai =$request->get('waktu_selesai');
+        $model->waktu_mulai = date('Y-m-d H:i:s', strtotime($request->get('waktu_mulai').':00'));
+        $model->waktu_selesai = date('Y-m-d H:i:s', strtotime($request->get('waktu_selesai').':00'));
         $model->updated_by=Auth::id();
-        $model->save();
+
+        if($model->save()){
+            $datas = \App\MeetingPeserta::where('meeting_id', '=', $model->id)->get();
+            foreach($datas as $data){
+                if(strlen($request->get('p_keterangan'.$data->id))>0 && strlen($request->get('p_kehadiran'.$data->id))>0){
+                    $model_peserta = \App\MeetingPeserta::find($data->id);
+                    $model_peserta->keterangan =  '';
+                    $model_peserta->kehadiran =  1;
+                    $model_peserta->save();
+                }
+            }
+
+            for($i=1;$i<=$total_peserta;++$i){
+                if(strlen($request->get('p_emailau'.$i))>0 && strlen($request->get('p_nip_baruau'.$i))>0){
+                    $model_peserta = new \App\MeetingPeserta;
+                    $model_peserta->meeting_id =  $model->id;
+                    $model_peserta->pegawai_id =  $request->get('p_emailau'.$i);
+                    $model_peserta->keterangan =  '';
+                    $model_peserta->kehadiran =  1;
+                    $model_peserta->created_by =  Auth::id();
+                    $model_peserta->updated_by =  Auth::id();
+                    $model_peserta->nip_baru =  $request->get('p_nip_baruau'.$i);
+                    $model_peserta->name =  $request->get('p_nameau'.$i);
+                    $model_peserta->nmjab =  $request->get('p_nmjabau'.$i);
+                    $model_peserta->save();
+                }
+            }
+        }
+
         return redirect('meeting');
     }
 

@@ -17,7 +17,7 @@
                     <td class="text-center">
                         <h6 class="margin-0" style="wrap-text: true">{{ $data['judul'] }}</h6>
                         <br/>
-                        <p class="badge badge-info">{{ date('d F Y h:i', strtotime($data['waktu_mulai'])) }} - {{ date('d F Y h:i', strtotime($data['waktu_selesai'])) }}</p>
+                        <p class="badge badge-info">{{ date('d F Y H:i', strtotime($data['waktu_mulai'])) }} - {{ date('d F Y H:i', strtotime($data['waktu_selesai'])) }}</p>
                     </td>
 
                     <td class="text-center"><a href="{{action('MeetingController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
