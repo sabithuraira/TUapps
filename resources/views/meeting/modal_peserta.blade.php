@@ -7,7 +7,17 @@
             <div class="modal-body">
 
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" v-model="keyword_peserta" placeholder="Cari berdasarkan nama pegawai.." v-on:keydown.enter="setDataPeserta">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" v-model="keyword_peserta" placeholder="Cari berdasarkan nama pegawai.." v-on:keydown.enter="setDataPeserta">
+                    </div>
+
+                    <div class="col-md-6">
+                        <select class="form-control  form-control-sm" v-model="kab_peserta" @change="setDataPeserta">
+                            @foreach ( config('app.unit_kerjas') as $key=>$value)
+                                <option value="{{ $key }}">{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <table class="table table-bordered table-sm">

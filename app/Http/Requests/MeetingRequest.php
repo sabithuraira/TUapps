@@ -25,7 +25,7 @@ class MeetingRequest extends FormRequest
     {
         return [
             'judul' => 'required',
-            'deskrispsi' => 'required',
+            'deskripsi' => 'required',
         ];
     }
 

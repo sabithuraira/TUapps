@@ -33,7 +33,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <input type="text" class="form-control datetime {{($errors->first('waktu_mulai') ? ' parsley-error' : '')}}" name="waktu_mulai" value="{{ old('waktu_mulai', $model->waktu_mulai) }}"  placeholder="Ex: 30-07-2019 23:59">
+                            <input type="text" class="form-control datetime {{($errors->first('waktu_mulai') ? ' parsley-error' : '')}}" name="waktu_mulai" value="{{ old('waktu_mulai', date('d-m-Y h:i', strtotime($model->waktu_mulai))) }}"  placeholder="Ex: 30-07-2019 23:59">
                         </div>
                         @foreach ($errors->get('waktu_mulai') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
@@ -49,7 +49,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <input type="text" class="form-control datetime {{($errors->first('waktu_selesai') ? ' parsley-error' : '')}}" name="waktu_selesai" value="{{ old('waktu_selesai', $model->waktu_selesai) }}"  placeholder="Ex: 30-07-2019 23:59">
+                            <input type="text" class="form-control datetime {{($errors->first('waktu_selesai') ? ' parsley-error' : '')}}" name="waktu_selesai" value="{{ old('waktu_selesai', date('d-m-Y h:i', strtotime($model->waktu_selesai))) }}"  placeholder="Ex: 30-07-2019 23:59">
                             <!-- <input type="text" class="form-control datetime" placeholder="Ex: 30/07/2016 23:59"> -->
                         </div>
 
@@ -69,8 +69,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>NIP (Lama/Baru)</th>
                         <th>Nama</th>
+                        <th>NIP</th>
                         <th>Jabatan</th>
                     </tr>
                 </thead>
@@ -78,13 +78,16 @@
                     <tr v-for="(data, index) in rincian_peserta" :key="data.id">
                         <td>
                             <template v-if="is_delete(data.id)">
-                                <a :data-id="data.id" v-on:click="delDataAuditi(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                                <a :data-id="data.id" v-on:click="delDataPeserta(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                            </template>
+                            <template v-if="!is_delete(data.id)">
+                                <a :data-id="data.id" v-on:click="delDataPesertaTemp(index)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                             </template>
                             @{{ index+1 }}
                         </td>
 
-                        <td>@{{ data.email }} / @{{ data.nip_baru }}</td>
                         <td>@{{ data.name }}</td>
+                        <td>@{{ data.nip_baru }}</td>
                         <td>@{{ data.nmjab }}</td>
                         <input type="hidden" :name="'p_email'+data.id" v-model="data.email">
                         <input type="hidden" :name="'p_nip_baru'+data.id" v-model="data.nip_baru">
@@ -115,6 +118,8 @@
         </div>
     </div>
         
+    <input type="hidden" name="total_peserta" v-model="total_peserta">
+
     <hr/>
     <button type="submit" class="btn btn-primary">Simpan</button>
     
@@ -154,6 +159,7 @@
                 list_peserta: [],
                 rincian_peserta: [],
                 keyword_peserta: '',
+                kab_peserta:  {!! json_encode($kd_kab) !!},
             },
             computed: {
                 pathname: function () {
@@ -164,38 +170,38 @@
                 }
             },
             methods: {
-                // setDatas: function(){
-                //     var self = this;
-                //     $('#wait_progres').modal('show');
-                //     $.ajaxSetup({
-                //         headers: {
-                //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                //         }
-                //     })
+                setDatas: function(){
+                    var self = this;
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    })
 
-                //     $.ajax({
-                //         url : self.pathname+"/data_rincian",
-                //         method : 'post',
-                //         dataType: 'json',
-                //         data:{
-                //             id_induk: self.id_induk,
-                //         },
-                //     }).done(function (data) {
-                //         self.rincian = data.datas;
-                //         var selisih = self.total_peserta - self.rincian.length;
+                    $.ajax({
+                        url : self.pathname+"/data_peserta",
+                        method : 'post',
+                        dataType: 'json',
+                        data:{
+                            idnya: self.id_induk,
+                        },
+                    }).done(function (data) {
+                        self.rincian_peserta = data.datas;
+                        // var selisih = self.total_peserta - self.rincian.length;
 
-                //         for(i=1;i<=selisih;++i){
-                //             self.rincian.push({
-                //                 'id': 'au'+(i),
-                //             });
-                //         }
+                        // for(i=1;i<=selisih;++i){
+                        //     self.rincian_peserta.push({
+                        //         'id': 'au'+(i),
+                        //     });
+                        // }
 
-                //         $('#wait_progres').modal('hide');
-                //     }).fail(function (msg) {
-                //         console.log(JSON.stringify(msg));
-                //         $('#wait_progres').modal('hide');
-                //     });
-                // },
+                        $('#wait_progres').modal('hide');
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                    });
+                },
             
                 pilihPeserta: function(event){
                     var self = this;
@@ -233,9 +239,10 @@
                         crossDomain: true,
                         data:{
                             keyword: self.keyword_peserta,
+                            kd_kab: self.kab_peserta,
+
                         },
                     }).done(function (data) {
-                        // console.log(data);
                         self.list_peserta = data.datas;
                         $('#wait_progres').modal('hide');
                         $('#select_peserta').modal('show');
@@ -247,25 +254,25 @@
 
                 delDataPeserta: function (idnya) {
                     var self = this;
-                    
-                    // $('#wait_progres').modal('show');
-                    // $.ajaxSetup({
-                    //     headers: {
-                    //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    //     }
-                    // })
-                    // $.ajax({
-                    //     url : self.pathname+"/" + idnya + "/destroy_rincian/",
-                    //     method : 'delete',
-                    //     dataType: 'json',
-                    // }).done(function (data) {
-                    //     window.location.reload(true);
-
-                    //     $('#wait_progres').modal('hide');
-                    // }).fail(function (msg) {
-                    //     console.log(JSON.stringify(msg));
-                    //     $('#wait_progres').modal('hide');
-                    // });
+                    $('#wait_progres').modal('show');
+                    $.ajax({
+                        url : self.pathname+"/" + idnya + "/destroy_peserta/",
+                        method : 'get',
+                        dataType: 'json',
+                    }).done(function (data) {
+                        window.location.reload(true);
+                        $('#wait_progres').modal('hide');
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                    });
+                },
+            
+                delDataPesertaTemp: function (index) {
+                    var self = this;
+                    $('#wait_progres').modal('show');
+                    self.rincian_peserta.splice(index, 1);
+                    $('#wait_progres').modal('hide');
                 },
             
                 is_delete: function(params){
@@ -285,6 +292,7 @@
         });
 
         $(document).ready(function() {
+            vm.setDatas();
         });
 
         $(function() {

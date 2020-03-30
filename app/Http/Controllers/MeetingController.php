@@ -31,16 +31,30 @@ class MeetingController extends Controller
 
     public function loadPegawai(Request $request){
         $keyword = '';
+        $kd_kab = '00';
 
         if(strlen($request->get('keyword'))>0)
             $keyword = $request->get('keyword');
+            
+        if(strlen($request->get('kd_kab'))>0)
+            $kd_kab = $request->get('kd_kab');
 
-        $model = \App\User::all();
+        $model = \App\User::where('kdkab', '=', $kd_kab)->get();
+
         if(strlen($keyword)>0){
-            $model = \App\User::where('name', 'LIKE', '%' . $keyword . '%')->get();
+            $model = \App\User::where('kdkab', '=', $kd_kab)
+                ->where('name', 'LIKE', '%' . $keyword . '%')->get();
         }
         
         return response()->json(['success'=>'1', 'datas'=>$model]);
+    }
+
+    public function data_peserta(Request $request){
+        $idnya = '';
+        if(strlen($request->get('idnya'))>0) $idnya = $request->get('idnya');
+        $datas = \App\MeetingPeserta::where('meeting_id', '=', $idnya)->get();
+
+        return response()->json(['datas'=>$datas]);
     }
 
     /**
@@ -51,7 +65,10 @@ class MeetingController extends Controller
     public function create()
     {
         $model= new \App\Meeting;
-        return view('meeting.create',compact('model'));
+        $model->waktu_mulai = date('d-m-Y h:i');
+        $model->waktu_selesai = date('d-m-Y h:i');
+        $kd_kab = Auth::user()->kdkab;
+        return view('meeting.create',compact('model', 'kd_kab'));
     }
 
     /**
@@ -67,18 +84,37 @@ class MeetingController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
+        
+        $total_peserta = $request->get('total_peserta');
 
         $model= new \App\Meeting;
         $model->judul =$request->get('judul');
         $model->deskripsi =$request->get('deskripsi');
         $model->notulen =$request->get('notulen');
         $model->keterangan =$request->get('keterangan');
-        $model->waktu_mulai =$request->get('waktu_mulai');
-        $model->waktu_selesai =$request->get('waktu_selesai');
+        $model->waktu_mulai = date('Y-m-d h:i:s', strtotime($request->get('waktu_mulai').':00'));
+        $model->waktu_selesai = date('Y-m-d h:i:s', strtotime($request->get('waktu_selesai').':00'));
 
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
-        $model->save();
+
+        if($model->save()){
+            for($i=1;$i<=$total_peserta;++$i){
+                if(strlen($request->get('p_emailau'.$i))>0 && strlen($request->get('p_nip_baruau'.$i))>0){
+                    $model_peserta = new \App\MeetingPeserta;
+                    $model_peserta->meeting_id =  $model->id;
+                    $model_peserta->pegawai_id =  $request->get('p_emailau'.$i);
+                    $model_peserta->keterangan =  '';
+                    $model_peserta->kehadiran =  1;
+                    $model_peserta->created_by =  Auth::id();;
+                    $model_peserta->updated_by =  Auth::id();;
+                    $model_peserta->nip_baru =  $request->get('p_nip_baruau'.$i);
+                    $model_peserta->name =  $request->get('p_nameau'.$i);
+                    $model_peserta->nmjab =  $request->get('p_nmjabau'.$i);
+                    $model_peserta->save();
+                }
+            }
+        }
         
         return redirect('meeting')->with('success', 'Information has been added');
     }
@@ -103,7 +139,8 @@ class MeetingController extends Controller
     public function edit($id)
     {
         $model = \App\Meeting::find($id);
-        return view('meeting.edit',compact('model','id'));
+        $kd_kab = Auth::user()->kdkab;
+        return view('meeting.edit',compact('model','id', 'kd_kab'));
     }
 
     /**
@@ -144,5 +181,13 @@ class MeetingController extends Controller
         $model = \App\Meeting::find($id);
         $model->delete();
         return redirect('meeting')->with('success','Information has been  deleted');
+    }
+
+    
+    public function destroy_peserta($id)
+    {
+        $model = \App\MeetingPeserta::find($id);
+        $model->delete();
+        return response()->json(['success'=>'Sukses']);
     }
 }

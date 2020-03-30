@@ -99,6 +99,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('meeting','MeetingController');
     Route::post('meeting/load_pegawai','MeetingController@loadPegawai');
+    Route::get('meeting/{id}/destroy_peserta', 'MeetingController@destroy_peserta');
+    Route::post('meeting/data_peserta', 'MeetingController@data_peserta');
 });
 
 Auth::routes();
