@@ -57,6 +57,10 @@
                                 
                                 <div class="input-group">
                                     <select class="form-control  form-control-sm" name="unit_kerja">
+                                        @if(auth()->user()->kdesl==2 || auth()->user()->hasRole('superadmin'))
+                                        <option @if (111 == old('unit_kerja', $unit_kerja))
+                                                selected="selected" @endif value="111">Pimpinan</option>
+                                        @endif
                                         @foreach ( config('app.unit_kerjas') as $key=>$value)
                                             <option @if ($key == old('unit_kerja', $unit_kerja))
                                                     selected="selected" @endif value="{{ $key }}">{{ $value }}</option>
