@@ -114,7 +114,7 @@ class SuratKmController extends Controller
             $first_after = \App\SuratKm::where([
                     ['tanggal', '>', $tanggal],
                     ['jenis_surat', '=', $jenis_surat],
-                    ['nomor_urut', 'regexp', '^[0-9]+$'],
+                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy('nomor_urut', 'asc')
                 ->first();
