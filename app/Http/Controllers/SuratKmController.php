@@ -102,10 +102,11 @@ class SuratKmController extends Controller
             $last_data = \App\SuratKm::where([
                     [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
                     ['jenis_surat', '=', $jenis_surat],
+                    ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy('nomor_urut', 'desc')
                 ->first();
-            
+
             if($last_data!=null) $total = $last_data->nomor_urut + 1;
             else $total = 1;
         }
@@ -113,6 +114,7 @@ class SuratKmController extends Controller
             $first_after = \App\SuratKm::where([
                     ['tanggal', '>', $tanggal],
                     ['jenis_surat', '=', $jenis_surat],
+                    ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy('nomor_urut', 'asc')
                 ->first();

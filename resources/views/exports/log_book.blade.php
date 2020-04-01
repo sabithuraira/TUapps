@@ -31,7 +31,7 @@
                     <tr>
                         <td>{{ $list_isi[$i] }}</td>
                         <td>
-                            @if(count($list_hasil)<$i)
+                            @if(isset($list_hasil[$i]))
                                 {{ $list_hasil[$i] }}
                             @endif
                         </td>
