@@ -121,7 +121,7 @@ class User extends Authenticatable
             ['kdorg', '=', $kdorg],
             ['kdesl', '=', 2], 
             ['kdprop', '=', $this->kdprop], 
-            ['kdkab', '=', $this->kdkab], 
+            // ['kdkab', '=', $this->kdkab], 
         ])->first();
 
         return $bos;

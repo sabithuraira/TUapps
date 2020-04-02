@@ -193,7 +193,7 @@ class CkpController extends Controller
 
                 $model_utama->kode_butir = $request->get('u_kode_butir'.$data->id);
                 $model_utama->angka_kredit = $request->get('u_angka_kredit'.$data->id);
-                $model_utama->keterangan = $request->get('u_kredit'.$data->id);
+                $model_utama->keterangan = $request->get('u_keterangan'.$data->id);
                 
                 // $model_utama->kecepatan = $request->get('u_kecepatan'.$data->id);
                 // $model_utama->ketepatan = $request->get('u_ketepatan'.$data->id);
@@ -217,7 +217,7 @@ class CkpController extends Controller
                 // $model_tambahan->kualitas = $request->get('t_kualitas'.$data->id);
                 $model_tambahan->kode_butir = $request->get('t_kode_butir'.$data->id);
                 $model_tambahan->angka_kredit = $request->get('t_angka_kredit'.$data->id);
-                $model_tambahan->keterangan = $request->get('t_kredit'.$data->id);
+                $model_tambahan->keterangan = $request->get('t_keterangan'.$data->id);
 
                 // $model_tambahan->kecepatan = $request->get('t_kecepatan'.$data->id);
                 // $model_tambahan->ketepatan = $request->get('t_ketepatan'.$data->id);
@@ -252,7 +252,7 @@ class CkpController extends Controller
 
                     $model_utama->kode_butir = $request->get('u_kode_butirau'.$i);
                     $model_utama->angka_kredit = $request->get('u_angka_kreditau'.$i);
-                    $model_utama->keterangan = $request->get('u_kreditau'.$i);
+                    $model_utama->keterangan = $request->get('u_keteranganau'.$i);
 
                     // $model_utama->kecepatan = $request->get('u_kecepatanau'.$i);
                     // $model_utama->ketepatan = $request->get('u_ketepatanau'.$i);
@@ -290,7 +290,7 @@ class CkpController extends Controller
                     
                     $model_tambahan->kode_butir = $request->get('t_kode_butirat'.$i);
                     $model_tambahan->angka_kredit = $request->get('t_angka_kreditat'.$i);
-                    $model_tambahan->keterangan = $request->get('t_kreditat'.$i);
+                    $model_tambahan->keterangan = $request->get('t_keteranganat'.$i);
 
                     // $model_tambahan->kecepatan = $request->get('t_kecepatanat'.$i);
                     // $model_tambahan->ketepatan = $request->get('t_ketepatanat'.$i);
