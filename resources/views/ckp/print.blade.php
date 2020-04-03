@@ -12,27 +12,18 @@
         border-collapse: collapse;
     }
 
-    tr, td{
-        padding-left: 8px;
-    }
+    tr, td{ padding-left: 8px; }
 
-    .table-border{
-        border: 1px solid black;
-    }
+    .table-border{ border: 1px solid black; }
     
-    .table-border td, th{
-        border: 1px solid black;
-
-    }
+    .table-border td, th{ border: 1px solid black; }
 
     tfoot tr td{
         font-weight: bold;
         font-size: x-small;
     }
 
-    .gray {
-        background-color: lightgray
-    }
+    .gray { background-color: lightgray }
 </style>
 
 </head>
@@ -133,7 +124,7 @@
                 $total_ak += $data->angka_kredit;
 
                 if($type==2){
-                    $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
+                    if($data->target_kuantitas>0) $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
                     $total_p_kualitas += $data->kualitas ;
                 }
             @endphp
@@ -145,7 +136,13 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>{{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %</td>
+                    <td>
+                        @if($data->target_kuantitas==0) 
+                            0 %
+                        @else
+                            {{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %
+                        @endif
+                    </td>
                     <td>{{ $data->kualitas }} %</td>
                 @endif
 
@@ -163,7 +160,7 @@
                 $total_ak += $data->angka_kredit;
 
                 if($type==2){
-                    $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
+                    if($data->target_kuantitas>0) $total_p_kuantitas += ($data->realisasi_kuantitas/$data->target_kuantitas*100);
                     $total_p_kualitas += $data->kualitas ;
                 }
             @endphp
@@ -175,7 +172,14 @@
 
                 @if ($type == 2)
                     <td>{{ $data->realisasi_kuantitas }}</td>
-                    <td>{{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %</td>
+                    <td>
+                    
+                        @if($data->target_kuantitas==0) 
+                            0 %
+                        @else
+                            {{ ($data->realisasi_kuantitas/$data->target_kuantitas*100) }} %
+                        @endif
+                    </td>
                     <td>{{ $data->kualitas }} %</td>
                 @endif
 

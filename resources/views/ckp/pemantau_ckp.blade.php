@@ -3,8 +3,8 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item"><a href="{{url('pegawai_anda')}}">Pegawai Anda</a></li>                            
-    <li class="breadcrumb-item">{{ $model->name }}</li>
+    <li class="breadcrumb-item"><a href="{{url('pegawai_anda')}}">Rincian CKP Pegawai</a></li>                            
+    <li class="breadcrumb-item"></li>
 </ul>
 @endsection
 

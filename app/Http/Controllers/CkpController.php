@@ -146,8 +146,8 @@ class CkpController extends Controller
         if(strlen($request->get('p_year'))>0)
             $year = $request->get('p_year');
             
-        if(strlen($request->get('p_type'))>0)
-            $type = $_POST['action'];
+        // if(strlen($request->get('p_type'))>0)
+        $type = $_POST['action'];
             
         if(strlen($request->get('p_user'))>0){
             $user_id = $request->get('p_user');
