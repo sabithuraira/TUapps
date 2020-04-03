@@ -29,7 +29,7 @@
                         <div class="input-group">
                         <select class="form-control  form-control-sm" v-model="ckp_user">
                                 @foreach ($list_user as $key=>$value)
-                                    <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    <option value="{{ $value->email }}">{{ $value->name }}</option>
                                 @endforeach
                             </select>
 
@@ -69,14 +69,24 @@
 
             <div class="profile-header">
                 <div>
-                    <div class="profile-image"> <img src="{!! $model->fotoUrl !!}" width="70" class="rounded-circle" alt=""> </div>
+                    <div class="profile-image"> <img :src="profile.fotoUrl" width="70" class="rounded-circle" alt=""> </div>
                     <div>
-                        <h4 class="m-b-0">{{ $model->name }}</h4>
-                        <p>{{ $model->nmjab }}</p>
+                        <h4 class="m-b-0">@{{ profile.name }}</h4>
+                        <p>@{{ profile.nmjab }}</p>
                     </div>                           
                 </div>
             </div>
 
+            <form action="{{action('CkpController@print')}}" method="post">
+                @csrf 
+                <input type="hidden"  v-model="ckp_month" name="p_month">
+                <input type="hidden"  v-model="ckp_year" name="p_year">
+                <input type="hidden"  v-model="ckp_user" name="p_user">
+                <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak CKP-R &nbsp</button>
+                <span class="float-right">&nbsp &nbsp</span>
+                <button name="action" class="float-right" type="submit" value="1"><i class="icon-printer"></i>&nbsp Cetak CKP-T &nbsp</button>
+            </form>
+            <br/><br/>
 
             <div>
                 <ul class="nav nav-tabs">
@@ -130,11 +140,17 @@ var vm = new Vue({
       kegiatan_tambahan: [],
       ckp_month: parseInt({!! json_encode($month) !!}),
       ckp_year: {!! json_encode($year) !!},
-      ckp_user: {!! json_encode($idnya) !!},
+      ckp_user: {!! json_encode($model->email) !!},
+
+      profile: {
+          'name': {!! json_encode($model->name) !!},
+          'nmjab': {!! json_encode($model->nmjab) !!},
+          'fotoUrl' : {!! json_encode($model->fotoUrl) !!},
+      },
+
       total_utama: 1,
       total_tambahan: 1,
       total_column: 10,
-
 
       datas: [],
       start: {!! json_encode($start) !!},
@@ -183,6 +199,7 @@ var vm = new Vue({
         },
         ckp_user: function (val) {
             this.setDatas();
+            this.setProfile();
         },
     },
     methods: {
@@ -205,9 +222,35 @@ var vm = new Vue({
                     type: 1,
                 },
             }).done(function (data) {
-                // console.log(data);
                 self.kegiatan_utama = data.datas.utama;
                 self.kegiatan_tambahan = data.datas.tambahan;
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        setProfile: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url :  "{{ url('/ckp/data_profile/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    user_id: self.ckp_user,
+                },
+            }).done(function (data) {
+                self.profile = {
+                    'name': data.model.name,
+                    'nmjab': data.model.nmjab,
+                    'fotoUrl' : data.model.fotoUrl,
+                };
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

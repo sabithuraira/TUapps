@@ -47,6 +47,17 @@ class CkpController extends Controller
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
 
+    public function dataProfile(Request $request){
+        $datas=array();
+        $user_id =  Auth::user()->email;
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+            
+        $model = \App\User::where('email', '=', $user_id)->first();
+
+        return response()->json(['success'=>'Sukses', 'model'=>$model]);
+    }
 
     /**
      * Display a listing of the resource.
