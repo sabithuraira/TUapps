@@ -12,4 +12,8 @@ class Meeting extends Model
     {
         return (new \App\Http\Requests\MeetingRequest())->attributes();
     }
+
+    public function getTotalPesertaAttribute(){
+        return \App\MeetingPeserta::where('meeting_id', '=', $this->id)->count();
+    }
 }

@@ -48,6 +48,10 @@
                                     @if(strlen(auth()->user()->kdesl)>0 || auth()->user()->hasRole('superadmin'))
                                     <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a href="{{ url('log_book/rekap_pegawai') }}">Rekap Kerja Seluruh Pegawai</a></li>
                                     @endif
+                                    
+                                    @if(auth()->user()->hasRole('superadmin') ||  auth()->user()->hasRole('kepegawaian'))
+                                    <li class="{{ request()->is('ckp/pemantau_ckp*') ? 'active' : '' }}"><a href="{{ url('ckp/pemantau_ckp') }}">Rinciap CKP Pegawai</a></li>
+                                    @endif
                                 </ul>
                             </li>
 

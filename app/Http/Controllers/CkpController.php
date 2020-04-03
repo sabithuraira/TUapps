@@ -31,8 +31,6 @@ class CkpController extends Controller
         $user_id =  Auth::user()->email;
         $month = date('m');
         $year = date('Y');
-        $type = 1;
-
 
         if(strlen($request->get('user_id'))>0)
             $user_id = $request->get('user_id');
@@ -42,12 +40,9 @@ class CkpController extends Controller
 
         if(strlen($request->get('year'))>0)
             $year = $request->get('year');
-            
-        if(strlen($request->get('type'))>0)
-            $type = $request->get('type');
         
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year, $user_id);
+        $datas = $model->CkpBulanan(1, $month, $year, $user_id);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -78,6 +73,33 @@ class CkpController extends Controller
 
         return view('ckp.index', compact('model', 'month', 
             'year', 'type'));
+    }
+
+    public function pemantau_ckp(Request $request)
+    {
+        $idnya = Auth::id();
+        
+        if(strlen($request->get('idnya'))>0)
+            $year = $request->get('idnya');
+
+        $model = \App\User::find($idnya);
+
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $list_user = \App\User::where('kdkab', '=', Auth::user()->kdkab)
+            ->orderBy('kdorg', 'asc')
+            ->get();
+
+        $ckp = new \App\Ckp;
+
+        $lb_datas=array();
+
+        $start = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."-1 month" ));
+        $end = date('m/d/Y');
+
+        return view('ckp.pemantau_ckp',compact('model','idnya', 'ckp', 'month', 
+            'year', 'start', 'end', 'list_user'));
     }
 
     /**

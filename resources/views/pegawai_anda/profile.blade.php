@@ -123,7 +123,6 @@ var vm = new Vue({
     data:  {
       kegiatan_utama: [],
       kegiatan_tambahan: [],
-      type: 1,
       ckp_month: parseInt({!! json_encode($month) !!}),
       ckp_year: {!! json_encode($year) !!},
       total_utama: 1,
@@ -194,7 +193,7 @@ var vm = new Vue({
                     user_id: {!! json_encode($model->email) !!},
                     month: self.ckp_month, 
                     year: self.ckp_year, 
-                    type: self.type,
+                    type: 1,
                 },
             }).done(function (data) {
                 // console.log(data);

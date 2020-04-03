@@ -36,7 +36,6 @@ class PegawaiAndaController extends Controller
         $datas=array();
         $month = date('m');
         $year = date('Y');
-        $type = 1;
 
         if(strlen($request->get('month'))>0)
             $month = $request->get('month');
@@ -45,7 +44,7 @@ class PegawaiAndaController extends Controller
             $year = $request->get('year');
             
         $model = new \App\Ckp;
-        $datas = $model->CkpBulanan($type, $month, $year, $user->email);
+        $datas = $model->CkpBulanan(1, $month, $year, $user->email);
 
         foreach($datas['utama'] as $data){
             // if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
@@ -84,7 +83,6 @@ class PegawaiAndaController extends Controller
         $datas=array();
         $month = date('m');
         $year = date('Y');
-        $type = 1;
 
         $ckp = new \App\Ckp;
 
@@ -94,7 +92,6 @@ class PegawaiAndaController extends Controller
         $end = date('m/d/Y');
 
         return view('pegawai_anda.profile',compact('model','id', 'ckp', 'month', 
-            'year', 'type',
-            'start', 'end'));
+            'year', 'start', 'end'));
     }
 }

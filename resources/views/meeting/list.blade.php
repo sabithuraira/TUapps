@@ -1,5 +1,5 @@
 <div id="load" class="table-responsive">
-    <table class="table m-b-0">
+    <table class="table table-sm m-b-0 table-bordered">
         @if (count($datas)==0)
             <thead>
                 <tr><th>Tidak ditemukan data</th></tr>
@@ -18,6 +18,8 @@
                         <h6 class="margin-0" style="wrap-text: true">{{ $data['judul'] }}</h6>
                         <br/>
                         <p class="badge badge-info">{{ date('d F Y H:i', strtotime($data['waktu_mulai'])) }} - {{ date('d F Y H:i', strtotime($data['waktu_selesai'])) }}</p>
+                        
+                        <p style="wrap-text: true">Jumlah Peserta: {{ $data['totalPeserta'] }}</p>
                     </td>
 
                     <td class="text-center"><a href="{{action('MeetingController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>

@@ -60,6 +60,11 @@ Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
     Route::post('opname_persediaan/print_kartukendali',array('as'=>'print_kartukendali','uses'=>'OpnamePersediaanController@print_kartukendali'));
 });
 
+
+Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {    
+    Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
+});
+
 Route::group(['middleware' => 'auth'], function(){
     /////////////////JADWAL TUGAS
     Route::resource('jadwal_tugas','JadwalTugasController');
