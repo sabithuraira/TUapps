@@ -34,9 +34,7 @@
 
             <form method="post" action="{{url('pegawai_anda/'.$id.'/store')}}" enctype="multipart/form-data">
                 @csrf
-                
                 <div>
-                
                     <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     <br/>
                     <hr/>
@@ -177,6 +175,21 @@ var vm = new Vue({
         },
     },
     methods: {
+        durasi: function(val1, val2){
+            var timeStart = new Date("01/01/2007 " + val2);
+            var timeEnd = new Date("01/01/2007 " + val1);
+
+            var timeDiff = timeEnd - timeStart;   
+            var minuteDiff = timeDiff/60/1000;
+
+            var num = minuteDiff;
+            var hours = (num / 60);
+            var rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            var rminutes = Math.round(minutes);
+
+            return rhours + " jam " + rminutes + " menit";
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');

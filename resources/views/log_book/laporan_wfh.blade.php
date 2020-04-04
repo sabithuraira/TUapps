@@ -21,54 +21,58 @@
 
       <div class="card">
         <div class="body">
-        
-            <br/><br/>
-          <form action="{{url('log_book/rekap_pegawai')}}" method="get">
             <div class="row clearfix">
-                    @if(auth()->user()->kdesl<=3 || auth()->user()->kdesl<=3 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('kepegawaian'))
-                        <div class="col-lg-6 col-md-12 left-box">
-                            <div class="form-group">
-                                <label>Tanggal:</label>
+                @if(auth()->user()->kdesl==3 || auth()->user()->kdesl==2 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('kepegawaian'))
+                    <div class="col-lg-6 col-md-12 left-box">
+                        <div class="form-group">
+                            <label>Tanggal:</label>
 
-                                <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="{{ date('m/d/Y', strtotime($tanggal)) }}">
-                                    <div class="input-group-append">                                            
-                                        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
-                                    </div>
+                            <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
+                                <input type="text" class="form-control" id="tanggal" name="tanggal" value="{{ date('m/d/Y', strtotime($tanggal)) }}">
+                                <div class="input-group-append">                                            
+                                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="col-lg-6 col-md-12 right-box">
-                            <div class="form-group">
-                                <label>Pegawai:</label>
-                                
-                                <div class="input-group">
-                                    <select class="form-control  form-control-sm" v-model="user_id">
-                                        @foreach ($list_user as $key=>$value)
-                                            <option value="{{ $value->email }}">{{ $value->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                       
+                    </div>
+                    
+                    <div class="col-lg-6 col-md-12 right-box">
+                        <div class="form-group">
+                            <label>Pegawai:</label>
+                            
+                            <div class="input-group">
+                                <select class="form-control  form-control-sm" v-model="user_id">
+                                    @foreach ($list_user as $key=>$value)
+                                        <option value="{{ $value->email }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                    
                         </div>
-                    @else
-                        <div class="col-lg-12 col-md-12 left-box">
-                            <div class="form-group">
-                                <label>Tanggal:</label>
+                    </div>
+                @else
+                    <div class="col-lg-12 col-md-12 left-box">
+                        <div class="form-group">
+                            <label>Tanggal:</label>
 
-                                <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="{{ date('m/d/Y', strtotime($tanggal)) }}">
-                                    <div class="input-group-append">                                            
-                                        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
-                                    </div>
+                            <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
+                                <input type="text" class="form-control" id="tanggal" name="tanggal" value="{{ date('m/d/Y', strtotime($tanggal)) }}">
+                                <div class="input-group-append">                                            
+                                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                 </div>
                             </div>
                         </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
+            </div>
+
+            <form action="{{ action('LogBookController@downloadExcelWfh') }}" method="post">
+                @csrf 
+                <input type="hidden"  v-model="tanggal" name="tanggal">
+                <input type="hidden"  v-model="user_id" name="user_id">
+                <button name="action" class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Cetak Laporan WFH &nbsp</button>
             </form>
+            <br/><br/>
 
           <section class="datas">
             @include('log_book.laporan_wfh_list')
@@ -201,7 +205,6 @@ var vm = new Vue({
     $(document).ready(function() {
         vm.setDatas();
     });
-
     
     $('#tanggal').change(function() {
         vm.tanggal = this.value;

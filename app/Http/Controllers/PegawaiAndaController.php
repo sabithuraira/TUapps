@@ -35,15 +35,26 @@ class PegawaiAndaController extends Controller
         $datas=array();
         $month = date('m');
         $year = date('Y');
+        $start = date('Y-m-d');
+        $end = date('Y-m-d');
 
         if(strlen($request->get('month'))>0)
             $month = $request->get('month');
         
         if(strlen($request->get('year'))>0)
             $year = $request->get('year');
+
+        if(strlen($request->get('start'))>0)
+            $start = date("Y-m-d", strtotime($request->get('start')));
+        
+        if(strlen($request->get('end'))>0)
+            $end = date("Y-m-d", strtotime($request->get('end')));
             
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan(1, $month, $year, $user->email);
+        
+        $model_log_book = new \App\LogBook;
+        $log_books = $model_log_book->LogBookRekap($start, $end, $user_id);
 
         foreach($datas['utama'] as $data){
             // if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
@@ -70,6 +81,14 @@ class PegawaiAndaController extends Controller
                 $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksi'.$data->id);
                 $model_tambahan->save();
             // }
+        }
+
+        foreach($log_books as $data){
+            if(strlen($request->get('u_status_penyelesaian'.$data['id']))>0){
+                $model_lb = \App\LogBook::find($data['id']);
+                $model_lb->status_penyelesaian = $request->get('u_status_penyelesaian'.$data['id']);
+                $model_lb->save();
+            }
         }
         
         return redirect('/pegawai_anda/'.$id.'/profile')->with('success', 'Information has been added');

@@ -18,6 +18,21 @@ class LogBookController extends Controller
     {
         return Excel::download(new \App\Exports\LogBookExport($tanggal, $unit_kerja), 'log_book.xlsx');
     }
+    
+    public function downloadExcelWfh(Request $request)
+    {
+        $user_id = '';
+        $tanggal = date('Y-m-d');
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id =  $request->get('user_id');
+
+        if(strlen($request->get('tanggal'))>0)
+            $tanggal =  date("Y-m-d", strtotime($request->get('tanggal')));
+
+        $name_file = "LapKinWFH-".$user_id.".xlsx";
+        return Excel::download(new \App\Exports\LaporanWfhExport($tanggal, $user_id), $name_file);
+    }
 
     public function laporan_wfh(Request $request)
     {
