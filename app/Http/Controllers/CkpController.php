@@ -89,10 +89,6 @@ class CkpController extends Controller
     public function pemantau_ckp(Request $request)
     {
         $idnya = Auth::id();
-        
-        if(strlen($request->get('idnya'))>0)
-            $year = $request->get('idnya');
-
         $model = \App\User::find($idnya);
 
         $datas=array();

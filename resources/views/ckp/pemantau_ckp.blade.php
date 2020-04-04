@@ -212,7 +212,7 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url :  "{{ url('/ckp/data_ckp/') }}",
+                url :  "{{ url('/ckp/data_ckp') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -239,7 +239,7 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url :  "{{ url('/ckp/data_profile/') }}",
+                url :  "{{ url('/ckp/data_profile') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{

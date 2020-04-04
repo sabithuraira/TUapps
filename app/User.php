@@ -152,7 +152,7 @@ class User extends Authenticatable
             else if($this->kdesl==3){
                 $pegawai = $this::where([
                     [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)],
-                    ['kdstjab', '<>', 3], 
+                    // ['kdstjab', '<>', 3], 
                     ['kdprop', '=', $this->kdprop], 
                     ['kdkab', '=', $this->kdkab], 
                 ])->paginate();

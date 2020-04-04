@@ -68,6 +68,10 @@ class LogBook extends Model
                 'created_by'        =>$value->created_by,
                 'updated_by'        =>$value->updated_by,
                 'ckp_id'            =>$value->ckp_id,
+                'volume'            =>$value->volume,
+                'satuan'            =>$value->satuan,
+                'pemberi_tugas'     =>$value->pemberi_tugas,
+                'status_penyelesaian' =>$value->status_penyelesaian,
             );
         }
 

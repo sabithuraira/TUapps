@@ -5,20 +5,30 @@
                 <b>Log Book</b>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    Tanggal:
-                    <div class="form-line">
-                        <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                            <input type="text" id="form_tanggal" name="tanggal">
-                            <div class="input-group-append">                                            
-                                <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                <input type="hidden" v-model="form_id">
+
+                <div class="row clearfix">
+                    <div class="col-md-6">
+                        Tanggal:
+                        <div class="form-line">
+                            <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
+                                <input type="text" id="form_tanggal" name="tanggal">
+                                <div class="input-group-append">                                            
+                                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <input type="hidden" v-model="form_id">
                     
-                <div class="form-group demo-masked-input">
+                    <div class="col-md-6">
+                        Pemberi tugas:
+                        <div class="form-line">
+                            <input type="text" v-model="form_pemberi_tugas" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                    
+                <div class="demo-masked-input">
                     Waktu mulai - selesai
                     <div class="row clearfix">
                         <div class="col-md-6">
@@ -46,20 +56,32 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    Isi:
-                    <div class="form-line">
-                        <textarea type="text" v-model="form_isi" class="form-control" rows=3></textarea>
+                <div class="row clearfix">
+                    <div class="col-md-6">
+                        Volume:
+                        <div class="form-line">
+                            <input type="text" v-model="form_volume" class="form-control">
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    Hasil:
-                    <div class="form-line">
-                        <textarea type="text" v-model="form_hasil" class="form-control" rows=3></textarea>
+                    
+                    <div class="col-md-6">
+                        Satuan:
+                        <div class="form-line">
+                            <input type="text" v-model="form_satuan" class="form-control">
+                        </div>
                     </div>
                 </div>
 
+                Isi:
+                <div class="form-line">
+                    <textarea type="text" v-model="form_isi" class="form-control" rows=3></textarea>
+                </div>
+            
+                Hasil:
+                <div class="form-line">
+                    <textarea type="text" v-model="form_hasil" class="form-control" rows=3></textarea>
+                </div>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="saveLogBook">SAVE</button>

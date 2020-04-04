@@ -61,7 +61,7 @@
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_kecepatan'+data.id" v-model="data.kecepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'u_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
                         <td><input class="form-control  form-control-sm" type="text" :name="'u_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
                         <td>
@@ -76,7 +76,7 @@
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_kecepatan'+data.id" v-model="data.kecepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_ketepatan'+data.id" v-model="data.ketepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td><input class="form-control  form-control-sm" type="number" :name="'t_penilaian_pimpinan'+data.id" v-model="data.penilaian_pimpinan"></td>
                         <td><input class="form-control  form-control-sm" type="text" :name="'t_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
                         <td>@{{ data.iki }}</td>

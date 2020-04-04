@@ -16,7 +16,6 @@ class PegawaiAndaController extends Controller
         $model = \App\User::where('email', '=', $user_id)->first();
 
         $datas = $model->getPegawaiAnda();
-        // print_r($datas);die();
         // if(count($datas)>0){
             $datas->withPath('pegawai_anda');
             $datas->appends($request->all());

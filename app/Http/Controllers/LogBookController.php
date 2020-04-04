@@ -18,6 +18,18 @@ class LogBookController extends Controller
     {
         return Excel::download(new \App\Exports\LogBookExport($tanggal, $unit_kerja), 'log_book.xlsx');
     }
+
+    public function laporan_wfh(Request $request)
+    {
+        $idnya = Auth::id();
+        $model = \App\User::find($idnya);
+        $tanggal = date('Y-m-d');
+        $list_user = \App\User::where('kdkab', '=', Auth::user()->kdkab)
+            ->orderBy('kdorg', 'asc')
+            ->get();
+
+        return view('log_book.laporan_wfh',compact('idnya', 'model', 'tanggal', 'list_user'));
+    }
     
     public function dataLogBook(Request $request){
         $datas=array();
@@ -125,9 +137,9 @@ class LogBookController extends Controller
             $model_ckp->type    =1;
             $model_ckp->jenis   =$request->jenis;
             $model_ckp->uraian  =$model->isi;
-            $model_ckp->satuan  ='';
-            $model_ckp->target_kuantitas  = 0;
-            $model_ckp->realisasi_kuantitas  = 0;
+            $model_ckp->satuan  =$model->satuan;
+            $model_ckp->target_kuantitas  = $model->volume;
+            $model_ckp->realisasi_kuantitas  = $model->volume;
             $model_ckp->kualitas=0;
             
             $model_ckp->created_by=Auth::id();
@@ -143,34 +155,6 @@ class LogBookController extends Controller
         else{
             return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
         }
-
-        $model->bulan = $request->form_month;
-        $model->tahun = $request->form_year;
-        $model->id_barang = $request->form_id_barang;
-        $model->jumlah_kurang = $request->form_jumlah;
-
-        $model_barang = \App\MasterBarang::find($request->form_id_barang);
-        if($model_barang!=null)
-            $model->harga_kurang = (int)$model_barang->harga_satuan*(int)$request->form_jumlah;
-        else
-            $model->harga_kurang = 0;
-
-        $model_unit_kerja = \App\UnitKerja::where('kode', '=' ,config('app.kode_prov').Auth::user()->kdkab)
-                            ->first();
-        $model->unit_kerja = $model_unit_kerja->id;
-
-        $model->unit_kerja4 = $request->form_unit_kerja;
-        $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
-        $model->created_by=Auth::id();
-        $model->updated_by=Auth::id();
-        if($model->save())
-        {
-            $model_o = new \App\Opnamepersediaan();
-            $model_o->triggerPersediaan($request->form_id_barang, $request->form_month, 
-                    $request->form_year, $model_barang->nama_barang);
-        }
-
-        return response()->json(['success'=>'Data berhasil ditambah']);
     }
 
     public function destroy_logbook($id)
@@ -214,6 +198,9 @@ class LogBookController extends Controller
         $model->waktu_selesai = date("H:i", strtotime($request->get('waktu_selesai')));
         $model->isi = $request->get('isi');
         $model->hasil = $request->get('hasil');
+        $model->volume = $request->get('volume');
+        $model->satuan = $request->get('satuan');
+        $model->pemberi_tugas = $request->get('pemberi_tugas');
         $model->updated_by=Auth::id();
         $model->save();
         

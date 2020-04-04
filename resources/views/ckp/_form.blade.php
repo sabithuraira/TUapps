@@ -92,7 +92,7 @@
                             <td>@{{ data.kualitas }}</td>
 
                             <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
-                            <td><input class="form-control  form-control-sm" type="number" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'u_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
                         </tr>
                         
@@ -113,7 +113,7 @@
                             <td>@{{ data.kualitas }}</td>
 
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
-                            <td><input class="form-control  form-control-sm" type="number" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
+                            <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
                         </tr>
 

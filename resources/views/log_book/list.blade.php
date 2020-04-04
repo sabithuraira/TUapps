@@ -3,9 +3,9 @@
         <thead>
             <tr>
                 <th>No</th><th></th>
-                <th class="text-center">Waktu</th>
-                <th class="text-center">Isi</th>
-                <th class="text-center">Hasil</th>
+                <th class="text-center">Keterangan</th>
+                <th class="text-center">Durasi & waktu</th>
+                <th class="text-center">Isi & Hasil</th>
             </tr>
         </thead>
 
@@ -16,6 +16,8 @@
                             :data-id="data.id" :data-tanggal="data.real_tanggal" 
                             :data-waktu_mulai="data.waktu_mulai" :data-waktu_selesai="data.waktu_selesai" 
                             :data-isi="data.isi" :data-hasil="data.hasil" 
+                            :data-volume="data.volume" :data-satuan="data.satuan" 
+                            :data-pemberi_tugas="data.pemberi_tugas" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
                     &nbsp;
                     <a :data-id="data.id" v-on:click="delLogBook(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
@@ -30,12 +32,23 @@
                         <p class='text-muted small'>Jadikan CKP</p>
                     </a>
                 </td>
+                
                 <td class="text-center">
+                    Pemberi Tugas: @{{ data.pemberi_tugas }}
+                    <p class="text-muted">Volume(satuan): @{{ data.volume }} (@{{ data.satuan }})</p>
+                    <span class="text-muted">Progres: @{{ data.status_penyelesaian }} %</span>
+                </td>
+
+                <td class="text-center">
+                    <span class="badge badge-pill badge-dark">@{{ durasi(data.waktu_selesai, data.waktu_mulai) }}</span>
+                    <br/>
                     @{{ data.tanggal }}
                     <p class="text-muted">Pukul: @{{ data.waktu_mulai }} - @{{ data.waktu_selesai }}</p>
                 </td>
-                <td>@{{ data.isi }}</td>
-                <td>@{{ data.hasil }}</td>
+                <td>
+                    @{{ data.isi }}
+                    <p class="text-muted">Hasil: @{{ data.hasil }}</p>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -92,10 +105,26 @@ var vm = new Vue({
         end: {!! json_encode($end) !!},
         pathname : window.location.pathname,
         form_id: 0, form_tanggal: '', form_waktu_mulai: '', form_waktu_selesai: '',
-        form_isi: '', form_hasil: '',
+        form_isi: '', form_hasil: '', form_volume: '',  form_satuan: '',
+        form_pemberi_tugas: '', 
         ckp_id: 0,
     },
     methods: {
+        durasi: function(val1, val2){
+            var timeStart = new Date("01/01/2007 " + val2);
+            var timeEnd = new Date("01/01/2007 " + val1);
+
+            var timeDiff = timeEnd - timeStart;   
+            var minuteDiff = timeDiff/60/1000;
+
+            var num = minuteDiff;
+            var hours = (num / 60);
+            var rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            var rminutes = Math.round(minutes);
+
+            return rhours + " jam " + rminutes + " menit";
+        },
         addLogBook: function (event) {
             var self = this;
             if (event) {
@@ -105,6 +134,9 @@ var vm = new Vue({
                 self.form_waktu_selesai = '';
                 self.form_isi = '';
                 self.form_hasil = '';
+                self.form_volume = '';
+                self.form_satuan = '';
+                self.form_pemberi_tugas = '';
             }
         },
         updateLogBook: function (event) {
@@ -117,40 +149,52 @@ var vm = new Vue({
                 self.form_waktu_selesai = event.currentTarget.getAttribute('data-waktu_selesai');
                 self.form_isi = event.currentTarget.getAttribute('data-isi');
                 self.form_hasil = event.currentTarget.getAttribute('data-hasil');
+                self.form_volume = event.currentTarget.getAttribute('data-volume');
+                self.form_satuan = event.currentTarget.getAttribute('data-satuan');
+                self.form_pemberi_tugas = event.currentTarget.getAttribute('data-pemberi_tugas');
             }
         },
         saveLogBook: function () {
             var self = this;
 
-            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_mulai.length==0 || self.form_isi.length==0){
-                alert("Pastikan isian tanggal, waku mulai - selesai dan isi telah diisi");
+            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_mulai.length==0 || 
+                self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
+                self.form_pemberi_tugas.length==0){
+                alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
             }
             else{
-                $('#wait_progres').modal('show');
-                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                if(isNaN(self.form_volume)){
+                    alert("Isian 'Volume' harus angka");    
+                }
+                else{
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
-                $.ajax({
-                    url :  self.pathname,
-                    method : 'post',
-                    dataType: 'json',
-                    data:{
-                        id: self.form_id,
-                        tanggal: self.form_tanggal,
-                        waktu_mulai: self.form_waktu_mulai,
-                        waktu_selesai: self.form_waktu_selesai, 
-                        isi: self.form_isi, 
-                        hasil: self.form_hasil,
-                    },
-                }).done(function (data) {
-                    $('#add_logbooks').modal('hide');
-                    window.location.reload(false); 
-                }).fail(function (msg) {
-                    console.log(JSON.stringify(msg));
-                    $('#wait_progres').modal('hide');
-                });
+                    $.ajax({
+                        url :  self.pathname,
+                        method : 'post',
+                        dataType: 'json',
+                        data:{
+                            id: self.form_id,
+                            tanggal: self.form_tanggal,
+                            waktu_mulai: self.form_waktu_mulai,
+                            waktu_selesai: self.form_waktu_selesai, 
+                            isi: self.form_isi, 
+                            hasil: self.form_hasil,
+                            volume: self.form_volume,
+                            satuan: self.form_satuan,
+                            pemberi_tugas: self.form_pemberi_tugas,
+                        },
+                    }).done(function (data) {
+                        $('#add_logbooks').modal('hide');
+                        window.location.reload(false); 
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                    });
+                }  
             }
         },
-
         delLogBook: function (idnya) {
             if (confirm('anda yakin mau menghapus data ini?')) {
                 var self = this;
@@ -172,8 +216,6 @@ var vm = new Vue({
                 });
             }
         },
-
-
         sendCkpId: function (event) {
             var self = this;
             if (event) {
