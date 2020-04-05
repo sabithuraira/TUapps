@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
-    protected $appends = ['fotoUrl'];
+    protected $appends = ['fotoUrl', 'pimpinan'];
 
     /**
      * The attributes that should be hidden for arrays.

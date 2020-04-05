@@ -1,80 +1,37 @@
-
-<style type="text/css">
-    * {
-        font-family: Segoe UI, Arial, sans-serif;
-    }
-    table{
-        font-size: x-small;
-        border-collapse: collapse;
-    }
-
-    tr, td{
-        padding-left: 4px;
-    }
-
-    .table-border{
-        border: 1px solid black;
-    }
-    
-    .table-border td, th{
-        border: 1px solid black;
-
-    }
-
-    tfoot tr td{
-        font-weight: bold;
-        font-size: x-small;
-    }
-
-    .gray {
-        background-color: lightgray
-    }
-</style>
-
 <table>
-    <tbody>
-        <tr class="text-center">
-            <th colspan="7"><h1>LAPORAN PELAKSANAN TUGAS HARIAN SELAMA PERIODE WORK FROM HOME</h1></th>
-        </tr>
-        
-        <tr>
-            <td colspan="2">NAMA</td>
-            <td colspan="2">: {{ $user->name }}</td>
-        </tr>
-        
-        <tr>
-            <td colspan="2">UNIT KERJA</td>
-            <td colspan="2">: {{ $user->nmorg }} {{ $user->nmwil }}</td>
-        </tr>
-        
-        <tr>
-            <td colspan="2">TANGGAL</td>
-            <td colspan="2">: {{ date('d M Y', strtotime($tanggal)) }}</td>
-        </tr>
-    </tbody>
     <thead>
         <tr>
-            <th rowspan="2">NO</th>
-            <th rowspan="2">DESKRIPSI PEKERJAAN/PENUGASAN</th>
-            <th colspan="2">KUANTITAS</th>
-            <th rowspan="2">DURASI WAKTU PENGERJAAN</th>
-            <th rowspan="2">PEMBERI TUGAS</th>
-            <th rowspan="2">STATUS PENYELESAIAN</th>
+            <th colspan="7" style="text-align:center;font-weight:bold">LAPORAN PELAKSANAN TUGAS HARIAN SELAMA PERIODE WORK FROM HOME</th>
         </tr>
         
-        <tr class="text-center">
-            <th>VOLUME</th>
-            <th>SATUAN</th>
+        <tr>@for ($j = 0; $j < 7; $j++)<th></th>@endfor</tr>
+        
+        <tr><th colspan="7">NAMA : {{ $user->name }}</th></tr>
+        <tr><th colspan="7">UNIT KERJA : {{ $user->nmorg }} {{ $user->nmwil }}</th></tr>
+        <tr><th colspan="7">TANGGAL : {{ date('d M Y', strtotime($tanggal)) }}</th></tr>
+        
+        <tr>
+            <th rowspan="2" style="font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">NO</th>
+            <th rowspan="2" style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">DESKRIPSI PEKERJAAN/PENUGASAN</th>
+            <th colspan="2" style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">KUANTITAS</th>
+            <th rowspan="2" style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">DURASI WAKTU PENGERJAAN</th>
+            <th rowspan="2" style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">PEMBERI TUGAS</th>
+            <th rowspan="2" style="font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">STATUS PENYELESAIAN</th>
         </tr>
         
         <tr>
-            <th>[1]</th>
-            <th>[2]</th>
-            <th>[3]</th>
-            <th>[4]</th>
-            <th>[5]</th>
-            <th>[6]</th>
-            <th>[7]</th>
+            <th style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">VOLUME</th>
+            <th style="text-align:center;font-weight:bold;border:1px solid #000000;background-color:#A9A9A9">SATUAN</th>
+        </tr>
+        
+        <tr>
+            <th style="text-align:center;border:1px solid #000000">[1]</th>
+            <th style="text-align:center;border:1px solid #000000">[2]</th>
+            <th style="text-align:center;border:1px solid #000000">[3]</th>
+            <th style="text-align:center;border:1px solid #000000">[4]</th>
+            <th style="text-align:center;border:1px solid #000000">[5]</th>
+            <th style="text-align:center;border:1px solid #000000">[6]</th>
+            <th style="text-align:center;border:1px solid #000000">[7]</th>
         </tr>
     </thead>
 
@@ -86,14 +43,50 @@
                 $selisih_time = round(abs($selesai_time - $mulai_time) / 60,2)." menit";
             @endphp
             <tr>
-                <td>{{ $key+1 }}</td>
-                <td>{{ $data['isi'] }}</td>
-                <td>{{ $data['volume'] }}</td>
-                <td>{{ $data['satuan'] }}</td>
-                <td>{{ $selisih_time }}</td>
-                <td>{{ $data['pemberi_tugas'] }}</td>
-                <td>{{ $data['status_penyelesaian'] }} %</td>
+                <td style="text-align:center;border:1px solid #000000">{{ $key+1 }}</td>
+                <td style="border:1px solid #000000">{{ $data['isi'] }}</td>
+                <td style="text-align:center;border:1px solid #000000">{{ $data['volume'] }}</td>
+                <td style="border:1px solid #000000">{{ $data['satuan'] }}</td>
+                <td style="text-align:center;border:1px solid #000000">{{ $selisih_time }}</td>
+                <td style="text-align:center;border:1px solid #000000">{{ $data['pemberi_tugas'] }}</td>
+                <td style="text-align:center;border:1px solid #000000">{{ $data['status_penyelesaian'] }} %</td>
             </tr>
         @endforeach
+
+        <tr><td colspan="7" style="font-size:9px">Jumlah Baris Disesuaikan dengan kebutuhan</td></tr>
+        <tr><td colspan="7" style="font-size:9px">Kolom (3) dan (4) : Dokumen/Berkas/Responden/Tabel dll.</td></tr>
+        <tr><td colspan="7" style="font-size:9px">Kolom (5) : Jam/Hari</td></tr>
+        <tr><td colspan="7" style="font-size:9px">Kolom (7) : Diisi oleh Atasan Langsung dalam bentuk % thd target harian</td></tr>
+        
+        @for ($i = 0; $i < 2; $i++)
+            <tr>
+                @for ($j = 0; $j < 7; $j++)
+                    <th></th>
+                @endfor
+            </tr>
+        @endfor
+
+        <tr>
+            <td colspan="4" style="text-align:center">Atasan Langsung (sebut jabatannya)</td>
+            <td colspan="3" style="text-align:center">Lokasi Tugas, tanggal tanda tangan</td>
+        </tr>
+
+        @for ($i = 0; $i < 2; $i++)
+            <tr>
+                @for ($j = 0; $j < 7; $j++)
+                    <th></th>
+                @endfor
+            </tr>
+        @endfor
+        
+        <tr>
+            <td colspan="4" style="text-align:center">{{ $user->pimpinan->name }}</td>
+            <td colspan="3" style="text-align:center">{{ $user->name }}</td>
+        </tr>
+        
+        <tr>
+            <td colspan="4" style="text-align:center">NIP. {{ $user->pimpinan->nip_baru }}</td>
+            <td colspan="3" style="text-align:center">NIP. {{ $user->nip_baru }}</td>
+        </tr>
     </tbody>
 </table>
