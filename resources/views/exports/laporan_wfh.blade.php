@@ -67,8 +67,8 @@
         @endfor
 
         <tr>
-            <td colspan="4" style="text-align:center">Atasan Langsung (sebut jabatannya)</td>
-            <td colspan="3" style="text-align:center">Lokasi Tugas, tanggal tanda tangan</td>
+            <td colspan="4" style="text-align:center">{{ $user->pimpinan->nmjab }}</td>
+            <td colspan="3" style="text-align:center">Lokasi Tugas, tanggal</td>
         </tr>
 
         @for ($i = 0; $i < 2; $i++)

@@ -86,7 +86,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('log_book/rekap_pegawai', 'LogBookController@rekap_pegawai');
     Route::get('log_book/destroy_logbook/{id}', 'LogBookController@destroy_logbook');
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
-    Route::get('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
     Route::post('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
 

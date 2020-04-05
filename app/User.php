@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 
     ];
 
     protected $appends = ['fotoUrl', 'pimpinan'];
@@ -33,13 +33,18 @@ class User extends Authenticatable
     ];
 
     public function getFotoUrlAttribute(){
-        $nip_id = substr($this->email, -5);
-        // $nip_id = '10080'; //10080 55914
-        if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
-            return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
+        if(strlen($this->foto)>0){
+            return "https://community.bps.go.id/images/avatar/".$this->foto; 
         }
         else{
-            return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+            $nip_id = substr($this->email, -5);
+            // $nip_id = '10080'; //10080 55914
+            if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
+            }
+            else{
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+            }
         }
     }
 
