@@ -240,7 +240,6 @@
                         data:{
                             keyword: self.keyword_peserta,
                             kd_kab: self.kab_peserta,
-
                         },
                     }).done(function (data) {
                         self.list_peserta = data.datas;

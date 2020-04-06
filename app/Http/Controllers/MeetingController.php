@@ -31,7 +31,7 @@ class MeetingController extends Controller
 
     public function loadPegawai(Request $request){
         $keyword = '';
-        $kd_kab = '00';
+        $kd_kab = Auth::user()->kdkab;
 
         if(strlen($request->get('keyword'))>0)
             $keyword = $request->get('keyword');

@@ -51,7 +51,7 @@ class LogBook extends Model
                 ['log_books.tanggal', '<=', $end_date],
                 ['log_books.user_id', '=', $user_id],
             ])
-            ->orderBy('log_books.tanggal')
+            ->orderBy('log_books.tanggal', 'desc')
             ->get();
 
         foreach($datas as $key=>$value){
