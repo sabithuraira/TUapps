@@ -49,7 +49,8 @@
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                        <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                        <td>@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                          
                         <td class="text-center">@{{ data.kualitas }} %</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
@@ -63,7 +64,7 @@
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                        <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                        <td>@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
                         <td class="text-center">@{{ data.kualitas }} %</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
@@ -190,18 +191,33 @@ var vm = new Vue({
     computed: {
         total_kuantitas: function(){
             var result = 0;
+            var jumlah_kegiatan=0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined') 
-                    result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
+                    if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{
+                        result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                    }
+                    jumlah_kegiatan++;
+                }
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
-                    result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
+                    if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{           
+                        result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                    }
+                    jumlah_kegiatan++;
+                }
             }
-
-            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
+            
+            return parseFloat(result/jumlah_kegiatan).toFixed(2);
         },
         total_kualitas: function(){
             var result = 0;

@@ -141,13 +141,11 @@ var vm = new Vue({
       ckp_month: parseInt({!! json_encode($month) !!}),
       ckp_year: {!! json_encode($year) !!},
       ckp_user: {!! json_encode($model->email) !!},
-
       profile: {
           'name': {!! json_encode($model->name) !!},
           'nmjab': {!! json_encode($model->nmjab) !!},
           'fotoUrl' : {!! json_encode($model->fotoUrl) !!},
       },
-
       total_utama: 1,
       total_tambahan: 1,
       total_column: 10,
@@ -163,13 +161,25 @@ var vm = new Vue({
             var result = 0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined') 
-                    result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
+                    if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{
+                        result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                    }
+                }
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined')
-                    result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
+                    if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{           
+                        result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                    }
+                }
             }
 
             return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);

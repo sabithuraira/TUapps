@@ -33,7 +33,8 @@
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                        <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                        <td>@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                        
                         <td>@{{ data.kualitas }} %</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
@@ -47,7 +48,7 @@
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
-                        <td class="text-center">@{{ (data.realisasi_kuantitas/data.target_kuantitas)*100 }} %</td>
+                        <td>@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
                         <td>@{{ data.kualitas }} %</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>

@@ -164,9 +164,21 @@ class LogBookController extends Controller
             $model_ckp->type    =1;
             $model_ckp->jenis   =$request->jenis;
             $model_ckp->uraian  =$model->isi;
-            $model_ckp->satuan  =$model->satuan;
-            $model_ckp->target_kuantitas  = $model->volume;
-            $model_ckp->realisasi_kuantitas  = $model->volume;
+
+            if($model->satuan==null || strlen($model->satuan)==0)
+                $model_ckp->satuan = '';
+            else
+                $model_ckp->satuan  =$model->satuan;
+                
+            if($model->volume==null || strlen($model->volume)==0){
+                $model_ckp->target_kuantitas = 0;
+                $model_ckp->realisasi_kuantitas = 0;
+            }
+            else{
+                $model_ckp->target_kuantitas  =$model->volume;
+                $model_ckp->realisasi_kuantitas  =$model->volume;
+            }
+
             $model_ckp->kualitas=0;
             
             $model_ckp->created_by=Auth::id();

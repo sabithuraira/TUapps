@@ -88,7 +88,7 @@
                             <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                             
                             <td><input class="form-control  form-control-sm" type="number" :name="'u_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) ) }}%</td>
                             <td>@{{ data.kualitas }}</td>
 
                             <td><input class="form-control  form-control-sm" type="text" :name="'u_kode_butir'+data.id" v-model="data.kode_butir"></td>
@@ -109,14 +109,13 @@
                             <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                             
                             <td><input class="form-control  form-control-sm" type="number" :name="'t_realisasi_kuantitas'+data.id" v-model="data.realisasi_kuantitas"></td>
-                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
+                            <td>@{{ (typeof data.target_kuantitas == 'undefined') ? 0 : (((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) ) }}%</td>
                             <td>@{{ data.kualitas }}</td>
 
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_kode_butir'+data.id" v-model="data.kode_butir"></td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_angka_kredit'+data.id" v-model="data.angka_kredit"></td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_keterangan'+data.id" v-model="data.keterangan"></td>
                         </tr>
-
 
                         <template>
                             <tr>
@@ -236,18 +235,28 @@ var vm = new Vue({
 
             for(i=0;i<this.kegiatan_utama.length;++i){
                 if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
-                    result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                    if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{
+                        result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+                    }
                     jumlah_kegiatan++;
                 }
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
                 if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
-                    result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                    if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
+                        result+=100;
+                    }
+                    else{           
+                        result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+                    }
                     jumlah_kegiatan++;
                 }
             }
-
+            
             return parseFloat(result/jumlah_kegiatan).toFixed(2);
         },
         total_kualitas: function(){
@@ -289,6 +298,17 @@ var vm = new Vue({
             if(typeof val3 == 'undefined') val3 = 0;
 
             return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
+        },
+        persenKuantitas: function(target, realisasi){
+            if(typeof target == 'undefined'){
+                return 0;
+            }
+            else if((realisasi/target)>1){
+                return 100;
+            }
+            else{
+                return (realisasi/target*100).toFixed(1)
+            }
         },
         is_delete: function(params){
             if(isNaN(params)) return false;

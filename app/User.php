@@ -33,11 +33,19 @@ class User extends Authenticatable
     ];
 
     public function getFotoUrlAttribute(){
+        $nip_id = substr($this->email, -5);
         if(strlen($this->foto)>0){
-            return "https://community.bps.go.id/images/avatar/".$this->foto; 
+            if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
+                return "https://community.bps.go.id/images/avatar/".$this->foto; 
+            }
+            else if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
+            }
+            else{
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+            }
         }
         else{
-            $nip_id = substr($this->email, -5);
             // $nip_id = '10080'; //10080 55914
             if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
                 return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
@@ -107,6 +115,9 @@ class User extends Authenticatable
                 if($bos!=null) return $bos;
                 else return $this->getBosRI();
             }
+            else if($this->kdesl==2){
+                return $this->getBosRI();
+            }
         }
     }
 
@@ -138,6 +149,7 @@ class User extends Authenticatable
         $bos = new User;
         $bos->name = 'Dr. Suhariyanto';
         $bos->nip_baru = '196106151983121001';
+        $bos->nmjab = 'Kepala Badan Pusat Statistik';
 
         return $bos;
     }
