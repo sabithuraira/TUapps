@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Meeting extends Model
 {
     protected $table = 'meeting';
+    
+    protected $appends = ['totalPeserta'];
 
     public function attributes()
     {

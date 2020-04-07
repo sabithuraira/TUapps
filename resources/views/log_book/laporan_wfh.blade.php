@@ -70,7 +70,7 @@
                 @csrf 
                 <input type="hidden"  v-model="tanggal" name="tanggal">
                 <input type="hidden"  v-model="user_id" name="user_id">
-                <button name="action" class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Cetak Laporan WFH &nbsp</button>
+                <button name="action" class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Unduh Laporan WFH &nbsp</button>
             </form>
             <br/><br/>
 

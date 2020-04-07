@@ -104,7 +104,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
 
-    Route::resource('meeting','MeetingController');
+    Route::resource('meeting','MeetingController')->except(['show']);
+    Route::get('meeting/{id}/detail','MeetingController@detail');
+    Route::get('meeting/kalender','MeetingController@kalender');
     Route::post('meeting/load_pegawai','MeetingController@loadPegawai');
     Route::get('meeting/{id}/destroy_peserta', 'MeetingController@destroy_peserta');
     Route::post('meeting/data_peserta', 'MeetingController@data_peserta');

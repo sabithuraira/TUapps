@@ -32,17 +32,14 @@ class MeetingController extends Controller
     public function kalender(Request $request)
     {
         $keyword = $request->get('search');
-        $datas = \App\Meeting::where('judul', 'LIKE', '%' . $keyword . '%')
-            ->paginate();
+        $cur_date = date('Y-m-d');
+        $datas = \App\Meeting::whereYear('waktu_mulai','=',date('Y'))
+            ->whereYear('waktu_selesai', '=', date('Y'), 'or')
+            ->orderBy('waktu_mulai')
+            ->get();
 
-        $datas->withPath('meeting');
-        $datas->appends($request->all());
-
-        if ($request->ajax()) {
-            return \Response::json(\View::make('meeting.list', array('datas' => $datas))->render());
-        }
-
-        return view('meeting.kalender',compact('datas', 'keyword'));
+        return view('meeting.kalender',compact('datas', 'keyword',
+            'cur_date'));
     }
 
     public function loadPegawai(Request $request){
@@ -109,6 +106,9 @@ class MeetingController extends Controller
         $total_peserta = $request->get('total_peserta');
 
         $model= new \App\Meeting;
+        
+        $model->kdprop =Auth::user()->kdprop;
+        $model->kdkab =Auth::user()->kdkab;
         $model->judul =$request->get('judul');
         $model->deskripsi =$request->get('deskripsi');
         $model->notulen =$request->get('notulen');
@@ -147,9 +147,12 @@ class MeetingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function detail($id)
+    {     
+        $model = \App\Meeting::find($id);
+        $kd_kab = Auth::user()->kdkab;
+        $rincian_peserta = \App\MeetingPeserta::where('meeting_id', '=', $id)->get();
+        return view('meeting.detail',compact('model','id', 'kd_kab', 'rincian_peserta'));
     }
 
     /**

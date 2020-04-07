@@ -63,7 +63,8 @@
                             <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
                                 <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Rapat/Pertemuan</span></a>
                                 <ul>                                  
-                                    <li class="{{ request()->is('meeting*') ? 'active' : '' }}"><a href="{{url('meeting')}}">Daftar</a></li>
+                                    <li class="{{ request()->is('meeting') ? 'active' : '' }}"><a href="{{url('meeting')}}">Daftar</a></li>
+                                    <li class="{{ request()->is('meeting/kalender') ? 'active' : '' }}"><a href="{{url('meeting/kalender')}}">Kalender</a></li>
                                 </ul>
                             </li>
 

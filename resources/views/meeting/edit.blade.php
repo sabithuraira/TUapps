@@ -4,7 +4,7 @@
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
     <li class="breadcrumb-item"><a href="{{url('meeting')}}">Rapat/Pertemuan</a></li>                            
-    <li class="breadcrumb-item">{{ $model->nama }}</li>
+    <li class="breadcrumb-item">{{ $model->judul }}</li>
 </ul>
 @endsection
 

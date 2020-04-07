@@ -22,7 +22,7 @@
                     </td>
 
                     <td class="text-center">
-                        <a href="{{ action('MeetingController@show', $data['id']) }}"><i class="icon-magnifier text-info"></i></a>
+                        <a href="{{ action('MeetingController@detail', $data['id']) }}"><i class="icon-magnifier text-info"></i></a>
                     </td>
                     
                     <td class="text-center">
