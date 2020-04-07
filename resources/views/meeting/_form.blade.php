@@ -205,21 +205,12 @@
                         },
                     }).done(function (data) {
                         self.rincian_peserta = data.datas;
-                        // var selisih = self.total_peserta - self.rincian.length;
-
-                        // for(i=1;i<=selisih;++i){
-                        //     self.rincian_peserta.push({
-                        //         'id': 'au'+(i),
-                        //     });
-                        // }
-
                         $('#wait_progres').modal('hide');
                     }).fail(function (msg) {
                         console.log(JSON.stringify(msg));
                         $('#wait_progres').modal('hide');
                     });
                 },
-            
                 pilihPeserta: function(event){
                     var self = this;
                     if (event) {
@@ -243,11 +234,6 @@
                     $('#select_peserta').modal('hide');
                     $('#wait_progres').modal('show');
 
-
-                    
-                    // $('#wait_progres').modal('hide');
-                    // $('#select_peserta').modal('show');
-                    
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -272,7 +258,6 @@
                         $('#wait_progres').modal('hide');
                     });
                 },
-
                 delDataPeserta: function (idnya) {
                     var self = this;
                     $('#wait_progres').modal('show');
@@ -288,14 +273,12 @@
                         $('#wait_progres').modal('hide');
                     });
                 },
-            
                 delDataPesertaTemp: function (index) {
                     var self = this;
                     $('#wait_progres').modal('show');
                     self.rincian_peserta.splice(index, 1);
                     $('#wait_progres').modal('hide');
                 },
-            
                 is_delete: function(params){
                     if(isNaN(params)) return false;
                     else return true;

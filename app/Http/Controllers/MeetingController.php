@@ -150,9 +150,14 @@ class MeetingController extends Controller
     public function detail($id)
     {     
         $model = \App\Meeting::find($id);
-        $kd_kab = Auth::user()->kdkab;
-        $rincian_peserta = \App\MeetingPeserta::where('meeting_id', '=', $id)->get();
-        return view('meeting.detail',compact('model','id', 'kd_kab', 'rincian_peserta'));
+        if($model->is_secret==1 && !$model->isPeserta){
+            abort(403, 'Anda tidak berhak mengakses halaman ini');
+        }
+        else{
+            $kd_kab = Auth::user()->kdkab;
+            $rincian_peserta = \App\MeetingPeserta::where('meeting_id', '=', $id)->get();
+            return view('meeting.detail',compact('model','id', 'kd_kab', 'rincian_peserta'));
+        }
     }
 
     /**
@@ -164,8 +169,13 @@ class MeetingController extends Controller
     public function edit($id)
     {
         $model = \App\Meeting::find($id);
-        $kd_kab = Auth::user()->kdkab;
-        return view('meeting.edit',compact('model','id', 'kd_kab'));
+        if($model->created_by==Auth::id()){
+            $kd_kab = Auth::user()->kdkab;
+            return view('meeting.edit',compact('model','id', 'kd_kab'));
+        }
+        else{
+            abort(403, 'Anda tidak berhak mengakses halaman ini');
+        }
     }
 
     /**
@@ -234,10 +244,15 @@ class MeetingController extends Controller
     public function destroy($id)
     {
         $model = \App\Meeting::find($id);
-        $model->delete();
-        return redirect('meeting')->with('success','Information has been  deleted');
+        if($model->created_by==Auth::id()){
+            $model = \App\Meeting::find($id);
+            $model->delete();
+            return redirect('meeting')->with('success','Information has been  deleted');
+        }
+        else{
+            abort(403, 'Anda tidak berhak mengakses halaman ini');
+        }
     }
-
     
     public function destroy_peserta($id)
     {

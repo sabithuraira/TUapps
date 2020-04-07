@@ -28,29 +28,19 @@
                 <div class="tab-pane show active" id="data">
                     <div class="form-group">
                         <label>{{ $model->attributes()['deskripsi']}}:</label>
-                        <blockquote>
-                            <p class="blockquote blockquote-primary">
-                                {!! $model->deskripsi !!}
-                            </p>        
-                        </blockquote>
+                        {!! $model->deskripsi !!}
                     </div>
 
+                    <hr/>                        
                     <div class="form-group">
                         <label>{{ $model->attributes()['notulen']}}:</label>
-                        <blockquote>
-                            <p class="blockquote blockquote-primary">
-                                {!! $model->notulen !!}
-                            </p>        
-                        </blockquote>
+                        {!! $model->notulen !!}
                     </div>
 
+                    <hr/>
                     <div class="form-group">
                         <label>{{ $model->attributes()['keterangan']}}:</label>
-                        <blockquote>
-                            <p class="blockquote blockquote-primary">
-                                {!! $model->keterangan !!}
-                            </p>        
-                        </blockquote>
+                        {!! $model->keterangan !!}
                     </div>
 
                 </div>
