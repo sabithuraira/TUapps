@@ -25,18 +25,18 @@
                         <tr class="text-center">
                             <th></th>
                             <th>No</th>
-                            <th>NIP (Lama/Baru)</th>
+                            <th>NIP</th>
                             <th>Nama</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(data, index) in list_peserta" :key="data.id" style="word-break: break-all;">
+                        <tr v-for="(data, index) in list_peserta" :key="data.email" style="word-break: break-all;">
                             <td>
                                 <a href="#" role="button" class="btn-org" :data-index="index"
                                     v-on:click="pilihPeserta"><i class="fa fa-plus-circle"></i> </a>
                             </td>
                             <td>@{{ index+1 }}</td>
-                            <td>@{{ data.email }} / @{{ data.nip_baru }}</td>
+                            <td>@{{ data.nip_baru }}</td>
                             <td>@{{ data.name }}</td>
                         </tr>
                     </tbody>

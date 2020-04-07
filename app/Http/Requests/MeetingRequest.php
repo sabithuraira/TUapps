@@ -42,6 +42,7 @@ class MeetingRequest extends FormRequest
     {
         return [
             'judul' => 'Judul',
+            'is_secret' => 'Apakah rahasia?',
             'deskripsi' => 'Deskripsi',
             'notulen' => 'Notulen',
             'keterangan' => 'Keterangan',

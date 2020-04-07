@@ -28,6 +28,22 @@ class MeetingController extends Controller
 
         return view('meeting.index',compact('datas', 'keyword'));
     }
+    
+    public function kalender(Request $request)
+    {
+        $keyword = $request->get('search');
+        $datas = \App\Meeting::where('judul', 'LIKE', '%' . $keyword . '%')
+            ->paginate();
+
+        $datas->withPath('meeting');
+        $datas->appends($request->all());
+
+        if ($request->ajax()) {
+            return \Response::json(\View::make('meeting.list', array('datas' => $datas))->render());
+        }
+
+        return view('meeting.kalender',compact('datas', 'keyword'));
+    }
 
     public function loadPegawai(Request $request){
         $keyword = '';
@@ -39,10 +55,10 @@ class MeetingController extends Controller
         if(strlen($request->get('kd_kab'))>0)
             $kd_kab = $request->get('kd_kab');
 
-        $model = \App\User::where('kdkab', '=', $kd_kab)->get();
+        $model = \App\UserModel::where('kdkab', '=', $kd_kab)->get();
 
         if(strlen($keyword)>0){
-            $model = \App\User::where('kdkab', '=', $kd_kab)
+            $model = \App\UserModel::where('kdkab', '=', $kd_kab)
                 ->where('name', 'LIKE', '%' . $keyword . '%')->get();
         }
         
@@ -68,6 +84,11 @@ class MeetingController extends Controller
         $model->waktu_mulai = date('d-m-Y h:i');
         $model->waktu_selesai = date('d-m-Y h:i');
         $kd_kab = Auth::user()->kdkab;
+        $model->is_secret = 0;
+
+        // $list_peserta = \App\User::select('name','email', 'nip_baru', 'nmjab', 'kdkab')
+        //     ->where('kdkab', '=', '00')->get();
+
         return view('meeting.create',compact('model', 'kd_kab'));
     }
 
@@ -92,6 +113,7 @@ class MeetingController extends Controller
         $model->deskripsi =$request->get('deskripsi');
         $model->notulen =$request->get('notulen');
         $model->keterangan =$request->get('keterangan');
+        $model->is_secret =$request->get('is_secret');
         $model->waktu_mulai = date('Y-m-d H:i:s', strtotime($request->get('waktu_mulai').':00'));
         $model->waktu_selesai = date('Y-m-d H:i:s', strtotime($request->get('waktu_selesai').':00'));
 

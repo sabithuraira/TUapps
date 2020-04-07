@@ -30,7 +30,7 @@ class PegawaiAndaController extends Controller
 
     public function store(Request $request, $id){
         $user = \App\User::find($id);
-        $user_id =  Auth::user()->email;
+        $user_id =  $user->email;
 
         $datas=array();
         $month = date('m');

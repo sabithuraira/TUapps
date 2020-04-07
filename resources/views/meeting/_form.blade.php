@@ -8,14 +8,32 @@
     <div class="tab-content">
         <div class="tab-pane show active" id="data">
 
-            <div class="form-group">
-                <label>{{ $model->attributes()['judul']}}:</label>
-                <input type="text" class="form-control {{($errors->first('judul') ? ' parsley-error' : '')}}" name="judul" value="{{ old('judul', $model->judul) }}">
-                @foreach ($errors->get('judul') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>  
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ $model->attributes()['judul']}}:</label>
+                        <input type="text" class="form-control {{($errors->first('judul') ? ' parsley-error' : '')}}" name="judul" value="{{ old('judul', $model->judul) }}">
+                        @foreach ($errors->get('judul') as $msg)
+                            <p class="text-danger">{{ $msg }}</p>
+                        @endforeach
+                    </div>
+                </div>
 
+                <div class="col-md-6">                
+                    <div class="form-group">
+                        <label>{{ $model->attributes()['is_secret']}}</label>
+                        <select class="form-control {{($errors->first('is_secret') ? ' parsley-error' : '')}}" name="is_secret">
+                            <option value="0" @if (0 == old('is_secret', $model->is_secret)) selected="selected" @endif >Tidak</option>
+                            <option value="1" @if (1 == old('is_secret', $model->is_secret)) selected="selected" @endif >Ya</option>
+                        </select>
+                        @foreach ($errors->get('is_secret') as $msg)
+                            <p class="text-danger">{{ $msg }}</p>
+                        @endforeach
+                        <small class="text-muted font-italic font-weight-lighter">*jika rahasia, hanya peserta yang dapat melihat detail rapat.</small>
+                    </div>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label>{{ $model->attributes()['deskripsi']}}:</label>
                 <textarea id="deskripsi" class="summernote form-control {{($errors->first('deskripsi') ? ' parsley-error' : '')}}" name="deskripsi" value="{{ old('deskripsi', $model->deskripsi) }}" rows="10"></textarea>
@@ -23,7 +41,6 @@
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-
 
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -225,6 +242,11 @@
                     var self = this;
                     $('#select_peserta').modal('hide');
                     $('#wait_progres').modal('show');
+
+
+                    
+                    // $('#wait_progres').modal('hide');
+                    // $('#select_peserta').modal('show');
                     
                     $.ajaxSetup({
                         headers: {
@@ -236,12 +258,12 @@
                         url : self.pathname + "/load_pegawai",
                         method : 'post',
                         dataType: 'json',
-                        crossDomain: true,
                         data:{
                             keyword: self.keyword_peserta,
                             kd_kab: self.kab_peserta,
                         },
                     }).done(function (data) {
+                        console.log(data.datas);
                         self.list_peserta = data.datas;
                         $('#wait_progres').modal('hide');
                         $('#select_peserta').modal('show');
