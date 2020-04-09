@@ -54,9 +54,22 @@ class CkpController extends Controller
         if(strlen($request->get('user_id'))>0)
             $user_id = $request->get('user_id');
             
-        $model = \App\User::where('email', '=', $user_id)->first();
+        $model = \App\UserModel::where('email', '=', $user_id)->first();
 
         return response()->json(['success'=>'Sukses', 'model'=>$model]);
+    }
+    
+    public function dataUnitKerja(Request $request){
+        $datas=array();
+        $unit_kerja = Auth::user()->kdkab;
+
+        if(strlen($request->get('unit_kerja'))>0)
+            $unit_kerja = $request->get('unit_kerja');
+            
+        $list_user = \App\UserModel::where('kdkab', '=', $unit_kerja)
+                        ->orderBy('kdorg', 'asc')->get();
+
+        return response()->json(['success'=>'Sukses', 'list_user'=>$list_user]);
     }
 
     /**
@@ -89,12 +102,13 @@ class CkpController extends Controller
     public function pemantau_ckp(Request $request)
     {
         $idnya = Auth::id();
-        $model = \App\User::find($idnya);
+        $model = \App\UserModel::find($idnya);
+        $unit_kerja = Auth::user()->kdkab;
 
         $datas=array();
         $month = date('m');
         $year = date('Y');
-        $list_user = \App\User::where('kdkab', '=', Auth::user()->kdkab)
+        $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('kdorg', 'asc')
             ->get();
 
@@ -106,7 +120,7 @@ class CkpController extends Controller
         $end = date('m/d/Y');
 
         return view('ckp.pemantau_ckp',compact('model','idnya', 'ckp', 'month', 
-            'year', 'start', 'end', 'list_user'));
+            'year', 'start', 'end', 'list_user', 'unit_kerja'));
     }
 
     /**

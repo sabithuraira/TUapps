@@ -20,19 +20,33 @@
 
       <div class="card">
         <div class="body profilepage_2 blog-page">
-
+        
+            @if(auth()->user()->kdkab=='00')
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select class="form-control  form-control-sm" v-model="ckp_unit_kerja">
+                                @foreach (config('app.unit_kerjas') as $key=>$value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-12 left-box">
                     <div class="form-group">
                         <label>Pegawai:</label>
-
                         <div class="input-group">
-                        <select class="form-control  form-control-sm" v-model="ckp_user">
-                                @foreach ($list_user as $key=>$value)
-                                    <option value="{{ $value->email }}">{{ $value->name }}</option>
-                                @endforeach
+                            <select class="form-control  form-control-sm" v-model="ckp_user">
+                                <option v-for="(data, index) in list_user" :key="data.id" :value="data.email">
+                                    @{{ data.name }}
+                                </option>
                             </select>
-
                         </div>
                     </div>
                 </div>
@@ -102,7 +116,6 @@
     </div>
   </div>
 
-
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -149,12 +162,13 @@ var vm = new Vue({
       total_utama: 1,
       total_tambahan: 1,
       total_column: 10,
-
-      datas: [],
+      datas: [], //data log book
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
       catatan_approve: '',
       id_row: 0,
+      list_user: {!! json_encode($list_user) !!},
+      ckp_unit_kerja: {!! json_encode($unit_kerja) !!},
     },
     computed: {
         total_kuantitas: function(){
@@ -211,8 +225,40 @@ var vm = new Vue({
             this.setDatas();
             this.setProfile();
         },
+        ckp_unit_kerja: function (val) {
+            this.setUnitKerja();
+            this.setDatas();
+            this.setProfile();
+        },
     },
     methods: {
+        setUnitKerja: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+
+            $.ajax({
+                url :  "{{ url('/ckp/data_unit_kerja') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    unit_kerja: self.ckp_unit_kerja,
+                },
+            }).done(function (data) {
+                self.list_user = data.list_user;
+                if(self.list_user.length>0){
+                    self.ckp_user = self.list_user[0].email;
+                }
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');

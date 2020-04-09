@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth'], function(){
     // Route::resource('attribute_pos','AttributePosController')->except(['show']);
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');
+    Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
     Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
     //IKI

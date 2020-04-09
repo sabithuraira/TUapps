@@ -130,7 +130,7 @@ class LogBookController extends Controller
     }
 
     public function rekap_pegawai(Request $request){
-        if(strlen(Auth::user()->kdesl)>0 || Auth::user()->hasRole('superadmin')){
+        if(strlen(Auth::user()->kdesl)>0 || Auth::user()->hasRole('superadmin')  || Auth::user()->hasRole('binagram')){
             $tanggal = date('Y-m-d');
             $unit_kerja = Auth::user()->kdkab;
 

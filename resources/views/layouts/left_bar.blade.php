@@ -46,7 +46,7 @@
                                     <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a href="{{ url('log_book') }}">Log Book</a></li>
                                     <li class="{{ request()->is('log_book/laporan_wfh*') ? 'active' : '' }}"><a href="{{ url('log_book/laporan_wfh') }}">Laporan WFH</a></li>
                                     
-                                    @if(strlen(auth()->user()->kdesl)>0 || auth()->user()->hasRole('superadmin'))
+                                    @if(strlen(auth()->user()->kdesl)>0 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('binagram'))
                                     <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a href="{{ url('log_book/rekap_pegawai') }}">Rekap Kerja Seluruh Pegawai</a></li>
                                     @endif
                                     

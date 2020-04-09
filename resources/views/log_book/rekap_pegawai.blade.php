@@ -57,7 +57,7 @@
                                 
                                 <div class="input-group">
                                     <select class="form-control  form-control-sm" name="unit_kerja">
-                                        @if(auth()->user()->kdesl==2 || auth()->user()->hasRole('superadmin'))
+                                        @if(auth()->user()->kdesl==2 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('binagram'))
                                         <option @if (111 == old('unit_kerja', $unit_kerja))
                                                 selected="selected" @endif value="111">Pimpinan</option>
                                         @endif
