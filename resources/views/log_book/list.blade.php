@@ -68,7 +68,6 @@
     </div>
 </div>
 
-
 <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -80,7 +79,6 @@
     </div>
 </div>
 
-
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
@@ -89,6 +87,7 @@
         table{font-size: small;border-collapse: collapse;}
         tfoot tr td{font-weight: bold;font-size: small;}
     </style>
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
 @endsection
 
 @section('scripts')
@@ -273,9 +272,12 @@ var vm = new Vue({
 });
 
 $(document).ready(function() {
-     $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
+    $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
     vm.setDatas();
     
+    $('.datepicker').datepicker({
+        endDate: 'd',
+    });
 });
 
 $('#start').change(function() {

@@ -48,7 +48,7 @@
                             @{{ data.isi }}
                             <p class="text-muted">Hasil: @{{ data.hasil }}</p>
                         </td>
-                        <td><input class="form-control  form-control-sm" type="number" :name="'u_status_penyelesaian'+data.id" v-model="data.status_penyelesaian"></td>
+                        <td><input class="form-control  form-control-sm" type="number" min="0" max="100" :name="'u_status_penyelesaian'+data.id" v-model="data.status_penyelesaian"></td>
                     </tr>
                 </tbody>
             </table>

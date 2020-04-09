@@ -11,8 +11,8 @@
                     <div class="col-md-6">
                         Tanggal:
                         <div class="form-line">
-                            <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
-                                <input type="text" id="form_tanggal" name="tanggal">
+                            <div class="input-group">
+                                <input type="text" class="datepicker form-control" id="form_tanggal" name="tanggal">
                                 <div class="input-group-append">                                            
                                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                 </div>
