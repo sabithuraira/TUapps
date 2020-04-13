@@ -186,7 +186,7 @@ var vm = new Vue({
                         },
                     }).done(function (data) {
                         $('#add_logbooks').modal('hide');
-                        window.location.reload(false); 
+                        self.setDatas();
                     }).fail(function (msg) {
                         console.log(JSON.stringify(msg));
                         $('#wait_progres').modal('hide');
@@ -208,7 +208,7 @@ var vm = new Vue({
                     dataType: 'json',
                 }).done(function (data) {
                     $('#wait_progress').modal('hide');
-                    window.location.reload(false); 
+                    self.setDatas();
                 }).fail(function (msg) {
                     console.log(JSON.stringify(msg));
                     $('#wait_progres').modal('hide');
@@ -238,7 +238,7 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 $('#wait_progress').modal('hide');
-                window.location.reload(false); 
+                self.setDatas();
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
