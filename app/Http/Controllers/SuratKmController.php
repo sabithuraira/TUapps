@@ -19,16 +19,25 @@ class SuratKmController extends Controller
         $keyword = $request->get('search');
         
         $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
+            ->where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('created_at', 'desc')->paginate();
             
         $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
+            ->where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('created_at', 'desc')->paginate();
             
         $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
+            ->where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('created_at', 'desc')->paginate();
         
         if(strlen($keyword)>0){
+            
             $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
+                ->where('kdprop', '=', Auth::user()->kdprop)
+                ->where('kdkab', '=', Auth::user()->kdkab)
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
@@ -39,6 +48,8 @@ class SuratKmController extends Controller
                 ->orderBy('created_at', 'desc')->paginate();
 
             $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
+                ->where('kdprop', '=', Auth::user()->kdprop)
+                ->where('kdkab', '=', Auth::user()->kdkab)
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
@@ -49,6 +60,8 @@ class SuratKmController extends Controller
                 ->orderBy('created_at', 'desc')->paginate();
 
             $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
+                ->where('kdprop', '=', Auth::user()->kdprop)
+                ->where('kdkab', '=', Auth::user()->kdkab)
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
@@ -92,16 +105,20 @@ class SuratKmController extends Controller
         if(strlen($request->get('tanggal'))>0){
             $tanggal = date('Y-m-d', strtotime($request->get('tanggal')));
         }
-        
+
         $total_after = \App\SuratKm::where([
                 ['tanggal', '>', $tanggal],
                 ['jenis_surat', '=', $jenis_surat],
+                ['kdprop', '=', Auth::user()->kdprop],
+                ['kdkab', '=', Auth::user()->kdkab],
             ])->count();
         
         if ($total_after == 0) {
             $last_data = \App\SuratKm::where([
                     [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
                     ['jenis_surat', '=', $jenis_surat],
+                    ['kdprop', '=', Auth::user()->kdprop],
+                    ['kdkab', '=', Auth::user()->kdkab],
                     ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy('nomor_urut', 'desc')
@@ -114,6 +131,8 @@ class SuratKmController extends Controller
             $first_after = \App\SuratKm::where([
                     ['tanggal', '>', $tanggal],
                     ['jenis_surat', '=', $jenis_surat],
+                    ['kdprop', '=', Auth::user()->kdprop],
+                    ['kdkab', '=', Auth::user()->kdkab],
                     // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy('nomor_urut', 'asc')
@@ -133,6 +152,8 @@ class SuratKmController extends Controller
             $total_current_number = \App\SuratKm::where([
                 ['nomor_urut', 'LIKE', $current_number.'%'],
                 ['jenis_surat', '=', $jenis_surat],
+                ['kdprop', '=', Auth::user()->kdprop],
+                ['kdkab', '=', Auth::user()->kdkab],
             ])
             ->count();
 
@@ -182,6 +203,10 @@ class SuratKmController extends Controller
         $model->perihal=$request->get('perihal');
         $model->nomor_petunjuk=$request->get('nomor_petunjuk');
         $model->jenis_surat=$request->get('jenis_surat');
+        
+        $model->kdprop =Auth::user()->kdprop;
+        $model->kdkab =Auth::user()->kdkab;
+
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
