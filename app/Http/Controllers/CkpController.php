@@ -167,6 +167,7 @@ class CkpController extends Controller
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan(1, $month, $year, $user_id);
 
+        $monthLabel = config('app.months')[$month];
         $monthName = date("F", mktime(0, 0, 0, $month, 10));
         $last_day_month  = date('t', mktime(0, 0, 0, $month, 10)); //date("t");
         $first_working_day = date('d F Y', strtotime("+0 weekday $monthName $year"));
@@ -174,7 +175,7 @@ class CkpController extends Controller
 
         $pdf = PDF::loadView('ckp.print', compact('month', 
             'year', 'type', 'model', 'datas', 'user', 
-            'monthName', 'last_day_month',
+            'monthName', 'monthLabel', 'last_day_month',
             'first_working_day', 'last_working_day'))
             ->setPaper('a4', 'landscape');
         

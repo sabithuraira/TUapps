@@ -245,6 +245,7 @@ class MeetingController extends Controller
     {
         $model = \App\Meeting::find($id);
         if($model->created_by==Auth::id()){
+            $rincian_peserta = \App\MeetingPeserta::where('meeting_id', '=', $id)->delete();
             $model = \App\Meeting::find($id);
             $model->delete();
             return redirect('meeting')->with('success','Information has been  deleted');

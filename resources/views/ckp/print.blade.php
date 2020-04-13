@@ -48,7 +48,7 @@
     <tr><td width="15%">Satuan Organisasi</td><td>: {{ $user->nmorg }}</td></tr>
     <tr><td>Nama</td><td>: {{ $user->name }}</td></tr>
     <tr><td>Jabatan</td><td>: {{ $user->nmjab }}</td></tr>
-    <tr><td>Periode</td><td>: 1 -  {{ $last_day_month }} {{ $monthName }} {{ $year }}</td></tr>
+    <tr><td>Periode</td><td>: 1 -  {{ $last_day_month }} {{ $monthLabel }} {{ $year }}</td></tr>
   </table>
 
   <table width="100%" class="table-border">
