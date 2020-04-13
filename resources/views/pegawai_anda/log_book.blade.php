@@ -18,7 +18,7 @@
 
     <section class="datas">
         <div class="table-responsive">
-            <table class="table table-sm table-bordered m-b-0">
+            <table class="table-bordered m-b-0">
                 <thead>
                     <tr>
                         <th>No</th>

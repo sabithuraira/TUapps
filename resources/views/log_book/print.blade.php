@@ -96,9 +96,5 @@
 @endsection
 
 @section('css')
-        <meta name="_token" content="{{csrf_token()}}" />
-@endsection
-
-@section('scripts')
-
+    <meta name="_token" content="{{csrf_token()}}" />
 @endsection

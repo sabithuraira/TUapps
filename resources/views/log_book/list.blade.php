@@ -1,11 +1,11 @@
 <div class="table-responsive">
-    <table class="table table-sm table-bordered m-b-0">
+    <table class="table-bordered m-b-0">
         <thead>
             <tr>
                 <th>No</th><th></th>
                 <th class="text-center">Keterangan</th>
                 <th class="text-center">Durasi & waktu</th>
-                <th class="text-center">Isi & Hasil</th>
+                <th style="min-width:55%" class="text-center">Isi & Hasil</th>
             </tr>
         </thead>
 
@@ -129,6 +129,7 @@ var vm = new Vue({
             if (event) {
                 self.form_id = 0;
                 self.form_tanggal = '';
+                $('#form_tanggal').val(self.form_tanggal);
                 self.form_waktu_mulai = '';
                 self.form_waktu_selesai = '';
                 self.form_isi = '';
