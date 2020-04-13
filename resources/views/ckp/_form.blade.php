@@ -537,9 +537,8 @@ var vm = new Vue({
                 method : 'delete',
                 dataType: 'json',
             }).done(function (data) {
-                window.location.reload(true);
-
                 $('#wait_progres').modal('hide');
+                self.setDatas();
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
