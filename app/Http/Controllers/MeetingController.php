@@ -82,11 +82,13 @@ class MeetingController extends Controller
         $model->waktu_selesai = date('d-m-Y h:i');
         $kd_kab = Auth::user()->kdkab;
         $model->is_secret = 0;
+        
+        $list_peserta = \App\UserModel::all();
 
         // $list_peserta = \App\User::select('name','email', 'nip_baru', 'nmjab', 'kdkab')
         //     ->where('kdkab', '=', '00')->get();
 
-        return view('meeting.create',compact('model', 'kd_kab'));
+        return view('meeting.create',compact('model', 'kd_kab', 'list_peserta'));
     }
 
     /**

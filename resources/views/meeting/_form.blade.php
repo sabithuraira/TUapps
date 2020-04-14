@@ -6,7 +6,7 @@
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane show active" id="data">
+        <div class="tab-pane" id="data">
 
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -78,45 +78,17 @@
             </div>
 
         </div>
-        <div class="tab-pane" id="peserta">
-            <label><span style="color: red; display:block; float:right">*</span>Peserta Meeting</label>
-            &nbsp <a v-on:click="setDataPeserta">&nbsp &nbsp<i class="icon-plus text-info"></i></a>
-                
-            <table class="table table-sm m-b-0 table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>NIP</th>
-                        <th>Jabatan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(data, index) in rincian_peserta" :key="data.id">
-                        <td>
-                            <template v-if="is_delete(data.id)">
-                                <a :data-id="data.id" v-on:click="delDataPeserta(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                            </template>
-                            <template v-if="!is_delete(data.id)">
-                                <a :data-id="data.id" v-on:click="delDataPesertaTemp(index)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                            </template>
-                            @{{ index+1 }}
-                        </td>
 
-                        <td>@{{ data.name }}</td>
-                        <td>@{{ data.nip_baru }}</td>
-                        <td>@{{ data.nmjab }}</td>
-                        <input type="hidden" :name="'p_email'+data.id" v-model="data.email">
-                        <input type="hidden" :name="'p_nip_baru'+data.id" v-model="data.nip_baru">
-                        <input type="hidden" :name="'p_name'+data.id" v-model="data.name">
-                        <input type="hidden" :name="'p_nmjab'+data.id" v-model="data.nmjab">
-                    </tr>
-                </tbody>
-            </table>
+        <div class="tab-pane show active" id="peserta">
+            <label><span style="color: red; display:block; float:right">*</span>Peserta Meeting</label>
+            <br/><br/>
+            <b>Pilih Peserta</b>
+            <select id="optgroup" class="ms" name="rincian_peserta[]" multiple="multiple">
+                <option v-for="(data, index) in list_peserta" :key="data.email" :value="data.email">@{{ data.name }}</option>
+            </select>
         </div>
 
         <div class="tab-pane" id="notulen_materi">
-            
             <div class="form-group">
                 <label>{{ $model->attributes()['notulen']}}:</label>
                 <textarea id="notulen" class="summernote form-control {{($errors->first('notulen') ? ' parsley-error' : '')}}" name="notulen" value="{{ old('notulen', $model->notulen) }}" rows="10"></textarea>
@@ -134,9 +106,6 @@
             </div>
         </div>
     </div>
-        
-    <input type="hidden" name="total_peserta" v-model="total_peserta">
-
     <hr/>
     <button type="submit" class="btn btn-primary">Simpan</button>
     
@@ -150,14 +119,14 @@
             </div>
         </div>
     </div>
-    
-    @include('meeting.modal_peserta')
+
 </div>
 
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
     <meta name="csrf-token" content="@csrf">
     <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/summernote/dist/summernote.css') !!}">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/multi-select/css/multi-select.css') !!}">
 @endsection
 
 @section('scripts')
@@ -165,17 +134,19 @@
     <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js') !!}"></script>
+    
+    <script src="{!! asset('lucid/assets/vendor/multi-select/js/jquery.multi-select.js') !!}"></script> <!-- Multi Select Plugin Js -->
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 
     <script>
         var vm = new Vue({
             el: "#app_vue",
             data:  {
-                total_peserta: 1,
+                // total_peserta: 1,
                 id_induk: {!! json_encode($model->id) !!},
-                list_peserta: [],
-                rincian_peserta: [],
-                keyword_peserta: '',
+                list_peserta: {!! json_encode($list_peserta) !!},
+                // rincian_peserta: [],
+                // keyword_peserta: '',
                 kab_peserta:  {!! json_encode($kd_kab) !!},
             },
             computed: {
@@ -211,87 +182,87 @@
                         $('#wait_progres').modal('hide');
                     });
                 },
-                pilihPeserta: function(event){
-                    var self = this;
-                    if (event) {
-                        let index_data = parseInt(event.currentTarget.getAttribute('data-index'));
-                        let cur_peserta =  self.list_peserta[index_data];
+                // pilihPeserta: function(event){
+                //     var self = this;
+                //     if (event) {
+                //         let index_data = parseInt(event.currentTarget.getAttribute('data-index'));
+                //         let cur_peserta =  self.list_peserta[index_data];
 
-                        self.total_peserta++;
-                        self.rincian_peserta.push({
-                            'id': 'au'+(self.total_peserta),
-                            'email': cur_peserta.email,
-                            'nip_baru': cur_peserta.nip_baru,
-                            'name': cur_peserta.name,
-                            'nmjab': cur_peserta.nmjab,
-                        });
+                //         self.total_peserta++;
+                //         self.rincian_peserta.push({
+                //             'id': 'au'+(self.total_peserta),
+                //             'email': cur_peserta.email,
+                //             'nip_baru': cur_peserta.nip_baru,
+                //             'name': cur_peserta.name,
+                //             'nmjab': cur_peserta.nmjab,
+                //         });
                         
-                        $('#select_peserta').modal('hide');
-                    }
-                },
-                setDataPeserta: function(){
-                    var self = this;
-                    $('#select_peserta').modal('hide');
-                    $('#wait_progres').modal('show');
+                //         $('#select_peserta').modal('hide');
+                //     }
+                // },
+                // setDataPeserta: function(){
+                //     var self = this;
+                //     $('#select_peserta').modal('hide');
+                //     $('#wait_progres').modal('show');
 
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                        }
-                    })
+                //     $.ajaxSetup({
+                //         headers: {
+                //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                //         }
+                //     })
 
-                    $.ajax({
-                        url : self.pathname + "/load_pegawai",
-                        method : 'post',
-                        dataType: 'json',
-                        data:{
-                            keyword: self.keyword_peserta,
-                            kd_kab: self.kab_peserta,
-                        },
-                    }).done(function (data) {
-                        console.log(data.datas);
-                        self.list_peserta = data.datas;
-                        $('#wait_progres').modal('hide');
-                        $('#select_peserta').modal('show');
-                    }).fail(function (msg) {
-                        console.log(JSON.stringify(msg));
-                        $('#wait_progres').modal('hide');
-                    });
-                },
-                delDataPeserta: function (idnya) {
-                    var self = this;
-                    $('#wait_progres').modal('show');
-                    $.ajax({
-                        url : self.pathname+"/" + idnya + "/destroy_peserta/",
-                        method : 'get',
-                        dataType: 'json',
-                    }).done(function (data) {
-                        window.location.reload(true);
-                        $('#wait_progres').modal('hide');
-                    }).fail(function (msg) {
-                        console.log(JSON.stringify(msg));
-                        $('#wait_progres').modal('hide');
-                    });
-                },
-                delDataPesertaTemp: function (index) {
-                    var self = this;
-                    $('#wait_progres').modal('show');
-                    self.rincian_peserta.splice(index, 1);
-                    $('#wait_progres').modal('hide');
-                },
-                is_delete: function(params){
-                    if(isNaN(params)) return false;
-                    else return true;
-                },
-                addData: function (event) {
-                    var self = this;
-                    if (event) {
-                        self.total_peserta++;
-                        self.rincian.push({
-                            'id': 'au'+(self.total_peserta),
-                        });
-                    }
-                },
+                //     $.ajax({
+                //         url : self.pathname + "/load_pegawai",
+                //         method : 'post',
+                //         dataType: 'json',
+                //         data:{
+                //             keyword: self.keyword_peserta,
+                //             kd_kab: self.kab_peserta,
+                //         },
+                //     }).done(function (data) {
+                //         console.log(data.datas);
+                //         self.list_peserta = data.datas;
+                //         $('#wait_progres').modal('hide');
+                //         $('#select_peserta').modal('show');
+                //     }).fail(function (msg) {
+                //         console.log(JSON.stringify(msg));
+                //         $('#wait_progres').modal('hide');
+                //     });
+                // },
+                // delDataPeserta: function (idnya) {
+                //     var self = this;
+                //     $('#wait_progres').modal('show');
+                //     $.ajax({
+                //         url : self.pathname+"/" + idnya + "/destroy_peserta/",
+                //         method : 'get',
+                //         dataType: 'json',
+                //     }).done(function (data) {
+                //         window.location.reload(true);
+                //         $('#wait_progres').modal('hide');
+                //     }).fail(function (msg) {
+                //         console.log(JSON.stringify(msg));
+                //         $('#wait_progres').modal('hide');
+                //     });
+                // },
+                // delDataPesertaTemp: function (index) {
+                //     var self = this;
+                //     $('#wait_progres').modal('show');
+                //     self.rincian_peserta.splice(index, 1);
+                //     $('#wait_progres').modal('hide');
+                // },
+                // is_delete: function(params){
+                //     if(isNaN(params)) return false;
+                //     else return true;
+                // },
+                // addData: function (event) {
+                //     var self = this;
+                //     if (event) {
+                //         self.total_peserta++;
+                //         self.rincian.push({
+                //             'id': 'au'+(self.total_peserta),
+                //         });
+                //     }
+                // },
             }
         });
 
