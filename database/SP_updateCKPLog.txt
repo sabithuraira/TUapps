@@ -35,7 +35,7 @@ BEGIN
             COALESCE(SUM(kecepatan),0) as kecepatan,
             COALESCE(SUM(ketepatan),0) as ketepatan,
             COALESCE(SUM(ketuntasan),0) as ketuntasan,
-            user_id, month, year, user_id, user_id 
+            user_id, month, year, user_id_int, user_id_int
             FROM ckps
             WHERE user_id='user_id' AND month = month AND year = year);
   END IF;
