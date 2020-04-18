@@ -134,6 +134,39 @@ class CkpController extends Controller
             'year', 'start', 'end', 'list_user', 'unit_kerja'));
     }
 
+    public function rekap_ckp(Request $request)
+    {
+        $unit_kerja = Auth::user()->kdkab;
+        $month = date('m');
+        $year = date('Y');
+
+        return view('ckp.rekap_ckp',compact('month', 
+            'year', 'unit_kerja'));
+    }
+
+    public function data_rekap_ckp(Request $request)
+    {
+        $unit_kerja = Auth::user()->kdkab;
+
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+
+        if(strlen($request->get('unit_kerja'))>0)
+            $unit_kerja = $request->get('unit_kerja');
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+
+        $ckp_log = new \App\CkpLogBulanan;
+        $datas = $ckp_log->RekapPerUnitKerjaPerBulan($unit_kerja, $month, $year);
+
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

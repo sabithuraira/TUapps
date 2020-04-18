@@ -51,7 +51,7 @@
                                     @endif
                                     
                                     @if(auth()->user()->hasRole('superadmin') ||  auth()->user()->hasRole('kepegawaian'))
-                                    <li class="{{ request()->is('ckp/pemantau_ckp*') ? 'active' : '' }}"><a href="{{ url('ckp/pemantau_ckp') }}">Rinciap CKP Pegawai</a></li>
+                                    <li class="{{ request()->is('ckp/rekap_ckp*') ? 'active' : '' }}"><a href="{{ url('ckp/rekap_ckp') }}">Rinciap CKP Pegawai</a></li>
                                     @endif
                                 </ul>
                             </li>

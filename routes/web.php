@@ -65,6 +65,8 @@ Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
 
 Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {    
     Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
+    Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
+    Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
 });
 
 Route::group(['middleware' => 'auth'], function(){
