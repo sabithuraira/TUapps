@@ -36,7 +36,7 @@ class PegawaiAndaController extends Controller
         $month = date('m');
         $year = date('Y');
         $start = date('Y-m-d');
-        $end = date('Y-m-d');
+        $end = date('Y-m-d');    
 
         if(strlen($request->get('month'))>0)
             $month = $request->get('month');
@@ -90,6 +90,9 @@ class PegawaiAndaController extends Controller
                 $model_lb->save();
             }
         }
+
+        $ckp_log = new \App\CkpLogBulanan();
+        $ckp_log->triggerCkp($user_id, $user->id, $month, $year);
         
         return redirect('/pegawai_anda/'.$id.'/profile')->with('success', 'Information has been added');
     }

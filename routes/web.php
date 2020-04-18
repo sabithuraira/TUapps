@@ -32,6 +32,9 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('angka_kredit','AngkaKreditController');
     Route::resource('user','UserController');
 
+    Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
+    Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
+
     //SPATIE
     Route::resource('role','RoleController');
     Route::resource('permission','PermissionController');
@@ -47,7 +50,6 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
-    Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
     Route::post('opname_persediaan/load_rincian', 'OpnamePersediaanController@loadRincian');
     Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');

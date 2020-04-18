@@ -24,6 +24,17 @@ class CkpController extends Controller
 
     //     // return view('sppk.print',compact('model','id'));
     // }
+
+    
+    public function aeik($month, $year){
+        
+        $all_user = \App\UserModel::all();
+
+        foreach($all_user as $value){
+            $ckp_log = new \App\CkpLogBulanan();
+            $ckp_log->triggerCkp($value->email, $value->id, $month, $year);
+        }
+    }
     
     public function dataCkp(Request $request){
         $datas=array();
@@ -349,6 +360,10 @@ class CkpController extends Controller
                 }
             }
         }
+
+        
+        $ckp_log = new \App\CkpLogBulanan();
+        $ckp_log->triggerCkp(Auth::user()->email, Auth::id(), $request->get('month'), $request->get('year'));
         
         return redirect('/ckp')->with('success', 'Information has been added');
     
