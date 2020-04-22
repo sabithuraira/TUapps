@@ -154,7 +154,7 @@ class User extends Authenticatable
         return $bos;
     }
 
-    function getPegawaiAnda(){
+    function getPegawaiAnda($keyword){
         $pegawai = array();
 
         if($this->kdstjab==4){
@@ -175,12 +175,17 @@ class User extends Authenticatable
                 ])->paginate();
             }
             else{
-                $pegawai = $this::where([
-                    [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)],
-                    ['kdstjab', '<>', 2], 
-                    ['kdprop', '=', $this->kdprop], 
-                    // ['kdkab', '=', $this->kdkab], 
-                ])->paginate();
+                $arr_where = [];
+                $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
+                $arr_where[] = ['kdstjab', '<>', 2];
+                $arr_where[] = ['kdprop', '=', $this->kdprop];
+                if(strlen($keyword)>0){
+                    if($keyword=='111')
+                        $arr_where[] = ['kdesl', '=', 3];
+                    else
+                        $arr_where[] = ['kdkab', '=', $keyword];
+                }
+                $pegawai = $this::where($arr_where)->paginate();
             }
         }
         else{
