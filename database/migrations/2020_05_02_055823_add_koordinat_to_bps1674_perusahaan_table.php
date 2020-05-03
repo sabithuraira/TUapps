@@ -14,7 +14,7 @@ class AddKoordinatToBps1674PerusahaanTable extends Migration
     public function up()
     {
         Schema::table('bps1674_perusahaan', function (Blueprint $table) {
-            $table->string('long')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('lat')->nullable();
             $table->string('tahun_mulai')->nullable()->change();
             $table->string('deskripsi')->nullable()->change();
