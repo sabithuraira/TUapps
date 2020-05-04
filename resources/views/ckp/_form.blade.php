@@ -52,7 +52,7 @@
     <div class="tab-content">
         <div class="tab-pane show active" id="utama">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered m-b-0">
+                <table class="table-sm table-bordered m-b-0">
                     <thead>
                         <tr>
                             <td rowspan="2">No</td>
@@ -132,7 +132,7 @@
         
         <div class="tab-pane" id="penilaian">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered m-b-0">
+                <table class="table-sm table-bordered m-b-0">
                     <thead>
                         <tr>
                             <td rowspan="2">No</td>

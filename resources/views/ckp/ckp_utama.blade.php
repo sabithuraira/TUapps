@@ -2,7 +2,7 @@
     <section class="datas">
         <div class="table-responsive">
             <br/><br/>
-            <table class="table table-sm table-bordered m-b-0">
+            <table class="table-sm table-bordered m-b-0">
                 <thead>
                     <tr>
                         <td rowspan="2">No</td>
