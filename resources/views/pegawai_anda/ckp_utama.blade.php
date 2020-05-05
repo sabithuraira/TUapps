@@ -65,7 +65,7 @@
                         
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                         <td class="text-center">@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
-                        <td><input class="form-control  form-control-sm" type="number" :name="'u_kualitas'+data.id" v-model="data.kualitas">%</td>
+                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_kualitas'+data.id" v-model="data.kualitas">%</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
                         <td>@{{ data.keterangan }}</td>
@@ -79,7 +79,7 @@
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                         <td class="text-center">@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
-                        <td><input class="form-control  form-control-sm" type="number" :name="'t_kualitas'+data.id" v-model="data.kualitas">%</td>
+                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_kualitas'+data.id" v-model="data.kualitas">%</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
                         <td>@{{ data.keterangan }}</td>
