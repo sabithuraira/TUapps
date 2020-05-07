@@ -232,6 +232,11 @@ class CkpController extends Controller
         $nama_file .= $month . '.pdf';
 
         return $pdf->download($nama_file);
+
+        // return view('ckp.print', compact('month', 
+        // 'year', 'type', 'model', 'datas', 'user', 
+        // 'monthName', 'monthLabel', 'last_day_month',
+        // 'first_working_day', 'last_working_day'));
     }
 
 

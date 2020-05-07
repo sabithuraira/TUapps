@@ -148,7 +148,12 @@
 
                 <td>{{ $data->kode_butir }}</td>
                 <td>{{ $data->angka_kredit }}</td>
-                <td>{{ $data->keterangan }}</td>
+                <td>
+                    {{ $data->keterangan }}
+                    @if(strlen($data->iki)>0)
+                        <br/>IKI: {{ $data->iki_label }}
+                    @endif
+                </td>
             </tr>
         @endforeach
 
@@ -185,7 +190,12 @@
 
                 <td>{{ $data->kode_butir }}</td>
                 <td>{{ $data->angka_kredit }}</td>
-                <td>{{ $data->keterangan }}</td>
+                <td>
+                    {{ $data->keterangan }}
+                    @if(strlen($data->iki)>0)
+                        IKI: {{ $data->iki_label }}
+                    @endif
+                </td>
             </tr>
         @endforeach
 
