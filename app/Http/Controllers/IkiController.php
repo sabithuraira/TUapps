@@ -10,8 +10,11 @@ class IkiController extends Controller
 {
     public function store(Request $request)
     {
-        $model= new \App\Iki;
-        $model->user_id= Auth::user()->email;
+        $model = \App\Iki::find($request->get("id"));
+        if($model==null){
+            $model= new \App\Iki;
+            $model->user_id= Auth::user()->email;
+        }
         $model->iki_label=$request->get('iki_label');
         $model->save();
         

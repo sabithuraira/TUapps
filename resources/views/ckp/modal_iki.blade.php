@@ -16,7 +16,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="(data, index) in list_iki" :key="data.id">
-                                <td>@{{ index+1 }}</td>
+                                <td>        
+                                    <a href="#" role="button" v-on:click="updateIki" data-toggle="modal" 
+                                        :data-id="data.id" :data-label="data.iki_label"
+                                        data-target="#add_iki"> <i class="icon-pencil"></i></a>
+                                    @{{ index+1 }}
+                                </td>
                                 <td>@{{ data.iki_label }}</td>
                                 <td class="text-center"><button class="btn btn-outline-primary btn-sm" type="button" v-on:click="pilihIki" :data-index="index">Pilih</button></td>
                             </tr>

@@ -222,7 +222,9 @@ var vm = new Vue({
       total_tambahan: 2,
       pathname : (window.location.pathname).replace("/create", ""),
       list_iki: {!! json_encode($list_iki) !!},
-      cur_index: 0, cur_jenis: 't', form_iki_label: '',
+      cur_index: 0, cur_jenis: 't', 
+      form_iki_id: 0,
+      form_iki_label: '',
     },
     computed: {
         ckp_label: function() {
@@ -314,8 +316,17 @@ var vm = new Vue({
             if(isNaN(params)) return false;
             else return true;
         },
+        updateIki: function (event) {
+            var self = this;
+            if (event) {
+                self.form_iki_id = event.currentTarget.getAttribute('data-id');
+                self.form_iki_label = event.currentTarget.getAttribute('data-label');
+            }
+        },
         addIki: function(){
             var self = this;
+            self.form_iki_id = 0;
+            self.form_iki_label = '';
             $('#select_iki').modal('hide');
             $('#add_iki').modal('show');
         },
@@ -334,10 +345,13 @@ var vm = new Vue({
                 method : 'post',
                 dataType: 'json',
                 data:{
+                    id : self.form_iki_id,
                     iki_label: self.form_iki_label,
                 },
             }).done(function (data) {
                 $('#add_iki').modal('hide');
+                self.form_iki_id = 0;
+                self.form_iki_label = '';
                 window.location.reload(false); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
