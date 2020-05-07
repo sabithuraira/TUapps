@@ -6,7 +6,7 @@
                     <h4 class="title" id="largeModalLabel">Pilih IKI</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table-sm table-bordered table-sm">
+                    <table class="table-sm table-bordered table-sm" style="min-width:100%">
                         <thead>
                             <tr class="text-center">
                                 <th>No</th>
