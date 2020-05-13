@@ -1,6 +1,6 @@
 <div id="load">
     <div class="table-responsive">
-        <table class="table-bordered m-b-0">
+        <table class="table-bordered m-b-0" style="min-width:100%">
             <thead>
                 <tr class="text-center">
                     <th rowspan="2">NO</th>

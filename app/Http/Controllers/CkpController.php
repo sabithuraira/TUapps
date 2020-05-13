@@ -24,7 +24,6 @@ class CkpController extends Controller
 
     //     // return view('sppk.print',compact('model','id'));
     // }
-
     
     public function aeik($month, $year){
         

@@ -5,8 +5,9 @@ namespace App\Exports;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class LaporanWfhExport implements FromView, ShouldAutoSize
+class LaporanWfhExport implements FromView, ShouldAutoSize, WithTitle
 {
     public $tanggal;
     public $user_id;
@@ -29,5 +30,10 @@ class LaporanWfhExport implements FromView, ShouldAutoSize
             'user'  => $user,
             'tanggal'   => $this->tanggal,
         ]);
+    }
+
+    public function title(): string
+    {
+        return date("d F", strtotime($this->tanggal));
     }
 }

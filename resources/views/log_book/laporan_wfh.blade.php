@@ -68,10 +68,20 @@
 
             <form action="{{ action('LogBookController@downloadExcelWfh') }}" method="post">
                 @csrf 
-                <input type="hidden"  v-model="tanggal" name="tanggal">
-                <input type="hidden"  v-model="user_id" name="user_id">
+                <input type="hidden" v-model="tanggal" name="tanggal">
+                <input type="hidden" name="jenis" value="2">
+                <input type="hidden" v-model="user_id" name="user_id">
+                <button name="action" class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Unduh Laporan WFH Bulanan &nbsp</button>
+            </form>
+            
+            <form action="{{ action('LogBookController@downloadExcelWfh') }}" method="post">
+                @csrf 
+                <input type="hidden" v-model="tanggal" name="tanggal">
+                <input type="hidden" name="jenis" value="1">
+                <input type="hidden" v-model="user_id" name="user_id">
                 <button name="action" class="float-right" type="submit"><i class="icon-printer"></i>&nbsp Unduh Laporan WFH &nbsp</button>
             </form>
+            
             <br/><br/>
 
           <section class="datas">

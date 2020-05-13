@@ -24,15 +24,25 @@ class LogBookController extends Controller
         $user_id = 'admin@email.com';
         // $tanggal = date('Y-m-d');
         $tanggal = '2020-04-04';
+        $jenis = 1; //1 harian, 2 bulanan
 
         if(strlen($request->get('user_id'))>0)
             $user_id =  $request->get('user_id');
+            
+        if(strlen($request->get('jenis'))>0)
+            $jenis =  $request->get('jenis');
 
         if(strlen($request->get('tanggal'))>0)
             $tanggal =  date("Y-m-d", strtotime($request->get('tanggal')));
 
-        $name_file = "LapKinWFH-".$user_id.".xlsx";
-        return Excel::download(new \App\Exports\LaporanWfhExport($tanggal, $user_id), $name_file);
+        if($jenis==1){
+            $name_file = "LapKinWFH-".$user_id.".xlsx";
+            return Excel::download(new \App\Exports\LaporanWfhExport($tanggal, $user_id), $name_file);
+        }
+        else{
+            $name_file = "LapKinWFHBulanan-".$user_id.".xlsx";
+            return Excel::download(new \App\Exports\LaporanWfhBulananExport(date('m', strtotime($tanggal)),date('Y', strtotime($tanggal)),$user_id), $name_file);
+        }
 
         // $model = new \App\LogBook;
         // $datas = $model->LogBookRekap($tanggal, $tanggal, $user_id);
