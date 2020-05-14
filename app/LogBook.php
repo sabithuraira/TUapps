@@ -25,7 +25,7 @@ class LogBook extends Model
 
         if($unit_kerja==111) $str_where = "kdesl='2' || kdesl='3'";
 
-        $sql = "SELECT u.id, u.name, u.nip_baru, u.kdorg,
+        $sql = "SELECT u.id, u.name, u.nip_baru, u.kdorg,  u.kdesl,
             GROUP_CONCAT(log_books.isi SEPARATOR '$separate') isi, 
             GROUP_CONCAT(log_books.hasil SEPARATOR '$separate') hasil
             
@@ -33,7 +33,7 @@ class LogBook extends Model
             LEFT JOIN log_books ON log_books.user_id=u.email AND  log_books.tanggal='$tanggal'
             
             WHERE $str_where
-            GROUP BY u.id, u.name, u.nip_baru, u.kdorg 
+            GROUP BY u.id, u.name, u.nip_baru, u.kdorg , u.kdesl
             ORDER by kdorg";
             
         $result = DB::select(DB::raw($sql));

@@ -12,13 +12,23 @@
 
             <tbody>
                 @foreach($datas as $key=>$data)
-                <tr>
-                    <td>{{ $key+1 }} </td>
-                    <td>{{ $data->name }} / {{ $data->nip_baru }}</td>
-                    <td>{!! $data->isi !!}</td>
-                    <td>{!! $data->hasil !!}</td>
-                    
-                </tr>
+                    @if($data->kdesl==2)
+                        @if(auth()->user()->kdesl==2)
+                            <tr>
+                                <td>{{ $key+1 }} </td>
+                                <td>{{ $data->name }} / {{ $data->nip_baru }}</td>
+                                <td>{!! $data->isi !!}</td>
+                                <td>{!! $data->hasil !!}</td>
+                            </tr>
+                        @endif    
+                    @else
+                        <tr>
+                            <td>{{ $key+1 }} </td>
+                            <td>{{ $data->name }} / {{ $data->nip_baru }}</td>
+                            <td>{!! $data->isi !!}</td>
+                            <td>{!! $data->hasil !!}</td>
+                        </tr>
+                    @endif 
                 @endforeach
                 
             </tbody>
