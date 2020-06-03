@@ -45,7 +45,6 @@
                         
                         <td class="text-center" rowspan="2">{{ $ckp->attributes()['kode_butir'] }}</td>
                         <td class="text-center" rowspan="2">{{ $ckp->attributes()['angka_kredit'] }}</td>
-                        <td class="text-center" rowspan="2">{{ $ckp->attributes()['keterangan'] }}</td>
                     </tr>
 
                     <tr>
@@ -68,7 +67,6 @@
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_kualitas'+data.id" v-model="data.kualitas">%</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
-                        <td>@{{ data.keterangan }}</td>
                     </tr>
                     
                     <tr><td colspan="10">TAMBAHAN</td></tr>
@@ -82,7 +80,6 @@
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_kualitas'+data.id" v-model="data.kualitas">%</td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
-                        <td>@{{ data.keterangan }}</td>
                     </tr>
 
                     <template>
