@@ -104,7 +104,6 @@
 </div>
 @endsection
 
-
 @section('css')
   <meta name="_token" content="{{csrf_token()}}" />
   <meta name="csrf-token" content="@csrf">
