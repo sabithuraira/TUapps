@@ -19,23 +19,14 @@
       <div class="card">
         <div class="body">
         
-          @if(auth()->user()->kdesl==2 || auth()->user()->hasRole('superadmin'))
           <form action="{{url('pegawai_anda')}}" method="get">
             @csrf
             <div class="row clearfix">
               <div class="col-lg-11 col-md-12 left-box">
                 <div class="form-group">
-                    <select class="form-control  form-control-sm" name="search">
-                        <option @if ($unit_kerja=='')
-                                selected="selected" @endif value="111" value="">- Semua - </option>
-                        
-                        <option @if (111 == $unit_kerja)
-                                selected="selected" @endif value="111">Pimpinan</option>
-                        @foreach ( config('app.unit_kerjas') as $key=>$value)
-                            <option @if ($key == $unit_kerja)
-                                    selected="selected" @endif value="{{ $key }}">{{ $value }}</option>
-                        @endforeach
-                    </select>
+                    
+                  <input type="text" class="form-control" name="search" id="search" value="{{ $keyword }}" placeholder="Search..">
+
                 </div>
               </div>
                       
@@ -44,7 +35,6 @@
               </div>
             </div>
           </form> 
-          @endif
           <section class="datas">
             @include('pegawai_anda.list')
           </section>

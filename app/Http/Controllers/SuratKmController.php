@@ -121,10 +121,20 @@ class SuratKmController extends Controller
                     ['kdkab', '=', Auth::user()->kdkab],
                     ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
-                ->orderBy('nomor_urut', 'desc')
+                ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
                 ->first();
 
-            if($last_data!=null) $total = $last_data->nomor_urut + 1;
+            // $nomor_terakhir = $last_data->nomor_urut;
+
+            // if(!is_numeric($nomor_terakhir)){
+            //     $exp = explode(".", $nomor_terakhir);
+            //     $nomor_terakhir = $exp[0];
+            // }
+
+            // if($last_data!=null) $total = $nomor_terakhir + 1;
+            // else $total = 1;
+            
+            if($last_data!=null) $total =  $last_data->nomor_urut + 1;
             else $total = 1;
         }
         else{

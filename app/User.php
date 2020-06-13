@@ -156,35 +156,51 @@ class User extends Authenticatable
 
     function getPegawaiAnda($keyword){
         $pegawai = array();
+        
+        $arr_where = [];
+        $arr_where[] = ['kdprop', '=', $this->kdprop];
+
+        if(strlen($keyword)>0){
+            $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
+        }
 
         if($this->kdstjab==4){
             if($this->kdesl==4){
-                $pegawai = $this::where([
-                    ['kdorg', '=', $this->kdorg],
-                    ['kdstjab', '<>', 4], 
-                    ['kdprop', '=', $this->kdprop], 
-                    ['kdkab', '=', $this->kdkab], 
-                ])->paginate();
+                
+                $arr_where[] = ['kdorg', '=', $this->kdorg];
+                $arr_where[] = ['kdstjab', '<>', 4];
+                $arr_where[] = ['kdkab', '=',  $this->kdkab];
+
+                // $pegawai = $this::where([
+                //     ['kdorg', '=', $this->kdorg],
+                //     ['kdstjab', '<>', 4], 
+                //     ['kdprop', '=', $this->kdprop], 
+                //     ['kdkab', '=', $this->kdkab], 
+                // ])->paginate();
+                $pegawai = $this::where($arr_where)->paginate();
             }
             else if($this->kdesl==3){
-                $pegawai = $this::where([
-                    [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)],
-                    // ['kdstjab', '<>', 3], 
-                    ['kdprop', '=', $this->kdprop], 
-                    ['kdkab', '=', $this->kdkab], 
-                ])->paginate();
+                // $pegawai = $this::where([
+                //     [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)],
+                //     // ['kdstjab', '<>', 3], 
+                //     ['kdprop', '=', $this->kdprop], 
+                //     ['kdkab', '=', $this->kdkab], 
+                // ])->paginate();
+                
+                $arr_where[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
+                $arr_where[] = ['kdkab', '=',  $this->kdkab];
+                $pegawai = $this::where($arr_where)->paginate();
             }
             else{
-                $arr_where = [];
                 $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
                 $arr_where[] = ['kdstjab', '<>', 2];
-                $arr_where[] = ['kdprop', '=', $this->kdprop];
-                if(strlen($keyword)>0){
-                    if($keyword=='111')
-                        $arr_where[] = ['kdesl', '=', 3];
-                    else
-                        $arr_where[] = ['kdkab', '=', $keyword];
-                }
+                // $arr_where[] = ['kdprop', '=', $this->kdprop];
+                // if(strlen($keyword)>0){
+                //     if($keyword=='111')
+                //         $arr_where[] = ['kdesl', '=', 3];
+                //     else
+                //         $arr_where[] = ['kdkab', '=', $keyword];
+                // }
                 $pegawai = $this::where($arr_where)->paginate();
             }
         }
