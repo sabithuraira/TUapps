@@ -29,10 +29,9 @@
             </div>
         </div>
     </div>
-
+    <p class="text-small text-muted font-italic float-left">*Isian "Tingkat Kualitas" didapat dari rata2 Kecepatan, Ketuntasan & Ketepatan pada "CKP Penilaian".</p>
     <section class="datas">
         <div class="table-responsive">
-            <br/><br/>
             <table class="table-sm table-bordered m-b-0">
                 <thead>
                     <tr>
@@ -64,7 +63,16 @@
                         
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                         <td class="text-center">@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_kualitas'+data.id" v-model="data.kualitas">%</td>
+                        <td>
+                            <template v-if="data.kualitas.length > 0">
+                                @{{ data.kualitas }} %
+                            </template>
+                            <template v-else>
+                                @{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }} %
+                            </template>
+                            
+                            <input type="hidden" max="100" :name="'u_kualitas'+data.id" v-model="data.kualitas">
+                        </td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
                     </tr>

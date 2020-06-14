@@ -18,8 +18,9 @@
       <div class="card" id="app_vue">
         <div class="body">
           <a href="{{action('CkpController@create')}}" class="btn btn-info">Buat CKP</a>
+          <br/>
+          <p class="text-small text-muted font-italic float-left">*Klik "Buat CKP" untuk merubah, menambah atau menghapus rincian CKP.</p>          
           <br/><br/>
-          
           <div class="row clearfix">
 
                 

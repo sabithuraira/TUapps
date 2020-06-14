@@ -37,7 +37,7 @@
 <input type="hidden" name="total_utama" v-model="total_utama">
 
 <div>
-    <p class="text-muted font-italic font-weight-lighter float-left">*Isian penilaian hanya dilakukan oleh pimpinan langsung.</p>
+    <p class="text-small text-muted font-italic float-left">*Isian penilaian hanya dilakukan oleh pimpinan langsung.</p>
     <button type="submit" class="btn btn-primary float-right">Simpan</button>
 </div>
 

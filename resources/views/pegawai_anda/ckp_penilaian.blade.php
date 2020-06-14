@@ -32,7 +32,6 @@
 
     <section class="datas">
         <div class="table-responsive">
-            <br/><br/>
             <table class="table-sm table-bordered m-b-0">
                 <thead>
                     <tr>
