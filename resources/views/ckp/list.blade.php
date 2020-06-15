@@ -121,7 +121,7 @@
                         <td>@{{ data.kecepatan }}</td>
                         <td>@{{ data.ketepatan }}</td>
                         <td>@{{ data.ketuntasan }}</td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
                         <td>
@@ -137,7 +137,7 @@
                         <td>@{{ data.kecepatan }}</td>
                         <td>@{{ data.ketepatan }}</td>
                         <td>@{{ data.ketuntasan }}</td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
                         <td>@{{ data.iki }}</td>
@@ -249,6 +249,13 @@ var vm = new Vue({
         },
     },
     methods: {
+        nilaiRata2: function(val1, val2, val3){
+            if(typeof val1 == 'undefined' || val1 == '' || val1 == null) val1 = 0;
+            if(typeof val2 == 'undefined' || val2 == '' || val2 == null) val2 = 0;
+            if(typeof val3 == 'undefined' || val3 == '' || val3 == null) val3 = 0;
+
+            return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
+        },
         setDatas: function(){
             var self = this;
             $('#wait_progres').modal('show');

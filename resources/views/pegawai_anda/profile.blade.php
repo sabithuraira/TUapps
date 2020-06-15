@@ -177,13 +177,21 @@ var vm = new Vue({
             var result = 0;
 
             for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
-                    result+= parseInt(this.kegiatan_utama[i].kualitas);
+                // if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
+                //     result+= parseInt(this.kegiatan_utama[i].kualitas);
+                result += parseFloat(this.nilaiRata2(
+                            this.kegiatan_utama[i].kecepatan,
+                            this.kegiatan_utama[i].ketepatan,
+                            this.kegiatan_utama[i].ketuntasan));
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
-                    result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+                // if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
+                //     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+                result += parseFloat(this.nilaiRata2(
+                            this.kegiatan_tambahan[i].kecepatan,
+                            this.kegiatan_tambahan[i].ketepatan,
+                            this.kegiatan_tambahan[i].ketuntasan));
             }
 
             return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
@@ -243,9 +251,9 @@ var vm = new Vue({
         },
         
         nilaiRata2: function(val1, val2, val3){
-            if(typeof val1 == 'undefined') val1 = 0;
-            if(typeof val2 == 'undefined') val2 = 0;
-            if(typeof val3 == 'undefined') val3 = 0;
+            if(typeof val1 == 'undefined' || val1 == '' || val1 == null) val1 = 0;
+            if(typeof val2 == 'undefined' || val2 == '' || val2 == null) val2 = 0;
+            if(typeof val3 == 'undefined' || val3 == '' || val3 == null) val3 = 0;
 
             return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
         },

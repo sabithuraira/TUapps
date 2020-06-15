@@ -30,7 +30,7 @@
                         <td>@{{ data.kecepatan }}</td>
                         <td>@{{ data.ketepatan }}</td>
                         <td>@{{ data.ketuntasan }}</td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
                         <td>
@@ -45,7 +45,7 @@
                         <td>@{{ data.kecepatan }}</td>
                         <td>@{{ data.ketepatan }}</td>
                         <td>@{{ data.ketuntasan }}</td>
-                        <td>@{{ (data.kecepatan+data.ketepatan+data.ketuntasan)/3 }}</td>
+                        <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
                         <td>@{{ data.iki }}</td>
