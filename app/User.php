@@ -186,10 +186,32 @@ class User extends Authenticatable
                 //     ['kdprop', '=', $this->kdprop], 
                 //     ['kdkab', '=', $this->kdkab], 
                 // ])->paginate();
-                
-                $arr_where[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
-                $arr_where[] = ['kdkab', '=',  $this->kdkab];
-                $pegawai = $this::where($arr_where)->paginate();
+
+
+                if($this->kdkab=='00'){
+                    $or_where1 = [];
+                    $or_where2 = [];
+
+                    $or_where1[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
+                    $or_where1[] = ['kdkab', '=',  $this->kdkab];
+                    
+                    $or_where2[] = ['kdkab', '<>', '00'];
+                    $or_where2[] = ['kdesl', '=', '3'];
+
+                    $pegawai = $this::where($arr_where)
+                        ->where(
+                            (function ($query) use ($or_where1, $or_where2) {
+                                $query->where($or_where1)
+                                    ->orWhere($or_where2);
+                            })
+                        )
+                        ->paginate();
+                }
+                else{
+                    $arr_where[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
+                    $arr_where[] = ['kdkab', '=',  $this->kdkab];
+                    $pegawai = $this::where($arr_where)->paginate();
+                }
             }
             else{
                 $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
