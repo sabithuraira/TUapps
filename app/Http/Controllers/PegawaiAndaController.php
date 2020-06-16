@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class PegawaiAndaController extends Controller
 {
@@ -27,7 +28,10 @@ class PegawaiAndaController extends Controller
     }
 
     public function store(Request $request, $id){
-        $user = \App\User::find($id);
+        // $user = \App\User::find($id);
+        $real_id = Crypt::decrypt($id);
+        $user = \App\User::find($real_id);
+        
         $user_id =  $user->email;
 
         $datas=array();
@@ -97,7 +101,9 @@ class PegawaiAndaController extends Controller
 
     public function profile($id)
     {
-        $model = \App\User::find($id);
+        $real_id = Crypt::decrypt($id);
+        // $model = \App\User::find($id);
+        $model = \App\User::find($real_id);
 
         $datas=array();
         $month = date('m');
@@ -110,7 +116,7 @@ class PegawaiAndaController extends Controller
         $start = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."-1 month" ));
         $end = date('m/d/Y');
 
-        return view('pegawai_anda.profile',compact('model','id', 'ckp', 'month', 
+        return view('pegawai_anda.profile',compact('model','id', 'real_id', 'ckp', 'month', 
             'year', 'start', 'end'));
     }
 }

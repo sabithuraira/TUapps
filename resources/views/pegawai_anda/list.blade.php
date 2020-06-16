@@ -27,7 +27,7 @@
                     </td> -->
                     
                     <td class="text-center">
-                        <a href="{{action('PegawaiAndaController@profile', $data['id'])}}"><i class="fa fa-search text-info"></i></a>
+                        <a href="{{action('PegawaiAndaController@profile', Crypt::encrypt($data['id']))}}"><i class="fa fa-search text-info"></i></a>
                     </td>
                     
                 </tr>

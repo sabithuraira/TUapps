@@ -159,6 +159,7 @@ class User extends Authenticatable
         
         $arr_where = [];
         $arr_where[] = ['kdprop', '=', $this->kdprop];
+        $arr_where[] = ['id', '<>', $this->id];
 
         if(strlen($keyword)>0){
             $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
