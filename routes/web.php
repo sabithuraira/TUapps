@@ -94,8 +94,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
 
     //CKP
-    Route::resource('ckp','CkpController')->except(['show']);
-    // Route::resource('attribute_pos','AttributePosController')->except(['show']);
+    Route::resource('ckp','CkpController');
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');
     Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
@@ -115,6 +114,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('meeting/load_pegawai','MeetingController@loadPegawai');
     Route::get('meeting/{id}/destroy_peserta', 'MeetingController@destroy_peserta');
     Route::post('meeting/data_peserta', 'MeetingController@data_peserta');
+
+    ///
+    Route::get('hai', 'HomeController@hai')->name('hai');
 });
 
 Auth::routes();

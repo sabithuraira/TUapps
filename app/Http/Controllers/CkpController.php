@@ -184,6 +184,8 @@ class CkpController extends Controller
         return view('ckp.create', compact('month', 
             'year', 'model', 'list_iki'));
     }
+    
+    public function show($id){}
 
     public function print(Request $request)
     {
