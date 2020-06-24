@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="vertical-align-wrap">
-    <div class="vertical-align-middle maintenance">
+    <div class="vertical-align-middle">
 
     <div class="text-center">
         <article>

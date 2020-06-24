@@ -48,7 +48,7 @@
                         <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td>@{{ data.penilaian_pimpinan }}</td>
                         <td>@{{ data.catatan_koreksi }}</td>
-                        <td>@{{ data.iki }}</td>
+                        <td>@{{ data.iki_label }}</td>
                     </tr>
                 </tbody>
             </table>
