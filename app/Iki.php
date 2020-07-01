@@ -13,4 +13,9 @@ class Iki extends Model
     {
         return $this->hasOne('App\User', 'email', 'user_id');
     }
+    
+    public function attributes()
+    {
+        return (new \App\Http\Requests\IkiRequest())->attributes();
+    }
 }

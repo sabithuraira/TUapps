@@ -101,7 +101,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
     //IKI
-    Route::post('iki','IkiController@store');
+    // Route::post('iki','IkiController@store');
+    Route::resource('iki','IkiController')->except(['show']);
 
     //PEGAWAI ANDA
     Route::resource('pegawai_anda','PegawaiAndaController');
