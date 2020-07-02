@@ -27,6 +27,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <br/>
                     <button class="btn btn-outline-primary btn-sm" type="button" v-on:click="addIki"><span class="fa fa-plus"></span> &nbspTambah IKI Baru</button>
                                     
                 </div>

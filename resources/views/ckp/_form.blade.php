@@ -221,7 +221,7 @@ var vm = new Vue({
       total_utama: 10,
       total_tambahan: 2,
       pathname : (window.location.pathname).replace("/create", ""),
-      list_iki: {!! json_encode($list_iki) !!},
+      list_iki: [],
       cur_index: 0, cur_jenis: 't', 
       form_iki_id: 0,
       form_iki_label: '',
@@ -349,10 +349,12 @@ var vm = new Vue({
                     iki_label: self.form_iki_label,
                 },
             }).done(function (data) {
-                $('#add_iki').modal('hide');
                 self.form_iki_id = 0;
                 self.form_iki_label = '';
-                window.location.reload(false); 
+                self.refreshIki();
+                $('#add_iki').modal('hide');
+                $('#wait_progres').modal('hide');
+                $('#select_iki').modal('show');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
@@ -383,6 +385,28 @@ var vm = new Vue({
                 
                 $('#select_iki').modal('show');
             }
+        },
+
+        refreshIki: function(){
+            var self = this;
+
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+
+            $.ajax({
+                url : "{{ url('/iki/list_json') }}",
+                method : 'get',
+                dataType: 'json',
+            }).done(function (data) {
+                self.list_iki = data.datas;
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
         },
         setDatas: function(){
             var self = this;
@@ -587,6 +611,7 @@ var vm = new Vue({
 
     $(document).ready(function() {
         vm.setDatas();
+        vm.refreshIki();
     });
 
 

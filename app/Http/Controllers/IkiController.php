@@ -34,6 +34,16 @@ class IkiController extends Controller
         return view('iki.index',compact('datas', 'keyword'));
     }
 
+    
+    public function list_json(Request $request)
+    {
+        $datas = \App\Iki::where('user_id', '=', Auth::user()->email)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
     public function create()
     {
         $model= new \App\Iki;

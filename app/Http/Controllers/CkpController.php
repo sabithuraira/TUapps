@@ -177,12 +177,9 @@ class CkpController extends Controller
         $year = date('Y');
 
         $model = new \App\Ckp;
-        $list_iki = \App\Iki::where('user_id', '=', Auth::user()->email)
-            ->orderBy('created_at', 'desc')
-            ->get();
         
         return view('ckp.create', compact('month', 
-            'year', 'model', 'list_iki'));
+            'year', 'model'));
     }
     
     public function show($id){}
