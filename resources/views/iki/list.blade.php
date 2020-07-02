@@ -1,5 +1,5 @@
 <div id="load" class="table-responsive">
-    <table class="table m-b-0">
+    <table style="min-width:100%" class="table-bordered m-b-0">
         @if (count($datas)==0)
             <thead>
                 <tr><th>Tidak ditemukan data</th></tr>
@@ -18,19 +18,13 @@
                     <td>{{ $data['User']['name'] }}</td>
                     <td>{{ $data['iki_label'] }} </td>
                     
-                    <td class="text-center"><a href="{{action('IkiController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
-                    <td class="text-center">
-                    <form action="{{action('IkiController@destroy', $data['id'])}}" method="post">
-                        @csrf
-                        <input name="_method" type="hidden" value="DELETE">
-                        <button type="submit"><i class="icon-trash text-danger"></i></button>
-                    </form>
-                    </td>
+                    <td class="text-center"><a href="{{action('IkiController@edit', Crypt::encrypt($data['id']))}}"><i class="icon-pencil text-info"></i></a></td>
                 </tr>
                 @endforeach
                 
             </tbody>
         @endif
     </table>
+    <br/>
     {{ $datas->links() }} 
 </div>

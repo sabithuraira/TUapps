@@ -16,9 +16,9 @@
               <h2>Tambah Rincian IKI</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{url('Iki')}}" enctype="multipart/form-data">
+              <form method="post" action="{{ url('iki/store_master') }}" enctype="multipart/form-data">
               @csrf
-              @include('Iki._form')
+              @include('iki._form')
               </form>
           </div>
       </div>

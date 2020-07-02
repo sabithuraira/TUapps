@@ -39,7 +39,7 @@
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">   
-                            <li class="{{ (request()->is('log_book*') || request()->is('ckp*')) ? 'active' : '' }}">
+                            <li class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('iki*')) ? 'active' : '' }}">
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                                 <ul>
                                     <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a></li>
@@ -53,6 +53,7 @@
                                     @if(auth()->user()->hasRole('superadmin') ||  auth()->user()->hasRole('kepegawaian'))
                                     <li class="{{ request()->is('ckp/rekap_ckp*') ? 'active' : '' }}"><a href="{{ url('ckp/rekap_ckp') }}">Rinciap CKP Pegawai</a></li>
                                     @endif
+                                    <li class="{{ request()->is('iki*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola IKI</a></li>
                                 </ul>
                             </li>
 

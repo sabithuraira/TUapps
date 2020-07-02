@@ -19,7 +19,7 @@
               <form method="post" action="{{action('IkiController@update', $id)}}" enctype="multipart/form-data">
               @csrf
                 <input name="_method" type="hidden" value="PATCH">
-                @include('Iki._form')
+                @include('iki._form')
               </form>
           </div>
       </div>

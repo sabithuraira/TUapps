@@ -103,6 +103,7 @@ Route::group(['middleware' => 'auth'], function(){
     //IKI
     // Route::post('iki','IkiController@store');
     Route::resource('iki','IkiController')->except(['show']);
+    Route::post('iki/store_master', 'IkiController@store_master');
 
     //PEGAWAI ANDA
     Route::resource('pegawai_anda','PegawaiAndaController');
