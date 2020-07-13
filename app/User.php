@@ -216,7 +216,7 @@ class User extends Authenticatable
             }
             else{
                 $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
-                $arr_where[] = ['kdstjab', '<>', 2];
+                // $arr_where[] = ['kdstjab', '<>', 2];
                 // $arr_where[] = ['kdprop', '=', $this->kdprop];
                 // if(strlen($keyword)>0){
                 //     if($keyword=='111')

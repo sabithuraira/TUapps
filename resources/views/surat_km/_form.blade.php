@@ -72,6 +72,16 @@
                 @endforeach
             </div>
         </div>
+
+        <div v-show="jenis_surat==1" class="col-md-6 left">
+            <div class="form-group">
+                <label>{{ $model->attributes()['penerima'] }}:</label>
+                <input type="text" class="form-control {{($errors->first('penerima') ? ' parsley-error' : '')}}" name="penerima" value="{{ old('penerima', $model->penerima) }}">
+                @foreach ($errors->get('penerima') as $msg)
+                    <p class="text-danger">{{ $msg }}</p>
+                @endforeach
+            </div>
+        </div>
     </div>
 
     <div class="row clearfix">

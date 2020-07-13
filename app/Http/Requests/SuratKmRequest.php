@@ -60,6 +60,7 @@ class SuratKmRequest extends FormRequest
             'perihal' => 'Perihal',
             'nomor_petunjuk' => 'Petunjuk',
             'jenis_surat' => 'Jenis Surat',
+            'penerima' => 'Nama Penerima',
         ];
     }
 }

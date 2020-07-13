@@ -1,6 +1,6 @@
 <div class="tab-pane show active" id="surat_masuk">
     <div id="load" class="table-responsive">
-        <table class="table-bordered m-b-0">
+        <table class="table-bordered m-b-0" style="min-width:100%">
             @if (count($surat_masuk)==0)
                 <thead>
                     <tr><th>Tidak ditemukan data</th></tr>
@@ -23,6 +23,7 @@
                             @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
                                 <p class="text-muted">{{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}</p>
                             @endif
+                            <span>Nama Penerima: {{$data['penerima']}}</span><br/>
                             <span>Alamat: {{$data['alamat']}}</span>
 
                         </td>

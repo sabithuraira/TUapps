@@ -1,6 +1,6 @@
 <div class="tab-pane" id="surat_keluar">
     <div id="load" class="table-responsive">
-        <table class="table-bordered  m-b-0">
+        <table class="table-bordered  m-b-0" style="min-width:100%">
             @if (count($surat_keluar)==0)
                 <thead>
                     <tr><th>Tidak ditemukan data</th></tr>

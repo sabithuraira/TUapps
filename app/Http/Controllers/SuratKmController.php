@@ -213,6 +213,7 @@ class SuratKmController extends Controller
         $model->perihal=$request->get('perihal');
         $model->nomor_petunjuk=$request->get('nomor_petunjuk');
         $model->jenis_surat=$request->get('jenis_surat');
+        $model->penerima=$request->get('penerima');
         
         $model->kdprop =Auth::user()->kdprop;
         $model->kdkab =Auth::user()->kdkab;
@@ -268,6 +269,7 @@ class SuratKmController extends Controller
         $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
         $model->nomor=$request->get('nomor');
         $model->perihal=$request->get('perihal');
+        $model->penerima=$request->get('penerima');
         $model->nomor_petunjuk=$request->get('nomor_petunjuk');
         $model->jenis_surat=$request->get('jenis_surat');
         $model->updated_by=Auth::id();
