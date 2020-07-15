@@ -134,9 +134,10 @@ class LogBookController extends Controller
         $end = date('m/d/Y');
 
         $model = new \App\LogBook;
+        $pemberi_tugas = Auth::user()->nmjab;
 
         return view('log_book.index', compact('model', 
-            'datas', 'start', 'end'));
+            'datas', 'start', 'end', 'pemberi_tugas'));
     }
 
     public function rekap_pegawai(Request $request){
