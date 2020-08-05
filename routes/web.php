@@ -126,3 +126,4 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('guest', 'HomeController@guest')->name('guest');
+Route::get('telegram/sp2020', 'TelegramController@sp2020');

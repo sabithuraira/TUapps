@@ -134,7 +134,7 @@ class LogBookController extends Controller
         $end = date('m/d/Y');
 
         $model = new \App\LogBook;
-        $pemberi_tugas = Auth::user()->nmjab;
+        $pemberi_tugas = Auth::user()->pimpinan->nmjab;
 
         return view('log_book.index', compact('model', 
             'datas', 'start', 'end', 'pemberi_tugas'));
