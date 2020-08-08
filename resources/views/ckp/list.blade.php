@@ -80,6 +80,12 @@
 
                             <td colspan="9"></td>
                         </tr>
+                        
+                        <tr>
+                            <td colspan="5"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
+                            <td class="text-center" colspan="2">@{{ ((Number(total_kuantitas)+Number(total_kualitas))/2).toFixed(2) }}</td>
+                            <td colspan="9"></td>
+                        </tr>
                     </template>
 
                 </tbody>
