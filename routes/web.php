@@ -39,6 +39,9 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('role','RoleController');
     Route::resource('permission','PermissionController');
     Route::resource('user_role','UserRoleController');
+
+    Route::get('sp2020sls/import_some','Sp2020SlsController@upload_some');
+    Route::post('sp2020sls/import_some','Sp2020SlsController@import_some');
 });
 
 
