@@ -44,7 +44,9 @@ class HomeController extends Controller
     }
 
     public function hai(){
-        return view('hai');
+        $model = new \App\Sp2020Sls();
+        $datas = $model->Rekapitulasi();
+        return view('hai',compact('model', 'datas'));
     }
 
     public function guest(){
