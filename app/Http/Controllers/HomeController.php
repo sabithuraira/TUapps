@@ -43,10 +43,43 @@ class HomeController extends Controller
         return redirect('hai');
     }
 
-    public function hai(){
+    public function hai(Request $request){
+        $label = 'prov';
+        $kab = $request->get('kab');
+        $kec = $request->get('kec');
+        $desa = $request->get('desa');
+
+        if(strlen($kab)==0) $kab = null;
+        if(strlen($kec)==0) $kec = null;
+        if(strlen($desa)==0) $desa = null;
         $model = new \App\Sp2020Sls();
-        $datas = $model->Rekapitulasi();
-        return view('hai',compact('model', 'datas'));
+
+        if($desa!=null){
+            $label = 'desa';
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+        }
+        else if($desa==null && $kec!=null){
+            $label = 'kec';
+            $datas = $model->Rekapitulasi($kab, $kec);    
+        }
+        else if($desa==null && $kec==null && $kab!=null){
+            $label = 'kab';
+            $datas = $model->Rekapitulasi($kab); 
+        }
+        else{
+            $datas = $model->Rekapitulasi(); 
+        }
+
+        $labels = [];
+        $persens = [];
+
+        foreach($datas as $key=>$data){
+            $labels[] = $data->nama;
+            $persen = round(($data->realisasi_penduduk/$data->target_penduduk*100),3);
+            $persens[] = $persen;
+        }
+        return view('hai',compact('model', 'datas', 'labels', 'persens',
+            'kab', 'kec', 'desa', 'label'));
     }
 
     public function guest(){

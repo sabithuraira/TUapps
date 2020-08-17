@@ -23,7 +23,17 @@
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
-                    <td>{{ $data->nama }}</td>
+                    <td>
+                        @if($label == 'prov')
+                            <a href="{{ url('hai?kab='.$data->idw) }}">{{ $data->nama }}</a>
+                        @elseif ($label == 'kab')
+                            <a href="{{ url('hai?kab='.$kab.'&kec='.$data->idw) }}">{{ $data->nama }}</a>
+                        @elseif ($label == 'kec')
+                            <a href="{{ url('hai?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->nama }}</a>
+                        @else
+                            {{ $data->nama }}
+                        @endif
+                    </td>
                     <td>{{ number_format($data->penduduk_dp,0,",",".") }}</td>
                     <td>{{ number_format($data->target_penduduk,0,",",".") }}</td>
                     <td>

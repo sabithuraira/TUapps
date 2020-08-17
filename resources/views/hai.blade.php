@@ -1,9 +1,15 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.c3-axis-x text 
+{
+  font-size: 10px;
+}
+</style>
     <div class="container">
         <div class="alert alert-primary" role="alert">
-            <p>Teruntuk mata yang menikmati tabel dan grafik ini, kami adalah <b>MONITORING SP2020</b> yang sedang diujicobakan oleh sang tuan..</p>
+            <p>Teruntuk mata yang menikmati tabel dan grafik dadakan, kami adalah <b>MONITORING SP2020</b> yang sedang diujicobakan oleh sang tuan..</p>
             <p>Boleh abaikan, rasakan, atau berikan saran.. Sekian.. #SP2020KitoSenianan</p>
         </div>
                             
@@ -22,4 +28,46 @@
             </div>
         </div>
   </div>
+@endsection
+
+@section('scripts')
+<script src="{!! asset('assets/bundles/c3.bundle.js') !!}"></script>
+<script>
+    var series =  {!! json_encode($persens) !!};
+    var chart = c3.generate({
+        bindto: '#chart-bar', // id of chart wrapper
+        data: {
+            columns: [
+                // each columns data
+                ['data1'].concat(series),
+            ],
+            type: 'bar', 
+            colors: {
+                'data1': lucid.colors["blue"]
+            },
+            names: {
+                'data1': 'Persentase selesai: '
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: {!! json_encode($labels) !!},
+            },
+            y: {
+                max: 100,
+            },
+        },
+        bar: {
+            ratio: 0.5
+        },
+        legend: {
+            show: false, //hide legend
+        },
+        padding: {
+            bottom: 100,
+            top: 10
+        },
+    });
+</script>
 @endsection
