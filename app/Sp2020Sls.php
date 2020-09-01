@@ -11,7 +11,7 @@ class Sp2020Sls extends Model
     
     protected $fillable = [ 'kd_prov', 'kd_kab', 'kd_kec',
         'kd_desa', 'id_sls', 'dp_j_penduduk', 'target_penduduk', 
-        'realisasi_penduduk', 'peta_j_keluarga', 'updated_phone'];
+        'realisasi_penduduk', 'peta_j_keluarga', 'updated_phone', 'nama_sls'];
     
     public function attributes()
     {

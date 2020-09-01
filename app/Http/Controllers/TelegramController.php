@@ -56,7 +56,7 @@ class TelegramController extends Controller
                     ->first();
     
                     if($data==null){
-                        $pesan = "ID SLS/Non SLS tidak ditemukan, silahkan ulangi lagi dengan ID SLS/Non SLS yang benar";
+                        $pesan = "ID SLS/Non SLS/Sub SLS tidak ditemukan. Silahkan ulangi lagi dengan ID SLS/Non SLS yang benar";
                     }
                     else{
                         $data->target_penduduk = $estimasi_penduduk;
