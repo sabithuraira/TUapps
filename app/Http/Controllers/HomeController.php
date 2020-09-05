@@ -75,7 +75,9 @@ class HomeController extends Controller
 
         foreach($datas as $key=>$data){
             $labels[] = $data->nama;
-            $persen = round(($data->realisasi_penduduk/$data->target_penduduk*100),3);
+
+            $hasil = ($data->target_penduduk==0) ? 0 : ($data->realisasi_penduduk/$data->target_penduduk*100);
+            $persen = round($hasil,3);
             $persens[] = $persen;
         }
         return view('hai',compact('model', 'datas', 'labels', 'persens',
@@ -83,6 +85,6 @@ class HomeController extends Controller
     }
 
     public function guest(){
-        return view('hai');
+        return view('guest');
     }
 }

@@ -38,7 +38,12 @@
                     <td>{{ number_format($data->target_penduduk,0,",",".") }}</td>
                     <td>
                         {{ number_format($data->realisasi_penduduk,0,",",".") }}
-                        ({{ round(($data->realisasi_penduduk/$data->target_penduduk*100),3) }} %)
+
+                        @if($data->target_penduduk == 0)
+                            (0 %)
+                        @else
+                            ({{ round(($data->realisasi_penduduk/$data->target_penduduk*100),3) }} %)
+                        @endif
                     </td>
                 </tr>
             @endforeach
