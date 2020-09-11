@@ -9,8 +9,8 @@
 </style>
     <div class="container">
         <div class="alert alert-primary" role="alert">
-            <p>Teruntuk mata yang menikmati tabel dan grafik dadakan, kami adalah <b>MONITORING SP2020</b> yang sedang diujicobakan oleh sang tuan..</p>
-            <p>Boleh abaikan, rasakan, atau berikan saran.. Sekian.. #SP2020KitoSenianan</p>
+            <p><b>MONITORING SP2020</b> nianan</p>
+            <p>Ingatkan petugas untuk selalu melaporkan progres lapangan SP2020 melalui TELEGRAM dan PANTAU penyelesaian SP2020 di SLS kita masing-masing ya..</p>
         </div>
                             
         <div class="card">
