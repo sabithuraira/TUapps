@@ -1,12 +1,16 @@
-<div class="tab-pane show active" id="hai_table">
-    <table class="table table-bordered table-sm">
+<table>
+    @if (count($datas)==0)
         <thead>
-            <tr class="text-center">
+            <tr><th>Tidak ditemukan data</th></tr>
+        </thead>
+    @else
+        <thead>
+            <tr>
                 <th>No</th>
                 <th>Nama Wilayah</th>
                 <th>Jumlah Penduduk DP</th>
                 <th>Jumlah Penduduk Kondisi Lapangan</th>
-                <th>Progres Selesai</th>
+                <th>Progres Selesai</th> 
             </tr>
         </thead>
         <tbody>
@@ -24,15 +28,7 @@
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td>
-                        @if($label == 'prov')
-                            <a href="{{ url('hai?kab='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
-                        @elseif ($label == 'kab')
-                            <a href="{{ url('hai?kab='.$kab.'&kec='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
-                        @elseif ($label == 'kec')
-                            <a href="{{ url('hai?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
-                        @else
-                            {{ $data->nama }}
-                        @endif
+                        {{ $data->idw }} - {{ $data->nama }}
                     </td>
                     <td>{{ number_format($data->penduduk_dp,0,",",".") }}</td>
                     <td>{{ number_format($data->target_penduduk,0,",",".") }}</td>
@@ -54,9 +50,14 @@
                 <td>{{ number_format($total_target_penduduk,0,",",".") }}</td>
                 <td>
                     {{ number_format($total_realisasi_penduduk,0,",",".") }}
-                    ({{ round(($total_realisasi_penduduk/$total_target_penduduk*100),3) }} %)
+                    
+                    @if($total_target_penduduk == 0)
+                        (0 %)
+                    @else
+                        ({{ round(($total_realisasi_penduduk/$total_target_penduduk*100),3) }} %)
+                    @endif
                 </td>
             </tr>
         </tbody>
-    </table>
-</div>
+    @endif
+</table>

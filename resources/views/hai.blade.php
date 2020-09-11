@@ -14,7 +14,31 @@
         </div>
                             
         <div class="card">
+            
             <div class="body profilepage_2 blog-page">
+                
+                @if ($label == 'prov')
+                    SUMATERA SELATAN
+                    <a class="float-right" href="{{ url('download_sp2020') }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
+                @elseif ($label == 'kab')
+                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
+                    - {{ $label_kab }}
+                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
+                @elseif ($label == 'kec')
+                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
+                    - <u><a href="{{ url('hai?kab='.$kab) }}">{{ $label_kab }}</a></u>
+                    - {{ $label_kec }}
+                    
+                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
+                @elseif($label=='desa')
+                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
+                    - <u><a href="{{ url('hai?kab='.$kab) }}">{{ $label_kab }}</a></u>
+                    - <u><a href="{{ url('hai?kab='.$kab.'&kec='.$kec) }}">{{ $label_kec }}</a></u> 
+                    - {{ $label_desa }}   
+                    
+                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
+                @endif
+                <br/><br/>
                 <div>
                     <ul class="nav nav-tabs">
                         <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#hai_table">Table</a></li>

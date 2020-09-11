@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
+    Route::get('download_sp2020', 'HomeController@downloadSp2020');
 });
 
 Auth::routes();
