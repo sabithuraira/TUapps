@@ -36,7 +36,7 @@ class Sp2020Sls extends Model
         $label_where = "";
 
         if($desa!=null){ //sls in kecamatan
-            $label_select = "s.id_sls as idw, s.id_sls as nama, SUM(s.dp_j_penduduk) as penduduk_dp, 
+            $label_select = "s.id_sls as idw, s.nama_sls as nama, SUM(s.dp_j_penduduk) as penduduk_dp, 
                 SUM(s.target_penduduk) as target_penduduk, 
                 SUM(s.realisasi_penduduk) as realisasi_penduduk";
 

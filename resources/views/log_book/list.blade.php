@@ -55,7 +55,7 @@
 </div>
 
 @include('log_book.modal_form')
-<div class="modal fade" id="send_ckp" tabindex="-1" role="dialog">
+<div class="modal" id="send_ckp" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">Masukkan Log Book pada:</div>

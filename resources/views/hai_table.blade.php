@@ -31,7 +31,7 @@
                         @elseif ($label == 'kec')
                             <a href="{{ url('hai?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @else
-                            {{ $data->nama }}
+                            {{ $data->idw }} - {{ $data->nama }}
                         @endif
                     </td>
                     <td>{{ number_format($data->penduduk_dp,0,",",".") }}</td>
