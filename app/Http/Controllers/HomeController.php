@@ -123,7 +123,7 @@ class HomeController extends Controller
 
         foreach($datas as $key=>$data){
             $labels[] = $data->nama;
-            $persen = 0;
+            $persen = 100;
             if($data->target_penduduk>0) $persen = round(($data->realisasi_penduduk/$data->target_penduduk*100),3);
             
             $persens[] = $persen;
