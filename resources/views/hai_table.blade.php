@@ -40,7 +40,7 @@
                         {{ number_format($data->realisasi_penduduk,0,",",".") }}
 
                         @if($data->target_penduduk == 0)
-                            (0 %)
+                            (100 %)
                         @else
                             ({{ round(($data->realisasi_penduduk/$data->target_penduduk*100),3) }} %)
                         @endif

@@ -59,11 +59,16 @@ class TelegramController extends Controller
                         $pesan = "ID SLS/Non SLS/Sub SLS tidak ditemukan. Silahkan ulangi lagi dengan ID SLS/Non SLS yang benar";
                     }
                     else{
-                        $data->target_penduduk = $estimasi_penduduk;
-                        $data->realisasi_penduduk = $jumlah_selesai;
-                        $data->save();
-
-                        $pesan = "Mantap.. data berhasil disimpan.";  
+                        if($data->flag_update==1){
+                            $pesan = "Maaf banget.. data SLS/Non SLS ini tidak bisa di update lagi karena dikunci BPS Kabupaten/Kota atau BPS Provinsi."; 
+                        }
+                        else{
+                            $data->target_penduduk = $estimasi_penduduk;
+                            $data->realisasi_penduduk = $jumlah_selesai;
+                            $data->save();
+    
+                            $pesan = "Mantap.. data berhasil disimpan."; 
+                        } 
                     }
                 }  
             }

@@ -19,4 +19,14 @@ class Sp2020SlsController extends Controller
         Excel::import(new Sp2020SlsAllImport(), $request->file('excel_file'));
         return redirect('sp2020sls/import_some')->with('success', 'Information has been added');
     }
+
+    public function upload_progres(){
+        $model = new \App\Sp2020Sls();
+        return view('sp2020sls.upload_some',compact('model'));
+    }
+
+    public function import_progres(Request $request){
+        Excel::import(new Sp2020SlsAllImport(), $request->file('excel_file'));
+        return redirect('sp2020sls/import_some')->with('success', 'Information has been added');
+    }
 }
