@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -171,24 +172,9 @@ class User extends Authenticatable
                 $arr_where[] = ['kdorg', '=', $this->kdorg];
                 $arr_where[] = ['kdstjab', '<>', 4];
                 $arr_where[] = ['kdkab', '=',  $this->kdkab];
-
-                // $pegawai = $this::where([
-                //     ['kdorg', '=', $this->kdorg],
-                //     ['kdstjab', '<>', 4], 
-                //     ['kdprop', '=', $this->kdprop], 
-                //     ['kdkab', '=', $this->kdkab], 
-                // ])->paginate();
                 $pegawai = $this::where($arr_where)->paginate();
             }
             else if($this->kdesl==3){
-                // $pegawai = $this::where([
-                //     [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)],
-                //     // ['kdstjab', '<>', 3], 
-                //     ['kdprop', '=', $this->kdprop], 
-                //     ['kdkab', '=', $this->kdkab], 
-                // ])->paginate();
-
-
                 if($this->kdkab=='00'){
                     $or_where1 = [];
                     $or_where2 = [];
@@ -216,14 +202,6 @@ class User extends Authenticatable
             }
             else{
                 $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
-                // $arr_where[] = ['kdstjab', '<>', 2];
-                // $arr_where[] = ['kdprop', '=', $this->kdprop];
-                // if(strlen($keyword)>0){
-                //     if($keyword=='111')
-                //         $arr_where[] = ['kdesl', '=', 3];
-                //     else
-                //         $arr_where[] = ['kdkab', '=', $keyword];
-                // }
                 $pegawai = $this::where($arr_where)->paginate();
             }
         }
@@ -231,6 +209,19 @@ class User extends Authenticatable
             $pegawai = $this::where([
                 ['kdstjab', '=', '999'],
             ])->paginate();
+        }
+
+        if(Auth::user()->hasRole('superadmin')){
+            $arr_where = [];
+            $arr_where[] = ['kdprop', '=', $this->kdprop];
+            $arr_where[] = ['id', '<>', $this->id];
+    
+            if(strlen($keyword)>0){
+                $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
+            }
+            
+            $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
+            $pegawai = $this::where($arr_where)->paginate();
         }
 
         return $pegawai;
