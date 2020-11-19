@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\Sp2020SlsAllImport;
+use App\Imports\Sp2020SlsPartialImport;
 
 class Sp2020SlsController extends Controller
 {
@@ -16,7 +16,7 @@ class Sp2020SlsController extends Controller
     }
 
     public function import_some(Request $request){
-        Excel::import(new Sp2020SlsAllImport(), $request->file('excel_file'));
+        Excel::import(new Sp2020SlsPartialImport(), $request->file('excel_file'));
         return redirect('sp2020sls/import_some')->with('success', 'Information has been added');
     }
 
