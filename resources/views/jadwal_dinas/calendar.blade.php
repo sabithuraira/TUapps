@@ -69,7 +69,7 @@
                         @endforeach
                     </select>
                 
-                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
+                    <a href="{{action('JadwalDinasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
                 </div>
                 <!-- /.pull-right -->
             </div>

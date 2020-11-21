@@ -7,33 +7,6 @@
 </ul>
 @endsection
 
-@section('css')
-    <style>
-        .scrollme {
-            overflow-y: auto;
-        }
-
-        td.red {
-            background-color: #ff2600 !important;
-            color: #fff;
-            font-size: 10px;
-        }
-
-        td.yellow {
-            background-color: #fece44 !important;
-            color: #fff;
-            font-size: 10px;
-        }
-
-        td.gray {
-            background-color: #e8e8e8 !important;
-        }
-    </style>
-    <meta name="_token" content="{{csrf_token()}}" />
-    <meta name="csrf-token" content="@csrf">
-    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-markdown/bootstrap-markdown.min.css') !!}">
-@endsection
-
 @section('content')
 <div class="container" id="calendar_tag">
     <br />
@@ -49,9 +22,9 @@
             <div class="mailbox-controls">
                 
                 <div>
-                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
+                    <a href="{{action('JadwalDinasController@create')}}" class="'btn btn-primary btn-sm"><i class='fa fa-list'></i> Daftar Jadwal Tugas</a>
                     
-                    <a href="{{action('JadwalTugasController@create')}}" class="'btn btn-success btn-sm"><i class='fa fa-plus'></i> Tambah Jadwal Tugas</a>
+                    <a href="{{action('JadwalDinasController@create')}}" class="'btn btn-success btn-sm"><i class='fa fa-plus'></i> Tambah Jadwal Tugas</a>
                 </div>
                 <!-- /.pull-right -->
             </div>
@@ -106,6 +79,32 @@
 </div>
 @endsection
 
+@section('css')
+    <style>
+        .scrollme {
+            overflow-y: auto;
+        }
+
+        td.red {
+            background-color: #ff2600 !important;
+            color: #fff;
+            font-size: 10px;
+        }
+
+        td.yellow {
+            background-color: #fece44 !important;
+            color: #fff;
+            font-size: 10px;
+        }
+
+        td.gray {
+            background-color: #e8e8e8 !important;
+        }
+    </style>
+    <meta name="_token" content="{{csrf_token()}}" />
+    <meta name="csrf-token" content="@csrf">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-markdown/bootstrap-markdown.min.css') !!}">
+@endsection
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
@@ -154,9 +153,7 @@ var vm = new Vue({
             $('#wait_progres').modal('show');
 
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
             $.ajax({
                 url : self.pathname+"/list_pegawai",
@@ -243,7 +240,7 @@ var vm = new Vue({
 
             for(var i=0 ;i < self.list_name.length; ++i){
                 self.html_body += '<tr id="id'+self.list_name[i].id+'"><td>'+(i+1)+'.</td>';
-                self.html_body += '<td class="gray">'+self.list_name[i].name+'</td>';
+                self.html_body += '<td>'+self.list_name[i].name+'</td>';
                 self.html_body += self.generateEmptyId;
                 self.html_body += '</tr>';
             }

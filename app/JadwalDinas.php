@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class JadwalTugas extends Model
+class JadwalDinas extends Model
 {
-    protected $table = 'jadwal_tugas';
+    protected $table = 'jadwal_dinas';
     
     public function PegawaiRel()
     {
@@ -27,20 +27,20 @@ class JadwalTugas extends Model
 
     public function attributes()
     {
-        return (new \App\Http\Requests\JadwalTugasRequest())->attributes();
+        return (new \App\Http\Requests\JadwalDinasRequest())->attributes();
     }
 
     public function listKegiatanByMonth($month){
 		$curr_year=date('Y');
 
 		$sql="SELECT u.id, u.email, u.name, DAY(tanggal_mulai) as mulai, 
-			DAY(tanggal_selesai) as selesai, j.nama_kegiatan
-			FROM jadwal_tugas j, users u 
+			DAY(tanggal_berakhir) as berakhir, j.nama_kegiatan
+			FROM jadwal_dinas j, users u 
 			WHERE 
-			(YEAR(tanggal_mulai)='".$curr_year."' OR YEAR(tanggal_selesai)='".$curr_year."') AND 
-			(MONTH(tanggal_mulai)='".$month."' OR MONTH(tanggal_selesai)='".$month."') AND 
+			(YEAR(tanggal_mulai)='".$curr_year."' OR YEAR(tanggal_berakhir)='".$curr_year."') AND 
+			(MONTH(tanggal_mulai)='".$month."' OR MONTH(tanggal_berakhir)='".$month."') AND 
 			j.pegawai_id=u.email 
-			ORDER BY tanggal_selesai DESC, tanggal_mulai DESC 
+			ORDER BY tanggal_berakhir DESC, tanggal_mulai DESC 
 			LIMIT 1000;";
 
         $result = DB::select(DB::raw($sql));

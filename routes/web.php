@@ -74,10 +74,10 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
 
 Route::group(['middleware' => 'auth'], function(){
     /////////////////JADWAL TUGAS
-    Route::resource('jadwal_tugas','JadwalTugasController');
-    Route::post('jadwal_tugas/calendar', 'JadwalTugasController@calendar');
-    Route::post('jadwal_tugas/list_pegawai', 'JadwalTugasController@listPegawai');
-    Route::post('jadwal_tugas/list_kegiatan', 'JadwalTugasController@listKegiatan');
+    Route::resource('jadwal_dinas','JadwalDinasController');
+    Route::post('jadwal_dinas/calendar', 'JadwalDinasController@calendar');
+    Route::post('jadwal_dinas/list_pegawai', 'JadwalDinasController@listPegawai');
+    Route::post('jadwal_dinas/list_kegiatan', 'JadwalDinasController@listKegiatan');
     /////////////////
 
     Route::resource('surat_km','SuratKmController');

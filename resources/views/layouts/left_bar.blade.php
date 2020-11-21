@@ -73,10 +73,10 @@
                                 <a href="{{ url('surat_km') }}" > <i class="icon-users"></i><span>Surat Menyurat</span></a>
                             </li>
 
-                            <li class="{{ (request()->is('jadwal_tugas*')) ? 'active' : '' }}">
+                            <li class="{{ (request()->is('jadwal_dinas*')) ? 'active' : '' }}">
                                 <a href="#Jadwal" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Jadwal Pegawai</span></a>
                                 <ul>                                  
-                                    <li class="{{ request()->is('jadwal_tugas*') ? 'active' : '' }}"><a href="{{url('jadwal_tugas')}}">Dinas Luar</a></li>
+                                    <li class="{{ request()->is('jadwal_dinas*') ? 'active' : '' }}"><a href="{{url('jadwal_dinas')}}">Dinas Luar</a></li>
                                 </ul>
                             </li>
 

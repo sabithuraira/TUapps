@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class JadwalTugasRequest extends FormRequest
+class JadwalDinasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,12 +29,7 @@ class JadwalTugasRequest extends FormRequest
             'tanggal_selesai' => 'required',
             'pegawai_id' => 'required',
             'penjelasan' => 'required',
-            'nomor' => 'required',
-            'is_kepala' => 'required',
-            'pejabat_ttd' => 'required',
-            'is_lpd' => 'required',
-            'is_kelengkapan' => 'required',
-            'is_lunas' => 'required',
+            'nomor_surat' => 'required',
 
         ];
     }
@@ -54,7 +49,7 @@ class JadwalTugasRequest extends FormRequest
             'tanggal_selesai' => 'Tanggal Selesai',
             'penjelasan' => 'Penjelasan',
 
-            'nomor' => 'Nomor Surat',
+            'nomor_surat' => 'Nomor Surat',
             'pejabat_ttd' => 'Pejabat Pemberi Tanda Tangan',
             'is_kepala' => 'Apakah persetujuan kepala?',
     

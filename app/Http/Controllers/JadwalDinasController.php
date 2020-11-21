@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\JadwalTugasRequest;
+use App\Http\Requests\JadwalDinasRequest;
 
-class JadwalTugasController extends Controller
+class JadwalDinasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class JadwalTugasController extends Controller
         $unit_kerja = \App\UnitKerja::all();
 
         $cur_unit_kerja =  \App\UnitKerja::where('kode','=',config('app.kode_prov').Auth::user()->kdkab)->first()->id;
-        return view('jadwal_tugas.index', compact(
+        return view('jadwal_dinas.index', compact(
             'unit_kerja', 'cur_unit_kerja'
         ));
     }
@@ -28,7 +28,7 @@ class JadwalTugasController extends Controller
         $unit_kerja = \App\UnitKerja::all();
 
         $cur_unit_kerja =  \App\UnitKerja::where('kode','=',config('app.kode_prov').Auth::user()->kdkab)->first()->id;
-        return view('jadwal_tugas.calendar', compact(
+        return view('jadwal_dinas.calendar', compact(
             'unit_kerja', 'cur_unit_kerja'
         ));
     }
@@ -42,7 +42,7 @@ class JadwalTugasController extends Controller
                 $kode_unit_kerja = $model_uk->kode;
         }
 
-        $datas = \App\User::where('kdprop', '=', substr($kode_unit_kerja,0,2))
+        $datas = \App\UserModel::where('kdprop', '=', substr($kode_unit_kerja,0,2))
                     ->where('kdkab','=',substr($kode_unit_kerja,2))
                     ->get();
 
@@ -55,7 +55,7 @@ class JadwalTugasController extends Controller
             $month = $request->get('month');
         }
 
-        $model = new \App\JadwalTugas();
+        $model = new \App\JadwalDinas();
         $data = $model->listKegiatanByMonth($month);
 
         return response()->json(['data'=>$data]);
@@ -68,7 +68,7 @@ class JadwalTugasController extends Controller
      */
     public function create()
     {
-        $model= new \App\JadwalTugas;
+        $model= new \App\JadwalDinas;
         $list_pegawai = \App\User::where('kdprop', '=', config('app.kode_prov'))
                     ->where('kdkab','=',Auth::user()->kdkab)
                     ->get();
@@ -79,7 +79,7 @@ class JadwalTugasController extends Controller
                     ->where('kdesl',"<=",2)
                     ->get();
 
-        return view('jadwal_tugas.create', 
+        return view('jadwal_dinas.create', 
             compact('list_pegawai', 'model', 'list_pejabat'));
     }
 
@@ -89,21 +89,21 @@ class JadwalTugasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JadwalTugasRequest $request)
+    public function store(JadwalDinasRequest $request)
     {
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('jadwal_tugas/create')
+            return redirect('jadwal_dinas/create')
                         ->withErrors($validator)
                         ->withInput();
         }
 
-        $model= new \App\JadwalTugas;
+        $model= new \App\JadwalDinas;
         $model->uraian=$request->get('uraian');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
         
-        return redirect('jadwal_tugas')->with('success', 'Information has been added');
+        return redirect('jadwal_dinas')->with('success', 'Information has been added');
     }
 
     /**
@@ -125,8 +125,8 @@ class JadwalTugasController extends Controller
      */
     public function edit($id)
     {
-        $model = \App\JadwalTugas::find($id);
-        return view('jadwal_tugas.edit',compact('model','id'));
+        $model = \App\JadwalDinas::find($id);
+        return view('jadwal_dinas.edit',compact('model','id'));
     }
 
     /**
@@ -136,19 +136,19 @@ class JadwalTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(JadwalTugasRequest $request, $id)
+    public function update(JadwalDinasRequest $request, $id)
     {
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('jadwal_tugas/edit',$id)
+            return redirect('jadwal_dinas/edit',$id)
                         ->withErrors($validator)
                         ->withInput();
         }
         
-        $model= \App\JadwalTugas::find($id);
+        $model= \App\JadwalDinas::find($id);
         $model->uraian=$request->get('uraian');
         $model->updated_by=Auth::id();
         $model->save();
-        return redirect('jadwal_tugas');
+        return redirect('jadwal_dinas');
     }
 
     /**
@@ -159,8 +159,8 @@ class JadwalTugasController extends Controller
      */
     public function destroy($id)
     {
-        $model = \App\JadwalTugas::find($id);
+        $model = \App\JadwalDinas::find($id);
         $model->delete();
-        return redirect('jadwal_tugas')->with('success','Information has been  deleted');
+        return redirect('jadwal_dinas')->with('success','Information has been  deleted');
     }
 }

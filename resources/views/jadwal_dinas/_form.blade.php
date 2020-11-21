@@ -20,9 +20,9 @@
     
     <div class="col-md-6">
         <div class="form-group">
-            <label>{{ $model->attributes()['nomor'] }}:</label>
-            <input type="text" class="form-control {{($errors->first('nomor') ? ' parsley-error' : '')}}" name="nomor" value="{{ old('nomor', $model->nomor) }}">
-            @foreach ($errors->get('nomor') as $msg)
+            <label>{{ $model->attributes()['nomor_surat'] }}:</label>
+            <input type="text" class="form-control {{($errors->first('nomor_surat') ? ' parsley-error' : '')}}" name="nomor_surat" value="{{ old('nomor_surat', $model->nomor_surat) }}">
+            @foreach ($errors->get('nomor_surat') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
             @endforeach
         </div>

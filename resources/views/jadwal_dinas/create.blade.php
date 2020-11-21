@@ -16,9 +16,9 @@
               <h2>Tambah Jadwal Tugas</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{url('jadwal_tugas')}}" enctype="multipart/form-data">
+              <form method="post" action="{{url('jadwal_dinas')}}" enctype="multipart/form-data">
               @csrf
-              @include('jadwal_tugas._form')
+              @include('jadwal_dinas._form')
               </form>
           </div>
       </div>
