@@ -58,7 +58,7 @@ class JadwalDinasRequest extends FormRequest
             'is_lunas' => 'Pelunasan Pembayaran',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',
-            'pegawai_id' => 'Pegawai',
+            'pegawai_id' => 'Pegawai ',
         ];
     }
 }

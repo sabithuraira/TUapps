@@ -72,6 +72,12 @@
                             <li class="{{ (request()->is('surat_km*')) ? 'active' : '' }}">
                                 <a href="{{ url('surat_km') }}" > <i class="icon-users"></i><span>Surat Menyurat</span></a>
                             </li>
+                            
+                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
+                            <li class="{{ (request()->is('pemegang_bmn*')) ? 'active' : '' }}">
+                                <a href="{{ url('pemegang_bmn') }}" > <i class="icon-basket-loaded"></i><span>Pemegang BMN</span></a>
+                            </li>
+                            @endhasanyrole
 
                             <li class="{{ (request()->is('jadwal_dinas*')) ? 'active' : '' }}">
                                 <a href="#Jadwal" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Jadwal Pegawai</span></a>

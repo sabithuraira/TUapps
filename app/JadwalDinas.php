@@ -34,13 +34,13 @@ class JadwalDinas extends Model
 		$curr_year=date('Y');
 
 		$sql="SELECT u.id, u.email, u.name, DAY(tanggal_mulai) as mulai, 
-			DAY(tanggal_berakhir) as berakhir, j.nama_kegiatan
+			DAY(tanggal_selesai) as berakhir, j.nama_kegiatan
 			FROM jadwal_dinas j, users u 
 			WHERE 
-			(YEAR(tanggal_mulai)='".$curr_year."' OR YEAR(tanggal_berakhir)='".$curr_year."') AND 
-			(MONTH(tanggal_mulai)='".$month."' OR MONTH(tanggal_berakhir)='".$month."') AND 
+			(YEAR(tanggal_mulai)='".$curr_year."' OR YEAR(tanggal_selesai)='".$curr_year."') AND 
+			(MONTH(tanggal_mulai)='".$month."' OR MONTH(tanggal_selesai)='".$month."') AND 
 			j.pegawai_id=u.email 
-			ORDER BY tanggal_berakhir DESC, tanggal_mulai DESC 
+			ORDER BY tanggal_selesai DESC, tanggal_mulai DESC 
 			LIMIT 1000;";
 
         $result = DB::select(DB::raw($sql));
