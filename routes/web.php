@@ -46,7 +46,10 @@ Route::group(['middleware' => ['role:superadmin']], function () {
 
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
-    Route::resource('jadwal_dinas','JadwalDinasController');
+    // Route::resource('jadwal_dinas','JadwalDinasController');
+    Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
+    Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
+    // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
 });
 
 
@@ -77,11 +80,11 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function(){
-    /////////////////JADWAL TUGAS
-    Route::resource('jadwal_dinas','JadwalDinasController');
-    Route::post('jadwal_dinas/calendar', 'JadwalDinasController@calendar');
-    Route::post('jadwal_dinas/list_pegawai', 'JadwalDinasController@listPegawai');
-    Route::post('jadwal_dinas/list_kegiatan', 'JadwalDinasController@listKegiatan');
+    /////////////////SURAT TUGAS TUGAS
+    Route::resource('surat_tugas','SuratTugasController');
+    Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
+    Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
+    Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
     /////////////////
 
     Route::resource('surat_km','SuratKmController');
