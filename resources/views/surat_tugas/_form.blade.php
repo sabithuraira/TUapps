@@ -48,7 +48,7 @@
                         selected="selected"
                     @endif>
                     {{ $value->kode_program.'.'.$value->kode_aktivitas.'.'.$value->kode_kro.'.'.$value->kode_ro.'.'.$value->kode_komponen.'.'.$value->kode_subkomponen }}
-                    {{ $value->label_aktivitas.'-'.$value->label_ro.'.'.$value->kode_kro.'.'.$value->kode_ro.'.'.$value->kode_komponen.'.'.$value->kode_subkomponen }}
+                    {{ $value->label_aktivitas.'-'.$value->label_ro }}
                 </option>
             @endforeach
         </select>
@@ -70,7 +70,7 @@
 
     <br>
     <button type="submit" class="btn btn-primary">Simpan</button>
-
+    <input type="hidden" name="total_utama" id="total_utama" v-model="total_utama">
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -94,9 +94,6 @@
 @section('scripts')
     <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
-    <script src="{!! asset('js/jquery_file_upload/js/vendor/jquery.ui.widget.js') !!}"></script>
-    <script src="{!! asset('js/jquery_file_upload/js/jquery.iframe-transport.js') !!}"></script>
-    <script src="{!! asset('js/jquery_file_upload/js/jquery.fileupload.js') !!}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 
 <script>
@@ -109,6 +106,9 @@
             kode_mak:  {!! json_encode($model->kode_mak) !!}, 
             tugas:  {!! json_encode($model->tugas) !!}, 
             unit_kerja:  {!! json_encode($model->unit_kerja) !!},
+            list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
+            list_kendaraan:  {!! json_encode($model_rincian->listKendaraan) !!},
+            list_pegawai:  {!! json_encode($list_pegawai) !!},
             total_utama: 1,
             rincian: [],
             cur_rincian: {
@@ -152,6 +152,21 @@
             is_delete: function(params){
                 if(isNaN(params)) return false;
                 else return true;
+            },
+            setNamaJabatan: function(event){
+                var self = this;
+                $('#wait_progres').modal('show');
+                var selected_index = event.currentTarget.selectedIndex;
+                self.cur_rincian.nama = self.list_pegawai[selected_index].name;
+                self.cur_rincian.jabatan = self.list_pegawai[selected_index].nmjab;
+                $('#wait_progres').modal('hide');
+            },
+            setPejabat: function(event){
+                var self = this;
+                $('#wait_progres').modal('show');
+                var selected_index = event.currentTarget.selectedIndex;
+                self.cur_rincian.pejabat_ttd_nama = self.list_pegawai[selected_index].name;
+                $('#wait_progres').modal('hide');
             },
             saveRincian: function(){
                 var self = this;

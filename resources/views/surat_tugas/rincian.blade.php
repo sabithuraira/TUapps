@@ -36,25 +36,24 @@
                 </td>
 
                     <td>
-                        <p>@{{ data.nip }}</p>
-                        @{{ data.nama }}
+                        @{{ data.nip }} - @{{ data.nama }}
                         <input type="hidden" :name="'u_nip'+data.id" v-model="data.nip">
                         <input type="hidden" :name="'u_nama'+data.id" v-model="data.nama">
+                        <input type="hidden" :name="'u_jabatan'+data.id" v-model="data.jabatan">
                     </td>
                     <td>@{{ data.tujuan_tugas }}<input type="hidden" :name="'u_tujuan_tugas'+data.id" v-model="data.tujuan_tugas"></td>
                     <td>
-                        @{{ data.tanggal_mulai }} - @{{ data.tanggal_selesai }}
+                        <b>@{{ data.tanggal_mulai }}</b> sd <b>@{{ data.tanggal_selesai }}</b>
                         <input type="hidden" :name="'u_tanggal_mulai'+data.id" v-model="data.tanggal_mulai">
                         <input type="hidden" :name="'u_tanggal_selesai'+data.id" v-model="data.tanggal_selesai">
                     </td>
                     <td>
-                        <p>@{{ data.pejabat_ttd_nip }}</p>
-                        @{{ data.pejabat_ttd_nama }}
+                        @{{ data.pejabat_ttd_nip }} - @{{ data.pejabat_ttd_nama }}
                         <input type="hidden" :name="'u_pejabat_ttd_nip'+data.id" v-model="data.pejabat_ttd_nip">
                         <input type="hidden" :name="'u_pejabat_ttd_nama'+data.id" v-model="data.pejabat_ttd_nama">
                     </td>
-                    <td>@{{ data.tingkat_biaya }}<input type="hidden" :name="'u_tingkat_biaya'+data.id" v-model="data.tingkat_biaya"></td>
-                    <td>@{{ data.kendaraan }}<input type="hidden" :name="'u_kendaraan'+data.id" v-model="data.kendaraan"></td>      
+                    <td class="text-center">@{{ list_tingkat_biaya[data.tingkat_biaya] }}<input type="hidden" :name="'u_tingkat_biaya'+data.id" v-model="data.tingkat_biaya"></td>
+                    <td class="text-center">@{{ list_kendaraan[data.kendaraan] }}<input type="hidden" :name="'u_kendaraan'+data.id" v-model="data.kendaraan"></td>      
                 </tr>
             </tbody>
         </table>

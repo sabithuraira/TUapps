@@ -19,7 +19,6 @@ class CreateSuratTugasTable extends Migration
             $table->integer('jenis_st');
             $table->integer('sumber_anggaran');
             $table->integer('mak');
-            $table->string('kode_mak');
             $table->string('tugas');
             $table->integer('unit_kerja');
             $table->integer('created_by');

@@ -80,12 +80,10 @@ class SuratTugasController extends Controller
                     
         $list_pejabat = \App\User::where('kdprop', '=', config('app.kode_prov'))
                     ->where('kdkab','=',Auth::user()->kdkab)
-                    ->where('kdesl',"<=",2)
-                    ->get();
+                    ->where('kdesl',"<=",2)->get();
                     
                     
-        $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)
-                    ->get();
+        $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
 
         $model_rincian = new \App\SuratTugasRincian;
 
@@ -106,13 +104,45 @@ class SuratTugasController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
+        $total_utama = $request->get('total_utama');
 
         $model= new \App\SuratTugas;
-        $model->uraian=$request->get('uraian');
+        $model->jenis_st=$request->get('');
+        $model->sumber_anggaran=$request->get('sumber_anggaran');
+        $model->mak=$request->get('mak');
+        $model->tugas=$request->get('tugas');
+        $model->unit_kerja=Auth::user()->kdprop.Auth::user()->kdkab;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
-        $model->save();
-        
+
+        if($model->save()){
+            for($i=1;$i<=$total_utama;++$i){
+                if(strlen($request->get('u_nipau'.$i))>0 && strlen($request->get('u_namaau'.$i))>0 
+                    && strlen($request->get('u_jabatanau'.$i))>0 && strlen($request->get('utujuan_tugasau'.$i))>0
+                    && strlen($request->get('utanggal_mulaiau'.$i))>0 && strlen($request->get('utanggal_selesaiau'.$i))>0
+                    && strlen($request->get('upejabat_ttd_nipau'.$i))>0 && strlen($request->get('upejabat_ttd_namaau'.$i))>0
+                    && strlen($request->get('utingkat_biayaau'.$i))>0 && strlen($request->get('ukendaraanau'.$i))>0){
+                    
+                    $model_r = new \App\TindakLanjut;
+                    $model_r->id_surtug =  $model->id;
+                    $model_r->nip  = $request->get('u_nipau'.$i);
+                    $model_r->nama   = $request->get('u_namaau'.$i);
+                    $model_r->jabatan = $request->get('u_jabatanau'.$i);
+                    $model_r->tujuan_tugas  = $request->get('u_tujuan_tugasau'.$i);
+                    $model_r->tanggal_mulai       = date('Y-m-d', strtotime($request->get('u_tanggal_mulaiau'.$i)));
+                    $model_r->tanggal_selesai       = date('Y-m-d', strtotime($request->get('u_tanggal_selesaiau'.$i)));
+                    $model_r->tingkat_biaya  = $request->get('u_tingkat_biayaau'.$i);
+                    $model_r->kendaraan  = $request->get('u_kendaraanau'.$i);
+                    $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
+                    $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
+                    
+                    $model_r->status_kumpul_lpd = 0;
+                    $model_r->status_kumpul_kelengkapan = 0;
+                    $model_r->status_pembayaran = 0;
+                    $model_r->save();
+                }
+            }
+        }
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
