@@ -26,8 +26,7 @@ class SuratTugasRequest extends FormRequest
         return [
             'jenis_st' => 'required',
             'sumber_anggaran' => 'required',
-            'kode_mak' => 'required',
-
+            'mak' => 'required',
         ];
     }
      
@@ -37,7 +36,6 @@ class SuratTugasRequest extends FormRequest
             'jenis_st' => 'Jenis Surat Tugas',
             'sumber_anggaran' => 'Sumber Anggaran',
             'mak' => 'MAK',
-            'kode_mak' => 'MAK',
             'tugas' => 'Tugas',
             'unit_kerja' => 'Unit Kerja',
             'created_by' => 'Dibuat oleh',

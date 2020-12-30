@@ -24,7 +24,7 @@ class CreateSuratTugasRincianTable extends Migration
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->string('nomor_st');
-            $table->string('nomor_sppd');
+            $table->string('nomor_spd');
             $table->integer('status_kumpul_lpd');
             $table->integer('status_kumpul_kelengkapan');
             $table->integer('status_pembayaran');
@@ -32,6 +32,7 @@ class CreateSuratTugasRincianTable extends Migration
             $table->string('pejabat_ttd_nama');
             $table->integer('tingkat_biaya');
             $table->integer('kendaraan');
+            $table->integer('unit_kerja');
             $table->integer('created_by');
             $table->integer('updated_by');
 

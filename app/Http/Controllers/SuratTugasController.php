@@ -107,7 +107,7 @@ class SuratTugasController extends Controller
         $total_utama = $request->get('total_utama');
 
         $model= new \App\SuratTugas;
-        $model->jenis_st=$request->get('');
+        $model->jenis_st=$request->get('jenis_st');
         $model->sumber_anggaran=$request->get('sumber_anggaran');
         $model->mak=$request->get('mak');
         $model->tugas=$request->get('tugas');
@@ -118,12 +118,12 @@ class SuratTugasController extends Controller
         if($model->save()){
             for($i=1;$i<=$total_utama;++$i){
                 if(strlen($request->get('u_nipau'.$i))>0 && strlen($request->get('u_namaau'.$i))>0 
-                    && strlen($request->get('u_jabatanau'.$i))>0 && strlen($request->get('utujuan_tugasau'.$i))>0
-                    && strlen($request->get('utanggal_mulaiau'.$i))>0 && strlen($request->get('utanggal_selesaiau'.$i))>0
-                    && strlen($request->get('upejabat_ttd_nipau'.$i))>0 && strlen($request->get('upejabat_ttd_namaau'.$i))>0
-                    && strlen($request->get('utingkat_biayaau'.$i))>0 && strlen($request->get('ukendaraanau'.$i))>0){
+                    && strlen($request->get('u_jabatanau'.$i))>0 && strlen($request->get('u_tujuan_tugasau'.$i))>0
+                    && strlen($request->get('u_tanggal_mulaiau'.$i))>0 && strlen($request->get('u_tanggal_selesaiau'.$i))>0
+                    && strlen($request->get('u_pejabat_ttd_nipau'.$i))>0 && strlen($request->get('u_pejabat_ttd_namaau'.$i))>0
+                    && strlen($request->get('u_tingkat_biayaau'.$i))>0 && strlen($request->get('u_kendaraanau'.$i))>0){
                     
-                    $model_r = new \App\TindakLanjut;
+                    $model_r = new \App\SuratTugasRincian;
                     $model_r->id_surtug =  $model->id;
                     $model_r->nip  = $request->get('u_nipau'.$i);
                     $model_r->nama   = $request->get('u_namaau'.$i);
@@ -136,9 +136,43 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
                     $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
                     
+                    ////////////////
+                    $nomor_st = 1;
+                    $nomor_spd = 1;
+                    $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    if($datas!=null){
+                        $exp_nomor_st = explode("/",$datas->nomor_st)[0];
+                        $exp_nomor_spd = explode("/",$datas->nomor_spd)[0];
+                        $prev_nomor_st = (int)$exp_nomor_st;
+                        $prev_nomor_spd = (int)$exp_nomor_spd;
+                        $nomor_st = $prev_nomor_st + 1;;
+                        $nomor_spd = $prev_nomor_spd + 1;
+                    }
+
+                    while(strlen($nomor_st)<4)
+                        $nomor_st = '0'.$nomor_st;
+                        
+                    while(strlen($nomor_spd)<4)
+                        $nomor_spd = '0'.$nomor_spd;
+                    ////////
+                    
+                    $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
+                    if(Auth::user()->kdkab=='00'){
+                        $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                    }
+                    else{
+                        $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                    }
+
+                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
                     $model_r->status_kumpul_lpd = 0;
                     $model_r->status_kumpul_kelengkapan = 0;
                     $model_r->status_pembayaran = 0;
+                    $model_r->created_by=Auth::id();
+                    $model_r->updated_by=Auth::id();
                     $model_r->save();
                 }
             }

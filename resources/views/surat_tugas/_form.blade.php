@@ -40,11 +40,11 @@
     </div>
 
     <div class="form-group">
-        <label>{{ $model->attributes()['kode_mak'] }}:</label>
-        <select class="form-control {{($errors->first('kode_mak') ? ' parsley-error' : '')}}"  name="kode_mak">
+        <label>{{ $model->attributes()['mak'] }}:</label>
+        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}"  name="mak">
             @foreach ($list_anggaran as $key=>$value)
                 <option  value="{{ $value->id }}" 
-                    @if ($value->id == old('kode_mak', $model->kode_mak))
+                    @if ($value->id == old('mak', $model->mak))
                         selected="selected"
                     @endif>
                     {{ $value->kode_program.'.'.$value->kode_aktivitas.'.'.$value->kode_kro.'.'.$value->kode_ro.'.'.$value->kode_komponen.'.'.$value->kode_subkomponen }}
@@ -52,7 +52,7 @@
                 </option>
             @endforeach
         </select>
-        @foreach ($errors->get('kode_mak') as $msg)
+        @foreach ($errors->get('mak') as $msg)
             <p class="text-danger">{{ $msg }}</p>
         @endforeach
     </div>
