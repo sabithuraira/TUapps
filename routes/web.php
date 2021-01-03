@@ -50,6 +50,18 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
     Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
     // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
+    
+    /////////////////SURAT TUGAS TUGAS
+    Route::resource('surat_tugas','SuratTugasController');
+    Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
+    Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
+    Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
+    
+    Route::post('surat_tugas/set_lpd', 'SuratTugasController@set_lpd');
+    Route::post('surat_tugas/set_kelengkapan', 'SuratTugasController@set_kelengkapan');
+    Route::post('surat_tugas/set_pembayaran', 'SuratTugasController@set_pembayaran');
+    Route::post('surat_tugas/set_aktif', 'SuratTugasController@set_aktif');
+    /////////////////
 });
 
 
@@ -80,12 +92,6 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function(){
-    /////////////////SURAT TUGAS TUGAS
-    Route::resource('surat_tugas','SuratTugasController');
-    Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
-    Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
-    Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
-    /////////////////
 
     Route::resource('surat_km','SuratKmController');
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');

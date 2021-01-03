@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratTugasRequest;
+use Illuminate\Support\Facades\Crypt;
 
 class SuratTugasController extends Controller
 {
@@ -16,10 +17,16 @@ class SuratTugasController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $datas = \App\SuratTugasRincian::where('nama', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%')
-            ->paginate();
+        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query-> where('nama', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
+                    })
+                )
+                ->orderBy('created_at', 'desc')
+                ->paginate();
 
         $datas->withPath('surat_tugas');
         $datas->appends($request->all());
@@ -77,10 +84,22 @@ class SuratTugasController extends Controller
                     ->where('kdkab','=',Auth::user()->kdkab)
                     ->get();
 
-                    
-        $list_pejabat = \App\User::where('kdprop', '=', config('app.kode_prov'))
-                    ->where('kdkab','=',Auth::user()->kdkab)
-                    ->where('kdesl',"<=",2)->get();
+        if(Auth::user()->kdkab=='00'){            
+            $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab','=',Auth::user()->kdkab)
+                        ->where(
+                            (function ($query) {
+                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                            }))->get();
+        }
+        else{
+            $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab','=',Auth::user()->kdkab)
+                        ->where(
+                            (function ($query) {
+                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
+                            }))->get();
+        }
                     
                     
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
@@ -199,8 +218,39 @@ class SuratTugasController extends Controller
      */
     public function edit($id)
     {
-        $model = \App\SuratTugas::find($id);
-        return view('surat_tugas.edit',compact('model','id'));
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+
+        if($model_rincian->status_aktif==1){
+            $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab','=',Auth::user()->kdkab)->get();
+
+            if(Auth::user()->kdkab=='00'){            
+                $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                            ->where('kdkab','=',Auth::user()->kdkab)
+                            ->where(
+                                (function ($query) {
+                                    $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                                }))->get();
+            }
+            else{
+                $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                            ->where('kdkab','=',Auth::user()->kdkab)
+                            ->where(
+                                (function ($query) {
+                                    $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
+                                }))->get();
+            }
+                                
+            $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
+
+            return view('surat_tugas.edit',compact('model','id', 'real_id', 
+                'list_pegawai', 'list_pejabat', 'list_anggaran', 'model_rincian'));
+        }
+        else{
+            abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
+        }
+
     }
 
     /**
@@ -218,11 +268,109 @@ class SuratTugasController extends Controller
                         ->withInput();
         }
         
-        $model= \App\SuratTugas::find($id);
-        $model->uraian=$request->get('uraian');
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+
+        $model->jenis_st=$request->get('jenis_st');
+        $model->sumber_anggaran=$request->get('sumber_anggaran');
+        $model->mak=$request->get('mak');
+        $model->tugas=$request->get('tugas');
         $model->updated_by=Auth::id();
         $model->save();
+        
+        /////////
+        $model_rincian->nip  = $request->get('nip');
+        $model_rincian->nama   = $request->get('nama');
+        $model_rincian->jabatan = $request->get('jabatan');
+        $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
+        $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+        $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+        $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
+        $model_rincian->kendaraan  = $request->get('kendaraan');
+        $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+        $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+        $model_rincian->updated_by=Auth::id();
+        $model_rincian->save();
+        ///////////
         return redirect('surat_tugas');
+    }
+
+    public function set_lpd(Request $request){
+        if($request->form_id_data!=''){
+            
+            $real_id = Crypt::decrypt($request->form_id_data);
+            $model_rincian = \App\SuratTugasRincian::find($real_id);
+
+            if($model_rincian->status_kumpul_lpd==0){
+                $model_rincian->status_kumpul_lpd = 1;
+            }
+            else{
+                $model_rincian->status_kumpul_lpd = 0;    
+            }
+
+            $model_rincian->save();
+
+            return response()->json(['result'=>'Data berhasil disimpan']);
+        }
+        else{
+            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+    }
+    
+    public function set_kelengkapan(Request $request){
+        if($request->form_id_data!=''){
+            
+            $real_id = Crypt::decrypt($request->form_id_data);
+            $model_rincian = \App\SuratTugasRincian::find($real_id);
+
+            if($model_rincian->status_kumpul_kelengkapan==0){
+                $model_rincian->status_kumpul_kelengkapan = 1;
+            }
+            else{
+                $model_rincian->status_kumpul_kelengkapan = 0;    
+            }
+
+            $model_rincian->save();
+
+            return response()->json(['result'=>'Data berhasil disimpan']);
+        }
+        else{
+            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+    }
+
+    public function set_pembayaran(Request $request){
+        if($request->form_id_data!=''){
+            
+            $real_id = Crypt::decrypt($request->form_id_data);
+            $model_rincian = \App\SuratTugasRincian::find($real_id);
+
+            if($model_rincian->status_pembayaran==0) $model_rincian->status_pembayaran = 1;
+            else $model_rincian->status_pembayaran = 0;    
+
+            $model_rincian->save();
+
+            return response()->json(['result'=>'Data berhasil disimpan']);
+        }
+        else{
+            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+    }
+    
+    public function set_aktif(Request $request){
+        if($request->form_id_data!=''){
+            
+            $real_id = Crypt::decrypt($request->form_id_data);
+            $model_rincian = \App\SuratTugasRincian::find($real_id);
+            
+            $model_rincian->status_aktif = 2;
+            $model_rincian->save();
+            return response()->json(['result'=>'Data berhasil disimpan']);
+        }
+        else{
+            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
     }
 
     /**

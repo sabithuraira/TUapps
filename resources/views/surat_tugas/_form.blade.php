@@ -109,6 +109,7 @@
             list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
             list_kendaraan:  {!! json_encode($model_rincian->listKendaraan) !!},
             list_pegawai:  {!! json_encode($list_pegawai) !!},
+            list_pejabat:  {!! json_encode($list_pejabat) !!},
             total_utama: 1,
             rincian: [],
             cur_rincian: {
@@ -125,28 +126,6 @@
                 id: '',
                 index: ''
             },
-        },
-        computed: {
-        },
-        watch: {
-            // nomor: function (val) {
-            //     if(!this.id_induk){
-            //         let year = new Date(this.form_tanggal).getFullYear();
-            //         this.form_no_laporan = val + '/' + this.label_nomor + this.label_nomor_periode;
-            //     }
-            // },
-            // form_periode_audit: function (val) {
-            //     if(!this.id_induk){
-            //         let year = new Date(this.form_tanggal).getFullYear();
-            //         this.form_no_laporan = this.nomor + '/' + this.label_nomor + this.label_nomor_periode;
-            //     }
-            // },
-            // form_tanggal: function (val) {
-            //     if(!this.id_induk){
-            //         let year = new Date(val).getFullYear();
-            //         this.form_no_laporan = this.nomor + '/'+ this.label_nomor + this.label_nomor_periode;
-            //     }
-            // },
         },
         methods: {
             is_delete: function(params){
@@ -165,7 +144,7 @@
                 var self = this;
                 $('#wait_progres').modal('show');
                 var selected_index = event.currentTarget.selectedIndex;
-                self.cur_rincian.pejabat_ttd_nama = self.list_pegawai[selected_index].name;
+                self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[selected_index].name;
                 $('#wait_progres').modal('hide');
             },
             saveRincian: function(){
@@ -220,6 +199,7 @@
                 var self = this;
                 if (event) {
                     self.cur_rincian.id = event.currentTarget.getAttribute('data-id');
+                    self.cur_rincian.index = event.currentTarget.getAttribute('data-index');
                     self.cur_rincian.nip = event.currentTarget.getAttribute('data-nip');
                     self.cur_rincian.nama = event.currentTarget.getAttribute('data-nama');
                     self.cur_rincian.tujuan_tugas = event.currentTarget.getAttribute('data-tujuan_tugas');

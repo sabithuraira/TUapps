@@ -31,6 +31,14 @@ class SuratTugasRincian extends Model
     {
         return array( 1 => 'Kendaraan Umum', 2 => 'Kendaraan Dinas',);
     }
+    
+    public function getListStatusAttribute()
+    {
+        return array(
+            0 => "<div class='badge badge-warning'>Belum Selesai</div>", 
+            1 => "<div class='badge badge-success'>Sudah Selesai</div>", 
+        );
+    }
 
     // public function listKegiatanByMonth($month){
 	// 	$curr_year=date('Y');

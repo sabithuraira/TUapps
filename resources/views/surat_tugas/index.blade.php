@@ -15,7 +15,7 @@
         </div>
       @endif
 
-      <div class="card">
+      <div class="card" id="app_vue">
         <div class="body">      
             <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Tambah Surat Tugas</a>
               
