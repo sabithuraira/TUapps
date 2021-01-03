@@ -79,12 +79,20 @@
                             </li>
                             @endhasanyrole
 
+                            @unlessrole('subbag-umum|subbag-keuangan')
                             <li class="{{ (request()->is('surat_tugas*')) ? 'active' : '' }}">
-                                <a href="#Jadwal" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Surat Tugas</span></a>
+                                <a href="{{ url('surat_tugas/daftar') }}" > <i class="icon-doc"></i><span>Surat Tugas</span></a>
+                            </li>
+                            @endunlessrole
+
+                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
+                            <li class="{{ (request()->is('surat_tugas*')) ? 'active' : '' }}">
+                                <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas</span></a>
                                 <ul>                                  
                                     <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a href="{{url('surat_tugas')}}">Daftar</a></li>
                                     <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a href="{{url('surat_tugas')}}">Calender</a></li>
                                 </ul>
+                            @endhasanyrole
                             </li>
 
                             @hasanyrole('superadmin|subbag-umum')

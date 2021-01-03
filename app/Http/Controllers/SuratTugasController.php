@@ -33,6 +33,26 @@ class SuratTugasController extends Controller
 
         return view('surat_tugas.index',compact('datas', 'keyword'));
     }
+    
+    public function daftar(Request $request)
+    {
+        $keyword = $request->get('search');
+        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query-> where('nama', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
+                    })
+                )
+                ->orderBy('created_at', 'desc')
+                ->paginate();
+
+        $datas->withPath('surat_tugas/daftar');
+        $datas->appends($request->all());
+
+        return view('surat_tugas.daftar',compact('datas', 'keyword'));
+    }
 
     public function calendar(Request $request)
     {

@@ -44,27 +44,6 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::post('sp2020sls/import_some','Sp2020SlsController@import_some');
 });
 
-
-Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
-    // Route::resource('jadwal_dinas','JadwalDinasController');
-    Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
-    Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
-    // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
-    
-    /////////////////SURAT TUGAS TUGAS
-    Route::resource('surat_tugas','SuratTugasController');
-    Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
-    Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
-    Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
-    
-    Route::post('surat_tugas/set_lpd', 'SuratTugasController@set_lpd');
-    Route::post('surat_tugas/set_kelengkapan', 'SuratTugasController@set_kelengkapan');
-    Route::post('surat_tugas/set_pembayaran', 'SuratTugasController@set_pembayaran');
-    Route::post('surat_tugas/set_aktif', 'SuratTugasController@set_aktif');
-    /////////////////
-});
-
-
 Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
@@ -91,8 +70,27 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
+    // Route::resource('jadwal_dinas','JadwalDinasController');
+    Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
+    Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
+    // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
+    
+    /////////////////SURAT TUGAS TUGAS
+    Route::resource('surat_tugas','SuratTugasController')->except(['show']);
+    Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
+    Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
+    Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
+    Route::post('surat_tugas/set_lpd', 'SuratTugasController@set_lpd');
+    Route::post('surat_tugas/set_kelengkapan', 'SuratTugasController@set_kelengkapan');
+    Route::post('surat_tugas/set_pembayaran', 'SuratTugasController@set_pembayaran');
+    Route::post('surat_tugas/set_aktif', 'SuratTugasController@set_aktif');
+    /////////////////
+});
 
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
+    ////////////////////
     Route::resource('surat_km','SuratKmController');
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
 
