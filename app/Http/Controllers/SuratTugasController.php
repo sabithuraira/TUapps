@@ -313,7 +313,34 @@ class SuratTugasController extends Controller
         $model_rincian->updated_by=Auth::id();
         $model_rincian->save();
         ///////////
-        return redirect('surat_tugas');
+        return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');
+    }
+
+    public function edit_unit_kerja()
+    {
+        $model = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)->where('kdkab','=',Auth::user()->kdkab)->get();
+
+        return view('surat_tugas.edit_unit_kerja',compact('model','list_pegawai'));
+    }
+
+    public function update_unit_kerja(Request $request)
+    {
+        $model = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+        $model->kepala_nip  =$request->get('kepala_nip');
+        $model->kepala_nama =$request->get('kepala_nama');
+        $model->ppk_nip =$request->get('ppk_nip');
+        $model->ppk_nama =$request->get('ppk_nama');
+        $model->bendahara_nip =$request->get('bendahara_nip');
+        $model->bendahara_nama =$request->get('bendahara_nama');
+        $model->ppspm_nip =$request->get('ppspm_nip');
+        $model->ppspm_nama =$request->get('ppspm_nama');
+        $model->ibu_kota =$request->get('ibu_kota');
+        $model->alamat_kantor =$request->get('alamat_kantor');
+        $model->kontak_kantor =$request->get('kontak_kantor');
+        $model->updated_by=Auth::id();
+        $model->save();
+        return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');
     }
 
     public function set_lpd(Request $request){
