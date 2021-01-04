@@ -35,8 +35,8 @@ class SuratTugasRincian extends Model
     public function getListStatusAttribute()
     {
         return array(
-            0 => "<div class='badge badge-warning'>Belum Selesai</div>", 
-            1 => "<div class='badge badge-success'>Sudah Selesai</div>", 
+            0 => "<div class='badge badge-warning'>Belum</div>", 
+            1 => "<div class='badge badge-success'>Selesai</div>", 
         );
     }
 

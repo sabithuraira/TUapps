@@ -11,7 +11,8 @@
                     <th class="text-center" rowspan="2">Pegawai</th>
                     <th class="text-center" colspan="2">Tanggal</th>
                     <th class="text-center" colspan="3">Status</th>
-                    <th class="text-center"  rowspan="2" colspan="2">Action</th>
+                    <th class="text-center" rowspan="2" colspan="2">Aksi</th>
+                    <th class="text-center" colspan="2">Cetak</th>
                 </tr>
                 
                 <tr>
@@ -20,6 +21,8 @@
                     <th class="text-center">LPD</th>
                     <th class="text-center">Kelengkapan Dok</th>
                     <th class="text-center">Pembayaran</th>
+                    <th class="text-center">Surat Tugas</th>
+                    <th class="text-center">SPD</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +75,9 @@
                                 <p class='text-muted small'>Batalkan</p>
                             </a>
                         </td>
+                        
+                        <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
+                        <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
                     </tr>
                     @else
                     <tr>
@@ -83,7 +89,7 @@
                             <u>{{$data['nip']}}</u><br/>
                             {{$data['nama']}}
                         </td>
-                        <td class="text-center" colspan="7">DIBATALKAN</td>
+                        <td class="text-center" colspan="9">DIBATALKAN</td>
                     </tr>
                     @endif
                 

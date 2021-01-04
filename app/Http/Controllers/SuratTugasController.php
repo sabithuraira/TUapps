@@ -227,7 +227,23 @@ class SuratTugasController extends Controller
      */
     public function show($id)
     {
-        //
+    }
+
+    public function print_st($id)
+    {
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+
+        // $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
+        //     'model_rincian', 'model', 'unit_kerja'))->setPaper('a4', 'potrait');
+
+        // $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
+        // return $pdf->download($nama_file);
+        
+        return view('surat_tugas.print_st',compact('real_id', 
+            'model_rincian', 'model', 'unit_kerja'));
     }
 
     /**
