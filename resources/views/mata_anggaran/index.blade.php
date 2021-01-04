@@ -18,19 +18,8 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('MataAnggaranController@create')}}" class="btn btn-info">Tambah</a>
+          <a href="{{action('MataAnggaranController@import_some')}}" class="btn btn-info">Import MAK Baru</a>
           <br/><br/>
-          <form action="{{url('mata_anggaran')}}" method="get">
-            <div class="input-group mb-3">
-                    
-                    @csrf
-                    <input type="text" class="form-control" name="search" id="search" value="{{ $keyword }}" placeholder="Search..">
-
-                    <div class="input-group-append">
-                        <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
-            </div>
-          </form>
           <section class="datas">
             @include('mata_anggaran.list')
           </section>

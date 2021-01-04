@@ -92,6 +92,7 @@
                                     <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a href="{{url('surat_tugas')}}">Daftar</a></li>
                                     <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a href="{{url('surat_tugas')}}">Calender</a></li>
                                     <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a href="{{url('surat_tugas/edit_unit_kerja')}}">Informasi Unit Kerja</a></li>
+                                    <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a href="{{url('mata_anggaran/index')}}">MAK</a></li>
                                 </ul>
                             @endhasanyrole
                             </li>

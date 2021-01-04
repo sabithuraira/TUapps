@@ -72,6 +72,7 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {    
     // Route::resource('jadwal_dinas','JadwalDinasController');
+    Route::get('mata_anggaran/index','MataAnggaranController@index');
     Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
     Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
     // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);

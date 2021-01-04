@@ -29,18 +29,13 @@ class MataAnggaranController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $datas = \App\MataAnggaran::where('nama', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('kode', 'LIKE', '%' . $keyword . '%')
+        $datas = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)
             ->paginate();
 
         $datas->withPath('mata_anggaran');
         $datas->appends($request->all());
 
-        if ($request->ajax()) {
-            return \Response::json(\View::make('mata_anggaran.list', array('datas' => $datas))->render());
-        }
-
-        return view('mata_anggaran.index',compact('datas', 'keyword'));
+        return view('mata_anggaran.index',compact('datas'));
     }
 
     /**
