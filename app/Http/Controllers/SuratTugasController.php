@@ -25,13 +25,13 @@ class SuratTugasController extends Controller
                         ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
                     })
                 )
-                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->paginate();
 
         $datas->withPath('surat_tugas');
         $datas->appends($request->all());
-
-        return view('surat_tugas.index',compact('datas', 'keyword'));
+        $model = new \App\SuratTugasRincian;
+        return view('surat_tugas.index',compact('datas', 'keyword', 'model'));
     }
     
     public function daftar(Request $request)
@@ -123,11 +123,13 @@ class SuratTugasController extends Controller
                     
                     
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
+        $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
 
         $model_rincian = new \App\SuratTugasRincian;
 
         return view('surat_tugas.create', 
-            compact('list_pegawai', 'model', 'list_pejabat', 'model_rincian', 'list_anggaran'));
+            compact('list_pegawai', 'model', 'list_pejabat', 'model_rincian', 
+                'list_anggaran', 'list_anggaran_prov'));
     }
 
     /**
@@ -174,12 +176,20 @@ class SuratTugasController extends Controller
                     $model_r->kendaraan  = $request->get('u_kendaraanau'.$i);
                     $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
                     $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
-                    
+                    $model_r->pejabat_ttd_jabatan  = $request->get('u_pejabat_ttd_jabatanau'.$i);
+
+                    $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+                    $model_r->ppk_nip  = $unit_kerja->ppk_nip;
+                    $model_r->ppk_nama  = $unit_kerja->ppk_nama;
+                    $model_r->bendahara_nip  = $unit_kerja->bendahara_nip;
+                    $model_r->bendahara_nama  = $unit_kerja->bendahara_nama;
+                    $model_r->ppspm_nip  = $unit_kerja->ppspm_nip;
+                    $model_r->ppspm_nama  = $unit_kerja->ppspm_nama;
                     ////////////////
                     $nomor_st = 1;
                     $nomor_spd = 1;
                     $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
-                        ->orderBy('created_at', 'desc')
+                        ->orderBy('id', 'desc')
                         ->first();
 
                     if($datas!=null){
@@ -207,9 +217,6 @@ class SuratTugasController extends Controller
                     }
 
                     $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
-                    $model_r->status_kumpul_lpd = 0;
-                    $model_r->status_kumpul_kelengkapan = 0;
-                    $model_r->status_pembayaran = 0;
                     $model_r->created_by=Auth::id();
                     $model_r->updated_by=Auth::id();
                     $model_r->save();
@@ -359,41 +366,11 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');
     }
 
-    public function set_lpd(Request $request){
+    public function set_status(Request $request){
         if($request->form_id_data!=''){
-            
             $real_id = Crypt::decrypt($request->form_id_data);
             $model_rincian = \App\SuratTugasRincian::find($real_id);
-
-            if($model_rincian->status_kumpul_lpd==0){
-                $model_rincian->status_kumpul_lpd = 1;
-            }
-            else{
-                $model_rincian->status_kumpul_lpd = 0;    
-            }
-
-            $model_rincian->save();
-
-            return response()->json(['result'=>'Data berhasil disimpan']);
-        }
-        else{
-            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
-        }
-    }
-    
-    public function set_kelengkapan(Request $request){
-        if($request->form_id_data!=''){
-            
-            $real_id = Crypt::decrypt($request->form_id_data);
-            $model_rincian = \App\SuratTugasRincian::find($real_id);
-
-            if($model_rincian->status_kumpul_kelengkapan==0){
-                $model_rincian->status_kumpul_kelengkapan = 1;
-            }
-            else{
-                $model_rincian->status_kumpul_kelengkapan = 0;    
-            }
-
+            $model_rincian->status_aktif = $request->form_status_data;
             $model_rincian->save();
 
             return response()->json(['result'=>'Data berhasil disimpan']);
@@ -403,32 +380,13 @@ class SuratTugasController extends Controller
         }
     }
 
-    public function set_pembayaran(Request $request){
-        if($request->form_id_data!=''){
-            
-            $real_id = Crypt::decrypt($request->form_id_data);
-            $model_rincian = \App\SuratTugasRincian::find($real_id);
-
-            if($model_rincian->status_pembayaran==0) $model_rincian->status_pembayaran = 1;
-            else $model_rincian->status_pembayaran = 0;    
-
-            $model_rincian->save();
-
-            return response()->json(['result'=>'Data berhasil disimpan']);
-        }
-        else{
-            return response()->json(['result'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
-        }
-    }
-    
     public function set_aktif(Request $request){
         if($request->form_id_data!=''){
-            
             $real_id = Crypt::decrypt($request->form_id_data);
             $model_rincian = \App\SuratTugasRincian::find($real_id);
-            
             $model_rincian->status_aktif = 2;
             $model_rincian->save();
+
             return response()->json(['result'=>'Data berhasil disimpan']);
         }
         else{

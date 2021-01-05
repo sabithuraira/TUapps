@@ -31,9 +31,18 @@ class SuratTugas extends Model
     
     public function getListSumberAnggaranAttribute()
     {
-        return array(
-            1 => 'DIPA BPS', 
-            2 => 'Bukan DIPA BPS', 
-        );
+        if(Auth::user()->kdkab=='00'){
+            return array(
+                1 => 'DIPA BPS', 
+                3 => 'Bukan DIPA BPS', 
+            );
+        }
+        else{
+            return array(
+                1 => 'DIPA BPS', 
+                2 => 'DIPA BPS Provinsi', 
+                3 => 'Bukan DIPA BPS', 
+            );
+        }
     }
 }

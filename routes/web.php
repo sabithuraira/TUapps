@@ -82,9 +82,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
     Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
     Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
-    Route::post('surat_tugas/set_lpd', 'SuratTugasController@set_lpd');
-    Route::post('surat_tugas/set_kelengkapan', 'SuratTugasController@set_kelengkapan');
-    Route::post('surat_tugas/set_pembayaran', 'SuratTugasController@set_pembayaran');
+    Route::post('surat_tugas/set_status', 'SuratTugasController@set_status');
     Route::post('surat_tugas/set_aktif', 'SuratTugasController@set_aktif');
     Route::get('surat_tugas/edit_unit_kerja', 'SuratTugasController@edit_unit_kerja');
     Route::post('surat_tugas/edit_unit_kerja', 'SuratTugasController@update_unit_kerja');

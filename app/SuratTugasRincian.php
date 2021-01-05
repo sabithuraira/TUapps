@@ -35,8 +35,24 @@ class SuratTugasRincian extends Model
     public function getListStatusAttribute()
     {
         return array(
-            0 => "<div class='badge badge-warning'>Belum</div>", 
-            1 => "<div class='badge badge-success'>Selesai</div>", 
+            1 => "<div class='badge badge-info'>Sedang Berjalan</div>", 
+            3 => "<div class='badge badge-warning'>Kelengkapan sudah di bagian administrasi</div>", 
+            4 => "<div class='badge badge-warning'>Kwitansi telah dibuat</div>", 
+            5 => "<div class='badge badge-warning'>Konfirmasi PPK</div>", 
+            6 => "<div class='badge badge-warning'>Proses Pembayaran</div>", 
+            7 => "<div class='badge badge-success'>Sudah dibayar</div>",
+        );
+    }
+
+    public function getListLabelStatusAttribute()
+    {
+        return array(
+            1 => "Sedang Berjalan", 
+            3 => "Kelengkapan sudah di bagian administrasi", 
+            4 => "Kwitansi telah dibuat", 
+            5 => "Konfirmasi PPK", 
+            6 => "Proses Pembayaran", 
+            7 => "Sudah dibayar",
         );
     }
 

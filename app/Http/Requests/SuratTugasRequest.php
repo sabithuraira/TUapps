@@ -26,7 +26,7 @@ class SuratTugasRequest extends FormRequest
         return [
             'jenis_st' => 'required',
             'sumber_anggaran' => 'required',
-            'mak' => 'required',
+            'tugas' => 'required',
         ];
     }
      

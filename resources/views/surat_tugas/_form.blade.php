@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['jenis_st'] }}:</label>
-                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}"  name="jenis_st">
+                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}" id="jenis_st" name="jenis_st">
                     @foreach ($model->listJenis as $key=>$value)
                         <option  value="{{ $key }}" 
                             @if ($key == old('jenis_st', $model->jenis_st))
@@ -22,7 +22,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['sumber_anggaran'] }}:</label>
-                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}"  name="sumber_anggaran">
+                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}" id="sumber_anggaran" name="sumber_anggaran" v-model="sumber_anggaran" @change="setSumberAnggaran($event)">
                     @foreach ($model->listSumberAnggaran as $key=>$value)
                         <option  value="{{ $key }}" 
                             @if ($key == old('sumber_anggaran', $model->sumber_anggaran))
@@ -41,16 +41,10 @@
 
     <div class="form-group">
         <label>{{ $model->attributes()['mak'] }}:</label>
-        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}"  name="mak">
-            @foreach ($list_anggaran as $key=>$value)
-                <option  value="{{ $value->id }}" 
-                    @if ($value->id == old('mak', $model->mak))
-                        selected="selected"
-                    @endif>
-                    {{ $value->kode_program.'.'.$value->kode_aktivitas.'.'.$value->kode_kro.'.'.$value->kode_ro.'.'.$value->kode_komponen.'.'.$value->kode_subkomponen }}
-                    {{ $value->label_aktivitas.'-'.$value->label_ro }}
-                </option>
-            @endforeach
+        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" :disabled="sumber_anggaran==3">
+            <option v-for="(value, index) in list_select_anggaran" :value="value.id">
+                @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }}
+            </option>
         </select>
         @foreach ($errors->get('mak') as $msg)
             <p class="text-danger">{{ $msg }}</p>
@@ -59,7 +53,7 @@
 
     <div class="form-group">
         <label>{{ $model->attributes()['tugas'] }}:</label>
-        <textarea name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
+        <textarea id="tugas" name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
         @foreach ($errors->get('tugas') as $msg)
             <p class="text-danger">{{ $msg }}</p>
         @endforeach
@@ -100,16 +94,15 @@
     var vm = new Vue({
         el: "#app_vue",
         data:  {
-            jenis_st: {!! json_encode($model->jenis_st) !!},
-            sumber_anggaran:  {!! json_encode($model->sumber_anggaran) !!},
+            sumber_anggaran:  1,
             mak: {!! json_encode($model->mak) !!},
-            kode_mak:  {!! json_encode($model->kode_mak) !!}, 
-            tugas:  {!! json_encode($model->tugas) !!}, 
-            unit_kerja:  {!! json_encode($model->unit_kerja) !!},
             list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
             list_kendaraan:  {!! json_encode($model_rincian->listKendaraan) !!},
             list_pegawai:  {!! json_encode($list_pegawai) !!},
             list_pejabat:  {!! json_encode($list_pejabat) !!},
+            list_anggaran:  {!! json_encode($list_anggaran) !!},
+            list_anggaran_prov:  {!! json_encode($list_anggaran_prov) !!},
+            list_select_anggaran: {!! json_encode($list_anggaran) !!},
             total_utama: 1,
             rincian: [],
             cur_rincian: {
@@ -121,6 +114,7 @@
                 tanggal_selesai: '',
                 pejabat_ttd_nip: '',
                 pejabat_ttd_nama: '',
+                pejabat_ttd_jabatan: '',
                 tingkat_biaya: '',
                 kendaraan: '',
                 id: '',
@@ -134,18 +128,22 @@
             },
             setNamaJabatan: function(event){
                 var self = this;
-                $('#wait_progres').modal('show');
                 var selected_index = event.currentTarget.selectedIndex;
                 self.cur_rincian.nama = self.list_pegawai[selected_index].name;
                 self.cur_rincian.jabatan = self.list_pegawai[selected_index].nmjab;
-                $('#wait_progres').modal('hide');
             },
             setPejabat: function(event){
                 var self = this;
-                $('#wait_progres').modal('show');
                 var selected_index = event.currentTarget.selectedIndex;
                 self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[selected_index].name;
-                $('#wait_progres').modal('hide');
+                self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[selected_index].nmjab;
+            },
+            setSumberAnggaran: function(event){
+                var self = this;
+                var value =  event.currentTarget.value;
+                if(value==1) self.list_select_anggaran = self.list_anggaran;
+                else if(value==2) self.list_select_anggaran = self.list_anggaran_prov;
+                else if(value==3) self.list_select_anggaran = null;
             },
             saveRincian: function(){
                 var self = this;
@@ -161,6 +159,7 @@
                         'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
                         'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                         'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                         'kendaraan'     : self.cur_rincian.kendaraan,
                     };
@@ -176,6 +175,7 @@
                         'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
                         'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                         'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                         'kendaraan'     : self.cur_rincian.kendaraan,
                     });
@@ -189,6 +189,7 @@
                 self.cur_rincian.tanggal_selesai = '';
                 self.cur_rincian.pejabat_ttd_nip = '';
                 self.cur_rincian.pejabat_ttd_nama = '';
+                self.cur_rincian.pejabat_ttd_jabatan = '';
                 self.cur_rincian.tingkat_biaya = '';
                 self.cur_rincian.kendaraan = '';
                 self.cur_rincian.id = '';
@@ -214,6 +215,7 @@
                     self.cur_rincian.tanggal_selesai = event.currentTarget.getAttribute('data-tanggal_selesai');
                     self.cur_rincian.pejabat_ttd_nip = event.currentTarget.getAttribute('data-pejabat_ttd_nip');
                     self.cur_rincian.pejabat_ttd_nama = event.currentTarget.getAttribute('data-pejabat_ttd_nama');
+                    self.cur_rincian.pejabat_ttd_jabatan = event.currentTarget.getAttribute('data-pejabat_ttd_jabatan');
                     self.cur_rincian.tingkat_biaya = event.currentTarget.getAttribute('data-tingkat_biaya');
                     self.cur_rincian.kendaraan = event.currentTarget.getAttribute('data-kendaraan');
 
@@ -228,7 +230,6 @@
             },
         }
     });
-
     
     $('#rincian_tanggal_mulai').change(function() {
         vm.cur_rincian.tanggal_mulai = this.value;
@@ -250,74 +251,59 @@
     
 
     $(".frep").on("submit", function(){
-        // $('#isi').val($("#editarea").html());
-        // return confirm("Anda yakin ingin menyimpan data ini?");
-        // var is_error = 1;
-        // var err_message = [];
+        var is_error = 0;
+        var err_message = [];
 
-        // var object_audit =  $('#object_audit').val();
-        // var total_utama =  $('#total_utama').val();
-        // var total_key =  $('#total_key').val();
-        // var total_auditor =  $('#total_auditor').val();
-        // var total_auditi =  $('#total_auditi').val();
+        var tugas =  $('#tugas').val();
+        var jenis_st =  $('#jenis_st').val();
+        var mak =  $('#mak').val();
+        var sumber_anggaran =  $('#sumber_anggaran').val();
+        var total_utama =  $('#total_utama').val();
 
-        // if(object_audit.length==0) {
-        //     if(vm.jenis==1)
-        //         err_message.push("Tujuan Saran Tidak Boleh Kosong");
-        //     else if(vm.jenis==4)
-        //         err_message.push("Unit Kerja Tidak Boleh Kosong");
-        //     else
-        //         err_message.push("Object Audit Tidak Boleh Kosong");
-            
-        //     is_error = 0;
-        // }
-
-        // if(vm.jenis==1 || vm.jenis==2){
-        //     var form_pejabat_badge =  $('#form_pejabat_badge').val();
-        //     if(form_pejabat_badge.length==0){ 
-        //         err_message.push("Pejabat Approval Tidak Boleh Kosong");
-        //         is_error = 0;
-        //     }
-        // }
-
-        // if(total_utama==1){
-        //     err_message.push("Minimal harus terdapat 1 rincian");
-        //     is_error = 0;
-        // }
+        if(jenis_st.length==0){
+            err_message.push("JENIS SURAT TUGAS tidak boleh kosong");
+            is_error = 1;
+        }
         
-        // if(total_key==1){
-        //     err_message.push("Minimal harus terdapat 1 key person");
-        //     is_error = 0;
-        // }
+        if(sumber_anggaran.length==0){
+            err_message.push("SUMBER ANGGARAN tidak boleh kosong");
+            is_error = 1;
+        }
 
-        // if(vm.jenis!=3 && vm.jenis!=5){
-        //     if(total_auditor==1){ 
-        //         err_message.push("Minimal harus terdapat 1 auditor/petugas K3/tim investigasi");
-        //         is_error = 0;
-        //     }
-            
-        //     if(total_auditi==1){ 
-        //         err_message.push("Minimal harus terdapat 1 auditi/tembusan");
-        //         is_error = 0;
-        //     }
-        // }
+        if(mak==null) {
+            if(sumber_anggaran!=3){
+                err_message.push("MAK tidak boleh kosong");
+                is_error = 1;
+            }
+        }
+        
+        if(tugas.length==0){
+            err_message.push("TUGAS tidak boleh kosong");
+            is_error = 1;
+        }
 
-        // if(vm.jenis==1){
-        //     vm.rincian.forEach(function(data_r){
-        //         if(data_r.uraian.length>0 && data_r.file_path.length==0){
-        //             err_message.push("Ada rincian yang tidak memiliki file/file belum selesai upload");
-        //             is_error = 0;
-        //         }
-        //     });
-        // }
+        if(total_utama==1){
+            err_message.push("Minimal harus terdapat 1 pegawai dalam SURAT TUGAS");
+            is_error = 1;
+        }
 
-        // if(is_error==0){
-        //     alert(err_message.join('\r\n'));
-        //     return false;
-        // }
-        // else{
-        //     return true;
-        // }
+        vm.rincian.forEach(function(data_r){
+            if(data_r.nip.length==0 || data_r.tujuan_tugas.length==0 
+                || data_r.tanggal_mulai.length==0 || data_r.tanggal_selesai.length==0 || 
+                data_r.pejabat_ttd_nip.length==0 || data_r.tingkat_biaya.length==0 ||
+                data_r.kendaraan.length==0){
+                err_message.push("Ada rincian pegawai yang belum lengkap");
+                is_error = 1;
+            }
+        });
+
+        if(is_error==1){
+            alert(err_message.join('\r\n'));
+            return false;
+        }
+        else{
+            return true;
+        }
     });
 </script>
 @endsection

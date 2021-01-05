@@ -51,6 +51,7 @@
                         @{{ data.pejabat_ttd_nip }} - @{{ data.pejabat_ttd_nama }}
                         <input type="hidden" :name="'u_pejabat_ttd_nip'+data.id" v-model="data.pejabat_ttd_nip">
                         <input type="hidden" :name="'u_pejabat_ttd_nama'+data.id" v-model="data.pejabat_ttd_nama">
+                        <input type="hidden" :name="'u_pejabat_ttd_jabatan'+data.id" v-model="data.pejabat_ttd_jabatan">
                     </td>
                     <td class="text-center">@{{ list_tingkat_biaya[data.tingkat_biaya] }}<input type="hidden" :name="'u_tingkat_biaya'+data.id" v-model="data.tingkat_biaya"></td>
                     <td class="text-center">@{{ list_kendaraan[data.kendaraan] }}<input type="hidden" :name="'u_kendaraan'+data.id" v-model="data.kendaraan"></td>      

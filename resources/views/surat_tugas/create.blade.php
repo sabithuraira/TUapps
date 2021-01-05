@@ -16,7 +16,7 @@
               <h2>Tambah Surat Tugas</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{url('surat_tugas')}}" enctype="multipart/form-data">
+              <form method="post" class="frep" action="{{url('surat_tugas')}}" enctype="multipart/form-data">
               @csrf
               @include('surat_tugas._form')
               </form>
