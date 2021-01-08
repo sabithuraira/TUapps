@@ -10,9 +10,9 @@ class SuratTugasRincian extends Model
 {
     protected $table = 'surat_tugas_rincian';
     
-    public function PegawaiRel()
+    public function SuratIndukRel()
     {
-        return $this->hasOne('App\User', 'email', 'pegawai_id');
+        return $this->hasOne('App\SuratTugas', 'id', 'id_surtug');
     }
 
     public function attributes()
@@ -25,7 +25,7 @@ class SuratTugasRincian extends Model
         return array(
             1 => 'B', 2 => 'C', 3 => 'D'
         );
-	}
+    }
 	
     public function getListKendaraanAttribute()
     {

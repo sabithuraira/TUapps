@@ -13,4 +13,9 @@ class MataAnggaran extends Model
     {
         return (new \App\Http\Requests\MataAnggaranRequest())->attributes();
     }
+
+    public function getKodeMakAttribute()
+    {
+        return $this->kode_program.'.'.$this->kode_ro.'.'.$this->kode_komponen.'.'.$this->kode_subkomponen;
+	}
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratTugasRequest;
 use Illuminate\Support\Facades\Crypt;
+use PDF;
 
 class SuratTugasController extends Controller
 {
@@ -243,14 +244,34 @@ class SuratTugasController extends Controller
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
 
-        // $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
-        //     'model_rincian', 'model', 'unit_kerja'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
+            'model_rincian', 'model', 'unit_kerja'))->setPaper('a4', 'potrait');
 
-        // $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
-        // return $pdf->download($nama_file);
+        $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
+        return $pdf->download($nama_file);
         
-        return view('surat_tugas.print_st',compact('real_id', 
-            'model_rincian', 'model', 'unit_kerja'));
+        // return view('surat_tugas.print_st',compact('real_id', 
+        //     'model_rincian', 'model', 'unit_kerja'));
+    }
+
+    public function print_spd($id)
+    {
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+
+        $pdf = PDF::loadView('surat_tugas.print_spd', compact('real_id', 
+            'model_rincian', 'model', 'unit_kerja',
+            'pegawai', 'mak'))->setPaper('a4', 'potrait');
+
+        $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
+        return $pdf->download($nama_file);
+        
+        // return view('surat_tugas.print_spd',compact('real_id', 
+        //     'model_rincian', 'model', 'unit_kerja', 'pegawai', 'mak'));
     }
 
     /**

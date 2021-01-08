@@ -19,6 +19,11 @@ class SuratTugas extends Model
     {
         return $this->belongsTo('App\UnitKerja', 'unit_kerja');
     }
+
+    public function MakRel()
+    {
+        return $this->hasOne('App\MataAnggaran', 'id', 'mak');
+    }
     
     public function getListJenisAttribute()
     {
@@ -29,11 +34,20 @@ class SuratTugas extends Model
         );
     }
     
+    public function getListKodeJenisAttribute()
+    {
+        return array(
+            1 => '524113', 
+            2 => '524111', 
+            // 3 => 'Honor/Upah/Transport Mitra'
+        );
+    }
+    
     public function getListSumberAnggaranAttribute()
     {
         if(Auth::user()->kdkab=='00'){
             return array(
-                1 => 'DIPA BPS', 
+                2 => 'DIPA BPS', 
                 3 => 'Bukan DIPA BPS', 
             );
         }

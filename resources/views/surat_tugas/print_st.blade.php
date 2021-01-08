@@ -6,41 +6,128 @@
 <style type="text/css">
     * { font-family: Segoe UI, Arial, sans-serif; }
     tr, td{ padding-left: 8px; }
+    .pepet{ white-space:nowrap; width:1%; }
     .table-border{ border: 1px solid black; }
     .table-border td, th{ border: 1px solid black; }
     tfoot tr td{ font-weight: bold; font-size: x-small; }
     .gray { background-color: lightgray }
+    header {
+        position: fixed;
+        top: -40px;
+        left: 0px;
+        right: 0px;
+    }
+
+    footer {
+        position: fixed; 
+        bottom: -60px; 
+        left: 0px; 
+        right: 0px;
+        height: 50px; 
+        text-align: center;
+        line-height: 35px;
+    }
 </style>
 
 </head>
 <body>
-  <table width="100%">
-    <tr>
-        <td>
-            <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:100px">
-        </td>
-        <td>
-            <h2>BADAN PUSAT STATISTIK</h2>
-            <h2>
-                {{ strtoupper($unit_kerja->nama) }}
-            </h2>
-        </td>
-        <td align="center">
-        </td>
-    </tr>
-  </table>
+    <header>
+        <table width="100%">
+            <tr>
+                <td class="pepet">
+                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
+                </td>
+                <td align="left">
+                    <i><b>BADAN PUSAT STATISTIK</b></i><br/>
+                    <i><b>{{ strtoupper($unit_kerja->nama) }}</b></i>
+                </td>
+            </tr>
+        </table>
+    </header>
+
+  <br/><br/><br/><br/><br/>
 
   <p align="center"><b><u>SURAT TUGAS</u></b></p>
   <p align="center">NOMOR : {{ $model_rincian->nomor_st }}</p>
+  
+    <br/>
+    <br/>
 
-  <table width="100%" class="table-border">
+  <table width="100%">
         <tr>
-            <td width=""></td>
+            <td width="10%"></td>
+            <td colspan="2">Yang bertanda tangan di bawah ini:<br/><br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td colspan="2" align="center"><b>Kepala {{ $unit_kerja->nama }}</b><br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td colspan="2">Memberi tugas kepada:<br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">Nama<br/><br/></td>
+            <td width="45%">: {{ $model_rincian->nama }}<br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">NIP<br/><br/></td>
+            <td width="45%">: {{ $model_rincian->nip }}<br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">Jabatan<br/><br/></td>
+            <td width="45%">: {{ $model_rincian->jabatan }}<br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">Tujuan Tugas</td>
+            <td width="45%">: {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+        
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">Waktu Pelaksanaan<br/><br/></td>
+            <td width="45%">: 
+                @if (date('n', strtotime($model_rincian->tanggal_mulai))==date('n', strtotime($model_rincian->tanggal_selesai)))
+                    {{ date('d', strtotime($model_rincian->tanggal_mulai)) }}
+                    s.d 
+                    {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}
+                @else
+                    {{ date('d', strtotime($model_rincian->tanggal_mulai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_mulai))] }} {{ date('Y', strtotime($model_rincian->tanggal_mulai)) }}
+                    s.d 
+                    {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}                
+                @endif
+                <br/><br/>
+            </td>
+            <td width="15%"></td>
+        </tr>
+        <tr>
+            <td width="10%"></td>
+            <td width="30%">Pembebanan<br/><br/></td>
+            <td width="45%">: 
+                @if ($model->sumber_anggaran!=3)
+                    {{ $model->MakRel->KodeMak }}.{{ $model->listKodeJenis[$model-jenis_st] }}
+                @else
+                    -
+                @endif
+                <br/><br/>
+            </td>
+            <td width="15%"></td>
         </tr>
   </table>
 
-
-  <br/>
+  <br/><br/>
   
   <table width="100%">
     <tr>
@@ -49,8 +136,10 @@
         </td>
         <td width="10%"></td>
         <td width="35%" align="center">
-            <p>{{ $unit_kerja->ibu_kota }}, {{ date('d M Y', strtotime($model_rincian->created_at)) }}</p>
-            <p>Kepala BPS {{ $unit_kerja->nama }}</p>
+            {{ $unit_kerja->ibu_kota }}, {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
+            Kepala BPS {{ $unit_kerja->nama }}
+            <br/>
+            <br/>
             <br/>
             <br/>
             <u>{{ $model_rincian->pejabat_ttd_nama }}</u><br/>

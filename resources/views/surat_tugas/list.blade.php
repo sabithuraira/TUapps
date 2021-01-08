@@ -47,7 +47,7 @@
                         </td>
                         
                         <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
-                        <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
+                        <td class="text-center"><a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
                         <td class="text-center">
                             <a href="#" role="button" v-on:click="sendStId" 
                                 data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}" 
