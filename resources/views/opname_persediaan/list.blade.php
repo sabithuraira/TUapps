@@ -7,7 +7,7 @@
         <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak &nbsp</button>
     </form>
     <br/><br/>
-    <table class="table table-bordered table-sm">
+    <table class="table-bordered" style="min-width:100%">
         <thead>
             <tr class="text-center">
                 <th>No</th>

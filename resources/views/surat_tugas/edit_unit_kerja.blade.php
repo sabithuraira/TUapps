@@ -24,7 +24,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['kepala_nip'] }}:</label>
-                                <select class="form-control {{($errors->first('kepala_nip') ? ' parsley-error' : '')}}"  name="kepala_nip" @change="setNamaKepala($event)">
+                                <select class="form-control {{($errors->first('kepala_nip') ? ' parsley-error' : '')}}" id="kepala_nip" name="kepala_nip" @change="setNamaKepala($event)">
                                     @foreach ($list_pegawai as $value)
                                         <option  value="{{ $value->nip_baru }}" 
                                             @if ($value->nip_baru == old('kepala_nip', $model->kepala_nip))
@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['ppk_nip'] }}:</label>
-                                <select class="form-control {{($errors->first('ppk_nip') ? ' parsley-error' : '')}}"  name="ppk_nip" @change="setNamaPpk($event)">
+                                <select class="form-control {{($errors->first('ppk_nip') ? ' parsley-error' : '')}}" id="ppk_nip" name="ppk_nip" @change="setNamaPpk($event)">
                                     @foreach ($list_pegawai as $value)
                                         <option  value="{{ $value->nip_baru }}" 
                                             @if ($value->nip_baru == old('ppk_nip', $model->ppk_nip))
@@ -64,7 +64,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['bendahara_nip'] }}:</label>
-                                <select class="form-control {{($errors->first('bendahara_nip') ? ' parsley-error' : '')}}"  name="bendahara_nip" @change="setNamaBendahara($event)">
+                                <select class="form-control {{($errors->first('bendahara_nip') ? ' parsley-error' : '')}}" id="bendahara_nip" name="bendahara_nip" @change="setNamaBendahara($event)">
                                     @foreach ($list_pegawai as $value)
                                         <option  value="{{ $value->nip_baru }}" 
                                             @if ($value->nip_baru == old('bendahara_nip', $model->bendahara_nip))
@@ -83,7 +83,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['ppspm_nip'] }}:</label>
-                                <select class="form-control {{($errors->first('ppspm_nip') ? ' parsley-error' : '')}}"  name="ppspm_nip" @change="setNamaPpspm($event)">
+                                <select class="form-control {{($errors->first('ppspm_nip') ? ' parsley-error' : '')}}" id="ppspm_nip" name="ppspm_nip" @change="setNamaPpspm($event)">
                                     @foreach ($list_pegawai as $value)
                                         <option  value="{{ $value->nip_baru }}" 
                                             @if ($value->nip_baru == old('ppspm_nip', $model->ppspm_nip))
@@ -121,7 +121,6 @@
                             <p class="text-danger">{{ $msg }}</p>
                         @endforeach
                     </div>
-
                     
                     <input type="hidden" name="kepala_nama" v-model="kepala_nama">
                     <input type="hidden" name="ppk_nama" v-model="ppk_nama">
@@ -173,17 +172,24 @@
                 var selected_index = event.currentTarget.selectedIndex;
                 self.ppspm_nama = self.list_pegawai[selected_index].name;
             },
+            setDatas: function(event){
+                var self = this;
+                var kepala_index = $("#kepala_nip")[0].selectedIndex;
+                var ppk_index = $("#ppk_nip")[0].selectedIndex;
+                var bendahara_index = $("#bendahara_nip")[0].selectedIndex;
+                var ppspm_index = $("#ppspm_nip")[0].selectedIndex;
+                
+                self.kepala_nama = self.list_pegawai[kepala_index].name;
+                self.ppk_nama = self.list_pegawai[ppk_index].name;
+                self.bendahara_nama = self.list_pegawai[bendahara_index].name;
+                self.ppspm_nama = self.list_pegawai[ppspm_index].name;
+            },
         }
     });
 
     $(document).ready(function() {
         // vm.setNomor();
-        // vm.setDatas();
-
-        $('.datepicker').datepicker({
-            startDate: 'd',
-            format: 'yyyy-mm-dd',
-        });
+        vm.setDatas();
     });
     
 

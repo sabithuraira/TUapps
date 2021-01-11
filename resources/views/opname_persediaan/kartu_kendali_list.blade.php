@@ -8,7 +8,7 @@
     </form>
     <br/><br/>
     <div class="table-responsive-sm">
-        <table class="table table-bordered table-sm">
+        <table class="table-bordered" style="min-width:100%">
             <thead>
                 <tr class="text-center">
                     <th rowspan="2">TGL</th>

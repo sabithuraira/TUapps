@@ -152,6 +152,10 @@
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
     <meta name="csrf-token" content="@csrf">
+    <style type="text/css">
+        .modal-dialog{ overflow-y: initial !important }
+        .modal-body{ height: 80vh; overflow-y: auto; }
+    </style>
 @endsection
 
 @section('scripts')

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 
 <style type="text/css">
-    * { font-family: Segoe UI, Arial, sans-serif; }
+    * { font-family: Segoe UI, Arial, sans-serif;  font-size: small }
     tr, td{ padding-left: 8px; }
     .pepet{ white-space:nowrap; width:1%; }
     .table-border{ border: 1px solid black; }
@@ -56,49 +56,54 @@
   <table width="100%">
         <tr>
             <td width="10%"></td>
-            <td colspan="2">Yang bertanda tangan di bawah ini:<br/><br/><br/></td>
+            <td colspan="3">Yang bertanda tangan di bawah ini:<br/><br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td colspan="2" align="center"><b>Kepala {{ $unit_kerja->nama }}</b><br/><br/></td>
+            <td colspan="3" align="center"><b>Kepala BPS {{ $unit_kerja->nama }}</b><br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td colspan="2">Memberi tugas kepada:<br/><br/></td>
+            <td colspan="3">Memberi tugas kepada:<br/><br/></td>
             <td width="15%"></td>
         </tr>
 
         <tr>
             <td width="10%"></td>
-            <td width="30%">Nama<br/><br/></td>
-            <td width="45%">: {{ $model_rincian->nama }}<br/><br/></td>
+            <td width="30%" valign="top">Nama<br/><br/></td>
+            <td width="3%" valign="top">:</td>
+            <td width="42%">{{ $model_rincian->nama }}<br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
             <td width="30%">NIP<br/><br/></td>
-            <td width="45%">: {{ $model_rincian->nip }}<br/><br/></td>
+            <td width="3%">:</td>
+            <td width="42%">{{ $model_rincian->nip }}<br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%">Jabatan<br/><br/></td>
-            <td width="45%">: {{ $model_rincian->jabatan }}<br/><br/></td>
+            <td width="30%" valign="top">Jabatan<br/><br/></td>
+            <td width="3%" valign="top">:</td>
+            <td width="42%">{{ $model_rincian->jabatan }}<br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%">Tujuan Tugas</td>
-            <td width="45%">: {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
+            <td width="30%" valign="top">Tujuan Tugas</td>
+            <td width="3%" valign="top">:</td>
+            <td width="42%">{{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
             <td width="15%"></td>
         </tr>
         
         <tr>
             <td width="10%"></td>
-            <td width="30%">Waktu Pelaksanaan<br/><br/></td>
-            <td width="45%">: 
+            <td width="30%" valign="top">Waktu Pelaksanaan<br/><br/></td>
+            <td width="3%" valign="top">:</td>
+            <td width="42%">
                 @if (date('n', strtotime($model_rincian->tanggal_mulai))==date('n', strtotime($model_rincian->tanggal_selesai)))
                     {{ date('d', strtotime($model_rincian->tanggal_mulai)) }}
                     s.d 
@@ -114,10 +119,11 @@
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%">Pembebanan<br/><br/></td>
-            <td width="45%">: 
+            <td width="30%" valign="top">Pembebanan<br/><br/></td>
+            <td width="3%" valign="top">:</td>
+            <td width="42%">
                 @if ($model->sumber_anggaran!=3)
-                    {{ $model->MakRel->KodeMak }}.{{ $model->listKodeJenis[$model-jenis_st] }}
+                    {{ $model->MakRel->KodeMak }}.{{ $model->listKodeJenis[$model->jenis_st] }}
                 @else
                     -
                 @endif
