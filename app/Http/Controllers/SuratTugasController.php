@@ -415,6 +415,25 @@ class SuratTugasController extends Controller
         }
     }
 
+    public function is_available(Request $request){
+        if($request->nip!='' && $request->t_start!='' && $request->t_end!=''){
+            $model = new \App\SuratTugasRincian;
+            $result = $model->isAvailable($request->nip, $request->t_start, $request->t_end);
+
+            return response()->json([
+                'response'=>1,
+                'result'=>$result,
+                'message'=>'Data berhasil disimpan'
+            ]);
+        }
+        else{
+            return response()->json([
+                'response' => 0,
+                'result'=>0,
+                'message'=>'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

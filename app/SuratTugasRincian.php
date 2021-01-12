@@ -29,7 +29,11 @@ class SuratTugasRincian extends Model
 	
     public function getListKendaraanAttribute()
     {
-        return array( 1 => 'Kendaraan Umum', 2 => 'Kendaraan Dinas',);
+        return array( 
+			1 => 'Kendaraan Umum', 
+			2 => 'Kendaraan Dinas',
+			3 => 'Kendaraan Dinas',
+		);
     }
     
     public function getListStatusAttribute()
@@ -91,6 +95,16 @@ class SuratTugasRincian extends Model
 			$hasil = trim($this->penyebut($nilai));
 		}     		
 		return $hasil;
+	}
+
+	public function isAvailable($nip, $t_start, $t_end){
+		$sql="SELECT count(*) as total FROM surat_tugas_rincian WHERE nip='".$nip."' 
+			AND (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
+			('".$t_end."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
+			(tanggal_mulai>'".$t_start."' AND tanggal_selesai<'".$t_end."'))";
+
+		$result = DB::select(DB::raw($sql));
+        return $result;
 	}
 
     // public function listKegiatanByMonth($month){

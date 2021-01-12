@@ -63,7 +63,6 @@ Route::group(['middleware' => ['role:superadmin|subbag-umum|subbag-keuangan']], 
     Route::resource('pemegang_bmn','PemegangBmnController');
 });
 
-
 Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {    
     Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
     Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
@@ -88,6 +87,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('surat_tugas/edit_unit_kerja', 'SuratTugasController@update_unit_kerja');
     Route::get('surat_tugas/{id}/print_st', 'SuratTugasController@print_st');
     Route::get('surat_tugas/{id}/print_spd', 'SuratTugasController@print_spd');
+    Route::post('surat_tugas/is_available', 'SuratTugasController@is_available');
     /////////////////
 });
 

@@ -1,4 +1,4 @@
-<div class="modal fade" id="form_rincian" tabindex="-1" role="dialog">
+<div class="modal" id="form_rincian" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
