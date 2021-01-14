@@ -127,17 +127,16 @@
                 if(isNaN(params)) return false;
                 else return true;
             },
-            setNamaJabatan: function(event){
+            setAllNamaAndPejabat(){
                 var self = this;
-                var selected_index = event.currentTarget.selectedIndex;
-                self.cur_rincian.nama = self.list_pegawai[selected_index].name;
-                self.cur_rincian.jabatan = self.list_pegawai[selected_index].nmjab;
-            },
-            setPejabat: function(event){
-                var self = this;
-                var selected_index = event.currentTarget.selectedIndex;
-                self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[selected_index].name;
-                self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[selected_index].nmjab;
+                var dropdown_nip = $("#nip")[0].selectedIndex;
+                var pejabat_ttd_nip = $("#pejabat_ttd_nip")[0].selectedIndex;
+                
+                self.cur_rincian.nama = self.list_pegawai[dropdown_nip].name;
+                self.cur_rincian.jabatan = self.list_pegawai[dropdown_nip].nmjab;
+                
+                self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
+                self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
             },
             setSumberAnggaran: function(event){
                 var self = this;
@@ -165,6 +164,7 @@
                     if(data.response==1){
                         // console.log(data.result[0].total)
                         if(data.result[0].total==0){
+                            self.setAllNamaAndPejabat()
                             ////////
                             if(self.cur_rincian.id){
                                 self.rincian[self.cur_rincian.index] = {

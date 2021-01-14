@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">Unit Kerja</li>
+    <li class="breadcrumb-item">Mata Anggaran</li>
 </ul>
 @endsection
 
@@ -19,6 +19,7 @@
       <div class="card">
         <div class="body">
           <a href="{{action('MataAnggaranController@import_some')}}" class="btn btn-info">Import MAK Baru</a>
+          <a href="{{action('MataAnggaranController@create')}}" class="btn btn-success">Tambah MAK</a>
           <br/><br/>
           <section class="datas">
             @include('mata_anggaran.list')

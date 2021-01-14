@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MataAnggaranRequest;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class MataAnggaranController extends Controller
     {
         $keyword = $request->get('search');
         $datas = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+            ->orderByDesc('created_by')
             ->paginate();
 
         $datas->withPath('mata_anggaran');
@@ -64,8 +66,20 @@ class MataAnggaranController extends Controller
         }
 
         $model= new \App\MataAnggaran;
-        $model->kode=$request->get('kode');
-        $model->nama=$request->get('nama');
+        $model->kode_uker=Auth::user()->kdprop.Auth::user()->kdkab;
+        $model->kode_program=$request->get('kode_program');
+        $model->label_program=$request->get('label_program');
+        $model->kode_aktivitas=$request->get('kode_aktivitas');
+        $model->label_aktivitas=$request->get('label_aktivitas');
+        $model->kode_kro=$request->get('kode_kro');
+        $model->label_kro=$request->get('label_kro');
+        $model->kode_ro=$request->get('kode_ro');
+        $model->label_ro=$request->get('label_ro');
+        $model->kode_komponen=$request->get('kode_komponen');
+        $model->label_komponen=$request->get('label_komponen');
+        $model->kode_subkomponen=$request->get('kode_subkomponen');
+        $model->label_subkomponen=$request->get('label_subkomponen');
+        $model->tahun = date('Y');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
@@ -112,8 +126,19 @@ class MataAnggaranController extends Controller
         }
         
         $model= \App\MataAnggaran::find($id);
-        $model->kode=$request->get('kode');
-        $model->nama=$request->get('nama');
+        
+        $model->kode_program=$request->get('kode_program');
+        $model->label_program=$request->get('label_program');
+        $model->kode_aktivitas=$request->get('kode_aktivitas');
+        $model->label_aktivitas=$request->get('label_aktivitas');
+        $model->kode_kro=$request->get('kode_kro');
+        $model->label_kro=$request->get('label_kro');
+        $model->kode_ro=$request->get('kode_ro');
+        $model->label_ro=$request->get('label_ro');
+        $model->kode_komponen=$request->get('kode_komponen');
+        $model->label_komponen=$request->get('label_komponen');
+        $model->kode_subkomponen=$request->get('kode_subkomponen');
+        $model->label_subkomponen=$request->get('label_subkomponen');
         $model->updated_by=Auth::id();
         $model->save();
         return redirect('mata_anggaran');

@@ -43,18 +43,18 @@ class MataAnggaranRequest extends FormRequest
     public function attributes()
     {
         return [
-            'kode_program' => 'Program',
-            'label_program' => 'Program',
-            'kode_aktivitas' => 'Aktivitas',
-            'label_aktivitas' => 'Aktivitas',
-            'kode_kro' => 'KRO',
-            'label_kro' => 'KRO',
-            'kode_ro' => 'RO',
-            'label_ro' => 'RO',
-            'kode_komponen' => 'Komponen',
-            'label_komponen' => 'Komponen',
-            'kode_subkomponen' => 'Sub Komponen',
-            'label_subkomponen' => 'Sub Komponen',
+            'kode_program' => 'Kode Program',
+            'label_program' => 'Label Program',
+            'kode_aktivitas' => 'Kode Aktivitas',
+            'label_aktivitas' => 'Label Aktivitas',
+            'kode_kro' => 'Kode KRO',
+            'label_kro' => 'Label KRO',
+            'kode_ro' => 'Kode RO',
+            'label_ro' => 'Label RO',
+            'kode_komponen' => 'Kode Komponen',
+            'label_komponen' => 'Label Komponen',
+            'kode_subkomponen' => 'Kode Sub Komponen',
+            'label_subkomponen' => 'Label Sub Komponen',
         ];
     }
 }

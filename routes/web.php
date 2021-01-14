@@ -74,7 +74,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('mata_anggaran/index','MataAnggaranController@index');
     Route::get('mata_anggaran/import_some','MataAnggaranController@upload_some');
     Route::post('mata_anggaran/import_some','MataAnggaranController@import_some');
-    // Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
+    Route::resource('mata_anggaran','MataAnggaranController')->except(['show']);
     
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas','SuratTugasController')->except(['show']);

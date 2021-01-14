@@ -9,7 +9,7 @@
                     <div class="col-md-6">
                         <div class="form-group">Pegawai:
                             <div class="form-line">
-                                <select class="form-control" v-model="cur_rincian.nip" @change="setNamaJabatan($event)">
+                                <select class="form-control" id="nip" v-model="cur_rincian.nip">
                                     @foreach ($list_pegawai as $value)
                                         <option value="{{ $value->nip_baru }}">{{ $value->name }} - {{ $value->nip_baru }} </option>
                                     @endforeach
@@ -21,7 +21,7 @@
                     <div class="col-md-6">
                         <div class="form-group">{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}
                             <div class="form-line">
-                                <select class="form-control" v-model="cur_rincian.pejabat_ttd_nip" @change="setPejabat($event)">
+                                <select class="form-control" v-model="cur_rincian.pejabat_ttd_nip" id="pejabat_ttd_nip">
                                     @foreach ($list_pejabat as $value)
                                         <option value="{{ $value->nip_baru }}">{{ $value->name }} - {{ $value->nip_baru }} </option>
                                     @endforeach
