@@ -11,7 +11,7 @@
                     <th class="text-center" rowspan="2">Pegawai</th>
                     <th class="text-center" colspan="2">Tanggal</th>
                     <th class="text-center" rowspan="2">Status</th>
-                    <th class="text-center" colspan="2">Cetak</th>
+                    <th class="text-center" colspan="3">Cetak</th>
                     <th class="text-center" rowspan="2">Aksi</th>
                 </tr>
                 <tr>
@@ -19,6 +19,7 @@
                     <th class="text-center">Selesai</th>
                     <th class="text-center">Surat Tugas</th>
                     <th class="text-center">SPD</th>
+                    <th class="text-center">Kwitansi</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +49,14 @@
                         
                         <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
                         <td class="text-center"><a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
+                        <td class="text-center">
+                            <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
+                                <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                            
+                            <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
+                                <i class="icon-arrow-right text-info"></i> <u>Input</u>
+                            </a>
+                        </td>
                         <td class="text-center">
                             <a href="#" role="button" v-on:click="sendStId" 
                                 data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}" 

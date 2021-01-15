@@ -227,6 +227,26 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
+
+    public function insert_kwitansi($id){
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+
+        if($model_rincian->status_aktif==1){
+            return view('surat_tugas.insert_kwitansi',compact('model','id', 
+                'real_id', 'model_rincian'));
+        }
+        else{
+            abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
+        }
+    }
+    
+    public function store_kwitansi(Request $request, $id){
+
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -268,6 +288,27 @@ class SuratTugasController extends Controller
             'pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
+        return $pdf->download($nama_file);
+        
+        // return view('surat_tugas.print_spd',compact('real_id', 
+        //     'model_rincian', 'model', 'unit_kerja', 'pegawai', 'mak'));
+    }
+
+    public function print_kwitansi($id)
+    {
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $model_kwitansi = \App\SuratTugasKwitansi::where('id_surtug', '=', $real_id)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+
+        $pdf = PDF::loadView('surat_tugas.print_kwitansi', compact('real_id', 
+            'model_rincian', 'model', 'model_kwitansi' ,'unit_kerja',
+            'pegawai', 'mak'))->setPaper('a4', 'potrait');
+
+        $nama_file = 'kwitansi_'.$model_rincian->nomor_spd.'.pdf';
         return $pdf->download($nama_file);
         
         // return view('surat_tugas.print_spd',compact('real_id', 
