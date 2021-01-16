@@ -243,7 +243,29 @@ class SuratTugasController extends Controller
     }
     
     public function store_kwitansi(Request $request, $id){
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        
+        $total_utama = $request->get('total_utama');
 
+        for($i=1;$i<=$total_utama;++$i){
+            if(strlen($request->get('u_rincianau'.$i))>0 && strlen($request->get('u_anggaranau'.$i))>0 
+                && strlen($request->get('u_is_rillau'.$i))>0){
+                
+                $model_r = new \App\SuratTugasKwitansi;
+                $model_r->id_surtug =  $model->id;
+                $model_r->id_surtug_pegawai  = $model_rincian->id;
+                $model_r->rincian   = $request->get('u_rincianau'.$i);
+                $model_r->anggaran = $request->get('u_anggaranau'.$i);
+                $model_r->is_rill  = $request->get('u_is_rillau'.$i);
+                $model_r->created_by=Auth::id();
+                $model_r->updated_by=Auth::id();
+                $model_r->save();
+            }
+        }
+        
+        return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
 
