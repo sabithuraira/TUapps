@@ -53,9 +53,11 @@
                             <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
                                 <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
                             
+                            @if($data['status_aktif']<=5)
                             <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
                                 <i class="icon-arrow-right text-info"></i> <u>Input</u>
                             </a>
+                            @endif
                         </td>
                         <td class="text-center">
                             <a href="#" role="button" v-on:click="sendStId" 

@@ -65,7 +65,7 @@
                     </table>
 
                     <b>Daftar Biaya</b> -
-                    &nbsp <a href="#" id="add-biaya" data-toggle="modal" data-target="#form_biaya">Tambah Rincian Biaya &nbsp &nbsp<i class="icon-plus text-info"></i></a>
+                    &nbsp <a href="#" id="add-biaya" data-toggle="modal" v-on:click="addRincian" data-target="#form_biaya">Tambah Rincian Biaya &nbsp &nbsp<i class="icon-plus text-info"></i></a>
                     <div class="table-responsive">
                         <table class="m-b-0 table-bordered table-sm" style="min-width:100%">
                             <thead>
@@ -84,14 +84,14 @@
                                             <a :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                                         </template>
                                         
-                                        <a href="#" role="button" v-on:click="updateRincian" data-toggle="modal" 
-                                                    :data-id="data.id" :data-index="index" :data-rincian="data.rincian" 
-                                                    :data-anggaran="data.anggaran" :data-is_rill="data.is_rill"
-                                                    data-target="#form_rincian"> <i class="icon-pencil"></i></a>
-                                        
                                         <template v-if="!is_delete(data.id)">
                                             <a :data-id="data.id" v-on:click="delDataTemp(index)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                                         </template>
+                                        
+                                        <a href="#" role="button" v-on:click="updateRincian" data-toggle="modal" 
+                                                    :data-id="data.id" :data-index="index" :data-rincian="data.rincian" 
+                                                    :data-anggaran="data.anggaran" :data-is_rill="data.is_rill"
+                                                    data-target="#form_biaya"> <i class="icon-pencil"></i></a>
                                         @{{ index+1 }}
                                     </td>
                                     <td>@{{ data.rincian }}<input type="hidden" :name="'u_rincian'+data.id" v-model="data.rincian"></td>
@@ -178,7 +178,8 @@
     var vm = new Vue({
         el: "#app_vue",
         data:  {
-            pathname :(window.location.pathname).replace("/create", ""),
+            enc_id: {!! json_encode($id) !!},
+            model_kwitansi:  {!! json_encode($model_kwitansi) !!},
             total_utama: 1,
             rincian: [],
             cur_rincian: {
@@ -189,7 +190,17 @@
                 index: ''
             },
         },
+        computed: {
+            pathname: function () {
+                return (window.location.pathname).replace("/"+this.enc_id+"/insert_kwitansi", "");
+            },
+        },
         methods: {
+            setDatas: function(){
+                var self = this;
+                self.rincian = self.model_kwitansi;
+                self.total_utama += self.rincian.length;
+            },
             is_delete: function(params){
                 if(isNaN(params)) return false;
                 else return true;
@@ -247,6 +258,13 @@
                 
                 //////////
             },
+            addRincian: function(){
+                var self = this;
+                self.cur_rincian.id = '';
+                self.cur_rincian.rincian = '';
+                self.cur_rincian.anggaran = '';
+                self.cur_rincian.is_rill = 0;
+            },
             updateRincian: function (event) {
                 var self = this;
                 if (event) {
@@ -264,12 +282,27 @@
                 self.total_utama--;
                 $('#wait_progres').modal('hide');
             },
+            delData: function (idnya) {
+                var self = this;
+                $('#wait_progres').modal('show');
+                $.ajax({
+                    url : self.pathname+"/" + idnya + "/destroy_kwitansi",
+                    method : 'get',
+                    dataType: 'json',
+                }).done(function (data) {
+                    window.location.reload(true);
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            },
         }
     });
 
     $(document).ready(function() {
         // vm.setNomor();
-        // vm.setDatas();
+        vm.setDatas();
     });
 </script>
 @endsection

@@ -232,10 +232,11 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $model_kwitansi = \App\SuratTugasKwitansi::where('id_surtug_pegawai', '=', $real_id)->get();
 
         if($model_rincian->status_aktif==1){
             return view('surat_tugas.insert_kwitansi',compact('model','id', 
-                'real_id', 'model_rincian'));
+                'real_id', 'model_rincian', 'model_kwitansi'));
         }
         else{
             abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
@@ -248,6 +249,19 @@ class SuratTugasController extends Controller
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         
         $total_utama = $request->get('total_utama');
+
+        $datas = \App\SuratTugasKwitansi::where('id_surtug_pegawai', '=', $real_id)->get();
+        foreach($datas as $data){
+            if(strlen($request->get('u_rincian'.$data->id))>0 && strlen($request->get('u_anggaran'.$data->id))>0  
+                && strlen($request->get('u_is_rill'.$data->id))>0){
+                $model_kw = \App\SuratTugasKwitansi::find($data->id);
+                $model_kw->rincian   = $request->get('u_rincian'.$data->id);
+                $model_kw->anggaran = $request->get('u_anggaran'.$data->id);
+                $model_kw->is_rill  = $request->get('u_is_rill'.$data->id);
+                $model_kw->updated_by=Auth::id();
+                $model_kw->save();
+            }
+        }
 
         for($i=1;$i<=$total_utama;++$i){
             if(strlen($request->get('u_rincianau'.$i))>0 && strlen($request->get('u_anggaranau'.$i))>0 
@@ -508,5 +522,12 @@ class SuratTugasController extends Controller
         $model = \App\SuratTugas::find($id);
         $model->delete();
         return redirect('surat_tugas')->with('success','Information has been  deleted');
+    }
+
+    public function destroy_kwitansi($id)
+    {
+        $model = \App\SuratTugasKwitansi::find($id);
+        $model->delete();
+        return response()->json(['success'=>'Sukses']);
     }
 }
