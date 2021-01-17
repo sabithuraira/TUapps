@@ -234,7 +234,7 @@ class SuratTugasController extends Controller
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $model_kwitansi = \App\SuratTugasKwitansi::where('id_surtug_pegawai', '=', $real_id)->get();
 
-        if($model_rincian->status_aktif==1){
+        if($model_rincian->status_aktif!=2){
             return view('surat_tugas.insert_kwitansi',compact('model','id', 
                 'real_id', 'model_rincian', 'model_kwitansi'));
         }
@@ -335,20 +335,33 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $model_kwitansi = \App\SuratTugasKwitansi::where('id_surtug', '=', $real_id)->first();
+        $model_kwitansi = \App\SuratTugasKwitansi::where([
+            ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 0]
+        ])->get();
+        
+        $model_kwitansi_rill = \App\SuratTugasKwitansi::where([
+            ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 1]
+        ])->get();
+        
+        $model_kwitansi_rill_total = \App\SuratTugasKwitansi::where([
+            ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 1]
+        ])->sum('anggaran');
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_kwitansi', compact('real_id', 
-            'model_rincian', 'model', 'model_kwitansi' ,'unit_kerja',
+            'model_rincian', 'model', 'model_kwitansi' , 'model_kwitansi_rill' , 
+             'unit_kerja', 'model_kwitansi_rill_total',
             'pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'kwitansi_'.$model_rincian->nomor_spd.'.pdf';
         return $pdf->download($nama_file);
         
-        // return view('surat_tugas.print_spd',compact('real_id', 
-        //     'model_rincian', 'model', 'unit_kerja', 'pegawai', 'mak'));
+        // return view('surat_tugas.print_kwitansi',compact('real_id', 
+        //     'model_rincian', 'model_kwitansi', 'model_kwitansi_rill',
+        //     'model_kwitansi_rill_total', 'model', 
+        //     'unit_kerja', 'pegawai', 'mak'));
     }
 
     /**
