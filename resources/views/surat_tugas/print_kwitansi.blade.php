@@ -215,8 +215,6 @@
 
     <div class="page-break"></div>
 
-
-    
     <table width="100%">
         <tr>
             <td class="pepet">
@@ -315,7 +313,113 @@
         </tr>
     </table>
 
+    @if(count($model_kwitansi_rill)>0)
+        <div class="page-break"></div>
+
+        <div align="center"><b>DAFTAR PENGELUARAN RIIL</b></div><br/>
+
+        <table width="100%">
+            <tr>
+                <td width="5%"></td>
+                <td colspan="2">Yang bertanda tangan di bawah ini:</td>
+            </tr>
+            <tr>
+                <td width="5%"></td>
+                <td width="25%">Nama</td>
+                <td>: {{ $model_rincian->nama }}</td>
+            </tr>
+            <tr>
+                <td width="5%"></td>
+                <td width="25%">NIP/td>
+                <td>: {{ $model_rincian->nip }}</td>
+            </tr>
+            <tr>
+                <td width="5%"></td>
+                <td width="25%">Jabatan</td>
+                <td>: {{ $model_rincian->jabatn }}</td>
+            </tr>
+        </table>
+        
+        <div>Berdasarkan Surat Perjalanan Dinas (SPD) Nomor: {{ $model_rincian->nomor_spd }} tanggal: {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}, dengan ini kami menyatakan dengan</div><br/>
+        <div>1. Biaya transport pegawai dan/atau biaya penginapan di bawah ini yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi:</div>
     
-    <div class="page-break"></div>
+        <table width="100%" class="table-border">
+            <tr align="center">
+                <td width="5%">No.</td>
+                <td>URAIAN</td>
+                <td>Jumlah<br/>(Rp)</td>
+                <td width="20%">Keterangan</td>
+            </tr>
+            <tr align="center">
+                <td width="5%">(1)</td>
+                <td>(2)</td>
+                <td>(3)</td>
+                <td width="20%">(4)</td>
+            </tr>
+           
+            @php 
+                $total_rowspan_riil = 2 + count($model_kwitansi);
+                $total_biaya_riil = 0;
+            @endphp  
+                            
+            @foreach($model_kwitansi_rill as $index=>$value)
+                @php 
+                    $total_biaya_riil += $value->anggaran;
+                @endphp
+                <tr>
+                    <td class="table-wobordertb">{{ ($index+1) }}</td>
+                    <td class="table-wobordertb">{{ $value->rincian }}</td>
+                    <td class="table-wobordertb" align="right">Rp. {{  number_format($value->anggaran,0,",",".")  }}</td>
+                    @if($index==0)
+                        <td rowspan="{{ $total_rowspan_riil }}"></td>
+                    @endif
+                </tr>
+            @endforeach
+
+            <tr>
+                <td class="table-wobordertb"><br/></td>
+                <td class="table-wobordertb"></td>
+                <td class="table-wobordertb"></td>
+            </tr>
+            
+            <tr>
+                <td class="table-wobordertb"></td>
+                <td class="table-wobordertb">Jumlah</td>
+                <td class="table-wobordertb" align="right">Rp. {{  number_format($total_biaya_riil,0,",",".")  }}</td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    Terbilang : {{  $model_rincian->terbilang($total_biaya_riil) }} rupiah
+                </td>
+            </tr>
+        </table>
+    
+        <div>2. Jumlah uang tersebut pada angka 1 di atas benar-benar dikeluarkan untuk pelaksanaan perjalanan dinas dimaksud dan apabila di kemudian hari terdapat kelebihan atas pembayaran, kami bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara<br/><br/></div>
+        <div>&nbsp; Demikian pernyataan ini kami buat dengan sebenarnya, untuk dipergunakan sebagaimana mestinya<br/><br/></div>
+
+        <table width="100%">
+            <tr>
+                <td width="50%" valign="top">
+                    Mengetahui/Menyetujui:<br/>
+                    Setuju dibayar:<br/>
+                    Pejabat Pembuat Komitmen<br/>
+                    <br/><br/><br/><br/><br/>
+                    <u>{{ $model_rincian->ppk_nama }}</u><br/>
+                    NIP. {{ $model_rincian->ppk_nip }} <br/>
+                </td>
+                <td width="10%"></td>
+                <td width="30%" align="center" valign="top">
+                    {{ $unit_kerja->ibu_kota }}<br/>
+                    Pelaksana SPD<br/>
+                    <br/><br/><br/><br/><br/><br/>
+                    <u>{{ $model_rincian->nama }}</u><br/>
+                    NIP. {{ $model_rincian->nip }} <br/>
+                </td>
+                <td width="10%"></td>
+            </tr>
+        </table>
+    @endif
 </body>
 </html>
