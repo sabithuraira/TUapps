@@ -159,17 +159,20 @@ class SuratTugasController extends Controller
 
         if($model->save()){
             for($i=1;$i<=$total_utama;++$i){
-                if(strlen($request->get('u_nipau'.$i))>0 && strlen($request->get('u_namaau'.$i))>0 
-                    && strlen($request->get('u_jabatanau'.$i))>0 && strlen($request->get('u_tujuan_tugasau'.$i))>0
+                if(strlen($request->get('u_namaau'.$i))>0 && strlen($request->get('u_tujuan_tugasau'.$i))>0
                     && strlen($request->get('u_tanggal_mulaiau'.$i))>0 && strlen($request->get('u_tanggal_selesaiau'.$i))>0
                     && strlen($request->get('u_pejabat_ttd_nipau'.$i))>0 && strlen($request->get('u_pejabat_ttd_namaau'.$i))>0
-                    && strlen($request->get('u_tingkat_biayaau'.$i))>0 && strlen($request->get('u_kendaraanau'.$i))>0){
+                    && strlen($request->get('u_tingkat_biayaau'.$i))>0 && strlen($request->get('u_kendaraanau'.$i))>0 
+                    && strlen($request->get('u_jenis_petugasau'.$i))>0){
                     
                     $model_r = new \App\SuratTugasRincian;
                     $model_r->id_surtug =  $model->id;
-                    $model_r->nip  = $request->get('u_nipau'.$i);
                     $model_r->nama   = $request->get('u_namaau'.$i);
-                    $model_r->jabatan = $request->get('u_jabatanau'.$i);
+                    $model_r->jenis_petugas = $request->get('u_jenis_petugasau'.$i);
+                    if($request->get('u_jenis_petugasau'.$i)==1){
+                        $model_r->nip  = $request->get('u_nipau'.$i);
+                        $model_r->jabatan = $request->get('u_jabatanau'.$i); 
+                    }
                     $model_r->tujuan_tugas  = $request->get('u_tujuan_tugasau'.$i);
                     $model_r->tanggal_mulai       = date('Y-m-d', strtotime($request->get('u_tanggal_mulaiau'.$i)));
                     $model_r->tanggal_selesai       = date('Y-m-d', strtotime($request->get('u_tanggal_selesaiau'.$i)));
@@ -178,7 +181,7 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
                     $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
                     $model_r->pejabat_ttd_jabatan  = $request->get('u_pejabat_ttd_jabatanau'.$i);
-
+                    
                     $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
                     $model_r->ppk_nip  = $unit_kerja->ppk_nip;
                     $model_r->ppk_nama  = $unit_kerja->ppk_nama;
@@ -192,10 +195,15 @@ class SuratTugasController extends Controller
                     $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
                         ->orderBy('id', 'desc')
                         ->first();
+                        
+                    $datas_spd = \App\SuratTugasRincian::where([
+                            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
+                            ['nomor_spd', '<>', '']
+                        ])->orderBy('id', 'desc')->first();
 
                     if($datas!=null){
                         $exp_nomor_st = explode("/",$datas->nomor_st)[0];
-                        $exp_nomor_spd = explode("/",$datas->nomor_spd)[0];
+                        $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
                         $prev_nomor_st = (int)$exp_nomor_st;
                         $prev_nomor_spd = (int)$exp_nomor_spd;
                         $nomor_st = $prev_nomor_st + 1;;
@@ -210,11 +218,18 @@ class SuratTugasController extends Controller
                     ////////
                     
                     $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
-                    if(Auth::user()->kdkab=='00'){
-                        $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                    
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                        $model_r->status_aktif = 1;
+                        if(Auth::user()->kdkab=='00'){
+                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        }
+                        else{
+                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        }
                     }
                     else{
-                        $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        $model_r->status_aktif = 7;
                     }
 
                     $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;

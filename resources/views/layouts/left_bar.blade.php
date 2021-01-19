@@ -32,6 +32,7 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#menu">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panduan"><i class="icon-book-open"></i> Panduan</a></li>
              </ul>
                 
             <!-- Tab panes -->
@@ -79,13 +80,7 @@
                             </li>
                             @endhasanyrole
 
-                            @unlessrole('subbag-umum|subbag-keuangan')
-                            <li class="{{ (request()->is('surat_tugas*')) ? 'active' : '' }}">
-                                <a href="{{ url('surat_tugas/daftar') }}" > <i class="icon-doc"></i><span>Surat Tugas</span></a>
-                            </li>
-                            @endunlessrole
-
-                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
+                            @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                             <li class="{{ (request()->is('surat_tugas*')) ? 'active' : '' }}">
                                 <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas</span></a>
                                 <ul>                                  
@@ -94,8 +89,8 @@
                                     <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a href="{{url('surat_tugas/edit_unit_kerja')}}">Informasi Unit Kerja</a></li>
                                     <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a href="{{url('mata_anggaran/index')}}">MAK</a></li>
                                 </ul>
-                            @endhasanyrole
                             </li>
+                            @endhasanyrole
 
                             @hasanyrole('superadmin|subbag-umum')
                             <li class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*')) ? 'active' : '' }}">
@@ -133,7 +128,20 @@
                             
                         </ul>
                     </nav>
-                </div>          
+                </div>      
+                
+                <div class="tab-pane p-l-15 p-r-15" id="panduan">
+                    <nav id="left-sidebar-nav" class="sidebar-nav">
+                        <ul class="metismenu">   
+                            <li><a href="https://laci.bps.go.id/s/r7q7pFlopuAY80t" > <i class="icon-doc"></i><span>Panduan Modul CKP, Penilaian & WFH</span></a></li>    
+                            <li><a href="https://laci.bps.go.id/s/7q6CAaFDjTDk4nB" > <i class="icon-doc"></i><span>Panduan Modul Barang Persediaan</span></a></li>    
+                            <li><a href="https://laci.bps.go.id/s/njTCSRMqiFm4IHV" > <i class="icon-doc"></i><span>Panduan Modul Surat Menyurat</span></a></li>   
+                            <li><a href="https://laci.bps.go.id/s/WimneDzApQTyq0V" > <i class="icon-doc"></i><span>Panduan Modul Surat Tugas</span></a></li>           
+                        </ul>
+                    </nav>
+                </div>
+
+
             </div>          
         </div>
     </div>

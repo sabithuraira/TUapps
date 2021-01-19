@@ -32,7 +32,7 @@ class SuratTugasRincian extends Model
         return array( 
 			1 => 'Kendaraan Umum', 
 			2 => 'Kendaraan Dinas',
-			3 => 'Kendaraan Dinas',
+			3 => 'Kendaraan Pesawat',
 		);
     }
     
@@ -44,7 +44,7 @@ class SuratTugasRincian extends Model
             4 => "<div class='badge badge-warning'>Kwitansi telah dibuat</div>", 
             5 => "<div class='badge badge-warning'>Konfirmasi PPK</div>", 
             6 => "<div class='badge badge-warning'>Proses Pembayaran</div>", 
-            7 => "<div class='badge badge-success'>Sudah dibayar</div>",
+            7 => "<div class='badge badge-success'>Sudah dibayar/selesai</div>",
         );
     }
 
@@ -56,7 +56,7 @@ class SuratTugasRincian extends Model
             4 => "Kwitansi telah dibuat", 
             5 => "Konfirmasi PPK", 
             6 => "Proses Pembayaran", 
-            7 => "Sudah dibayar",
+            7 => "Sudah dibayar/selesai",
         );
     }
 
