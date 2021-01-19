@@ -30,7 +30,7 @@ class SuratTugas extends Model
         return array(
             1 => 'Perjadin Organik Dalam Kota', 
             2 => 'Perjadin Organik Luar Kota', 
-            // 3 => 'Honor/Upah/Transport Mitra'
+            3 => 'Honor/Upah/Transport Mitra'
         );
     }
     
@@ -39,7 +39,7 @@ class SuratTugas extends Model
         return array(
             1 => '524113', 
             2 => '524111', 
-            // 3 => 'Honor/Upah/Transport Mitra'
+            3 => '521213'
         );
     }
     

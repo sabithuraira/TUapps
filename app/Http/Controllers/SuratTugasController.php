@@ -196,30 +196,38 @@ class SuratTugasController extends Controller
                         ->orderBy('id', 'desc')
                         ->first();
                         
-                    $datas_spd = \App\SuratTugasRincian::where([
-                            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
-                            ['nomor_spd', '<>', '']
-                        ])->orderBy('id', 'desc')->first();
 
                     if($datas!=null){
                         $exp_nomor_st = explode("/",$datas->nomor_st)[0];
-                        $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
                         $prev_nomor_st = (int)$exp_nomor_st;
-                        $prev_nomor_spd = (int)$exp_nomor_spd;
-                        $nomor_st = $prev_nomor_st + 1;;
-                        $nomor_spd = $prev_nomor_spd + 1;
+                        $nomor_st = $prev_nomor_st + 1;
+                    }
+                    
+                    
+                    if(($model_r->jenis_petugas==1 && $model->jenis_st!=3) || $model->jenis_st!=3){
+                        $datas_spd = \App\SuratTugasRincian::where([
+                            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
+                            ['nomor_spd', '<>', '']
+                        ])->orderBy('id', 'desc')->first();
+                        
+                        if($datas_spd!=null){
+                            $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
+                            $prev_nomor_spd = (int)$exp_nomor_spd;
+                            $nomor_spd = $prev_nomor_spd + 1;
+                        }
+                        
+                        while(strlen($nomor_spd)<4)
+                            $nomor_spd = '0'.$nomor_spd;
                     }
 
                     while(strlen($nomor_st)<4)
                         $nomor_st = '0'.$nomor_st;
                         
-                    while(strlen($nomor_spd)<4)
-                        $nomor_spd = '0'.$nomor_spd;
                     ////////
                     
                     $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
                     
-                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                    if(($model_r->jenis_petugas==1 && $model->jenis_st!=3) || $model->jenis_st!=3){
                         $model_r->status_aktif = 1;
                         if(Auth::user()->kdkab=='00'){
                             $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');

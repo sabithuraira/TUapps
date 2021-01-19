@@ -43,7 +43,7 @@
         <label>{{ $model->attributes()['mak'] }}:</label>
         <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" :disabled="sumber_anggaran==3">
             <option v-for="(value, index) in list_select_anggaran" :value="value.id">
-                @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }}
+                @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }} - @{{ value.label_ro }}
             </option>
         </select>
         @foreach ($errors->get('mak') as $msg)

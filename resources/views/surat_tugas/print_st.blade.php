@@ -81,14 +81,26 @@
             <td width="10%"></td>
             <td width="30%">NIP<br/><br/></td>
             <td width="3%">:</td>
-            <td width="42%">{{ $model_rincian->nip }}<br/><br/></td>
+            <td width="42%">
+                @if($model_rincian->jenis_petugas==2)
+                    -
+                @else
+                    {{ $model_rincian->nip }}
+                @endif
+            <br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
             <td width="30%" valign="top">Jabatan<br/><br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="42%">{{ $model_rincian->jabatan }}<br/><br/></td>
+            <td width="42%">
+                @if($model_rincian->jenis_petugas==2)
+                    Mitra
+                @else
+                    {{ $model_rincian->jabatan }}
+                @endif    
+                <br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
