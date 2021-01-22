@@ -59,6 +59,7 @@
                         <input type="hidden" :name="'u_pejabat_ttd_nip'+data.id" v-model="data.pejabat_ttd_nip">
                         <input type="hidden" :name="'u_pejabat_ttd_nama'+data.id" v-model="data.pejabat_ttd_nama">
                         <input type="hidden" :name="'u_pejabat_ttd_jabatan'+data.id" v-model="data.pejabat_ttd_jabatan">
+                        <input type="hidden" :name="'u_unit_kerja_ttd'+data.id" v-model="data.unit_kerja_ttd">
                         <input type="hidden" :name="'u_jenis_petugas'+data.id" v-model="data.jenis_petugas">
                     </td>
                     <td class="text-center">@{{ list_tingkat_biaya[data.tingkat_biaya] }}<input type="hidden" :name="'u_tingkat_biaya'+data.id" v-model="data.tingkat_biaya"></td>

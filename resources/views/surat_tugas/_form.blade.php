@@ -117,6 +117,7 @@
                 pejabat_ttd_nip: '',
                 pejabat_ttd_nama: '',
                 pejabat_ttd_jabatan: '',
+                unit_kerja_ttd: '',
                 tingkat_biaya: '',
                 kendaraan: '',
                 id: '',
@@ -138,6 +139,7 @@
                 
                 self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
                 self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
+                self.cur_rincian.unit_kerja_ttd = self.list_pejabat[pejabat_ttd_nip].kdprop+self.list_pejabat[pejabat_ttd_nip].kdkab;
             },
             setAllPejabat(){
                 var self = this;
@@ -145,6 +147,7 @@
                 
                 self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
                 self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
+                self.cur_rincian.unit_kerja_ttd = self.list_pejabat[pejabat_ttd_nip].kdprop+self.list_pejabat[pejabat_ttd_nip].kdkab;
             },
             setSumberAnggaran: function(event){
                 var self = this;
@@ -187,6 +190,7 @@
                                         'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                                         'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
                                         'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                        'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
                                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                         'kendaraan'     : self.cur_rincian.kendaraan,
                                         'jenis_petugas'     : jenis_petugas,
@@ -204,6 +208,7 @@
                                         'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                                         'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
                                         'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                        'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
                                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                         'kendaraan'     : self.cur_rincian.kendaraan,
                                         'jenis_petugas'     : jenis_petugas,
@@ -219,6 +224,7 @@
                                 self.cur_rincian.pejabat_ttd_nip = '';
                                 self.cur_rincian.pejabat_ttd_nama = '';
                                 self.cur_rincian.pejabat_ttd_jabatan = '';
+                                self.cur_rincian.unit_kerja_ttd = '';
                                 self.cur_rincian.tingkat_biaya = '';
                                 self.cur_rincian.kendaraan = '';
                                 self.cur_rincian.id = '';
@@ -258,6 +264,7 @@
                                 'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                                 'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
                                 'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
                                 'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                 'kendaraan'     : self.cur_rincian.kendaraan,
                                 'jenis_petugas'     : jenis_petugas,
@@ -275,6 +282,7 @@
                                 'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
                                 'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
                                 'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
                                 'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                 'kendaraan'     : self.cur_rincian.kendaraan,
                                 'jenis_petugas'     : jenis_petugas,
@@ -290,6 +298,7 @@
                         self.cur_rincian.pejabat_ttd_nip = '';
                         self.cur_rincian.pejabat_ttd_nama = '';
                         self.cur_rincian.pejabat_ttd_jabatan = '';
+                        self.cur_rincian.unit_kerja_ttd = '';
                         self.cur_rincian.tingkat_biaya = '';
                         self.cur_rincian.kendaraan = '';
                         self.cur_rincian.id = '';
@@ -324,6 +333,7 @@
                     self.cur_rincian.pejabat_ttd_nip = event.currentTarget.getAttribute('data-pejabat_ttd_nip');
                     self.cur_rincian.pejabat_ttd_nama = event.currentTarget.getAttribute('data-pejabat_ttd_nama');
                     self.cur_rincian.pejabat_ttd_jabatan = event.currentTarget.getAttribute('data-pejabat_ttd_jabatan');
+                    self.cur_rincian.unit_kerja_ttd = event.currentTarget.getAttribute('data-unit_kerja_ttd');
                     self.cur_rincian.tingkat_biaya = event.currentTarget.getAttribute('data-tingkat_biaya');
                     self.cur_rincian.kendaraan = event.currentTarget.getAttribute('data-kendaraan');
 
