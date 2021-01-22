@@ -8,7 +8,11 @@
             <thead>
                 <tr>
                     <th class="text-center" rowspan="2">Ket Surat</th>
-                    <th class="text-center" rowspan="2">Pegawai</th>
+                    <th class="text-center" rowspan="2">
+                        Pegawai<br/>
+                        <span class="badge bg-dark text-white">K</span><small>=Ketua Tim</small> 
+                        <span class="badge bg-dark text-white">A</span><small>=Anggota</small>
+                    </th>
                     <th class="text-center" colspan="2">Tanggal</th>
                     <th class="text-center" rowspan="2">Status</th>
                     <th class="text-center" colspan="3">Cetak</th>
@@ -32,8 +36,14 @@
                             {{$data['tujuan_tugas']}}
                         </td>
                         <td class="text-center">
-                            <u>{{$data['nip']}}</u><br/>
-                            {{$data['nama']}}
+                            <u>{{ $data['nip'] }}</u><br/>
+                            {{ $data['nama'] }}
+                            
+                            @if ($data['kategori_petugas']==1)
+                                <span class="badge bg-dark text-white">K</span>
+                            @elseif($data['kategori_petugas']==2)
+                                <span class="badge bg-dark text-white">A</span>
+                            @endif
                         </td>
                         <td>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
                         <td>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
@@ -83,6 +93,12 @@
                         <td class="text-center">
                             <u>{{$data['nip']}}</u><br/>
                             {{$data['nama']}}
+                            
+                            @if ($data['kategori_petugas']==1)
+                                <span class="badge bg-dark text-white">K</span>
+                            @elseif($data['kategori_petugas']==2)
+                                <span class="badge bg-dark text-white">K</span>
+                            @endif
                         </td>
                         <td class="text-center" colspan="8">DIBATALKAN</td>
                     </tr>

@@ -267,8 +267,6 @@
                         <td width="65%">: 
                         @if (substr($unit_kerja->kode,2)=='00' || substr($unit_kerja->kode,2,1)=='7')
                             Kota 
-                        @else
-                            Kabupaten 
                         @endif
                         {{ $unit_kerja->ibu_kota }}</td>
                     </tr>
@@ -385,8 +383,6 @@
                         <td width="65%">: 
                         @if (substr($unit_kerja->kode,2)=='00' || substr($unit_kerja->kode,2,1)=='7')
                             Kota 
-                        @else
-                            Kabupaten 
                         @endif
                         {{ $unit_kerja->ibu_kota }}</td>
                     </tr>
@@ -395,7 +391,8 @@
                         <td width="65%">: {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center">Pejabat Pembuat BPS {{ $unit_kerja->nama }}<br/><br/><br/><br/><br/></td>
+                        <td colspan="2" align="center">Pejabat Pembuat Komitmen<br/>
+                        BPS {{ $unit_kerja->nama }}<br/><br/><br/><br/><br/></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><u>{{ $model_rincian->ppk_nama }}</u></td>
@@ -418,7 +415,8 @@
                     <tr>
                         <td></td>
                         <td width="80%" align="center">
-                            Pejabat Pembuat BPS Provinsi Sumatera Selatan
+                            Pejabat Pembuat Komitmen<br/>
+                            BPS {{ $unit_kerja->nama }}
                             <br/><br/><br/><br/><br/>
                         </td>
                     </tr>

@@ -28,7 +28,7 @@ class SuratTugasController extends Controller
                 )
                 ->orderBy('id', 'desc')
                 ->paginate();
-
+    
         $datas->withPath('surat_tugas');
         $datas->appends($request->all());
         $model = new \App\SuratTugasRincian;
@@ -102,8 +102,7 @@ class SuratTugasController extends Controller
     {
         $model= new \App\SuratTugas;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
-                    ->where('kdkab','=',Auth::user()->kdkab)
-                    ->get();
+                    ->where('kdkab','=',Auth::user()->kdkab)->get();
 
         if(Auth::user()->kdkab=='00'){            
             $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
@@ -114,14 +113,24 @@ class SuratTugasController extends Controller
                             }))->get();
         }
         else{
-            $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
-                        ->where('kdkab','=',Auth::user()->kdkab)
-                        ->where(
-                            (function ($query) {
-                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
-                            }))->get();
+            $list_pejabat = \App\UserModel::where(
+                        (function ($query) {
+                            $query->where('kdprop', '=', config('app.kode_prov'))
+                                ->where('kdkab', '=', Auth::user()->kdkab)
+                                ->where(
+                                    (function ($query) {
+                                        $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
+                                    }));
+                    }))
+                    ->orWhere(
+                        (function ($query) {
+                            $query->where('kdprop', '=', config('app.kode_prov'))
+                                ->where('kdkab', '=', '00')
+                                ->where(
+                                    (function ($query) {
+                                        $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                                    }));}))->get();
         }
-                    
                     
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
         $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
@@ -154,6 +163,7 @@ class SuratTugasController extends Controller
         $model->mak=$request->get('mak');
         $model->tugas=$request->get('tugas');
         $model->unit_kerja=Auth::user()->kdprop.Auth::user()->kdkab;
+        $model->kategori = 1;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
 
@@ -204,7 +214,7 @@ class SuratTugasController extends Controller
                     }
                     
                     
-                    if(($model_r->jenis_petugas==1 && $model->jenis_st!=3) || $model->jenis_st!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
                         $datas_spd = \App\SuratTugasRincian::where([
                             ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
                             ['nomor_spd', '<>', '']
@@ -222,12 +232,11 @@ class SuratTugasController extends Controller
 
                     while(strlen($nomor_st)<4)
                         $nomor_st = '0'.$nomor_st;
-                        
                     ////////
                     
                     $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
                     
-                    if(($model_r->jenis_petugas==1 && $model->jenis_st!=3) || $model->jenis_st!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
                         $model_r->status_aktif = 1;
                         if(Auth::user()->kdkab=='00'){
                             $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
@@ -250,6 +259,164 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
+    public function create_tim()
+    {
+        $model= new \App\SuratTugas;
+        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                    ->where('kdkab','=',Auth::user()->kdkab)->get();
+
+        if(Auth::user()->kdkab=='00'){            
+            $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab','=',Auth::user()->kdkab)
+                        ->where(
+                            (function ($query) {
+                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                            }))->get();
+        }
+        else{
+            $list_pejabat = \App\UserModel::where(
+                (function ($query) {
+                    $query->where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab', '=', Auth::user()->kdkab)
+                        ->where(
+                            (function ($query) {
+                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
+                            }));
+            }))
+            ->orWhere(
+                (function ($query) {
+                    $query->where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab', '=', '00')
+                        ->where(
+                            (function ($query) {
+                                $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                            }));}))->get();
+        }
+                    
+        $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
+        $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
+
+        $model_rincian = new \App\SuratTugasRincian;
+
+        return view('surat_tugas.create_tim', 
+            compact('list_pegawai', 'model', 'list_pejabat', 'model_rincian', 
+                'list_anggaran', 'list_anggaran_prov'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_tim(SuratTugasRequest $request)
+    {
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('surat_tugas/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $total_utama = $request->get('total_utama');
+
+        $model= new \App\SuratTugas;
+        $model->jenis_st=$request->get('jenis_st');
+        $model->sumber_anggaran=$request->get('sumber_anggaran');
+        $model->mak=$request->get('mak');
+        $model->tugas=$request->get('tugas');
+        $model->unit_kerja=Auth::user()->kdprop.Auth::user()->kdkab;
+        $model->kategori = 2;
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        
+        //////////PENOMORAN
+        ////////////////
+        $nomor_st = 1;
+        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+            ->orderBy('id', 'desc')->first();
+
+        if($datas!=null){
+            $exp_nomor_st = explode("/",$datas->nomor_st)[0];
+            $prev_nomor_st = (int)$exp_nomor_st;
+            $nomor_st = $prev_nomor_st + 1;
+        }
+        
+        while(strlen($nomor_st)<4)
+            $nomor_st = '0'.$nomor_st;
+        ////////
+        $nomor_spd = 1;
+
+        $datas_spd = \App\SuratTugasRincian::where([
+            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
+            ['nomor_spd', '<>', '']
+        ])->orderBy('id', 'desc')->first();
+        
+        if($datas_spd!=null){
+            $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
+            $prev_nomor_spd = (int)$exp_nomor_spd;
+            $nomor_spd = $prev_nomor_spd + 1;
+        }
+        
+        while(strlen($nomor_spd)<4)
+            $nomor_spd = '0'.$nomor_spd;
+        ////////////
+        
+        if($model->save()){
+            $nomor_ujung_spd = 1;
+            for($i=1;$i<=$total_utama;++$i){
+                if(strlen($request->get('u_namaau'.$i))>0 && strlen($request->get('u_tingkat_biayaau'.$i))>0 
+                    && strlen($request->get('u_kendaraanau'.$i))>0 && strlen($request->get('u_jenis_petugasau'.$i))>0){
+                    
+                    $model_r = new \App\SuratTugasRincian;
+                    $model_r->id_surtug =  $model->id;
+                    $model_r->nama   = $request->get('u_namaau'.$i);
+                    $model_r->jenis_petugas = $request->get('u_jenis_petugasau'.$i);
+                    if($request->get('u_jenis_petugasau'.$i)==1){
+                        $model_r->nip  = $request->get('u_nipau'.$i);
+                        $model_r->jabatan = $request->get('u_jabatanau'.$i); 
+                    }
+                    $model_r->tujuan_tugas  = $request->get('tujuan_tugas');
+                    $model_r->tanggal_mulai       = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+                    $model_r->tanggal_selesai       = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+                    $model_r->tingkat_biaya  = $request->get('u_tingkat_biayaau'.$i);
+                    $model_r->kendaraan  = $request->get('u_kendaraanau'.$i);
+                    $model_r->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+                    $model_r->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+                    $model_r->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+                    
+                    $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+                    $model_r->ppk_nip  = $unit_kerja->ppk_nip;
+                    $model_r->ppk_nama  = $unit_kerja->ppk_nama;
+                    $model_r->bendahara_nip  = $unit_kerja->bendahara_nip;
+                    $model_r->bendahara_nama  = $unit_kerja->bendahara_nama;
+                    $model_r->ppspm_nip  = $unit_kerja->ppspm_nip;
+                    $model_r->ppspm_nama  = $unit_kerja->ppspm_nama;
+
+                    if($i==1) $model_r->kategori_petugas = 1;
+                    else $model_r->kategori_petugas = 2;
+                   
+                    $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
+                    
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                        $model_r->status_aktif = 1;
+                        if(Auth::user()->kdkab=='00')
+                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        else
+                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        $nomor_ujung_spd++;
+                    }
+                    else{
+                        $model_r->status_aktif = 7;
+                    }
+
+                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->created_by=Auth::id();
+                    $model_r->updated_by=Auth::id();
+                    $model_r->save();
+                }
+            }
+        }
+        return redirect('surat_tugas')->with('success', 'Information has been added');
+    }
 
     public function insert_kwitansi($id){
         $real_id = Crypt::decrypt($id);
@@ -305,7 +472,6 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -322,9 +488,14 @@ class SuratTugasController extends Controller
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $list_anggota = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
+            ->where('kategori_petugas', '=', 2)->get();
+        $ketua = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
+            ->where('kategori_petugas', '=', 1)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
-            'model_rincian', 'model', 'unit_kerja'))->setPaper('a4', 'potrait');
+            'model_rincian', 'model', 'unit_kerja', 'list_anggota',
+            'ketua'))->setPaper('a4', 'potrait');
 
         $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
         return $pdf->download($nama_file);
@@ -411,12 +582,23 @@ class SuratTugasController extends Controller
                                 }))->get();
             }
             else{
-                $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
-                            ->where('kdkab','=',Auth::user()->kdkab)
+                $list_pejabat = \App\UserModel::where(
+                    (function ($query) {
+                        $query->where('kdprop', '=', config('app.kode_prov'))
+                            ->where('kdkab', '=', Auth::user()->kdkab)
                             ->where(
                                 (function ($query) {
                                     $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
-                                }))->get();
+                                }));
+                }))
+                ->orWhere(
+                    (function ($query) {
+                        $query->where('kdprop', '=', config('app.kode_prov'))
+                            ->where('kdkab', '=', '00')
+                            ->where(
+                                (function ($query) {
+                                    $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                                }));}))->get();
             }
                                 
             $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();

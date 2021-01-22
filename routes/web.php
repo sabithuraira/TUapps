@@ -92,6 +92,8 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@insert_kwitansi');
     Route::post('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@store_kwitansi');
     Route::get('surat_tugas/{id}/destroy_kwitansi', 'SuratTugasController@destroy_kwitansi');
+    Route::get('surat_tugas/create_tim', 'SuratTugasController@create_tim');
+    Route::post('surat_tugas/create_tim', 'SuratTugasController@store_tim');
     /////////////////
 });
 

@@ -72,54 +72,118 @@
 
         <tr>
             <td width="10%"></td>
-            <td width="30%" valign="top">Nama<br/><br/></td>
+            <td width="25%" valign="top">Nama<br/><br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="42%">{{ $model_rincian->nama }}<br/><br/></td>
-            <td width="15%"></td>
-        </tr>
-        <tr>
-            <td width="10%"></td>
-            <td width="30%">NIP<br/><br/></td>
-            <td width="3%">:</td>
-            <td width="42%">
-                @if($model_rincian->jenis_petugas==2)
-                    -
-                @else
-                    {{ $model_rincian->nip }}
-                @endif
+            <td width="47%">
+            @if($model->kategori==2)    
+                {{ $ketua->nama }}
+            @else
+                {{ $model_rincian->nama }}
+            @endif
             <br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%" valign="top">Jabatan<br/><br/></td>
-            <td width="3%" valign="top">:</td>
-            <td width="42%">
-                @if($model_rincian->jenis_petugas==2)
-                    Mitra
+            <td width="25%">NIP<br/><br/></td>
+            <td width="3%">:</td>
+            <td width="47%">
+                @if($model->kategori==2)    
+                    @if($ketua->jenis_petugas==2)
+                        -
+                    @else
+                        {{ $ketua->nip }}
+                    @endif
                 @else
-                    {{ $model_rincian->jabatan }}
-                @endif    
-                <br/><br/></td>
+                    @if($model_rincian->jenis_petugas==2)
+                        -
+                    @else
+                        {{ $model_rincian->nip }}
+                    @endif
+                @endif
+
+            <br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%" valign="top">Tujuan Tugas</td>
+            <td width="25%" valign="top">Jabatan<br/><br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="42%">{{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
+            <td width="47%">
+                @if($model->kategori==2)
+                    @if($ketua->jenis_petugas==2)
+                        Mitra
+                    @else
+                        {{ $ketua->jabatan }}
+                    @endif
+                @else
+                    @if($model_rincian->jenis_petugas==2)
+                        Mitra
+                    @else
+                        {{ $model_rincian->jabatan }}
+                    @endif
+                @endif
+
+                    
+                <br/><br/></td>
+            <td width="15%"></td>
+        </tr>
+
+        @if($model->kategori==2 & count($list_anggota)>0)
+            <tr>
+                <td width="10%"></td>
+                <td width="25%" valign="top">Anggota<br/><br/></td>
+                <td width="3%" valign="top">:</td>
+                <td width="47%">
+                    @if($list_anggota[0]->jenis_petugas==2)
+                        1. {{ $list_anggota[0]->nama }} / Mitra
+                    @else
+                        1. {{ $list_anggota[0]->nama }} / {{ $list_anggota[0]->jabatan }}
+                    @endif
+                </td>
+                <td width="15%"></td>
+            </tr>
+
+            @foreach ($list_anggota as $v)
+                @if (!$loop->first)
+                    <tr>
+                        <td width="10%"></td>
+                        <td width="25%" valign="top"><br/><br/></td>
+                        <td width="3%" valign="top"></td>
+                        <td width="47%">
+                            @if($v->jenis_petugas==2)
+                                2. {{ $v->nama }} / Mitra
+                            @else   
+                                2. {{ $v->nama }} / {{ $v->jabatan }} 
+                            @endif
+                        </td>
+                        <td width="15%"></td>
+                    </tr>
+                @endif
+            @endforeach
+        @endif
+
+        <tr>
+            <td width="10%"></td>
+            <td width="25%" valign="top">Tujuan Tugas</td>
+            <td width="3%" valign="top">:</td>
+            <td width="47%">{{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
             <td width="15%"></td>
         </tr>
         
         <tr>
             <td width="10%"></td>
-            <td width="30%" valign="top">Waktu Pelaksanaan<br/><br/></td>
+            <td width="25%" valign="top">Waktu Pelaksanaan<br/><br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="42%">
+            <td width="47%">
                 @if (date('n', strtotime($model_rincian->tanggal_mulai))==date('n', strtotime($model_rincian->tanggal_selesai)))
-                    {{ date('d', strtotime($model_rincian->tanggal_mulai)) }}
-                    s.d 
-                    {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}
+                    @if(date('Y-m-d', strtotime($model_rincian->tanggal_mulai))==date('Y-m-d', strtotime($model_rincian->tanggal_selesai)))
+                        {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}
+                    @else
+                        {{ date('d', strtotime($model_rincian->tanggal_mulai)) }}
+                        s.d 
+                        {{ date('d', strtotime($model_rincian->tanggal_selesai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_selesai))] }} {{ date('Y', strtotime($model_rincian->tanggal_selesai)) }}
+                    @endif
                 @else
                     {{ date('d', strtotime($model_rincian->tanggal_mulai)) }} {{ config('app.months')[date('n', strtotime($model_rincian->tanggal_mulai))] }} {{ date('Y', strtotime($model_rincian->tanggal_mulai)) }}
                     s.d 
@@ -131,9 +195,9 @@
         </tr>
         <tr>
             <td width="10%"></td>
-            <td width="30%" valign="top">Pembebanan<br/><br/></td>
+            <td width="25%" valign="top">Pembebanan<br/><br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="42%">
+            <td width="47%">
                 @if ($model->sumber_anggaran!=3)
                     {{ $model->MakRel->KodeMak }}.{{ $model->listKodeJenis[$model->jenis_st] }}
                 @else
@@ -150,8 +214,7 @@
   <table width="100%">
     <tr>
         <td width="15%"></td>
-        <td width="25%" align="center">
-        </td>
+        <td width="25%" align="center"></td>
         <td width="10%"></td>
         <td width="35%" align="center">
             {{ $unit_kerja->ibu_kota }}, {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>

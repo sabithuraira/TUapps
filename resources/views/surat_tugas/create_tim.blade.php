@@ -1,72 +1,158 @@
-<div id="app_vue">
-    <div class="row clearfix">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['jenis_st'] }}:</label>
-                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}" id="jenis_st" name="jenis_st">
-                    @foreach ($model->listJenis as $key=>$value)
-                        <option  value="{{ $key }}" 
-                            @if ($key == old('jenis_st', $model->jenis_st))
-                                selected="selected"
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-                @foreach ($errors->get('jenis_st') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
+@extends('layouts.admin')
 
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['sumber_anggaran'] }}:</label>
-                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}" id="sumber_anggaran" name="sumber_anggaran" v-model="sumber_anggaran" @change="setSumberAnggaran($event)">
-                    @foreach ($model->listSumberAnggaran as $key=>$value)
-                        <option  value="{{ $key }}" 
-                            @if ($key == old('sumber_anggaran', $model->sumber_anggaran))
-                                selected="selected"
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-                @foreach ($errors->get('sumber_anggaran') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-    </div>
+@section('breadcrumb')
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
+    <li class="breadcrumb-item"><a href="{{url('surat_tugas')}}">Surat Tugas</a></li>                            
+    <li class="breadcrumb-item">Tambah Data Tim</li>
+</ul>
+@endsection
 
-    <div class="form-group">
-        <label>{{ $model->attributes()['mak'] }}:</label>
-        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" :disabled="sumber_anggaran==3">
-            <option v-for="(value, index) in list_select_anggaran" :value="value.id">
-                @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }} - @{{ value.label_ro }}
-            </option>
-        </select>
-        @foreach ($errors->get('mak') as $msg)
-            <p class="text-danger">{{ $msg }}</p>
-        @endforeach
-    </div>
+@section('content')
+<div class="row clearfix" id="app_vue">
+  <div class="col-md-12">
+      <div class="card">
+          <div class="header">
+              <h2>Tambah Surat Tugas Tim</h2>
+          </div>
+          <div class="body">
+              <form method="post" class="frep" action="{{url('surat_tugas/create_tim')}}" enctype="multipart/form-data">
+              @csrf
+                <div>
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model->attributes()['jenis_st'] }}:</label>
+                                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}" id="jenis_st" name="jenis_st">
+                                    @foreach ($model->listJenis as $key=>$value)
+                                        <option  value="{{ $key }}" 
+                                            @if ($key == old('jenis_st', $model->jenis_st))
+                                                selected="selected"
+                                            @endif>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @foreach ($errors->get('jenis_st') as $msg)
+                                    <p class="text-danger">{{ $msg }}</p>
+                                @endforeach
+                            </div>
+                        </div>
 
-    <div class="form-group">
-        <label>{{ $model->attributes()['tugas'] }}:</label>
-        <textarea id="tugas" name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
-        @foreach ($errors->get('tugas') as $msg)
-            <p class="text-danger">{{ $msg }}</p>
-        @endforeach
-    </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model->attributes()['sumber_anggaran'] }}:</label>
+                                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}" id="sumber_anggaran" name="sumber_anggaran" v-model="sumber_anggaran" @change="setSumberAnggaran($event)">
+                                    @foreach ($model->listSumberAnggaran as $key=>$value)
+                                        <option  value="{{ $key }}" 
+                                            @if ($key == old('sumber_anggaran', $model->sumber_anggaran))
+                                                selected="selected"
+                                            @endif>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @foreach ($errors->get('sumber_anggaran') as $msg)
+                                    <p class="text-danger">{{ $msg }}</p>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
 
-    @include('surat_tugas.rincian')
-    @include('surat_tugas.modal_form_rincian')
-    @include('surat_tugas.modal_form_rincian_mitra')
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model->attributes()['mak'] }}:</label>
+                                <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" :disabled="sumber_anggaran==3">
+                                    <option v-for="(value, index) in list_select_anggaran" :value="value.id">
+                                        @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }} - @{{ value.label_ro }}
+                                    </option>
+                                </select>
+                                @foreach ($errors->get('mak') as $msg)
+                                    <p class="text-danger">{{ $msg }}</p>
+                                @endforeach
+                            </div>
+                        </div>
 
-    <br>
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <input type="hidden" name="total_utama" id="total_utama" v-model="total_utama">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}:</label>
+                                <div class="form-line">
+                                    <select class="form-control" id="pejabat_ttd_nip" name="pejabat_ttd_nip">
+                                        @foreach ($list_pejabat as $value)
+                                            <option value="{{ $value->nip_baru }}">{{ $value->name }} - {{ $value->nip_baru }} </option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="pejabat_ttd_nama" v-model="pejabat_ttd_nama">
+                                    <input type="hidden" name="pejabat_ttd_jabatan" v-model="pejabat_ttd_jabatan">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
 
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model->attributes()['tugas'] }}:</label>
+                                <textarea id="tugas" name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="3">{{ old('tugas', $model->tugas) }}</textarea>
+                                @foreach ($errors->get('tugas') as $msg)
+                                    <p class="text-danger">{{ $msg }}</p>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $model_rincian->attributes()['tujuan_tugas'] }}:</label>
+                                <div class="form-line">
+                                    <textarea id="tujuan_tugas" name="tujuan_tugas" class="form-control form-control-sm {{($errors->first('tujuan_tugas') ? ' parsley-error' : '')}}" rows="3">{{ old('tujuan_tugas') }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">{{ $model_rincian->attributes()['tanggal_mulai'] }}
+                                <div class="form-line">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control datepicker form-control-sm tanggal_mulai" name="tanggal_mulai" v-model="tanggal_mulai">
+                                        <div class="input-group-append">                                            
+                                            <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">{{ $model_rincian->attributes()['tanggal_selesai'] }}
+                                <div class="form-line">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control datepicker form-control-sm tanggal_selesai" name="tanggal_selesai" v-model="tanggal_selesai">
+                                        <div class="input-group-append">                                            
+                                            <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @include('surat_tugas.rincian_tim')
+                    @include('surat_tugas.modal_form_rincian_tim')
+                    @include('surat_tugas.modal_form_rincian_mitra_tim')
+
+                    <br>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <input type="hidden" name="total_utama" id="total_utama" v-model="total_utama">
+                </div>
+
+              </form>
+          </div>
+      </div>
+  </div>
+  
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -78,6 +164,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
@@ -95,7 +182,7 @@
     var vm = new Vue({
         el: "#app_vue",
         data:  {
-            pathname :(window.location.pathname).replace("/create", ""),
+            pathname :(window.location.pathname).replace("/create_tim", ""),
             sumber_anggaran:  1,
             mak: {!! json_encode($model->mak) !!},
             list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
@@ -107,16 +194,14 @@
             list_select_anggaran: {!! json_encode($list_anggaran) !!},
             total_utama: 1,
             rincian: [],
+            tanggal_mulai: '',
+            tanggal_selesai: '',
+            pejabat_ttd_nama: '',
+            pejabat_ttd_jabatan: '',
             cur_rincian: {
                 nip: '',
                 nama: '',
                 jabatan: '',
-                tujuan_tugas: '',
-                tanggal_mulai: '',
-                tanggal_selesai: '',
-                pejabat_ttd_nip: '',
-                pejabat_ttd_nama: '',
-                pejabat_ttd_jabatan: '',
                 tingkat_biaya: '',
                 kendaraan: '',
                 id: '',
@@ -128,23 +213,19 @@
                 if(isNaN(params)) return false;
                 else return true;
             },
-            setAllNamaAndPejabat(){
+            setAllNama(){
                 var self = this;
                 var dropdown_nip = $("#nip")[0].selectedIndex;
-                var pejabat_ttd_nip = $("#pejabat_ttd_nip")[0].selectedIndex;
                 
                 self.cur_rincian.nama = self.list_pegawai[dropdown_nip].name;
                 self.cur_rincian.jabatan = self.list_pegawai[dropdown_nip].nmjab;
-                
-                self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
-                self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
             },
             setAllPejabat(){
                 var self = this;
                 var pejabat_ttd_nip = $("#pejabat_ttd_nip")[0].selectedIndex;
                 
-                self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
-                self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
+                self.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
+                self.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
             },
             setSumberAnggaran: function(event){
                 var self = this;
@@ -166,14 +247,14 @@
                         dataType: 'json',
                         data:{
                             nip: self.cur_rincian.nip,
-                            t_start: self.cur_rincian.tanggal_mulai,
-                            t_end: self.cur_rincian.tanggal_selesai,
+                            t_start: self.tanggal_mulai,
+                            t_end: self.tanggal_selesai,
                         },
                     }).done(function (data) {
                         if(data.response==1){
                             // console.log(data.result[0].total)
                             if(data.result[0].total==0){
-                                self.setAllNamaAndPejabat()
+                                self.setAllNama()
                                 ////////
                                 if(self.cur_rincian.id){
                                     self.rincian[self.cur_rincian.index] = {
@@ -181,12 +262,6 @@
                                         'nip'   : self.cur_rincian.nip,
                                         'nama'   : self.cur_rincian.nama,
                                         'jabatan'   : self.cur_rincian.jabatan,
-                                        'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                        'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                        'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                        'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                        'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                         'kendaraan'     : self.cur_rincian.kendaraan,
                                         'jenis_petugas'     : jenis_petugas,
@@ -198,12 +273,6 @@
                                         'nip'   : self.cur_rincian.nip,
                                         'nama'   : self.cur_rincian.nama,
                                         'jabatan'   : self.cur_rincian.jabatan,
-                                        'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                        'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                        'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                        'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                        'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                                         'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                         'kendaraan'     : self.cur_rincian.kendaraan,
                                         'jenis_petugas'     : jenis_petugas,
@@ -213,12 +282,7 @@
 
                                 self.cur_rincian.nip = '';
                                 self.cur_rincian.nama = '';
-                                self.cur_rincian.tujuan_tugas = '';
-                                self.cur_rincian.tanggal_mulai = '';
-                                self.cur_rincian.tanggal_selesai = '';
-                                self.cur_rincian.pejabat_ttd_nip = '';
-                                self.cur_rincian.pejabat_ttd_nama = '';
-                                self.cur_rincian.pejabat_ttd_jabatan = '';
+                                self.cur_rincian.jabatan = '';
                                 self.cur_rincian.tingkat_biaya = '';
                                 self.cur_rincian.kendaraan = '';
                                 self.cur_rincian.id = '';
@@ -230,7 +294,7 @@
                             }
                         }
                         else{
-                            alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
+                            alert("Isian tanggal atau form belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
                         }
                         
                         $('#wait_progres').modal('hide');
@@ -241,23 +305,13 @@
                 }
                 else{
                     self.setAllPejabat()
-                    if(self.cur_rincian.nama!='' && self.cur_rincian.tanggal_mulai!='' 
-                        && self.cur_rincian.pejabat_ttd_nip!=''
-                        && self.cur_rincian.tanggal_selesai!='' && self.cur_rincian.tujuan_tugas!='' 
-                        && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){
+                    if(self.cur_rincian.nama!='' && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){
 
                         if(self.cur_rincian.id){
                             self.rincian[self.cur_rincian.index] = {
                                 'id': self.cur_rincian.id,
                                 'nip'   : '',
                                 'nama'   : self.cur_rincian.nama,
-                                'jabatan'   : '',
-                                'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                                 'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                 'kendaraan'     : self.cur_rincian.kendaraan,
                                 'jenis_petugas'     : jenis_petugas,
@@ -268,13 +322,6 @@
                                 'id': 'au'+(self.total_utama),
                                 'nip'   : '',
                                 'nama'   : self.cur_rincian.nama,
-                                'jabatan'   : '',
-                                'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
                                 'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
                                 'kendaraan'     : self.cur_rincian.kendaraan,
                                 'jenis_petugas'     : jenis_petugas,
@@ -284,12 +331,7 @@
 
                         self.cur_rincian.nip = '';
                         self.cur_rincian.nama = '';
-                        self.cur_rincian.tujuan_tugas = '';
-                        self.cur_rincian.tanggal_mulai = '';
-                        self.cur_rincian.tanggal_selesai = '';
-                        self.cur_rincian.pejabat_ttd_nip = '';
-                        self.cur_rincian.pejabat_ttd_nama = '';
-                        self.cur_rincian.pejabat_ttd_jabatan = '';
+                        self.cur_rincian.jabatan = '';
                         self.cur_rincian.tingkat_biaya = '';
                         self.cur_rincian.kendaraan = '';
                         self.cur_rincian.id = '';
@@ -312,21 +354,8 @@
                     self.cur_rincian.index = event.currentTarget.getAttribute('data-index');
                     self.cur_rincian.nip = event.currentTarget.getAttribute('data-nip');
                     self.cur_rincian.nama = event.currentTarget.getAttribute('data-nama');
-                    self.cur_rincian.tujuan_tugas = event.currentTarget.getAttribute('data-tujuan_tugas');
-                    
-                    // self.cur_rincian.tanggal_mulai = event.currentTarget.getAttribute('data-tangga_mulai');
-                    self.cur_rincian.tanggal_mulai = event.currentTarget.getAttribute('data-tanggal_mulai');
-                    $('#rincian_tanggal_mulai').val(self.cur_rincian.tanggal_mulai);
-
-                    self.cur_rincian.tanggal_selesai = event.currentTarget.getAttribute('data-tanggal_selesai');
-                    $('#rincian_tanggal_selesai').val(self.cur_rincian.tanggal_selesai);
-
-                    self.cur_rincian.pejabat_ttd_nip = event.currentTarget.getAttribute('data-pejabat_ttd_nip');
-                    self.cur_rincian.pejabat_ttd_nama = event.currentTarget.getAttribute('data-pejabat_ttd_nama');
-                    self.cur_rincian.pejabat_ttd_jabatan = event.currentTarget.getAttribute('data-pejabat_ttd_jabatan');
                     self.cur_rincian.tingkat_biaya = event.currentTarget.getAttribute('data-tingkat_biaya');
                     self.cur_rincian.kendaraan = event.currentTarget.getAttribute('data-kendaraan');
-
                 }
             },
             delDataTemp: function (index) {
@@ -339,25 +368,20 @@
         }
     });
     
-    $('.rincian_tanggal_mulai').change(function() {
-        vm.cur_rincian.tanggal_mulai = this.value;
+    $('.tanggal_mulai').change(function() {
+        vm.tanggal_mulai = this.value;
     });
     
-    $('.rincian_tanggal_selesai').change(function() {
-        vm.cur_rincian.tanggal_selesai = this.value;
+    $('.tanggal_selesai').change(function() {
+        vm.tanggal_selesai = this.value;
     });
 
     $(document).ready(function() {
-        // vm.setNomor();
-        // vm.setDatas();
-
         $('.datepicker').datepicker({
             // startDate: 'd',
             format: 'yyyy-mm-dd',
         });
     });
-    
-
 
     $(".frep").on("submit", function(){
         $('#wait_progres').modal('show');
@@ -369,6 +393,8 @@
         var mak =  $('#mak').val();
         var sumber_anggaran =  $('#sumber_anggaran').val();
         var total_utama =  $('#total_utama').val();
+        var tujuan_tugas =  $('#tujuan_tugas').val();
+        var pejabat_ttd_nip =  $('#pejabat_ttd_nip').val();
 
         if(jenis_st.length==0){
             err_message.push("JENIS SURAT TUGAS tidak boleh kosong");
@@ -392,15 +418,28 @@
             is_error = 1;
         }
 
+        if(vm.tanggal_mulai==null || vm.tanggal_mulai.length==0 || vm.tanggal_selesai==null || vm.tanggal_selesai.length==0){
+            err_message.push("Tanggal Pelaksanaan tidak boleh kosong");
+            is_error = 1;
+        }
+
+        if(tujuan_tugas==null || tujuan_tugas.length==0){
+            err_message.push("TUJUAN tidak boleh kosong");
+            is_error = 1;
+        }
+        
+        if(pejabat_ttd_nip==null || pejabat_ttd_nip.length==0){
+            err_message.push("PEJABAT YANG MENANDATANGANI tidak boleh kosong");
+            is_error = 1;
+        }
+
         if(total_utama==1){
             err_message.push("Minimal harus terdapat 1 pegawai dalam SURAT TUGAS");
             is_error = 1;
         }
 
         vm.rincian.forEach(function(data_r){
-            if(data_r.nama.length==0 || data_r.tujuan_tugas.length==0 
-                || data_r.tanggal_mulai.length==0 || data_r.tanggal_selesai.length==0 || 
-                data_r.pejabat_ttd_nip.length==0 || data_r.tingkat_biaya.length==0 ||
+            if(data_r.nama.length==0 || data_r.tingkat_biaya.length==0 ||
                 data_r.kendaraan.length==0){
                 err_message.push("Ada rincian pegawai yang belum lengkap");
                 is_error = 1;

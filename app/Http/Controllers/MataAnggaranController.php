@@ -36,6 +36,10 @@ class MataAnggaranController extends Controller
 
         $datas->withPath('mata_anggaran');
         $datas->appends($request->all());
+        
+        if ($request->ajax()) {
+            return \Response::json(\View::make('mata_anggaran.list', array('datas' => $datas))->render());
+        }
 
         return view('mata_anggaran.index',compact('datas'));
     }

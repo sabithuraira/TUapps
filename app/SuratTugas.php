@@ -33,6 +33,15 @@ class SuratTugas extends Model
             3 => 'Honor/Upah/Transport Mitra'
         );
     }
+
+    public function getListKategoriAttribute()
+    {
+        return array(
+            1 => 'Biasa', 
+            2 => 'Tim', 
+            3 => 'Pelatihan'
+        );
+    }
     
     public function getListKodeJenisAttribute()
     {

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class SuratTugasRincian extends Model
 {
-    protected $table = 'surat_tugas_rincian';
+	protected $table = 'surat_tugas_rincian';
+	protected $appends = ["kategori_petugas"];
     
     public function SuratIndukRel()
     {
@@ -33,6 +34,14 @@ class SuratTugasRincian extends Model
 			1 => 'Kendaraan Umum', 
 			2 => 'Kendaraan Dinas',
 			3 => 'Kendaraan Pesawat',
+		);
+	}
+
+	public function getListKategoriPetugasAttribute()
+    {
+        return array( 
+			1 => 'Ketua', 
+			2 => 'Anggota',
 		);
     }
     
@@ -98,7 +107,9 @@ class SuratTugasRincian extends Model
 	}
 
 	public function isAvailable($nip, $t_start, $t_end){
-		$sql="SELECT count(*) as total FROM surat_tugas_rincian WHERE nip='".$nip."' 
+		$sql="SELECT count(*) as total 
+			FROM surat_tugas_rincian  
+			WHERE nip='".$nip."' AND status_aktif<>2 
 			AND (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			('".$t_end."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			(tanggal_mulai>'".$t_start."' AND tanggal_selesai<'".$t_end."'))";
