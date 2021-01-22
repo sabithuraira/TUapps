@@ -488,13 +488,14 @@ class SuratTugasController extends Controller
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
         $list_anggota = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
             ->where('kategori_petugas', '=', 2)->get();
         $ketua = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
             ->where('kategori_petugas', '=', 1)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
-            'model_rincian', 'model', 'unit_kerja', 'list_anggota',
+            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_ttd', 'list_anggota',
             'ketua'))->setPaper('a4', 'potrait');
 
         $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
@@ -639,9 +640,9 @@ class SuratTugasController extends Controller
         // $model_rincian->nip  = $request->get('nip');
         // $model_rincian->nama   = $request->get('nama');
         // $model_rincian->jabatan = $request->get('jabatan');
-        // $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
-        // $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
-        // $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+        $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
+        $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+        $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
         // $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
         // $model_rincian->kendaraan  = $request->get('kendaraan');
         // $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');

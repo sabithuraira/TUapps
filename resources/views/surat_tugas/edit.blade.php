@@ -125,7 +125,7 @@
                 
                     <div class="form-group">{{ $model_rincian->attributes()['tujuan_tugas'] }}
                         <div class="form-line">
-                            <input  disabled class="form-control form-control-sm" type="text" name="tujuan_tugas" value="{{ old('tujuan_tugas', $model_rincian->tujuan_tugas) }}">
+                            <input  class="form-control form-control-sm" type="text" name="tujuan_tugas" value="{{ old('tujuan_tugas', $model_rincian->tujuan_tugas) }}">
                         </div>
                     </div>
 
@@ -134,7 +134,7 @@
                             <div class="form-group">{{ $model_rincian->attributes()['tanggal_mulai'] }}
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input disabled  type="text" class="form-control datepicker form-control-sm" name="tanggal_mulai" id="rincian_tanggal_mulai" value="{{ old('tanggal_mulai', $model_rincian->tanggal_mulai) }}">
+                                        <input type="text" class="form-control datepicker form-control-sm" name="tanggal_mulai" id="rincian_tanggal_mulai" value="{{ old('tanggal_mulai', $model_rincian->tanggal_mulai) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>
@@ -147,7 +147,7 @@
                             <div class="form-group">{{ $model_rincian->attributes()['tanggal_selesai'] }}
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input disabled  type="text" class="form-control datepicker form-control-sm" name="tanggal_selesai" id="rincian_tanggal_selesai" value="{{ old('tanggal_selesai', $model_rincian->tanggal_selesai) }}">
+                                        <input type="text" class="form-control datepicker form-control-sm" name="tanggal_selesai" id="rincian_tanggal_selesai" value="{{ old('tanggal_selesai', $model_rincian->tanggal_selesai) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>

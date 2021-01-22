@@ -39,7 +39,12 @@
                 </td>
                 <td align="left">
                     <i><b>BADAN PUSAT STATISTIK</b></i><br/>
-                    <i><b>{{ strtoupper($unit_kerja->nama) }}</b></i>
+                    <i><b>
+                    @if($unit_kerja_ttd!=null)
+                        {{ strtoupper($unit_kerja_ttd->nama) }}
+                    @else
+                        {{ strtoupper($unit_kerja->nama) }}
+                    @endif    
                 </td>
             </tr>
         </table>
@@ -61,7 +66,13 @@
         </tr>
         <tr>
             <td width="10%"></td>
-            <td colspan="3" align="center"><b>Kepala BPS {{ $unit_kerja->nama }}</b><br/><br/></td>
+            <td colspan="3" align="center"><b>
+                @if($unit_kerja_ttd!=null)
+                    Kepala BPS {{ $unit_kerja_ttd->nama }}
+                @else
+                    Kepala BPS {{ $unit_kerja->nama }}
+                @endif
+            </b><br/><br/></td>
             <td width="15%"></td>
         </tr>
         <tr>
@@ -218,7 +229,13 @@
         <td width="10%"></td>
         <td width="35%" align="center">
             {{ $unit_kerja->ibu_kota }}, {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
-            Kepala BPS {{ $unit_kerja->nama }}
+            Kepala BPS 
+            
+            @if($unit_kerja_ttd!=null)
+                Kepala BPS {{ $unit_kerja_ttd->nama }}
+            @else
+                Kepala BPS {{ $unit_kerja->nama }}
+            @endif
             <br/>
             <br/>
             <br/>
