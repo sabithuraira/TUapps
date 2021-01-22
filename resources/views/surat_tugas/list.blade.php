@@ -76,12 +76,19 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <a href="#" role="button" v-on:click="sendStId" 
-                                data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}" 
-                                data-target="#set_aktif"> 
-                                <i class="icon-trash text-danger"></i>
-                                <p class='text-danger small'>Batalkan</p>
-                            </a>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="#" role="button" v-on:click="sendStId" 
+                                    data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}" 
+                                    data-target="#set_aktif"> 
+                                    <i class="icon-trash text-danger"></i>
+                                    <p class='text-danger small'>Batalkan</p>
+                                </a>
+
+                                <a href="{{ action('SuratTugasController@edit', Crypt::encrypt($data['id']))}}">
+                                    <i class="icon-pencil text-primary"></i> 
+                                    <p class='text-primary small'>Edit</p>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     @else

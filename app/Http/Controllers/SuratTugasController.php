@@ -570,7 +570,7 @@ class SuratTugasController extends Controller
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
 
-        if($model_rincian->status_aktif==1){
+        if($model_rincian->status_aktif!=2){
             $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab','=',Auth::user()->kdkab)->get();
 
             if(Auth::user()->kdkab=='00'){            
@@ -619,37 +619,35 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SuratTugasRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('surat_tugas/edit',$id)
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+        // if (isset($request->validator) && $request->validator->fails()) {
+        //     return redirect('surat_tugas/edit',$id)
+        //                 ->withErrors($validator)
+        //                 ->withInput();
+        // }
         
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
 
-        $model->jenis_st=$request->get('jenis_st');
-        $model->sumber_anggaran=$request->get('sumber_anggaran');
-        $model->mak=$request->get('mak');
-        $model->tugas=$request->get('tugas');
         $model->updated_by=Auth::id();
+        $model->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
         $model->save();
         
         /////////
-        $model_rincian->nip  = $request->get('nip');
-        $model_rincian->nama   = $request->get('nama');
-        $model_rincian->jabatan = $request->get('jabatan');
-        $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
-        $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
-        $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
-        $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
-        $model_rincian->kendaraan  = $request->get('kendaraan');
-        $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
-        $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+        // $model_rincian->nip  = $request->get('nip');
+        // $model_rincian->nama   = $request->get('nama');
+        // $model_rincian->jabatan = $request->get('jabatan');
+        // $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
+        // $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+        // $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+        // $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
+        // $model_rincian->kendaraan  = $request->get('kendaraan');
+        // $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+        // $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
         $model_rincian->updated_by=Auth::id();
+        $model_rincian->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
         $model_rincian->save();
         ///////////
         return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');

@@ -25,7 +25,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['jenis_st'] }}:</label>
-                                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}"  name="jenis_st">
+                                <select disabled class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}"  name="jenis_st">
                                     @foreach ($model->listJenis as $key=>$value)
                                         <option  value="{{ $key }}" 
                                             @if ($key == old('jenis_st', $model->jenis_st))
@@ -44,7 +44,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['sumber_anggaran'] }}:</label>
-                                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}"  name="sumber_anggaran">
+                                <select disabled  class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}"  name="sumber_anggaran">
                                     @foreach ($model->listSumberAnggaran as $key=>$value)
                                         <option  value="{{ $key }}" 
                                             @if ($key == old('sumber_anggaran', $model->sumber_anggaran))
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                         <label>{{ $model->attributes()['mak'] }}:</label>
-                        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}"  name="mak">
+                        <select disabled  class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}"  name="mak">
                             @foreach ($list_anggaran as $key=>$value)
                                 <option  value="{{ $value->id }}" 
                                     @if ($value->id == old('mak', $model->mak))
@@ -81,7 +81,7 @@
 
                     <div class="form-group">
                         <label>{{ $model->attributes()['tugas'] }}:</label>
-                        <textarea name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
+                        <textarea disabled  name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
                         @foreach ($errors->get('tugas') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
                         @endforeach
@@ -92,7 +92,7 @@
                         <div class="col-md-6">
                             <div class="form-group">Pegawai:
                                 <div class="form-line">
-                                    <select class="form-control" name="nip" @change="setNamaJabatan($event)">
+                                    <select disabled  class="form-control" name="nip" @change="setNamaJabatan($event)">
                                         @foreach ($list_pegawai as $value)
                                             <option value="{{ $value->nip_baru }}" 
                                                 @if ($value->nip_baru == old('nip', $model_rincian->nip))
@@ -108,7 +108,7 @@
                         <div class="col-md-6">
                             <div class="form-group">{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}
                                 <div class="form-line">
-                                    <select class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
+                                    <select  disabled class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
                                         @foreach ($list_pejabat as $value)
                                             <option value="{{ $value->nip_baru }}"
                                                 @if ($value->nip_baru == old('pejabat_ttd_nip', $model_rincian->pejabat_ttd_nip))
@@ -125,7 +125,7 @@
                 
                     <div class="form-group">{{ $model_rincian->attributes()['tujuan_tugas'] }}
                         <div class="form-line">
-                            <input class="form-control form-control-sm" type="text" name="tujuan_tugas" value="{{ old('tujuan_tugas', $model_rincian->tujuan_tugas) }}">
+                            <input  disabled class="form-control form-control-sm" type="text" name="tujuan_tugas" value="{{ old('tujuan_tugas', $model_rincian->tujuan_tugas) }}">
                         </div>
                     </div>
 
@@ -134,7 +134,7 @@
                             <div class="form-group">{{ $model_rincian->attributes()['tanggal_mulai'] }}
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input type="text" class="form-control datepicker form-control-sm" name="tanggal_mulai" id="rincian_tanggal_mulai" value="{{ old('tanggal_mulai', $model_rincian->tanggal_mulai) }}">
+                                        <input disabled  type="text" class="form-control datepicker form-control-sm" name="tanggal_mulai" id="rincian_tanggal_mulai" value="{{ old('tanggal_mulai', $model_rincian->tanggal_mulai) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>
@@ -147,7 +147,7 @@
                             <div class="form-group">{{ $model_rincian->attributes()['tanggal_selesai'] }}
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input type="text" class="form-control datepicker form-control-sm" name="tanggal_selesai" id="rincian_tanggal_selesai" value="{{ old('tanggal_selesai', $model_rincian->tanggal_selesai) }}">
+                                        <input disabled  type="text" class="form-control datepicker form-control-sm" name="tanggal_selesai" id="rincian_tanggal_selesai" value="{{ old('tanggal_selesai', $model_rincian->tanggal_selesai) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>
@@ -161,7 +161,7 @@
                         <div class="col-md-6">
                             {{ $model_rincian->attributes()['tingkat_biaya'] }}
                             <div class="form-line">
-                                <select class="form-control" name="tingkat_biaya">
+                                <select disabled  class="form-control" name="tingkat_biaya">
                                     @foreach ($model_rincian->listTingkatBiaya as $key=>$value)
                                         <option value="{{ $key }}" 
                                             @if ($key == old('tingkat_biaya', $model_rincian->tingkat_biaya))
@@ -176,7 +176,7 @@
                         <div class="col-md-6">
                             {{ $model_rincian->attributes()['kendaraan'] }}
                             <div class="form-line">
-                                <select class="form-control" name="kendaraan">
+                                <select disabled  class="form-control" name="kendaraan">
                                     @foreach ($model_rincian->listKendaraan as $key=>$value)
                                         <option value="{{ $key }}"
                                             @if ($key == old('kendaraan', $model_rincian->kendaraan))
@@ -185,6 +185,21 @@
                                         {{ $value }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <div class="form-group">Tanggal Pembuatan/Tanda Tangan
+                                <div class="form-line">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control datepicker form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', date('Y-m-d',strtotime($model_rincian->created_at))) }}">
+                                        <div class="input-group-append">                                            
+                                            <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -215,8 +230,6 @@
   </div>
 </div>
 @endsection
-
-
 
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
@@ -266,85 +279,10 @@
     });
 
     $(document).ready(function() {
-        // vm.setNomor();
-        // vm.setDatas();
-
         $('.datepicker').datepicker({
-            startDate: 'd',
             format: 'yyyy-mm-dd',
         });
     });
     
-
-    $(".frep").on("submit", function(){
-        // $('#isi').val($("#editarea").html());
-        // return confirm("Anda yakin ingin menyimpan data ini?");
-        // var is_error = 1;
-        // var err_message = [];
-
-        // var object_audit =  $('#object_audit').val();
-        // var total_utama =  $('#total_utama').val();
-        // var total_key =  $('#total_key').val();
-        // var total_auditor =  $('#total_auditor').val();
-        // var total_auditi =  $('#total_auditi').val();
-
-        // if(object_audit.length==0) {
-        //     if(vm.jenis==1)
-        //         err_message.push("Tujuan Saran Tidak Boleh Kosong");
-        //     else if(vm.jenis==4)
-        //         err_message.push("Unit Kerja Tidak Boleh Kosong");
-        //     else
-        //         err_message.push("Object Audit Tidak Boleh Kosong");
-            
-        //     is_error = 0;
-        // }
-
-        // if(vm.jenis==1 || vm.jenis==2){
-        //     var form_pejabat_badge =  $('#form_pejabat_badge').val();
-        //     if(form_pejabat_badge.length==0){ 
-        //         err_message.push("Pejabat Approval Tidak Boleh Kosong");
-        //         is_error = 0;
-        //     }
-        // }
-
-        // if(total_utama==1){
-        //     err_message.push("Minimal harus terdapat 1 rincian");
-        //     is_error = 0;
-        // }
-        
-        // if(total_key==1){
-        //     err_message.push("Minimal harus terdapat 1 key person");
-        //     is_error = 0;
-        // }
-
-        // if(vm.jenis!=3 && vm.jenis!=5){
-        //     if(total_auditor==1){ 
-        //         err_message.push("Minimal harus terdapat 1 auditor/petugas K3/tim investigasi");
-        //         is_error = 0;
-        //     }
-            
-        //     if(total_auditi==1){ 
-        //         err_message.push("Minimal harus terdapat 1 auditi/tembusan");
-        //         is_error = 0;
-        //     }
-        // }
-
-        // if(vm.jenis==1){
-        //     vm.rincian.forEach(function(data_r){
-        //         if(data_r.uraian.length>0 && data_r.file_path.length==0){
-        //             err_message.push("Ada rincian yang tidak memiliki file/file belum selesai upload");
-        //             is_error = 0;
-        //         }
-        //     });
-        // }
-
-        // if(is_error==0){
-        //     alert(err_message.join('\r\n'));
-        //     return false;
-        // }
-        // else{
-        //     return true;
-        // }
-    });
 </script>
 @endsection
