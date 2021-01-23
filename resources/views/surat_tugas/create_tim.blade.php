@@ -85,6 +85,7 @@
                                     </select>
                                     <input type="hidden" name="pejabat_ttd_nama" v-model="pejabat_ttd_nama">
                                     <input type="hidden" name="pejabat_ttd_jabatan" v-model="pejabat_ttd_jabatan">
+                                    <input type="hidden" name="unit_kerja_ttd" v-model="unit_kerja_ttd">
                                 </div>
                             </div>
                         </div>
@@ -198,6 +199,7 @@
             tanggal_selesai: '',
             pejabat_ttd_nama: '',
             pejabat_ttd_jabatan: '',
+            unit_kerja_ttd: '',
             cur_rincian: {
                 nip: '',
                 nama: '',
@@ -226,6 +228,7 @@
                 
                 self.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
                 self.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
+                self.unit_kerja_ttd = self.list_pejabat[pejabat_ttd_nip].kdprop+self.list_pejabat[pejabat_ttd_nip].kdkab;
             },
             setSumberAnggaran: function(event){
                 var self = this;

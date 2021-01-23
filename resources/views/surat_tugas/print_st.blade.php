@@ -228,7 +228,12 @@
         <td width="25%" align="center"></td>
         <td width="10%"></td>
         <td width="35%" align="center">
-            {{ $unit_kerja->ibu_kota }}, {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
+            @if($unit_kerja_ttd!=null)
+                {{ $unit_kerja_ttd->ibu_kota }}
+            @else
+                {{ $unit_kerja->ibu_kota }}
+            @endif    
+            , {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
             Kepala BPS 
             
             @if($unit_kerja_ttd!=null)

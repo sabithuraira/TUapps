@@ -191,6 +191,7 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
                     $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
                     $model_r->pejabat_ttd_jabatan  = $request->get('u_pejabat_ttd_jabatanau'.$i);
+                    $model_r->unit_kerja_ttd  = $request->get('u_unit_kerja_ttdau'.$i);
                     
                     $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
                     $model_r->ppk_nip  = $unit_kerja->ppk_nip;
@@ -382,6 +383,7 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
                     $model_r->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
                     $model_r->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+                    $model_r->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
                     
                     $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
                     $model_r->ppk_nip  = $unit_kerja->ppk_nip;
