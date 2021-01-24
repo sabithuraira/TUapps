@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratTugasRequest;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class SuratTugasController extends Controller
@@ -18,7 +19,29 @@ class SuratTugasController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+        $month = '';
+        $year = '';
+        $unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+
+        if(Auth::user()->kdkab=='00'){
+            if(strlen($request->get('unit_kerja'))>0){
+                $unit_kerja = Auth::user()->kdprop.$request->get('unit_kerja');
+            }
+        }
+        
+        $arr_where[] = ['unit_kerja', '=', $unit_kerja];
+
+        if(strlen($request->get('month'))>0){
+            $month = $request->get('month');
+            $arr_where[] = [\DB::raw('MONTH(created_at)'), '=', $month];
+        }
+        
+        if(strlen($request->get('year'))>0){
+            $year = $request->get('year');
+            $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
+        }
+
+        $datas = \App\SuratTugasRincian::where($arr_where)
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nama', 'LIKE', '%' . $keyword . '%')
@@ -32,7 +55,8 @@ class SuratTugasController extends Controller
         $datas->withPath('surat_tugas');
         $datas->appends($request->all());
         $model = new \App\SuratTugasRincian;
-        return view('surat_tugas.index',compact('datas', 'keyword', 'model'));
+        return view('surat_tugas.index',compact('datas', 'keyword', 'model',
+            'month', 'year','unit_kerja'));
     }
     
     public function daftar(Request $request)
