@@ -27,7 +27,13 @@
             <td>Nomor : {{ $model_rincian->nomor_spd }}</td>
         </tr>
         <tr>
-            <td width="65%">{{ strtoupper($unit_kerja->nama) }}</td>
+            <td width="65%">
+                @if($unit_kerja_ttd!=null)
+                    {{ strtoupper($unit_kerja_ttd->nama) }}
+                @else
+                    {{ strtoupper($unit_kerja->nama) }}
+                @endif
+            </td>
             <td>Lembar : </td>
         </tr>
     </table>
@@ -230,7 +236,12 @@
             <td width="10%"></td>
             <td width="30%">
                 Dikeluarkan di: 
-                {{ $unit_kerja->ibu_kota }}<br/>
+                @if($unit_kerja_ttd!=null)
+                    {{ $unit_kerja_ttd->ibu_kota }}
+                @else
+                    {{ $unit_kerja->ibu_kota }}
+                @endif   
+                <br/>
                 Pada tanggal : {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}
                 <br/><br/>
             </td>
@@ -246,7 +257,12 @@
             <td width="10%"></td>
             <td width="30%" align="center">
                 Pejabat Pembuat Komitmen<br/>
-                BPS {{ $unit_kerja->nama }}
+                BPS 
+                @if($unit_kerja_ttd!=null)
+                    {{ $unit_kerja_ttd->nama }}
+                @else
+                    {{ $unit_kerja->nama }}
+                @endif   
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->ppk_nama }}</u><br/>
                 NIP. {{ $model_rincian->ppk_nip }} <br/>
@@ -279,7 +295,13 @@
                         <td width="65%">: {{ $model_rincian->tujuan_tugas }}<br/></td>
                     </tr>
                     
-                    <tr><td colspan="2" align="center">Kepala BPS {{ $unit_kerja->nama }}</td></tr>
+                    <tr><td colspan="2" align="center">Kepala BPS 
+                        @if($unit_kerja_ttd!=null)
+                            {{ $unit_kerja_ttd->nama }}
+                        @else
+                            {{ $unit_kerja->nama }}
+                        @endif       
+                    </td></tr>
                     <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
                     
                     <tr><td colspan="2" align="center"><u>{{ $model_rincian->pejabat_ttd_nama }}</u></td></tr>
@@ -392,7 +414,13 @@
                     </tr>
                     <tr>
                         <td colspan="2" align="center">Pejabat Pembuat Komitmen<br/>
-                        BPS {{ $unit_kerja->nama }}<br/><br/><br/><br/><br/></td>
+                        BPS 
+                        @if($unit_kerja_ttd!=null)
+                            {{ $unit_kerja_ttd->nama }}
+                        @else
+                            {{ $unit_kerja->nama }}
+                        @endif   
+                        <br/><br/><br/><br/><br/></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><u>{{ $model_rincian->ppk_nama }}</u></td>
@@ -416,7 +444,12 @@
                         <td></td>
                         <td width="80%" align="center">
                             Pejabat Pembuat Komitmen<br/>
-                            BPS {{ $unit_kerja->nama }}
+                            BPS 
+                            @if($unit_kerja_ttd!=null)
+                                {{ $unit_kerja_ttd->nama }}
+                            @else
+                                {{ $unit_kerja->nama }}
+                            @endif   
                             <br/><br/><br/><br/><br/>
                         </td>
                     </tr>

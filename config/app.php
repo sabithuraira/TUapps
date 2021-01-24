@@ -261,5 +261,10 @@ return [
         '72' => 'Kota Prabumulih',
         '73' => 'Kota Pagaralam',
         '74' => 'Kota Lubuklinggau',
-    ]
+    ],
+    'debug_blacklist' => [
+        '_COOKIE' => array_keys($_COOKIE),
+        '_SERVER' => array_keys($_SERVER),
+        '_ENV' => array_keys($_ENV),        
+    ],
 ];

@@ -513,11 +513,12 @@ class SuratTugasController extends Controller
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_spd', compact('real_id', 
-            'model_rincian', 'model', 'unit_kerja',
+            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_ttd',
             'pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
@@ -544,12 +545,13 @@ class SuratTugasController extends Controller
             ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 1]
         ])->sum('anggaran');
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_kwitansi', compact('real_id', 
             'model_rincian', 'model', 'model_kwitansi' , 'model_kwitansi_rill' , 
-             'unit_kerja', 'model_kwitansi_rill_total',
+             'unit_kerja', 'unit_kerja_ttd' , 'model_kwitansi_rill_total',
             'pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'kwitansi_'.$model_rincian->nomor_spd.'.pdf';
