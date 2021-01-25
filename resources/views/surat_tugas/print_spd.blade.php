@@ -28,11 +28,7 @@
         </tr>
         <tr>
             <td width="65%">
-                @if($unit_kerja_ttd!=null)
-                    {{ strtoupper($unit_kerja_ttd->nama) }}
-                @else
-                    {{ strtoupper($unit_kerja->nama) }}
-                @endif
+                {{ strtoupper($unit_kerja->nama) }}
             </td>
             <td>Lembar : </td>
         </tr>

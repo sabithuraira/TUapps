@@ -27,6 +27,7 @@ class CreateSuratTugasPesertaPelatihanTable extends Migration
             $table->integer('jenis_peserta');
             $table->integer('tingkat_biaya');
             $table->integer('kendaraan');
+            $table->integer('kategori_peserta');
             $table->integer('created_by');
             $table->integer('updated_by');
 

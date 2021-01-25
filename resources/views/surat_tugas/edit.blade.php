@@ -86,6 +86,7 @@
                         <div class="col-md-6">
                             <div class="form-group">Pegawai:
                                 <div class="form-line">
+                                    @if($model_rincian->jenis_petugas==1)
                                     <select disabled  class="form-control" name="nip" @change="setNamaJabatan($event)">
                                         @foreach ($list_pegawai as $value)
                                             <option value="{{ $value->nip_baru }}" 
@@ -95,6 +96,9 @@
                                             {{ $value->name }} - {{ $value->nip_baru }} </option>
                                         @endforeach
                                     </select>
+                                    @else
+                                        <input disabled class="form-control form-control-sm" type="text" name="nama" value="{{ old('nama', $model_rincian->nama) }}">
+                                    @endif
                                 </div>
                             </div>
                         </div>

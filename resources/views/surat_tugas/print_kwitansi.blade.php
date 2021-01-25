@@ -289,7 +289,7 @@
             <td width="30%">
                 Lunas Pada tanggal:<br/>
                 Bendahara Pengeluaran<br/>
-                BPS {{ $unit_kerja->nama }}
+                BPS  {{ $unit_kerja->nama }}
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->bendahara_nama }}</u><br/>
                 NIP. {{ $model_rincian->bendahara_nip }} <br/>

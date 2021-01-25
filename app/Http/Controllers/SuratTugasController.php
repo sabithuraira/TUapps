@@ -29,7 +29,7 @@ class SuratTugasController extends Controller
             }
         }
         
-        $arr_where[] = ['unit_kerja', '=', $unit_kerja];
+        $arr_where = [];
 
         if(strlen($request->get('month'))>0){
             $month = $request->get('month');
@@ -42,6 +42,12 @@ class SuratTugasController extends Controller
         }
 
         $datas = \App\SuratTugasRincian::where($arr_where)
+                ->where(
+                    (function ($query) use ($unit_kerja) {
+                        $query-> where('unit_kerja', '=', $unit_kerja)
+                        ->orWhere('unit_kerja_ttd', '=', $unit_kerja);
+                    })
+                )
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nama', 'LIKE', '%' . $keyword . '%')
@@ -216,38 +222,46 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('u_pejabat_ttd_nipau'.$i);
                     $model_r->pejabat_ttd_nama  = $request->get('u_pejabat_ttd_namaau'.$i);
                     $model_r->pejabat_ttd_jabatan  = $request->get('u_pejabat_ttd_jabatanau'.$i);
-                    $model_r->unit_kerja_ttd  = $request->get('u_unit_kerja_ttdau'.$i);
                     
                     $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+                    if(Auth::user()->kdkab!='00' && $model->sumber_anggaran==2){
+                        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
+                    }
+                    
                     $model_r->ppk_nip  = $unit_kerja->ppk_nip;
                     $model_r->ppk_nama  = $unit_kerja->ppk_nama;
                     $model_r->bendahara_nip  = $unit_kerja->bendahara_nip;
                     $model_r->bendahara_nama  = $unit_kerja->bendahara_nama;
                     $model_r->ppspm_nip  = $unit_kerja->ppspm_nip;
                     $model_r->ppspm_nama  = $unit_kerja->ppspm_nama;
+                    $model_r->unit_kerja = $request->get('u_unit_kerja_ttdau'.$i);
+                    $model_r->unit_kerja_ttd  = Auth::user()->kdprop.Auth::user()->kdkab;
                     ////////////////
                     $nomor_st = 1;
                     $nomor_spd = 1;
-                    $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
-                        ->orderBy('id', 'desc')
-                        ->first();
-                        
+
+                    $datas = \App\SuratTugasRincian::where('unit_kerja', '=', $model_r->unit_kerja)
+                        ->orderBy('id', 'desc')->first();
 
                     if($datas!=null){
                         $exp_nomor_st = explode("/",$datas->nomor_st)[0];
                         $prev_nomor_st = (int)$exp_nomor_st;
                         $nomor_st = $prev_nomor_st + 1;
                     }
-                    
+
+                    while(strlen($nomor_st)<4)
+                        $nomor_st = '0'.$nomor_st;
+                        
+                    $model_r->nomor_st = $nomor_st.'/BPS'.$model_r->unit_kerja.'/'.date('m').'/'.date('Y');
                     
                     if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
-                        $datas_spd = \App\SuratTugasRincian::where([
-                            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
-                            ['nomor_spd', '<>', '']
-                        ])->orderBy('id', 'desc')->first();
+                        $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
+                            ->where('unit_kerja_ttd', '=', $unit_kerja->kode)
+                            ->orderBy('id', 'desc')->first();
                         
                         if($datas_spd!=null){
                             $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
+                            $exp_nomor_spd = explode(".",$exp_nomor_spd)[0];
                             $prev_nomor_spd = (int)$exp_nomor_spd;
                             $nomor_spd = $prev_nomor_spd + 1;
                         }
@@ -255,27 +269,21 @@ class SuratTugasController extends Controller
                         while(strlen($nomor_spd)<4)
                             $nomor_spd = '0'.$nomor_spd;
                     }
-
-                    while(strlen($nomor_st)<4)
-                        $nomor_st = '0'.$nomor_st;
                     ////////
                     
-                    $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
-                    
-                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->sumber_anggaran!=3){
                         $model_r->status_aktif = 1;
-                        if(Auth::user()->kdkab=='00'){
-                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        if($unit_kerja->kode==Auth::user()->kdprop.'00'){
+                            $model_r->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         }
                         else{
-                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         }
                     }
                     else{
                         $model_r->status_aktif = 7;
                     }
 
-                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
                     $model_r->created_by=Auth::id();
                     $model_r->updated_by=Auth::id();
                     $model_r->save();
@@ -356,8 +364,13 @@ class SuratTugasController extends Controller
         
         //////////PENOMORAN
         ////////////////
+        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+        if(Auth::user()->kdkab!='00' && $model->sumber_anggaran==2){
+            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
+        }
+
         $nomor_st = 1;
-        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', $request->get('unit_kerja_ttd'))
             ->orderBy('id', 'desc')->first();
 
         if($datas!=null){
@@ -370,14 +383,12 @@ class SuratTugasController extends Controller
             $nomor_st = '0'.$nomor_st;
         ////////
         $nomor_spd = 1;
-
-        $datas_spd = \App\SuratTugasRincian::where([
-            ['unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab],
-            ['nomor_spd', '<>', '']
-        ])->orderBy('id', 'desc')->first();
+        $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
+            ->where('unit_kerja_ttd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
         
         if($datas_spd!=null){
             $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
+            $exp_nomor_spd = explode(".",$exp_nomor_spd)[0];
             $prev_nomor_spd = (int)$exp_nomor_spd;
             $nomor_spd = $prev_nomor_spd + 1;
         }
@@ -408,9 +419,7 @@ class SuratTugasController extends Controller
                     $model_r->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
                     $model_r->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
                     $model_r->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
-                    $model_r->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
                     
-                    $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
                     $model_r->ppk_nip  = $unit_kerja->ppk_nip;
                     $model_r->ppk_nama  = $unit_kerja->ppk_nama;
                     $model_r->bendahara_nip  = $unit_kerja->bendahara_nip;
@@ -421,21 +430,22 @@ class SuratTugasController extends Controller
                     if($i==1) $model_r->kategori_petugas = 1;
                     else $model_r->kategori_petugas = 2;
                    
-                    $model_r->nomor_st = $nomor_st.'/BPS'.Auth::user()->kdprop.Auth::user()->kdkab.'/'.date('m').'/'.date('Y');
+                    $model_r->nomor_st = $nomor_st.'/BPS'.$request->get('unit_kerja_ttd').'/'.date('m').'/'.date('Y');
                     
                     if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
                         $model_r->status_aktif = 1;
-                        if(Auth::user()->kdkab=='00')
-                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                        if($unit_kerja->kode==Auth::user()->kdprop.'00')
+                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         else
-                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                            $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.'00/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         $nomor_ujung_spd++;
                     }
                     else{
                         $model_r->status_aktif = 7;
                     }
 
-                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->unit_kerja_ttd  = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->unit_kerja = $request->get('unit_kerja_ttd');
                     $model_r->created_by=Auth::id();
                     $model_r->updated_by=Auth::id();
                     $model_r->save();
@@ -514,8 +524,8 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
         $list_anggota = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
             ->where('kategori_petugas', '=', 2)->get();
         $ketua = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
@@ -537,8 +547,10 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        if($model->sumber_anggaran==2) 
+            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
@@ -569,8 +581,10 @@ class SuratTugasController extends Controller
         $model_kwitansi_rill_total = \App\SuratTugasKwitansi::where([
             ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 1]
         ])->sum('anggaran');
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        if($model->sumber_anggaran==2) 
+            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
