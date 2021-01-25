@@ -304,7 +304,7 @@
             </td>
             <td>
                 &nbsp; <br/>
-                Palembang,<br/>
+                {{ $unit_kerja->ibu_kota }},<br/>
                 Yang Menerima
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->nama }}</u><br/>
@@ -330,13 +330,13 @@
             </tr>
             <tr>
                 <td width="5%"></td>
-                <td width="25%">NIP/td>
+                <td width="25%">NIP</td>
                 <td>: {{ $model_rincian->nip }}</td>
             </tr>
             <tr>
                 <td width="5%"></td>
                 <td width="25%">Jabatan</td>
-                <td>: {{ $model_rincian->jabatn }}</td>
+                <td>: {{ $model_rincian->jabatan }}</td>
             </tr>
         </table>
         

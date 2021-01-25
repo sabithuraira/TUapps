@@ -49,6 +49,7 @@ class SuratTugasController extends Controller
                         ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
                     })
                 )
+                ->with('SuratIndukRel')
                 ->orderBy('id', 'desc')
                 ->paginate();
     
@@ -631,9 +632,10 @@ class SuratTugasController extends Controller
             }
                                 
             $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
-
+            $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
+    
             return view('surat_tugas.edit',compact('model','id', 'real_id', 
-                'list_pegawai', 'list_pejabat', 'list_anggaran', 'model_rincian'));
+                'list_pegawai', 'list_pejabat', 'list_anggaran', 'list_anggaran_prov' , 'model_rincian'));
         }
         else{
             abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
@@ -659,6 +661,9 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $model->sumber_anggaran = $request->get('sumber_anggaran');
+        $model->mak = $request->get('mak');
+        $model->tugas = $request->get('tugas');
 
         $model->updated_by=Auth::id();
         $model->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
@@ -671,8 +676,8 @@ class SuratTugasController extends Controller
         $model_rincian->tujuan_tugas  = $request->get('tujuan_tugas');
         $model_rincian->tanggal_mulai   = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
         $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
-        // $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
-        // $model_rincian->kendaraan  = $request->get('kendaraan');
+        $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
+        $model_rincian->kendaraan  = $request->get('kendaraan');
         // $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
         // $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
         $model_rincian->updated_by=Auth::id();

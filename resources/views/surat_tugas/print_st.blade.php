@@ -237,9 +237,9 @@
             Kepala BPS 
             
             @if($unit_kerja_ttd!=null)
-                Kepala BPS {{ $unit_kerja_ttd->nama }}
+                 {{ $unit_kerja_ttd->nama }}
             @else
-                Kepala BPS {{ $unit_kerja->nama }}
+                 {{ $unit_kerja->nama }}
             @endif
             <br/>
             <br/>

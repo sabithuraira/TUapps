@@ -44,7 +44,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['sumber_anggaran'] }}:</label>
-                                <select disabled  class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}"  name="sumber_anggaran">
+                                <select class="form-control {{($errors->first('sumber_anggaran') ? ' parsley-error' : '')}}"  name="sumber_anggaran" v-model="sumber_anggaran" @change="setSumberAnggaran($event)">
                                     @foreach ($model->listSumberAnggaran as $key=>$value)
                                         <option  value="{{ $key }}" 
                                             @if ($key == old('sumber_anggaran', $model->sumber_anggaran))
@@ -63,16 +63,10 @@
 
                     <div class="form-group">
                         <label>{{ $model->attributes()['mak'] }}:</label>
-                        <select disabled  class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}"  name="mak">
-                            @foreach ($list_anggaran as $key=>$value)
-                                <option  value="{{ $value->id }}" 
-                                    @if ($value->id == old('mak', $model->mak))
-                                        selected="selected"
-                                    @endif>
-                                    {{ $value->kode_program.'.'.$value->kode_aktivitas.'.'.$value->kode_kro.'.'.$value->kode_ro.'.'.$value->kode_komponen.'.'.$value->kode_subkomponen }}
-                                    {{ $value->label_aktivitas.'-'.$value->label_ro }}
-                                </option>
-                            @endforeach
+                        <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" v-model="mak" :disabled="sumber_anggaran==3">
+                            <option v-for="(value, index) in list_select_anggaran" :value="value.id">
+                                @{{ value.kode_program }}.@{{ value.kode_ro }}.@{{ value.kode_komponen }}.@{{ value.kode_subkomponen }} - @{{ value.label_ro }}
+                            </option>
                         </select>
                         @foreach ($errors->get('mak') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
@@ -81,7 +75,7 @@
 
                     <div class="form-group">
                         <label>{{ $model->attributes()['tugas'] }}:</label>
-                        <textarea disabled  name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
+                        <textarea name="tugas" class="form-control form-control-sm {{($errors->first('tugas') ? ' parsley-error' : '')}}" rows="5">{{ old('tugas', $model->tugas) }}</textarea>
                         @foreach ($errors->get('tugas') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
                         @endforeach
@@ -108,7 +102,7 @@
                         <div class="col-md-6">
                             <div class="form-group">{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}
                                 <div class="form-line">
-                                    <select  disabled class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
+                                    <select class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
                                         @foreach ($list_pejabat as $value)
                                             <option value="{{ $value->nip_baru }}"
                                                 @if ($value->nip_baru == old('pejabat_ttd_nip', $model_rincian->pejabat_ttd_nip))
@@ -161,7 +155,7 @@
                         <div class="col-md-6">
                             {{ $model_rincian->attributes()['tingkat_biaya'] }}
                             <div class="form-line">
-                                <select disabled  class="form-control" name="tingkat_biaya">
+                                <select class="form-control" name="tingkat_biaya">
                                     @foreach ($model_rincian->listTingkatBiaya as $key=>$value)
                                         <option value="{{ $key }}" 
                                             @if ($key == old('tingkat_biaya', $model_rincian->tingkat_biaya))
@@ -176,7 +170,7 @@
                         <div class="col-md-6">
                             {{ $model_rincian->attributes()['kendaraan'] }}
                             <div class="form-line">
-                                <select disabled  class="form-control" name="kendaraan">
+                                <select class="form-control" name="kendaraan">
                                     @foreach ($model_rincian->listKendaraan as $key=>$value)
                                         <option value="{{ $key }}"
                                             @if ($key == old('kendaraan', $model_rincian->kendaraan))
@@ -207,6 +201,8 @@
                     <input type="hidden" name="nama" v-model="nama">
                     <input type="hidden" name="jabatan" v-model="jabatan">
                     <input type="hidden" name="pejabat_ttd_nama" v-model="pejabat_ttd_nama">
+                    <input type="hidden" name="pejabat_ttd_jabatan" v-model="pejabat_ttd_jabatan">
+                    <input type="hidden" name="unit_kerja_ttd" v-model="unit_kerja_ttd">
 
                     <br>
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -255,9 +251,13 @@
             unit_kerja:  {!! json_encode($model->unit_kerja) !!},
             list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
             list_kendaraan:  {!! json_encode($model_rincian->listKendaraan) !!},
+            list_select_anggaran: {!! json_encode($list_anggaran) !!},
             list_pegawai:  {!! json_encode($list_pegawai) !!},
             list_pejabat:  {!! json_encode($list_pejabat) !!},
-            nama: '', jabatan: '', pejabat_ttd_nama: ''
+            list_anggaran:  {!! json_encode($list_anggaran) !!},
+            list_anggaran_prov:  {!! json_encode($list_anggaran_prov) !!},
+            nama: '', jabatan: '', pejabat_ttd_nama: '',
+            pejabat_ttd_jabatan: '', unit_kerja_ttd: ''
         },
         methods: {
             setNamaJabatan: function(event){
@@ -273,7 +273,16 @@
                 $('#wait_progres').modal('show');
                 var selected_index = event.currentTarget.selectedIndex;
                 self.pejabat_ttd_nama = self.list_pejabat[selected_index].name;
+                self.pejabat_ttd_jabatan = self.list_pejabat[selected_index].jabatan;
+                self.unit_kerja_ttd = self.list_pejabat[selected_index].unit_kerja_ttd;
                 $('#wait_progres').modal('hide');
+            },
+            setSumberAnggaran: function(event){
+                var self = this;
+                var value =  event.currentTarget.value;
+                if(value==1) self.list_select_anggaran = self.list_anggaran;
+                else if(value==2) self.list_select_anggaran = self.list_anggaran_prov;
+                else if(value==3) self.list_select_anggaran = null;
             },
         }
     });

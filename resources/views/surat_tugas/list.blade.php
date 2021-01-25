@@ -59,12 +59,12 @@
                         
                         <td class="text-center"><a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a></td>
                         <td class="text-center">
-                            @if($data['nomor_spd']!='')
+                            @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
                             <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
                             @endif
                         </td>
                         <td class="text-center">
-                            @if($data['nomor_spd']!='')
+                            @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
                                 <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
                                     <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
                                 
