@@ -18,7 +18,7 @@
     <div class="card" id="app_vue">
         <div class="body">
             <form action="{{url('surat_tugas')}}" method="get">
-            <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>Surat Tugas</a>
+            <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Surat Tugas</a>
 
             <a href="{{action('SuratTugasController@create_tim')}}" class="'btn btn-info btn-sm"><i
                     class='fa fa-plus'></i> Surat Tugas Tim</a>

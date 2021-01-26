@@ -286,11 +286,16 @@ class SuratTugasController extends Controller
                     
                     if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->sumber_anggaran!=3){
                         $model_r->status_aktif = 1;
-                        if($unit_kerja->kode==Auth::user()->kdprop.'00'){
-                            $model_r->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+                        if(Auth::user()->kdkab!='00'){
+                            if($unit_kerja->kode==Auth::user()->kdprop.'00'){
+                                $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                            }
+                            else{
+                                $model_r->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+                            }
                         }
                         else{
-                            $model_r->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+                            $model_r->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         }
                     }
                     else{
