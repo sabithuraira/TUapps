@@ -28,7 +28,7 @@
         </tr>
         <tr>
             <td width="65%">
-                {{ strtoupper($unit_kerja->nama) }}
+                {{ strtoupper($unit_kerja_spd->nama) }}
             </td>
             <td>Lembar : </td>
         </tr>
@@ -232,8 +232,8 @@
             <td width="10%"></td>
             <td width="30%">
                 Dikeluarkan di: 
-                @if($unit_kerja_ttd!=null)
-                    {{ $unit_kerja_ttd->ibu_kota }}
+                @if($unit_kerja_spd!=null)
+                    {{ $unit_kerja_spd->ibu_kota }}
                 @else
                     {{ $unit_kerja->ibu_kota }}
                 @endif   
@@ -254,8 +254,8 @@
             <td width="30%" align="center">
                 Pejabat Pembuat Komitmen<br/>
                 BPS 
-                @if($unit_kerja_ttd!=null)
-                    {{ $unit_kerja_ttd->nama }}
+                @if($unit_kerja_spd!=null)
+                    {{ $unit_kerja_spd->nama }}
                 @else
                     {{ $unit_kerja->nama }}
                 @endif   
@@ -411,8 +411,8 @@
                     <tr>
                         <td colspan="2" align="center">Pejabat Pembuat Komitmen<br/>
                         BPS 
-                        @if($unit_kerja_ttd!=null)
-                            {{ $unit_kerja_ttd->nama }}
+                        @if($unit_kerja_spd!=null)
+                            {{ $unit_kerja_spd->nama }}
                         @else
                             {{ $unit_kerja->nama }}
                         @endif   
@@ -441,8 +441,8 @@
                         <td width="80%" align="center">
                             Pejabat Pembuat Komitmen<br/>
                             BPS 
-                            @if($unit_kerja_ttd!=null)
-                                {{ $unit_kerja_ttd->nama }}
+                            @if($unit_kerja_spd!=null)
+                                {{ $unit_kerja_spd->nama }}
                             @else
                                 {{ $unit_kerja->nama }}
                             @endif   

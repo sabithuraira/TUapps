@@ -132,7 +132,7 @@
         <tr>
             <td width="50%"></td>
             <td width="10%"></td>
-            <td width="30%">{{ $unit_kerja->ibu_kota }},<br/></td>
+            <td width="30%">{{ $unit_kerja_spd->ibu_kota }},<br/></td>
             <td width="10%"></td>
         </tr>
         <tr>
@@ -158,7 +158,7 @@
         <tr>
             <td width="50%" valign="top">
                 Bendahara Pengeluaran<br/>
-                BPS {{ $unit_kerja->nama }}
+                BPS {{ $unit_kerja_spd->nama }}
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->bendahara_nama }}</u><br/>
                 NIP. {{ $model_rincian->bendahara_nip }} <br/>
@@ -204,7 +204,7 @@
             <td width="40%"></td>
             <td width="35%" align="center">
                 Pejabat Pembuat Komitmen<br/>
-                BPS {{ $unit_kerja->nama }}
+                BPS {{ $unit_kerja_spd->nama }}
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->ppk_nama }}</u><br/>
                 NIP. {{ $model_rincian->ppk_nip }} <br/>
@@ -289,7 +289,7 @@
             <td width="30%">
                 Lunas Pada tanggal:<br/>
                 Bendahara Pengeluaran<br/>
-                BPS  {{ $unit_kerja->nama }}
+                BPS  {{ $unit_kerja_spd->nama }}
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->bendahara_nama }}</u><br/>
                 NIP. {{ $model_rincian->bendahara_nip }} <br/>
@@ -297,14 +297,14 @@
             <td width="40%" align="center">
                 Setuju dibayar:<br/>
                 Pejabat Pembuat Komitmen<br/>
-                BPS {{ $unit_kerja->nama }}
+                BPS {{ $unit_kerja_spd->nama }}
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->ppk_nama }}</u><br/>
                 NIP. {{ $model_rincian->ppk_nip }} <br/>
             </td>
             <td>
                 &nbsp; <br/>
-                {{ $unit_kerja->ibu_kota }},<br/>
+                {{ $unit_kerja_spd->ibu_kota }},<br/>
                 Yang Menerima
                 <br/><br/><br/><br/><br/>
                 <u>{{ $model_rincian->nama }}</u><br/>

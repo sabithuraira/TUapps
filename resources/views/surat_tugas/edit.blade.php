@@ -25,7 +25,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['jenis_st'] }}:</label>
-                                <select disabled class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}"  name="jenis_st">
+                                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}"  name="jenis_st">
                                     @foreach ($model->listJenis as $key=>$value)
                                         <option  value="{{ $key }}" 
                                             @if ($key == old('jenis_st', $model->jenis_st))
@@ -277,8 +277,8 @@
                 $('#wait_progres').modal('show');
                 var selected_index = event.currentTarget.selectedIndex;
                 self.pejabat_ttd_nama = self.list_pejabat[selected_index].name;
-                self.pejabat_ttd_jabatan = self.list_pejabat[selected_index].jabatan;
-                self.unit_kerja_ttd = self.list_pejabat[selected_index].unit_kerja_ttd;
+                self.pejabat_ttd_jabatan = self.list_pejabat[selected_index].nmjab;
+                self.unit_kerja_ttd = self.list_pejabat[selected_index].kdprop+self.list_pejabat[selected_index].kdkab;
                 $('#wait_progres').modal('hide');
             },
             setSumberAnggaran: function(event){

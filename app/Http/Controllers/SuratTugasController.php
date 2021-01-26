@@ -234,13 +234,14 @@ class SuratTugasController extends Controller
                     $model_r->bendahara_nama  = $unit_kerja->bendahara_nama;
                     $model_r->ppspm_nip  = $unit_kerja->ppspm_nip;
                     $model_r->ppspm_nama  = $unit_kerja->ppspm_nama;
-                    $model_r->unit_kerja = $request->get('u_unit_kerja_ttdau'.$i);
-                    $model_r->unit_kerja_ttd  = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->unit_kerja_ttd  = $request->get('u_unit_kerja_ttdau'.$i);
+                    $model_r->unit_kerja_spd = $unit_kerja->kode;
                     ////////////////
                     $nomor_st = 1;
                     $nomor_spd = 1;
 
-                    $datas = \App\SuratTugasRincian::where('unit_kerja', '=', $model_r->unit_kerja)
+                    $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $model_r->unit_kerja_ttd)
                         ->orderBy('id', 'desc')->first();
 
                     if($datas!=null){
@@ -252,11 +253,11 @@ class SuratTugasController extends Controller
                     while(strlen($nomor_st)<4)
                         $nomor_st = '0'.$nomor_st;
                         
-                    $model_r->nomor_st = $nomor_st.'/BPS'.$model_r->unit_kerja.'/'.date('m').'/'.date('Y');
+                    $model_r->nomor_st = $nomor_st.'/BPS'.$model_r->unit_kerja_ttd.'/'.date('m').'/'.date('Y');
                     
                     if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
                         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
-                            ->where('unit_kerja_ttd', '=', $unit_kerja->kode)
+                            ->where('unit_kerja_spd', '=', $unit_kerja->kode)
                             ->orderBy('id', 'desc')->first();
                         
                         if($datas_spd!=null){
@@ -370,7 +371,7 @@ class SuratTugasController extends Controller
         }
 
         $nomor_st = 1;
-        $datas = \App\SuratTugasRincian::where('unit_kerja', '=', $request->get('unit_kerja_ttd'))
+        $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $request->get('unit_kerja_ttd'))
             ->orderBy('id', 'desc')->first();
 
         if($datas!=null){
@@ -384,7 +385,7 @@ class SuratTugasController extends Controller
         ////////
         $nomor_spd = 1;
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
-            ->where('unit_kerja_ttd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
+            ->where('unit_kerja_spd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
         
         if($datas_spd!=null){
             $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
@@ -443,9 +444,11 @@ class SuratTugasController extends Controller
                     else{
                         $model_r->status_aktif = 7;
                     }
+                    
+                    $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                    $model_r->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
+                    $model_r->unit_kerja_spd = $unit_kerja->kode;
 
-                    $model_r->unit_kerja_ttd  = Auth::user()->kdprop.Auth::user()->kdkab;
-                    $model_r->unit_kerja = $request->get('unit_kerja_ttd');
                     $model_r->created_by=Auth::id();
                     $model_r->updated_by=Auth::id();
                     $model_r->save();
@@ -524,8 +527,8 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
         $list_anggota = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
             ->where('kategori_petugas', '=', 2)->get();
         $ketua = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
@@ -547,22 +550,21 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
-        if($model->sumber_anggaran==2) 
-            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja_spd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_spd)->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
 
         $pdf = PDF::loadView('surat_tugas.print_spd', compact('real_id', 
-            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_ttd',
-            'pegawai', 'mak'))->setPaper('a4', 'potrait');
+            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd',
+            'unit_kerja_ttd','pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
         return $pdf->download($nama_file);
         
         // return view('surat_tugas.print_spd',compact('real_id', 
-        //     'model_rincian', 'model', 'unit_kerja', 'pegawai', 'mak'));
+        //     'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd', 'pegawai', 'mak'));
     }
 
     public function print_kwitansi($id)
@@ -581,8 +583,8 @@ class SuratTugasController extends Controller
         $model_kwitansi_rill_total = \App\SuratTugasKwitansi::where([
             ['id_surtug_pegawai', '=', $real_id],['is_rill', '=', 1]
         ])->sum('anggaran');
-        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_spd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_spd)->first();
         if($model->sumber_anggaran==2) 
             $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
         $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
@@ -590,7 +592,7 @@ class SuratTugasController extends Controller
 
         $pdf = PDF::loadView('surat_tugas.print_kwitansi', compact('real_id', 
             'model_rincian', 'model', 'model_kwitansi' , 'model_kwitansi_rill' , 
-             'unit_kerja', 'unit_kerja_ttd' , 'model_kwitansi_rill_total',
+             'unit_kerja', 'unit_kerja_spd' , 'model_kwitansi_rill_total',
             'pegawai', 'mak'))->setPaper('a4', 'potrait');
 
         $nama_file = 'kwitansi_'.$model_rincian->nomor_spd.'.pdf';
@@ -675,6 +677,7 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $model->jenis_st = $request->get('jenis_st');
         $model->sumber_anggaran = $request->get('sumber_anggaran');
         $model->mak = $request->get('mak');
         $model->tugas = $request->get('tugas');
@@ -692,8 +695,10 @@ class SuratTugasController extends Controller
         $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
         $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
         $model_rincian->kendaraan  = $request->get('kendaraan');
-        // $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
-        // $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+        $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+        $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+        $model_rincian->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+        $model_rincian->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
         $model_rincian->updated_by=Auth::id();
         $model_rincian->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
         $model_rincian->save();
