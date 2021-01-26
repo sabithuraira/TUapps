@@ -292,16 +292,12 @@
                     </tr>
                     
                     <tr><td colspan="2" align="center">Kepala BPS 
-                        @if($unit_kerja_ttd!=null)
-                            {{ $unit_kerja_ttd->nama }}
-                        @else
-                            {{ $unit_kerja->nama }}
-                        @endif       
+                        {{ $unit_kerja_spd->nama }}
                     </td></tr>
                     <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
                     
-                    <tr><td colspan="2" align="center"><u>{{ $model_rincian->pejabat_ttd_nama }}</u></td></tr>
-                    <tr><td colspan="2" align="center">NIP. {{ $model_rincian->pejabat_ttd_nip }}</td></tr>
+                    <tr><td colspan="2" align="center"><u>{{ $unit_kerja_spd->kepala_nama }}</u></td></tr>
+                    <tr><td colspan="2" align="center">NIP. {{ $unit_kerja_spd->kepala_nip }}</td></tr>
                 </table>
             </td>
         </tr>
