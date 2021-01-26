@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratTugasRequest;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class SuratTugasController extends Controller
@@ -22,6 +23,11 @@ class SuratTugasController extends Controller
         $month = '';
         $year = '';
         $unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+        $type = 1;
+        
+        if(strlen($request->get('action'))>0){
+            $type = $request->get('action');
+        }
 
         if(Auth::user()->kdkab=='00'){
             if(strlen($request->get('unit_kerja'))>0){
@@ -41,29 +47,35 @@ class SuratTugasController extends Controller
             $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
         }
 
-        $datas = \App\SuratTugasRincian::where($arr_where)
-                ->where(
-                    (function ($query) use ($unit_kerja) {
-                        $query-> where('unit_kerja', '=', $unit_kerja)
-                        ->orWhere('unit_kerja_ttd', '=', $unit_kerja);
-                    })
-                )
-                ->where(
-                    (function ($query) use ($keyword) {
-                        $query-> where('nama', 'LIKE', '%' . $keyword . '%')
-                        ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
-                        ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
-                    })
-                )
-                ->with('SuratIndukRel')
-                ->orderBy('id', 'desc')
-                ->paginate();
-    
-        $datas->withPath('surat_tugas');
-        $datas->appends($request->all());
-        $model = new \App\SuratTugasRincian;
-        return view('surat_tugas.index',compact('datas', 'keyword', 'model',
-            'month', 'year','unit_kerja'));
+        if($type==2){
+            return Excel::download(new \App\Exports\SuratTugasExport($unit_kerja, $month, $year, $keyword), 'surat_tugas.xlsx');
+        }
+        else{
+            $datas = \App\SuratTugasRincian::where($arr_where)
+                    ->where(
+                        (function ($query) use ($unit_kerja) {
+                            $query-> where('unit_kerja', '=', $unit_kerja)
+                            ->orWhere('unit_kerja_ttd', '=', $unit_kerja)
+                            ->orWhere('unit_kerja_spd', '=', $unit_kerja);
+                        })
+                    )
+                    ->where(
+                        (function ($query) use ($keyword) {
+                            $query-> where('nama', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
+                        })
+                    )
+                    ->with('SuratIndukRel')
+                    ->orderBy('id', 'desc')
+                    ->paginate();
+        
+            $datas->withPath('surat_tugas');
+            $datas->appends($request->all());
+            $model = new \App\SuratTugasRincian;
+            return view('surat_tugas.index',compact('datas', 'keyword', 'model',
+                'month', 'year','unit_kerja'));
+        }
     }
     
     public function daftar(Request $request)

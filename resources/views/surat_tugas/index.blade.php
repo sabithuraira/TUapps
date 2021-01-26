@@ -17,14 +17,17 @@
 
     <div class="card" id="app_vue">
         <div class="body">
-            <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>
-                Tambah Surat Tugas</a>
+            <form action="{{url('surat_tugas')}}" method="get">
+            <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>Surat Tugas</a>
 
             <a href="{{action('SuratTugasController@create_tim')}}" class="'btn btn-info btn-sm"><i
-                    class='fa fa-plus'></i> Tambah Surat Tugas Tim</a>
-
-            <br /><br />
-            <form action="{{url('surat_tugas')}}" method="get">
+                    class='fa fa-plus'></i> Surat Tugas Tim</a>
+                    
+            <button name="action" class="btn btn-success btn-sm float-right" type="submit" value="2"><i class="fa fa-file-excel-o"></i> Unduh Excel</button>   
+            
+            <br/><br/>
+            <span class="float-right small"><i>Data unduhan sesuai filter pencarian</i></span>
+            <br/>
                 @csrf
 
                 @if(Auth::user()->kdkab=='00')
