@@ -253,7 +253,7 @@
             <td width="10%"></td>
             <td width="30%" align="center">
                 Pejabat Pembuat Komitmen<br/>
-                BPS 
+                Badan Pusat Statistik<br/> 
                 @if($unit_kerja_spd!=null)
                     {{ $unit_kerja_spd->nama }}
                 @else
@@ -291,7 +291,7 @@
                         <td width="65%">: {{ $model_rincian->tujuan_tugas }}<br/></td>
                     </tr>
                     
-                    <tr><td colspan="2" align="center">Kepala BPS 
+                    <tr><td colspan="2" align="center">Kepala Badan Pusat Statistik<br/> 
                         {{ $unit_kerja_spd->nama }}
                     </td></tr>
                     <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
@@ -406,7 +406,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" align="center">Pejabat Pembuat Komitmen<br/>
-                        BPS 
+                        Badan Pusat Statistik<br/> 
                         @if($unit_kerja_spd!=null)
                             {{ $unit_kerja_spd->nama }}
                         @else
@@ -436,7 +436,7 @@
                         <td></td>
                         <td width="80%" align="center">
                             Pejabat Pembuat Komitmen<br/>
-                            BPS 
+                            Badan Pusat Statistik<br/> 
                             @if($unit_kerja_spd!=null)
                                 {{ $unit_kerja_spd->nama }}
                             @else

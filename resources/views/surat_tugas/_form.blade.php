@@ -408,8 +408,7 @@
         }
 
         vm.rincian.forEach(function(data_r){
-            if(data_r.nama.length==0 || data_r.tujuan_tugas.length==0 
-                || data_r.tanggal_mulai.length==0 || data_r.tanggal_selesai.length==0 || 
+            if(data_r.nama.length==0 || data_r.tanggal_mulai.length==0 || data_r.tanggal_selesai.length==0 || 
                 data_r.pejabat_ttd_nip.length==0 || data_r.tingkat_biaya.length==0 ||
                 data_r.kendaraan.length==0){
                 err_message.push("Ada rincian pegawai yang belum lengkap");

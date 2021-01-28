@@ -178,7 +178,13 @@
             <td width="10%"></td>
             <td width="25%" valign="top">Tujuan Tugas</td>
             <td width="3%" valign="top">:</td>
-            <td width="47%">{{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}<br/><br/></td>
+            <td width="47%">
+                @if(strlen($model_rincian->tujuan_tugas)>0)
+                    {{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}
+                @else
+                    {{ $model->tugas }}    
+                @endif
+            <br/><br/></td>
             <td width="15%"></td>
         </tr>
         
@@ -234,7 +240,7 @@
                 {{ $unit_kerja->ibu_kota }}
             @endif    
             , {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
-            Kepala BPS 
+            Kepala Badan Pusat Statistik<br/> 
             
             @if($unit_kerja_ttd!=null)
                  {{ $unit_kerja_ttd->nama }}

@@ -212,7 +212,7 @@ class SuratTugasController extends Controller
 
         if($model->save()){
             for($i=1;$i<=$total_utama;++$i){
-                if(strlen($request->get('u_namaau'.$i))>0 && strlen($request->get('u_tujuan_tugasau'.$i))>0
+                if(strlen($request->get('u_namaau'.$i))>0 
                     && strlen($request->get('u_tanggal_mulaiau'.$i))>0 && strlen($request->get('u_tanggal_selesaiau'.$i))>0
                     && strlen($request->get('u_pejabat_ttd_nipau'.$i))>0 && strlen($request->get('u_pejabat_ttd_namaau'.$i))>0
                     && strlen($request->get('u_tingkat_biayaau'.$i))>0 && strlen($request->get('u_kendaraanau'.$i))>0 

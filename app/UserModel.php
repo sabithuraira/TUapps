@@ -13,8 +13,8 @@ class UserModel extends Model
         return array(
             'II/a' => 'Pengatur Muda', 
             'II/b' => 'Pengatur Muda Tingkat I', 
-            'II/c' => 'Pegatur Tingkat I' , 
-            'II/d' => 'Pengatur' , 
+            'II/c' => 'Pengatur' , 
+            'II/d' => 'Pengatur Tingkat I' , 
             'III/a' => 'Penata Muda',  
             'III/b' => 'Penata Muda Tingkat I',  
             'III/c' => 'Penata' , 
