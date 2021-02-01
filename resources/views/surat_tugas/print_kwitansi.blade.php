@@ -231,29 +231,22 @@
         <tr>
             <td width="5%"></td>
             <td width="25%">Sudah Terima dari</td>
-            <td>: Pejabat Pembuat Komitmen BPS {{ $unit_kerja->nama }}</td>
+            <td width="1%">:</td>
+            <td>Pejabat Pembuat Komitmen BPS {{ $unit_kerja->nama }}</td>
         </tr>
         <tr>
             <td width="5%"></td>
             <td>Uang sebanyak</td>
-            <td>: Rp. {{  number_format($total_biaya,0,",",".")  }}</td>
+            <td width="1%">:</td>
+            <td>Rp. {{  number_format($total_biaya,0,",",".")  }}</td>
         </tr>
         <tr>
             <td width="5%"></td>
-            <td>Untuk pembayaran</td>
-            <td>: Biaya Perjalanan Dinas dalam Rangka {{ $model->tugas }}</td>
-        </tr>
-        
-        <tr>
-            <td width="5%"></td>
-            <td></td>
-            <td> &nbsp; &nbsp; {{ $mak->label_program }}</td>
-        </tr>
-        
-        <tr>
-            <td width="5%"></td>
-            <td></td>
-            <td> &nbsp; &nbsp; 
+            <td valign="top">Untuk pembayaran</td>
+            <td width="1%">:</td>
+            <td>
+                Biaya Perjalanan Dinas dalam Rangka {{ $model->tugas }}<br/>
+                {{ $mak->label_program }}<br/>
                 @if($model->sumber_anggaran==1)
                     Anggaran Badan Pusat Statistik {{ $unit_kerja->nama }} Tahun Anggaran {{ date('Y', strtotime($model_rincian->created_at)) }}
                 @elseif($model->sumber_anggaran==2)
@@ -261,33 +254,34 @@
                 @else
                     Bukan Anggaran Badan Pusat Statistik
                 @endif
+                <br/>
+                selama {{ ($selisih_hari+1) }} Hari (Rincian terlampir)
             </td>
         </tr>
         <tr>
             <td width="5%"></td>
-            <td></td>
-            <td> &nbsp; &nbsp; selama {{ ($selisih_hari+1) }} Hari (Rincian terlampir)</td>
-        </tr>
-        <tr>
-            <td width="5%"></td>
             <td>Berdasarkan SPPD</td>
-            <td>: Nomor: {{ $model_rincian->nomor_spd }} Tanggal: {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}</td>
+            <td width="1%">:</td>
+            <td>Nomor: {{ $model_rincian->nomor_spd }} Tanggal: {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}</td>
         </tr>
         <tr>
             <td width="5%"></td>
             <td>Untuk perjalanan dinas dari</td>
-            <td>: BPS {{ $unit_kerja->nama }} ke {{ $model_rincian->tujuan_tugas }} (PP)</td>
+            <td width="1%">:</td>
+            <td>BPS {{ $unit_kerja->nama }} ke {{ $model_rincian->tujuan_tugas }} (PP)</td>
         </tr>
         
         <tr>
             <td width="5%"></td>
             <td>Terbilang</td>
-            <td>: {{  $model_rincian->terbilang($total_biaya) }} rupiah</td>
+            <td width="1%">:</td>
+            <td>{{  $model_rincian->terbilang($total_biaya) }} rupiah</td>
         </tr>
     </table>
     <br/><br/>
     <table width="100%">
         <tr>
+            <td width="5%"></td>
             <td width="30%">
                 Lunas Pada tanggal:<br/>
                 Bendahara Pengeluaran<br/>
@@ -297,7 +291,7 @@
                 <u>{{ $model_rincian->bendahara_nama }}</u><br/>
                 NIP. {{ $model_rincian->bendahara_nip }} <br/>
             </td>
-            <td width="40%" align="center">
+            <td width="35%" align="center">
                 Setuju dibayar:<br/>
                 Pejabat Pembuat Komitmen<br/>
                 Badan Pusat Statistik<br/>
