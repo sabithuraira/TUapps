@@ -30,7 +30,9 @@ class SuratTugas extends Model
         return array(
             1 => 'Perjadin Organik Dalam Kota', 
             2 => 'Perjadin Organik Luar Kota', 
-            3 => 'Honor/Upah/Transport Mitra'
+            3 => 'Honor/Upah/Transport Mitra', 
+            4 => 'Lainnya (Kontrak, tanpa anggaran, dll)',
+            // 5 => 'Pelatihan'
         );
     }
 

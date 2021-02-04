@@ -71,35 +71,35 @@ class SuratTugasRincian extends Model
 
     function penyebut($nilai) {
 		$nilai = abs($nilai);
-		$huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		$huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
 		$temp = "";
 		if ($nilai < 12) {
 			$temp = " ". $huruf[$nilai];
 		} else if ($nilai <20) {
-			$temp = $this->penyebut($nilai - 10). " belas";
+			$temp = $this->penyebut($nilai - 10). " Belas";
 		} else if ($nilai < 100) {
-			$temp = $this->penyebut($nilai/10)." puluh". $this->penyebut($nilai % 10);
+			$temp = $this->penyebut($nilai/10)." Puluh". $this->penyebut($nilai % 10);
 		} else if ($nilai < 200) {
-			$temp = " seratus" . $this->penyebut($nilai - 100);
+			$temp = " Seratus" . $this->penyebut($nilai - 100);
 		} else if ($nilai < 1000) {
-			$temp = $this->penyebut($nilai/100) . " ratus" . $this->penyebut($nilai % 100);
+			$temp = $this->penyebut($nilai/100) . " Ratus" . $this->penyebut($nilai % 100);
 		} else if ($nilai < 2000) {
-			$temp = " seribu" . $this->penyebut($nilai - 1000);
+			$temp = " Seribu" . $this->penyebut($nilai - 1000);
 		} else if ($nilai < 1000000) {
-			$temp = $this->penyebut($nilai/1000) . " ribu" . $this->penyebut($nilai % 1000);
+			$temp = $this->penyebut($nilai/1000) . " Ribu" . $this->penyebut($nilai % 1000);
 		} else if ($nilai < 1000000000) {
-			$temp = $this->penyebut($nilai/1000000) . " juta" . $this->penyebut($nilai % 1000000);
+			$temp = $this->penyebut($nilai/1000000) . " Juta" . $this->penyebut($nilai % 1000000);
 		} else if ($nilai < 1000000000000) {
-			$temp = $this->penyebut($nilai/1000000000) . " milyar" . $this->penyebut(fmod($nilai,1000000000));
+			$temp = $this->penyebut($nilai/1000000000) . " Milyar" . $this->penyebut(fmod($nilai,1000000000));
 		} else if ($nilai < 1000000000000000) {
-			$temp = $this->penyebut($nilai/1000000000000) . " trilyun" . $this->penyebut(fmod($nilai,1000000000000));
+			$temp = $this->penyebut($nilai/1000000000000) . " Trilyun" . $this->penyebut(fmod($nilai,1000000000000));
 		}     
 		return $temp;
 	}
  
 	public function terbilang($nilai) {
 		if($nilai<0) {
-			$hasil = "minus ". trim($this->penyebut($nilai));
+			$hasil = "Minus ". trim($this->penyebut($nilai));
 		} else {
 			$hasil = trim($this->penyebut($nilai));
 		}     		
@@ -107,10 +107,12 @@ class SuratTugasRincian extends Model
 	}
 
 	public function isAvailable($nip, $t_start, $t_end){
-		$sql="SELECT count(*) as total 
-			FROM surat_tugas_rincian  
-			WHERE nip='".$nip."' AND status_aktif<>2 
-			AND (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
+		$sql="SELECT count(sr.id) as total 
+			FROM surat_tugas_rincian as sr, surat_tugas as s  
+			WHERE 
+			sr.id_surtug = s.id AND s.mak IS NOT NULL AND
+			nip='".$nip."' AND status_aktif<>2 
+			AND  (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			('".$t_end."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			(tanggal_mulai>'".$t_start."' AND tanggal_selesai<'".$t_end."'))";
 

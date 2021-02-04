@@ -24,7 +24,7 @@ class SuratTugasRequest extends FormRequest
     public function rules()
     {
         return [
-            'jenis_st' => 'required',
+            // 'jenis_st' => 'required',
             'sumber_anggaran' => 'required',
             'tugas' => 'required',
         ];

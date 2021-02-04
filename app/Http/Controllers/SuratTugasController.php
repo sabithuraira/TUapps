@@ -267,7 +267,7 @@ class SuratTugasController extends Controller
                         
                     $model_r->nomor_st = $nomor_st.'/BPS'.$model_r->unit_kerja_ttd.'/'.date('m').'/'.date('Y');
                     
-                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->jenis_st!=4){
                         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
                             ->where('unit_kerja_spd', '=', $unit_kerja->kode)
                             ->orderBy('id', 'desc')->first();
@@ -284,7 +284,7 @@ class SuratTugasController extends Controller
                     }
                     ////////
                     
-                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->sumber_anggaran!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->jenis_st!=4 && $model->sumber_anggaran!=3){
                         $model_r->status_aktif = 1;
                         if(Auth::user()->kdkab!='00'){
                             if($unit_kerja->kode==Auth::user()->kdprop.'00'){
@@ -450,7 +450,7 @@ class SuratTugasController extends Controller
                    
                     $model_r->nomor_st = $nomor_st.'/BPS'.$request->get('unit_kerja_ttd').'/'.date('m').'/'.date('Y');
                     
-                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3){
+                    if($model_r->jenis_petugas==1 && $model->jenis_st!=3 && $model->jenis_st!=4){
                         $model_r->status_aktif = 1;
                         // if($unit_kerja->kode==Auth::user()->kdprop.'00')
                         //     $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
@@ -481,6 +481,316 @@ class SuratTugasController extends Controller
                     $model_r->created_by=Auth::id();
                     $model_r->updated_by=Auth::id();
                     $model_r->save();
+                }
+            }
+        }
+        return redirect('surat_tugas')->with('success', 'Information has been added');
+    }
+
+    public function create_pelatihan()
+    {
+        $model= new \App\SuratTugas;
+        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                    ->where('kdkab','=',Auth::user()->kdkab)->get();
+
+        if(Auth::user()->kdkab=='00'){            
+            $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab','=',Auth::user()->kdkab)
+                        ->where((function ($query) { $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2); }))->get();
+        }
+        else{
+            $list_pejabat = \App\UserModel::where(
+                (function ($query) {
+                    $query->where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab', '=', Auth::user()->kdkab)
+                        ->where((function ($query) { $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4); }));
+            }))
+            ->orWhere(
+                (function ($query) {
+                    $query->where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab', '=', '00')
+                        ->where((function ($query) { $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2); })); }))->get();
+        }
+                    
+        $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
+        $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
+        $list_unit_kerja = \App\UnitKerja::orderBy('kode')->get();
+        $model_rincian = new \App\SuratTugasRincian;
+        $model_pelatihan = new \App\SuratTugasPesertaPelatihan;
+
+        $list_pegawai = [];
+        foreach($list_unit_kerja as $key=>$value){
+            $list_pegawai[$value->kode] = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                        ->where('kdkab','=',substr($value->kode,2))->get();
+        }
+
+        return view('surat_tugas.create_pelatihan', 
+            compact('list_pegawai', 'model', 'list_pejabat', 'model_rincian', 
+                'list_anggaran', 'list_anggaran_prov', 'model_pelatihan', 
+                'list_unit_kerja'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_pelatihan(SuratTugasRequest $request)
+    {
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('surat_tugas/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $total_peserta = $request->get('total_peserta');
+        $total_pengajar = $request->get('total_pengajar');
+        $total_panitia = $request->get('total_panitia');
+
+        $model= new \App\SuratTugas;
+        $model->jenis_st = 5;
+        $model->sumber_anggaran=$request->get('sumber_anggaran');
+        $model->mak=$request->get('mak');
+        $model->tugas=$request->get('tugas');
+        $model->unit_kerja=Auth::user()->kdprop.Auth::user()->kdkab;
+        $model->kategori = 2;
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        
+        //////////PENOMORAN
+        ////////////////
+        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.Auth::user()->kdkab)->first();
+        if(Auth::user()->kdkab!='00' && $model->sumber_anggaran==2){
+            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
+        }
+
+        $nomor_st = 1;
+        $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $request->get('unit_kerja_ttd'))
+            ->orderBy('id', 'desc')->first();
+
+        if($datas!=null){
+            $exp_nomor_st = explode("/",$datas->nomor_st)[0];
+            $prev_nomor_st = (int)$exp_nomor_st;
+            $nomor_st = $prev_nomor_st + 1;
+        }
+        ////////
+        $nomor_spd = 1;
+        $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
+            ->where('unit_kerja_spd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
+        
+        if($datas_spd!=null){
+            $exp_nomor_spd = explode("/",$datas_spd->nomor_spd)[0];
+            $exp_nomor_spd = explode(".",$exp_nomor_spd)[0];
+            $prev_nomor_spd = (int)$exp_nomor_spd;
+            $nomor_spd = $prev_nomor_spd + 1;
+        }
+        ////////////
+        
+        if($model->save()){
+            /////////RINCIAN PESERTA
+            $model_r = new \App\SuratTugasRincian;
+            $model_r->id_surtug =  $model->id;
+            $model_r->nama   = "PESERTA ".$model->tugas;
+            $model_r->jenis_petugas = 0;
+            $model_r->tujuan_tugas  = $request->get('tujuan_tugas');
+            $model_r->tanggal_mulai       = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+            $model_r->tanggal_selesai       = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+            $model_r->tingkat_biaya  = 0;
+            $model_r->kendaraan  = 0;
+            $model_r->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+            $model_r->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+            $model_r->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+            $model_r->ppk_nip  = $unit_kerja->ppk_nip;
+            $model_r->ppk_nama  = $unit_kerja->ppk_nama;
+            $model_r->bendahara_nip  = $unit_kerja->bendahara_nip;
+            $model_r->bendahara_nama  = $unit_kerja->bendahara_nama;
+            $model_r->ppspm_nip  = $unit_kerja->ppspm_nip;
+            $model_r->ppspm_nama  = $unit_kerja->ppspm_nama;
+            
+            $nomor_st_label = $nomor_st;
+            $nomor_spd_label = $nomor_spd;
+            while(strlen($nomor_st_label)<4)
+                $nomor_st_label = '0'.$nomor_st_label;
+            while(strlen($nomor_spd_label)<4)
+                $nomor_spd_label = '0'.$nomor_spd_label;
+            
+            $model_r->nomor_st = $nomor_st_label.'/BPS'.$request->get('unit_kerja_ttd').'/'.date('m').'/'.date('Y');
+            $model_r->status_aktif = 1;
+            if(Auth::user()->kdkab!='00'){
+                if($unit_kerja->kode==Auth::user()->kdprop.'00')
+                    $model_r->nomor_spd = $nomor_spd_label.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                else
+                    $model_r->nomor_spd = $nomor_spd_label.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            else{
+                $model_r->nomor_spd = $nomor_spd_label.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            $model_r->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+            $model_r->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
+            $model_r->unit_kerja_spd = $unit_kerja->kode;
+            $model_r->created_by=Auth::id();
+            $model_r->updated_by=Auth::id();
+            $model_r->save();
+            $nomor_st++; $nomor_spd++;
+            //////////
+            /////////RINCIAN PENGAJAR
+            $model_r2 = new \App\SuratTugasRincian;
+            $model_r2->id_surtug =  $model->id;
+            $model_r2->nama   = "PENGAJAR ".$model->tugas;
+            $model_r2->jenis_petugas = 0;
+            $model_r2->tujuan_tugas  = $request->get('tujuan_tugas');
+            $model_r2->tanggal_mulai       = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+            $model_r2->tanggal_selesai       = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+            $model_r2->tingkat_biaya  = 0;
+            $model_r2->kendaraan  = 0;
+            $model_r2->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+            $model_r2->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+            $model_r2->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+            $model_r2->ppk_nip  = $unit_kerja->ppk_nip;
+            $model_r2->ppk_nama  = $unit_kerja->ppk_nama;
+            $model_r2->bendahara_nip  = $unit_kerja->bendahara_nip;
+            $model_r2->bendahara_nama  = $unit_kerja->bendahara_nama;
+            $model_r2->ppspm_nip  = $unit_kerja->ppspm_nip;
+            $model_r2->ppspm_nama  = $unit_kerja->ppspm_nama;
+
+            $nomor_st_label = $nomor_st;
+            $nomor_spd_label = $nomor_spd;
+            while(strlen($nomor_st_label)<4)
+                $nomor_st_label = '0'.$nomor_st_label;
+            while(strlen($nomor_spd_label)<4)
+                $nomor_spd_label = '0'.$nomor_spd_label;
+
+            $model_r2->nomor_st = $nomor_st.'/BPS'.$request->get('unit_kerja_ttd').'/'.date('m').'/'.date('Y');
+            $model_r2->status_aktif = 1;
+            if(Auth::user()->kdkab!='00'){
+                if($unit_kerja->kode==Auth::user()->kdprop.'00')
+                    $model_r2->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                else
+                    $model_r2->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            else{
+                $model_r2->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            $model_r2->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+            $model_r2->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
+            $model_r2->unit_kerja_spd = $unit_kerja->kode;
+            $model_r2->created_by=Auth::id();
+            $model_r2->updated_by=Auth::id();
+            $model_r2->save();
+            $nomor_st++; $nomor_spd++;
+            //////
+            /////////RINCIAN PANITIA
+            $model_r3 = new \App\SuratTugasRincian;
+            $model_r3->id_surtug =  $model->id;
+            $model_r3->nama   = "PANITIA ".$model->tugas;
+            $model_r3->jenis_petugas = 0;
+            $model_r3->tujuan_tugas  = $request->get('tujuan_tugas');
+            $model_r3->tanggal_mulai       = date('Y-m-d', strtotime($request->get('tanggal_mulai')));
+            $model_r3->tanggal_selesai       = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
+            $model_r3->tingkat_biaya  = 0;
+            $model_r3->kendaraan  = 0;
+            $model_r3->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+            $model_r3->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+            $model_r3->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+            $model_r3->ppk_nip  = $unit_kerja->ppk_nip;
+            $model_r3->ppk_nama  = $unit_kerja->ppk_nama;
+            $model_r3->bendahara_nip  = $unit_kerja->bendahara_nip;
+            $model_r3->bendahara_nama  = $unit_kerja->bendahara_nama;
+            $model_r3->ppspm_nip  = $unit_kerja->ppspm_nip;
+            $model_r3->ppspm_nama  = $unit_kerja->ppspm_nama;
+
+            $nomor_st_label = $nomor_st;
+            $nomor_spd_label = $nomor_spd;
+            while(strlen($nomor_st_label)<4)
+                $nomor_st_label = '0'.$nomor_st_label;
+            while(strlen($nomor_spd_label)<4)
+                $nomor_spd_label = '0'.$nomor_spd_label;
+
+            $model_r3->nomor_st = $nomor_st.'/BPS'.$request->get('unit_kerja_ttd').'/'.date('m').'/'.date('Y');
+            $model_r3->status_aktif = 1;
+            if(Auth::user()->kdkab!='00'){
+                if($unit_kerja->kode==Auth::user()->kdprop.'00')
+                    $model_r3->nomor_spd = $nomor_spd.'/'.Auth::user()->kdprop.'00/'.Auth::user()->kdprop.Auth::user()->kdkab.'/SPD/'.date('m').'/'.date('Y');
+                else
+                    $model_r3->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            else{
+                $model_r3->nomor_spd = $nomor_spd.'/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
+            }
+            $model_r3->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+            $model_r3->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
+            $model_r3->unit_kerja_spd = $unit_kerja->kode;
+            $model_r3->created_by=Auth::id();
+            $model_r3->updated_by=Auth::id();
+            $model_r3->save();
+            //////
+            for($i=1;$i<=$total_peserta;++$i){
+                if(strlen($request->get('peserta_namaau'.$i))>0 && strlen($request->get('peserta_tingkat_biayaau'.$i))>0 
+                    && strlen($request->get('peserta_kendaraanau'.$i))>0 && strlen($request->get('peserta_jenis_pesertaau'.$i))>0 
+                    && strlen($request->get('peserta_jabatan_pelatihanau'.$i))>0){
+                    $model_p = new \App\SuratTugasPesertaPelatihan;
+                    $model_p->id_surtug =   $model_r->id;
+                    $model_p->nip = $request->get('peserta_nipau'.$i);
+                    $model_p->nama   = $request->get('peserta_namaau'.$i);
+                    $model_p->gol = $request->get('peserta_golau'.$i);
+                    $model_p->jabatan = $request->get('peserta_jabatanau'.$i);
+                    $model_p->jabatan_pelatihan = $request->get('peserta_jabatan_pelatihanau'.$i);
+                    $model_p->asal_daerah = $request->get('peserta_asal_daerahau'.$i);
+                    $model_p->unit_kerja = $request->get('peserta_unit_kerjaau'.$i);
+                    $model_p->jenis_peserta = $request->get('peserta_jenis_pesertaau'.$i);
+                    $model_p->tingkat_biaya = $request->get('peserta_tingkat_biayaau'.$i);
+                    $model_p->kendaraan = $request->get('peserta_kendaraanau'.$i);
+                    $model_p->kategori_peserta = 1;
+                    $model_p->created_by=Auth::id();
+                    $model_p->updated_by=Auth::id();
+                    $model_p->save();
+                }
+            }
+
+            for($i=1;$i<=$total_pengajar;++$i){
+                if(strlen($request->get('pengajar_namaau'.$i))>0 && strlen($request->get('pengajar_tingkat_biayaau'.$i))>0 
+                    && strlen($request->get('pengajar_kendaraanau'.$i))>0 && strlen($request->get('pengajar_jenis_pesertaau'.$i))>0 
+                    && strlen($request->get('pengajar_jabatan_pelatihanau'.$i))>0){
+                    $model_p = new \App\SuratTugasPesertaPelatihan;
+                    $model_p->id_surtug =   $model_r2->id;
+                    $model_p->nip = $request->get('pengajar_nipau'.$i);
+                    $model_p->nama   = $request->get('pengajar_namaau'.$i);
+                    $model_p->gol = $request->get('pengajar_golau'.$i);
+                    $model_p->jabatan = $request->get('pengajar_jabatanau'.$i);
+                    $model_p->jabatan_pelatihan = $request->get('pengajar_jabatan_pelatihanau'.$i);
+                    $model_p->asal_daerah = $request->get('pengajar_asal_daerahau'.$i);
+                    $model_p->unit_kerja = $request->get('pengajar_unit_kerjaau'.$i);
+                    $model_p->jenis_peserta = $request->get('pengajar_jenis_pesertaau'.$i);
+                    $model_p->tingkat_biaya = $request->get('peserta_tingkat_biayaau'.$i);
+                    $model_p->kendaraan = $request->get('pengajar_kendaraanau'.$i);
+                    $model_p->kategori_peserta = 2;
+                    $model_p->created_by=Auth::id();
+                    $model_p->updated_by=Auth::id();
+                    $model_p->save();
+                }
+            }
+
+            for($i=1;$i<=$total_panitia;++$i){
+                if(strlen($request->get('panitia_namaau'.$i))>0 && strlen($request->get('panitia_tingkat_biayaau'.$i))>0 
+                    && strlen($request->get('panitia_kendaraanau'.$i))>0 && strlen($request->get('panitia_jenis_pesertaau'.$i))>0 
+                    && strlen($request->get('panitia_jabatan_pelatihanau'.$i))>0){
+                    $model_p = new \App\SuratTugasPesertaPelatihan;
+                    $model_p->id_surtug =   $model_r3->id;
+                    $model_p->nip = $request->get('panitia_nipau'.$i);
+                    $model_p->nama   = $request->get('panitia_namaau'.$i);
+                    $model_p->gol = $request->get('panitia_golau'.$i);
+                    $model_p->jabatan = $request->get('panitia_jabatanau'.$i);
+                    $model_p->jabatan_pelatihan = $request->get('panitia_jabatan_pelatihanau'.$i);
+                    $model_p->asal_daerah = $request->get('panitia_asal_daerahau'.$i);
+                    $model_p->unit_kerja = $request->get('panitia_unit_kerjaau'.$i);
+                    $model_p->jenis_peserta = $request->get('panitia_jenis_pesertaau'.$i);
+                    $model_p->tingkat_biaya = $request->get('peserta_tingkat_biayaau'.$i);
+                    $model_p->kendaraan = $request->get('panitia_kendaraanau'.$i);
+                    $model_p->kategori_peserta = 3;
+                    $model_p->created_by=Auth::id();
+                    $model_p->updated_by=Auth::id();
+                    $model_p->save();
                 }
             }
         }
@@ -724,12 +1034,12 @@ class SuratTugasController extends Controller
         $model_rincian->tanggal_selesai = date('Y-m-d', strtotime($request->get('tanggal_selesai')));
         $model_rincian->tingkat_biaya  = $request->get('tingkat_biaya');
         $model_rincian->kendaraan  = $request->get('kendaraan');
-        $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
-        $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
-        $model_rincian->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
-        $model_rincian->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
+        // $model_rincian->pejabat_ttd_nip  = $request->get('pejabat_ttd_nip');
+        // $model_rincian->pejabat_ttd_nama  = $request->get('pejabat_ttd_nama');
+        // $model_rincian->pejabat_ttd_jabatan  = $request->get('pejabat_ttd_jabatan');
+        // $model_rincian->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
         $model_rincian->updated_by=Auth::id();
-        $model_rincian->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
+        // $model_rincian->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
         $model_rincian->save();
         ///////////
         return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');

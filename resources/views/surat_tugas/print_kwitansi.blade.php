@@ -243,7 +243,7 @@
         <tr>
             <td width="5%"></td>
             <td valign="top">Untuk pembayaran</td>
-            <td width="1%">:</td>
+            <td valign="top" width="1%">:</td>
             <td>
                 Biaya Perjalanan Dinas dalam Rangka {{ $model->tugas }}<br/>
                 {{ $mak->label_program }}<br/>
@@ -275,7 +275,7 @@
             <td width="5%"></td>
             <td>Terbilang</td>
             <td width="1%">:</td>
-            <td>{{  $model_rincian->terbilang($total_biaya) }} rupiah</td>
+            <td>{{  $model_rincian->terbilang($total_biaya) }} Rupiah</td>
         </tr>
     </table>
     <br/><br/>

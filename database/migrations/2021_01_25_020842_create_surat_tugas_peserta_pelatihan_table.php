@@ -17,10 +17,10 @@ class CreateSuratTugasPesertaPelatihanTable extends Migration
             $table->increments('id');
 
             $table->integer('id_surtug');
-            $table->string('nip');
+            $table->string('nip')->nullable();
             $table->string('nama');
-            $table->string('gol');
-            $table->string('jabatan');
+            $table->string('gol')->nullable();
+            $table->string('jabatan')->nullable();
             $table->string('jabatan_pelatihan');
             $table->string('asal_daerah');
             $table->integer('unit_kerja');

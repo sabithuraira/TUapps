@@ -9,6 +9,7 @@
                 <th>Nomor</th>
                 <th>Pegawai</th>
                 <th>Jabatan Pegawai</th>
+                <th>Tugas</th>
                 <th>Tujuan</th>
                 <th>Nomor Surat Tugas</th>
                 <th>Nomor SPD</th>
@@ -34,6 +35,7 @@
                         @endif
                     </td>
                     <td>{{ $data->jabatan }}</td>
+                    <td>{{ $data->SuratIndukRel->tugas }}</td>
                     <td>{{ $data->tujuan_tugas }}</td>
                     <td>{{ $data->nomor_st }}</td>
                     <td>{{ $data->nomor_spd }}</td>

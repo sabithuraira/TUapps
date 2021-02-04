@@ -106,7 +106,7 @@
                         <div class="col-md-6">
                             <div class="form-group">{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}
                                 <div class="form-line">
-                                    <select class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
+                                    <select disabled class="form-control" name="pejabat_ttd_nip" @change="setPejabat($event)">
                                         @foreach ($list_pejabat as $value)
                                             <option value="{{ $value->nip_baru }}"
                                                 @if ($value->nip_baru == old('pejabat_ttd_nip', $model_rincian->pejabat_ttd_nip))
@@ -192,7 +192,7 @@
                             <div class="form-group">Tanggal Pembuatan/Tanda Tangan
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input type="text" class="form-control datepicker form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', date('Y-m-d',strtotime($model_rincian->created_at))) }}">
+                                        <input disabled type="text" class="form-control datepicker form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', date('Y-m-d',strtotime($model_rincian->created_at))) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>
