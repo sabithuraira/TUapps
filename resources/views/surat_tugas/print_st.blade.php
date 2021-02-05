@@ -125,17 +125,23 @@
                     @if($ketua->jenis_petugas==2)
                         Mitra
                     @else
-                        {{ $ketua->jabatan }}
+                        @if(substr($ketua->jabatan,0, 10)=="Kepala BPS")
+                            Kepala BPS {{ $unit_kerja->nama }}
+                        @else
+                            {{ $ketua->jabatan }}
+                        @endif
                     @endif
                 @else
                     @if($model_rincian->jenis_petugas==2)
                         Mitra
                     @else
-                        {{ $model_rincian->jabatan }}
+                        @if(substr($model_rincian->jabatan,0, 10)=="Kepala BPS")
+                            Kepala BPS {{ $unit_kerja->nama }}
+                        @else
+                            {{ $model_rincian->jabatan }}
+                        @endif
                     @endif
                 @endif
-
-                    
                 <br/><br/></td>
             <td width="15%"></td>
         </tr>

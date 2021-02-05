@@ -82,12 +82,6 @@
                 b. Tempat tujuan<br/>
             </td>
             <td colspan="2">
-                @if (substr($unit_kerja->kode,2)=='00' || substr($unit_kerja->kode,2,1)=='7')
-                    Kota
-                @else
-                    Kabupaten
-                @endif
-
                 {{ $unit_kerja->ibu_kota }}<br/>
                 {{ $model_rincian->tujuan_tugas }}<br/>
             </td>
