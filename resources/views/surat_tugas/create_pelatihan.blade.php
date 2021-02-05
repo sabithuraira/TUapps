@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 <label>{{ $model_rincian->attributes()['pejabat_ttd_nip'] }}:</label>
                                 <div class="form-line">
-                                    <select class="form-control" id="pejabat_ttd_nip" name="pejabat_ttd_nip">
+                                    <select class="form-control" id="pejabat_ttd_nip" name="pejabat_ttd_nip" @change="setAllPejabat()">
                                         @foreach ($list_pejabat as $value)
                                             <option value="{{ $value->nip_baru }}">{{ $value->name }} - {{ $value->nip_baru }} </option>
                                         @endforeach
@@ -359,7 +359,6 @@
                     });
                 }
                 else{
-                    self.setAllPejabat()
                     if(self.cur_rincian.nama!='' && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){
 
                         if(self.cur_rincian.id){
@@ -500,6 +499,7 @@
             // startDate: 'd',
             format: 'yyyy-mm-dd',
         });
+        vm.setAllPejabat()
     });
 
     $(".frep").on("submit", function(){
