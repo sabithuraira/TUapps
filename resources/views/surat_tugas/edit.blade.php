@@ -192,7 +192,7 @@
                             <div class="form-group">Tanggal Pembuatan/Tanda Tangan
                                 <div class="form-line">
                                     <div class="input-group">
-                                        <input disabled type="text" class="form-control datepicker form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', date('Y-m-d',strtotime($model_rincian->created_at))) }}">
+                                        <input type="text" class="form-control datepicker form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', date('Y-m-d',strtotime($model_rincian->created_at))) }}">
                                         <div class="input-group-append">                                            
                                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                                         </div>

@@ -86,6 +86,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('surat_tugas/edit_unit_kerja', 'SuratTugasController@edit_unit_kerja');
     Route::post('surat_tugas/edit_unit_kerja', 'SuratTugasController@update_unit_kerja');
     Route::get('surat_tugas/{id}/print_st', 'SuratTugasController@print_st');
+    Route::get('surat_tugas/{id}/print_st_pelatihan', 'SuratTugasController@print_st_pelatihan');
     Route::get('surat_tugas/{id}/print_spd', 'SuratTugasController@print_spd');
     Route::get('surat_tugas/{id}/print_kwitansi', 'SuratTugasController@print_kwitansi');
     Route::post('surat_tugas/is_available', 'SuratTugasController@is_available');
