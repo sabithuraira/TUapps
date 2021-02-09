@@ -66,7 +66,11 @@
                         </td>
                         <td class="text-center">
                             @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                            <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                                @if($data->SuratIndukRel->jenis_st==5)
+                                    <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                                @else
+                                    <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                                @endif
                             @endif
                         </td>
                         <td class="text-center">

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use iio\libmergepdf\Merger;
 
 class SuratTugasController extends Controller
 {
@@ -932,6 +933,44 @@ class SuratTugasController extends Controller
         // return view('surat_tugas.print_spd',compact('real_id', 
         //     'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd', 'pegawai', 'mak'));
     }
+
+    
+    public function print_spd_pelatihan($id)
+    {
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
+        $unit_kerja_spd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_spd)->first();
+        $pegawai = \App\UserModel::where('nip_baru', '=', $model_rincian->nip)->first();
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+        $list_anggota = \App\SuratTugasPesertaPelatihan::where('id_surtug', '=', $real_id)->get();
+    
+        $m = new Merger();
+        $pdf = PDF::loadView('surat_tugas.print_spd_pelatihan', compact('real_id', 
+            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd',
+            'unit_kerja_ttd','pegawai', 'mak'))->setPaper('a4', 'potrait');
+
+        // $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
+        // return $pdf->download($nama_file);
+        // $pdf->render();
+        $m->addRaw($pdf->output());
+
+        
+        $pdf2 = PDF::loadView('surat_tugas.print_spd_pelatihan_lampiran', compact('real_id', 
+            'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd',
+            'unit_kerja_ttd','pegawai', 'mak', 'list_anggota'))->setPaper('a4', 'landscape');
+
+        $nama_file = 'spd_'.$model_rincian->nomor_spd.'.pdf';
+        $m->addRaw($pdf2->output());
+        return response($m->merge())
+                ->withHeaders([
+                    'Content-Type' => 'application/pdf',
+                    'Cache-Control' => 'no-store, no-cache',
+                    'Content-Disposition' => 'attachment; filename="'.$nama_file,
+                ]);
+       }
 
     public function print_kwitansi($id)
     {

@@ -61,7 +61,9 @@ class UkerController extends Controller
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
-        
+        /////////
+        /////////
+
         return redirect('uker')->with('success', 'Information has been added');
     }
 

@@ -50,7 +50,8 @@ class SuratTugas extends Model
         return array(
             1 => '524113', 
             2 => '524111', 
-            3 => '521213'
+            3 => '521213',
+            5 => '524114'
         );
     }
     

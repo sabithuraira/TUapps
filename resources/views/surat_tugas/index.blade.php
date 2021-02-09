@@ -20,7 +20,7 @@
             <form action="{{url('surat_tugas')}}" method="get">
             <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Surat Tugas</a>
             <a href="{{action('SuratTugasController@create_tim')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Surat Tugas Tim</a>
-            <a href="{{action('SuratTugasController@create_pelatihan')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Surat Tugas Pelatihan</a>
+            <a href="{{action('SuratTugasController@create_pelatihan')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i> Surat Tugas Penyelenggara Pelatihan</a>
                     
             <button hidden name="action" type="submit" value="1"></button> 
             <button name="action" class="btn btn-success btn-sm float-right" type="submit" value="2"><i class="fa fa-file-excel-o"></i> Unduh Excel</button>   
