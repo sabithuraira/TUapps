@@ -858,6 +858,42 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
+    public function insert_kwitansi_pelatihan($id){
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+        $list_anggota = \App\SuratTugasPesertaPelatihan::where('id_surtug', '=', $real_id)->get();
+    
+        if($model_rincian->status_aktif!=2){
+            return view('surat_tugas.insert_kwitansi_pelatihan',compact('model','id', 
+                'real_id', 'model_rincian', 'mak', 'list_anggota'));
+        }
+        else{
+            abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
+        }
+    }
+
+    public function store_kwitansi_pelatihan(Request $request, $id){
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+        $list_anggota = \App\SuratTugasPesertaPelatihan::where('id_surtug', '=', $real_id)->get();
+    
+        // if($model_rincian->status_aktif!=2){
+        //     return view('surat_tugas.insert_kwitansi_pelatihan',compact('model','id', 
+        //         'real_id', 'model_rincian', 'mak', 'list_anggota'));
+        // }
+        // else{
+        //     abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
+        // }
+       
+        
+        return redirect('surat_tugas')->with('success', 'Information has been added');
+    }
+
     /**
      * Display the specified resource.
      *

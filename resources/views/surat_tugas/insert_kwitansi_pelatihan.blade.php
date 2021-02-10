@@ -4,13 +4,13 @@
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
     <li class="breadcrumb-item"><a href="{{url('surat_tugas')}}">Surat Tugas</a></li>                            
-    <li class="breadcrumb-item">Rincian Biaya</li>
+    <li class="breadcrumb-item">Rincian Honor Pelatihan</li>
 </ul>
 @endsection
 
 @section('content')
 <div id="app_vue"> 
-    <form method="post" action="{{action('SuratTugasController@store_kwitansi', $id)}}" enctype="multipart/form-data">
+    <form method="post" action="{{action('SuratTugasController@store_kwitansi_pelatihan', $id)}}" enctype="multipart/form-data">
     @csrf   
         <div class="card">
             <div class="body">     
@@ -18,7 +18,6 @@
                 <div class="row clearfix">                                
                     <div class="col-lg-12 col-md-12">
                         <h5>{{ $model_rincian->nama }}</h5>
-                        <p>{{ $model_rincian->nip }}</p>
                     </div>
                 </div>                    
                 <div class="table-responsive">
@@ -111,44 +110,6 @@
         </div>
     </form>                    
 
-    <div class="modal" id="form_biaya" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <b class="title" id="defaultModalLabel">Rincian Biaya</b>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">Rincian
-                        <div class="form-line">
-                            <input class="form-control form-control-sm" type="text" placeholder="contoh: Biaya Transport dari Kota Palembang Ke Kabupaten Lahat PP" v-model="cur_rincian.rincian">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">Anggaran
-                        <div class="form-line">
-                            <input class="form-control form-control-sm" type="text" placeholder="contoh: 120000 (tanpa koma atau titik)" v-model="cur_rincian.anggaran">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">Apakah pengeluaran rill?
-                        <div class="form-line">
-                            <select class="form-control" v-model="cur_rincian.is_rill">
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click="saveRincian" >SAVE</button>
-                    <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -196,113 +157,10 @@
             },
         },
         methods: {
-            setDatas: function(){
-                var self = this;
-                self.rincian = self.model_kwitansi;
-                self.total_utama += self.rincian.length;
-            },
-            is_delete: function(params){
-                if(isNaN(params)) return false;
-                else return true;
-            },
-            saveRincian: function(){
-                var self = this;
-
-                var is_error = 0
-                var pesan_error = []
-
-                if(self.cur_rincian.rincian==''){
-                    is_error = 1
-                    pesan_error.push("Isian rincian wajib diisi")
-                }
-                
-                if(self.cur_rincian.anggaran==''){
-                    is_error = 1
-                    pesan_error.push("Anggaran rincian wajib diisi")
-                }
-                else{
-                    if(isNaN(self.cur_rincian.anggaran)){
-                        is_error = 1
-                        pesan_error.push("Anggaran harus berupa angka")
-                    }
-                }
-                
-                if(is_error==0){
-                    if(self.cur_rincian.id){
-                        self.rincian[self.cur_rincian.index] = {
-                            'id': self.cur_rincian.id,
-                            'rincian'   : self.cur_rincian.rincian,
-                            'anggaran'   : self.cur_rincian.anggaran,
-                            'is_rill'   : self.cur_rincian.is_rill,
-                        };
-                    }
-                    else{
-                        self.rincian.push({
-                            'id': 'au'+(self.total_utama),
-                            'rincian'   : self.cur_rincian.rincian,
-                            'anggaran'   : self.cur_rincian.anggaran,
-                            'is_rill'   : self.cur_rincian.is_rill,
-                        });
-                        self.total_utama++;
-                    }
-
-                    self.cur_rincian.rincian = '';
-                    self.cur_rincian.anggaran = '';
-                    self.cur_rincian.is_rill = 0;
-                    self.cur_rincian.id = '';                   
-                    $('#form_biaya').modal('hide');
-                }
-                else{
-                    alert(pesan_error.join("\n"))
-                }
-                
-                //////////
-            },
-            addRincian: function(){
-                var self = this;
-                self.cur_rincian.id = '';
-                self.cur_rincian.rincian = '';
-                self.cur_rincian.anggaran = '';
-                self.cur_rincian.is_rill = 0;
-            },
-            updateRincian: function (event) {
-                var self = this;
-                if (event) {
-                    self.cur_rincian.id = event.currentTarget.getAttribute('data-id');
-                    self.cur_rincian.index = event.currentTarget.getAttribute('data-index');
-                    self.cur_rincian.rincian = event.currentTarget.getAttribute('data-rincian');
-                    self.cur_rincian.anggaran = event.currentTarget.getAttribute('data-anggaran');
-                    self.cur_rincian.is_rill = event.currentTarget.getAttribute('data-is_rill');
-                }
-            },
-            delDataTemp: function (index) {
-                var self = this;
-                $('#wait_progres').modal('show');
-                self.rincian.splice(index, 1);
-                self.total_utama--;
-                $('#wait_progres').modal('hide');
-            },
-            delData: function (idnya) {
-                var self = this;
-                $('#wait_progres').modal('show');
-                $.ajax({
-                    url : self.pathname+"/" + idnya + "/destroy_kwitansi",
-                    method : 'get',
-                    dataType: 'json',
-                }).done(function (data) {
-                    window.location.reload(true);
-                    $('#wait_progres').modal('hide');
-                }).fail(function (msg) {
-                    console.log(JSON.stringify(msg));
-                    $('#wait_progres').modal('hide');
-                });
-            },
         }
     });
 
     $(document).ready(function() {
-        // vm.setNomor();
-        vm.setDatas();
     });
 </script>
 @endsection

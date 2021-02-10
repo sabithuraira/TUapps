@@ -79,9 +79,15 @@
                                     <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
                                 
                                 @if($data['status_aktif']<=5)
-                                <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
-                                    <i class="icon-arrow-right text-info"></i> <u>Input</u>
-                                </a>
+                                    @if($data->SuratIndukRel->jenis_st==5)
+                                        <a href="{{ action('SuratTugasController@insert_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
+                                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
+                                        </a>
+                                    @else
+                                        <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
+                                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
+                                        </a>
+                                    @endif
                                 @endif
                             @endif
                         </td>

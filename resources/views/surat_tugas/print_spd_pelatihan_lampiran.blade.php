@@ -98,38 +98,40 @@
         @endphp
         
         @foreach($list_anggota as $key=>$value)
-            <td>{{ $key+1 }}</td>
-            <td>{{ $value->nama }}</td>
-            <td>
-                @if(strlen($value->jabatan)>0)
-                    {{ $value->jabatan }}
-                @else
-                    Mitra
-                @endif
-            </td>
-            <td>
-                @if(strlen($value->gol)>0)
-                    {{ $value->gol }}
-                @else
-                    -
-                @endif
-            </td>
-            @php 
-                $uker = \App\UnitKerja::where('kode', '=', $value->unit_kerja)->first();
-            @endphp
-            <td>
-                @if($uker!=null)
-                    {{ $uker->nama }}
-                @endif
-            </td>
-            <td align="center">{{ $model_rincian->listTingkatBiaya[$value->tingkat_biaya] }}</td>
-            <td align="center">{{ $model_rincian->listKendaraan[$value->kendaraan] }}</td>
-            <td>{{ $model_rincian->nomor_st }}</td>
-            <td>{{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}</td>
-            <td>{{ date('d/m/Y', strtotime($model_rincian->tanggal_mulai)) }}</td>
-            <td>{{ date('d/m/Y', strtotime($model_rincian->tanggal_selesai)) }}</td>
-            <td>{{ ($selisih_hari+1) }} ({{ $model_rincian->terbilang($selisih_hari+1) }}) hari</td>
-            <td></td>
+            <tr>
+                <td>{{ $key+1 }}</td>
+                <td>{{ $value->nama }}</td>
+                <td>
+                    @if(strlen($value->jabatan)>0)
+                        {{ $value->jabatan }}
+                    @else
+                        Mitra
+                    @endif
+                </td>
+                <td>
+                    @if(strlen($value->gol)>0)
+                        {{ $value->gol }}
+                    @else
+                        -
+                    @endif
+                </td>
+                @php 
+                    $uker = \App\UnitKerja::where('kode', '=', $value->unit_kerja)->first();
+                @endphp
+                <td>
+                    @if($uker!=null)
+                        {{ $uker->nama }}
+                    @endif
+                </td>
+                <td align="center">{{ $model_rincian->listTingkatBiaya[$value->tingkat_biaya] }}</td>
+                <td align="center">{{ $model_rincian->listKendaraan[$value->kendaraan] }}</td>
+                <td>{{ $model_rincian->nomor_st }}</td>
+                <td>{{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}</td>
+                <td>{{ date('d/m/Y', strtotime($model_rincian->tanggal_mulai)) }}</td>
+                <td>{{ date('d/m/Y', strtotime($model_rincian->tanggal_selesai)) }}</td>
+                <td>{{ ($selisih_hari+1) }} ({{ $model_rincian->terbilang($selisih_hari+1) }}) hari</td>
+                <td></td>
+            </tr>
         @endforeach()
     </table>
 
