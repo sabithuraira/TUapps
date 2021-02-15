@@ -90,11 +90,13 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('surat_tugas/{id}/print_spd', 'SuratTugasController@print_spd');
     Route::get('surat_tugas/{id}/print_spd_pelatihan', 'SuratTugasController@print_spd_pelatihan');
     Route::get('surat_tugas/{id}/print_kwitansi', 'SuratTugasController@print_kwitansi');
+    Route::get('surat_tugas/{id}/print_kwitansi_pelatihan', 'SuratTugasController@print_kwitansi_pelatihan');
     Route::post('surat_tugas/is_available', 'SuratTugasController@is_available');
     Route::get('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@insert_kwitansi');
     Route::post('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@store_kwitansi');
     Route::get('surat_tugas/{id}/destroy_kwitansi', 'SuratTugasController@destroy_kwitansi');
-    Route::get('surat_tugas/{id}/insert_kwitansi_pelatihan', 'SuratTugasController@insert_kwitansi_pelatihan');
+    Route::get('surat_tugas/{id}/insert_kwitansi_pelatihan','SuratTugasController@insert_kwitansi_pelatihan');
+    Route::post('surat_tugas/{id}/insert_kwitansi_pelatihan','SuratTugasController@store_kwitansi_pelatihan');
     Route::get('surat_tugas/create_tim', 'SuratTugasController@create_tim');
     Route::post('surat_tugas/create_tim', 'SuratTugasController@store_tim');
     Route::get('surat_tugas/create_pelatihan', 'SuratTugasController@create_pelatihan');

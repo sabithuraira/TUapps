@@ -878,20 +878,18 @@ class SuratTugasController extends Controller
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
-        $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
         $list_anggota = \App\SuratTugasPesertaPelatihan::where('id_surtug', '=', $real_id)->get();
     
-        // if($model_rincian->status_aktif!=2){
-        //     return view('surat_tugas.insert_kwitansi_pelatihan',compact('model','id', 
-        //         'real_id', 'model_rincian', 'mak', 'list_anggota'));
-        // }
-        // else{
-        //     abort(403, 'Data telah dibatalkan, permintaan tidak diberikan');
-        // }
-       
+        foreach($list_anggota as $key=>$value){
+            $value->biaya_perjadin = $request->get('biaya_perjadin'.$value->id);
+            $value->biaya_fullboard = $request->get('biaya_fullboard'.$value->id);
+            $value->transport_pergi = $request->get('transport_pergi'.$value->id);
+            $value->transport_pulang = $request->get('tranposrt_pulang'.$value->id);
+            $value->save();
+        }
         
-        return redirect('surat_tugas')->with('success', 'Information has been added');
+        return redirect('surat_tugas')->with('success', 'Data berhasil disimpan');
     }
 
     /**
@@ -1043,6 +1041,30 @@ class SuratTugasController extends Controller
         //     'model_rincian', 'model_kwitansi', 'model_kwitansi_rill',
         //     'model_kwitansi_rill_total', 'model', 
         //     'unit_kerja', 'pegawai', 'mak'));
+    }
+
+    public function print_kwitansi_pelatihan($id)
+    {
+        $real_id = Crypt::decrypt($id);
+        $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $model = \App\SuratTugas::find($model_rincian->id_surtug);
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
+        $unit_kerja_spd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_spd)->first();
+        if($model->sumber_anggaran==2) 
+            $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop.'00')->first();
+        $mak = \App\MataAnggaran::where('id', '=', $model->mak)->first();
+        $list_anggota = \App\SuratTugasPesertaPelatihan::where('id_surtug', '=', $real_id)->get();
+    
+        $pdf = PDF::loadView('surat_tugas.print_kwitansi_pelatihan', compact('real_id', 
+        'model_rincian', 'model', 
+        'unit_kerja', 'unit_kerja_spd', 'mak', 'list_anggota'))->setPaper('a4', 'landscape');
+
+        $nama_file = 'kwitansi_'.$model_rincian->nomor_spd.'.pdf';
+        return $pdf->download($nama_file);
+        
+        // return view('surat_tugas.print_kwitansi_pelatihan',compact('real_id', 
+        //     'model_rincian', 'model', 
+        //     'unit_kerja', 'unit_kerja_spd', 'mak', 'list_anggota'));
     }
 
     /**

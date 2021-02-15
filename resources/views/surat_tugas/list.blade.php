@@ -75,9 +75,15 @@
                         </td>
                         <td class="text-center">
                             @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                                <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
-                                    <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                                @if($data->SuratIndukRel->jenis_st==5)
+                                    <a href="{{ action('SuratTugasController@print_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
+                                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                                @else
+                                    <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
+                                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                                @endif
                                 
+
                                 @if($data['status_aktif']<=5)
                                     @if($data->SuratIndukRel->jenis_st==5)
                                         <a href="{{ action('SuratTugasController@insert_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">

@@ -64,46 +64,45 @@
                     </table>
 
                     <b>Daftar Biaya</b> -
-                    &nbsp <a href="#" id="add-biaya" data-toggle="modal" v-on:click="addRincian" data-target="#form_biaya">Tambah Rincian Biaya &nbsp &nbsp<i class="icon-plus text-info"></i></a>
                     <div class="table-responsive">
-                        <table class="m-b-0 table-bordered table-sm" style="min-width:100%">
+                        <table class="m-b-0 table-bordered" style="min-width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th class="text-center">Rincian</th>
-                                    <th class="text-center">Biaya</th>
-                                    <th class="text-center">Apakah Pengeluaran Rill?</th>
+                                    <th rowspan="2">No</th>
+                                    <th rowspan="2">Nama Pelaksana</th>
+                                    <th rowspan="2" class="text-center">Asal Penugasan</th>
+                                    <th rowspan="2" class="text-center">Biaya Uang Harian Perjadin</th>
+                                    <th rowspan="2" class="text-center">Biaya Uang Harian Fullboard</th>
+                                    <th colspan="2" class="text-center">Transport (PP)</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Asal (Rp)</th>
+                                    <th class="text-center">Tujuan (Rp)</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                <tr v-for="(data, index) in rincian" :key="data.id">
-                                    <td>
-                                        <template v-if="is_delete(data.id)">
-                                            <a :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                                        </template>
-                                        
-                                        <template v-if="!is_delete(data.id)">
-                                            <a :data-id="data.id" v-on:click="delDataTemp(index)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                                        </template>
-                                        
-                                        <a href="#" role="button" v-on:click="updateRincian" data-toggle="modal" 
-                                                    :data-id="data.id" :data-index="index" :data-rincian="data.rincian" 
-                                                    :data-anggaran="data.anggaran" :data-is_rill="data.is_rill"
-                                                    data-target="#form_biaya"> <i class="icon-pencil"></i></a>
-                                        @{{ index+1 }}
-                                    </td>
-                                    <td>@{{ data.rincian }}<input type="hidden" :name="'u_rincian'+data.id" v-model="data.rincian"></td>
-                                    <td>@{{ data.anggaran }}<input type="hidden" :name="'u_anggaran'+data.id" v-model="data.anggaran"></td>
-                                    <td>
-                                    @{{ (data.is_rill==0) ? "Tidak" : "Ya" }}
-                                    <input type="hidden" :name="'u_is_rill'+data.id" v-model="data.is_rill"></td>
-                                </tr>
+                                @foreach($list_anggota as $key=>$value)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $value->nama }}</td>
+                                        @php 
+                                            $uker = \App\UnitKerja::where('kode', '=', $value->unit_kerja)->first();
+                                        @endphp
+                                        <td>
+                                            @if($uker!=null)
+                                                {{ $uker->nama }}
+                                            @endif
+                                        </td>
+                                        <td><input type="number" class="form-control form-control-sm" name="{{ 'biaya_perjadin'.$value->id }}" value="{{ $value->biaya_perjadin }}"></td>
+                                        <td><input type="number" class="form-control form-control-sm" name="{{ 'biaya_fullboard'.$value->id }}" value="{{ $value->biaya_fullboard }}"></td>
+                                        <td><input type="number" class="form-control form-control-sm" name="{{ 'transport_pergi'.$value->id }}" value="{{ $value->transport_pergi }}"></td>
+                                        <td><input type="number" class="form-control form-control-sm" name="{{ 'tranposrt_pulang'.$value->id }}" value="{{ $value->transport_pulang }}"></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <br/>
                         <button type="submit" class="btn btn-primary pull-right">Simpan</button>
-                        <input type="hidden" name="total_utama" id="total_utama" v-model="total_utama">
                     </div>
                 </div>
             </div>
@@ -140,16 +139,7 @@
         el: "#app_vue",
         data:  {
             enc_id: {!! json_encode($id) !!},
-            model_kwitansi:  {!! json_encode($model_kwitansi) !!},
-            total_utama: 1,
-            rincian: [],
-            cur_rincian: {
-                rincian: '',
-                anggaran: '',
-                is_rill: 0,
-                id: '',
-                index: ''
-            },
+           
         },
         computed: {
             pathname: function () {
