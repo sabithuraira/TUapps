@@ -17,7 +17,7 @@
     
         <div class="card">
             <div class="row clearfix">
-                <div class="col-lg-5 col-md-12">
+                <div class="col-lg-6 col-md-12">
                     @include('home.random_profile')
                 </div>
             </div>

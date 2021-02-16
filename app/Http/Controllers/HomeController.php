@@ -34,7 +34,9 @@ class HomeController extends Controller
     public function dashboard(Request $request)
     {
         $random_user = \App\UserModel::inRandomOrder()->first();
-        return view('home.dashboard',compact('random_user'));
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
+        return view('home.dashboard',compact(
+            'random_user', 'unit_kerja'));
     }
 
     protected function attemptLogin($params)

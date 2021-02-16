@@ -7,28 +7,39 @@
     </div>
     <div class="body">
         <div class="row">
-            <div class="col-4 text-left">NIP</div>
-            <div class="col-8 text-left">: {{ $random_user->nip_baru }}</div>
+            <div class="col-5 text-left">NIP</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">{{ $random_user->nip_baru }}</div>
         </div>
         
         <div class="row">
-            <div class="col-4 text-left">NIP Lama</div>
-            <div class="col-8 text-left">: {{ $random_user->email }}</div>
+            <div class="col-5 text-left">NIP Lama</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">{{ $random_user->email }}</div>
         </div>
         
         <div class="row">
-            <div class="col-4 text-left">Unit Kerja</div>
-            <div class="col-8 text-left">: {{ $random_user->nmorg }}</div>
+            <div class="col-5 text-left">Unit Kerja</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">BPS {{ $unit_kerja->nama }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-5 text-left">Organisasi Unit Kerja</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">{{ $random_user->nmorg }}</div>
         </div>
         
         <div class="row">
-            <div class="col-4 text-left">Jabatan / Gol</div>
-            <div class="col-8 text-left">: {{ $random_user->nmjab }} / {{ $random_user->nmgol }}</div>
+            <div class="col-5 text-left">Jabatan / Gol</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">{{ $random_user->nmjab }} / {{ $random_user->nmgol }}</div>
         </div>
         
         <div class="row">
-            <div class="col-4 text-left">Wilayah</div>
-            <div class="col-8 text-left">: {{ $random_user->nmwil }}</div>
+            <div class="col-5 text-left">Wilayah</div>
+            <div class="col-1">:</div>
+            <div class="col-6 text-left">{{ $random_user->nmwil }}</div>
         </div>
         <hr>
         <div class="row">

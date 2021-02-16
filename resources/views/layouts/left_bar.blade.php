@@ -40,6 +40,10 @@
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">   
+                            <li class="{{ (request()->is('dashboard*')) ? 'active' : '' }}">
+                                <a href="{{ url('dashboard') }}" > <i class="icon-speedometer"></i><span>Dashboard</span></a>
+                            </li>
+
                             <li class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('iki*')) ? 'active' : '' }}">
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                                 <ul>
@@ -61,24 +65,6 @@
                             <li class="{{ (request()->is('pegawai_anda*')) ? 'active' : '' }}">
                                 <a href="{{ url('pegawai_anda') }}" > <i class="icon-users"></i><span>Pegawai Anda</span></a>
                             </li>
-
-                            <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
-                                <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Rapat/Pertemuan</span></a>
-                                <ul>                                  
-                                    <li class="{{ request()->is('meeting') ? 'active' : '' }}"><a href="{{url('meeting')}}">Daftar</a></li>
-                                    <li class="{{ request()->is('meeting/kalender') ? 'active' : '' }}"><a href="{{url('meeting/kalender')}}">Kalender</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="{{ (request()->is('surat_km*')) ? 'active' : '' }}">
-                                <a href="{{ url('surat_km') }}" > <i class="icon-users"></i><span>Surat Menyurat</span></a>
-                            </li>
-                            
-                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
-                            <li class="{{ (request()->is('pemegang_bmn*')) ? 'active' : '' }}">
-                                <a href="{{ url('pemegang_bmn') }}" > <i class="icon-basket-loaded"></i><span>Pemegang BMN</span></a>
-                            </li>
-                            @endhasanyrole
 
                             @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                             <li class="{{ (request()->is('surat_tugas*')) ? 'active' : '' }}">
@@ -102,6 +88,24 @@
                                 </ul>
                             </li>
                             @endhasanyrole
+                            
+                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
+                            <li class="{{ (request()->is('pemegang_bmn*')) ? 'active' : '' }}">
+                                <a href="{{ url('pemegang_bmn') }}" > <i class="icon-basket-loaded"></i><span>Pemegang BMN</span></a>
+                            </li>
+                            @endhasanyrole
+
+                            <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Rapat/Pertemuan</span></a>
+                                <ul>                                  
+                                    <li class="{{ request()->is('meeting') ? 'active' : '' }}"><a href="{{url('meeting')}}">Daftar</a></li>
+                                    <li class="{{ request()->is('meeting/kalender') ? 'active' : '' }}"><a href="{{url('meeting/kalender')}}">Kalender</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="{{ (request()->is('surat_km*')) ? 'active' : '' }}">
+                                <a href="{{ url('surat_km') }}" > <i class="icon-users"></i><span>Surat Menyurat</span></a>
+                            </li>
 
                             @role('superadmin')
                                 <li class="{{ (request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*')) ? 'active' : '' }}">
