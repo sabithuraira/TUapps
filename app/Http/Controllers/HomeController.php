@@ -28,7 +28,13 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        return redirect('ckp');
+        return redirect('dashboard');
+    }
+
+    public function dashboard(Request $request)
+    {
+        $random_user = \App\UserModel::inRandomOrder()->first();
+        return view('home.dashboard',compact('random_user'));
     }
 
     protected function attemptLogin($params)
@@ -40,7 +46,7 @@ class HomeController extends Controller
 
     protected function sendLoginResponse($params)
     {
-        return redirect('hai');
+        return redirect('dashboard');
     }
 
     public function downloadSp2020(Request $request)
