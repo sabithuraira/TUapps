@@ -43,8 +43,13 @@
         </div>
         <hr>
         <div class="row">
+            <div class="col-12">
+                <h5>Tahun {{ date('Y') }}</h5>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-4">
-                <h5>---</h5>
+                <h5>{{ $random_user->getJumlahDl() }}</h5>
                 <small>Hari DL</small>
             </div>
             <div class="col-4">
