@@ -20,6 +20,9 @@
                 <div class="col-lg-6 col-md-12">
                     @include('home.random_profile')
                 </div>
+                <div class="col-lg-6 col-md-12">
+                    @include('home.list_unit_kerja')
+                </div>
             </div>
         </div>
     </div>
