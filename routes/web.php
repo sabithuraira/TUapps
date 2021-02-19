@@ -150,7 +150,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
-    Route::get('dashboard', 'HomeController@dashboard')->name('dashboard');
+    Route::get('dashboard/index', 'DashboardController@index');
     Route::get('download_sp2020', 'HomeController@downloadSp2020');
 });
 

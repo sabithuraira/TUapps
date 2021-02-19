@@ -110,12 +110,41 @@ class SuratTugasRincian extends Model
 		$sql="SELECT count(sr.id) as total 
 			FROM surat_tugas_rincian as sr, surat_tugas as s  
 			WHERE 
-			sr.id_surtug = s.id AND s.mak IS NOT NULL AND
+			sr.id_surtug = s.id AND s.mak IS NOT NULL AND 
+			s.jenis_st <> 4 AND
 			nip='".$nip."' AND status_aktif<>2 
 			AND  (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			('".$t_end."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			(tanggal_mulai>'".$t_start."' AND tanggal_selesai<'".$t_end."'))";
 
+		$result = DB::select(DB::raw($sql));
+        return $result;
+	}
+
+	public function rekapUnitKerja($uk, $month, $year){
+		$d=cal_days_in_month(CAL_GREGORIAN,$month,$year);
+		
+		$label_select = [];
+		$label_case = [];
+
+		for($i=1;$i<=$d;$i++){
+			$label_select[] = 'day'.$i;
+			$label_case[] = "COUNT(CASE WHEN ($i BETWEEN DAY(tanggal_mulai) AND DAY(tanggal_selesai)) THEN 0 END) AS day".$i;
+		}
+		
+		$sql = "SELECT nip, ".join(",", $label_select)."
+			FROM (
+				SELECT nip_baru as nip, users.name as nama, ".join(",", $label_case)."
+			FROM users 
+			LEFT JOIN surat_tugas_rincian ON users.nip_baru=surat_tugas_rincian.nip 
+				AND YEAR(tanggal_mulai)=".$year." 
+				AND MONTH(tanggal_mulai)=".$month." 
+				AND surat_tugas_rincian.nip IS NOT NULL 
+				WHERE kdkab='".$uk."' 
+			GROUP BY nip, name
+				ORDER BY users.id
+			) AS CA";
+			
 		$result = DB::select(DB::raw($sql));
         return $result;
 	}

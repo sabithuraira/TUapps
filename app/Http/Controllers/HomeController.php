@@ -28,17 +28,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        return redirect('dashboard');
-    }
-
-    public function dashboard(Request $request)
-    {
-        $random_user = \App\UserModel::inRandomOrder()->first();
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
-        $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
-
-        return view('home.dashboard',compact(
-            'random_user', 'unit_kerja', 'dl_per_uk'));
+        return redirect('dashboard/index');
     }
 
     protected function attemptLogin($params)
@@ -50,7 +40,7 @@ class HomeController extends Controller
 
     protected function sendLoginResponse($params)
     {
-        return redirect('dashboard');
+        return redirect('dashboard/index');
     }
 
     public function downloadSp2020(Request $request)

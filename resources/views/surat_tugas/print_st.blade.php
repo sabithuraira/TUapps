@@ -161,7 +161,7 @@
                 <td width="15%"></td>
             </tr>
 
-            @foreach ($list_anggota as $v)
+            @foreach ($list_anggota as $k=>$v)
                 @if (!$loop->first)
                     <tr>
                         <td width="10%"></td>
@@ -169,9 +169,9 @@
                         <td width="3%" valign="top"></td>
                         <td width="47%">
                             @if($v->jenis_petugas==2)
-                                2. {{ $v->nama }} / Mitra
+                                {{ $k+1 }}. {{ $v->nama }} / Mitra
                             @else   
-                                2. {{ $v->nama }} / {{ $v->jabatan }} 
+                                {{ $k+1 }}. {{ $v->nama }} / {{ $v->jabatan }} 
                             @endif
                         </td>
                         <td width="15%"></td>

@@ -258,6 +258,7 @@
                             // console.log(data.result[0].total)
                             if(data.result[0].total==0){
                                 self.setAllNama()
+                                self.setAllPejabat()
                                 ////////
                                 if(self.cur_rincian.id){
                                     self.rincian[self.cur_rincian.index] = {
