@@ -41,8 +41,13 @@
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">   
                             <li class="{{ (request()->is('dashboard*')) ? 'active' : '' }}">
-                                <a href="{{ url('dashboard') }}" > <i class="icon-speedometer"></i><span>Dashboard</span></a>
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i> <span>Dashboard</span></a>
+                                <ul>
+                                    <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a href="{{ url('dashboard/index') }}">Overview</a></li>
+                                    <li class="{{ request()->is('dashboard/rekap_dl*') ? 'active' : '' }}"><a href="{{ url('dashboard/rekap_dl') }}">Kalender DL</a></li>
+                                </ul>
                             </li>
+
 
                             <li class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('iki*')) ? 'active' : '' }}">
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>

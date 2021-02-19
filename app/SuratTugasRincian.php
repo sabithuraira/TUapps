@@ -121,7 +121,7 @@ class SuratTugasRincian extends Model
         return $result;
 	}
 
-	public function rekapUnitKerja($uk, $month, $year){
+	public static function rekapUnitKerja($uk, $month, $year){
 		$d=cal_days_in_month(CAL_GREGORIAN,$month,$year);
 		
 		$label_select = [];
@@ -132,7 +132,7 @@ class SuratTugasRincian extends Model
 			$label_case[] = "COUNT(CASE WHEN ($i BETWEEN DAY(tanggal_mulai) AND DAY(tanggal_selesai)) THEN 0 END) AS day".$i;
 		}
 		
-		$sql = "SELECT nip, ".join(",", $label_select)."
+		$sql = "SELECT nip, nama, ".join(",", $label_select)."
 			FROM (
 				SELECT nip_baru as nip, users.name as nama, ".join(",", $label_case)."
 			FROM users 
@@ -141,7 +141,7 @@ class SuratTugasRincian extends Model
 				AND MONTH(tanggal_mulai)=".$month." 
 				AND surat_tugas_rincian.nip IS NOT NULL 
 				WHERE kdkab='".$uk."' 
-			GROUP BY nip, name
+			GROUP BY nip_baru, name
 				ORDER BY users.id
 			) AS CA";
 			
