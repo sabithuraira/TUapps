@@ -43,6 +43,7 @@ class UserModel extends Model
                     ->where('surat_tugas.sumber_anggaran', '<>', 3)
                     ->where('surat_tugas_rincian.nip', '=', $nip)
                     ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                    ->whereNotNull('surat_tugas_rincian.nomor_spd')
                     ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
                     ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
                     
@@ -52,6 +53,7 @@ class UserModel extends Model
                     ->where('surat_tugas.sumber_anggaran', '<>', 3)
                     ->where('surat_tugas_peserta_pelatihan.nip', '=', $nip)
                     ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                    ->whereNotNull('surat_tugas_rincian.nomor_spd')
                     ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
                     ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
 

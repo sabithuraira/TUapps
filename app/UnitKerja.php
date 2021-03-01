@@ -38,13 +38,12 @@ class UnitKerja extends Model
                 FROM `unit_kerjas` 
                 LEFT JOIN  surat_tugas_rincian ON 
                     surat_tugas_rincian.unit_kerja=unit_kerjas.kode AND 
-                    surat_tugas_rincian.jenis_petugas=1 AND 
+                    surat_tugas_rincian.nip IS NOT NULL AND
                     surat_tugas_rincian.status_aktif<>2 AND 
-                    YEAR(surat_tugas_rincian.tanggal_mulai)=2021 AND 
+				    surat_tugas_rincian.nomor_spd IS NOT NULL AND 
                     CURDATE() BETWEEN surat_tugas_rincian.tanggal_mulai AND surat_tugas_rincian.tanggal_selesai 
                 LEFT JOIN surat_tugas ON surat_tugas.id=surat_tugas_rincian.id_surtug AND 
-                    surat_tugas.sumber_anggaran<>3 
-                
+                    surat_tugas.sumber_anggaran IN (1,2,4) AND surat_tugas.mak IS NOT NULL 
                 GROUP BY unit_kerjas.id, unit_kerjas.nama";
 
         $result = DB::select(DB::raw($sql));

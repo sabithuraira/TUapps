@@ -44,9 +44,6 @@ class DashboardController extends Controller
         }
 
         $datas = \App\SuratTugasRincian::rekapUnitKerja($uk, $month, $year);
-
-        // print_r($datas);die();
-
         return view('dashboard.rekap_dl',compact(
             'datas', 'month', 'year', 'uk', 'list_libur'));
     }

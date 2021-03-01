@@ -222,7 +222,10 @@
             <td width="3%" valign="top">:</td>
             <td width="47%">
                 @if ($model->sumber_anggaran!=3)
-                    {{ $model->MakRel->KodeMak }}.{{ $model->listKodeJenis[$model->jenis_st] }}
+                    {{ $model->MakRel->KodeMak }}
+                    @if ($model->jenis_st!=4)
+                        .{{ $model->listKodeJenis[$model->jenis_st] }}
+                    @endif
                 @else
                     -
                 @endif

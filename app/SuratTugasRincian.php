@@ -134,14 +134,21 @@ class SuratTugasRincian extends Model
 		
 		$sql = "SELECT nip, nama, ".join(",", $label_select)."
 			FROM (
-				SELECT nip_baru as nip, users.name as nama, ".join(",", $label_case)."
+				SELECT users.id, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
 			FROM users 
 			LEFT JOIN surat_tugas_rincian ON users.nip_baru=surat_tugas_rincian.nip 
 				AND YEAR(tanggal_mulai)=".$year." 
 				AND MONTH(tanggal_mulai)=".$month." 
 				AND surat_tugas_rincian.nip IS NOT NULL 
-				WHERE kdkab='".$uk."' 
-			GROUP BY nip_baru, name
+				AND surat_tugas_rincian.status_aktif<>2  
+				AND surat_tugas_rincian.nomor_spd IS NOT NULL
+			LEFT JOIN surat_tugas ON surat_tugas.id=surat_tugas_rincian.id_surtug  
+				AND surat_tugas.sumber_anggaran IN (1,2,4)  
+				AND surat_tugas.mak IS NOT NULL 
+				 
+			WHERE kdkab='".$uk."' 
+				
+			GROUP BY nip_baru, name, users.id
 				ORDER BY users.id
 			) AS CA";
 			
