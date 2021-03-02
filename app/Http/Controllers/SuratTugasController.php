@@ -906,6 +906,7 @@ class SuratTugasController extends Controller
     {
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $user_ttd = \App\UserModel::where('nip_baru', '=', $model_rincian->pejabat_ttd_nip)->first();
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
         $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
@@ -916,7 +917,7 @@ class SuratTugasController extends Controller
 
         $pdf = PDF::loadView('surat_tugas.print_st', compact('real_id', 
             'model_rincian', 'model', 'unit_kerja', 'unit_kerja_ttd', 'list_anggota',
-            'ketua'))->setPaper('a4', 'potrait');
+            'ketua', 'user_ttd'))->setPaper('a4', 'potrait');
 
         $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
         return $pdf->download($nama_file);
@@ -929,6 +930,7 @@ class SuratTugasController extends Controller
     {
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
+        $user_ttd = \App\UserModel::where('nip_baru', '=', $model_rincian->pejabat_ttd_nip)->first();
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja)->first();
         $unit_kerja_ttd = \App\UnitKerja::where('kode', '=', $model_rincian->unit_kerja_ttd)->first();
@@ -936,7 +938,7 @@ class SuratTugasController extends Controller
     
         $pdf = PDF::loadView('surat_tugas.print_st_pelatihan', compact('real_id', 
             'model_rincian', 'model', 'unit_kerja', 'unit_kerja_ttd', 
-            'list_anggota'))->setPaper('a4', 'potrait');
+            'list_anggota', 'user_ttd'))->setPaper('a4', 'potrait');
 
         $nama_file = 'st_'.$model_rincian->nomor_st.'.pdf';
         return $pdf->download($nama_file);

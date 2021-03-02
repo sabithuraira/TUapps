@@ -249,12 +249,30 @@
                 {{ $unit_kerja->ibu_kota }}
             @endif    
             , {{ date('d', strtotime($model_rincian->created_at)) }} {{ config('app.months')[date('n', strtotime($model_rincian->created_at))] }} {{ date('Y', strtotime($model_rincian->created_at)) }}<br/>
+            
+            <!-- cek jika unit kerja bukan kepala dari unit kerja -->
+            @if($unit_kerja_ttd!=null)
+                @if($unit_kerja_ttd->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    an. 
+                @endif
+            @else
+                @if($unit_kerja->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    an. 
+                @endif
+            @endif
+
             Kepala Badan Pusat Statistik<br/> 
             
             @if($unit_kerja_ttd!=null)
                  {{ $unit_kerja_ttd->nama }}
+                 @if($unit_kerja_ttd->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    <br/><br/>{{ $user_ttd->nmjab }}
+                @endif
             @else
                  {{ $unit_kerja->nama }}
+                 @if($unit_kerja->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    <br/><br/>{{ $user_ttd->nmjab }}
+                @endif
             @endif
             <br/>
             <br/>

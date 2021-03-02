@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Illuminate\Support\Facades\Crypt;
 
 class DashboardController extends Controller
 {
@@ -48,4 +49,12 @@ class DashboardController extends Controller
             'datas', 'month', 'year', 'uk', 'list_libur'));
     }
 
+    public function profile($id){
+        $real_id = Crypt::decrypt($id);
+        $model = \App\UserModel::where('nip_baru', '=', $real_id)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
+        return view('dashboard.profile', compact(
+            'id', 'model', 'unit_kerja'
+        ));
+    }
 }

@@ -96,7 +96,9 @@
                                 @foreach($datas as $key=>$value)
                                     <tr >
                                         <td>{{ $key+1 }}.</td>
-                                        <td>{{ $value->nama }}</td>
+                                        <td>
+                                            <a href="{{ action('DashboardController@profile', Crypt::encrypt($value->nip)) }}">{{ $value->nama }}</a>
+                                        </td>
                                         @for($i=1;$i<=$d;++$i)
                                             @php 
                                                 $var_name = "day".$i;
