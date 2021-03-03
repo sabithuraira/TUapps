@@ -24,13 +24,14 @@ class SuratTugasRincian extends Model
     public function getListTingkatBiayaAttribute()
     {
         return array(
-            1 => 'A', 2 => 'B', 3 => 'C'
+            0=> '', 1 => 'A', 2 => 'B', 3 => 'C'
         );
     }
 	
     public function getListKendaraanAttribute()
     {
         return array( 
+			0 => '',
 			1 => 'Kendaraan Umum', 
 			2 => 'Kendaraan Dinas',
 			3 => 'Kendaraan Pesawat',

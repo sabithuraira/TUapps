@@ -4,7 +4,7 @@
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>            
     <li class="breadcrumb-item"><a href="{{url('log_book')}}"> CKP</a></li>                      
-    <li class="breadcrumb-item">Rekapitulasi CKP</li>
+    <li class="breadcrumb-item">Rekapitulasi DL</li>
 </ul>
 @endsection
 
