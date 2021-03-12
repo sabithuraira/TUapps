@@ -266,12 +266,12 @@
             @if($unit_kerja_ttd!=null)
                  {{ $unit_kerja_ttd->nama }}
                  @if($unit_kerja_ttd->kepala_nip!=$model_rincian->pejabat_ttd_nip)
-                    <br/><br/>{{ $user_ttd->nmjab }}
+                    <br/>{{ $user_ttd->nmjab }}
                 @endif
             @else
                  {{ $unit_kerja->nama }}
                  @if($unit_kerja->kepala_nip!=$model_rincian->pejabat_ttd_nip)
-                    <br/><br/>{{ $user_ttd->nmjab }}
+                    <br/>{{ $user_ttd->nmjab }}
                 @endif
             @endif
             <br/>
