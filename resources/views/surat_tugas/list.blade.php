@@ -33,6 +33,8 @@
                     <tr>
                         <td class="text-center">
                             <u>{{$data['nomor_st']}}</u><br/>
+                            
+                            {{ $data->SuratIndukRel->tugas }}<br/>
                             {{$data['tujuan_tugas']}}
                         </td>
                         <td class="text-center">
