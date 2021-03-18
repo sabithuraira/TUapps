@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
-    <li class="breadcrumb-item">Daftar Surat Tugas</li>
+    <li class="breadcrumb-item">Daftar cuti</li>
 </ul>
 @endsection
 
@@ -17,23 +17,16 @@
 
     <div class="card" id="app_vue">
         <div class="body">
-            <form action="{{url('surat_tugas')}}" method="get">
-                <a href="{{action('SuratTugasController@create')}}" class="'btn btn-info btn-sm"><i
-                        class='fa fa-plus'></i> Surat Tugas</a>
-                <a href="{{action('SuratTugasController@create_tim')}}" class="'btn btn-info btn-sm"><i
-                        class='fa fa-plus'></i> Surat Tugas Tim</a>
-                <a href="{{action('SuratTugasController@create_pelatihan')}}" class="'btn btn-info btn-sm"><i
-                        class='fa fa-plus'></i> Surat Tugas Penyelenggara Pelatihan</a>
-
+            <form action="{{url('cuti')}}" method="get">
+                <a href="{{action('CutiController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>
+                    Cuti</a>
                 <button hidden name="action" type="submit" value="1"></button>
-                <button name="action" class="btn btn-success btn-sm float-right" type="submit" value="2"><i
-                        class="fa fa-file-excel-o"></i> Unduh Excel</button>
-
+                {{-- <button name="action" class="btn btn-success btn-sm float-right" type="submit" value="2"><i
+                        class="fa fa-file-excel-o"></i> Unduh Excel</button> --}}
                 <br /><br />
-                <span class="float-right small"><i>Data unduhan sesuai filter pencarian</i></span>
+                {{-- <span class="float-right small"><i>Data unduhan sesuai filter pencarian</i></span> --}}
                 <br />
                 @csrf
-
                 @if(Auth::user()->kdkab=='00')
                 <div class="row clearfix">
                     <div class="col-md-12 left">
@@ -79,7 +72,7 @@
             </form>
             <br />
             <section class="datas">
-                @include('surat_tugas.list')
+                @include('cuti.list')
             </section>
         </div>
     </div>

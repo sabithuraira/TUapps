@@ -9,133 +9,70 @@
         @else
         <thead>
             <tr>
-                <th class="text-center" rowspan="2">Ket Surat</th>
                 <th class="text-center" rowspan="2">
                     Pegawai<br />
-                    <span class="badge bg-dark text-white">K</span><small>=Ketua Tim</small>
-                    <span class="badge bg-dark text-white">A</span><small>=Anggota</small>
                 </th>
                 <th class="text-center" colspan="2">Tanggal</th>
-                <th class="text-center" rowspan="2">Status</th>
-                <th class="text-center" colspan="3">Cetak</th>
+                <th class="text-center" rowspan="2">Jenis Cuti</th>
+                <th class="text-center" rowspan="2">Lama Cuti<br />(Hari)</th>
+                <th class="text-center" colspan="2">Status</th>
+                <th class="text-center" rowspan="2">Print</th>
                 <th class="text-center" rowspan="2">Aksi</th>
             </tr>
             <tr>
                 <th class="text-center">Mulai</th>
                 <th class="text-center">Selesai</th>
-                <th class="text-center">Surat Tugas</th>
-                <th class="text-center">SPD</th>
-                <th class="text-center">Kwitansi</th>
+                <th class="text-center">Atasan</th>
+                <th class="text-center">Pejabat</th>
             </tr>
         </thead>
         <tbody>
+            {{-- {{ json_encode($datas) }} --}}
             @foreach($datas as $data)
-
-            @if ($data['status_aktif']!=2)
             <tr>
                 <td class="text-center">
-                    <u>{{$data['nomor_st']}}</u><br />
-                    {{$data['tujuan_tugas']}}
-                </td>
-                <td class="text-center">
                     <u>{{ $data['nip'] }}</u><br />
-                    {{ $data['nama'] }}
-
-                    @if ($data['kategori_petugas']==1)
-                    <span class="badge bg-dark text-white">K</span>
-                    @elseif($data['kategori_petugas']==2)
-                    <span class="badge bg-dark text-white">A</span>
-                    @endif
-                </td>
-                <td>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
-                <td>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
+                    {{ $data['nama'] }}</td>
+                <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
+                <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
+                <td class="text-center">{{ $data['jenis_cuti'] }}</td>
+                <td class="text-center">{{ $data['lama_cuti'] }}</td>
                 <td class="text-center">
-                    {!! $data->listStatus[$data['status_aktif']] !!}<br />
+                    {!! $data->listStatus[$data['status_atasan']] !!}<br />
                     <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                        data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_aktif'] }}"
-                        data-target="#set_status">
+                        data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_atasan'] }}"
+                        data-target="#set_status_atasan">
                         <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
                     </a>
                 </td>
-
                 <td class="text-center">
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{action('SuratTugasController@print_st_pelatihan', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @else
-                    <a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @endif
+                    {!! $data->listStatus[$data['status_pejabat']] !!}<br />
+                    <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
+                        data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_pejabat'] }}"
+                        data-target="#set_status_pejabat">
+                        <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
+                    </a>
                 </td>
                 <td class="text-center">
-                    @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i
+                    <a href="{{action('CutiController@print_cuti', Crypt::encrypt($data['id']))}}"><i
                             class="fa fa-file-pdf-o text-info"></i></a>
-                    @else
-                    <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @endif
-                    @endif
                 </td>
-                <td class="text-center">
-                    @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{ action('SuratTugasController@print_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
-                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br />
-                    @else
-                    <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
-                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br />
-                    @endif
 
-
-                    @if($data['status_aktif']<=5) @if($data->SuratIndukRel->jenis_st==5)
-                        <a
-                            href="{{ action('SuratTugasController@insert_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
-                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
-                        </a>
-                        @else
-                        <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
-                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
-                        </a>
-                        @endif
-                        @endif
-                        @endif
-                </td>
                 <td class="text-center">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                            data-id="{{ Crypt::encrypt($data['id']) }}" data-target="#set_aktif">
+                            data-id="{{ Crypt::encrypt($data->id) }}" data-target="#set_aktif">
                             <i class="icon-trash text-danger"></i>
-                            <p class='text-danger small'>Batalkan</p>
+                            <p class='text-danger small'>Hapus</p>
                         </a>
 
-                        <a href="{{ action('SuratTugasController@edit', Crypt::encrypt($data['id']))}}">
+                        <a href="{{ action('CutiController@edit', Crypt::encrypt($data['id']))}}">
                             <i class="icon-pencil text-primary"></i>
                             <p class='text-primary small'>Edit</p>
                         </a>
                     </div>
                 </td>
             </tr>
-            @else
-            <tr>
-                <td class="text-center">
-                    <u>{{$data['nomor_st']}}</u><br />
-                    {{$data['tujuan_tugas']}}
-                </td>
-                <td class="text-center">
-                    <u>{{$data['nip']}}</u><br />
-                    {{$data['nama']}}
-
-                    @if ($data['kategori_petugas']==1)
-                    <span class="badge bg-dark text-white">K</span>
-                    @elseif($data['kategori_petugas']==2)
-                    <span class="badge bg-dark text-white">K</span>
-                    @endif
-                </td>
-                <td class="text-center" colspan="8">DIBATALKAN</td>
-            </tr>
-            @endif
             @endforeach
         </tbody>
         @endif
@@ -144,7 +81,7 @@
     {{ $datas->links() }}
 </div>
 
-<div class="modal" id="set_status" tabindex="-1" role="dialog">
+<div class="modal" id="set_status_atasan" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -156,7 +93,25 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" v-on:click="setStatus">Ya</button>
+                <button type="button" class="btn btn-primary" v-on:click="setStatus_atasan">Ya</button>
+                <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="set_status_pejabat" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Rubah status menjadi:
+                <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" v-model="st_status">
+                    <option v-for="(value, index) in list_label_status" :value="index">
+                        @{{ value }}
+                    </option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" v-on:click="setStatus_pejabat">Ya</button>
                 <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
             </div>
         </div>
@@ -166,10 +121,15 @@
 <div class="modal" id="set_aktif" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-body">Anda yakin ingin membatalkan surat tugas ini? Setelah pembatalan data ini tidak
+            <div class="modal-body">Anda yakin ingin menghapus cuti ini? Setelah pembatalan data ini tidak
                 dapat lagi digunakan.</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" v-on:click="setAktif">Ya</button>
+                <button type="button" class="btn btn-primary" v-on:click="setDelete">Ya</button>
+                {{-- <form method="POST" action="/cuti/{{ $data->id }}">
+                {{ csrf_field() }}
+                {{ method_field('DELETE') }}
+                <button type="submit" class="btn btn-primary">Ya</button>
+                </form> --}}
                 <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
             </div>
         </div>
@@ -232,13 +192,12 @@
                 self.st_status = event.currentTarget.getAttribute('data-status');
             }
         },
-        setStatus: function (jenis) {
+        setStatus_atasan: function ($tipe) {
             var self = this;
-            $('#set_pembayaran').modal('hide');
             $('#wait_progres').modal('show');
             $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
             $.ajax({
-                url :  self.pathname + '/set_status',
+                url :  self.pathname + '/set_status_atasan',
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -252,20 +211,38 @@
                 $('#wait_progres').modal('hide');
             });
         },
-        setAktif: function (jenis) {
+        setStatus_pejabat: function ($tipe) {
             var self = this;
-            $('#set_pembayaran').modal('hide');
             $('#wait_progres').modal('show');
             $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
             $.ajax({
-                url :  self.pathname + '/set_aktif',
+                url :  self.pathname + '/set_status_pejabat',
                 method : 'post',
                 dataType: 'json',
                 data:{
                     form_id_data: self.st_id,
+                    form_status_data: self.st_status,
                 },
             }).done(function (data) {
                 window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        setDelete: function (jenis) {
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+            $.ajax({
+                url :  self.pathname +"/"+ self.st_id,
+                method : 'DELETE',
+                dataType: 'json',
+                data:{
+                    id: self.st_id,
+                },
+            }).done(function (data) {
+                window.location.reload(true); 
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
