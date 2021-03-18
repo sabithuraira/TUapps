@@ -1,0 +1,24 @@
+BEGIN
+  IF EXISTS(SELECT * FROM opname_persediaan 
+    		WHERE id_barang = barang_id AND bulan = next_month 				AND tahun = next_year) 
+  THEN
+    UPDATE opname_persediaan,
+   	  (SELECT 
+      	(saldo_awal+saldo_tambah-saldo_kurang) as total_saldo,
+        (harga_awal+harga_tambah-harga_kurang) as total_harga    
+      FROM opname_persediaan 
+      WHERE id_barang = barang_id AND bulan = month AND tahun = 			year) AS prev_data 
+      SET saldo_awal = prev_data.total_saldo, harga_awal = 				prev_data.total_harga  
+      WHERE id_barang = barang_id AND bulan = next_month AND 			tahun = next_year ;
+  ELSE
+    INSERT INTO opname_persediaan 
+      (id_barang, nama_barang, bulan, saldo_awal, harga_awal, 		  saldo_tambah, harga_tambah, created_by, updated_by, 			tahun, saldo_kurang, harga_kurang) 
+    (SELECT id_barang, nama_barang, next_month, 
+        (saldo_awal+saldo_tambah-saldo_kurang),
+        (harga_awal+harga_tambah-harga_kurang),
+        0, 0 , user_id, user_id, next_year, 0, 0
+     FROM opname_persediaan 
+     WHERE id_barang = barang_id AND bulan = month 
+     	AND tahun = year);
+  END IF;
+END

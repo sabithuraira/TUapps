@@ -1,0 +1,8 @@
+SELECT sp2020_sls.*, p_kec.nmKec, p_desa.nmDesa 
+FROM sp2020_sls
+LEFT JOIN p_kec ON (p_kec.idKab = sp2020_sls.kd_kab AND p_kec.idKec = sp2020_sls.kd_kec)
+LEFT JOIN p_desa ON  (p_desa.idKab = sp2020_sls.kd_kab AND p_desa.idKec = sp2020_sls.kd_kec AND p_desa.idDesa=sp2020_sls.kd_desa)
+WHERE sp2020_sls.kd_kab='02'
+
+
+UPDATE `sp2020_sls` SET `dp_j_penduduk`=0 WHERE LENGTH(id_sls)=18 AND RIGHT(id_sls,2)>1
