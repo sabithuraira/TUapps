@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container" id="app_vue">
         <div class="row clearfix">
             <div class="col-lg-6 col-md-12">
                 <div class="card member-card">
@@ -78,7 +78,66 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Nilai CKP Bulanan 2021</h2>
+                    </div>
+                    <div class="body">
+                        <div id="line-chart" class="ct-chart"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('css')
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/chartist/css/chartist.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css') !!}">
+    <meta name="_token" content="{{csrf_token()}}" />
+    <meta name="csrf-token" content="@csrf">
+@endsection
+
+@section('scripts')
+    <script src="{!! asset('assets/bundles/chartist.bundle.js') !!}"></script>
+    <script src="{!! asset('lucid/assets/vendor/chartist/polar_area_chart.js') !!}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+
+<script>
+    var vm = new Vue({
+        el: "#app_vue",
+        data:  {
+            series_ckp: {!! json_encode($result_ckp) !!}
+        },
+        methods: {
+            setChart(){
+                var self = this;
+                options = {
+                    height: "300px",
+                    axisX: {
+                        showGrid: false
+                    },
+                    low: 0,
+                    high: 100,
+                    plugins: [
+                        Chartist.plugins.tooltip(),
+                    ]
+                };
+
+                var data_ckp = {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    series: [self.series_ckp,]
+                };
+
+                
+                new Chartist.Line('#line-chart', data_ckp, options);
+            },
+        }
+    });
+    
+
+    $(document).ready(function() {
+        vm.setChart();
+    });
+</script>
 @endsection

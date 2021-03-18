@@ -303,6 +303,7 @@
 
                 Kepala Badan Pusat Statistik<br />
 
+<<<<<<< HEAD
                 @if($unit_kerja_ttd!=null)
                 {{ $unit_kerja_ttd->nama }}
                 @if($unit_kerja_ttd->kepala_nip!=$model_rincian->pejabat_ttd_nip)
@@ -312,6 +313,19 @@
                 {{ $unit_kerja->nama }}
                 @if($unit_kerja->kepala_nip!=$model_rincian->pejabat_ttd_nip)
                 <br /><br />{{ $user_ttd->nmjab }}
+=======
+            Kepala Badan Pusat Statistik<br/> 
+            
+            @if($unit_kerja_ttd!=null)
+                 {{ $unit_kerja_ttd->nama }}
+                 @if($unit_kerja_ttd->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    <br/>{{ $user_ttd->nmjab }}
+                @endif
+            @else
+                 {{ $unit_kerja->nama }}
+                 @if($unit_kerja->kepala_nip!=$model_rincian->pejabat_ttd_nip)
+                    <br/>{{ $user_ttd->nmjab }}
+>>>>>>> 7d546657ff7a33cbe62a91e7aaabd26a7c81ab7a
                 @endif
                 @endif
                 <br />

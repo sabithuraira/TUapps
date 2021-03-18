@@ -7,6 +7,7 @@
             </tr>
         </thead>
         @else
+<<<<<<< HEAD
         <thead>
             <tr>
                 <th class="text-center" rowspan="2">Ket Surat</th>
@@ -30,6 +31,88 @@
         </thead>
         <tbody>
             @foreach($datas as $data)
+=======
+            <thead>
+                <tr>
+                    <th class="text-center" rowspan="2">Ket Surat</th>
+                    <th class="text-center" rowspan="2">
+                        Pegawai<br/>
+                        <span class="badge bg-dark text-white">K</span><small>=Ketua Tim</small> 
+                        <span class="badge bg-dark text-white">A</span><small>=Anggota</small>
+                    </th>
+                    <th class="text-center" colspan="2">Tanggal</th>
+                    <th class="text-center" rowspan="2">Status</th>
+                    <th class="text-center" colspan="3">Cetak</th>
+                    <th class="text-center" rowspan="2">Aksi</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Mulai</th>
+                    <th class="text-center">Selesai</th>
+                    <th class="text-center">Surat Tugas</th>
+                    <th class="text-center">SPD</th>
+                    <th class="text-center">Kwitansi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($datas as $data)
+                
+                    @if ($data['status_aktif']!=2)
+                    <tr>
+                        <td class="text-center">
+                            <u>{{$data['nomor_st']}}</u><br/>
+                            
+                            {{ $data->SuratIndukRel->tugas }}<br/>
+                            {{$data['tujuan_tugas']}}
+                        </td>
+                        <td class="text-center">
+                            <u>{{ $data['nip'] }}</u><br/>
+                            {{ $data['nama'] }}
+                            
+                            @if ($data['kategori_petugas']==1)
+                                <span class="badge bg-dark text-white">K</span>
+                            @elseif($data['kategori_petugas']==2)
+                                <span class="badge bg-dark text-white">A</span>
+                            @endif
+                        </td>
+                        <td>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
+                        <td>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
+                        <td class="text-center">
+                            {!! $data->listStatus[$data['status_aktif']] !!}<br/>
+                            <a href="#" role="button" v-on:click="sendStId" 
+                                    data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}"
+                                    data-status="{{ $data['status_aktif'] }}" 
+                                    data-target="#set_status">
+                                <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
+                            </a>
+                        </td>
+                        
+                        <td class="text-center">
+                            @if($data->SuratIndukRel->jenis_st==5)
+                                <a href="{{action('SuratTugasController@print_st_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                            @else
+                                <a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
+                                @if($data->SuratIndukRel->jenis_st==5)
+                                    <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                                @else
+                                    <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
+                                @endif
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
+                                @if($data->SuratIndukRel->jenis_st==5)
+                                    <a href="{{ action('SuratTugasController@print_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
+                                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                                @else
+                                    <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
+                                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
+                                @endif
+                                
+>>>>>>> 7d546657ff7a33cbe62a91e7aaabd26a7c81ab7a
 
             @if ($data['status_aktif']!=2)
             <tr>

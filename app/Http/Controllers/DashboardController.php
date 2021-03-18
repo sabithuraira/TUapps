@@ -18,7 +18,6 @@ class DashboardController extends Controller
         return view('dashboard.index',compact(
             'random_user', 'unit_kerja', 'dl_per_uk'));
     }
-
     
     public function rekap_dl(Request $request)
     {
@@ -50,11 +49,21 @@ class DashboardController extends Controller
     }
 
     public function profile($id){
+        $year = date('Y');
         $real_id = Crypt::decrypt($id);
         $model = \App\UserModel::where('nip_baru', '=', $real_id)->first();
+        $ckp_bulanan = new \App\CkpLogBulanan;
+        $list_ckp = $ckp_bulanan->RekapCkpPegawaiPerTahun($model->email, 2020);
+        $result_ckp = [];
+        for($i=1;$i<=12;++$i){
+            $name = 'bulan'.$i;
+            $result_ckp[] = $list_ckp[0]->$name;
+        }
+
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
+        // dd($list_ckp[0]);
         return view('dashboard.profile', compact(
-            'id', 'model', 'unit_kerja'
+            'id', 'model', 'unit_kerja', 'result_ckp'
         ));
     }
 }

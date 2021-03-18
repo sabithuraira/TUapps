@@ -27,11 +27,27 @@ class SuratTugasRincian extends Model
 			1 => 'A', 2 => 'B', 3 => 'C'
 		);
 	}
+<<<<<<< HEAD
 
 	public function getListKendaraanAttribute()
 	{
 		return array(
 			1 => 'Kendaraan Umum',
+=======
+	
+    public function getListTingkatBiayaAttribute()
+    {
+        return array(
+            0=> '', 1 => 'A', 2 => 'B', 3 => 'C'
+        );
+    }
+	
+    public function getListKendaraanAttribute()
+    {
+        return array( 
+			0 => '',
+			1 => 'Kendaraan Umum', 
+>>>>>>> 7d546657ff7a33cbe62a91e7aaabd26a7c81ab7a
 			2 => 'Kendaraan Dinas',
 			3 => 'Kendaraan Pesawat',
 		);
