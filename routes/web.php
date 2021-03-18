@@ -18,12 +18,17 @@
 
 Route::get('testa', function () {
     // print_r(Flysystem::connection('webdav')->listContents('remote.php/webdav/'));
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     $data = Flysystem::connection('webdav')->put('test.txt', 'hai hai');
     print_r("udahan");
     die();
 });
 
+<<<<<<< HEAD
 Route::group(['middleware' => ['role:superadmin']], function () {    
     Route::resource('uker','UkerController');
     Route::resource('uker4','Uker4Controller');
@@ -31,11 +36,21 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('rincian_kredit','RincianKreditController');
     Route::resource('angka_kredit','AngkaKreditController');
     Route::resource('user','UserController');
+=======
+Route::group(['middleware' => ['role:superadmin']], function () {
+    Route::resource('uker', 'UkerController');
+    Route::resource('uker4', 'Uker4Controller');
+    Route::resource('type_kredit', 'TypeKreditController');
+    Route::resource('rincian_kredit', 'RincianKreditController');
+    Route::resource('angka_kredit', 'AngkaKreditController');
+    Route::resource('user', 'UserController');
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
 
     //SPATIE
+<<<<<<< HEAD
     Route::resource('role','RoleController');
     Route::resource('permission','PermissionController');
     Route::resource('user_role','UserRoleController');
@@ -47,6 +62,19 @@ Route::group(['middleware' => ['role:superadmin']], function () {
 Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {    
     Route::resource('master_barang','MasterBarangController');
     Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
+=======
+    Route::resource('role', 'RoleController');
+    Route::resource('permission', 'PermissionController');
+    Route::resource('user_role', 'UserRoleController');
+
+    Route::get('sp2020sls/import_some', 'Sp2020SlsController@upload_some');
+    Route::post('sp2020sls/import_some', 'Sp2020SlsController@import_some');
+});
+
+Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
+    Route::resource('master_barang', 'MasterBarangController');
+    Route::resource('opname_persediaan', 'OpnamePersediaanController')->except(['show']);
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
     Route::post('opname_persediaan/load_rincian', 'OpnamePersediaanController@loadRincian');
     Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');
@@ -55,6 +83,7 @@ Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
     Route::post('opname_persediaan/delete_barang_masuk', 'OpnamePersediaanController@deleteBarangMasuk');
     Route::get('opname_persediaan/kartu_kendali', 'OpnamePersediaanController@kartu_kendali');
     Route::post('opname_persediaan/load_kartukendali', 'OpnamePersediaanController@loadKartukendali');
+<<<<<<< HEAD
     Route::post('opname_persediaan/print_persediaan',array('as'=>'print_persediaan','uses'=>'OpnamePersediaanController@print_persediaan'));
     Route::post('opname_persediaan/print_kartukendali',array('as'=>'print_kartukendali','uses'=>'OpnamePersediaanController@print_kartukendali'));
 });
@@ -78,6 +107,36 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas','SuratTugasController')->except(['show']);
+=======
+    Route::post('opname_persediaan/print_persediaan', array('as' => 'print_persediaan', 'uses' => 'OpnamePersediaanController@print_persediaan'));
+    Route::post('opname_persediaan/print_kartukendali', array('as' => 'print_kartukendali', 'uses' => 'OpnamePersediaanController@print_kartukendali'));
+});
+
+Route::group(['middleware' => ['role:superadmin|subbag-umum|subbag-keuangan']], function () {
+    Route::resource('pemegang_bmn', 'PemegangBmnController');
+});
+
+Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
+    Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
+    Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
+    Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
+    //Cuti
+    Route::resource('cuti', 'CutiController')->except(['show']);
+    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
+    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
+    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
+});
+
+Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
+    // Route::resource('jadwal_dinas','JadwalDinasController');
+    Route::get('mata_anggaran/index', 'MataAnggaranController@index');
+    Route::get('mata_anggaran/import_some', 'MataAnggaranController@upload_some');
+    Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
+    Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
+
+    /////////////////SURAT TUGAS TUGAS
+    Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
     Route::post('surat_tugas/list_pegawai', 'SuratTugasController@listPegawai');
     Route::post('surat_tugas/list_kegiatan', 'SuratTugasController@listKegiatan');
@@ -95,8 +154,13 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@insert_kwitansi');
     Route::post('surat_tugas/{id}/insert_kwitansi', 'SuratTugasController@store_kwitansi');
     Route::get('surat_tugas/{id}/destroy_kwitansi', 'SuratTugasController@destroy_kwitansi');
+<<<<<<< HEAD
     Route::get('surat_tugas/{id}/insert_kwitansi_pelatihan','SuratTugasController@insert_kwitansi_pelatihan');
     Route::post('surat_tugas/{id}/insert_kwitansi_pelatihan','SuratTugasController@store_kwitansi_pelatihan');
+=======
+    Route::get('surat_tugas/{id}/insert_kwitansi_pelatihan', 'SuratTugasController@insert_kwitansi_pelatihan');
+    Route::post('surat_tugas/{id}/insert_kwitansi_pelatihan', 'SuratTugasController@store_kwitansi_pelatihan');
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     Route::get('surat_tugas/create_tim', 'SuratTugasController@create_tim');
     Route::post('surat_tugas/create_tim', 'SuratTugasController@store_tim');
     Route::get('surat_tugas/create_pelatihan', 'SuratTugasController@create_pelatihan');
@@ -104,6 +168,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
+<<<<<<< HEAD
 Route::group(['middleware' => 'auth'], function(){
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////
@@ -114,6 +179,18 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('log_book','LogBookController')->except(['show']);
     Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
     Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
+=======
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
+    ////////////////////
+    Route::resource('surat_km', 'SuratKmController');
+    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
+
+    //////////////////////////
+    Route::resource('log_book', 'LogBookController')->except(['show']);
+    Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
+    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
@@ -124,6 +201,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
 
     //CKP
+<<<<<<< HEAD
     Route::resource('ckp','CkpController');
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');
@@ -133,10 +211,22 @@ Route::group(['middleware' => 'auth'], function(){
     //IKI
     // Route::post('iki','IkiController@store');
     Route::resource('iki','IkiController')->except(['show']);
+=======
+    Route::resource('ckp', 'CkpController');
+    Route::post('ckp/data_ckp', 'CkpController@dataCkp');
+    Route::post('ckp/data_profile', 'CkpController@dataProfile');
+    Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
+    Route::post('ckp/print', array('as' => 'print', 'uses' => 'CkpController@print'));
+
+    //IKI
+    // Route::post('iki','IkiController@store');
+    Route::resource('iki', 'IkiController')->except(['show']);
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     Route::post('iki/store_master', 'IkiController@store_master');
     Route::get('iki/list_json', 'IkiController@list_json');
 
     //PEGAWAI ANDA
+<<<<<<< HEAD
     Route::resource('pegawai_anda','PegawaiAndaController');
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
@@ -154,6 +244,18 @@ Route::group(['middleware' => 'auth'], function(){
     // Route::post('vicon/load_pegawai','ViconController@loadPegawai');
     // Route::get('vicon/{id}/destroy_peserta', 'ViconController@destroy_peserta');
     // Route::post('vicon/data_peserta', 'ViconController@data_peserta');
+=======
+    Route::resource('pegawai_anda', 'PegawaiAndaController');
+    Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
+    Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
+
+    Route::resource('meeting', 'MeetingController')->except(['show']);
+    Route::get('meeting/{id}/detail', 'MeetingController@detail');
+    Route::get('meeting/kalender', 'MeetingController@kalender');
+    Route::post('meeting/load_pegawai', 'MeetingController@loadPegawai');
+    Route::get('meeting/{id}/destroy_peserta', 'MeetingController@destroy_peserta');
+    Route::post('meeting/data_peserta', 'MeetingController@data_peserta');
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
@@ -167,4 +269,8 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('guest', 'HomeController@guest')->name('guest');
+<<<<<<< HEAD
 Route::post('telegram/sp2020', 'TelegramController@sp2020');
+=======
+Route::post('telegram/sp2020', 'TelegramController@sp2020');
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864

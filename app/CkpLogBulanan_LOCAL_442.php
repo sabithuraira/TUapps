@@ -132,35 +132,4 @@ class CkpLogBulanan extends Model
         $result = DB::select(DB::raw($sql));
         return $result;
     }
-<<<<<<< HEAD
-=======
-
-    public function RekapCkpPegawaiPerTahun($user_id, $year){
-        $label_sum_bulan = "";
-        $label_union = "";
-
-        for($i=1;$i<=12;++$i){
-            if($i>1){
-                $label_union .= " UNION ALL SELECT $i ";
-                $label_sum_bulan .= ", SUM(CASE WHEN (month=$i) THEN ((realisasi_kuantitas/target_kuantitas*100)+kualitas)/2 ELSE 0 END) AS bulan$i";
-            }
-            else{
-                $label_sum_bulan .= " SUM(CASE WHEN (month=$i) THEN ((realisasi_kuantitas/target_kuantitas*100)+kualitas)/2 ELSE 0 END) AS bulan$i";
-            }
-        }
-
-        $sql = "SELECT $label_sum_bulan
-                FROM (
-                    SELECT 1 AS val
-                    $label_union 
-                ) AS daftar
-                LEFT JOIN ckp_log_bulanan ON ckp_log_bulanan.month=daftar.val 
-                AND ckp_log_bulanan.year=$year 
-                WHERE user_id = '$user_id'";
-
-                
-        $result = DB::select(DB::raw($sql));
-        return $result;
-    }
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 }
