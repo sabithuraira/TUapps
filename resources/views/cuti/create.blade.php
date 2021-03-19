@@ -96,6 +96,17 @@
                 var tgl_mulai_kerja = new Date( self.list_pegawai[selected_index].nip_baru.substring(8,12)+'-'+ self.list_pegawai[selected_index].nip_baru.substring(12,14)+'-'+self.list_pegawai[selected_index].nip_baru.substring(14,16)  )
                 var harikerja = Math.round(Math.abs((tgl_mulai_kerja - tgl_hari_ini) / oneDay));
                 $('#masa_kerja').val(calculateTimimg(harikerja)['years']+' Tahun '+calculateTimimg(harikerja)['months']+' Bulan')
+            },
+            setPejabat:function(event){
+                var self = this;
+                var selected_index = event.currentTarget.selectedIndex;
+                // $("#jabatan").val(self.list_pegawai[selected_index].nmjab)
+                // $("#nama").val(self.list_pegawai[selected_index].name)
+                $("#nip_pejabat").val(self.list_pegawai[selected_index].nip_baru)
+                // var tgl_hari_ini = new Date()
+                // var tgl_mulai_kerja = new Date( self.list_pegawai[selected_index].nip_baru.substring(8,12)+'-'+ self.list_pegawai[selected_index].nip_baru.substring(12,14)+'-'+self.list_pegawai[selected_index].nip_baru.substring(14,16)  )
+                // var harikerja = Math.round(Math.abs((tgl_mulai_kerja - tgl_hari_ini) / oneDay));
+                // $('#masa_kerja').val(calculateTimimg(harikerja)['years']+' Tahun '+calculateTimimg(harikerja)['months']+' Bulan')
             }
         }
     });

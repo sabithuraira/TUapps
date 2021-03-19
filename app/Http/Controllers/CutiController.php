@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cuti;
 use App\Http\Requests\CutiRequest;
+use App\User;
 use Doctrine\DBAL\Types\JsonType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -128,6 +129,7 @@ class CutiController extends Controller
 
         $model = new \App\Cuti;
         // dd($request->all());
+        $user = User::find($request->get('id_user'));
         $model->id_user = $request->get('id_user');
         $model->nip = $request->get('nip');
         $model->nama = $request->get('nama');
@@ -164,14 +166,13 @@ class CutiController extends Controller
         $model->alamat_cuti = $request->get('alamat_cuti');
         $model->no_telp = $request->get('no_telp');
 
-        $model->nama_atasan = " ";
-        $model->nip_atasan = " ";
+        $model->nama_atasan =  $user->pimpinan->name;
+        $model->nip_atasan = $user->pimpinan->nip_baru;
         $model->status_atasan = 0;
 
-        $model->nama_pejabat = "";
-        $model->nip_pejabat = "";
+        $model->nama_pejabat = $request->get('nama_pejabat');;
+        $model->nip_pejabat = $request->get('nip_pejabat');;
         $model->status_pejabat = 0;
-
         $model->created_by = Auth::id();
         // $model->created_at = date('Y-m-d H:i:s');
         $model->updated_by = Auth::id();
@@ -300,8 +301,12 @@ class CutiController extends Controller
     }
     public function print_cuti($id)
     {
+
         $real_id = Crypt::decrypt($id);
+
         $model = Cuti::find($real_id);
+        $user = User::find($model->id_user);
+        // dd($user->pimpinan);
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
         $current_date =  date('Y-m-d');
 
@@ -309,9 +314,16 @@ class CutiController extends Controller
             'real_id',
             'catatan_cuti',
             'model',
+            'user'
         ))->setPaper('a4', 'potrait');
 
-        $nama_file = 'cuti_' . $model->nama . '.pdf';
-        return $pdf->download($nama_file);
+        // $nama_file = 'cuti_' . $model->nama . '.pdf';
+        // return $pdf->download($nama_file);
+        return view('cuti.print_cuti', compact(
+            'real_id',
+            'catatan_cuti',
+            'user',
+            'model',
+        ));
     }
 }

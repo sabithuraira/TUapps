@@ -104,6 +104,7 @@
         });
 
         $('#id_user').attr('disabled','disabled')
+        $('#nama_pejabat').attr('disabled','disabled')
     });
 </script>
 @endsection

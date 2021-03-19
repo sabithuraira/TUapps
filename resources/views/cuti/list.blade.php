@@ -233,20 +233,19 @@
         setDelete: function (jenis) {
             var self = this;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
-            $.ajax({
-                url :  self.pathname +"/"+ self.st_id,
-                method : 'DELETE',
-                dataType: 'json',
-                data:{
-                    id: self.st_id,
-                },
-            }).done(function (data) {
-                window.location.reload(true); 
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
+            window.location.href = self.pathname +"/"+ self.st_id +"/delete";
+            // $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+            // $.ajax({
+            //     url :  self.pathname +"/"+ self.st_id +"/delete",
+            //     method : 'GET',
+            // }).done(function (data) {
+            //     $('#wait_progres').modal('hide');
+            //     window.location.reload(true); 
+            //     // return redirect('cuti')->with('success', 'Data berhasil dihapus');
+            // }).fail(function (msg) {
+            //     console.log(JSON.stringify(msg));
+            //     $('#wait_progres').modal('hide');
+            // });
         },
     }
 });

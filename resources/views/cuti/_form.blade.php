@@ -229,6 +229,25 @@
                 @endforeach
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ $model->attributes()['pejabat'] }}
+                <select class="form-control {{($errors->first('id_user_pejabat') ? ' parsley-error' : '')}}"
+                    name="nama_pejabat" id="nama_pejabat" @change="setPejabat($event)">
+                    @foreach ($list_pegawai as $key=>$value)
+                    <option value="{{$value['name']}}" @if($value['name']==old('nama_pejabat', $model->nama_pejabat))
+                        selected="selected"
+                        @endif>
+                        {{$value['name']}} - {{ $value['nip_baru'] }}
+                    </option>
+                    @endforeach
+                </select>
+                @foreach ($errors->get('nama_pejabat') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+                @endforeach
+            </div>
+        </div>
     </div>
+    <input type="text" name="nip_pejabat" id="nip_pejabat" hidden>
     <button type="submit" class="btn btn-primary mt-2">Simpan</button>
 </div>

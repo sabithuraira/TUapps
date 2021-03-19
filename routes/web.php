@@ -72,6 +72,7 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
     Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
     Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
+    Route::get('cuti/{id}/delete', 'CutiController@destroy');
 });
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {

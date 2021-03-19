@@ -32,7 +32,7 @@ class CutiRequest extends FormRequest
             'alasan_cuti' => 'required',
             'tanggal_mulai' => 'required',
             'tanggal_selesai' => 'required',
-            'lama_cuti' => 'required',
+            'lama_cuti' => 'required|numeric',
             'alamat_cuti' => 'required',
             'no_telp' => 'required',
         ];
@@ -53,6 +53,7 @@ class CutiRequest extends FormRequest
             'unit_kerja' => 'Unit Kerja',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',
+            'pejabat' => 'Pejabat yang Berwenang Memberikan Cuti'
 
         ];
     }
