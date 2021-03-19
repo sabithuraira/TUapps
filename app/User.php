@@ -172,6 +172,9 @@ class User extends Authenticatable
                 $arr_where[] = ['kdorg', '=', $this->kdorg];
                 $arr_where[] = ['kdstjab', '<>', 4];
                 $arr_where[] = ['kdkab', '=',  $this->kdkab];
+<<<<<<< HEAD
+                $pegawai = $this::where($arr_where)->paginate();
+=======
 
                 $or_where[] = ['kdorg', '=', 92870];
                 $or_where[] = ['kdstjab', '<>', 4];
@@ -184,6 +187,7 @@ class User extends Authenticatable
                         })
                     )
                     ->paginate();
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
             }
             else if($this->kdesl==3){
                 if($this->kdkab=='00'){

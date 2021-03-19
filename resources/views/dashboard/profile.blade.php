@@ -8,7 +8,11 @@
 @endsection
 
 @section('content')
+<<<<<<< HEAD
+    <div class="container">
+=======
     <div class="container" id="app_vue">
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
         <div class="row clearfix">
             <div class="col-lg-6 col-md-12">
                 <div class="card member-card">
@@ -78,6 +82,8 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-12">
+<<<<<<< HEAD
+=======
                 <div class="card">
                     <div class="header">
                         <h2>Nilai CKP Bulanan 2021</h2>
@@ -86,10 +92,13 @@
                         <div id="line-chart" class="ct-chart"></div>
                     </div>
                 </div>
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
             </div>
         </div>
     </div>
 @endsection
+<<<<<<< HEAD
+=======
 
 @section('css')
     <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/chartist/css/chartist.min.css') !!}">
@@ -141,3 +150,4 @@
     });
 </script>
 @endsection
+>>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
