@@ -68,10 +68,13 @@
                         <td class="text-center">
                             <u>{{$data['nomor_st']}}</u><br/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                             
                             {{ $data->SuratIndukRel->tugas }}<br/>
 >>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
+=======
+>>>>>>> parent of 7d54665... ST - show tugas on list
                             {{$data['tujuan_tugas']}}
                         </td>
                         <td class="text-center">
