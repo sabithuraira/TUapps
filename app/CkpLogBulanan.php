@@ -132,8 +132,6 @@ class CkpLogBulanan extends Model
         $result = DB::select(DB::raw($sql));
         return $result;
     }
-<<<<<<< HEAD
-=======
 
     public function RekapCkpPegawaiPerTahun($user_id, $year){
         $label_sum_bulan = "";
@@ -162,5 +160,4 @@ class CkpLogBulanan extends Model
         $result = DB::select(DB::raw($sql));
         return $result;
     }
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 }

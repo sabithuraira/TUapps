@@ -172,9 +172,6 @@ class User extends Authenticatable
                 $arr_where[] = ['kdorg', '=', $this->kdorg];
                 $arr_where[] = ['kdstjab', '<>', 4];
                 $arr_where[] = ['kdkab', '=',  $this->kdkab];
-<<<<<<< HEAD
-                $pegawai = $this::where($arr_where)->paginate();
-=======
 
                 $or_where[] = ['kdorg', '=', 92870];
                 $or_where[] = ['kdstjab', '<>', 4];
@@ -185,9 +182,7 @@ class User extends Authenticatable
                         (function ($query) use ($or_where) {
                             $query->where($or_where);
                         })
-                    )
-                    ->paginate();
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
+                    )->paginate();
             }
             else if($this->kdesl==3){
                 if($this->kdkab=='00'){
@@ -242,8 +237,6 @@ class User extends Authenticatable
         return $pegawai;
     }
 
-    
-
     function is_foto_exist($url){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$url);
@@ -254,14 +247,8 @@ class User extends Authenticatable
     
         $result = curl_exec($ch);
         curl_close($ch);
-        if($result !== FALSE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        if($result !== FALSE) return true;
+        else return false;
         // $headers=get_headers($url);
         // return stripos($headers[0],"200 OK")?true:false;
     }

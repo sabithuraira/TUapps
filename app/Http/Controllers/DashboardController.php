@@ -18,11 +18,7 @@ class DashboardController extends Controller
         return view('dashboard.index',compact(
             'random_user', 'unit_kerja', 'dl_per_uk'));
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
-    
     public function rekap_dl(Request $request)
     {
         $year = date('Y');
@@ -53,13 +49,6 @@ class DashboardController extends Controller
     }
 
     public function profile($id){
-<<<<<<< HEAD
-        $real_id = Crypt::decrypt($id);
-        $model = \App\UserModel::where('nip_baru', '=', $real_id)->first();
-        $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
-        return view('dashboard.profile', compact(
-            'id', 'model', 'unit_kerja'
-=======
         $year = date('Y');
         $real_id = Crypt::decrypt($id);
         $model = \App\UserModel::where('nip_baru', '=', $real_id)->first();
@@ -75,7 +64,6 @@ class DashboardController extends Controller
         // dd($list_ckp[0]);
         return view('dashboard.profile', compact(
             'id', 'model', 'unit_kerja', 'result_ckp'
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
         ));
     }
 }

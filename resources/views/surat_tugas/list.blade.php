@@ -1,44 +1,12 @@
 <div id="load" class="table-responsive">
     <table class="table-sm table-bordered m-b-0" style="min-width:100%">
         @if (count($datas)==0)
-<<<<<<< HEAD
-            <thead>
-                <tr><th>Tidak ditemukan data</th></tr>
-            </thead>
-        @else
-=======
         <thead>
             <tr>
                 <th>Tidak ditemukan data</th>
             </tr>
         </thead>
         @else
-<<<<<<< HEAD
-        <thead>
-            <tr>
-                <th class="text-center" rowspan="2">Ket Surat</th>
-                <th class="text-center" rowspan="2">
-                    Pegawai<br />
-                    <span class="badge bg-dark text-white">K</span><small>=Ketua Tim</small>
-                    <span class="badge bg-dark text-white">A</span><small>=Anggota</small>
-                </th>
-                <th class="text-center" colspan="2">Tanggal</th>
-                <th class="text-center" rowspan="2">Status</th>
-                <th class="text-center" colspan="3">Cetak</th>
-                <th class="text-center" rowspan="2">Aksi</th>
-            </tr>
-            <tr>
-                <th class="text-center">Mulai</th>
-                <th class="text-center">Selesai</th>
-                <th class="text-center">Surat Tugas</th>
-                <th class="text-center">SPD</th>
-                <th class="text-center">Kwitansi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($datas as $data)
-=======
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
             <thead>
                 <tr>
                     <th class="text-center" rowspan="2">Ket Surat</th>
@@ -67,14 +35,7 @@
                     <tr>
                         <td class="text-center">
                             <u>{{$data['nomor_st']}}</u><br/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                            
                             {{ $data->SuratIndukRel->tugas }}<br/>
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
-=======
->>>>>>> parent of 7d54665... ST - show tugas on list
                             {{$data['tujuan_tugas']}}
                         </td>
                         <td class="text-center">
@@ -124,9 +85,6 @@
                                     <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
                                         <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br/>
                                 @endif
-                                
-<<<<<<< HEAD
-
                                 @if($data['status_aktif']<=5)
                                     @if($data->SuratIndukRel->jenis_st==5)
                                         <a href="{{ action('SuratTugasController@insert_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
@@ -181,121 +139,6 @@
     </table>
     <br/>
     {{ $datas->links() }} 
-=======
->>>>>>> 7d546657ff7a33cbe62a91e7aaabd26a7c81ab7a
-
-            @if ($data['status_aktif']!=2)
-            <tr>
-                <td class="text-center">
-                    <u>{{$data['nomor_st']}}</u><br />
-                    {{$data['tujuan_tugas']}}
-                </td>
-                <td class="text-center">
-                    <u>{{ $data['nip'] }}</u><br />
-                    {{ $data['nama'] }}
-
-                    @if ($data['kategori_petugas']==1)
-                    <span class="badge bg-dark text-white">K</span>
-                    @elseif($data['kategori_petugas']==2)
-                    <span class="badge bg-dark text-white">A</span>
-                    @endif
-                </td>
-                <td>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
-                <td>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
-                <td class="text-center">
-                    {!! $data->listStatus[$data['status_aktif']] !!}<br />
-                    <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                        data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_aktif'] }}"
-                        data-target="#set_status">
-                        <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
-                    </a>
-                </td>
-
-                <td class="text-center">
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{action('SuratTugasController@print_st_pelatihan', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @else
-                    <a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @else
-                    <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
-                    @endif
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                    @if($data->SuratIndukRel->jenis_st==5)
-                    <a href="{{ action('SuratTugasController@print_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
-                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br />
-                    @else
-                    <a href="{{ action('SuratTugasController@print_kwitansi', Crypt::encrypt($data['id']))}}">
-                        <i class="fa fa-file-pdf-o text-info"></i> <u>Cetak</u></a><br />
-                    @endif
-
-
-                    @if($data['status_aktif']<=5) @if($data->SuratIndukRel->jenis_st==5)
-                        <a
-                            href="{{ action('SuratTugasController@insert_kwitansi_pelatihan', Crypt::encrypt($data['id']))}}">
-                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
-                        </a>
-                        @else
-                        <a href="{{ action('SuratTugasController@insert_kwitansi', Crypt::encrypt($data['id']))}}">
-                            <i class="icon-arrow-right text-info"></i> <u>Input</u>
-                        </a>
-                        @endif
-                        @endif
-                        @endif
-                </td>
-                <td class="text-center">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                            data-id="{{ Crypt::encrypt($data['id']) }}" data-target="#set_aktif">
-                            <i class="icon-trash text-danger"></i>
-                            <p class='text-danger small'>Batalkan</p>
-                        </a>
-
-                        <a href="{{ action('SuratTugasController@edit', Crypt::encrypt($data['id']))}}">
-                            <i class="icon-pencil text-primary"></i>
-                            <p class='text-primary small'>Edit</p>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            @else
-            <tr>
-                <td class="text-center">
-                    <u>{{$data['nomor_st']}}</u><br />
-                    {{$data['tujuan_tugas']}}
-                </td>
-                <td class="text-center">
-                    <u>{{$data['nip']}}</u><br />
-                    {{$data['nama']}}
-
-                    @if ($data['kategori_petugas']==1)
-                    <span class="badge bg-dark text-white">K</span>
-                    @elseif($data['kategori_petugas']==2)
-                    <span class="badge bg-dark text-white">K</span>
-                    @endif
-                </td>
-                <td class="text-center" colspan="8">DIBATALKAN</td>
-            </tr>
-            @endif
-            @endforeach
-        </tbody>
-        @endif
-    </table>
-    <br />
-    {{ $datas->links() }}
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 </div>
 
 <div class="modal" id="set_status" tabindex="-1" role="dialog">
@@ -304,11 +147,7 @@
             <div class="modal-body">
                 Rubah status menjadi:
                 <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" v-model="st_status">
-<<<<<<< HEAD
-                    <option v-for="(value, index) in list_label_status" :value="index"> 
-=======
                     <option v-for="(value, index) in list_label_status" :value="index">
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
                         @{{ value }}
                     </option>
                 </select>
@@ -324,12 +163,8 @@
 <div class="modal" id="set_aktif" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-<<<<<<< HEAD
-            <div class="modal-body">Anda yakin ingin membatalkan surat tugas ini? Setelah pembatalan data ini tidak dapat lagi digunakan.</div>
-=======
             <div class="modal-body">Anda yakin ingin membatalkan surat tugas ini? Setelah pembatalan data ini tidak
                 dapat lagi digunakan.</div>
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="setAktif">Ya</button>
                 <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
@@ -342,12 +177,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-<<<<<<< HEAD
-                <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200" height="200" alt="Loading..."></div>
-=======
                 <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200"
                         height="200" alt="Loading..."></div>
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
                 <h4 class="text-center">Please wait...</h4>
             </div>
         </div>
@@ -355,16 +186,6 @@
 </div>
 
 @section('css')
-<<<<<<< HEAD
-  <meta name="_token" content="{{csrf_token()}}" />
-  <meta name="csrf-token" content="@csrf">
-    <style type="text/css">
-        * {font-family: Segoe UI, Arial, sans-serif;}
-        table{font-size: small;border-collapse: collapse;}
-        tfoot tr td{font-weight: bold;font-size: small;}
-    </style>
-    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
-=======
 <meta name="_token" content="{{csrf_token()}}" />
 <meta name="csrf-token" content="@csrf">
 <style type="text/css">
@@ -384,7 +205,6 @@
 </style>
 <link rel="stylesheet"
     href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
 @endsection
 
 @section('scripts')
@@ -392,12 +212,7 @@
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
 <script>
-<<<<<<< HEAD
-    
-var vm = new Vue({  
-=======
     var vm = new Vue({  
->>>>>>> a94157905379bf0ebf9740f4c12e79d2333a1864
     el: "#app_vue",
     data:  {
         datas: [],
