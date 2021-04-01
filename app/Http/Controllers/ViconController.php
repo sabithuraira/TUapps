@@ -18,17 +18,13 @@ class ViconController extends Controller
      */
     public function index(Request $request)
     {
-        // $vicon_book=\App\Vicon::all();
-
         $keyword = $request->get('search');
-
         $datas = \App\Vicon::where('keperluan', 'LIKE', '%' . $keyword . '%')
-                 ->paginate();
+                ->orWhere('ketua', 'LIKE', '%' . $keyword . '%')
+                ->orderBy('tanggal', 'asc')
+                ->orderBy('jamawalguna', 'asc')
+                ->paginate();
 
-        // if(Auth::user()->hasRole('superadmin')){
-        //     $datas = \App\Iki::where('iki_label', 'LIKE', '%' . $keyword . '%')
-        //         ->paginate();
-        // }
 
         $datas->withPath('vicon');
         $datas->appends($request->all());
@@ -40,24 +36,7 @@ class ViconController extends Controller
         }
 
         return view('vicon.index',compact('datas', 'keyword'));
-
-
-       
-        //tabel biasa 
     }
-
-    //  public function kalender(Request $request)
-    // {
-    //     $keyword = $request->get('search');
-    //     $cur_date = date('Y-m-d');
-    //     $datas = \App\Vicon::whereYear('jamgunaawal','=',date('Y'))
-    //         ->whereYear('jamgunaakhir', '=', date('Y'), 'or')
-    //         ->orderBy('jamgunaawal')
-    //         ->get();
-
-    //     return view('meeting.kalender',compact('datas', 'keyword',
-    //         'cur_date'));
-    // }
 
     /**
      * Show the form for creating a new resource.
@@ -70,7 +49,6 @@ class ViconController extends Controller
         $model->tanggal=date('Y-m-d');
         $model->jamawalguna = date('Y-m-d H:i');
         $model->jamakhirguna = date('Y-m-d H:i');
-        // $unit_kerja = UnitKerja4::pluck('nama','id');
                       
         return view('vicon.create',compact('model'));
         //
@@ -96,34 +74,13 @@ class ViconController extends Controller
         
         $jam_akhir=$request->tanggal.''.$request->jamakhirguna;
         $model->jamakhirguna = new DateTime($jam_akhir);
-        // $model->jamawalguna=$request->jamawalguna;
-        // $model->jamakhirguna=$request->jamakhirguna;
-        $model->status=$request->status;
+        $model->status=1;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
 
        $model->save();
         
         return redirect('vicon')->with('success', 'Data berhasil ditambahkan');
-
-
-       //  $model= new \App\Vicon;
-       //  $model->keperluan=$request->keperluan;
-       //  $model->tanggal=$request->tanggal=date('Y-m-d');
-       //  $model->ketua=$request->ketua;
-       //  $model->jamawalguna=$request->jamawalguna = date('H:i');
-       //  $model->jamakhirguna=$request->jamakhirguna = date('H:i');
-       //  $model->status=$request->status;
-       //  $model->created_by=Auth::id();
-       //  $model->updated_by=Auth::id();
-
-       // $model->save();
-        
-       //  return redirect('vicon')->with('success', 'Data berhasil ditambahkan');
-        // $vicon_book->$unit_kerja = UnitKerja4::pluck('nama','id');
-                      
-       
-
     }
 
     /**
@@ -177,9 +134,6 @@ class ViconController extends Controller
         
         $jam_akhir=$request->tanggal.''.$request->jamakhirguna;
         $model->jamakhirguna = new DateTime($jam_akhir);
-        
-        // $model->jamawalguna=$request->get('jamawalguna');
-        // $model->jamakhirguna=$request->get('jamakhirguna');
         
         $model->status=$request->get('status');
         $model->created_by=Auth::id();

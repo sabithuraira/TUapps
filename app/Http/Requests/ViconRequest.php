@@ -39,10 +39,10 @@ class ViconRequest extends FormRequest
     {
         return [
             'tanggal'=>'Tanggal Pelaksanaan',
-            'keperluan'=>'Penggunaan',
-            'ketua'=>'Penanggung Jawab Kegiatan',
-            'jamawalguna'=>'Waktu Mulai',
-            'jamakhirguna'=>'Waktu Selesai',
+            'keperluan'=>'Tujuan Penggunaan',
+            'ketua'=>'Penanggung Jawab',
+            'jamawalguna'=>'Mulai',
+            'jamakhirguna'=>'Selesai',
             'status'=>'Status',
             'created_by' => 'Dibuat oleh',
             'updated_by' => 'Terakhir diperbaharui oleh',

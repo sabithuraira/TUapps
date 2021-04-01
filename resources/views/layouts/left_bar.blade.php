@@ -83,6 +83,12 @@
                         <li class="{{ (request()->is('pegawai_anda*')) ? 'active' : '' }}">
                             <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                         </li>
+                        
+                        @if(Auth::user()->kdkab=='00')
+                            <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
+                                <a href="{{ url('vicon') }}"> <i class="icon-users"></i><span>Penggunaan Ruang Vicon</span></a>
+                            </li>
+                        @endif
 
                         @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                         <li class="{{ (request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">

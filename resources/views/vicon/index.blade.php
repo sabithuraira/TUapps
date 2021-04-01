@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">Video Conference Room</li>
+    <li class="breadcrumb-item">Penggunaan Ruang Vicon</li>
 </ul>
 @endsection
 

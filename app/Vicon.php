@@ -17,8 +17,7 @@ class Vicon extends Model
     {
         return array(
             1 => 'Booked', 
-            2 => 'Sedang Berlangsung',
-            3=> 'Selesai', 
+            2 => 'Dibatalkan',
             
         );
     }

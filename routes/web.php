@@ -53,12 +53,6 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
     Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
     Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
-    //Cuti
-    Route::resource('cuti', 'CutiController')->except(['show']);
-    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
-    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
-    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
-    Route::get('cuti/{id}/delete', 'CutiController@destroy');
 });
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
@@ -67,6 +61,13 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('mata_anggaran/import_some', 'MataAnggaranController@upload_some');
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
+    
+    //Cuti
+    Route::resource('cuti', 'CutiController')->except(['show']);
+    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
+    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
+    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
+    Route::get('cuti/{id}/delete', 'CutiController@destroy');
 
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
