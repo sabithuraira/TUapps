@@ -28,6 +28,8 @@ class CreateSkpIndukTable extends Migration
             $table->string("pimpinan_gol");
             $table->string("pimpinan_jabatan");
             $table->string("pimpinan_unit_kerja");
+
+            $table->integer("versi");
             $table->timestamps();
         });
     }
