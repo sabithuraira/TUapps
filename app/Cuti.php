@@ -63,9 +63,6 @@ class Cuti extends Model
             'keterangan_cuti_melahirkan' => null,
             'keterangan_cuti_penting' => null,
             'keterangan_luar_tanggunan' => null,
-
-
-
         );
     }
 }

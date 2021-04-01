@@ -65,7 +65,7 @@
                             <i class="icon-trash text-danger"></i>
                             <p class='text-danger small'>Hapus</p>
                         </a>
-
+                        &nbsp;
                         <a href="{{ action('CutiController@edit', Crypt::encrypt($data['id']))}}">
                             <i class="icon-pencil text-primary"></i>
                             <p class='text-primary small'>Edit</p>

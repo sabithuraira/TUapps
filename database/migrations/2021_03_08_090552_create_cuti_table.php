@@ -33,11 +33,11 @@ class CreateCutiTable extends Migration
             $table->integer('status_atasan');
             $table->string('nama_atasan');
             $table->string('nip_atasan');
-            $table->timestamps('tanggal_status_atasan')->nullable();
+            $table->datetime('tanggal_status_atasan')->nullable();
             $table->integer('status_pejabat');
-            $table->string('nama_perjabat');
+            $table->string('nama_pejabat');
             $table->string('nip_pejabat');
-            $table->timestamps('tanggal_status_pejabat')->nullable();
+            $table->datetime('tanggal_status_pejabat')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

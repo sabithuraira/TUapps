@@ -48,7 +48,7 @@ class CutiRequest extends FormRequest
             'tanggal_mulai' => 'Tanggal Mulai',
             'tanggal_selesai' => 'Tanggal Selesai',
             'lama_cuti' => 'Lama Cuti (Hari)',
-            'alamat_cuti' => 'Alamat Selamat Cuti',
+            'alamat_cuti' => 'Alamat Selama Cuti',
             'no_telp' => 'No. Telp / Hp (Aktif)',
             'unit_kerja' => 'Unit Kerja',
             'created_by' => 'Dibuat oleh',

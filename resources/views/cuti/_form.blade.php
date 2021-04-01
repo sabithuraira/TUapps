@@ -44,7 +44,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label style="margin-bottom: 0">{{ $model->attributes()['jenis_cuti'] }}:</label>
+                {{ $model->attributes()['jenis_cuti'] }}:
                 <select class="form-control {{($errors->first('jenis_cuti') ? ' parsley-error' : '')}}"
                     name="jenis_cuti">
                     @foreach ($model->listJenisCuti as $key=>$value)
@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                <label> {{ $model->attributes()['alasan_cuti'] }}</label>
+                {{ $model->attributes()['alasan_cuti'] }}
                 <textarea name="alasan_cuti"
                     class="form-control form-control-sm {{($errors->first('alasan_cuti') ? ' parsley-error' : '')}}"
                     rows="3">{{ old('alasan_cuti', $model->alasan) }}</textarea>
@@ -75,8 +75,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 {{ $model->attributes()['lama_cuti'] }}
-                <input name="lama_cuti"
-                    class="form-control form-control-sm {{($errors->first('lama_cuti') ? ' parsley-error' : '')}}"
+                <input type="number" name="lama_cuti" class="form-control form-control-sm {{($errors->first('lama_cuti') ? ' parsley-error' : '')}}"
                     value="{{ old('lama_cuti', $model->lama_cuti) }}">
                 @foreach ($errors->get('lama_cuti') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
@@ -128,40 +127,40 @@
             <table class="table table-bordered m-b-0 text-center" style="">
                 <thead>
                     <tr>
-                        <th colspan="2" style="width: 16.66%">Jenis Cuti</th>
-                        <th style="width: 16.66%">Sisa(Hari)</th>
-                        <th>Keterangan</th>
+                        <td colspan="2" style="width: 16.66%">Jenis Cuti</td>
+                        <td style="width: 16.66%">Sisa(Hari)</td>
+                        <td>Keterangan</td>
                     </tr>
-
                 </thead>
                 <tbody>
                     {{-- {{  $catatan_cuti = json_encode($catatan_cuti) }} --}}
                     <tr>
                         <td rowspan="2" class="text-left">Cuti Tahunan</td>
                         <td>{{ date('Y')-1 }}</td>
-                        <td><input name="cuti_tahunan_sebelum" style="width: 100%"
+                        <td>
+                            <input type="number" name="cuti_tahunan_sebelum" style="width: 100%"
                                 value="{{ old('cuti_tahunan_sebelum', $catatan_cuti->cuti_tahunan_sebelum) }}">
                             @foreach ($errors->get('cuti_tahunan_sebelum') as $msg)
                             <p class="text-danger">{{ $msg }}</p>
                             @endforeach
                         </td>
-                        <td><input name="keterangan_cuti_tahunan_sebelum" style=" width: 100%"
-                                value="{{ old('keterangan_cuti_tahunan_sebelum', $catatan_cuti->keterangan_cuti_tahunan_sebelum) }}">
+                        <td>
+                            <input name="keterangan_cuti_tahunan_sebelum" style=" width: 100%" value="{{ old('keterangan_cuti_tahunan_sebelum', $catatan_cuti->keterangan_cuti_tahunan_sebelum) }}">
                         </td>
                     </tr>
                     <tr>
                         <td>{{ date('Y') }}</td>
-                        <td><input name="cuti_tahunan" style="width: 100%"
-                                value="{{ old('cuti_tahunan', $catatan_cuti->cuti_tahunan) }}">
+                        <td>
+                            <input type="number" name="cuti_tahunan" style="width: 100%" value="{{ old('cuti_tahunan', $catatan_cuti->cuti_tahunan) }}">
                         </td>
-                        <td><input name="keterangan_cuti_tahunan" style=" width: 100%"
-                                value="{{ old('keterangan_cuti_tahunan', $catatan_cuti->keterangan_cuti_tahunan) }}">
+                        <td>
+                            <input name="keterangan_cuti_tahunan" style=" width: 100%" value="{{ old('keterangan_cuti_tahunan', $catatan_cuti->keterangan_cuti_tahunan) }}">
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Besar</td>
-                        <td><input name="cuti_besar" style="width: 100%"
-                                value="{{ old('cuti_besar', $catatan_cuti->cuti_besar) }}">
+                        <td>
+                            <input type="number" name="cuti_besar" style="width: 100%" value="{{ old('cuti_besar', $catatan_cuti->cuti_besar) }}">
                         </td>
                         <td><input name="keterangan_cuti_besar" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_besar', $catatan_cuti->keterangan_cuti_besar) }}">
@@ -169,8 +168,8 @@
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Sakit</td>
-                        <td><input name="cuti_sakit" style="width: 100%"
-                                value="{{ old('cuti_sakit', $catatan_cuti->cuti_sakit) }}">
+                        <td>
+                            <input type="number" name="cuti_sakit" style="width: 100%" value="{{ old('cuti_sakit', $catatan_cuti->cuti_sakit) }}">
                         </td>
                         <td><input name="keterangan_cuti_sakit" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_sakit', $catatan_cuti->keterangan_cuti_sakit) }}">
@@ -178,8 +177,8 @@
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Melahirkan</td>
-                        <td><input name="cuti_melahirkan" style="width: 100%"
-                                value="{{ old('cuti_melahirkan', $catatan_cuti->cuti_melahirkan) }}">
+                        <td>
+                            <input type="number" name="cuti_melahirkan" style="width: 100%" value="{{ old('cuti_melahirkan', $catatan_cuti->cuti_melahirkan) }}">
                         </td>
                         <td><input name="keterangan_cuti_melahirkan" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_melahirkan', $catatan_cuti->keterangan_cuti_melahirkan) }}">
@@ -187,8 +186,8 @@
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Karena Alasan Penting</td>
-                        <td><input name="cuti_penting" style="width: 100%"
-                                value="{{ old('cuti_penting', $catatan_cuti->cuti_penting) }}">
+                        <td>
+                            <input type="number" name="cuti_penting" style="width: 100%" value="{{ old('cuti_penting', $catatan_cuti->cuti_penting) }}">
                         </td>
                         <td><input name="keterangan_cuti_penting" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_penting', $catatan_cuti->keterangan_cuti_penting) }}">
@@ -196,8 +195,8 @@
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti di Luar Tanggunan Negara</td>
-                        <td><input name="cuti_luar_tanggungan" style="width: 100%"
-                                value="{{ old('cuti_luar_tanggungan', $catatan_cuti->cuti_luar_tanggungan) }}">
+                        <td>
+                            <input type="number" name="cuti_luar_tanggungan" style="width: 100%" value="{{ old('cuti_luar_tanggungan', $catatan_cuti->cuti_luar_tanggungan) }}">
                         </td>
                         <td><input name="keterangan_luar_tanggunan" style=" width: 100%"
                                 value="{{ old('keterangan_luar_tanggunan', $catatan_cuti->keterangan_luar_tanggunan) }}">
@@ -212,7 +211,7 @@
                 {{ $model->attributes()['alamat_cuti'] }}
                 <textarea name="alamat_cuti"
                     class="form-control form-control-sm {{($errors->first('alamat_cuti') ? ' parsley-error' : '')}}"
-                    rows="2">{{ old('alamat_cuti', $model->alamat_cuti) }} </textarea>
+                    rows="4">{{ old('alamat_cuti', $model->alamat_cuti) }} </textarea>
                 @foreach ($errors->get('alamat_cuti') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -228,8 +227,7 @@
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-        </div>
-        <div class="col-md-6">
+
             <div class="form-group">
                 {{ $model->attributes()['pejabat'] }}
                 <select class="form-control {{($errors->first('id_user_pejabat') ? ' parsley-error' : '')}}"
@@ -246,6 +244,9 @@
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
+        </div>
+        <div class="col-md-6">
+            
         </div>
     </div>
     <input type="text" name="nip_pejabat" id="nip_pejabat" hidden>

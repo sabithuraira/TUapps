@@ -52,25 +52,18 @@ class CutiController extends Controller
         if ($type == 2) {
             // return Excel::download(new \App\Exports\SuratTugasExport($unit_kerja, $month, $year, $keyword), 'cuti.xlsx');
         } else {
-            // $datas = Cuti::all()
             $datas = \App\Cuti::where($arr_where)
                 ->where(
                     (function ($query) use ($unit_kerja) {
                         $query->where('unit_kerja', '=', $unit_kerja);
-                        // ->orWhere('unit_kerja_ttd', '=', $unit_kerja)
-                        // ->orWhere('unit_kerja_spd', '=', $unit_kerja);
                     })
                 )
                 ->where(
                     (function ($query) use ($keyword) {
                         $query->where('nama', 'LIKE', '%' . $keyword . '%');
-                        // ->orWhere('tujuan_tugas', 'LIKE', '%' . $keyword . '%')
-                        // ->orWhere('nomor_st', 'LIKE', '%' . $keyword . '%');
                     })
                 )->orderBy('id', 'desc')
                 ->paginate();
-            // ->with('SuratIndukRel')
-
 
             $datas->withPath('cuti');
             $datas->appends($request->all());
@@ -120,7 +113,6 @@ class CutiController extends Controller
      */
     public function store(CutiRequest $request)
     {
-
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)
@@ -128,7 +120,6 @@ class CutiController extends Controller
         }
 
         $model = new \App\Cuti;
-        // dd($request->all());
         $user = User::find($request->get('id_user'));
         $model->id_user = $request->get('id_user');
         $model->nip = $request->get('nip');
@@ -174,10 +165,7 @@ class CutiController extends Controller
         $model->nip_pejabat = $request->get('nip_pejabat');;
         $model->status_pejabat = 0;
         $model->created_by = Auth::id();
-        // $model->created_at = date('Y-m-d H:i:s');
         $model->updated_by = Auth::id();
-        // $model->updated_at = date('Y-m-d H:i:s');
-        // dd($model);
         $model->save();
         return redirect('cuti')->with('success', 'Data Berhasil Ditambah');
     }
@@ -226,7 +214,7 @@ class CutiController extends Controller
     {
         //
         $real_id = Crypt::decrypt($id);
-        $model = \App\cuti::find($real_id);
+        $model = \App\Cuti::find($real_id);
 
         $model->jenis_cuti = $request->get('jenis_cuti');
         $model->alasan = $request->get('alasan_cuti');
@@ -273,6 +261,7 @@ class CutiController extends Controller
         Cuti::where('id', Crypt::decrypt($id))->delete();
         return redirect('cuti')->with('success', 'Data berhasil dihapus');
     }
+
     public function set_status_atasan(Request $request)
     {
         if ($request->form_id_data != '') {
@@ -286,6 +275,7 @@ class CutiController extends Controller
             return response()->json(['result' => 'Terjadi kesalahan, refresh halaman dan coba lagi']);
         }
     }
+
     public function set_status_pejabat(Request $request)
     {
         if ($request->form_id_data != '') {
@@ -299,9 +289,9 @@ class CutiController extends Controller
             return response()->json(['result' => 'Terjadi kesalahan, refresh halaman dan coba lagi']);
         }
     }
+
     public function print_cuti($id)
     {
-
         $real_id = Crypt::decrypt($id);
 
         $model = Cuti::find($real_id);
@@ -311,19 +301,16 @@ class CutiController extends Controller
         $current_date =  date('Y-m-d');
 
         $pdf = PDF::loadView('cuti.print_cuti', compact(
-            'real_id',
-            'catatan_cuti',
-            'model',
-            'user'
+            'real_id', 'catatan_cuti', 'model', 'user'
         ))->setPaper('a4', 'potrait');
 
-        // $nama_file = 'cuti_' . $model->nama . '.pdf';
-        // return $pdf->download($nama_file);
-        return view('cuti.print_cuti', compact(
-            'real_id',
-            'catatan_cuti',
-            'user',
-            'model',
-        ));
+        $nama_file = 'cuti_' . $model->nama . '.pdf';
+        return $pdf->download($nama_file);
+        // return view('cuti.print_cuti', compact(
+        //     'real_id',
+        //     'catatan_cuti',
+        //     'user',
+        //     'model',
+        // ));
     }
 }
