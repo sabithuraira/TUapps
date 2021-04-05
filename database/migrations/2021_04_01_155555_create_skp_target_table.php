@@ -28,6 +28,7 @@ class CreateSkpTargetTable extends Migration
             $table->string('satuan_waktu');
             $table->decimal('biaya',12,2);
 
+            $table->integer('jenis');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

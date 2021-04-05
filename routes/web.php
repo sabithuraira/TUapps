@@ -123,6 +123,13 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
     Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
 
+    //SKP
+    Route::resource('skp','SkpController')->only('index', 'create');
+    Route::post('skp/{id}/data_skp', 'SkpController@dataSkp');
+    Route::post('skp/data_profile', 'SkpController@dataProfile');
+    Route::post('skp/data_unit_kerja', 'SkpController@dataUnitKerja');
+    Route::post('skp/print',array('as'=>'print','uses'=>'SkpController@print'));
+
     //IKI
     // Route::post('iki','IkiController@store');
     Route::resource('iki','IkiController')->except(['show']);

@@ -55,10 +55,11 @@
 
 
                         <li
-                            class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('iki*')) ? 'active' : '' }}">
+                            class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('skp*') || request()->is('iki*')) ? 'active' : '' }}">
                             <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                             <ul>
                                 <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a>
+                                <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP</a>
                                 </li>
                                 <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a
                                         href="{{ url('log_book') }}">Log Book</a></li>

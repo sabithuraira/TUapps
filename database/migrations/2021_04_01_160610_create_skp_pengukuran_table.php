@@ -40,6 +40,7 @@ class CreateSkpPengukuranTable extends Migration
 
             $table->float('penghitungan');
             $table->float('nilai_capaian_skp');
+            $table->integer('jenis');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();
