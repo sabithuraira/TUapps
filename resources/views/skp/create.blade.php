@@ -13,9 +13,9 @@
   <div class="col-md-12">
       <div class="card">
           <div class="body" id="app_vue">
-              <form method="post" action="{{url('ckp')}}" enctype="multipart/form-data">
+              <form method="post" action="{{ url('ckp') }}" enctype="multipart/form-data">
               @csrf
-              @include('ckp._form')
+              @include('skp._form')
               </form>
           </div>
       </div>

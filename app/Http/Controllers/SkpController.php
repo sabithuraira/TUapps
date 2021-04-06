@@ -15,11 +15,20 @@ class SkpController extends Controller
 
     public function index(Request $request)
     {
-        $datas=array();
-        
         $skp_induk = \App\SkpInduk::where('user_id', '=', Auth::user()->email)->get();
 
         return view('skp.index', compact('skp_induk'));
+    }
+
+    public function create(){
+        $skp_induk = \App\SkpInduk::where('user_id', '=', Auth::user()->email)->get();
+        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                    ->where('kdkab','=',Auth::user()->kdkab)->get();
+        $list_pangkat = (new \App\UserModel())->listPangkat;
+        $cur_user = Auth::user();
+
+        return view('skp.create', compact('skp_induk', 'list_pegawai', 
+            'list_pangkat', 'cur_user'));
     }
 
     public function dataSkp(Request $request, $id){
