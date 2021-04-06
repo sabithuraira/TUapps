@@ -17,8 +17,8 @@
 
       <div class="card" id="app_vue">
         <div class="body">
-          <a href="{{action('CkpController@create')}}" class="btn btn-info">Perbaharui SKP</a>
-          <br/>
+          <a href="{{action('SkpController@create')}}" class="btn btn-success">Perbaharui SKP</a>
+          <br/><br/>
           <div class="row clearfix">      
                 <div class="col-lg-6 col-md-12 left-box">
                     <div class="form-group">

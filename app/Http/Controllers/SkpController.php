@@ -17,7 +17,7 @@ class SkpController extends Controller
     {
         $datas=array();
         
-        $skp_induk = \App\SkpInduk::where('user_id', '=', )->get();
+        $skp_induk = \App\SkpInduk::where('user_id', '=', Auth::user()->email)->get();
 
         return view('skp.index', compact('skp_induk'));
     }
@@ -26,8 +26,14 @@ class SkpController extends Controller
         $datas=array();
         
         $skp_induk = \App\SkpInduk::find($id);
-        $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
-        $skp_pengukuran = \App\SkpInduk::where('id_induk', '=', $skp_induk->id)->get();
+        if($skp_induk!==null){
+            $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
+            $skp_pengukuran = \App\SkpInduk::where('id_induk', '=', $skp_induk->id)->get();
+        }
+        else{
+            $skp_target = [];
+            $skp_pengukuran = [];
+        }
 
         $datas = [
             'skp_induk'     => $skp_induk,

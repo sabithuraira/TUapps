@@ -125,7 +125,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     //SKP
     Route::resource('skp','SkpController')->only('index', 'create');
-    Route::post('skp/{id}/data_skp', 'SkpController@dataSkp');
+    // Route::get('skp/{id}/edit', 'SkpController@edit');
+    Route::get('skp/{id}/data_skp', 'SkpController@dataSkp');
     Route::post('skp/data_profile', 'SkpController@dataProfile');
     Route::post('skp/data_unit_kerja', 'SkpController@dataUnitKerja');
     Route::post('skp/print',array('as'=>'print','uses'=>'SkpController@print'));
