@@ -87,40 +87,6 @@ class SkpController extends Controller
         }
 
         return response()->json(['success'=>1]);
-
-
-        // foreach($datas['utama'] as $data){
-        //     if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
-                
-        //         $model_utama = \App\Ckp::find($data->id);
-        //         $model_utama->uraian = $request->get('u_uraian'.$data->id);
-        //         $model_utama->satuan = $request->get('u_satuan'.$data->id);
-        //         $model_utama->target_kuantitas = $request->get('u_target_kuantitas'.$data->id);
-
-        //         $model_utama->realisasi_kuantitas = $request->get('u_realisasi_kuantitas'.$data->id);
-        //         // $model_utama->kualitas = $request->get('u_kualitas'.$data->id);
-
-        //         $model_utama->kode_butir = $request->get('u_kode_butir'.$data->id);
-        //         $model_utama->angka_kredit = $request->get('u_angka_kredit'.$data->id);
-        //         $model_utama->keterangan = $request->get('u_keterangan'.$data->id);
-                
-        //         // $model_utama->kecepatan = $request->get('u_kecepatan'.$data->id);
-        //         // $model_utama->ketepatan = $request->get('u_ketepatan'.$data->id);
-        //         // $model_utama->ketuntasan = $request->get('u_ketuntasan'.$data->id);
-        //         // $model_utama->penilaian_pimpinan = $request->get('u_penilaian_pimpinan'.$data->id);
-        //         // $model_utama->catatan_koreksi = $request->get('u_catatan_koreksi'.$data->id);
-        //         $model_utama->iki = $request->get('u_iki'.$data->id);
-
-        //         $model_utama->save();
-        //     }
-        // }
-        
-
-        
-        // $ckp_log = new \App\CkpLogBulanan();
-        // $ckp_log->triggerCkp(Auth::user()->email, Auth::id(), $request->get('month'), $request->get('year'));
-        
-        // return redirect('/ckp')->with('success', 'Information has been added');
     }
 
     public function dataSkp(Request $request, $id){
@@ -129,7 +95,7 @@ class SkpController extends Controller
         $skp_induk = \App\SkpInduk::find($id);
         if($skp_induk!==null){
             $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
-            $skp_pengukuran = \App\SkpInduk::where('id_induk', '=', $skp_induk->id)->get();
+            $skp_pengukuran = \App\SkpPengukuran::where('id_induk', '=', $skp_induk->id)->get();
         }
         else{
             $skp_target = [];
