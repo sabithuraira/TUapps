@@ -3,8 +3,8 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><i class="icon-home"></i></li>
-    <li class="breadcrumb-item"><a href="{{url('ckp')}}">CKP</a></li>                            
-    <li class="breadcrumb-item">Buat CKP</li>
+    <li class="breadcrumb-item"><a href="{{url('skp')}}">SKP</a></li>                            
+    <li class="breadcrumb-item">Perbaharui CKP</li>
 </ul>
 @endsection
 
@@ -13,10 +13,7 @@
   <div class="col-md-12">
       <div class="card">
           <div class="body" id="app_vue">
-              <form method="post" action="{{ url('ckp') }}" enctype="multipart/form-data">
-              @csrf
               @include('skp._form')
-              </form>
           </div>
       </div>
   </div>
