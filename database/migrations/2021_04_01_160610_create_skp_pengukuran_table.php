@@ -20,26 +20,26 @@ class CreateSkpPengukuranTable extends Migration
             $table->string('user_id');
             $table->string('uraian');
             
-            $table->integer('kode_point_kredit');
+            $table->integer('kode_point_kredit')->nullable();
             
             $table->string('target_satuan');
             $table->float('target_kuantitas');
             $table->float('target_kualitas');
-            $table->integer('target_waktu');
-            $table->string('target_satuan_waktu');
-            $table->decimal('target_biaya',12,2);
-            $table->float('target_angka_kredit');
+            $table->integer('target_waktu')->nullable();
+            $table->string('target_satuan_waktu')->nullable();
+            $table->decimal('target_biaya',12,2)->nullable();
+            $table->float('target_angka_kredit')->nullable();
             
             $table->string('realisasi_satuan');
             $table->float('realisasi_kuantitas');
             $table->float('realisasi_kualitas');
-            $table->integer('realisasi_waktu');
-            $table->string('realisasi_satuan_waktu');
-            $table->decimal('realisasi_biaya',12,2);
-            $table->float('realisasi_angka_kredit');
+            $table->integer('realisasi_waktu')->nullable();
+            $table->string('realisasi_satuan_waktu')->nullable();
+            $table->decimal('realisasi_biaya',12,2)->nullable();
+            $table->float('realisasi_angka_kredit')->nullable();
 
-            $table->float('penghitungan');
-            $table->float('nilai_capaian_skp');
+            $table->float('penghitungan')->nullable();
+            $table->float('nilai_capaian_skp')->nullable();
             $table->integer('jenis');
             $table->integer('created_by');
             $table->integer('updated_by');

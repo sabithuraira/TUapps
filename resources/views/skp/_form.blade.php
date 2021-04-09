@@ -129,7 +129,9 @@
         
         <div class="tab-pane" id="pengukuran">
             <div class="table-responsive">
-                <table class="table-sm table-bordered m-b-0" style="min-width:100%">
+                <button class="btn btn-info" @click="addPengukuran">Tambah Rincian</button>
+                <br/><br/>
+                <table class="table table-sm table-bordered m-b-0" style="min-width:100%">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
@@ -143,14 +145,14 @@
                         </tr>
 
                         <tr class="text-center">
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                             
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                         </tr>
                         
@@ -173,33 +175,35 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="(data, index) in skp_pengukuran" :key="data.id">
+                        <tr v-for="(data, index) in skp_pengukuran" :key="'pengukuran'+index">
                             <td>@{{ index+1 }}</td>
-                            <td>@{{ data.uraian }}</td> 
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.uraian"></td> 
 
-                            <td>@{{ data.target_angka_kredit }}</td>
-                            <td>@{{ data.target_kuantitas }}</td>
-                            <td>@{{ data.target_satuan }}</td>
-                            <td>@{{ data.target_kualitas }}</td>
-                            <td>@{{ data.target_waktu }}</td>
-                            <td>@{{ data.target_satuan_waktu }}</td>
-                            <td>@{{ data.target_biaya }}</td>
+                            <td>..</td>
+                            <td><input type="number" class="form form-control form-control-sm" v-model="data.target_kuantitas"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_satuan"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_kualitas"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_waktu"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_satuan_waktu"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_biaya"></td>
                             
-                            <td>@{{ data.realisasi_angka_kredit }}</td>
-                            <td>@{{ data.realisasi_kuantitas }}</td>
-                            <td>@{{ data.realisasi_satuan }}</td>
-                            <td>@{{ data.realisasi_kualitas }}</td>
-                            <td>@{{ data.realisasi_waktu }}</td>
-                            <td>@{{ data.realisasi_satuan_waktu }}</td>
-                            <td>@{{ data.realisasi_biaya }}</td>
+                            <td>..</td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_kuantitas"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_satuan"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_kualitas"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_waktu"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_satuan_waktu"></td>
+                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_biaya"></td>
 
                             <td>@{{ data.penghitungan }}</td>
                             <td>@{{ data.nilai_capaian_skp }}</td>
                         </tr>
                     </tbody>
                 </table>
+                
+                <br/>
+                <button class="btn btn-success float-right" @click="savePengukuran">SIMPAN</button>
             </div>
-
         </div>
     </div>
 </div>
@@ -277,6 +281,7 @@ var vm = new Vue({
             else this.skp_id = 0
         },
         setDatas: function(){
+            var self = this
             $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
@@ -284,13 +289,13 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : this.pathname+ "/" + this.skp_id + "/data_skp",
+                url : self.pathname+ "/" + self.skp_id + "/data_skp",
                 method : 'get',
                 dataType: 'json',
             }).done(function (data) {
-                this.skp_induk = data.datas.skp_induk;
-                this.skp_pengukuran = data.datas.skp_pengukuran;
-                this.skp_target = data.datas.skp_target;
+                self.skp_induk = data.datas.skp_induk;
+                self.skp_pengukuran = data.datas.skp_pengukuran;
+                self.skp_target = data.datas.skp_target;
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
@@ -329,27 +334,59 @@ var vm = new Vue({
                 'created_by': '', 'updated_by': '', 'created_at': '', 'updated_at': '',
             });
         },
+        addPengukuran: function(){
+            this.skp_pengukuran.push({
+                'id' : '', 'id_induk' : '', 'user_id': '',
+                'uraian': '', 'kode_point_kredit': '', 
+                'target_satuan': '', 'target_kuantitas': '','target_kualitas': '','target_waktu': '','target_satuan_waktu': '','target_biaya': '','target_angka_kredit': '',
+                'realisasi_satuan': '', 'realisasi_kuantitas': '','realisasi_kualitas': '','realisasi_waktu': '','realisasi_satuan_waktu': '','realisasi_biaya': '','realisasi_angka_kredit': '',
+                'penghitungan': '', 'nilai_capaian_skp': '', 'jenis': '',
+                'created_by': '', 'updated_by': '', 'created_at': '', 'updated_at': '',
+            });
+        },
         saveTarget: function(){
+            var self = this
             $('#wait_progres').modal('show');
             $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
             $.ajax({
-                url :  this.pathname + "/store_target",
+                url :  self.pathname + "/store_target",
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    skp_id: this.skp_id,
-                    skp_induk: this.skp_induk,
-                    skp_target: this.skp_target,
+                    skp_id: self.skp_id,
+                    skp_induk: self.skp_induk,
+                    skp_target: self.skp_target,
                 },
             }).done(function (data) {
                 // console.log(data.success)
-                window.location = this.pathname
+                window.location = self.pathname
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
             });
-        }
+        },
+        savePengukuran: function(){
+            var self = this
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  self.pathname + "/store_target",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    skp_id: self.skp_id,
+                    skp_induk: self.skp_induk,
+                    skp_pengukuran: self.skp_pengukuran,
+                },
+            }).done(function (data) {
+                window.location = self.pathname
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
     }
 });
 
