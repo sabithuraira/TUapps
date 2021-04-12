@@ -41,7 +41,7 @@
                             <td>1</td>
                             <td>Nama</td>
                             <td>
-                                <select class="form-control form-control-sm" v-model="skp_induk.pimpinan_id" @change="setPimpinan">
+                                <select class="form-control form-control-sm" v-model="skp_induk.pimpinan_id" id="pimpinan_id" @change="setPimpinan">
                                     <option v-for="(data, index) in list_pegawai" :key="data.id" :value="data.email">@{{ data.name }}</option>
                                 </select>
                             </td>
@@ -268,12 +268,9 @@ var vm = new Vue({
         pathname : window.location.pathname.replace("/create", ""),
     },
     watch: {
-        tanggal_mulai: function (val) {
+        skp_id: function (val) {
             this.setDatas();
         },
-        tanggal_selesai: function (val) {
-            this.setDatas();
-        }
     },
     methods: {
         setSkpId: function(){
@@ -284,27 +281,50 @@ var vm = new Vue({
             var self = this
             $('#wait_progres').modal('show');
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
             $.ajax({
                 url : self.pathname+ "/" + self.skp_id + "/data_skp",
                 method : 'get',
                 dataType: 'json',
             }).done(function (data) {
-                self.skp_induk = data.datas.skp_induk;
-                self.skp_pengukuran = data.datas.skp_pengukuran;
-                self.skp_target = data.datas.skp_target;
+                if(data.datas.skp_induk!=null){
+                    self.skp_induk = data.datas.skp_induk;
+                    self.skp_pengukuran = data.datas.skp_pengukuran;
+                    self.skp_target = data.datas.skp_target;
+                    
+                    $('#tanggal_mulai').val(self.changeDateFormat(self.skp_induk.tanggal_mulai))
+                    $('#tanggal_selesai').val(self.changeDateFormat(self.skp_induk.tanggal_selesai))
+                    
+                    let cur_pegawai = self.list_pegawai.find( ({ email }) => email ==self.skp_induk.pimpinan_id);
+                    self.skp_induk.pimpinan_pangkat = self.list_pangkat[cur_pegawai.nmgol.replace(" ", "")]
+                    self.skp_induk.pimpinan_gol = cur_pegawai.nmgol
+                    self.skp_induk.pimpinan_jabatan = cur_pegawai.nmjab 
+                    self.skp_induk.pimpinan_unit_kerja = cur_pegawai.nmorg
+                    self.skp_induk.pimpinan_id = cur_pegawai.email
+                    self.pimpinan_nip = cur_pegawai.nip_baru
+                }
+                else{
+                    self.skp_induk = {'id': null,
+                        'tanggal_mulai': null, 'tanggal_selesai': null,
+                        'pimpinan_id': null, 'pimpinan_pangkat': null, 'pimpinan_gol': null,
+                        'pimpinan_jabatan': null, 'pimpinan_unit_kerja': null,
+                        'versi': null, 'created_at': null,'updated_at': null};
 
+                    self.skp_pengukuran = []
+                    self.skp_target = []
+                    
+                    $('#tanggal_mulai').val("")
+                    $('#tanggal_selesai').val("")
+                }
+                
+                self.setUser();
+                
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
             });
-        },
-        setTanggal: function(jenis){
-            console.log("hai");
         },
         setPimpinan: function(e){
             // console.log(e.target.selectedIndex)
@@ -387,9 +407,12 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
+        changeDateFormat: function(label){
+            var mydate = new Date(label);
+            return (mydate.getMonth()+1)+"/"+mydate.getDate()+"/"+mydate.getFullYear();
+        }
     }
 });
-
 
 $('#tanggal_mulai').change(function() {
     vm.skp_induk.tanggal_mulai = this.value;
@@ -400,9 +423,9 @@ $('#tanggal_selesai').change(function() {
 });
 
     $(document).ready(function() {
-        vm.setSkpId();
         vm.setUser();
-        vm.setDatas();
+        vm.setSkpId();
+        // vm.setDatas();
     });
 </script>
 @endsection
