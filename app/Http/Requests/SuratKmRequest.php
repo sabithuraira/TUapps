@@ -53,7 +53,7 @@ class SuratKmRequest extends FormRequest
     public function attributes()
     {
         return [
-            'nomor_urut' => 'Nomor Urut',
+            'nomor_urut' => 'No',
             'alamat' => 'Alamat',
             'tanggal' => 'Tanggal',
             'nomor' => 'Nomor',
