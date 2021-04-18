@@ -11,7 +11,7 @@
                         <th>{{ $surat_masuk[0]->attributes()['nomor_urut'] }} / Tgl</th>
                         <th>Keterangan</th>
                         <th>Penerima</th>
-                        <th colspan="2">Action</th>
+                        <th colspan="3">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,17 +22,17 @@
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                         </td>
                         <td>
-                            <h6 class="m-b-0">Perihal: {{$data['perihal']}}</h6>
+                            <p class="m-b-0">Perihal: {{$data['perihal']}}</p>
                             @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
                                 <p class="text-muted">{{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}</p>
                             @endif
                         </td>
 
                         <td>
-                            <h6 class="m-b-0">Nama : {{$data['penerima']}}</h6>
-                            <span>Alamat: {{$data['alamat']}}</span>
+                            <p class="m-b-0">{{$data['penerima']}}</p>
                         </td>
                         
+                        <td class="text-center"><a href="{{action('SuratKmController@show', $data['id'])}}" class="btn btn-sm btn-primary"><i class="icon-eye"></i></a></td>
                         <td class="text-center"><a href="{{action('SuratKmController@edit', $data['id'])}}" class="btn btn-sm btn-info"><i class="icon-pencil"></i></a></td>
                         <td class="text-center">
                         <form action="{{action('SuratKmController@destroy', $data['id'])}}" method="post">

@@ -21,7 +21,7 @@
           <a href="{{action('SuratKmController@create')}}" class="btn btn-info">Tambah</a>
     
           <br/>
-          <p class="text-muted font-italic font-weight-lighter float-left">*Pengguna hanya dapat melihat & mengelola surat di unit kerja masing-masing.</p>
+          <small class="text-muted font-italic font-weight-lighter float-left">*Pengguna hanya dapat melihat & mengelola surat di unit kerja masing-masing.</small>
     
           <form action="{{url('surat_km')}}" method="get">
             <div class="input-group mb-3">
