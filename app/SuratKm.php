@@ -15,7 +15,15 @@ class SuratKm extends Model
 
     public function getListJenisAttribute()
     {
-        return array(1 => 'Surat Masuk', 2 => 'Surat Keluar', 3=>'Memorandum');
+        return array(
+            1 => 'Surat Masuk', 
+            2 => 'Surat Dinas Keluar', 
+            3 => 'Memorandum / Nota Dinas', 
+            4 => 'Surat Pengantar', 
+            5 => 'Disposisi', 
+            6 => 'Surat Keputusan', 
+            7 => 'Surat Keterangan', 
+        );
     }
 
     public function getListPetunjukAttribute()

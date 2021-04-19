@@ -17,51 +17,19 @@ class SuratKmController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        
-        $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
-            ->where('kdprop', '=', Auth::user()->kdprop)
-            ->where('kdkab', '=', Auth::user()->kdkab)
-            ->orderBy('created_at', 'desc')->paginate();
-            
-        $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
-            ->where('kdprop', '=', Auth::user()->kdprop)
-            ->where('kdkab', '=', Auth::user()->kdkab)
-            ->orderBy('created_at', 'desc')->paginate();
-            
-        $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
-            ->where('kdprop', '=', Auth::user()->kdprop)
-            ->where('kdkab', '=', Auth::user()->kdkab)
-            ->orderBy('created_at', 'desc')->paginate();
+        $jenis = $request->get('jenis');
+
+        $where_condition = [
+            ['kdprop', '=', Auth::user()->kdprop],
+            ['kdkab', '=', Auth::user()->kdkab],
+        ];
+
+        if($jenis!='') $where_condition[] = ['jenis_surat', '=', $jenis];
+
+        $list_surat = \App\SuratKm::where($where_condition)->orderBy('created_at', 'desc')->paginate();
         
         if(strlen($keyword)>0){
-            
-            $surat_masuk = \App\SuratKm::where('jenis_surat', '=', 1)
-                ->where('kdprop', '=', Auth::user()->kdprop)
-                ->where('kdkab', '=', Auth::user()->kdkab)
-                ->where(
-                    (function ($query) use ($keyword) {
-                        $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
-                            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
-                            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%');
-                    })
-                )
-                ->orderBy('created_at', 'desc')->paginate();
-
-            $surat_keluar = \App\SuratKm::where('jenis_surat', '=', 2)
-                ->where('kdprop', '=', Auth::user()->kdprop)
-                ->where('kdkab', '=', Auth::user()->kdkab)
-                ->where(
-                    (function ($query) use ($keyword) {
-                        $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
-                            ->orWhere('alamat', 'LIKE', '%' . $keyword . '%')
-                            ->orWhere('perihal', 'LIKE', '%' . $keyword . '%');
-                    })
-                )
-                ->orderBy('created_at', 'desc')->paginate();
-
-            $memorandum = \App\SuratKm::where('jenis_surat', '=', 3)
-                ->where('kdprop', '=', Auth::user()->kdprop)
-                ->where('kdkab', '=', Auth::user()->kdkab)
+            $list_surat = \App\SuratKm::where($where_condition)
                 ->where(
                     (function ($query) use ($keyword) {
                         $query-> where('nomor_urut', 'LIKE', '%' . $keyword . '%')
@@ -72,22 +40,11 @@ class SuratKmController extends Controller
                 ->orderBy('created_at', 'desc')->paginate();
         }
 
-        $surat_masuk->withPath('surat_km');
-        $surat_masuk->appends($request->all());
-        
-        $surat_keluar->withPath('surat_km');
-        $surat_keluar->appends($request->all());
-        
-        $memorandum->withPath('surat_km');
-        $memorandum->appends($request->all());
+        $list_surat->withPath('surat_km');
+        $list_surat->appends($request->all());
 
-        // if ($request->ajax()) {
-        //     return \Response::json(\View::make('surat_km.list', array(
-        //         'surat_masuk' => $surat_masuk, 'surat_keluar'=> $surat_keluar, 'memorandum'=>$memorandum))
-        //         ->render());
-        // }
 
-        return view('surat_km.index',compact('surat_masuk','surat_keluar', 'memorandum', 'keyword'));
+        return view('surat_km.index',compact('list_surat', 'keyword', 'jenis'));
     }
 
     public function getNomorUrut(Request $request){

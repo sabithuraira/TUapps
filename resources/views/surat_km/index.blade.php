@@ -35,16 +35,7 @@
             </div>
           </form>
           <section class="datas">
-            <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#surat_masuk">Surat Masuk</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#surat_keluar">Surat Keluar</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#memorandum">Memorandum</a></li>
-            </ul>
-            <div class="tab-content">
-                @include('surat_km.list_surat_masuk')
-                @include('surat_km.list_surat_keluar')
-                @include('surat_km.list_memorandum')
-            </div>
+              @include('surat_km.list')
           </section>
       </div>
     </div>
