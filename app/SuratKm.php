@@ -43,4 +43,12 @@ class SuratKm extends Model
             9215 => 'Subbagian Umum',
         );
     }
+
+    public function getListTingkatKeamananAttribute()
+    {
+        return array(
+            'B' => 'Biasa', 
+            'R' => 'Rahasia', 
+        );
+    }
 }
