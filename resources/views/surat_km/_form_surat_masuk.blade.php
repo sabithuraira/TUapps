@@ -41,7 +41,7 @@
 
 <div class="row clearfix">
     <div class="col-md-6">
-        <label>{{ $model->attributes()['nomor'] }}:</label>
+        <label>Nomor Surat:</label>
         <input type="text" class="form-control {{($errors->first('nomor') ? ' parsley-error' : '')}}" name="nomor" value="{{ old('nomor', $model->nomor) }}">
         @foreach ($errors->get('nomor') as $msg)
             <p class="text-danger">{{ $msg }}</p>
@@ -50,7 +50,7 @@
     
     <div class="col-md-6 left">
         <div class="form-group">
-            <label>{{ $model->attributes()['alamat'] }}:</label>
+            <label>{{ $model->attributes()['alamat'] }} / Pengirim:</label>
             <input type="text" class="form-control {{($errors->first('alamat') ? ' parsley-error' : '')}}" name="alamat" value="{{ old('alamat', $model->alamat) }}">
             @foreach ($errors->get('alamat') as $msg)
                 <p class="text-danger">{{ $msg }}</p>

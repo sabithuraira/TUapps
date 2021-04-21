@@ -16,18 +16,9 @@ class SuratKmRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'nomor_urut' => 'required|max:255',
-            'alamat' => 'required',
-            'tanggal' => 'required',
-            'perihal' => 'required',
         ];
     }
 
@@ -39,16 +30,6 @@ class SuratKmRequest extends FormRequest
             // 'nama.required' => ':attribute tidak boleh kosong',
         ];
     }
-
-
-    // $table->string('nomor_urut');
-    // $table->string('alamat');
-    // $table->date('tanggal');
-    // $table->string('nomor')->nullable();
-    // $table->string('perihal');
-    // $table->string('nomor_petunjuk')->nullable();
-
-    // $table->integer('jenis_surat');
 
     public function attributes()
     {

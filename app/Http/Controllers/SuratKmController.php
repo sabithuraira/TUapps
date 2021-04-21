@@ -148,6 +148,72 @@ class SuratKmController extends Controller
         return view('surat_km.create',compact('model'));
     }
 
+    function getNomorUrutDirect($date_surat, $jenis_surat){
+        $total=1;
+        $tanggal =  date('Y-m-d', strtotime($date_surat));
+
+        $total_after = \App\SuratKm::where([
+                ['tanggal', '>', $tanggal],
+                ['jenis_surat', '=', $jenis_surat],
+                ['kdprop', '=', Auth::user()->kdprop],
+                ['kdkab', '=', Auth::user()->kdkab],
+            ])->count();
+        
+        if ($total_after == 0) {
+            $last_data = \App\SuratKm::where([
+                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
+                    ['jenis_surat', '=', $jenis_surat],
+                    ['kdprop', '=', Auth::user()->kdprop],
+                    ['kdkab', '=', Auth::user()->kdkab],
+                    ['nomor_urut', 'regexp', '^[0-9]+$'],
+                ])
+                ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
+                ->first();
+            
+            if($last_data!=null) $total =  $last_data->nomor_urut + 1;
+            else $total = 1;
+        }
+        else{
+            $first_after = \App\SuratKm::where([
+                    ['tanggal', '>', $tanggal],
+                    ['jenis_surat', '=', $jenis_surat],
+                    ['kdprop', '=', Auth::user()->kdprop],
+                    ['kdkab', '=', Auth::user()->kdkab],
+                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
+                ])
+                ->orderBy('nomor_urut', 'asc')
+                ->first();
+
+            $first_number_after = $first_after->nomor_urut;
+
+            // if the number not numeric, ex: 306.A, 90.C,
+            // we will explode by "." char and take the numeric only
+            if(!is_numeric($first_number_after)){
+                $exp = explode(".", $first_number_after);
+                $first_number_after = $exp[0];
+            }
+
+            $current_number = $first_number_after - 1;
+
+            $total_current_number = \App\SuratKm::where([
+                ['nomor_urut', 'LIKE', $current_number.'%'],
+                ['jenis_surat', '=', $jenis_surat],
+                ['kdprop', '=', Auth::user()->kdprop],
+                ['kdkab', '=', Auth::user()->kdkab],
+            ])
+            ->count();
+
+            $alphabet = range('A', 'Z');
+            
+            if($current_number==0 || $total_current_number<=0)
+                $total = 0;
+            else
+                $total = $current_number.'.'.$alphabet[$total_current_number-1];
+        }
+
+        return $total;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -163,22 +229,41 @@ class SuratKmController extends Controller
         }
 
         $model= new \App\SuratKm;
-        $model->nomor_urut=$request->get('nomor_urut');
-        $model->alamat=$request->get('alamat');
-        $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-        $model->nomor=$request->get('nomor');
-        $model->perihal=$request->get('perihal');
-        $model->nomor_petunjuk=$request->get('nomor_petunjuk');
-        $model->jenis_surat=$request->get('jenis_surat');
-        $model->penerima=$request->get('penerima');
-        
+        $model->jenis_surat = $request->jenis_surat;
         $model->kdprop =Auth::user()->kdprop;
         $model->kdkab =Auth::user()->kdkab;
-
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
-        $model->save();
-        
+
+        if($model->jenis_surat==1){
+            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
+            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->alamat= $request->get('alamat');
+            $model->nomor= $request->get('nomor');
+            $model->perihal= $request->get('perihal');
+            $model->nomor_petunjuk= $request->get('nomor_petunjuk');
+            $model->penerima= $request->get('penerima');
+            $model->save();
+        }
+        else if($model->jenis_surat==2){
+
+        }
+        else if($model->jenis_surat==3){
+
+        }
+        else if($model->jenis_surat==4){
+
+        }
+        else if($model->jenis_surat==5){
+
+        }
+        else if($model->jenis_surat==6){
+
+        }
+        else if($model->jenis_surat==7){
+
+        }
+       
         return redirect('surat_km')->with('success', 'Information has been added');
     }
 
