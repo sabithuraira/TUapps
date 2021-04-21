@@ -83,6 +83,7 @@ var vm = new Vue({
         tanggal: {!! json_encode(date('m/d/Y', strtotime($model->tanggal))) !!},
         nomor_urut: {!! json_encode($model->nomor_urut) !!},
         tembusan: [],
+        keputusan: [],
         pathname : (window.location.pathname).replace("/create", ""),
     },
     computed: {
@@ -119,8 +120,20 @@ var vm = new Vue({
             }).done(function (data) {
                 self.nomor_urut = data.total;
              
-                if(self.jenis_surat==2 || self.jenis_surat==3){
+                if(self.jenis_surat>=2 && self.jenis_surat<=5){
                     $('#isi').summernote();
+                }
+                
+                if(self.jenis_surat==5){
+                    $('#isi_disposisi').summernote();
+                    $('#diteruskan_kepada').summernote();
+                }
+                
+                if(self.jenis_surat==6){
+                    $('#tentang').summernote();
+                    $('#menimbang').summernote();
+                    $('#mengingat').summernote();
+                    $('#menetapkan').summernote();
                 }
 
                 $('#wait_progres').modal('hide');
@@ -132,6 +145,13 @@ var vm = new Vue({
         addTembusan(){
             this.tembusan.push({
                 'id' : 'a' + this.tembusan.length,
+                'induk_id' : '',
+                'isi' : '',
+            });
+        },
+        addKeputusan(){
+            this.keputusan.push({
+                'id' : 'a' + this.keputusan.length,
                 'induk_id' : '',
                 'isi' : '',
             });
