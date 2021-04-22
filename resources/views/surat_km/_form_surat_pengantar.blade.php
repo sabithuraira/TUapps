@@ -31,14 +31,39 @@
     <div class="col-md-6 left">
         <div class="form-group">
             <label>Kode Klasifikasi:</label>
-            <input type="text" class="form-control" name="kode_klasifikasi_arsip" v-model="kode_klasifikasi_arsip">
+            <input type="text" class="form-control" name="klasifikasi_arsip" v-model="klasifikasi_arsip">
         </div>
     </div>
 </div>
 
-Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
-<input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+kode_klasifikasi_arsip+'/'+bulan+'/'+tahun">
+Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
+<input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+klasifikasi_arsip+'/'+bulan+'/'+tahun">
 <br/><br/>
+
+
+<div class="row clearfix">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>{{ $model->attributes()['tanggal'] }}:</label>
+            <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
+                <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" id="tanggal" v-model="tanggal">
+                <div class="input-group-append">                                            
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
+            @foreach ($errors->get('tanggal') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="col-md-6 left">
+        <div class="form-group">
+            <label>Dibuat di:</label>
+            <input type="text" class="form-control" name="dibuat_di">
+        </div>
+    </div>
+</div>
 
 <label>Kepada:</label>
 <div class="row clearfix">
@@ -97,21 +122,26 @@ Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{
     <div class="col-md-4">
         <div class="form-group">
             Tanggal:<br/>
-            <input type="text" class="form-control" name="diterima_tanggal">
+            <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
+                <input type="text" class="form-control" name="diterima_tanggal" id="diterima_tanggal" v-model="diterima_tanggal">
+                <div class="input-group-append">                                            
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="col-md-4 left">
         <div class="form-group">
             Nama Penerima:<br/>
-            <input type="text" class="form-control" name="diterima_jabatan">
+            <input type="text" class="form-control" name="diterima_nama">
         </div>
     </div>
 
     <div class="col-md-4 left">
         <div class="form-group">
             Jabatan:<br/>
-            <input type="text" class="form-control" name="diterima_nama">
+            <input type="text" class="form-control" name="diterima_jabatan">
         </div>
     </div>
 </div>

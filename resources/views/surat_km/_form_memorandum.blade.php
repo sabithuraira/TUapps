@@ -55,13 +55,13 @@
     <div class="col-md-4 left">
         <div class="form-group">
             <label>Kode Klasifikasi:</label>
-            <input type="text" class="form-control" name="kode_klasifikasi_arsip" v-model="kode_klasifikasi_arsip">
+            <input type="text" class="form-control" name="klasifikasi_arsip" v-model="klasifikasi_arsip">
         </div>
     </div>
 </div>
 
-Nomor Surat: @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
-<input type="hidden" name="nomor" :value="nomor_urut+'/'+kode_unit_kerja+'/'+kode_klasifikasi_arsip+'/'+bulan+'/'+tahun">
+Nomor Surat: @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
+<input type="hidden" name="nomor" :value="nomor_urut+'/'+kode_unit_kerja+'/'+klasifikasi_arsip+'/'+bulan+'/'+tahun">
 <br/><br/>
 
 <div class="row clearfix">
@@ -73,10 +73,6 @@ Nomor Surat: @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip
     </div>
     
     <div class="col-md-6 left">
-        <div class="form-group">
-            <label>Lampiran:</label>
-            <input type="text" class="form-control" name="lampiran">
-        </div>
     </div>
 </div>
 
@@ -110,13 +106,7 @@ Nomor Surat: @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip
     <div class="col-md-12">
         <div class="form-group">
             <label>Tembusan:</label>
-            <button href="" class="btn btn-info" @click="addTembusan">&nbsp; Tambah</button><br/><br/>                   
-            <table class="table-bordered m-b-0" style="min-width:100%">
-                
-                <tr v-for="(data, index) in tembusan" :key="'tembusan'+index">
-                    <td><input class="form form-control" type="text" v-model="data.isi"></td>
-                </tr>
-            </table>
+            <textarea id="tembusan" class="summernote form-control" name="tembusan" rows="10"></textarea>
         </div>
     </div>
 </div>

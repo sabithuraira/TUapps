@@ -16,19 +16,14 @@
 
     <div class="col-md-6 left">
         <div class="form-group">
-            <label>Tingkat Keamanan:</label>
-            <select class="form-control" v-model="tingkat_keamanan" name="tingkat_keamanan">
-                <option value="">- Pilih Tingkat Keamanan -</option>
-                @foreach ($model->listTingkatKeamanan as $key=>$value)
-                    <option value="{{ $key }}">{{ $value }}</option>
-                @endforeach
-            </select>
+            <label>Nomor Surat:</label>
+            <input type="text" class="form-control" name="nomor">
         </div>
     </div>
 </div>
 
 <div class="row clearfix">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
             <label>Nomor Urut:</label>
             <input type="text" class="form-control" name="nomor_urut" v-model="nomor_urut">
@@ -36,10 +31,22 @@
         </div>
     </div>
     
-    <div class="col-md-6 left">
+    <div class="col-md-4 left">
         <div class="form-group">
             <label>Nomor Agenda:</label>
             <input type="text" class="form-control" name="nomor_agenda" v-model="nomor_agenda">
+        </div>
+    </div>
+
+    <div class="col-md-4 left">
+        <div class="form-group">
+            <label>Tingkat Keamanan:</label>
+            <select class="form-control" v-model="tingkat_keamanan" name="tingkat_keamanan">
+                <option value="">- Pilih Tingkat Keamanan -</option>
+                @foreach ($model->listTingkatKeamanan as $key=>$value)
+                    <option value="{{ $key }}">{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 </div>
@@ -91,7 +98,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Ringkasan Isi:</label>
-            <textarea id="isi" class="summernote form-control" name="isi" rows="10"></textarea>
+            <textarea id="isi" class="form-control" name="isi" rows="5"></textarea>
         </div>
     </div>
 </div>
@@ -101,7 +108,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Isi Disposisi:</label>
-            <textarea id="isi_disposisi" class="summernote form-control" name="isi_disposisi" rows="10"></textarea>
+            <textarea id="isi_disposisi" class="form-control" name="isi_disposisi" rows="5"></textarea>
         </div>
     </div>
 </div>
@@ -110,7 +117,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Diteruskan Kepada:</label>
-            <textarea id="diteruskan_kepada" class="summernote form-control" name="diteruskan_kepada" rows="10"></textarea>
+            <textarea id="diteruskan_kepada" class="form-control" name="diteruskan_kepada" rows="5"></textarea>
         </div>
     </div>
 </div>

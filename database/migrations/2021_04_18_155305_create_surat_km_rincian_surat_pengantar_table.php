@@ -24,6 +24,7 @@ class CreateSuratKmRincianSuratPengantarTable extends Migration
             $table->string('diterima_nama');
             $table->string('diterima_nip')->nullable();
             $table->string('diterima_no_hp')->nullable();
+            $table->string('dibuat_di')->nullable();
             $table->timestamps();
         });
     }

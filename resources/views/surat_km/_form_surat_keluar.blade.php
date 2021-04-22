@@ -58,13 +58,13 @@
     <div class="col-md-4 left">
         <div class="form-group">
             <label>Kode Klasifikasi:</label>
-            <input type="text" class="form-control" name="kode_klasifikasi_arsip" v-model="kode_klasifikasi_arsip">
+            <input type="text" class="form-control" name="klasifikasi_arsip" v-model="klasifikasi_arsip">
         </div>
     </div>
 </div>
 
-Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
-<input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+kode_klasifikasi_arsip+'/'+bulan+'/'+tahun">
+Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} <small class="text-mute"><i>(Keterangan Format Nomor Surat: Nomor Urut/Kode Satuan Organisasi/Kode Klasifikasi Arsip/Bulan/Tahun)</i></small>
+<input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+klasifikasi_arsip+'/'+bulan+'/'+tahun">
 <br/><br/>
 <div class="row clearfix">
     <div class="col-md-6">
