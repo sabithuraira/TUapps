@@ -125,7 +125,7 @@ var vm = new Vue({
             }).done(function (data) {
                 self.nomor_urut = data.total;
              
-                if(self.jenis_surat>=2 && self.jenis_surat<=4){
+                if((self.jenis_surat>=2 && self.jenis_surat<=4) || self.jenis_surat==7){
                     $('#isi').summernote();
                 }
                 

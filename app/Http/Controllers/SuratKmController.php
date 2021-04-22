@@ -234,7 +234,10 @@ class SuratKmController extends Controller
         $model->kdkab =Auth::user()->kdkab;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
-        $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
+
+        $tanggal_format = date('Y-m-d');
+        if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
+    
         $bulan = date('m', strtotime($request->get('tanggal')));
         $tahun = date('Y', strtotime($request->get('tanggal')));
 
@@ -363,7 +366,21 @@ class SuratKmController extends Controller
             }
         }
         else if($model->jenis_surat==7){
-
+            $model->nomor_urut= $this->getNomorUrutDirect( $tanggal_format, $model->jenis_surat);
+            $model->tingkat_keamanan = $request->tingkat_keamanan;
+            $model->kode_unit_kerja = $request->kode_unit_kerja;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
+            $model->ditetapkan_di = $request->ditetapkan_di;
+            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal));
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
+            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            if($model->save()){
+                $model_rincian = new \App\SuratKmRincianSuratKeterangan;
+                $model_rincian->induk_id = $model->id;
+                $model_rincian->isi = $request->isi;
+                $model_rincian->save();
+            }
         }
        
         return redirect('surat_km')->with('success', 'Information has been added');

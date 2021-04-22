@@ -18,7 +18,6 @@ class CreateSuratKmRincianSuratKeteranganTable extends Migration
 
             $table->integer('induk_id');
             $table->text('isi');
-            $table->text('pendanda_tangan');
 
             $table->timestamps();
         });

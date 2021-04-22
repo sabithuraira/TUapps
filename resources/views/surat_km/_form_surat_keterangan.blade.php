@@ -1,5 +1,5 @@
 <div class="row clearfix">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="form-group">
             <label>Nomor Urut:</label>
             <input type="text" class="form-control" name="nomor_urut" v-model="nomor_urut">
@@ -7,17 +7,32 @@
         </div>
     </div>
     
-    <div class="col-md-4 left">
+    <div class="col-md-6 left">
         <div class="form-group">
             <label>Kode Satuan Organisasi:</label>
             <input type="text" class="form-control" name="kode_unit_kerja" v-model="kode_unit_kerja">
         </div>
     </div>
 
-    <div class="col-md-4 left">
+</div>
+
+<div class="row clearfix">
+    <div class="col-md-6">
         <div class="form-group">
             <label>Kode Klasifikasi:</label>
             <input type="text" class="form-control" name="klasifikasi_arsip" v-model="klasifikasi_arsip">
+        </div>
+    </div>
+
+    <div class="col-md-6 left">
+        <div class="form-group">
+            <label>Tingkat Keamanan:</label>
+            <select class="form-control" v-model="tingkat_keamanan" name="tingkat_keamanan">
+                <option value="">- Pilih Tingkat Keamanan -</option>
+                @foreach ($model->listTingkatKeamanan as $key=>$value)
+                    <option value="{{ $key }}">{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 </div>
@@ -47,7 +62,12 @@ Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{
     <div class="col-md-6 left">
         <div class="form-group">
             Tanggal:<br/>
-            <input type="text" class="form-control" name="ditetapkan_tanggal">
+            <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
+                <input type="text" class="form-control" name="ditetapkan_tanggal" id="ditetapkan_tanggal" v-model="ditetapkan_tanggal">
+                <div class="input-group-append">                                            
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
