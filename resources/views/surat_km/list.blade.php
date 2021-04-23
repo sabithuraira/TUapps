@@ -23,14 +23,17 @@
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                         </td>
                         <td>
-                            @if($data['jenis_surat']==1)
+                            @if($data['jenis_surat']>=1 && $data['jenis_surat']<=3)
                                 <h6 class="m-b-0">{{ $data['perihal'] }}</h6>
                                 <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
-                            @else 
-                                <p class="m-b-0">Perihal: {{$data['perihal']}}</p>
-                                @if(array_key_exists($data['nomor_petunjuk'], $data->listPetunjuk))
-                                    <p class="text-muted">{{ $data->listPetunjuk[$data['nomor_petunjuk']] }} - {{ $data['nomor_petunjuk'] }}</p>
-                                @endif
+                            @elseif($data['jenis_surat']==4)
+                                <h6 class="m-b-0">Dari: {{ $data['ditetapkan_oleh'] }}</h6>
+                                <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
+                            @elseif($data['jenis_surat']==5)
+                                <p class="m-b-0">{{ $data['nomor'] }}</p>
+                            @elseif($data['jenis_surat']==6 || $data['jenis_surat']==7)
+                                <h6 class="m-b-0">Ditetapkan Oleh: {{ $data['ditetapkan_oleh'] }}</h6>
+                                <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
                             @endif
                         </td>
                         

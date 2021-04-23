@@ -300,7 +300,6 @@ class SuratKmController extends Controller
             $model->kode_unit_kerja = $request->kode_unit_kerja;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip;
             $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->perihal= $request->get('perihal');
             $model->ditetapkan_oleh = $request->ditetapkan_oleh;
             $model->ditetapkan_nama = $request->ditetapkan_nama;
             $model->ditetapkan_nip = $request->ditetapkan_nip;
