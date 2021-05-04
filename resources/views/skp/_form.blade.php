@@ -131,7 +131,7 @@
             <div class="table-responsive">
                 <button class="btn btn-info" @click="addPengukuran">Tambah Rincian</button>
                 <br/><br/>
-                <table class="table table-sm table-bordered m-b-0" style="min-width:100%">
+                <table class="table table-sm table-bordered m-b-0" style="min-width:200%">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
@@ -177,23 +177,23 @@
                     <tbody>
                         <tr v-for="(data, index) in skp_pengukuran" :key="'pengukuran'+index">
                             <td>@{{ index+1 }}</td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.uraian"></td> 
+                            <td><input type="text" class="form-control form-control" v-model="data.uraian"></td> 
 
                             <td>..</td>
-                            <td><input type="number" class="form form-control form-control-sm" v-model="data.target_kuantitas"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_satuan"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_kualitas"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_waktu"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_satuan_waktu"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.target_biaya"></td>
+                            <td><input type="number" class="form-control form-control-sm" size="8" v-model="data.target_kuantitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.target_satuan"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_kualitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_satuan_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.target_biaya"></td>
                             
                             <td>..</td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_kuantitas"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_satuan"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_kualitas"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_waktu"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_satuan_waktu"></td>
-                            <td><input type="text" class="form form-control form-control-sm" v-model="data.realisasi_biaya"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_kuantitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.realisasi_satuan"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_kualitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_satuan_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.realisasi_biaya"></td>
 
                             <td>@{{ data.penghitungan }}</td>
                             <td>@{{ data.nilai_capaian_skp }}</td>

@@ -40,7 +40,6 @@ Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{
 <input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+klasifikasi_arsip+'/'+bulan+'/'+tahun">
 <br/><br/>
 
-
 <div class="row clearfix">
     <div class="col-md-6">
         <div class="form-group">

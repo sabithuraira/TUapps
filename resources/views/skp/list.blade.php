@@ -139,7 +139,7 @@
                             <td>10</td>
                             <td colspan="2">11</td>
                             <td>12</td>
-                            <td>13/td>
+                            <td>13</td>
                             <td>14</td>
                         </tr>
                     </thead>
