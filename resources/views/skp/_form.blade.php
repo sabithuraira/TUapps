@@ -182,18 +182,18 @@
                             <td>..</td>
                             <td><input type="number" class="form-control form-control-sm" size="8" v-model="data.target_kuantitas"></td>
                             <td><input type="text" class="form-control form-control-sm" v-model="data.target_satuan"></td>
-                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_kualitas"></td>
+                            <td><input type="number" class="form-control form-control-sm" size="1" v-model="data.target_kualitas"></td>
                             <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_waktu"></td>
                             <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_satuan_waktu"></td>
-                            <td><input type="text" class="form-control form-control-sm" v-model="data.target_biaya"></td>
+                            <td><input type="number" class="form-control form-control-sm" v-model="data.target_biaya"></td>
                             
                             <td>..</td>
                             <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_kuantitas"></td>
                             <td><input type="text" class="form-control form-control-sm" v-model="data.realisasi_satuan"></td>
-                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_kualitas"></td>
+                            <td><input type="number" class="form-control form-control-sm" size="1" v-model="data.realisasi_kualitas"></td>
                             <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_waktu"></td>
                             <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_satuan_waktu"></td>
-                            <td><input type="text" class="form-control form-control-sm" v-model="data.realisasi_biaya"></td>
+                            <td><input type="number" class="form-control form-control-sm" v-model="data.realisasi_biaya"></td>
 
                             <td>@{{ data.penghitungan }}</td>
                             <td>@{{ data.nilai_capaian_skp }}</td>
@@ -392,7 +392,7 @@ var vm = new Vue({
             $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
             $.ajax({
-                url :  self.pathname + "/store_target",
+                url :  self.pathname + "/store_pengukuran",
                 method : 'post',
                 dataType: 'json',
                 data:{

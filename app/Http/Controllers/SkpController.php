@@ -125,31 +125,35 @@ class SkpController extends Controller
                     $model_pengukuran->created_by = Auth::id();
                 }
 
-                $model_pengukuran->id_induk = $model_induk->id;
-                $model_pengukuran->user_id = $user_id;
-                $model_pengukuran->uraian = $value['uraian'];
-                $model_pengukuran->kode_point_kredit = $value['kode_point_kredit'];
-                $model_pengukuran->target_satuan = $value['target_satuan'];
-                $model_pengukuran->target_kuantitas = $value['target_kuantitas'];
-                $model_pengukuran->target_kualitas = $value['target_kualitas'];
-                $model_pengukuran->target_waktu = $value['target_waktu'];
-                $model_pengukuran->target_satuan_waktu = $value['target_satuan_waktu'];
-                $model_pengukuran->target_biaya = $value['target_biaya'];
-                $model_pengukuran->target_angka_kredit = $value['target_angka_kredit'];
-                
-                $model_pengukuran->realisasi_satuan = $value['realisasi_satuan'];
-                $model_pengukuran->realisasi_kuantitas = $value['realisasi_kuantitas'];
-                $model_pengukuran->realisasi_kualitas = $value['realisasi_kualitas'];
-                $model_pengukuran->realisasi_waktu = $value['realisasi_waktu'];
-                $model_pengukuran->realisasi_satuan_waktu = $value['realisasi_satuan_waktu'];
-                $model_pengukuran->realisasi_biaya = $value['realisasi_biaya'];
-                $model_pengukuran->realisasi_angka_kredit = $value['realisasi_angka_kredit'];
+                if(strlen($value['uraian'])>0 && strlen($value['target_satuan'])>0 && strlen($value['target_kuantitas'])>0 && 
+                    strlen($value['target_kualitas'])>0 && strlen($value['realisasi_waktu'])>0 && strlen($value['realisasi_kuantitas'])>0 && 
+                    strlen($value['realisasi_kualitas'])>0){
+                    $model_pengukuran->id_induk = $model_induk->id;
+                    $model_pengukuran->user_id = $user_id;
+                    $model_pengukuran->uraian = $value['uraian'];
+                    $model_pengukuran->kode_point_kredit = $value['kode_point_kredit'];
+                    $model_pengukuran->target_satuan = $value['target_satuan'];
+                    $model_pengukuran->target_kuantitas = $value['target_kuantitas'];
+                    $model_pengukuran->target_kualitas = $value['target_kualitas'];
+                    $model_pengukuran->target_waktu = $value['target_waktu'];
+                    $model_pengukuran->target_satuan_waktu = $value['target_satuan_waktu'];
+                    $model_pengukuran->target_biaya = $value['target_biaya'];
+                    $model_pengukuran->target_angka_kredit = $value['target_angka_kredit'];
+                    
+                    $model_pengukuran->realisasi_satuan = $value['realisasi_satuan'];
+                    $model_pengukuran->realisasi_kuantitas = $value['realisasi_kuantitas'];
+                    $model_pengukuran->realisasi_kualitas = $value['realisasi_kualitas'];
+                    $model_pengukuran->realisasi_waktu = $value['realisasi_waktu'];
+                    $model_pengukuran->realisasi_satuan_waktu = $value['realisasi_satuan_waktu'];
+                    $model_pengukuran->realisasi_biaya = $value['realisasi_biaya'];
+                    $model_pengukuran->realisasi_angka_kredit = $value['realisasi_angka_kredit'];
 
-                $model_pengukuran->penghitungan = $value['penghitungan'];
-                $model_pengukuran->nilai_capaian_ckp = $value['nilai_capaian_ckp'];
-                $model_pengukuran->jenis = 1;
-                $model_pengukuran->updated_by = Auth::id();
-                $model_pengukuran->save();
+                    $model_pengukuran->penghitungan = $value['penghitungan'];
+                    $model_pengukuran->nilai_capaian_skp = $value['nilai_capaian_skp'];
+                    $model_pengukuran->jenis = 1;
+                    $model_pengukuran->updated_by = Auth::id();
+                    $model_pengukuran->save();
+                }
             }
         }
 
@@ -176,5 +180,53 @@ class SkpController extends Controller
         ];
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
+    public function print(Request $request)
+    {
+        $skp_id = 0; $type = 1;
+
+        $type = $_POST['action'];
+            
+        if(strlen($request->get('skp_id'))>0){
+            $skp_id = $request->get('skp_id');
+        }
+        //////////////
+        // $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+        //             ->where('kdkab','=',Auth::user()->kdkab)->get();
+        // $list_pangkat = (new \App\UserModel())->listPangkat;
+        $user_id = Auth::user()->email;
+        $skp_induk = \App\SkpInduk::find($skp_id);
+
+        if($type==1){
+            if($skp_induk!==null) $skp_pengukuran = \App\SkpPengukuran::where('id_induk', '=', $skp_induk->id)->get();
+            else $skp_pengukuran = [];
+
+            $pdf = PDF::loadView('skp.print_pengukuran', compact('skp_induk', 'skp_pengukuran'))
+                ->setPaper('a4', 'landscape');
+            
+            $nama_file = $user_id.'_SKP_';
+            $nama_file .= 'PENGUKURAN_';
+            $nama_file .= $skp_induk->id.'.pdf';
+        }
+        else if($type==2){
+            if($skp_induk!==null) $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
+            else $skp_target = [];
+            
+            $pdf = PDF::loadView('skp.print_target', compact('skp_induk', 'skp_target'))
+                ->setPaper('a4', 'landscape');
+            
+            $nama_file = $user_id.'_SKP_';
+            $nama_file .= 'TARGET_';
+            $nama_file .= $skp_induk->id.'.pdf';
+        }
+
+        /////////////
+        // $monthLabel = config('app.months')[$month];
+        // $monthName = date("F", mktime(0, 0, 0, $month, 10));
+        // $last_day_month  = date('t', mktime(0, 0, 0, $month, 10)); //date("t");
+        // $first_working_day = date('d F Y', strtotime("+0 weekday $monthName $year"));
+        // $last_working_day = date('d F Y', strtotime('last weekday '.date("F Y", strtotime('next month '.$monthName.' '.$year))));
+        return $pdf->download($nama_file);
     }
 }

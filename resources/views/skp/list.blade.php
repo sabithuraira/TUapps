@@ -1,4 +1,4 @@
-<form action="{{action('CkpController@print')}}" method="post">
+<form action="{{action('SkpController@print')}}" method="post">
     @csrf 
     <input type="hidden"  v-model="skp_id" name="skp">
     <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak SKP Target &nbsp</button>
@@ -101,7 +101,7 @@
         
         <div class="tab-pane" id="pengukuran">
             <div class="table-responsive">
-                <table class="table-sm table-bordered m-b-0">
+                <table class="table table-sm table-bordered m-b-0" style="min-width:200%">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
@@ -111,18 +111,18 @@
                             <th rowspan="2">AK</th>
                             <th class="text-center" colspan="6">REALISASI</th>
                             <th rowspan="2">PENGHITUNGAN</th>
-                            <th rowspan="2">NILAI CAPAIAN SKP</th>
+                            <th class="text-center" rowspan="2">NILAI CAPAIAN SKP</th>
                         </tr>
 
                         <tr class="text-center">
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                             
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                         </tr>
                         
