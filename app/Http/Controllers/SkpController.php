@@ -185,6 +185,7 @@ class SkpController extends Controller
     public function print(Request $request)
     {
         $skp_id = 0; $type = 1;
+        $user = Auth::user();
 
         $type = $_POST['action'];
             
@@ -199,10 +200,19 @@ class SkpController extends Controller
         $skp_induk = \App\SkpInduk::find($skp_id);
 
         if($type==1){
-            if($skp_induk!==null) $skp_pengukuran = \App\SkpPengukuran::where('id_induk', '=', $skp_induk->id)->get();
-            else $skp_pengukuran = [];
+            if($skp_induk!==null) {
+                $skp_pengukuran = \App\SkpPengukuran::where('id_induk', '=', $skp_induk->id)->get();
+                $user_pimpinan = \App\User::where('email', '=', $skp_induk->pimpinan_id)->first();
+            }
+            else{
+                $skp_pengukuran = [];
+                $user_pimpinan = null;
+            } 
 
-            $pdf = PDF::loadView('skp.print_pengukuran', compact('skp_induk', 'skp_pengukuran'))
+            // print_r($skp_pengukuran);
+
+            $pdf = PDF::loadView('skp.print_pengukuran', compact('skp_induk', 'skp_pengukuran', 
+                'user', 'user_pimpinan'))
                 ->setPaper('a4', 'landscape');
             
             $nama_file = $user_id.'_SKP_';
@@ -210,23 +220,26 @@ class SkpController extends Controller
             $nama_file .= $skp_induk->id.'.pdf';
         }
         else if($type==2){
-            if($skp_induk!==null) $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
-            else $skp_target = [];
+            if($skp_induk!==null){ 
+                $skp_target = \App\SkpTarget::where('id_induk', '=', $skp_induk->id)->get();
+                $user_target = \App\User::where('email', '=', $skp_induk->user_id)->first();
+                $user_pimpinan = \App\User::where('email', '=', $skp_induk->pimpinan_id)->first();
+            }
+            else{ 
+                $skp_target = [];
+                $user_target = null;
+                $user_pimpinan = null;
+            }
             
-            $pdf = PDF::loadView('skp.print_target', compact('skp_induk', 'skp_target'))
-                ->setPaper('a4', 'landscape');
+
+            $pdf = PDF::loadView('skp.print_target', compact('skp_induk', 'skp_target', 'user', 
+                'user_target', 'user_pimpinan'))
+                ->setPaper('a4', 'potrait');
             
             $nama_file = $user_id.'_SKP_';
             $nama_file .= 'TARGET_';
             $nama_file .= $skp_induk->id.'.pdf';
         }
-
-        /////////////
-        // $monthLabel = config('app.months')[$month];
-        // $monthName = date("F", mktime(0, 0, 0, $month, 10));
-        // $last_day_month  = date('t', mktime(0, 0, 0, $month, 10)); //date("t");
-        // $first_working_day = date('d F Y', strtotime("+0 weekday $monthName $year"));
-        // $last_working_day = date('d F Y', strtotime('last weekday '.date("F Y", strtotime('next month '.$monthName.' '.$year))));
         return $pdf->download($nama_file);
     }
 }

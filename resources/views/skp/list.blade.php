@@ -1,6 +1,6 @@
 <form action="{{action('SkpController@print')}}" method="post">
     @csrf 
-    <input type="hidden"  v-model="skp_id" name="skp">
+    <input type="hidden"  v-model="skp_id" name="skp_id">
     <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak SKP Target &nbsp</button>
     <span class="float-right">&nbsp &nbsp</span>
     <button name="action" class="float-right" type="submit" value="1"><i class="icon-printer"></i>&nbsp Cetak SKP Pengukuran &nbsp</button>

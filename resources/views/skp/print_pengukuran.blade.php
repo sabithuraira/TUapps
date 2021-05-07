@@ -23,17 +23,20 @@
         font-size: x-small;
     }
 
+    .p_kecil {
+        font-size: x-small; 
+    }
+
     .gray { background-color: lightgray }
 </style>
 
 </head>
 <body>
-    <h3 align="center">
+    <h4 align="center">
         PENILAIAN CAPAIAN SASARAN KERJA<br/>
         PEGAWAI NEGERI SIPIL
-    </h3>
-
-    <p>
+    </h4>
+    <p class="p_kecil">
         Jangka Waktu Penilaian
         {{ date('d', strtotime($skp_induk->tanggal_mulai)) }} {{ config('app.months')[date('n', strtotime($skp_induk->tanggal_mulai))] }} 
         s.d 
@@ -48,7 +51,7 @@
                 <td rowspan="2">AK</td>
                 <td colspan="6">TARGET</td>
                 <td rowspan="2">AK</td>
-                <td rowspan="6">REALISASI</td>
+                <td colspan="6">REALISASI</td>
                 <td rowspan="2">PENGHITUNGAN</td>
                 <td rowspan="2">NILAI CAPAIAN SKP</td>
             </tr>
@@ -64,69 +67,52 @@
                 <td>Biaya</td>
             </tr>
 
-            <tr align="center">
-                @for($i=1;$i<=14;++$i)
-                    <td>{{ $i }}</td>
-                @endfor 
+            <tr align="center" class="gray">
+                <td>1</td><td>2</td><td>3</td><td colspan="2">4</td><td>5</td><td colspan="2">6</td><td>7</td>
+                <td>8</td><td colspan="2">9</td><td>10</td><td colspan="2">11</td><td>12</td><td>13</td><td>14</td>
             </tr>
         </thead>
 
         <tbody>
             @foreach($skp_pengukuran as $key=>$rincian)
-                <td>{{ $key+1 }}</td>
-                <td>{{ $rincian->uraian }}</td>
-                <td>{{ $rincian->target_angka_kredit }}</td>
-                <td>{{ $rincian->target_kuantitas }}</td>
-                <td>{{ $rincian->target_satuan }}</td>
-                <td>{{ $rincian->target_kualitas }}</td>
-                <td>{{ $rincian->target_waktu }}</td>
-                <td>{{ $rincian->target_satuan_waktu }}</td>
-                <td>{{ $rincian->target_biaya }}</td>
-                
-                <td>{{ $rincian->realisasi_angka_kredit }}</td>
-                <td>{{ $rincian->realisasi_kuantitas }}</td>
-                <td>{{ $rincian->realisasi_satuan }}</td>
-                <td>{{ $rincian->realisasi_kualitas }}</td>
-                <td>{{ $rincian->realisasi_waktu }}</td>
-                <td>{{ $rincian->realisasi_satuan_waktu }}</td>
-                <td>{{ $rincian->realisasi_biaya }}</td>
-                <td>{{ $rincian->penghitungan }}</td>
-                <td>{{ $rincian->nilai_capaian_skp }}</td>
-            @endfor 
+                <tr align="center">
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ $rincian->uraian }}</td>
+                    <td>{{ $rincian->target_angka_kredit }}</td>
+                    <td>{{ $rincian->target_kuantitas }}</td>
+                    <td>{{ $rincian->target_satuan }}</td>
+                    <td>{{ $rincian->target_kualitas }}</td>
+                    <td>{{ $rincian->target_waktu }}</td>
+                    <td>{{ $rincian->target_satuan_waktu }}</td>
+                    <td>{{ $rincian->target_biaya }}</td>
+                    
+                    <td>{{ $rincian->realisasi_angka_kredit }}</td>
+                    <td>{{ $rincian->realisasi_kuantitas }}</td>
+                    <td>{{ $rincian->realisasi_satuan }}</td>
+                    <td>{{ $rincian->realisasi_kualitas }}</td>
+                    <td>{{ $rincian->realisasi_waktu }}</td>
+                    <td>{{ $rincian->realisasi_satuan_waktu }}</td>
+                    <td>{{ $rincian->realisasi_biaya }}</td>
+                    <td>{{ $rincian->penghitungan }}</td>
+                    <td>{{ $rincian->nilai_capaian_skp }}</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
-
-    <br/>
-    <table width="30%">
-        
-        @if ($type==1)
-            <tr><td><b>Kesepakatan Target</b></td></tr>
-            <tr><td>Tanggal : {{ $first_working_day }}</td></tr>
-        @else
-            <tr><td><b>Penilaian Kinerja</b></td></tr>
-            <tr><td>Tanggal : {{ $last_working_day }}</td></tr>
-        @endif
-    </table>
     
     <br/>
-    
     <table width="100%">
         <tr>
             <td width="15%"></td>
-            <td width="25%" align="center">
-                <p>Pegawai Yang Dinilai</p>
-                <br/>
-                <br/>
-                ( {{ $user->name }} )<br/>
-                NIP.  {{ $user->nip_baru }}
-            </td>
+            <td width="25%" align="center"></td>
             <td width="20%"></td>
             <td width="25%" align="center">
+                <p>Palembang, ............................
                 <p>Pejabat Penilai</p>
                 <br/>
                 <br/>
-                ( {{ $user->pimpinan->name }} )<br/>
-                NIP.   {{ $user->pimpinan->nip_baru }} <br/>
+                ( {{ $user_pimpinan->name }} )<br/>
+                NIP.   {{ $user_pimpinan->nip_baru }} <br/>
             </td>
             <td width="15%"></td>
         </tr>
