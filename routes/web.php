@@ -98,6 +98,10 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function(){
+    //
+    Route::resource('penugasan', 'PenugasanController');
+    
+    //
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////
     Route::resource('surat_km','SuratKmController');
