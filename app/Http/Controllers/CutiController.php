@@ -88,21 +88,17 @@ class CutiController extends Controller
      */
     public function create()
     {
-        $model = new \App\cuti;
-        $catatan_cuti = new \App\cuti;
+        $model = new \App\Cuti;
+        $catatan_cuti = new \App\Cuti;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
-        // dd($model);
         $current_date =  date('Y-m-d');
-        return view(
-            'cuti.create',
-            compact(
+        return view('cuti.create', compact(
                 'list_pegawai',
                 'model',
                 'current_date',
-                'catatan_cuti',
-            )
-        );
+                'catatan_cuti'
+        ));
     }
 
     /**
