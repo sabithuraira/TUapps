@@ -11,6 +11,7 @@
         <div class="form-group">
             <label>Kode Satuan Organisasi:</label>
             <input type="text" class="form-control" name="kode_unit_kerja" v-model="kode_unit_kerja">
+            <small class="text-info font-italic">adalah kode unit kerja penerbit surat, misal: 16000</small>
         </div>
     </div>
 
@@ -21,6 +22,7 @@
         <div class="form-group">
             <label>Kode Klasifikasi:</label>
             <input type="text" class="form-control" name="klasifikasi_arsip" v-model="klasifikasi_arsip">
+            <small class="text-info font-italic">adalah kode klasifikasi arsip sesuai aturan arsiparis, misal: KU.010. Daftar kode klasifikasi dapat dilihat <a href="https://drive.google.com/file/d/1lQ-GLOJcSDwa_s6eCPV4H3GIGuQKH1xS/view?usp=sharing" target="_blank">disini</a></small>
         </div>
     </div>
 
@@ -41,6 +43,7 @@ Nomor Surat: @{{ tingkat_keamanan }}-@{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{
 <input type="hidden" name="nomor" :value="tingkat_keamanan+'-'+nomor_urut+'/'+kode_unit_kerja+'/'+klasifikasi_arsip+'/'+bulan+'/'+tahun">
 <br/><br/>
 
+<span class="text-info font-italic font-weight-bold"><u>Isian ISI SURAT dibawah tidak wajib diisi, jika diisi anda dapat mencetak surat langsung dari MUSI</u></span>
 <div class="row clearfix">
     <div class="col-md-12">
         <div class="form-group">

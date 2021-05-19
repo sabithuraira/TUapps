@@ -27,7 +27,7 @@
                                 <h6 class="m-b-0">{{ $data['perihal'] }}</h6>
                                 <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
                             @elseif($data['jenis_surat']==4)
-                                <h6 class="m-b-0">Dari: {{ $data['ditetapkan_oleh'] }}</h6>
+                                <h6 class="m-b-0">Ditetapkan oleh: {{ $data['ditetapkan_oleh'] }}</h6>
                                 <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
                             @elseif($data['jenis_surat']==5)
                                 <p class="m-b-0">{{ $data['nomor'] }}</p>
