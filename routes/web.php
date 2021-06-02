@@ -10,29 +10,29 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => ['role:superadmin']], function () {    
-    Route::resource('uker','UkerController');
-    Route::resource('uker4','Uker4Controller');
-    Route::resource('type_kredit','TypeKreditController');
-    Route::resource('rincian_kredit','RincianKreditController');
-    Route::resource('angka_kredit','AngkaKreditController');
-    Route::resource('user','UserController');
+Route::group(['middleware' => ['role:superadmin']], function () {
+    Route::resource('uker', 'UkerController');
+    Route::resource('uker4', 'Uker4Controller');
+    Route::resource('type_kredit', 'TypeKreditController');
+    Route::resource('rincian_kredit', 'RincianKreditController');
+    Route::resource('angka_kredit', 'AngkaKreditController');
+    Route::resource('user', 'UserController');
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
 
     //SPATIE
-    Route::resource('role','RoleController');
-    Route::resource('permission','PermissionController');
-    Route::resource('user_role','UserRoleController');
+    Route::resource('role', 'RoleController');
+    Route::resource('permission', 'PermissionController');
+    Route::resource('user_role', 'UserRoleController');
 
-    Route::get('sp2020sls/import_some','Sp2020SlsController@upload_some');
-    Route::post('sp2020sls/import_some','Sp2020SlsController@import_some');
+    Route::get('sp2020sls/import_some', 'Sp2020SlsController@upload_some');
+    Route::post('sp2020sls/import_some', 'Sp2020SlsController@import_some');
 });
 
-Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {    
-    Route::resource('master_barang','MasterBarangController');
-    Route::resource('opname_persediaan','OpnamePersediaanController')->except(['show']);
+Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
+    Route::resource('master_barang', 'MasterBarangController');
+    Route::resource('opname_persediaan', 'OpnamePersediaanController')->except(['show']);
     Route::post('opname_persediaan/load_data', 'OpnamePersediaanController@loadData');
     Route::post('opname_persediaan/load_rincian', 'OpnamePersediaanController@loadRincian');
     Route::post('opname_persediaan/store_barang_keluar', 'OpnamePersediaanController@storeBarangKeluar');
@@ -53,6 +53,16 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
     Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
     Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
+
+    Route::resource('jabatan_fungsional', 'JabatanFungsionalController');
+    Route::post('jabatan_fungsional/tambah_jabatan', 'JabatanFungsionalController@tambah_jabatan');
+    Route::post('jabatan_fungsional/hapus_jabatan', 'JabatanFungsionalController@hapus_jabatan');
+    Route::post('jabatan_fungsional/tambah_row', 'JabatanFungsionalController@tambah_row');
+    Route::post('jabatan_fungsional/edit_judul', 'JabatanFungsionalController@edit_judul');
+    Route::post('jabatan_fungsional/edit_subjudul', 'JabatanFungsionalController@edit_subjudul');
+    Route::post('jabatan_fungsional/edit_kegiatan', 'JabatanFungsionalController@edit_kegiatan');
+    Route::post('jabatan_fungsional/edit_subkegiatan', 'JabatanFungsionalController@edit_subkegiatan');
+    Route::post('jabatan_fungsional/hapus', 'JabatanFungsionalController@hapus');
 });
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
@@ -61,7 +71,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::get('mata_anggaran/import_some', 'MataAnggaranController@upload_some');
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
-    
+
     //Cuti
     Route::resource('cuti', 'CutiController')->except(['show']);
     Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
@@ -97,16 +107,16 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'auth'], function () {
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////
-    Route::resource('surat_km','SuratKmController');
-    Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
+    Route::resource('surat_km', 'SuratKmController');
+    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
 
     //////////////////////////
-    Route::resource('log_book','LogBookController')->except(['show']);
+    Route::resource('log_book', 'LogBookController')->except(['show']);
     Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
-    Route::post('surat_km/nomor_urut','SuratKmController@getNomorUrut');
+    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
@@ -117,40 +127,40 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
 
     //CKP
-    Route::resource('ckp','CkpController');
+    Route::resource('ckp', 'CkpController');
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');
     Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
-    Route::post('ckp/print',array('as'=>'print','uses'=>'CkpController@print'));
+    Route::post('ckp/print', array('as' => 'print', 'uses' => 'CkpController@print'));
 
     //SKP
-    Route::resource('skp','SkpController')->only('index', 'create');
+    Route::resource('skp', 'SkpController')->only('index', 'create');
     // Route::get('skp/{id}/edit', 'SkpController@edit');
     Route::get('skp/{id}/data_skp', 'SkpController@dataSkp');
     Route::post('skp/data_profile', 'SkpController@dataProfile');
     Route::post('skp/data_unit_kerja', 'SkpController@dataUnitKerja');
-    Route::post('skp/print',array('as'=>'print','uses'=>'SkpController@print'));
+    Route::post('skp/print', array('as' => 'print', 'uses' => 'SkpController@print'));
 
     //IKI
     // Route::post('iki','IkiController@store');
-    Route::resource('iki','IkiController')->except(['show']);
+    Route::resource('iki', 'IkiController')->except(['show']);
     Route::post('iki/store_master', 'IkiController@store_master');
     Route::get('iki/list_json', 'IkiController@list_json');
 
     //PEGAWAI ANDA
-    Route::resource('pegawai_anda','PegawaiAndaController');
+    Route::resource('pegawai_anda', 'PegawaiAndaController');
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
 
-    Route::resource('meeting','MeetingController')->except(['show']);
-    Route::get('meeting/{id}/detail','MeetingController@detail');
-    Route::get('meeting/kalender','MeetingController@kalender');
-    Route::post('meeting/load_pegawai','MeetingController@loadPegawai');
+    Route::resource('meeting', 'MeetingController')->except(['show']);
+    Route::get('meeting/{id}/detail', 'MeetingController@detail');
+    Route::get('meeting/kalender', 'MeetingController@kalender');
+    Route::post('meeting/load_pegawai', 'MeetingController@loadPegawai');
     Route::get('meeting/{id}/destroy_peserta', 'MeetingController@destroy_peserta');
     Route::post('meeting/data_peserta', 'MeetingController@data_peserta');
-    
-    Route::resource('vicon','ViconController')->except(['show']);
-    Route::get('vicon/{id}/detail','ViconController@detail');
+
+    Route::resource('vicon', 'ViconController')->except(['show']);
+    Route::get('vicon/{id}/detail', 'ViconController@detail');
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
     Route::get('dashboard/index', 'DashboardController@index');
