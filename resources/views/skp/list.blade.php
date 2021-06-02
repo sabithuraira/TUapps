@@ -1,6 +1,6 @@
-<form action="{{action('CkpController@print')}}" method="post">
+<form action="{{action('SkpController@print')}}" method="post">
     @csrf 
-    <input type="hidden"  v-model="skp_id" name="skp">
+    <input type="hidden"  v-model="skp_id" name="skp_id">
     <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak SKP Target &nbsp</button>
     <span class="float-right">&nbsp &nbsp</span>
     <button name="action" class="float-right" type="submit" value="1"><i class="icon-printer"></i>&nbsp Cetak SKP Pengukuran &nbsp</button>
@@ -15,7 +15,7 @@
     <div class="tab-content">
         <div class="tab-pane show active" id="target">
             <div class="table-responsive">
-                <table class="table-sm table-bordered m-b-0">
+                <table class="table-sm table-bordered m-b-0" style="min-width:100%">
                     <thead>
                         <tr>
                             <td>NO</td><td colspan="2">I. PEJABAT PENILAI</td>
@@ -27,19 +27,19 @@
                         <tr>
                             <td>1</td>
                             <td>Nama</td>
-                            <td>@{{  }}</td>
+                            <td></td>
                             <td>1</td>
                             <td colspan="2">Nama</td>
-                            <td colspan="4">@{{  }}</td>
+                            <td colspan="4"></td>
                         </tr>
                         
                         <tr>
                             <td>2</td>
                             <td>NIP</td>
-                            <td>@{{  }}</td>
+                            <td></td>
                             <td>2</td>
                             <td colspan="2">NIP</td>
-                            <td colspan="4">@{{  }}</td>
+                            <td colspan="4"></td>
                         </tr>
                         
                         <tr>
@@ -48,7 +48,7 @@
                             <td>@{{ skp_induk.user_pangkat }} / @{{ skp_induk.user_gol }} </td>
                             <td>3</td>
                             <td colspan="2">Pangkat/Gol. Ruang</td>
-                            <td>@{{ skp_induk.pimpinan_pangkat }} / @{{ skp_induk.pimpinan_gol }} </td>
+                            <td colspan="4">@{{ skp_induk.pimpinan_pangkat }} / @{{ skp_induk.pimpinan_gol }} </td>
                         </tr>
                         
                         <tr>
@@ -57,7 +57,7 @@
                             <td>@{{ skp_induk.user_jabatan }}</td>
                             <td>4</td>
                             <td colspan="2">Jabatan</td>
-                            <td>@{{ skp_induk.user_jabatan }}</td>
+                            <td colspan="4">@{{ skp_induk.user_jabatan }}</td>
                         </tr>
 
                         <tr>
@@ -66,7 +66,7 @@
                             <td>@{{ skp_induk.user_unit_kerja }}</td>
                             <td>5</td>
                             <td colspan="2">Unit Kerja</td>
-                            <td>@{{ skp_induk.user_unit_kerja }}</td>
+                            <td colspan="4">@{{ skp_induk.user_unit_kerja }}</td>
                         </tr>
 
                         <tr>
@@ -85,7 +85,7 @@
 
                         <tr v-for="(data, index) in skp_target" :key="data.id">
                             <td>@{{ index+1 }}</td>
-                            <td>@{{ data.uraian }}</td>
+                            <td colspan="2">@{{ data.uraian }}</td>
                             <td>@{{ data.kode_point_kredit }}</td>
                             <td class="text-center">@{{ data.target_kuantitas }}</td>
                             <td class="text-center">@{{ data.satuan }}</td>
@@ -97,13 +97,11 @@
                     </tbody>
                 </table>
             </div>
-
-
         </div>
         
         <div class="tab-pane" id="pengukuran">
             <div class="table-responsive">
-                <table class="table-sm table-bordered m-b-0">
+                <table class="table table-sm table-bordered m-b-0" style="min-width:200%">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
@@ -113,18 +111,18 @@
                             <th rowspan="2">AK</th>
                             <th class="text-center" colspan="6">REALISASI</th>
                             <th rowspan="2">PENGHITUNGAN</th>
-                            <th rowspan="2">NILAI CAPAIAN SKP</th>
+                            <th class="text-center" rowspan="2">NILAI CAPAIAN SKP</th>
                         </tr>
 
                         <tr class="text-center">
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                             
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                         </tr>
                         
@@ -141,7 +139,7 @@
                             <td>10</td>
                             <td colspan="2">11</td>
                             <td>12</td>
-                            <td>13/td>
+                            <td>13</td>
                             <td>14</td>
                         </tr>
                     </thead>
@@ -233,6 +231,7 @@ var vm = new Vue({
             else this.skp_id = 0
         },
         setDatas: function(){
+            var self = this;
             $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
@@ -240,14 +239,13 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url : this.pathname+ "/" + this.skp_id + "/data_skp",
+                url : self.pathname+ "/" + self.skp_id + "/data_skp",
                 method : 'get',
                 dataType: 'json',
             }).done(function (data) {
-                this.skp_induk = data.datas.skp_induk;
-                this.skp_pengukuran = data.datas.skp_pengukuran;
-                this.skp_target = data.datas.skp_target;
-
+                self.skp_induk = data.datas.skp_induk;
+                self.skp_pengukuran = data.datas.skp_pengukuran;
+                self.skp_target = data.datas.skp_target;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

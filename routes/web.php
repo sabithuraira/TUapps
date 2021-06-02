@@ -108,6 +108,10 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    //
+    Route::resource('penugasan', 'PenugasanController');
+
+    //
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////
     Route::resource('surat_km', 'SuratKmController');
@@ -136,6 +140,8 @@ Route::group(['middleware' => 'auth'], function () {
     //SKP
     Route::resource('skp', 'SkpController')->only('index', 'create');
     // Route::get('skp/{id}/edit', 'SkpController@edit');
+    Route::post('skp/store_target', 'SkpController@store_target');
+    Route::post('skp/store_pengukuran', 'SkpController@store_pengukuran');
     Route::get('skp/{id}/data_skp', 'SkpController@dataSkp');
     Route::post('skp/data_profile', 'SkpController@dataProfile');
     Route::post('skp/data_unit_kerja', 'SkpController@dataUnitKerja');

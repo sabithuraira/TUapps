@@ -1,6 +1,6 @@
 <div id="app_vue">
     <div class="row clearfix">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group">
                 <label>{{ $model->attributes()['jenis_surat'] }}:</label>
                 <select class="form-control {{($errors->first('jenis_surat') ? ' parsley-error' : '')}}" v-model="jenis_surat" name="jenis_surat" @change="setNomor">
@@ -17,95 +17,35 @@
                 @endforeach
             </div>
         </div>
-
-        <div class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['tanggal'] }}:</label>
-                <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                    <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" id="tanggal" v-model="tanggal">
-                    <div class="input-group-append">                                            
-                        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
-                    </div>
-                </div>
-                @foreach ($errors->get('tanggal') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
     </div>
 
-    <div class="row clearfix">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['perihal'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('perihal') ? ' parsley-error' : '')}}" name="perihal" value="{{ old('perihal', $model->perihal) }}">
-                @foreach ($errors->get('perihal') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-        
-        <div class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['nomor_petunjuk'] }}:</label>
-                <select class="form-control {{($errors->first('nomor_petunjuk') ? ' parsley-error' : '')}}" name="nomor_petunjuk">
-                    <option value="">- Pilih Jenis Surat -</option>
-                    @foreach ($model->listPetunjuk as $key=>$value)
-                        <option value="{{ $key }}" 
-                            @if ($key == old('nomor_petunjuk', $model->nomor_petunjuk))
-                                selected="selected"
-                            @endif >{{ $value }} - {{ $key }}</option>
-                    @endforeach
-                </select>
-                @foreach ($errors->get('nomor_petunjuk') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-        
-        <div v-show="jenis_surat==1" class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['nomor'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('nomor') ? ' parsley-error' : '')}}" name="nomor" value="{{ old('nomor', $model->nomor) }}">
-                @foreach ($errors->get('nomor') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-
-        <div v-show="jenis_surat==1" class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['penerima'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('penerima') ? ' parsley-error' : '')}}" name="penerima" value="{{ old('penerima', $model->penerima) }}">
-                @foreach ($errors->get('penerima') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    <div class="row clearfix">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['nomor_urut'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('nomor_urut') ? ' parsley-error' : '')}}" name="nomor_urut"  v-model="nomor_urut">
-                <p class="text-info">Nomor urut dibuat otomatis, kecuali karena keadaan khusus harap tidak merubah isian ini.</p>
-                @foreach ($errors->get('nomor_urut') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-        
-        <div class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['alamat'] }}:</label>
-                <input type="text" class="form-control {{($errors->first('alamat') ? ' parsley-error' : '')}}" name="alamat" value="{{ old('alamat', $model->alamat) }}">
-                @foreach ($errors->get('alamat') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach
-            </div>
-        </div>
-    </div>
+    <template v-if="jenis_surat==1">
+        @include('surat_km._form_surat_masuk')
+    </template>
+    
+    <template v-if="jenis_surat==2">
+        @include('surat_km._form_surat_keluar')
+    </template>
+    
+    <template v-if="jenis_surat==3">
+        @include('surat_km._form_memorandum')
+    </template>
+    
+    <template v-if="jenis_surat==4">
+        @include('surat_km._form_surat_pengantar')
+    </template>
+    
+    <template v-if="jenis_surat==5">
+        @include('surat_km._form_disposisi')
+    </template>
+    
+    <template v-if="jenis_surat==6">
+        @include('surat_km._form_surat_keputusan')
+    </template>
+    
+    <template v-if="jenis_surat==7">
+        @include('surat_km._form_surat_keterangan')
+    </template>
 
     <br>
     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -123,11 +63,13 @@
 </div>
 
 @section('css')
-  <meta name="_token" content="{{csrf_token()}}" />
-  <meta name="csrf-token" content="@csrf">
+    <meta name="_token" content="{{csrf_token()}}" />
+    <meta name="csrf-token" content="@csrf">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/summernote/dist/summernote.css') !!}">
 @endsection
 
 @section('scripts')
+<script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script>
@@ -135,15 +77,37 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
         jenis_surat: {!! json_encode($model->jenis_surat) !!},
+        kode_unit_kerja: '',
+        klasifikasi_arsip: '',
+        tingkat_keamanan: '',
         tanggal: {!! json_encode(date('m/d/Y', strtotime($model->tanggal))) !!},
         nomor_urut: {!! json_encode($model->nomor_urut) !!},
+        tembusan: [],
+        keputusan: [],
         pathname : (window.location.pathname).replace("/create", ""),
+        list_angka_keputusan: [
+            "KESATU", "KEDUA", "KETIGA", "KEEMPAT", "KELIMA", "KEENAM", "KETUJUH", "KEDELAPAN", 
+            "KESEMBILAN", "KESEPULUH", "KESEBELAS", "KEDUA BELAS", "KETIGA BELAS", "KEEMPAT BELAS",
+            "KELIMA BELAS", "KEENAM BELAS", "KETUJUH BELAS", "KEDELAPAN BELAS", "KESEMBILAN BELAS", "KEDUA PULUH"
+        ]
+    },
+    computed: {
+        bulan: function () {
+            var split_tanggal = this.tanggal.split("/");
+            if(split_tanggal.length==0) return "";
+            else return split_tanggal[0]
+        },
+        tahun: function () {
+            var split_tanggal = this.tanggal.split("/");
+            if(split_tanggal.length==0) return "";
+            else return split_tanggal[2]
+        },
     },
     methods: {
         setNomor: function(){
             var self = this;
             $('#wait_progres').modal('show');
-            console.log(self.tanggal);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -160,6 +124,22 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.nomor_urut = data.total;
+             
+                if((self.jenis_surat>=2 && self.jenis_surat<=4) || self.jenis_surat==7){
+                    $('#isi').summernote();
+                }
+                
+                if(self.jenis_surat==3){
+                    $('#tembusan').summernote();
+                }
+                
+                
+                if(self.jenis_surat==6){
+                    $('#menimbang').summernote();
+                    $('#mengingat').summernote();
+                    $('#menetapkan').summernote();
+                    $('#tembusan').summernote();
+                }
 
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
@@ -167,11 +147,26 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
+        addTembusan(){
+            this.tembusan.push({
+                'id' : 'a' + this.tembusan.length,
+                'induk_id' : '',
+                'isi' : '',
+            });
+        },
+        addKeputusan(){
+            this.keputusan.push({
+                'id' : 'a' + this.keputusan.length,
+                'induk_id' : '',
+                'isi' : '',
+            });
+        },
     }
 });
 
 $(document).ready(function() {
     vm.setNomor();
+    
 });
 
 $('.date').datepicker()

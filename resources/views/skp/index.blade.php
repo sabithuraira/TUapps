@@ -25,7 +25,7 @@
                         <label>Pilih SKP:</label>
 
                         <div class="input-group">
-                          <select class="form-control  form-control-sm"  v-model="skp_id">
+                          <select class="form-control  form-control-sm" v-model="skp_id" name="skp_id">
                                 @foreach ($skp_induk as $key=>$value)
                                     <option value="{{ $value->id }}">{{ date('d M Y', strtotime($value->tanggal_mulai)) }} - {{ date('d M Y', strtotime($value->tanggal_selesai)) }}</option>
                                 @endforeach

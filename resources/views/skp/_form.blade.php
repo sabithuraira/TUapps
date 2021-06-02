@@ -3,8 +3,8 @@
         <div class="form-group">
             <label>Pilih SKP yang diperbaharui:</label>
             <div class="input-group">
-                <select class="form-control  form-control-sm"  v-model="skp_id">
-                    <option value="0">SKP BARU</option>
+                <select class="form-control  form-control-sm" v-model="skp_id">
+                    <option value="0">BUAT SKP BARU</option>
                     @foreach ($skp_induk as $key=>$value)
                         <option value="{{ $value->id }}">{{ date('d M Y', strtotime($value->tanggal_mulai)) }} - {{ date('d M Y', strtotime($value->tanggal_selesai)) }}</option>
                     @endforeach
@@ -13,13 +13,20 @@
         </div>
     </div>
 </div>
-
+<div class="row clearfix">  
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#target">TARGET</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pengukuran">PENGUKURAN</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane show active" id="target">
+        <div class="tab-pane show active" id="target">   
+            <label>Rentang Waktu SKP</label>                                 
+            <div class="input-daterange input-group" data-provide="datepicker">
+                <input type="text" class="input-sm form-control" id="tanggal_mulai">
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control" id="tanggal_selesai">
+            </div>
+            <br/>
             <div class="table-responsive">
                 <table class="table-sm table-bordered m-b-0" style="min-width:100%">
                     <thead>
@@ -34,7 +41,7 @@
                             <td>1</td>
                             <td>Nama</td>
                             <td>
-                                <select class="form-control form-control-sm" v-model="skp_induk.pimpinan_id" @change="setPimpinan">
+                                <select class="form-control form-control-sm" v-model="skp_induk.pimpinan_id" id="pimpinan_id" @change="setPimpinan">
                                     <option v-for="(data, index) in list_pegawai" :key="data.id" :value="data.email">@{{ data.name }}</option>
                                 </select>
                             </td>
@@ -42,7 +49,7 @@
                             <td colspan="2">Nama</td>
                             <td colspan="4">
                             
-                                <select class="form-control form-control-sm" v-model="skp_induk.user_id">
+                                <select class="form-control form-control-sm" disabled v-model="skp_induk.user_id">
                                     <option v-for="(data, index) in list_pegawai" :key="data.id" :value="data.email">@{{ data.name }}</option>
                                 </select>
                             </td>
@@ -97,28 +104,34 @@
                             <th colspan="2">WAKTU</th>
                             <th>BIAYA</th>
                         </tr>
+                        
+                        <tr class="text-center">
+                            <td colspan="10"><button class="btn btn-info" @click="addTarget">Tambah Rincian</button></td>
+                        </tr>
 
-                        <tr v-for="(data, index) in skp_target" :key="data.id">
+                        <tr v-for="(data, index) in skp_target" :key="index">
                             <td>@{{ index+1 }}</td>
-                            <td>@{{ data.uraian }}</td>
+                            <td colspan="2"><input type="text" class="form-control" v-model="data.uraian" /></td>
                             <td>@{{ data.kode_point_kredit }}</td>
-                            <td class="text-center">@{{ data.target_kuantitas }}</td>
-                            <td class="text-center">@{{ data.satuan }}</td>
-                            <td class="text-center">@{{ data.target_kualitas }}</td>
-                            <td class="text-center">@{{ data.waktu }}</td>
-                            <td class="text-center">@{{ data.satuan_waktu }}</td>
-                            <td class="text-center">@{{ data.biaya }} %</td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.target_kuantitas" /></td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.satuan" /></td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.target_kualitas" /></td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.waktu" /></td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.satuan_waktu" /></td>
+                            <td class="text-center"><input type="text" class="form-control" v-model="data.biaya" /></td>
                         </tr>
                     </tbody>
                 </table>
+                <br/>
+                <button class="btn btn-success float-right" @click="saveTarget">SIMPAN</button>
             </div>
-
-
         </div>
         
         <div class="tab-pane" id="pengukuran">
             <div class="table-responsive">
-                <table class="table-sm table-bordered m-b-0" style="min-width:100%">
+                <button class="btn btn-info" @click="addPengukuran">Tambah Rincian</button>
+                <br/><br/>
+                <table class="table table-sm table-bordered m-b-0" style="min-width:200%">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
@@ -132,14 +145,14 @@
                         </tr>
 
                         <tr class="text-center">
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                             
-                            <td coslpan="2">Kuant/Output</td>
-                            <td coslpan="2">Kual/Mutu</td>
-                            <td>Waktu</td>
+                            <td colspan="2">Kuant/Output</td>
+                            <td>Kual/Mutu</td>
+                            <td colspan="2">Waktu</td>
                             <td>Biaya</td>
                         </tr>
                         
@@ -162,35 +175,38 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="(data, index) in skp_pengukuran" :key="data.id">
+                        <tr v-for="(data, index) in skp_pengukuran" :key="'pengukuran'+index">
                             <td>@{{ index+1 }}</td>
-                            <td>@{{ data.uraian }}</td> 
+                            <td><input type="text" class="form-control form-control" v-model="data.uraian"></td> 
 
-                            <td>@{{ data.target_angka_kredit }}</td>
-                            <td>@{{ data.target_kuantitas }}</td>
-                            <td>@{{ data.target_satuan }}</td>
-                            <td>@{{ data.target_kualitas }}</td>
-                            <td>@{{ data.target_waktu }}</td>
-                            <td>@{{ data.target_satuan_waktu }}</td>
-                            <td>@{{ data.target_biaya }}</td>
+                            <td>..</td>
+                            <td><input type="number" class="form-control form-control-sm" size="8" v-model="data.target_kuantitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.target_satuan"></td>
+                            <td><input type="number" class="form-control form-control-sm" size="1" v-model="data.target_kualitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.target_satuan_waktu"></td>
+                            <td><input type="number" class="form-control form-control-sm" v-model="data.target_biaya"></td>
                             
-                            <td>@{{ data.realisasi_angka_kredit }}</td>
-                            <td>@{{ data.realisasi_kuantitas }}</td>
-                            <td>@{{ data.realisasi_satuan }}</td>
-                            <td>@{{ data.realisasi_kualitas }}</td>
-                            <td>@{{ data.realisasi_waktu }}</td>
-                            <td>@{{ data.realisasi_satuan_waktu }}</td>
-                            <td>@{{ data.realisasi_biaya }}</td>
+                            <td>..</td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_kuantitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" v-model="data.realisasi_satuan"></td>
+                            <td><input type="number" class="form-control form-control-sm" size="1" v-model="data.realisasi_kualitas"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_waktu"></td>
+                            <td><input type="text" class="form-control form-control-sm" size="1" v-model="data.realisasi_satuan_waktu"></td>
+                            <td><input type="number" class="form-control form-control-sm" v-model="data.realisasi_biaya"></td>
 
                             <td>@{{ data.penghitungan }}</td>
                             <td>@{{ data.nilai_capaian_skp }}</td>
                         </tr>
                     </tbody>
                 </table>
+                
+                <br/>
+                <button class="btn btn-success float-right" @click="savePengukuran">SIMPAN</button>
             </div>
-
         </div>
     </div>
+</div>
 
 <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -211,10 +227,12 @@
         table{font-size: small;border-collapse: collapse;}
         tfoot tr td{font-weight: bold;font-size: small;}
     </style>
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
 @endsection
 
 @section('scripts')
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script>
 var vm = new Vue({  
     el: "#app_vue",
@@ -222,7 +240,7 @@ var vm = new Vue({
         list_skp: {!! json_encode($skp_induk) !!},
         list_pegawai: {!! json_encode($list_pegawai) !!},
         list_pangkat: {!! json_encode($list_pangkat) !!},
-        cur_user: {!! json_encode($cur_user) !!},
+        cur_user_id :  {!! json_encode($cur_user_id) !!}, 
         skp_id: 0,
         skp_induk: {
             'id': null,
@@ -250,12 +268,9 @@ var vm = new Vue({
         pathname : window.location.pathname.replace("/create", ""),
     },
     watch: {
-        tanggal_mulai: function (val) {
+        skp_id: function (val) {
             this.setDatas();
         },
-        tanggal_selesai: function (val) {
-            this.setDatas();
-        }
     },
     methods: {
         setSkpId: function(){
@@ -263,21 +278,48 @@ var vm = new Vue({
             else this.skp_id = 0
         },
         setDatas: function(){
+            var self = this
             $('#wait_progres').modal('show');
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
             $.ajax({
-                url : this.pathname+ "/" + this.skp_id + "/data_skp",
+                url : self.pathname+ "/" + self.skp_id + "/data_skp",
                 method : 'get',
                 dataType: 'json',
             }).done(function (data) {
-                this.skp_induk = data.datas.skp_induk;
-                this.skp_pengukuran = data.datas.skp_pengukuran;
-                this.skp_target = data.datas.skp_target;
+                if(data.datas.skp_induk!=null){
+                    self.skp_induk = data.datas.skp_induk;
+                    self.skp_pengukuran = data.datas.skp_pengukuran;
+                    self.skp_target = data.datas.skp_target;
+                    
+                    $('#tanggal_mulai').val(self.changeDateFormat(self.skp_induk.tanggal_mulai))
+                    $('#tanggal_selesai').val(self.changeDateFormat(self.skp_induk.tanggal_selesai))
+                    
+                    let cur_pegawai = self.list_pegawai.find( ({ email }) => email ==self.skp_induk.pimpinan_id);
+                    self.skp_induk.pimpinan_pangkat = self.list_pangkat[cur_pegawai.nmgol.replace(" ", "")]
+                    self.skp_induk.pimpinan_gol = cur_pegawai.nmgol
+                    self.skp_induk.pimpinan_jabatan = cur_pegawai.nmjab 
+                    self.skp_induk.pimpinan_unit_kerja = cur_pegawai.nmorg
+                    self.skp_induk.pimpinan_id = cur_pegawai.email
+                    self.pimpinan_nip = cur_pegawai.nip_baru
+                }
+                else{
+                    self.skp_induk = {'id': null,
+                        'tanggal_mulai': null, 'tanggal_selesai': null,
+                        'pimpinan_id': null, 'pimpinan_pangkat': null, 'pimpinan_gol': null,
+                        'pimpinan_jabatan': null, 'pimpinan_unit_kerja': null,
+                        'versi': null, 'created_at': null,'updated_at': null};
 
+                    self.skp_pengukuran = []
+                    self.skp_target = []
+                    
+                    $('#tanggal_mulai').val("")
+                    $('#tanggal_selesai').val("")
+                }
+                
+                self.setUser();
+                
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -287,26 +329,103 @@ var vm = new Vue({
         setPimpinan: function(e){
             // console.log(e.target.selectedIndex)
             let cur_pegawai = this.list_pegawai[e.target.selectedIndex]
-            this.skp_induk.pimpinan_pangkat = this.list_pangkat[cur_pegawai.nmgol]
+            this.skp_induk.pimpinan_pangkat = this.list_pangkat[cur_pegawai.nmgol.replace(" ", "")]
             this.skp_induk.pimpinan_gol = cur_pegawai.nmgol
             this.skp_induk.pimpinan_jabatan = cur_pegawai.nmjab 
             this.skp_induk.pimpinan_unit_kerja = cur_pegawai.nmorg
+            this.skp_induk.pimpinan_id = cur_pegawai.email
             this.pimpinan_nip = cur_pegawai.nip_baru
         },
         setUser: function(){
-            this.skp_induk.user_pangkat = this.list_pangkat[cur_user.nmgol]
-            this.skp_induk.user_gol = cur_user.nmgol
-            this.skp_induk.user_jabatan = cur_user.nmjab 
-            this.skp_induk.user_unit_kerja = cur_user.nmorg
-            this.user_nip = cur_user.nip_baru
+            let cur_pegawai = this.list_pegawai.find( ({ email }) => email ==this.cur_user_id);
+            this.skp_induk.user_pangkat = this.list_pangkat[cur_pegawai.nmgol.replace(" ", "")]
+            this.skp_induk.user_gol = cur_pegawai.nmgol
+            this.skp_induk.user_jabatan = cur_pegawai.nmjab 
+            this.skp_induk.user_unit_kerja = cur_pegawai.nmorg
+            this.skp_induk.user_id = this.cur_user_id;
+            this.user_nip = cur_pegawai.nip_baru
+        },
+        addTarget: function(){
+            this.skp_target.push({
+                'id' : '', 'id_induk' : '', 'user_id': '',
+                'uraian': '', 'satuan': '', 'target_kuantitas': '',
+                'kode_point_kerdit': '', 'angka_kredit': '', 'target_kualitas': '',
+                'waktu': '', 'satuan_waktu': '', 'biaya': '', 'jenis': '',
+                'created_by': '', 'updated_by': '', 'created_at': '', 'updated_at': '',
+            });
+        },
+        addPengukuran: function(){
+            this.skp_pengukuran.push({
+                'id' : '', 'id_induk' : '', 'user_id': '',
+                'uraian': '', 'kode_point_kredit': '', 
+                'target_satuan': '', 'target_kuantitas': '','target_kualitas': '','target_waktu': '','target_satuan_waktu': '','target_biaya': '','target_angka_kredit': '',
+                'realisasi_satuan': '', 'realisasi_kuantitas': '','realisasi_kualitas': '','realisasi_waktu': '','realisasi_satuan_waktu': '','realisasi_biaya': '','realisasi_angka_kredit': '',
+                'penghitungan': '', 'nilai_capaian_skp': '', 'jenis': '',
+                'created_by': '', 'updated_by': '', 'created_at': '', 'updated_at': '',
+            });
+        },
+        saveTarget: function(){
+            var self = this
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  self.pathname + "/store_target",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    skp_id: self.skp_id,
+                    skp_induk: self.skp_induk,
+                    skp_target: self.skp_target,
+                },
+            }).done(function (data) {
+                // console.log(data.success)
+                window.location = self.pathname
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        savePengukuran: function(){
+            var self = this
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  self.pathname + "/store_pengukuran",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    skp_id: self.skp_id,
+                    skp_induk: self.skp_induk,
+                    skp_pengukuran: self.skp_pengukuran,
+                },
+            }).done(function (data) {
+                window.location = self.pathname
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        changeDateFormat: function(label){
+            var mydate = new Date(label);
+            return (mydate.getMonth()+1)+"/"+mydate.getDate()+"/"+mydate.getFullYear();
         }
     }
 });
 
+$('#tanggal_mulai').change(function() {
+    vm.skp_induk.tanggal_mulai = this.value;
+});
+
+$('#tanggal_selesai').change(function() {
+    vm.skp_induk.tanggal_selesai = this.value;
+});
+
     $(document).ready(function() {
-        vm.setSkpId();
         vm.setUser();
-        vm.setDatas();
+        vm.setSkpId();
+        // vm.setDatas();
     });
 </script>
 @endsection
