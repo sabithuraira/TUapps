@@ -586,7 +586,7 @@ class SuratTugasController extends Controller
         $model->mak = $request->get('mak');
         $model->tugas = $request->get('tugas');
         $model->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
-        $model->kategori = 2;
+        $model->kategori = 3;
         $model->created_by = Auth::id();
         $model->updated_by = Auth::id();
 
