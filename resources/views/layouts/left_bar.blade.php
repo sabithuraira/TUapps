@@ -84,16 +84,18 @@
                         <li class="{{ (request()->is('pegawai_anda*')) ? 'active' : '' }}">
                             <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                         </li>
-                        
+
                         @if(Auth::user()->kdkab=='00')
-                            <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
-                                <a href="{{ url('vicon') }}"> <i class="icon-users"></i><span>Penggunaan Ruang Vicon</span></a>
-                            </li>
+                        <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
+                            <a href="{{ url('vicon') }}"> <i class="icon-users"></i><span>Penggunaan Ruang
+                                    Vicon</span></a>
+                        </li>
                         @endif
 
                         @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                         <li class="{{ (request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
-                            <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas & Cuti</span></a>
+                            <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas &
+                                    Cuti</span></a>
                             <ul>
                                 <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
                                         href="{{url('surat_tugas')}}">Daftar Surat Tugas</a></li>
@@ -167,6 +169,9 @@
                                         href="{{url('rincian_kredit')}}">Rincian Angka Kredit</a></li>
                                 <li class="{{ request()->is('user*') ? 'active' : '' }}"><a
                                         href="{{url('user')}}">User</a>
+                                </li>
+                                <li class="{{ request()->is('jabatan_fungsional*') ? 'active' : '' }}"><a
+                                        href="{{url('jabatan_fungsional')}}">Jabatan Fungsional</a>
                                 </li>
                             </ul>
                         </li>
