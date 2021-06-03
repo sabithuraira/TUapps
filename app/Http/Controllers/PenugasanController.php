@@ -13,7 +13,37 @@ class PenugasanController extends Controller
      */
     public function index()
     {
-        //
+        $keyword = $request->get('search');
+        $month = '';
+        $year = '';
+        $unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+
+        if(Auth::user()->kdkab=='00'){
+            if(strlen($request->get('unit_kerja'))>0){
+                $unit_kerja = Auth::user()->kdprop.$request->get('unit_kerja');
+            }
+        }
+        
+        $arr_where = [];
+
+        if(strlen($request->get('month'))>0){
+            $month = $request->get('month');
+            $arr_where[] = [\DB::raw('MONTH(created_at)'), '=', $month];
+        }
+        
+        if(strlen($request->get('year'))>0){
+            $year = $request->get('year');
+            $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
+        }
+
+        return view('penugasan.index', compact(
+                // 'datas',
+                'keyword',
+                // 'model',
+                'month',
+                'year',
+                'unit_kerja'
+            ));
     }
 
     /**
@@ -23,7 +53,7 @@ class PenugasanController extends Controller
      */
     public function create()
     {
-        //
+        return view('penugasan.create');
     }
 
     /**
@@ -45,7 +75,7 @@ class PenugasanController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('penugasan.show');
     }
 
     /**
@@ -56,7 +86,7 @@ class PenugasanController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('penugasan.edit');
     }
 
     /**
