@@ -19,4 +19,14 @@ class Penugasan extends Model
             'jenis_periode' => 'Jenis Periode',
         ];
     }
+
+    public function getListJenisPeriodeAttribute()
+    {
+        return array(
+            1 => 'Bulanan', 
+            2 => 'Triwulan', 
+            3 => 'Subround', 
+            4 => 'Tahunan', 
+        );
+    }
 }

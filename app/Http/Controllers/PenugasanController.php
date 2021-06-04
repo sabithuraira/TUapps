@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class PenugasanController extends Controller
 {
@@ -11,8 +14,7 @@ class PenugasanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
         $month = '';
         $year = '';
@@ -25,6 +27,7 @@ class PenugasanController extends Controller
         }
         
         $arr_where = [];
+        $arr_where[] = ['unit_kerja', '=', $unit_kerja];
 
         if(strlen($request->get('month'))>0){
             $month = $request->get('month');
@@ -36,10 +39,23 @@ class PenugasanController extends Controller
             $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
         }
 
+        $datas = \App\Penugasan::where($arr_where)
+            ->where(
+                (function ($query) use ($keyword) {
+                    $query->where('isi', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('keterangan', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('satuan', 'LIKE', '%' . $keyword . '%');
+                })
+            )
+            ->orderBy('id', 'desc')
+            ->paginate();
+
+        $datas->withPath('penugasan');
+        $datas->appends($request->all());
+
         return view('penugasan.index', compact(
-                // 'datas',
+                'datas',
                 'keyword',
-                // 'model',
                 'month',
                 'year',
                 'unit_kerja'
@@ -53,7 +69,12 @@ class PenugasanController extends Controller
      */
     public function create()
     {
-        return view('penugasan.create');
+        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $model = new \App\Penugasan;
+        return view('penugasan.create', compact(
+            'list_pegawai', 'model'
+        ));
     }
 
     /**

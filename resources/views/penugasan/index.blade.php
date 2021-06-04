@@ -20,7 +20,7 @@
             <form action="{{url('penugasan')}}" method="get">
                 <a href="{{action('PenugasanController@create')}}" class="'btn btn-info btn-sm"><i
                         class='fa fa-plus'></i> Penugasan</a>
-                <br />
+                <br /><br />
                 @csrf
 
                 @if(Auth::user()->kdkab=='00')
