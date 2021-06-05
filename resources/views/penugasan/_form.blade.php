@@ -93,7 +93,7 @@
         var vm = new Vue({
             el: "#app_vue",
             data:  {
-                pathname :(window.location.pathname).replace("/create", ""),
+                participant_old: [],
                 participant: [],
                 form: {
                     isi: '',
@@ -119,7 +119,14 @@
                     id: '',
                     index: ''
                 },
-                list_pegawai: {!! json_encode($list_pegawai) !!}
+                list_pegawai: {!! json_encode($list_pegawai) !!},
+                id: {!! json_encode($id) !!},
+            },
+            computed: {
+                pathname: function() {
+                    if(this.id=='') return (window.location.pathname).replace("/create", "");
+                    else return (window.location.pathname).replace("/"+this.id+"/edit", "");
+                },
             },
             methods: {
                 is_delete: function(params){
@@ -215,6 +222,41 @@
                         $('#wait_progres').modal('hide');
                     }
                 },
+                loadData: function(){
+                    var self = this;
+                    $('#wait_progres').modal('show');
+
+                    $.ajax({
+                        url :  self.pathname + "/" + self.id,
+                        method : 'get',
+                        dataType: 'json',
+                    }).done(function (data) {
+                        $('#wait_progres').modal('hide');
+
+                        if(data.form!=null){
+                            self.form = data.form;
+
+                            $('#tanggal_mulai').val(self.form.tanggal_mulai);
+                            $('#tanggal_selesai').val(self.form.tanggal_selesai);
+
+                            self.participant = data.participant;
+
+                            self.participant_old = [];
+                            for(var i=0;i<self.participant.length;i++){
+                                self.participant_old.push(self.participant[i].user_nip_lama);
+                            }
+
+                            // console.log(temp_participant)
+                            // temp_participant = ['340013929']
+                            // $("#participant_select").val(temp_participant);
+                            $("#participant_select").multiSelect('select', self.participant_old);
+                        }
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                    });
+                    
+                },
                 updateParticipant: function (event) {
                     var self = this;
                 //     if (event) {
@@ -256,11 +298,17 @@
                 // startDate: 'd',
                 format: 'yyyy-mm-dd',
             });
+
+            if(vm.id!=''){
+                vm.loadData();
+            }
         });
         
         $('#participant_select').multiSelect({
             afterSelect: function(values){
-                vm.addParticipant(values[0])
+                if (vm.participant_old.indexOf(values[0]) === -1) {
+                    vm.addParticipant(values[0])
+                }
             },
             afterDeselect: function(values){
                 // alert("Deselect value: "+values);

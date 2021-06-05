@@ -13,13 +13,10 @@
   <div class="col-md-12">
       <div class="card">
           <div class="header">
-              <h2>Tambah Penugasan</h2>
+              <h2>Kelola Penugasan</h2>
           </div>
           <div class="body">
-              <form method="post" class="frep" action="{{url('penugasan')}}" enctype="multipart/form-data">
-              @csrf
               @include('penugasan._form')
-              </form>
           </div>
       </div>
   </div>

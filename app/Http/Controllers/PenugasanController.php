@@ -71,8 +71,9 @@ class PenugasanController extends Controller
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
         $model = new \App\Penugasan;
+        $id = '';
         return view('penugasan.create', compact(
-            'list_pegawai', 'model'
+            'list_pegawai', 'model', 'id'
         ));
     }
 
@@ -82,18 +83,15 @@ class PenugasanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $model = new \App\Penugasan;
         
         if($request->id!=0){
             $temp_model = \App\Penugasan::find($request->id);
-            if($temp_model!=null){
+            if($temp_model!=null)
                 $model = $temp_model;
-            }
-            else{
+            else
                 $model->created_by = Auth::id();
-            }
         }
         else{
             $model->created_by = Auth::id();
@@ -161,7 +159,11 @@ class PenugasanController extends Controller
      */
     public function show($id)
     {
-        return view('penugasan.show');
+        $real_id = Crypt::decrypt($id);
+        $model = \App\Penugasan::find($real_id);
+        $participant = \App\PenugasanParticipant::where('penugasan_id', '=', $real_id)->get();
+        
+        return response()->json(['form'=>$model, 'participant'=> $participant]);
     }
 
     /**
@@ -172,7 +174,13 @@ class PenugasanController extends Controller
      */
     public function edit($id)
     {
-        return view('penugasan.edit');
+        $real_id = Crypt::decrypt($id);
+        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $model = \App\Penugasan::find($real_id);
+        return view('penugasan.create', compact(   
+            'list_pegawai', 'model', 'id'
+        ));
     }
 
     /**

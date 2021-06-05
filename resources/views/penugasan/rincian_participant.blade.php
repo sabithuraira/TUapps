@@ -1,5 +1,4 @@
-<b>Daftar Participant</b> -
-&nbsp <a href="#" id="add-participant" data-toggle="modal" data-target="#form_rincian2">Tambah Participant &nbsp &nbsp<i class="icon-plus text-info"></i></a>
+<b>Daftar Participant</b>
 
 <select id="participant_select" class="ms" multiple="multiple">
     @foreach($list_pegawai as $data)

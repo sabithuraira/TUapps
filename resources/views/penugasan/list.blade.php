@@ -13,7 +13,7 @@
                     <th rowspan="2">Keterangan</th>
                     <th rowspan="2">Pegawai yang terlibat</th>
                     <th colspan="2">Waktu</th>
-                    <th colspan="2" rowspan="2">Aksi</th>
+                    <th rowspan="2">Aksi</th>
                 </tr>
                 
                 <tr class="text-center">
@@ -31,12 +31,21 @@
                             <small><i>{{$data['keterangan']}}</i></small>
                         </td>
                         <td class="text-center">
+                            {!! $data->listPeserta !!}
+                            
+                            <a href="{{ action('PenugasanController@show', Crypt::encrypt($data['id']))}}">
+                                 
+                                <p class='text-primary small'><i class="fa fa-search text-primary"></i> Detail</p>
+                            </a>
                         </td>
                         <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
                         <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
-                        <td class="text-center"></td>
-                        
-                        <td class="text-center"></td>
+                        <td class="text-center">
+                            <a href="{{ action('PenugasanController@edit', Crypt::encrypt($data['id']))}}">
+                                <i class="icon-pencil text-primary"></i> 
+                                <p class='text-primary small'>Edit/Progres</p>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
