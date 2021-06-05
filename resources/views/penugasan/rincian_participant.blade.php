@@ -31,21 +31,11 @@
                         <a :data-id="data.id" v-on:click="deleteParticipant(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                     </template>
                     
-                    <a href="#" role="button" v-on:click="updateParticipant" data-toggle="modal" 
-                                :data-id="data.id" :data-index="index" 
-                                :data-user_nip_lama="data.user_nip_lama" :data-user_id="data.user_id" 
-                                :data-jumlah_target="data.jumlah_target" :data-unit_kerja="data.unit_kerja" 
-                                :data-nilai_waktu="data.nilai_waktu" :data-nilai_penyelesaian="data.nilai_penyelesaian" 
-                                data-target="#form_rincian"> <i class="icon-pencil"></i></a>
-                    
-                    <template v-if="!is_delete(data.id)">
-                        <a :data-id="data.id" v-on:click="deleteTempParticipant(index)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
-                    </template>
                     @{{ index+1 }}
                 </td>
                     <td>@{{ data.user_nip_baru }} - @{{ data.user_nama }}</td>
-                    <td><input class="form-control form-control-sm" type="text" v-model="data.jumlah_target"></td>
-                    <td><input class="form-control form-control-sm" type="text" v-model="data.jumlah_selesai"></td>
+                    <td><input class="form-control form-control-sm" type="text" size="3" v-model="data.jumlah_target"></td>
+                    <td>@{{ data.jumlah_realisasi }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

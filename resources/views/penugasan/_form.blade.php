@@ -14,7 +14,7 @@
             <div class="form-group"><label>Tanggal Mulai</label>
                 <div class="form-line">
                     <div class="input-group">
-                        <input type="text" class="form-control datepicker form-control-sm" v-model="form.tanggal_mulai">
+                        <input type="text" id="tanggal_mulai" class="form-control datepicker form-control-sm">
                         <div class="input-group-append">                                            
                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                         </div>
@@ -27,7 +27,7 @@
             <div class="form-group"><label>Tanggal Selesai</label>
                 <div class="form-line">
                     <div class="input-group">
-                        <input type="text" class="form-control datepicker form-control-sm" v-model="form.tanggal_selesai">
+                        <input type="text" id="tanggal_selesai" class="form-control datepicker form-control-sm">
                         <div class="input-group-append">                                            
                             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                         </div>
@@ -61,7 +61,7 @@
 
     @include('penugasan.rincian_participant')
     <br/>
-    <button type="submit" class="btn btn-primary">Simpan</button>
+    <button type="button" @click="saveData()" class="btn btn-primary">Simpan</button>
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -123,7 +123,7 @@
             },
             methods: {
                 is_delete: function(params){
-                    if(isNaN(params)) return false;
+                    if(params=='' || isNaN(params)) return false;
                     else return true;
                 },
                 addParticipant: function(nip){
@@ -148,193 +148,73 @@
                     this.participant.splice(this.participant.findIndex(x => x.user_nip_lama === nip), 1);
                 },
                 deleteParticipant: function(id){
-
                 },
-                // setAllNamaAndPejabat(){
-                //     var self = this;
-                //     var dropdown_nip = $("#nip")[0].selectedIndex;
-                //     var pejabat_ttd_nip = $("#pejabat_ttd_nip")[0].selectedIndex;
+                saveData: function(){
+                    var self = this;
+
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
                     
-                //     self.cur_rincian.nama = self.list_pegawai[dropdown_nip].name;
-                //     self.cur_rincian.jabatan = self.list_pegawai[dropdown_nip].nmjab;
+                    var is_error = false;
+                    var err_msg = []
+
+                    if(self.form.isi==''){
+                        is_error = true;
+                        err_msg.push("Rincian 'Isi' Wajib Diisi");
+                    }
                     
-                //     self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
-                //     self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
-                //     self.cur_rincian.unit_kerja_ttd = self.list_pejabat[pejabat_ttd_nip].kdprop+self.list_pejabat[pejabat_ttd_nip].kdkab;
-                // },
-                // setAllPejabat(){
-                //     var self = this;
-                //     var pejabat_ttd_nip = $("#pejabat_ttd_nip")[0].selectedIndex;
+                    if(self.form.tanggal_mulai=='' || self.form.tanggal_selesai==''){
+                        is_error = true;
+                        err_msg.push("Rincian 'Tanggal Mulai' dan 'Tanggal Selesai' Wajib Diisi");
+                    }
                     
-                //     self.cur_rincian.pejabat_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
-                //     self.cur_rincian.pejabat_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
-                //     self.cur_rincian.unit_kerja_ttd = self.list_pejabat[pejabat_ttd_nip].kdprop+self.list_pejabat[pejabat_ttd_nip].kdkab;
-                // },
-                // setSumberAnggaran: function(event){
-                //     var self = this;
-                //     var value =  event.currentTarget.value;
-                //     if(value==1) self.list_select_anggaran = self.list_anggaran;
-                //     else if(value==2) self.list_select_anggaran = self.list_anggaran_prov;
-                //     else if(value==3) self.list_select_anggaran = null;
-                // },
-                // saveRincian: function(jenis_petugas){
-                //     var self = this;
-
-                //     $('#wait_progres').modal('show');
-                //     $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                    if(self.form.satuan==''){
+                        is_error = true;
+                        err_msg.push("Rincian 'Satuan' Wajib Diisi");
+                    }
                     
-                //     if(jenis_petugas==1){
-                //         $.ajax({
-                //             url :  vm.pathname + "/is_available",
-                //             method : 'post',
-                //             dataType: 'json',
-                //             data:{
-                //                 nip: self.cur_rincian.nip,
-                //                 t_start: self.cur_rincian.tanggal_mulai,
-                //                 t_end: self.cur_rincian.tanggal_selesai,
-                //             },
-                //         }).done(function (data) {
-                //             if(data.response==1){
-                //                 // console.log(data.result[0].total)
-                //                 if(data.result[0].total==0){
-                //                     self.setAllNamaAndPejabat()
-                //                     ////////
-                //                     if(self.cur_rincian.id){
-                //                         self.rincian[self.cur_rincian.index] = {
-                //                             'id': self.cur_rincian.id,
-                //                             'nip'   : self.cur_rincian.nip,
-                //                             'nama'   : self.cur_rincian.nama,
-                //                             'jabatan'   : self.cur_rincian.jabatan,
-                //                             'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                //                             'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                //                             'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                //                             'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                //                             'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                //                             'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                //                             'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                //                             'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                //                             'kendaraan'     : self.cur_rincian.kendaraan,
-                //                             'jenis_petugas'     : jenis_petugas,
-                //                         };
-                //                     }
-                //                     else{
-                //                         self.rincian.push({
-                //                             'id': 'au'+(self.total_utama),
-                //                             'nip'   : self.cur_rincian.nip,
-                //                             'nama'   : self.cur_rincian.nama,
-                //                             'jabatan'   : self.cur_rincian.jabatan,
-                //                             'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                //                             'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                //                             'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                //                             'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                //                             'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                //                             'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                //                             'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                //                             'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                //                             'kendaraan'     : self.cur_rincian.kendaraan,
-                //                             'jenis_petugas'     : jenis_petugas,
-                //                         });
-                //                         self.total_utama++;
-                //                     }
+                    if(self.form.jenis_periode==''){
+                        is_error = true;
+                        err_msg.push("Rincian 'Jenis Periode' Wajib Diisi");
+                    }
+                    
+                    if(self.participant.length==0){
+                        is_error = true;
+                        err_msg.push("Minimal ada 1 Participant Pada Penugasan");
+                    }
 
-                //                     self.cur_rincian.nip = '';
-                //                     self.cur_rincian.nama = '';
-                //                     self.cur_rincian.tujuan_tugas = '';
-                //                     self.cur_rincian.tanggal_mulai = '';
-                //                     self.cur_rincian.tanggal_selesai = '';
-                //                     self.cur_rincian.pejabat_ttd_nip = '';
-                //                     self.cur_rincian.pejabat_ttd_nama = '';
-                //                     self.cur_rincian.pejabat_ttd_jabatan = '';
-                //                     self.cur_rincian.unit_kerja_ttd = '';
-                //                     self.cur_rincian.tingkat_biaya = '';
-                //                     self.cur_rincian.kendaraan = '';
-                //                     self.cur_rincian.id = '';
-                //                     //////////
-                //                     $('#form_rincian').modal('hide');
-                //                 }
-                //                 else{
-                //                     alert(self.cur_rincian.nama + " tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
-                //                 }
-                //             }
-                //             else{
-                //                 alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
-                //             }
-                            
-                //             $('#wait_progres').modal('hide');
-                //         }).fail(function (msg) {
-                //             console.log(JSON.stringify(msg));
-                //             $('#form_rincian').modal('hide');
-                //         });
-                //     }
-                //     else{
-                //         self.setAllPejabat()
-                //         if(self.cur_rincian.nama!='' && self.cur_rincian.tanggal_mulai!='' 
-                //             && self.cur_rincian.pejabat_ttd_nip!=''
-                //             && self.cur_rincian.tanggal_selesai!='' && self.cur_rincian.tujuan_tugas!='' 
-                //             && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){
+                    for(var i=0;i<self.participant.length;i++){
+                        if(self.participant[i].jumlah_target==''){
+                            is_error = true;
+                            err_msg.push("Ada Isian 'Jumlah Target' yang kosong");
+                        }
+                    }
 
-                //             if(self.cur_rincian.id){
-                //                 self.rincian[self.cur_rincian.index] = {
-                //                     'id': self.cur_rincian.id,
-                //                     'nip'   : '',
-                //                     'nama'   : self.cur_rincian.nama,
-                //                     'jabatan'   : '',
-                //                     'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                //                     'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                //                     'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                //                     'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                //                     'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                //                     'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                //                     'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                //                     'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                //                     'kendaraan'     : self.cur_rincian.kendaraan,
-                //                     'jenis_petugas'     : jenis_petugas,
-                //                 };
-                //             }
-                //             else{
-                //                 self.rincian.push({
-                //                     'id': 'au'+(self.total_utama),
-                //                     'nip'   : '',
-                //                     'nama'   : self.cur_rincian.nama,
-                //                     'jabatan'   : '',
-                //                     'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                //                     'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                //                     'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                //                     'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                //                     'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                //                     'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                //                     'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                //                     'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                //                     'kendaraan'     : self.cur_rincian.kendaraan,
-                //                     'jenis_petugas'     : jenis_petugas,
-                //                 });
-                //                 self.total_utama++;
-                //             }
+                    if(!is_error){
+                        var data_post = self.form
+                        var rincian = { participant: self.participant }
+                        data_post = { ...data_post, ...rincian }
 
-                //             self.cur_rincian.nip = '';
-                //             self.cur_rincian.nama = '';
-                //             self.cur_rincian.tujuan_tugas = '';
-                //             self.cur_rincian.tanggal_mulai = '';
-                //             self.cur_rincian.tanggal_selesai = '';
-                //             self.cur_rincian.pejabat_ttd_nip = '';
-                //             self.cur_rincian.pejabat_ttd_nama = '';
-                //             self.cur_rincian.pejabat_ttd_jabatan = '';
-                //             self.cur_rincian.unit_kerja_ttd = '';
-                //             self.cur_rincian.tingkat_biaya = '';
-                //             self.cur_rincian.kendaraan = '';
-                //             self.cur_rincian.id = '';
-                //             //////////
-
-                //             $('#wait_progres').modal('hide');    
-                //             $('#form_rincian2').modal('hide');
-                //         }
-                //         else{
-                //             $('#wait_progres').modal('hide');
-                //             alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
-                //         }
-                        
-                //     }
-                // },
+                        $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                        $.ajax({
+                            url :  self.pathname,
+                            method : 'post',
+                            dataType: 'json',
+                            data: data_post,
+                        }).done(function (data) {
+                            $('#wait_progres').modal('hide');
+                            window.location.href = self.pathname
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#wait_progres').modal('hide');
+                            window.location.href = self.pathname
+                        });
+                    }
+                    else{
+                        alert(err_msg.join("\r\n"));
+                        $('#wait_progres').modal('hide');
+                    }
+                },
                 updateParticipant: function (event) {
                     var self = this;
                 //     if (event) {
@@ -363,12 +243,12 @@
             }
         });
         
-        $('.tanggal_mulai').change(function() {
-            vm.cur_rincian.tanggal_mulai = this.value;
+        $('#tanggal_mulai').change(function() {
+            vm.form.tanggal_mulai = this.value;
         });
         
-        $('.tanggal_selesai').change(function() {
-            vm.cur_rincian.tanggal_selesai = this.value;
+        $('#tanggal_selesai').change(function() {
+            vm.form.tanggal_selesai = this.value;
         });
 
         $(document).ready(function() {

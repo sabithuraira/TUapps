@@ -8,27 +8,32 @@
         </thead>
         @else
             <thead>
-                <tr>
-                    <th class="text-center">Judul</th>
-                    <th class="text-center">Keterangan</th>
-                    <th class="text-center">Pegawai yang terlibat</th>
-                    <th class="text-center" colspan="2">Waktu</th>
-                    <th class="text-center" rowspan="2">Aksi</th>
+                <tr class="text-center">
+                    <th rowspan="2">Judul</th>
+                    <th rowspan="2">Keterangan</th>
+                    <th rowspan="2">Pegawai yang terlibat</th>
+                    <th colspan="2">Waktu</th>
+                    <th colspan="2" rowspan="2">Aksi</th>
+                </tr>
+                
+                <tr class="text-center">
+                    <th>Mulai</th>
+                    <th>Selesai</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($datas as $data)
                     <tr>
-                        <td class="text-center">
-                            <u>{{$data['isi']}}</u>
+                        <td>
+                            {{$data['isi']}}
+                        </td>
+                        <td>
+                            <small><i>{{$data['keterangan']}}</i></small>
                         </td>
                         <td class="text-center">
-                            <small><u>{{$data['keterangan']}}</u></small>
                         </td>
-                        <td class="text-center">
-                        </td>
-                        <td>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
-                        <td>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
+                        <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
+                        <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
                         <td class="text-center"></td>
                         
                         <td class="text-center"></td>
