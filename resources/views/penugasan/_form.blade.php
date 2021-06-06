@@ -116,6 +116,7 @@
                     unit_kerja: '',
                     nilai_waktu: '',
                     nilai_penyelesaian: '',
+                    tanggal_last_progress: '',
                     id: '',
                     index: ''
                 },
@@ -129,10 +130,6 @@
                 },
             },
             methods: {
-                is_delete: function(params){
-                    if(params=='' || isNaN(params)) return false;
-                    else return true;
-                },
                 addParticipant: function(nip){
                     var current_pegawai = this.list_pegawai.find(x => x.email === nip);
                     this.participant.push({
@@ -151,10 +148,29 @@
                         index: ''
                     });
                 },
+                addSelectedParticipant: function(nip){
+                    $("#participant_select").multiSelect('select', [nip]);
+                },
                 deleteTempParticipant: function(nip){
                     this.participant.splice(this.participant.findIndex(x => x.user_nip_lama === nip), 1);
+                    $("#participant_select").multiSelect('deselect', [nip]);
                 },
-                deleteParticipant: function(id){
+                deleteData: function(id_participant){
+                    var self = this;
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                    $.ajax({
+                        url :  self.pathname + "/" + id_participant + "/destroy_participant",
+                        method : 'post',
+                        dataType: 'json',
+                    }).done(function (data) {
+                        self.loadData()
+                        $('#wait_progres').modal('hide');
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                        self.loadData()
+                    });
                 },
                 saveData: function(){
                     var self = this;
@@ -227,7 +243,7 @@
                     $('#wait_progres').modal('show');
 
                     $.ajax({
-                        url :  self.pathname + "/" + self.id,
+                        url :  self.pathname + "/" + self.id + "/detail",
                         method : 'get',
                         dataType: 'json',
                     }).done(function (data) {
@@ -246,9 +262,6 @@
                                 self.participant_old.push(self.participant[i].user_nip_lama);
                             }
 
-                            // console.log(temp_participant)
-                            // temp_participant = ['340013929']
-                            // $("#participant_select").val(temp_participant);
                             $("#participant_select").multiSelect('select', self.participant_old);
                         }
                     }).fail(function (msg) {
@@ -256,31 +269,6 @@
                         $('#wait_progres').modal('hide');
                     });
                     
-                },
-                updateParticipant: function (event) {
-                    var self = this;
-                //     if (event) {
-                //         self.cur_rincian.id = event.currentTarget.getAttribute('data-id');
-                //         self.cur_rincian.index = event.currentTarget.getAttribute('data-index');
-                //         self.cur_rincian.nip = event.currentTarget.getAttribute('data-nip');
-                //         self.cur_rincian.nama = event.currentTarget.getAttribute('data-nama');
-                //         self.cur_rincian.tujuan_tugas = event.currentTarget.getAttribute('data-tujuan_tugas');
-                        
-                //         // self.cur_rincian.tanggal_mulai = event.currentTarget.getAttribute('data-tangga_mulai');
-                //         self.cur_rincian.tanggal_mulai = event.currentTarget.getAttribute('data-tanggal_mulai');
-                //         $('#rincian_tanggal_mulai').val(self.cur_rincian.tanggal_mulai);
-
-                //         self.cur_rincian.tanggal_selesai = event.currentTarget.getAttribute('data-tanggal_selesai');
-                //         $('#rincian_tanggal_selesai').val(self.cur_rincian.tanggal_selesai);
-
-                //         self.cur_rincian.pejabat_ttd_nip = event.currentTarget.getAttribute('data-pejabat_ttd_nip');
-                //         self.cur_rincian.pejabat_ttd_nama = event.currentTarget.getAttribute('data-pejabat_ttd_nama');
-                //         self.cur_rincian.pejabat_ttd_jabatan = event.currentTarget.getAttribute('data-pejabat_ttd_jabatan');
-                //         self.cur_rincian.unit_kerja_ttd = event.currentTarget.getAttribute('data-unit_kerja_ttd');
-                //         self.cur_rincian.tingkat_biaya = event.currentTarget.getAttribute('data-tingkat_biaya');
-                //         self.cur_rincian.kendaraan = event.currentTarget.getAttribute('data-kendaraan');
-
-                //     }
                 },
             }
         });
@@ -306,13 +294,26 @@
         
         $('#participant_select').multiSelect({
             afterSelect: function(values){
-                if (vm.participant_old.indexOf(values[0]) === -1) {
+                if (vm.participant.findIndex(x => x.user_nip_lama === values[0]) === -1) {
                     vm.addParticipant(values[0])
                 }
             },
             afterDeselect: function(values){
-                // alert("Deselect value: "+values);
-                vm.deleteTempParticipant(values[0])
+                if (vm.participant_old.indexOf(values[0]) === -1) {
+                    vm.deleteTempParticipant(values[0])
+                }
+                else{
+                    var cur_index = vm.participant.findIndex(x => x.user_nip_lama === values[0]);
+                    
+                    if (cur_index != -1) {
+                        var cur_data = vm.participant[cur_index]
+                        var confirm_var = confirm("Apakah anda yakin ingin menghapus penugasan '"+ cur_data.user_nama +"'");
+                        if (confirm_var == true) 
+                            vm.deleteData(cur_data.id)
+                        else
+                            vm.addSelectedParticipant(values[0])
+                    }
+                }
             }
         });
     </script>

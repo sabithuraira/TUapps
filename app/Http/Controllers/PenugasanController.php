@@ -134,7 +134,7 @@ class PenugasanController extends Controller
                         $model_participant->user_nama = $value['user_nama'];
                         $model_participant->user_jabatan = $value['user_jabatan'];
                         $model_participant->jumlah_target = $value['jumlah_target'];
-                        $model_participant->jumlah_selesai = 0;
+                        $model_participant->jumlah_selesai =  0;
                         $model_participant->nilai_waktu = 0;
                         $model_participant->nilai_penyelesaian = 0;
                         $model_participant->unit_kerja = $model->unit_kerja;
@@ -157,13 +157,23 @@ class PenugasanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function detail($id)
     {
         $real_id = Crypt::decrypt($id);
         $model = \App\Penugasan::find($real_id);
         $participant = \App\PenugasanParticipant::where('penugasan_id', '=', $real_id)->get();
         
         return response()->json(['form'=>$model, 'participant'=> $participant]);
+    }
+
+    public function show($id){
+        $real_id = Crypt::decrypt($id);
+        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $model = \App\Penugasan::find($real_id);
+        return view('penugasan.show', compact(   
+            'list_pegawai', 'model', 'id'
+        ));
     }
 
     /**
@@ -179,6 +189,16 @@ class PenugasanController extends Controller
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
         $model = \App\Penugasan::find($real_id);
         return view('penugasan.create', compact(   
+            'list_pegawai', 'model', 'id'
+        ));
+    }
+
+    public function progres($id){
+        $real_id = Crypt::decrypt($id);
+        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $model = \App\Penugasan::find($real_id);
+        return view('penugasan.progres', compact(   
             'list_pegawai', 'model', 'id'
         ));
     }
@@ -204,5 +224,12 @@ class PenugasanController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function destroy_participant($id)
+    {
+        $model = \App\PenugasanParticipant::find($id);
+        $model->delete();
+        return response()->json(['success'=>'Sukses']);
     }
 }
