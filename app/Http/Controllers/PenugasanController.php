@@ -203,6 +203,29 @@ class PenugasanController extends Controller
         ));
     }
 
+    public function store_progres(Request $request, $id){
+        $model = \App\Penugasan::find($id);
+        
+        $participant = [];
+        if($request->has('participant')){
+            $participant = $request->participant;
+
+            foreach($participant as $key=>$value){
+                if($value['id']!=0 || $value['id']!=''){
+                    $model_participant = \App\PenugasanParticipant::find($value['id']);
+                    if($model_participant!=null){
+                        $model_participant->jumlah_selesai =  $value['jumlah_selesai'];
+                        if(strlen($value['tanggal_last_progress'])>0)
+                            $model_participant->tanggal_last_progress =  date('Y-m-d', strtotime($value['tanggal_last_progress']));
+                        $model_participant->save();
+                    }
+                }
+            }
+        }
+        
+        return response()->json(['result'=>'success']);
+    }
+
     /**
      * Update the specified resource in storage.
      *

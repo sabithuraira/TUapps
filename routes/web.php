@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penugasan/{id}/detail', 'PenugasanController@detail');
     Route::get('penugasan/{id}/progres', 'PenugasanController@progres');
     Route::post('penugasan/{id}/destroy_participant', 'PenugasanController@destroy_participant');
+    Route::post('penugasan/{id}/store_progres', 'PenugasanController@store_progres');
 
     //
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
