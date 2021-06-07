@@ -49,7 +49,7 @@ class DashboardController extends Controller
         $model = new \App\UserModel;
 
         foreach($result as $key=>$value){
-            $datas[] = (object) array_merge((array) $value, (array) $model->getJumlahDlByNip($value->nip));
+            $datas[] = (object) array_merge((array) $value, ['total_dl' => $model->getJumlahDlByNip($value->nip)]);
         }
 
         return view('dashboard.rekap_dl',compact(

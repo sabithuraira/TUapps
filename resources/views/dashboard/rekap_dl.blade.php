@@ -82,7 +82,7 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No</th>
-                                    <th>Nama</th>
+                                    <th>Nama (Total Hari DL Tahun Ini)</th>
                                     @for($i=1;$i<=$d;++$i)
                                         @if($i<10)
                                             <th>0{{ $i }}</th>
@@ -98,8 +98,9 @@
                                         <td>{{ $key+1 }}.</td>
                                         <td>
                                             <a href="{{ action('DashboardController@profile', Crypt::encrypt($value->nip)) }}">
-                                                {{ $value->nama }}
+                                                {{ $value->nama }} 
                                             </a>
+                                            <b>({{ $value->total_dl }})</b>
                                         </td>
                                         @for($i=1;$i<=$d;++$i)
                                             @php 
