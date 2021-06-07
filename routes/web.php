@@ -107,7 +107,8 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
-Route::group(['middleware' => 'auth'], function () {
+
+Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {    
     //
     Route::resource('penugasan', 'PenugasanController');
     Route::get('penugasan/{id}/detail', 'PenugasanController@detail');
@@ -115,6 +116,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('penugasan/{id}/destroy_participant', 'PenugasanController@destroy_participant');
     Route::post('penugasan/{id}/store_progres', 'PenugasanController@store_progres');
 
+});
+
+Route::group(['middleware' => 'auth'], function () {
     //
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////

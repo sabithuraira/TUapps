@@ -68,9 +68,11 @@
                     <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                 </li>
                 
+                @hasanyrole('superadmin|admin_uker')
                 <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
                     <a href="{{ url('penugasan') }}"> <i class="fa fa-tasks"></i><span>Penugasan</span></a>
                 </li>
+                @endhasanyrole
 
                 @if(Auth::user()->kdkab=='00')
                 <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">

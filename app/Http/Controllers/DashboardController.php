@@ -53,7 +53,7 @@ class DashboardController extends Controller
         $real_id = Crypt::decrypt($id);
         $model = \App\UserModel::where('nip_baru', '=', $real_id)->first();
         $ckp_bulanan = new \App\CkpLogBulanan;
-        $list_ckp = $ckp_bulanan->RekapCkpPegawaiPerTahun($model->email, 2020);
+        $list_ckp = $ckp_bulanan->RekapCkpPegawaiPerTahun($model->email, $year);
         $result_ckp = [];
         for($i=1;$i<=12;++$i){
             $name = 'bulan'.$i;
