@@ -43,7 +43,15 @@ class DashboardController extends Controller
             }
         }
 
-        $datas = \App\SuratTugasRincian::rekapUnitKerja($uk, $month, $year);
+        // $datas = \App\SuratTugasRincian::rekapUnitKerja($uk, $month, $year);
+        $result = \App\SuratTugasRincian::rekapUnitKerja($uk, $month, $year);
+        $datas = [];
+        $model = new \App\UserModel;
+
+        foreach($result as $key=>$value){
+            $datas[] = (object) array_merge((array) $value, (array) $model->getJumlahDlByNip($value->nip));
+        }
+
         return view('dashboard.rekap_dl',compact(
             'datas', 'month', 'year', 'uk', 'list_libur'));
     }

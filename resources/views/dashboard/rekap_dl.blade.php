@@ -97,7 +97,9 @@
                                     <tr >
                                         <td>{{ $key+1 }}.</td>
                                         <td>
-                                            <a href="{{ action('DashboardController@profile', Crypt::encrypt($value->nip)) }}">{{ $value->nama }}</a>
+                                            <a href="{{ action('DashboardController@profile', Crypt::encrypt($value->nip)) }}">
+                                                {{ $value->nama }}
+                                            </a>
                                         </td>
                                         @for($i=1;$i<=$d;++$i)
                                             @php 

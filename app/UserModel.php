@@ -58,7 +58,31 @@ class UserModel extends Model
                     ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
 
         return $total_biasa + $total_pelatihan;
+    }
 
+    public function getJumlahDlByNip($nip){
+        $cur_year = date('Y');
+
+        $total_biasa = DB::table("surat_tugas_rincian")
+                    ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
+                    ->where('surat_tugas.sumber_anggaran', '<>', 3)
+                    ->where('surat_tugas_rincian.nip', '=', $nip)
+                    ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                    ->whereNotNull('surat_tugas_rincian.nomor_spd')
+                    ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
+                    ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
+                    
+        $total_pelatihan = DB::table("surat_tugas_peserta_pelatihan")
+                    ->join("surat_tugas_rincian","surat_tugas_rincian.id","=","surat_tugas_peserta_pelatihan.id_surtug")
+                    ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
+                    ->where('surat_tugas.sumber_anggaran', '<>', 3)
+                    ->where('surat_tugas_peserta_pelatihan.nip', '=', $nip)
+                    ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                    ->whereNotNull('surat_tugas_rincian.nomor_spd')
+                    ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
+                    ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
+
+        return $total_biasa + $total_pelatihan;
     }
 
     public function getFotoUrlAttribute(){

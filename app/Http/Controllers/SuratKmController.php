@@ -14,8 +14,7 @@ class SuratKmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
         $jenis = $request->get('jenis');
 
@@ -417,7 +416,8 @@ class SuratKmController extends Controller
      */
     public function show($id)
     {
-        //
+        $model = \App\SuratKm::find($id);
+        return view('surat_km.show', compact('model', 'id'));
     }
 
     /**

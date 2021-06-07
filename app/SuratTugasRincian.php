@@ -132,25 +132,45 @@ class SuratTugasRincian extends Model
 			$label_select[] = 'day'.$i;
 			$label_case[] = "COUNT(CASE WHEN ($i BETWEEN DAY(tanggal_mulai) AND DAY(tanggal_selesai)) THEN 0 END) AS day".$i;
 		}
-		
+		//ini percobaan query baru, kalo bulan 10 2021 ga ada masalah, brrti uda bener
 		$sql = "SELECT nip, nama, ".join(",", $label_select)."
 			FROM (
 				SELECT users.id, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
 			FROM users 
-			LEFT JOIN surat_tugas_rincian ON users.nip_baru=surat_tugas_rincian.nip 
-				AND YEAR(tanggal_mulai)=".$year." 
-				AND MONTH(tanggal_mulai)=".$month." 
-				AND surat_tugas_rincian.nip IS NOT NULL 
-				AND surat_tugas_rincian.status_aktif<>2  
-				AND surat_tugas_rincian.nomor_spd IS NOT NULL
-			LEFT JOIN surat_tugas ON surat_tugas.id=surat_tugas_rincian.id_surtug  
-				AND surat_tugas.sumber_anggaran IN (1,2,4)  
-				AND surat_tugas.mak IS NOT NULL 
+			LEFT JOIN 
+			    (SELECT surat_tugas_rincian.* FROM surat_tugas_rincian, surat_tugas 
+                    WHERE surat_tugas_rincian.id_surtug=surat_tugas.id 
+                        AND YEAR(surat_tugas_rincian.tanggal_mulai)=".$year." 
+        				AND MONTH(surat_tugas_rincian.tanggal_mulai)=".$month." 
+        				AND surat_tugas_rincian.nip IS NOT NULL
+        				AND surat_tugas_rincian.status_aktif<>2  
+        				AND surat_tugas_rincian.nomor_spd IS NOT NULL
+				        AND surat_tugas.sumber_anggaran <> 3  
+                ) AS str ON str.nip=users.nip_baru
 			WHERE kdkab='" . $uk . "' 
-				
 			GROUP BY nip_baru, name, users.id
 				ORDER BY users.id
 			) AS CA";
+		
+		//ini percobaan query baru, kalo bulan 10 2021 ga ada masalah, hapus code di bawah
+		// $sql = "SELECT nip, nama, ".join(",", $label_select)."
+		// 	FROM (
+		// 		SELECT users.id, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
+		// 	FROM users 
+		// 	LEFT JOIN surat_tugas_rincian ON users.nip_baru=surat_tugas_rincian.nip 
+		// 		AND YEAR(tanggal_mulai)=".$year." 
+		// 		AND MONTH(tanggal_mulai)=".$month." 
+		// 		AND surat_tugas_rincian.nip IS NOT NULL 
+		// 		AND surat_tugas_rincian.status_aktif<>2  
+		// 		AND surat_tugas_rincian.nomor_spd IS NOT NULL
+		// 	LEFT JOIN surat_tugas ON surat_tugas.id=surat_tugas_rincian.id_surtug  
+		// 		AND surat_tugas.sumber_anggaran <> 3   
+		// 		AND surat_tugas.mak IS NOT NULL 
+		// 	WHERE kdkab='" . $uk . "' 
+				
+		// 	GROUP BY nip_baru, name, users.id
+		// 		ORDER BY users.id
+		// 	) AS CA";
 			
 		$result = DB::select(DB::raw($sql));
         return $result;
