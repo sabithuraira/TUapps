@@ -70,6 +70,7 @@
                             <tr class="text-center">
                                 <td rowspan="2">No</td>
                                 <td rowspan="2">Pegawai</td>
+                                <td rowspan="2">Keterangan</td>>
                                 <td colspan="2">Jumlah</td>
                                 <td rowspan="2">Progres <br/>Terakhir Pada</td>
                                 <td rowspan="2">Skor</td>
@@ -84,6 +85,7 @@
                             <tr v-for="(data, index) in participant" :key="data.user_nip_lama">
                                 <td>@{{ index+1 }}</td>
                                 <td>@{{ data.user_nip_baru }} - @{{ data.user_nama }}</td>
+                                <td class="text-center">@{{ data.keterangan }}</td>
                                 <td class="text-center">@{{ data.jumlah_target }}</td>
                                 <td class="text-center">@{{ data.jumlah_selesai }}</td>
                                 <td class="text-center">@{{ data.tanggal_last_progress }}</td>
@@ -139,7 +141,7 @@
             },
             computed: {
                 pathname: function() {
-                    return (window.location.pathname).replace("/"+this.id, "");
+                    return (window.location.pathname).replace("/"+this.id + "/show", "");
                 },
             },
             methods: {

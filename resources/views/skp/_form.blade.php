@@ -113,12 +113,12 @@
                             <td>@{{ index+1 }}</td>
                             <td colspan="2"><input type="text" class="form-control" v-model="data.uraian" /></td>
                             <td>@{{ data.kode_point_kredit }}</td>
-                            <td class="text-center"><input type="text" class="form-control" v-model="data.target_kuantitas" /></td>
+                            <td class="text-center"><input type="number" class="form-control" v-model="data.target_kuantitas" /></td>
                             <td class="text-center"><input type="text" class="form-control" v-model="data.satuan" /></td>
-                            <td class="text-center"><input type="text" class="form-control" v-model="data.target_kualitas" /></td>
+                            <td class="text-center"><input type="number" class="form-control" v-model="data.target_kualitas" /></td>
                             <td class="text-center"><input type="text" class="form-control" v-model="data.waktu" /></td>
                             <td class="text-center"><input type="text" class="form-control" v-model="data.satuan_waktu" /></td>
-                            <td class="text-center"><input type="text" class="form-control" v-model="data.biaya" /></td>
+                            <td class="text-center"><input type="number" class="form-control" v-model="data.biaya" /></td>
                         </tr>
                     </tbody>
                 </table>

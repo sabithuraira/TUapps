@@ -12,6 +12,7 @@
             <tr class="text-center">
                 <td>No</td>
                 <td>Pegawai</td>
+                <td>Keterangan</td>
                 <td>Jumlah Target</td>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                     @{{ index+1 }}
                 </td>
                 <td>@{{ data.user_nip_baru }} - @{{ data.user_nama }}</td>
+                <td><textarea class="form form-control" v-model="data.keterangan"></textarea></td>
                 <td><input class="form-control form-control-sm" type="text" size="3" v-model="data.jumlah_target"></td>
                 </tr>
             </tbody>

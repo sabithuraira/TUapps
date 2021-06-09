@@ -42,7 +42,7 @@
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                     <ul>
                         <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a>
-                        <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP</a>
+                        <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP <span class="badge badge-warning float-right">Uji Coba</span></a>
                         </li>
                         <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a
                                 href="{{ url('log_book') }}">Log Book</a></li>
@@ -68,9 +68,19 @@
                     <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                 </li>
                 
-                @hasanyrole('superadmin|admin_uker')
+                @hasanyrole('superadmin|admin_uker|penugas')
                 <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
-                    <a href="{{ url('penugasan') }}"> <i class="fa fa-tasks"></i><span>Penugasan</span></a>
+                    <a href="#Jadwal" class="has-arrow"><i class="fa fa-tasks"></i> <span>Matrik Tugas</span>  <span class="badge badge-warning float-right">Uji Coba</span></a>
+                    <ul>
+                        <li class="{{ request()->is('penugasan/anda*') ? 'active' : '' }}"><a
+                                href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
+                        @hasanyrole('superadmin|admin_uker|penugas')
+                            <li class="{{ request()->is('penugasan*') ? 'active' : '' }}"><a
+                                    href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>
+                            <li class="{{ request()->is('penugasan/user_role*') ? 'active' : '' }}"><a
+                                    href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>       
+                        @endhasanyrole
+                    </ul>
                 </li>
                 @endhasanyrole
 

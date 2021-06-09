@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class PenugasanController extends Controller
 {
@@ -133,6 +135,7 @@ class PenugasanController extends Controller
                         $model_participant->user_nip_baru = $value['user_nip_baru'];
                         $model_participant->user_nama = $value['user_nama'];
                         $model_participant->user_jabatan = $value['user_jabatan'];
+                        $model_participant->keterangan = $value['keterangan'];
                         $model_participant->jumlah_target = $value['jumlah_target'];
                         $model_participant->jumlah_selesai =  0;
                         $model_participant->nilai_waktu = 0;
@@ -224,6 +227,34 @@ class PenugasanController extends Controller
         }
         
         return response()->json(['result'=>'success']);
+    }
+
+    public function user_role(Request $request){
+        $keyword = $request->get('search');
+        $datas = \App\User::where('name', 'LIKE', '%' . $keyword . '%')
+            ->where('kdprop', '=', Auth::user()->kdprop)
+            ->where('kdkab', '=', Auth::user()->kdkab)
+            ->paginate();
+
+        $datas->withPath('penugasan/user_role');
+        $datas->appends($request->all());
+        return view('penugasan.user_role',compact('datas', 'keyword'));
+    }
+
+    public function user_role_edit($id){
+        
+        $model = \App\User::find($id);
+        $all_roles = Role::where('name', '=', 'pemberi_tugas')->get();
+        return view('penugasan.user_role_edit',compact('model','id',
+            'all_roles'));
+    }
+
+    public function user_role_update(Request $request, $id)
+    {
+        $model = \App\UserModel::find($id);
+        // $model->syncRoles($request['optrole']);
+        print_r($request['optrole']);die();
+        return redirect('penugasan/user_role');
     }
 
     /**

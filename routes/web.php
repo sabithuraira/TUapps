@@ -108,14 +108,20 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
 });
 
 
-Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {    
+Route::group(['middleware' => ['role:superadmin|admin_uker|penugas']], function () {    
     //
-    Route::resource('penugasan', 'PenugasanController');
+    Route::resource('penugasan', 'PenugasanController')->except('show');
+    Route::get('penugasan/{id}/show', 'PenugasanController@show');
     Route::get('penugasan/{id}/detail', 'PenugasanController@detail');
     Route::get('penugasan/{id}/progres', 'PenugasanController@progres');
     Route::post('penugasan/{id}/destroy_participant', 'PenugasanController@destroy_participant');
     Route::post('penugasan/{id}/store_progres', 'PenugasanController@store_progres');
+});
 
+Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {    
+    Route::get('penugasan/user_role', 'PenugasanController@user_role');
+    Route::get('penugasan/{id}/user_role_edit', 'PenugasanController@user_role_edit');
+    Route::patch('penugasan/{id}/user_role_update', 'PenugasanController@user_role_update');
 });
 
 Route::group(['middleware' => 'auth'], function () {
