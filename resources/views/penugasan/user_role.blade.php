@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>                     
-    <li class="breadcrumb-item">Kelola User Penugas</li>
+    <li class="breadcrumb-item">Kelola User Pemberi Tugas</li>
 </ul>
 @endsection
 

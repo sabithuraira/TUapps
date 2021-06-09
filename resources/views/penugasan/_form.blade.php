@@ -5,8 +5,12 @@
     </div>
 
     <div class="form-group">
-        <label>Keterangan:</label>
-        <textarea class="form-control form-control-sm" rows="5" v-model="form.keterangan"></textarea>
+        <label>Ditugaskan Oleh :</label>
+        <select class="form-control form-control-sm" v-model="form.ditugaskan_oleh_fungsi">
+            @foreach($list_fungsi as $key=>$value)
+                <option value="{{ $value->id }}">{{ $value->nama }}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="row clearfix">
@@ -97,6 +101,7 @@
                 participant: [],
                 form: {
                     isi: '',
+                    ditugaskan_oleh_fungsi: '',
                     keterangan: '',
                     tanggal_mulai: '',
                     tanggal_selesai: '',

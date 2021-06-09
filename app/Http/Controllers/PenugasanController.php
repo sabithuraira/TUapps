@@ -72,10 +72,11 @@ class PenugasanController extends Controller
     public function create(){
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
         $model = new \App\Penugasan;
         $id = '';
         return view('penugasan.create', compact(
-            'list_pegawai', 'model', 'id'
+            'list_pegawai', 'model', 'id', 'list_fungsi'
         ));
     }
 
@@ -100,7 +101,7 @@ class PenugasanController extends Controller
         }
 
         $model->isi = $request->isi;
-        $model->keterangan = $request->keterangan;
+        $model->ditugaskan_oleh_fungsi = $request->ditugaskan_oleh_fungsi;
         $model->tanggal_mulai =  date('Y-m-d', strtotime($request->tanggal_mulai));
         $model->tanggal_selesai =  date('Y-m-d', strtotime($request->tanggal_selesai));
         $model->satuan = $request->satuan;
@@ -174,8 +175,9 @@ class PenugasanController extends Controller
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
         $model = \App\Penugasan::find($real_id);
+        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
         return view('penugasan.show', compact(   
-            'list_pegawai', 'model', 'id'
+            'list_pegawai', 'model', 'id', 'list_fungsi'
         ));
     }
 
@@ -191,8 +193,9 @@ class PenugasanController extends Controller
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
         $model = \App\Penugasan::find($real_id);
+        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
         return view('penugasan.create', compact(   
-            'list_pegawai', 'model', 'id'
+            'list_pegawai', 'model', 'id', 'list_fungsi'
         ));
     }
 
@@ -251,9 +254,14 @@ class PenugasanController extends Controller
 
     public function user_role_update(Request $request, $id)
     {
-        $model = \App\UserModel::find($id);
+        $model = \App\User::find($id);
         // $model->syncRoles($request['optrole']);
-        print_r($request['optrole']);die();
+        if(isset($request['optrole'])){
+            $model->assignRole("pemberi_tugas");
+        }
+        else{
+            $model->removeRole("pemberi_tugas");
+        }
         return redirect('penugasan/user_role');
     }
 

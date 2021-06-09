@@ -9,7 +9,16 @@
                     <div class="col-md-12">
                         Pegawai:
                         <div class="form-line">
-                            <input type="text" disabled v-model="detail_participant.user_name" class="form-control">
+                            <input type="text" disabled v-model="detail_participant.user_nama" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        Keterangan:
+                        <div class="form-line">
+                            <textarea disabled class="form form-control" v-model="detail_participant.keterangan"></textarea>
                         </div>
                     </div>
                 </div>

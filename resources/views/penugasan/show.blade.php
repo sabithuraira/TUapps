@@ -20,8 +20,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Keterangan:</label>
-                    <textarea  disabled class="form-control form-control-sm" rows="5" v-model="form.keterangan"></textarea>
+                    <label>Ditugaskan Oleh :</label>
+                    <select disabled class="form-control form-control-sm" v-model="form.ditugaskan_oleh_fungsi">
+                        @foreach($list_fungsi as $key=>$value)
+                            <option value="{{ $value->id }}">{{ $value->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="row clearfix">
@@ -70,7 +74,7 @@
                             <tr class="text-center">
                                 <td rowspan="2">No</td>
                                 <td rowspan="2">Pegawai</td>
-                                <td rowspan="2">Keterangan</td>>
+                                <td rowspan="2">Keterangan</td>
                                 <td colspan="2">Jumlah</td>
                                 <td rowspan="2">Progres <br/>Terakhir Pada</td>
                                 <td rowspan="2">Skor</td>
@@ -112,7 +116,6 @@
   </div>
 </div>
 @endsection
-
 
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />

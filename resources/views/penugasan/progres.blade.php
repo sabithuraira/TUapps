@@ -167,11 +167,13 @@
                 updateProgres: function (event) {
                     var self = this;
                     if (event) {
+                    console.log(event.currentTarget.getAttribute('data-user_nama'))
                         self.detail_participant.id = event.currentTarget.getAttribute('data-id');
                         self.detail_participant.tanggal_last_progress = event.currentTarget.getAttribute('data-tanggal_last_progress');
                         $('#tanggal_last_progress').val(self.detail_participant.tanggal_last_progress);
 
                         self.detail_participant.user_nama = event.currentTarget.getAttribute('data-user_nama');
+                        self.detail_participant.keterangan = event.currentTarget.getAttribute('data-keterangan');
                         self.detail_participant.jumlah_target = event.currentTarget.getAttribute('data-jumlah_target');
                         self.detail_participant.jumlah_selesai = event.currentTarget.getAttribute('data-jumlah_selesai');
                     }
