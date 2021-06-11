@@ -75,9 +75,9 @@
                         <li class="{{ request()->is('penugasan/anda*') ? 'active' : '' }}"><a
                                 href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
                         @hasanyrole('superadmin|admin_uker|penugas')
-                            <li class="{{ request()->is('penugasan*') ? 'active' : '' }}"><a
+                            <li class="{{ (request()->is('penugasan/*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda*')) ? 'active' : '' }}"><a
                                     href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>
-                            <li class="{{ request()->is('penugasan/user_role*') ? 'active' : '' }}"><a
+                            <li class="{{ request()->is('penugasan/user_role') ? 'active' : '' }}"><a
                                     href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>       
                         @endhasanyrole
                     </ul>

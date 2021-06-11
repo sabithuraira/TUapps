@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
-    <li class="breadcrumb-item">Daftar Penugasan</li>
+    <li class="breadcrumb-item">Matrik Tugas</li>
 </ul>
 @endsection
 

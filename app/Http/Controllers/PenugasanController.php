@@ -155,6 +155,29 @@ class PenugasanController extends Controller
         }
     }
 
+    public function anda(Request $request){
+        $list_penugasan = \App\PenugasanParticipant::where('user_id', '=', Auth::id())->paginate();
+        
+        return view('penugasan.anda', compact(
+            'list_penugasan'
+        ));
+    }
+
+    public function storeLapor(Request $request){
+        if($request->id!=0){
+            $model = \App\PenugasanParticipant::find($request->id);
+            if($model!=null){
+                $model->jumlah_lapor = $request->jumlah_lapor;
+                $model->tanggal_last_lapor = $request->tanggal_last_lapor;
+                if($model->save()){
+                    return response()->json(['result'=>'success']);
+                }
+            }
+        }
+        
+        return response()->json(['result'=>'error']);
+    }
+
     /**
      * Display the specified resource.
      *
