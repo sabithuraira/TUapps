@@ -2,57 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <style type="text/css">
-            * {
-                font-family: Segoe UI, Arial, sans-serif;
-                font-size: small
-            }
-
-            tr,
-            td {
-                padding-left: 8px;
-            }
-
-            .pepet {
-                white-space: nowrap;
-                width: 1%;
-            }
-
-            .table-border {
-                border: 1px solid black;
-            }
-
-            .table-border td,
-            th {
-                border: 1px solid black;
-            }
-
-            tfoot tr td {
-                font-weight: bold;
-                font-size: x-small;
-            }
-
-            .gray {
-                background-color: lightgray
-            }
-
-            header {
-                position: fixed;
-                top: -40px;
-                left: 0px;
-                right: 0px;
-            }
-
-            footer {
-                position: fixed;
-                bottom: -60px;
-                left: 0px;
-                right: 0px;
-                height: 50px;
-                text-align: center;
-                line-height: 35px;
-            }
-        </style>
+        <link href="{{ asset('css/print_pdf.css') }}" rel="stylesheet">
     </head>
 
     <body>
@@ -71,40 +21,31 @@
             </table>
         </header>
 
-        <br /><br /><br /><br /><br />
-
-        <p align="center"><b><u>SURAT TUGAS</u></b></p>
-        <p align="center">NOMOR : {{ $model_rincian->nomor_st }}</p>
-
-        <br /><br />
-
-        <table width="100%">
-            <tr><td colspan="2" align="right">{{ $model_rincian->dibuat_di }}</td></tr>
-            <tr><td width="15%">Nomor</td><td>: {{ $model->nomor }}</td></tr>
-            <tr><td width="15%">Lampiran</td><td>: {{ $model_rincian->lampiran }}</td></tr>
-            <tr><td width="15%">Perihal</td><td>: {{ $model->perihal }}</td></tr>
-        </table>
-
-        <br/><br/><br/>
-
-        <p>Kepada Yth:</p>
-        <p>{{ $model_rincian->kepada }}</p>
-        <p>di</p>
-        <p>&nbsp;&nbsp; {{ $model_rincian->kepada_di }}</p>
-
-        <br/><br/><br/>
-
-        {!! $model_rincian->isi !!}
+        <br/><br/><br/><br/>
         
-        <br/><br/><br/>
+        <p align="center"><b><u>SURAT KETERANGAN / PERNYATAAN</u></b></p>
+        <p align="center">NOMOR : {{ $model->nomor }}</p>
 
         <table width="100%">
             <tr>
-                <td width="50%"></td>
+                <td width="7%"></td>
+                <td>{!! $model_rincian->isi !!}</td>
+                <td width="10%"></td>
+            </tr>
+        </table>
+
+        <br/><br/>
+
+        <table width="100%">
+            <tr style="vertical-align: text-top;">
+                <td width="7%"></td>
+                <td width="43%">
+                </td>
                 <td width="40%" align="center">
+                    {{ $model->ditetapkan_di }}, {{ date('d', strtotime($model->ditetapkan_tanggal)) }} {{ config('app.months')[date('n', strtotime($model->ditetapkan_tanggal))] }} {{ date('Y', strtotime($model->ditetapkan_tanggal)) }} <br/>
                     {{ $model->ditetapkan_oleh }}
-                    <br/><br/><br/><br/><br/>
-                    {{ $model->ditetapkan_nam }}
+                    <br/><br/><br/><br/><br/><br/>
+                    {{ $model->ditetapkan_nama }}<br/>
                 </td>
                 <td width="10%"></td>
             </tr>
