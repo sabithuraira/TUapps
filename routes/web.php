@@ -132,6 +132,7 @@ Route::group(['middleware' => 'auth'], function () {
     ////////////////////
     Route::resource('surat_km', 'SuratKmController');
     Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
+    Route::get('surat_km/{id}/print', 'SuratKmController@print');
 
     //////////////////////////
     Route::resource('log_book', 'LogBookController')->except(['show']);

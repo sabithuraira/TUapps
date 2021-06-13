@@ -1,0 +1,53 @@
+* {
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: small
+}
+
+tr,
+td {
+    padding-left: 8px;
+}
+
+.pepet {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.table-border {
+    border: 1px solid black;
+}
+
+.table-border td,th {
+    border: 1px solid black;
+}
+
+.table-woborder{ border: none; }
+.table-woborder td, th{ border: none; }
+td.table-woborder { border: none; }
+td.table-wobordertb { border-top: none; border-bottom: none; }
+
+tfoot tr td {
+    font-weight: bold;
+    font-size: x-small;
+}
+
+.gray {
+    background-color: lightgray
+}
+
+header {
+    position: fixed;
+    top: -40px;
+    left: 0px;
+    right: 0px;
+}
+
+footer {
+    position: fixed;
+    bottom: -60px;
+    left: 0px;
+    right: 0px;
+    height: 50px;
+    text-align: center;
+    line-height: 35px;
+}

@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Tentang:</label>
-            <textarea id="tentang" class="form-control" name="tentang" rows="3"></textarea>
+            <textarea id="tentang" class="summernote form-control" name="tentang" rows="3"></textarea>
         </div>
     </div>
 </div>

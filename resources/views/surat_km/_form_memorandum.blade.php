@@ -68,14 +68,11 @@ Nomor Surat: @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ klasifikasi_arsip }}/@
 
 <span class="text-info font-italic font-weight-bold"><u>Isian ISI SURAT dibawah tidak wajib diisi, jika diisi anda dapat mencetak surat langsung dari MUSI</u></span>
 <div class="row clearfix">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="form-group">
             <label>Kepada:</label>
             <input type="text" class="form-control" name="kepada">
         </div>
-    </div>
-    
-    <div class="col-md-6 left">
     </div>
 </div>
 

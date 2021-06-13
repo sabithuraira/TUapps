@@ -135,6 +135,7 @@ var vm = new Vue({
                 
                 
                 if(self.jenis_surat==6){
+                    $('#tentang').summernote();
                     $('#menimbang').summernote();
                     $('#mengingat').summernote();
                     $('#menetapkan').summernote();

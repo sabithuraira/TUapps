@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratKmRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use PDF;
 
 class SuratKmController extends Controller
 {
@@ -312,9 +314,7 @@ class SuratKmController extends Controller
             $model->ditetapkan_nip = $request->ditetapkan_nip;
             if($model->save()){
                 if(strlen($request->isi)>0 && strlen($request->kepada)>0 && 
-                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0
-                    && strlen($request->diterima_tanggal)>0 && strlen($request->diterima_jabatan)>0 
-                    && strlen($request->diterima_nama)>0){
+                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
                     $model_rincian = new \App\SuratKmRincianSuratPengantar;
                     $model_rincian->induk_id = $model->id;
                     $model_rincian->isi = $request->isi;
@@ -416,8 +416,83 @@ class SuratKmController extends Controller
      */
     public function show($id)
     {
-        $model = \App\SuratKm::find($id);
-        return view('surat_km.show', compact('model', 'id'));
+        $real_id = Crypt::decrypt($id);
+        $model = \App\SuratKm::find($real_id);
+        $model_rincian = null;
+        switch ($model->jenis_surat) {
+            case 2:
+                $model_rincian = \App\SuratKmRincianSuratLuar::where('induk_id', '=', $real_id)->first();
+                break;
+            case 3:
+                $model_rincian = \App\SuratKmRincianMemorandum::where('induk_id', '=', $real_id)->first();
+                break;
+            case 4:
+                $model_rincian = \App\SuratKmRincianSuratPengantar::where('induk_id', '=', $real_id)->first();
+                break;
+            case 5:
+                $model_rincian = \App\SuratKmRincianDisposisi::where('induk_id', '=', $real_id)->first();
+                break;
+            case 6:
+                $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $real_id)->first();
+                break;
+            case 7:
+                $model_rincian = \App\SuratKmRincianSuratKeterangan::where('induk_id', '=', $real_id)->first();
+                break;
+            default:
+        } 
+        return view('surat_km.show', compact('model', 'id', 'model_rincian'));
+    }
+
+    public function print($id){
+        $real_id = Crypt::decrypt($id);
+        $model = \App\SuratKm::find($real_id);
+        $model_rincian = null;
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
+        $pdf = null;
+
+        switch ($model->jenis_surat) {
+            case 2:
+                $model_rincian = \App\SuratKmRincianSuratLuar::where('induk_id', '=', $real_id)->first();
+                $pdf = PDF::loadView('surat_km.print_surat_keluar', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja'
+                        ))->setPaper('a4');
+                break;
+            case 3:
+                $model_rincian = \App\SuratKmRincianMemorandum::where('induk_id', '=', $real_id)->first();
+                $pdf = PDF::loadView('surat_km.print_memorandum', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja'
+                        ))->setPaper('a4');
+                break;
+            case 4:
+                $model_rincian = \App\SuratKmRincianSuratPengantar::where('induk_id', '=', $real_id)->first();
+                $pdf = PDF::loadView('surat_km.print_surat_pengantar', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja'
+                        ))->setPaper('a4');
+                break;
+            case 5:
+                $model_rincian = \App\SuratKmRincianDisposisi::where('induk_id', '=', $real_id)->first();
+                $pdf = PDF::loadView('surat_km.print_disposisi', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja'
+                        ))->setPaper('a4');
+                break;
+            case 6:
+                $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $real_id)->first();
+                $list_keputusan = \App\SuratKmRincianListKeputusan::where('induk_id', '=', $real_id)->get();
+                $pdf = PDF::loadView('surat_km.print_surat_keputusan', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja', 'list_keputusan'
+                        ))->setPaper('a4');
+                break;
+            case 7:
+                $model_rincian = \App\SuratKmRincianSuratKeterangan::where('induk_id', '=', $real_id)->first();
+                $pdf = PDF::loadView('surat_km.print_surat_keterangan', compact(
+                            'real_id', 'model_rincian', 'model','unit_kerja'
+                        ))->setPaper('a4');
+                break;
+            default:
+        }
+        
+        $nama_file = 'surat_'.$model->nomor.'.pdf';
+        return $pdf->download($nama_file);
     }
 
     /**
