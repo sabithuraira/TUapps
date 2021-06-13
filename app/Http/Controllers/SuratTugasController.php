@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratTugasRequest;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;f
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 use iio\libmergepdf\Merger;
 
 class SuratTugasController extends Controller

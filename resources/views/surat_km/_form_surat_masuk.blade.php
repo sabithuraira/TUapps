@@ -2,7 +2,7 @@
     <div class="col-md-12 left">
         <div class="form-group">
             <label>{{ $model->attributes()['perihal'] }}:</label>
-            <input type="text" required class="form-control {{($errors->first('perihal') ? ' parsley-error' : '')}}" name="perihal" value="{{ old('perihal', $model->perihal) }}">
+            <input type="text" required class="form-control {{($errors->first('perihal') ? ' parsley-error' : '')}}" name="perihal"  v-model="form.perihal">
             @foreach ($errors->get('perihal') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
             @endforeach
@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label>{{ $model->attributes()['tanggal'] }}:</label>
                 <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                    <input type="text" required class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" id="tanggal" v-model="tanggal">
+                    <input type="text" required class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal" id="tanggal" v-model="form.tanggal">
                     <div class="input-group-append">                                            
                         <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                     </div>

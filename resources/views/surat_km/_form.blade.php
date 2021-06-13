@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label>{{ $model->attributes()['jenis_surat'] }}:</label>
-                <select class="form-control {{($errors->first('jenis_surat') ? ' parsley-error' : '')}}" v-model="jenis_surat" name="jenis_surat" @change="setNomor">
+                <select :disabled="id_data!=''" class="form-control {{($errors->first('jenis_surat') ? ' parsley-error' : '')}}" v-model="form.jenis_surat" name="jenis_surat" @change="setNomor">
                     <option value="">- Pilih Jenis Surat -</option>
                     @foreach ($model->listJenis as $key=>$value)
                         <option value="{{ $key }}" 
@@ -19,31 +19,31 @@
         </div>
     </div>
 
-    <template v-if="jenis_surat==1">
+    <template v-if="form.jenis_surat==1">
         @include('surat_km._form_surat_masuk')
     </template>
     
-    <template v-if="jenis_surat==2">
+    <template v-if="form.jenis_surat==2">
         @include('surat_km._form_surat_keluar')
     </template>
     
-    <template v-if="jenis_surat==3">
+    <template v-if="form.jenis_surat==3">
         @include('surat_km._form_memorandum')
     </template>
     
-    <template v-if="jenis_surat==4">
+    <template v-if="form.jenis_surat==4">
         @include('surat_km._form_surat_pengantar')
     </template>
     
-    <template v-if="jenis_surat==5">
+    <template v-if="form.jenis_surat==5">
         @include('surat_km._form_disposisi')
     </template>
     
-    <template v-if="jenis_surat==6">
+    <template v-if="form.jenis_surat==6">
         @include('surat_km._form_surat_keputusan')
     </template>
     
-    <template v-if="jenis_surat==7">
+    <template v-if="form.jenis_surat==7">
         @include('surat_km._form_surat_keterangan')
     </template>
 
@@ -76,12 +76,84 @@
 var vm = new Vue({
     el: "#app_vue",
     data:  {
-        jenis_surat: {!! json_encode($model->jenis_surat) !!},
-        kode_unit_kerja: '',
-        klasifikasi_arsip: '',
-        tingkat_keamanan: '',
-        tanggal: {!! json_encode(date('m/d/Y', strtotime($model->tanggal))) !!},
-        nomor_urut: {!! json_encode($model->nomor_urut) !!},
+        id_data: {!! json_encode($id) !!},
+        form: {
+            id: '',
+            nomor_urut: {!! json_encode($model->nomor_urut) !!},
+            alamat: '',
+            tanggal: {!! json_encode(date('m/d/Y', strtotime($model->tanggal))) !!},
+            nomor: '',
+            perihal: '',
+            nomor_petunjuk: '',
+            jenis_surat: {!! json_encode($model->jenis_surat) !!},
+            kdprop: '',
+            kdkab: '',
+            penerima: '',
+            ditetapkan_di: '',
+            ditetapkan_tanggal: '',
+            ditetapkan_oleh: '',
+            ditetapkan_nama: '',
+            ditetapkan_nip: '',
+            kode_unit_kerja: '',
+            klasifikasi_arsip: '',
+            tingkat_keamanan: '',
+        },
+        form_disposisi: {
+            id: '',
+            induk_id: '',
+            nomor_agenda: '',
+            tanggal_penerimaan: '',
+            tanggal_penyelesaian: '',
+            dari: '',
+            isi: '',
+            lampiran: '',
+            isi_disposisi: '',
+            diteruskan_kepada: '',
+        },
+        form_memorandum: {
+            id: '',
+            induk_id: '',
+            dari: '',
+            isi: '',
+            tembusan: '',
+            kepada: '',
+        },
+        form_surat_keputusan: {
+            id: '',
+            induk_id: '',
+            tentang: '',
+            menimbang: '',
+            mengingat: '',
+            menetapkan: '',
+            tembusan: '',
+        },
+        form_surat_keterangan: {
+            id: '',
+            induk_id: '',
+            isi: '',
+        },
+        form_surat_keluar: {
+            id: '',
+            induk_id: '',
+            isi: '',
+            lampiran: '',
+            kepada: '',
+            kepada_di: '',
+            dibuat_di: '',
+        },
+        form_surat_pengantar: {
+            id: '',
+            induk_id: '',
+            isi: '',
+            kepada: '',
+            kepada_di: '',
+            diterima_tanggal: '',
+            diterima_jabatan: '',
+            diterima_nama: '',
+            diterima_nip: '',
+            diterima_no_hp: '',
+            dibuat_di: '',
+        },
         tembusan: [],
         keputusan: [],
         pathname : (window.location.pathname).replace("/create", ""),
@@ -93,12 +165,12 @@ var vm = new Vue({
     },
     computed: {
         bulan: function () {
-            var split_tanggal = this.tanggal.split("/");
+            var split_tanggal = this.form.tanggal.split("/");
             if(split_tanggal.length==0) return "";
             else return split_tanggal[0]
         },
         tahun: function () {
-            var split_tanggal = this.tanggal.split("/");
+            var split_tanggal = this.form.tanggal.split("/");
             if(split_tanggal.length==0) return "";
             else return split_tanggal[2]
         },
@@ -109,9 +181,7 @@ var vm = new Vue({
             $('#wait_progres').modal('show');
 
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
 
             $.ajax({
@@ -119,22 +189,20 @@ var vm = new Vue({
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    jenis_surat: self.jenis_surat, 
-                    tanggal: self.tanggal,
+                    jenis_surat: self.form.jenis_surat, 
+                    tanggal: self.form.tanggal,
                 },
             }).done(function (data) {
-                self.nomor_urut = data.total;
+                self.form.nomor_urut = data.total;
              
-                if((self.jenis_surat>=2 && self.jenis_surat<=4) || self.jenis_surat==7){
+                if((self.form.jenis_surat>=2 && self.form.jenis_surat<=4) || self.form.jenis_surat==7){
                     $('#isi').summernote();
                 }
                 
-                if(self.jenis_surat==3){
+                if(self.form.jenis_surat==3)
                     $('#tembusan').summernote();
-                }
                 
-                
-                if(self.jenis_surat==6){
+                if(self.form.jenis_surat==6){
                     $('#tentang').summernote();
                     $('#menimbang').summernote();
                     $('#mengingat').summernote();
@@ -162,17 +230,53 @@ var vm = new Vue({
                 'isi' : '',
             });
         },
+        setDatas: function(){
+            if(this.id_data!=''){
+                this.form = {!! json_encode($model) !!};
+                if(this.form.jenis_surat==2) {
+                    this.form_surat_keluar = {!! json_encode($model_rincian) !!};  
+                    $('#isi').summernote('code', this.form_surat_keluar.isi);   
+                }
+                else if(this.form.jenis_surat==3){
+                    this.form_memorandum = {!! json_encode($model_rincian) !!};   
+                    $('#isi').summernote('code', this.form_memorandum.isi);   
+                    $('#tembusan').summernote('code', this.form_memorandum.tembusan);
+                } 
+                else if(this.form.jenis_surat==4){
+                    this.form_surat_pengantar = {!! json_encode($model_rincian) !!}; 
+                    $('#isi').summernote('code', this.form_surat_pengantar.isi);   
+                } 
+                else if(this.form.jenis_surat==5) this.form_disposisi = {!! json_encode($model_rincian) !!};
+                else if(this.form.jenis_surat==6){
+                    this.form_surat_keputusan = {!! json_encode($model_rincian) !!};
+                    this.keputusan = {!! json_encode($list_keputusan) !!};
+                    $('#tentang').summernote('code', this.form_surat_keputusan.tentang);
+                    $('#menimbang').summernote('code', this.form_surat_keputusan.menimbang);
+                    $('#mengingat').summernote('code', this.form_surat_keputusan.mengingat);
+                    $('#menetapkan').summernote('code', this.form_surat_keputusan.menetapkan);
+                    $('#tembusan').summernote('code', this.form_surat_keputusan.tembusan);
+                }
+                else if(this.form.jenis_surat==7){
+                    this.form_surat_keterangan = {!! json_encode($model_rincian) !!}; 
+                    $('#isi').summernote('code', this.form_surat_keterangan.isi); 
+                } 
+
+                // if((this.form.jenis_surat>=2 && this.form.jenis_surat<=4) || this.form.jenis_surat==7){
+                //     $('#isi').summernote();
+                // }
+            }
+        },
     }
 });
 
 $(document).ready(function() {
-    vm.setNomor();
-    
+    if(vm.id_data=='') vm.setNomor();
+    vm.setDatas();
 });
 
 $('.date').datepicker()
     .on('changeDate', function(e) {
-        vm.tanggal = $('#tanggal').val();
+        vm.form.tanggal = $('#tanggal').val();
         vm.setNomor();
 });
 </script>

@@ -65,7 +65,7 @@
                             @endif
                         </td>
                         <td class="text-center"><a href="{{ action('SuratKmController@show', Crypt::encrypt($data['id'])) }}" class="btn btn-sm"><i class="icon-eye text-info"></i></a></td>
-                        <td class="text-center"><a href="{{ action('SuratKmController@edit', $data['id']) }}" class="btn btn-sm"><i class="icon-pencil text-info"></i></a></td>
+                        <td class="text-center"><a href="{{ action('SuratKmController@edit', Crypt::encrypt($data['id'])) }}" class="btn btn-sm"><i class="icon-pencil text-info"></i></a></td>
                         <td class="text-center">
                         <form action="{{action('SuratKmController@destroy', $data['id'])}}" method="post">
                             @csrf

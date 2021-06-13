@@ -146,7 +146,10 @@ class SuratKmController extends Controller
         $model= new \App\SuratKm;
         $model->tanggal = date('Y-m-d');
         $model->jenis_surat = 1;
-        return view('surat_km.create',compact('model'));
+        $id = '';
+        $model_rincian = null;
+        $list_keputusan = [];
+        return view('surat_km.create',compact('model', 'id', 'model_rincian', 'list_keputusan'));
     }
 
     function getNomorUrutDirect($date_surat, $jenis_surat){
@@ -386,6 +389,7 @@ class SuratKmController extends Controller
             }
         }
         else if($model->jenis_surat==7){
+            $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect( $tanggal_format, $model->jenis_surat);
             $model->tingkat_keamanan = $request->tingkat_keamanan;
             $model->kode_unit_kerja = $request->kode_unit_kerja;
@@ -503,8 +507,33 @@ class SuratKmController extends Controller
      */
     public function edit($id)
     {
-        $model = \App\SuratKm::find($id);
-        return view('surat_km.edit',compact('model','id'));
+        $real_id = Crypt::decrypt($id);
+        $model = \App\SuratKm::find($real_id);
+        $model_rincian = null;
+        $list_keputusan = [];
+        switch ($model->jenis_surat) {
+            case 2:
+                $model_rincian = \App\SuratKmRincianSuratLuar::where('induk_id', '=', $real_id)->first();
+                break;
+            case 3:
+                $model_rincian = \App\SuratKmRincianMemorandum::where('induk_id', '=', $real_id)->first();
+                break;
+            case 4:
+                $model_rincian = \App\SuratKmRincianSuratPengantar::where('induk_id', '=', $real_id)->first();
+                break;
+            case 5:
+                $model_rincian = \App\SuratKmRincianDisposisi::where('induk_id', '=', $real_id)->first();
+                break;
+            case 6:
+                $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $real_id)->first();
+                $list_keputusan = \App\SuratKmRincianListKeputusan::where('induk_id', '=', $real_id)->get();
+                break;
+            case 7:
+                $model_rincian = \App\SuratKmRincianSuratKeterangan::where('induk_id', '=', $real_id)->first();
+                break;
+            default:
+        } 
+        return view('surat_km.edit',compact('model','id', 'model_rincian', 'list_keputusan'));
     }
 
     /**
@@ -530,7 +559,6 @@ class SuratKmController extends Controller
         $model->perihal=$request->get('perihal');
         $model->penerima=$request->get('penerima');
         $model->nomor_petunjuk=$request->get('nomor_petunjuk');
-        $model->jenis_surat=$request->get('jenis_surat');
         $model->updated_by=Auth::id();
         $model->save();
         return redirect('surat_km');
