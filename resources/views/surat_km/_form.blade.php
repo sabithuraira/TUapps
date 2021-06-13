@@ -234,22 +234,40 @@ var vm = new Vue({
             if(this.id_data!=''){
                 this.form = {!! json_encode($model) !!};
                 if(this.form.jenis_surat==2) {
-                    this.form_surat_keluar = {!! json_encode($model_rincian) !!};  
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null)
+                        this.form_surat_keluar = {!! json_encode($model_rincian) !!};  
                     $('#isi').summernote('code', this.form_surat_keluar.isi);   
                 }
                 else if(this.form.jenis_surat==3){
-                    this.form_memorandum = {!! json_encode($model_rincian) !!};   
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null)
+                        this.form_memorandum = {!! json_encode($model_rincian) !!};   
                     $('#isi').summernote('code', this.form_memorandum.isi);   
                     $('#tembusan').summernote('code', this.form_memorandum.tembusan);
                 } 
                 else if(this.form.jenis_surat==4){
-                    this.form_surat_pengantar = {!! json_encode($model_rincian) !!}; 
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null)
+                        this.form_surat_pengantar = {!! json_encode($model_rincian) !!}; 
                     $('#isi').summernote('code', this.form_surat_pengantar.isi);   
                 } 
-                else if(this.form.jenis_surat==5) this.form_disposisi = {!! json_encode($model_rincian) !!};
+                else if(this.form.jenis_surat==5){
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null){
+                        this.form_disposisi = {!! json_encode($model_rincian) !!};
+                        
+                        $('#tanggal_penyelesaian').val(this.form_disposisi.tanggal_penyelesaian);
+                        $('#tanggal_penerimaan').val(this.form_disposisi.tanggal_penerimaan);
+                    }
+                } 
                 else if(this.form.jenis_surat==6){
-                    this.form_surat_keputusan = {!! json_encode($model_rincian) !!};
-                    this.keputusan = {!! json_encode($list_keputusan) !!};
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null){
+                        this.form_surat_keputusan = {!! json_encode($model_rincian) !!};
+                        this.keputusan = {!! json_encode($list_keputusan) !!};
+                        $('#ditetapkan_tanggal').val(this.form.ditetapkan_tanggal);
+                    }
                     $('#tentang').summernote('code', this.form_surat_keputusan.tentang);
                     $('#menimbang').summernote('code', this.form_surat_keputusan.menimbang);
                     $('#mengingat').summernote('code', this.form_surat_keputusan.mengingat);
@@ -257,7 +275,11 @@ var vm = new Vue({
                     $('#tembusan').summernote('code', this.form_surat_keputusan.tembusan);
                 }
                 else if(this.form.jenis_surat==7){
-                    this.form_surat_keterangan = {!! json_encode($model_rincian) !!}; 
+                    var temp_data = {!! json_encode($model_rincian) !!}
+                    if(temp_data!=null){
+                        this.form_surat_keterangan = {!! json_encode($model_rincian) !!}; 
+                        $('#ditetapkan_tanggal').val(this.form.ditetapkan_tanggal);
+                    }
                     $('#isi').summernote('code', this.form_surat_keterangan.isi); 
                 } 
 

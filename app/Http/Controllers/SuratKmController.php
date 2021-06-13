@@ -247,7 +247,7 @@ class SuratKmController extends Controller
 
         if($model->jenis_surat==1){
             $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            // $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
             $model->alamat= $request->get('alamat');
             $model->nomor= $request->get('nomor');
             $model->perihal= $request->get('perihal');
@@ -545,22 +545,204 @@ class SuratKmController extends Controller
      */
     public function update(SuratKmRequest $request, $id)
     {
+        $real_id = Crypt::decrypt($id);
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_km/edit',$id)
                         ->withErrors($validator)
                         ->withInput();
         }
         
-        $model= \App\SuratKm::find($id);
-        $model->nomor_urut=$request->get('nomor_urut');
-        $model->alamat=$request->get('alamat');
-        $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-        $model->nomor=$request->get('nomor');
-        $model->perihal=$request->get('perihal');
-        $model->penerima=$request->get('penerima');
-        $model->nomor_petunjuk=$request->get('nomor_petunjuk');
+        $model= \App\SuratKm::find($real_id);
         $model->updated_by=Auth::id();
-        $model->save();
+
+        $tanggal_format = date('Y-m-d');
+        if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
+    
+        $bulan = date('m', strtotime($request->get('tanggal')));
+        $tahun = date('Y', strtotime($request->get('tanggal')));
+
+        if($model->jenis_surat==1){
+            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
+            $model->alamat= $request->get('alamat');
+            $model->nomor= $request->get('nomor');
+            $model->perihal= $request->get('perihal');
+            $model->nomor_petunjuk= $request->get('nomor_petunjuk');
+            $model->penerima= $request->get('penerima');
+            $model->save();
+        }
+        else if($model->jenis_surat==2){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->tingkat_keamanan = $request->tingkat_keamanan;
+            $model->kode_unit_kerja = $request->kode_unit_kerja;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
+            $model->perihal= $request->get('perihal');
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
+            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            if($model->save()){
+                if(strlen($request->isi)>0 && strlen($request->lampiran)>0 && 
+                    strlen($request->kepada)>0 && 
+                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+
+                    $model_rincian = \App\SuratKmRincianSuratLuar::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianSuratLuar;
+                        $model_rincian->induk_id = $model->id;
+                    }
+
+                    $model_rincian->isi = $request->isi;
+                    $model_rincian->lampiran = $request->lampiran;
+                    $model_rincian->kepada = $request->kepada;
+                    $model_rincian->kepada_di = $request->kepada_di;
+                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->save();
+                }
+            }
+        }
+        else if($model->jenis_surat==3){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->perihal= $request->get('perihal');
+            $model->kode_unit_kerja = $request->kode_unit_kerja;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            // @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} 
+            $model->nomor= $request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
+            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            if($model->save()){
+                if(strlen($request->dari)>0 && strlen($request->isi)>0 && 
+                    strlen($request->kepada)>0 && strlen($request->tembusan)>0){
+                    $model_rincian =\App\SuratKmRincianMemorandum::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianMemorandum;
+                        $model_rincian->induk_id = $model->id;
+                    }
+                    $model_rincian->dari = $request->dari;
+                    $model_rincian->isi = $request->isi;
+                    $model_rincian->kepada = $request->kepada;
+                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->save();
+                }
+            }
+        }
+        else if($model->jenis_surat==4){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->tingkat_keamanan = $request->tingkat_keamanan;
+            $model->kode_unit_kerja = $request->kode_unit_kerja;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
+            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->ditetapkan_nip = $request->ditetapkan_nip;
+            if($model->save()){
+                if(strlen($request->isi)>0 && strlen($request->kepada)>0 && 
+                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+                    $model_rincian = \App\SuratKmRincianSuratPengantar::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianSuratPengantar;
+                        $model_rincian->induk_id = $model->id;
+                    }
+                    $model_rincian->isi = $request->isi;
+                    $model_rincian->kepada = $request->kepada;
+                    $model_rincian->kepada_di = $request->kepada_di;
+                    $model_rincian->diterima_tanggal = $request->diterima_tanggal;
+                    $model_rincian->diterima_jabatan = $request->diterima_jabatan;
+                    $model_rincian->diterima_nama = $request->diterima_nama;
+                    $model_rincian->diterima_nip = $request->diterima_nip;
+                    $model_rincian->diterima_no_hp = $request->diterima_no_hp;
+                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->save();
+                }
+            }
+        }
+        else if($model->jenis_surat==5){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->tingkat_keamanan = $request->tingkat_keamanan;
+            $model->nomor= $request->nomor;
+            if($model->save()){
+                if(strlen($request->isi)>0 && strlen($request->nomor_agenda)>0 && 
+                    strlen($request->tanggal_penerimaan)>0 && strlen($request->tanggal_penyelesaian)>0
+                    && strlen($request->dari)>0 && strlen($request->isi)>0){
+                    $model_rincian = \App\SuratKmRincianDisposisi::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianDisposisi;
+                        $model_rincian->induk_id = $model->id;
+                    }
+                    $model_rincian->nomor_agenda = $request->nomor_agenda;
+                    $model_rincian->tanggal_penerimaan = date('Y-m-d', strtotime($request->tanggal_penerimaan));
+                    $model_rincian->tanggal_penyelesaian = date('Y-m-d', strtotime($request->tanggal_penyelesaian));
+                    $model_rincian->dari = $request->dari;
+                    $model_rincian->lampiran = $request->lampiran;
+                    $model_rincian->isi = $request->isi;
+                    $model_rincian->isi_disposisi = $request->isi_disposisi;
+                    $model_rincian->diteruskan_kepada = $request->diteruskan_kepada;
+                    $model_rincian->save();
+                }
+            }
+        }
+        else if($model->jenis_surat==6){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->nomor= $request->nomor;
+            $model->ditetapkan_di= $request->ditetapkan_di;
+            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal));
+            $model->ditetapkan_oleh= $request->ditetapkan_oleh;
+            $model->ditetapkan_nama= $request->ditetapkan_nama;
+            if($model->save()){
+                if(strlen($request->tentang)>0 && strlen($request->menimbang)>0 && 
+                    strlen($request->mengingat)>0 && strlen($request->menetapkan)>0
+                    && strlen($request->tembusan)>0 && strlen($request->jumlah_keputusan)>0){
+                    $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianMemorandum;
+                        $model_rincian->induk_id = $model->id;
+                    }
+                    $model_rincian->tentang = $request->tentang;
+                    $model_rincian->menimbang = $request->menimbang;
+                    $model_rincian->mengingat = $request->mengingat;
+                    $model_rincian->menetapkan = $request->menetapkan;
+                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->save();
+    
+                    $jumlah_keputusan = $request->jumlah_keputusan;
+                    // for($i=0;$i<$jumlah_keputusan;$i++){
+                    //     $model_keputusan = \App\SuratKmRincianListKeputusan::where('induk_id', '=', $model->id)->first();
+                    //     if($model_rincian!=null){
+                    //         $model_keputusan->isi = $request->get("keputusana".$i);
+                    //         $model_keputusan->save();
+                    //     }
+                    // } 
+                }
+
+            }
+        }
+        else if($model->jenis_surat==7){
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut;
+            $model->tingkat_keamanan = $request->tingkat_keamanan;
+            $model->kode_unit_kerja = $request->kode_unit_kerja;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
+            $model->ditetapkan_di = $request->ditetapkan_di;
+            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal));
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
+            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            if($model->save()){
+                if(strlen($request->isi)>0){
+                    $model_rincian = \App\SuratKmRincianSuratKeterangan::where('induk_id', '=', $model->id)->first();
+                    if($model_rincian==null){
+                        $model_rincian = new \App\SuratKmRincianMemorandum;
+                        $model_rincian->induk_id = $model->id;
+                    }
+                    $model_rincian->isi = $request->isi;
+                    $model_rincian->save();
+                }
+            }
+        }
+        /////////////
         return redirect('surat_km');
     }
 

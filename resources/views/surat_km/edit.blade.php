@@ -3,7 +3,7 @@
 @section('breadcrumb')
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="icon-home"></i></a></li>
-    <li class="breadcrumb-item"><a href="{{url('surat_km')}}">Peruntukan Surat</a></li>                            
+    <li class="breadcrumb-item"><a href="{{url('surat_km')}}">Surat</a></li>                            
     <li class="breadcrumb-item">{{ $model->uraian }}</li>
 </ul>
 @endsection

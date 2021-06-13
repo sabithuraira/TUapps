@@ -81,7 +81,7 @@ Nomor Surat: @{{ form.tingkat_keamanan }}-@{{ form.nomor_urut }}/@{{ form.kode_u
         <div class="form-group">
             Tanggal:<br/>
             <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                <input type="text" class="form-control" name="ditetapkan_tanggal" id="ditetapkan_tanggal" v-model="form.ditetapkan_tanggal">
+                <input type="text" class="form-control" name="ditetapkan_tanggal" id="ditetapkan_tanggal">
                 <div class="input-group-append">                                            
                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                 </div>

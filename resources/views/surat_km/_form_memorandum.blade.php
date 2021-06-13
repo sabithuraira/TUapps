@@ -80,7 +80,7 @@ Nomor Surat: @{{ form.nomor_urut }}/@{{ form.kode_unit_kerja }}/@{{ form.klasifi
     <div class="col-md-12">
         <div class="form-group">
             <label>Isi Surat:</label>
-            <textarea id="isi" class="summernote form-control" name="isi" rows="10" v-model="form_memorandum.isi">@{{ form_memorandum.isi }}</textarea>
+            <textarea id="isi" class="summernote form-control" name="isi" rows="10"></textarea>
         </div>
     </div>
 </div>
@@ -106,7 +106,7 @@ Nomor Surat: @{{ form.nomor_urut }}/@{{ form.kode_unit_kerja }}/@{{ form.klasifi
     <div class="col-md-12">
         <div class="form-group">
             <label>Tembusan:</label>
-            <textarea id="tembusan" class="summernote form-control" name="tembusan" v-model="form_memorandum.tembusan" rows="10"></textarea>
+            <textarea id="tembusan" class="summernote form-control" name="tembusan" rows="10"></textarea>
         </div>
     </div>
 </div>

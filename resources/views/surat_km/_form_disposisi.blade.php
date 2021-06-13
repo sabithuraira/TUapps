@@ -56,7 +56,7 @@
         <div class="form-group">
             <label>Tanggal Penerimaan:</label>
             <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                <input type="text" class="form-control" name="tanggal_penerimaan" id="tanggal_penerimaan" v-model="form_disposisi.tanggal_penerimaan">
+                <input type="text" class="form-control" name="tanggal_penerimaan" id="tanggal_penerimaan">
                 <div class="input-group-append">                                            
                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                 </div>
@@ -68,7 +68,7 @@
         <div class="form-group">
             <label>Tanggal Penyelesaian:</label>
             <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                <input type="text" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian" v-model="form_disposisi.tanggal_penyelesaian">
+                <input type="text" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian">
                 <div class="input-group-append">                                            
                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                 </div>

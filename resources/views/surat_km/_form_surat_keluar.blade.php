@@ -107,7 +107,7 @@ Nomor Surat: @{{ form.tingkat_keamanan }}-@{{ form.nomor_urut }}/@{{ form.kode_u
     <div class="col-md-12">
         <div class="form-group">
             <label>Isi Surat:</label>
-            <textarea id="isi" class="summernote form-control" name="isi" rows="10" v-model="form_surat_keluar.isi"></textarea>
+            <textarea id="isi" class="summernote form-control" name="isi" rows="10"></textarea>
         </div>
     </div>
 </div>
