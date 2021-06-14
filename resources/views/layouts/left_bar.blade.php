@@ -68,21 +68,24 @@
                     <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                 </li>
                 
-                @hasanyrole('superadmin|admin_uker|penugas')
                 <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
                     <a href="#Jadwal" class="has-arrow"><i class="fa fa-tasks"></i> <span>Matrik Tugas</span>  <span class="badge badge-warning float-right">Uji Coba</span></a>
                     <ul>
                         <li class="{{ request()->is('penugasan/anda*') ? 'active' : '' }}"><a
                                 href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
-                        @hasanyrole('superadmin|admin_uker|penugas')
+                        
+                        @hasanyrole('superadmin|admin_uker|pemberi_tugas')
                             <li class="{{ (request()->is('penugasan/*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda*')) ? 'active' : '' }}"><a
-                                    href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>
-                            <li class="{{ request()->is('penugasan/user_role') ? 'active' : '' }}"><a
-                                    href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>       
+                                    href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>   
                         @endhasanyrole
+
+                        @hasanyrole('superadmin|admin_uker')
+                            <li class="{{ request()->is('penugasan/user_role') ? 'active' : '' }}"><a
+                                        href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>  
+                        @endhasanyrole
+                          
                     </ul>
                 </li>
-                @endhasanyrole
 
                 @if(Auth::user()->kdkab=='00')
                 <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">

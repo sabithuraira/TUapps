@@ -247,7 +247,7 @@ class SuratKmController extends Controller
 
         if($model->jenis_surat==1){
             $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-            // $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
             $model->alamat= $request->get('alamat');
             $model->nomor= $request->get('nomor');
             $model->perihal= $request->get('perihal');
