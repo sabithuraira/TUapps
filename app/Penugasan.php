@@ -20,6 +20,13 @@ class Penugasan extends Model
         ];
     }
 
+    public function getStatusDataAttribute(){
+        return [
+            0 => '<span class="badge badge-warning">Belum Selesai</span>',
+            1 => '<span class="badge badge-success">Selesai</span>',
+        ];
+    }
+
     public function getListJenisPeriodeAttribute()
     {
         return array(

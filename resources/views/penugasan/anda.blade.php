@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="desc">
                                         <h3>{{ $value->PenugasanIndukRel->isi }}</h3>
-                                        <small>{{ $value->jumlah_target }} {{ $value->PenugasanIndukRel->satuan }}, {{ $value->jumlah_lapor }} dilaporkan dan telah di-approve {{ $value->jumlah_selesai }} {{ $value->PenugasanIndukRel->satuan }}</small>
+                                        <small>{{ $value->jumlah_target }} {{ $value->PenugasanIndukRel->satuan }}, {{ $value->jumlah_lapor }} {{ $value->PenugasanIndukRel->satuan }} telah dilaporkan dan telah di-approve {{ $value->jumlah_selesai }} {{ $value->PenugasanIndukRel->satuan }}</small>
                                         <h4>Dibuat Oleh: {{ $value->PenugasanIndukRel->CreatedBy->name }}</h4>
                                         <a href="#" role="button" @click="updateProgres" data-toggle="modal" 
                                                 data-id="{{ $value->id }}" data-user_nama="{{ $value->user_nama }}" data-keterangan="{{ $value->keterangan }}" 

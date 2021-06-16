@@ -27,7 +27,10 @@
                     <td>@{{ data.user_nip_baru }} - @{{ data.user_nama }}</td>  
                     <td>@{{ data.keterangan }}</td>                    
                     <td class="text-center">@{{ data.jumlah_target }}</td>
-                    <td class="text-center">@{{ data.jumlah_lapor }}</td>
+                    <td class="text-center">
+                        @{{ data.jumlah_lapor }}
+                        <small>@{{ data.tanggal_last_lapor  }}</small>
+                    </td>
                     <td class="text-center">@{{ data.jumlah_selesai }}</td>
                     <td class="text-center">@{{ data.tanggal_last_progress }}</td>
                     <td></td>

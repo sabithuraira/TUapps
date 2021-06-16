@@ -233,12 +233,14 @@ class PenugasanController extends Controller
     }
 
     public function store_progres(Request $request, $id){
-        $model = \App\Penugasan::find($id);
+        $real_id = Crypt::decrypt($id);
+        $model = \App\Penugasan::find($real_id);
         
         $participant = [];
         if($request->has('participant')){
             $participant = $request->participant;
 
+            $is_complete = 1;
             foreach($participant as $key=>$value){
                 if($value['id']!=0 || $value['id']!=''){
                     $model_participant = \App\PenugasanParticipant::find($value['id']);
@@ -249,6 +251,13 @@ class PenugasanController extends Controller
                         $model_participant->save();
                     }
                 }
+                
+                if($model_participant->jumlah_target>$model_participant->jumlah_selesai) $is_complete = 0;
+            }
+
+            if($is_complete==1){
+                $model->status = 1;
+                $model->save();
             }
         }
         

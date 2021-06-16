@@ -78,13 +78,11 @@
                     </div>
                 </div>
             </div>
-
           </div>
       </div>
   </div>
 </div>
 @endsection
-
 
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
@@ -157,6 +155,7 @@
                         data: data_post,
                     }).done(function (data) {
                         $('#wait_progres').modal('hide');
+                        // console.log(data)
                         window.location.href = self.pathname
                     }).fail(function (msg) {
                         console.log(JSON.stringify(msg));

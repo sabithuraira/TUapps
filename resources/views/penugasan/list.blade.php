@@ -24,8 +24,9 @@
             <tbody>
                 @foreach($datas as $data)
                     <tr>
-                        <td>
-                            {{$data['isi']}}
+                        <td class="text-center">
+                            {{ $data['isi'] }}<br/>
+                            {!! $data->statusData[$data['status']] !!}
                         </td>
                         <td>
                             <small><i>{{$data['keterangan']}}</i></small>
