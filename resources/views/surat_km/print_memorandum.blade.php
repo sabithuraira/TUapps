@@ -6,20 +6,18 @@
     </head>
 
     <body>
-        <header>
-            <table width="100%">
-                <tr>
-                    <td class="pepet">
-                        <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
-                    </td>
-                    <td align="left">
-                        <i><b>BADAN PUSAT STATISTIK</b></i><br />
-                        <i><b>
-                        {{ strtoupper($unit_kerja->nama) }}
-                    </td>
-                </tr>
-            </table>
-        </header>
+        <table width="100%">
+            <tr>
+                <td class="pepet">
+                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
+                </td>
+                <td align="left">
+                    <i><b>BADAN PUSAT STATISTIK</b></i><br />
+                    <i><b>
+                    {{ strtoupper($unit_kerja->nama) }}
+                </td>
+            </tr>
+        </table>
 
         <br/><br/><br/>
         

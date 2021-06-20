@@ -62,8 +62,8 @@
                 
                 <tr v-for="(data, index) in keputusan" :key="'keputusan'+index">
                     <td class="text-center">@{{ list_angka_keputusan[index] }}</td>
-                    <td><textarea class="form-control" rows="3" v-model="data.isi"></textarea></td>
-                    <input type="hidden" v-model="data.isi" :name="'keputusan'+data.id">
+                    <td><textarea class="form-control" rows="3" v-model="data.isi" :name="'keputusan_isi'+data.id"></textarea></td>
+                    <input type="hidden" v-model="data.id" :name="'keputusan_'+index">
                 </tr>
                 <input type="hidden" :value="keputusan.length" name="jumlah_keputusan">
             </table>
