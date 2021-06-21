@@ -311,7 +311,7 @@ class PenugasanController extends Controller
             ->where('kdkab', '=', Auth::user()->kdkab)
             ->paginate();
 
-        $datas->withPath('penugasan/user_role');
+        $datas->withPath('user_role');
         $datas->appends($request->all());
         return view('penugasan.user_role',compact('datas', 'keyword'));
     }

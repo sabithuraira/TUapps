@@ -21,7 +21,7 @@
                             <ul class="dropdown-menu notifications">
                                 <li class="header"><strong>Unduh Buku Panduan</strong></li>
                                 <li>
-                                    <a href="https://laci.bps.go.id/s/r7q7pFlopuAY80t"> <i class="icon-doc"></i> <span>Panduan Modul CKP, Penilaian & WFH</span></a>
+                                    <a href="https://laci.bps.go.id/s/E1hMNODEMVyftUR"> <i class="icon-doc"></i> <span>Panduan Modul SKP, CKP, Penilaian & WFH</span></a>
                                 </li>                               
                                 <li>
                                     <a href="https://laci.bps.go.id/s/7q6CAaFDjTDk4nB"> <i class="icon-doc"></i> <span>Panduan Modul Barang Persediaan</span></a>

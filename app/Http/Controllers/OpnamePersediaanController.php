@@ -40,10 +40,12 @@ class OpnamePersediaanController extends Controller
         $year = date('Y');
         $master_barang = \App\MasterBarang::all();
 
-        $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',1)->get();
+        $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',1)
+            ->where('is_persediaan', '=', 1)->get();
 
         if(Auth::user()->kdkab=='00'){
-            $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',0)->get();
+            $unit_kerja = \App\UnitKerja4::where('is_kabupaten','=',0)
+                ->where('is_persediaan', '=', 1)->get();
         }
 
         return view('opname_persediaan.index',compact('master_barang','unit_kerja', 

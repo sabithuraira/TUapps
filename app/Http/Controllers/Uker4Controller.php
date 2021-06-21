@@ -56,6 +56,7 @@ class Uker4Controller extends Controller
 
         $model= new \App\UnitKerja4;
         $model->is_kabupaten=$request->get('is_kabupaten');
+        $model->is_persediaan=$request->get('is_persediaan');
         $model->nama=$request->get('nama');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
@@ -104,6 +105,7 @@ class Uker4Controller extends Controller
         
         $model= \App\UnitKerja4::find($id);
         $model->is_kabupaten=$request->get('is_kabupaten');
+        $model->is_persediaan=$request->get('is_persediaan');
         $model->nama=$request->get('nama');
         $model->updated_by=Auth::id();
         $model->save();

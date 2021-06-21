@@ -9,6 +9,7 @@
                 <tr>
                 <th>Unit Kerja Kabupaten?</th>
                 <th>Nama</th>
+                <th>Tampilkan pada persediaan?</th>
                 <th class="text-center" colspan="2">Action</th>
                 </tr>
             </thead>
@@ -17,6 +18,7 @@
                 <tr>
                     <td>{{ ($data['is_kabupaten']==1) ? "Ya" : "Tidak" }}</td>
                     <td>{{$data['nama']}}</td>
+                    <td>{{ ($data['is_persediaan']==1) ? "Ya" : "Tidak" }}</td>
                     
                     <td class="text-center"><a href="{{action('Uker4Controller@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
                     <td class="text-center">
