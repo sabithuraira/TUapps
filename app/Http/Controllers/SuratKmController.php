@@ -697,7 +697,7 @@ class SuratKmController extends Controller
                     && strlen($request->tembusan)>0 && strlen($request->jumlah_keputusan)>0){
                     $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
-                        $model_rincian = new \App\SuratKmSuratKeputusan;
+                        $model_rincian = new \App\SuratKmRincianSuratKeputusan;
                         $model_rincian->induk_id = $model->id;
                     }
                     $model_rincian->tentang = $request->tentang;
@@ -710,18 +710,20 @@ class SuratKmController extends Controller
                     $jumlah_keputusan = $request->jumlah_keputusan;
                     for($i=0;$i<$jumlah_keputusan;$i++){
                         $current_id = $request->get("keputusan_".$i);
-                        if(is_numeric($current_id)){
-                            $model_keputusan = \App\SuratKmRincianListKeputusan::where('id', '=', $current_id)->first();
-                            if($model_keputusan!=null){
+                        if($request->get("keputusan_isi".$current_id)!=''){
+                            if(is_numeric($current_id)){
+                                $model_keputusan = \App\SuratKmRincianListKeputusan::where('id', '=', $current_id)->first();
+                                if($model_keputusan!=null){
+                                    $model_keputusan->isi = $request->get("keputusan_isi".$current_id);
+                                    $model_keputusan->save();
+                                }
+                            }
+                            else{
+                                $model_keputusan = new \App\SuratKmRincianListKeputusan;
+                                $model_keputusan->induk_id = $model->id;
                                 $model_keputusan->isi = $request->get("keputusan_isi".$current_id);
                                 $model_keputusan->save();
                             }
-                        }
-                        else{
-                            $model_keputusan = new \App\SuratKmRincianListKeputusan;
-                            $model_keputusan->induk_id = $model->id;
-                            $model_keputusan->isi = $request->get("keputusan_isi".$current_id);
-                            $model_keputusan->save();
                         }
                     } 
                 }

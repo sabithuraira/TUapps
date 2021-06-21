@@ -75,8 +75,11 @@
                                 href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
                         
                         @hasanyrole('superadmin|admin_uker|pemberi_tugas')
-                            <li class="{{ (request()->is('penugasan/*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda*')) ? 'active' : '' }}"><a
+                            <li class="{{ (request()->is('penugasan*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda') && !request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
                                     href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>   
+                                    
+                            <li class="{{ (request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
+                                    href="{{url('penugasan/rekap')}}">Rekap Matrik Tugas</a></li>   
                         @endhasanyrole
 
                         @hasanyrole('superadmin|admin_uker')

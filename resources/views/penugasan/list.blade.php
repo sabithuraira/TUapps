@@ -10,7 +10,7 @@
             <thead>
                 <tr class="text-center">
                     <th rowspan="2">Judul</th>
-                    <th rowspan="2">Keterangan</th>
+                    <th rowspan="2">Ditugaskan Oleh</th>
                     <th rowspan="2">Pegawai yang terlibat</th>
                     <th colspan="2">Waktu</th>
                     <th rowspan="2" colspan="2">Aksi</th>
@@ -28,8 +28,8 @@
                             {{ $data['isi'] }}<br/>
                             {!! $data->statusData[$data['status']] !!}
                         </td>
-                        <td>
-                            <small><i>{{$data['keterangan']}}</i></small>
+                        <td class="text-center">
+                            <small><i>{{ $data->FungsiLabel->nama }}</i></small>
                         </td>
                         <td class="text-center">
                             {!! $data->listPeserta !!}

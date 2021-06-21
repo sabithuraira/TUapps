@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Penugasan extends Model
 {
@@ -52,8 +53,43 @@ class Penugasan extends Model
     }
 
     
-    public function CreatedBy()
-    {
+    public function CreatedBy(){
         return $this->hasOne('App\UserModel', 'id', 'created_by');
+    }
+    
+    public function FungsiLabel(){
+        return $this->hasOne('App\UnitKerja4', 'id', 'ditugaskan_oleh_fungsi');
+    }
+
+    public function Rekap($bulan, $year, $user){
+        $datas = array();
+
+        $datas = DB::table('penugasan_participant')
+            ->join('penugasan', 'penugasan.id', '=', 'penugasan_participant.penugasan_id')
+            ->where('penugasan_participant.user_id', '=', $user)
+            ->where(
+                (function ($query) use ($bulan) {
+                    if($bulan!=''){
+                        $query->where(DB::raw('MONTH(penugasan.tanggal_mulai)'), '=', $bulan)
+                            ->orWhere(DB::raw('MONTH(penugasan.tanggal_selesai)'), '=', $bulan);
+                    }
+                })
+            )
+            ->where(
+                (function ($query) use ($year) {
+                    if($year!=''){
+                        $query->where(DB::raw('YEAR(penugasan.tanggal_mulai)'), '=', $year)
+                            ->orWhere(DB::raw('YEAR(penugasan.tanggal_selesai)'), '=', $year);
+                    }
+                })
+            )
+            ->select('penugasan.isi','penugasan.keterangan', 
+                'penugasan.tanggal_mulai','penugasan.tanggal_selesai','penugasan.satuan', 
+                'penugasan.jenis_periode', 'penugasan.unit_kerja', 
+                'penugasan.ditugaskan_oleh_fungsi', 'penugasan.status', 'penugasan_participant.*')
+            ->orderBy('penugasan.tanggal_mulai', 'desc')
+            ->get();
+
+        return $datas;
     }
 }

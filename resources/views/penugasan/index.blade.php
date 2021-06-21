@@ -39,8 +39,13 @@
 
                 <div class="row clearfix">
                     <div class="col-md-8 left">
-                        <input type="text" class="form-control form-control-sm" name="search" id="search"
-                            value="{{ $keyword }}" placeholder="Search..">
+                        <select class="form-control  form-control-sm" name="ditugaskan_oleh" onchange="this.form.submit()">
+                            <option value="">- Fungsi yang Menugaskan -</option>
+                            @foreach ($list_fungsi as $key=>$value)
+                            <option value="{{ $value->id }}" @if ($ditugaskan_oleh==$value->id) selected="selected" @endif>{{ $value->nama }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-md-2 left">

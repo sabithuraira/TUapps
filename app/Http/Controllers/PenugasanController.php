@@ -17,9 +17,9 @@ class PenugasanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $keyword = $request->get('search');
         $month = '';
         $year = '';
+        $ditugaskan_oleh = '';
         $unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
 
         if(Auth::user()->kdkab=='00'){
@@ -40,27 +40,28 @@ class PenugasanController extends Controller
             $year = $request->get('year');
             $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
         }
+        
+        if(strlen($request->get('ditugaskan_oleh'))>0){
+            $ditugaskan_oleh = $request->get('ditugaskan_oleh');
+            $arr_where[] = ['ditugaskan_oleh_fungsi', '=', $ditugaskan_oleh];
+        }
 
         $datas = \App\Penugasan::where($arr_where)
-            ->where(
-                (function ($query) use ($keyword) {
-                    $query->where('isi', 'LIKE', '%' . $keyword . '%')
-                        ->orWhere('keterangan', 'LIKE', '%' . $keyword . '%')
-                        ->orWhere('satuan', 'LIKE', '%' . $keyword . '%');
-                })
-            )
             ->orderBy('id', 'desc')
             ->paginate();
 
         $datas->withPath('penugasan');
         $datas->appends($request->all());
+        
+        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
 
         return view('penugasan.index', compact(
                 'datas',
-                'keyword',
+                'ditugaskan_oleh',
                 'month',
                 'year',
-                'unit_kerja'
+                'unit_kerja',
+                'list_fungsi'
             ));
     }
 
@@ -176,6 +177,45 @@ class PenugasanController extends Controller
         }
         
         return response()->json(['result'=>'error']);
+    }
+
+    public function rekap(Request $request){
+        $idnya = Auth::id();
+        $model = \App\UserModel::find($idnya);
+        $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
+            ->orderBy('kdorg', 'asc')
+            ->get();
+        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
+            
+        $unit_kerja = Auth::user()->kdkab;
+        $month = date('m');
+        $year = date('Y');
+
+        return view('penugasan.rekap', compact(
+            'list_user', 'unit_kerja', 'month', 'year', 'model', 'list_fungsi'
+        ));
+    }
+
+    public function dataRekap(Request $request){
+        $datas=array();
+        $user = Auth::user();
+        $user_id =  Auth::user()->id;
+        $month = '';
+        $year = '';
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+            
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+            
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+            
+        $model = new \App\Penugasan;
+        $datas = $model->Rekap($month, $year, $user_id);
+        
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
 
     /**

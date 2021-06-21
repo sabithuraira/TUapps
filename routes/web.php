@@ -127,6 +127,8 @@ Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
+    Route::get('penugasan/rekap', 'PenugasanController@rekap');
+    Route::post('penugasan/data_rekap', 'PenugasanController@dataRekap');
     //
     Route::get('surat_tugas/daftar', 'SuratTugasController@daftar');
     ////////////////////

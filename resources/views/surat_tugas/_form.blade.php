@@ -336,7 +336,6 @@
                     self.cur_rincian.unit_kerja_ttd = event.currentTarget.getAttribute('data-unit_kerja_ttd');
                     self.cur_rincian.tingkat_biaya = event.currentTarget.getAttribute('data-tingkat_biaya');
                     self.cur_rincian.kendaraan = event.currentTarget.getAttribute('data-kendaraan');
-
                 }
             },
             delDataTemp: function (index) {
@@ -366,8 +365,6 @@
             format: 'yyyy-mm-dd',
         });
     });
-    
-
 
     $(".frep").on("submit", function(){
         $('#wait_progres').modal('show');
