@@ -93,10 +93,10 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                     </div>
-                    @foreach ($errors->get('tangga_mulai') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                    @endforeach
                 </div>
+                @foreach ($errors->get('tanggal_mulai') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+                @endforeach
             </div>
         </div>
         <div class="col-md-4">
@@ -111,10 +111,10 @@
                             <button class="btn btn-outline-secondary" type="button"><i
                                     class="fa fa-calendar"></i></button>
                         </div>
-                        @foreach ($errors->get('tanggal_selesai') as $msg)
-                        <p class="text-danger">{{ $msg }}</p>
-                        @endforeach
                     </div>
+                    @foreach ($errors->get('tanggal_selesai') as $msg)
+                    <p class="text-danger">{{ $msg }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>

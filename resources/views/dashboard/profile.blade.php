@@ -86,6 +86,50 @@
                         <div id="line-chart" class="ct-chart"></div>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="body">
+                        <b>Daftar Aktivitas Surat Tugas</b>
+                        <table class="table-sm table-bordered" style="min-width:100%">
+                            @if (count($data_st)==0)
+                            <thead>
+                                <tr><th>Tidak ditemukan data</th></tr>
+                            </thead>
+                            @else
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" rowspan="2"><small>Ket Surat</small></th>
+                                        <th class="text-center" colspan="2"><small>Tanggal</small></th>
+                                        <th class="text-center" rowspan="2"><small>Status</small></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center"><small>Mulai</small></th>
+                                        <th class="text-center"><small>Selesai</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($data_st as $data)
+                                        <tr>
+                                            <td class="text-center">
+                                                <small>
+                                                <u>{{$data['nomor_st']}}</u><br/>
+                                                {{ $data->SuratIndukRel->tugas }}<br/>
+                                                {{$data['tujuan_tugas']}}
+                                                </small>
+                                            </td>
+                                            <td><small>{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</small></td>
+                                            <td><small>{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</small></td>
+                                            <td class="text-center">
+                                                <small>{!! $data->listStatus[$data['status_aktif']] !!}</small>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            @endif
+                        </table>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -92,7 +92,7 @@
 
                 @if(Auth::user()->kdkab=='00')
                 <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
-                    <a href="{{ url('vicon') }}"> <i class="icon-users"></i><span>Penggunaan Ruang
+                    <a href="{{ url('vicon') }}"> <i class="icon-grid"></i><span>Penggunaan Ruang
                             Vicon</span></a>
                 </li>
                 @endif
@@ -141,7 +141,7 @@
                 @endhasanyrole
 
                 <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
-                    <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i>
+                    <a href="#Dashboard" class="has-arrow"><i class="icon-users"></i>
                         <span>Rapat/Pertemuan</span></a>
                     <ul>
                         <li class="{{ request()->is('meeting') ? 'active' : '' }}"><a
@@ -152,7 +152,7 @@
                 </li>
 
                 <li class="{{ (request()->is('surat_km*')) ? 'active' : '' }}">
-                    <a href="{{ url('surat_km') }}"> <i class="icon-users"></i><span>Surat Menyurat</span></a>
+                    <a href="{{ url('surat_km') }}"> <i class="icon-doc"></i><span>Surat Menyurat</span></a>
                 </li>
 
                 @role('superadmin')

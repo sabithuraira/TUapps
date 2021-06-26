@@ -21,15 +21,13 @@ class SuratTugasRincian extends Model
         return (new \App\Http\Requests\SuratTugasRincianRequest())->attributes();
 	}
 	
-    public function getListTingkatBiayaAttribute()
-    {
+    public function getListTingkatBiayaAttribute(){
         return array(
             0=> '', 1 => 'A', 2 => 'B', 3 => 'C'
         );
     }
 	
-    public function getListKendaraanAttribute()
-    {
+    public function getListKendaraanAttribute(){
         return array( 
 			0 => '',
 			1 => 'Kendaraan Umum', 
@@ -38,16 +36,14 @@ class SuratTugasRincian extends Model
 		);
 	}
 
-	public function getListKategoriPetugasAttribute()
-    {
+	public function getListKategoriPetugasAttribute(){
         return array( 
 			1 => 'Ketua', 
 			2 => 'Anggota',
 		);
     }
     
-    public function getListStatusAttribute()
-    {
+    public function getListStatusAttribute(){
         return array(
             1 => "<div class='badge badge-info'>Sedang Berjalan</div>", 
             3 => "<div class='badge badge-warning'>Kelengkapan sudah di bagian administrasi</div>", 
@@ -58,8 +54,7 @@ class SuratTugasRincian extends Model
         );
     }
 
-    public function getListLabelStatusAttribute()
-    {
+    public function getListLabelStatusAttribute(){
         return array(
             1 => "Sedang Berjalan", 
             3 => "Kelengkapan sudah di bagian administrasi", 

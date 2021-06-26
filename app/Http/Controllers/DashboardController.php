@@ -68,10 +68,23 @@ class DashboardController extends Controller
             $result_ckp[] = $list_ckp[0]->$name;
         }
 
+        $data_st = \App\SuratTugasRincian::where([
+                ['nip', '=', $real_id], ['status_aktif', '<>', '2']
+            ])
+            ->where(
+                (function ($query) use ($year) {
+                    $query->where(\DB::raw('YEAR(tanggal_mulai)'), '=', $year)
+                        ->orWhere(\DB::raw('YEAR(tanggal_selesai)'), '=', $year);
+                })
+            )
+            ->with('SuratIndukRel')
+            ->orderBy('id', 'desc')
+            ->get();
+
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
         // dd($list_ckp[0]);
         return view('dashboard.profile', compact(
-            'id', 'model', 'unit_kerja', 'result_ckp'
+            'id', 'model', 'unit_kerja', 'result_ckp', 'data_st'
         ));
     }
 }

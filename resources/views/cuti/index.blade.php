@@ -21,11 +21,7 @@
                 <a href="{{action('CutiController@create')}}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>
                     Cuti</a>
                 <button hidden name="action" type="submit" value="1"></button>
-                {{-- <button name="action" class="btn btn-success btn-sm float-right" type="submit" value="2"><i
-                        class="fa fa-file-excel-o"></i> Unduh Excel</button> --}}
                 <br /><br />
-                {{-- <span class="float-right small"><i>Data unduhan sesuai filter pencarian</i></span> --}}
-                <br />
                 @csrf
                 @if(Auth::user()->kdkab=='00')
                 <div class="row clearfix">
@@ -65,10 +61,7 @@
                                 @endfor
                         </select>
                     </div>
-
                 </div>
-
-
             </form>
             <br />
             <section class="datas">

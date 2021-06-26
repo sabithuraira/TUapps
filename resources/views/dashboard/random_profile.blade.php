@@ -61,5 +61,10 @@
                 <small>Hari Lembur</small>
             </div>
         </div>
+        <div class="row text-center">
+            <div class="col-12 text-center">
+                <a href="{{ action('DashboardController@profile', Crypt::encrypt($random_user->nip_baru)) }}" class="btn btn-info">Selengkapnya >></a>
+            </div>
+        </div>
     </div>
 </div>
