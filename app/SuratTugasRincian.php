@@ -128,9 +128,9 @@ class SuratTugasRincian extends Model
 			$label_case[] = "COUNT(CASE WHEN ($i BETWEEN DAY(tanggal_mulai) AND DAY(tanggal_selesai)) THEN 0 END) AS day".$i;
 		}
 		//ini percobaan query baru, kalo bulan 10 2021 ga ada masalah, brrti uda bener
-		$sql = "SELECT nip, nama, ".join(",", $label_select)."
+		$sql = "SELECT nip, nama, kdorg, ".join(",", $label_select)."
 			FROM (
-				SELECT users.id, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
+				SELECT users.id, users.kdorg, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
 			FROM users 
 			LEFT JOIN 
 			    (SELECT surat_tugas_rincian.* FROM surat_tugas_rincian, surat_tugas 
@@ -143,8 +143,8 @@ class SuratTugasRincian extends Model
 				        AND surat_tugas.sumber_anggaran <> 3  
                 ) AS str ON str.nip=users.nip_baru
 			WHERE kdkab='" . $uk . "' 
-			GROUP BY nip_baru, name, users.id
-				ORDER BY users.id
+			GROUP BY nip_baru, users.kdorg, name, users.id
+				ORDER BY users.kdorg, users.id
 			) AS CA";
 		
 		//ini percobaan query baru, kalo bulan 10 2021 ga ada masalah, hapus code di bawah
