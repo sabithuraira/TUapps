@@ -221,7 +221,25 @@
             },
             setKategoriPeserta: function(index){
                 var self = this;
+                self.setRincianKosong();
                 self.cur_kategori_peserta = index;
+            },
+            setRincianKosong: function(){
+                this.cur_rincian = {
+                    nip: '',
+                    nama: '',
+                    gol: '',
+                    jabatan: '',
+                    jabatan_pelatihan: '',
+                    asal_daerah: '',
+                    unit_kerja: '',
+                    jenis_peserta: '',
+                    tingkat_biaya: 1,
+                    kendaraan: 1,
+                    kategori_peserta: '',
+                    id: '',
+                    index: ''
+                };
             },
             setAllNama(){
                 var self = this;
@@ -252,111 +270,117 @@
                 $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
                 
                 if(jenis_peserta==1){
-                    $.ajax({
-                        url :  vm.pathname + "/is_available",
-                        method : 'post',
-                        dataType: 'json',
-                        data:{
-                            nip: self.cur_rincian.nip,
-                            t_start: self.tanggal_mulai,
-                            t_end: self.tanggal_selesai,
-                        },
-                    }).done(function (data) {
-                        if(data.response==1){
-                            if(data.result[0].total==0){
-                                self.setAllNama()
-                                ////////
-                                if(self.cur_rincian.id){
-                                    var temp_rincian = {
-                                        'id': self.cur_rincian.id,
-                                        'nip'   : self.cur_rincian.nip,
-                                        'nama'   : self.cur_rincian.nama,
-                                        'gol'   : self.cur_rincian.gol,
-                                        'jabatan'   : self.cur_rincian.jabatan,
-                                        'jabatan_pelatihan'   : self.cur_rincian.jabatan_pelatihan,
-                                        'asal_daerah'   : self.cur_rincian.asal_daerah,
-                                        'unit_kerja'   : self.cur_rincian.unit_kerja,
-                                        'jenis_peserta'     : jenis_peserta,
-                                        'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                                        'kendaraan'     : self.cur_rincian.kendaraan,
-                                        'kategori_peserta'     : self.cur_kategori_peserta,
-                                    };
-                                    if(self.cur_kategori_peserta==1)
-                                        self.rincian_peserta[self.cur_rincian.index] = temp_rincian;
-                                    else if(self.cur_kategori_peserta==2)
-                                        self.rincian_pengajar[self.cur_rincian.index] = temp_rincian;
-                                    else if(self.cur_kategori_peserta==3)
-                                        self.rincian_panitia[self.cur_rincian.index] = temp_rincian;
+                    if(self.cur_rincian.nip!='' && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){
+                        $.ajax({
+                            url :  vm.pathname + "/is_available",
+                            method : 'post',
+                            dataType: 'json',
+                            data:{
+                                nip: self.cur_rincian.nip,
+                                t_start: self.tanggal_mulai,
+                                t_end: self.tanggal_selesai,
+                            },
+                        }).done(function (data) {
+                            if(data.response==1){
+                                if(data.result[0].total==0){
+                                    self.setAllNama()
+                                    ////////
+                                    if(self.cur_rincian.id){
+                                        var temp_rincian = {
+                                            'id': self.cur_rincian.id,
+                                            'nip'   : self.cur_rincian.nip,
+                                            'nama'   : self.cur_rincian.nama,
+                                            'gol'   : self.cur_rincian.gol,
+                                            'jabatan'   : self.cur_rincian.jabatan,
+                                            'jabatan_pelatihan'   : self.cur_rincian.jabatan_pelatihan,
+                                            'asal_daerah'   : self.cur_rincian.asal_daerah,
+                                            'unit_kerja'   : self.cur_rincian.unit_kerja,
+                                            'jenis_peserta'     : jenis_peserta,
+                                            'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                            'kendaraan'     : self.cur_rincian.kendaraan,
+                                            'kategori_peserta'     : self.cur_kategori_peserta,
+                                        };
+                                        if(self.cur_kategori_peserta==1)
+                                            self.rincian_peserta[self.cur_rincian.index] = temp_rincian;
+                                        else if(self.cur_kategori_peserta==2)
+                                            self.rincian_pengajar[self.cur_rincian.index] = temp_rincian;
+                                        else if(self.cur_kategori_peserta==3)
+                                            self.rincian_panitia[self.cur_rincian.index] = temp_rincian;
+                                    }
+                                    else{
+                                        var id_nya = ""
+                                        if(self.cur_kategori_peserta==1){
+                                            id_nya = 'au'+(self.total_peserta)
+                                        }
+                                        else if(self.cur_kategori_peserta==2){
+                                            id_nya = 'au'+(self.total_pengajar)
+                                        }
+                                        else if(self.cur_kategori_peserta==3){
+                                            id_nya = 'au'+(self.total_panitia)
+                                        }
+
+                                        var temp_rincian = {
+                                            'id': id_nya,
+                                            'nip'   : self.cur_rincian.nip,
+                                            'nama'   : self.cur_rincian.nama,
+                                            'gol'   : self.cur_rincian.gol,
+                                            'jabatan'   : self.cur_rincian.jabatan,
+                                            'jabatan_pelatihan'   : self.cur_rincian.jabatan_pelatihan,
+                                            'asal_daerah'   : self.cur_rincian.asal_daerah,
+                                            'unit_kerja'   : self.cur_rincian.unit_kerja,
+                                            'jenis_peserta'     : jenis_peserta,
+                                            'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                            'kendaraan'     : self.cur_rincian.kendaraan,
+                                            'kategori_peserta'     : self.cur_kategori_peserta,
+                                        };
+                                        
+                                        if(self.cur_kategori_peserta==1){
+                                            self.rincian_peserta.push(temp_rincian);
+                                            self.total_peserta++;
+                                        }
+                                        else if(self.cur_kategori_peserta==2){
+                                            self.rincian_pengajar.push(temp_rincian);
+                                            self.total_pengajar++;
+                                        }
+                                        else if(self.cur_kategori_peserta==3){
+                                            self.rincian_panitia.push(temp_rincian);
+                                            self.total_panitia++;
+                                        }
+                                    }
+
+                                    self.cur_rincian.nip = '';
+                                    self.cur_rincian.nama = '';
+                                    self.cur_rincian.gol = '';
+                                    self.cur_rincian.jabatan = '';
+                                    self.cur_rincian.jabatan_pelatihan = '';
+                                    self.cur_rincian.asal_daerah = '';
+                                    self.cur_rincian.unit_kerja = '';
+                                    self.cur_rincian.jenis_peserta = '';
+                                    self.cur_rincian.tingkat_biaya = '';
+                                    self.cur_rincian.kendaraan = '';
+                                    self.cur_rincian.kategori_peserta = '';
+                                    self.cur_rincian.id = '';
+                                    //////////
+                                    $('#form_pelatihan').modal('hide');
                                 }
                                 else{
-                                    var id_nya = ""
-                                    if(self.cur_kategori_peserta==1){
-                                        id_nya = 'au'+(self.total_peserta)
-                                    }
-                                    else if(self.cur_kategori_peserta==2){
-                                        id_nya = 'au'+(self.total_pengajar)
-                                    }
-                                    else if(self.cur_kategori_peserta==3){
-                                        id_nya = 'au'+(self.total_panitia)
-                                    }
-
-                                    var temp_rincian = {
-                                        'id': id_nya,
-                                        'nip'   : self.cur_rincian.nip,
-                                        'nama'   : self.cur_rincian.nama,
-                                        'gol'   : self.cur_rincian.gol,
-                                        'jabatan'   : self.cur_rincian.jabatan,
-                                        'jabatan_pelatihan'   : self.cur_rincian.jabatan_pelatihan,
-                                        'asal_daerah'   : self.cur_rincian.asal_daerah,
-                                        'unit_kerja'   : self.cur_rincian.unit_kerja,
-                                        'jenis_peserta'     : jenis_peserta,
-                                        'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                                        'kendaraan'     : self.cur_rincian.kendaraan,
-                                        'kategori_peserta'     : self.cur_kategori_peserta,
-                                    };
-                                    
-                                    if(self.cur_kategori_peserta==1){
-                                        self.rincian_peserta.push(temp_rincian);
-                                        self.total_peserta++;
-                                    }
-                                    else if(self.cur_kategori_peserta==2){
-                                        self.rincian_pengajar.push(temp_rincian);
-                                        self.total_pengajar++;
-                                    }
-                                    else if(self.cur_kategori_peserta==3){
-                                        self.rincian_panitia.push(temp_rincian);
-                                        self.total_panitia++;
-                                    }
+                                    alert(self.cur_rincian.nama + " tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
                                 }
-
-                                self.cur_rincian.nip = '';
-                                self.cur_rincian.nama = '';
-                                self.cur_rincian.gol = '';
-                                self.cur_rincian.jabatan = '';
-                                self.cur_rincian.jabatan_pelatihan = '';
-                                self.cur_rincian.asal_daerah = '';
-                                self.cur_rincian.unit_kerja = '';
-                                self.cur_rincian.jenis_peserta = '';
-                                self.cur_rincian.tingkat_biaya = '';
-                                self.cur_rincian.kendaraan = '';
-                                self.cur_rincian.kategori_peserta = '';
-                                self.cur_rincian.id = '';
-                                //////////
-                                $('#form_pelatihan').modal('hide');
                             }
                             else{
-                                alert(self.cur_rincian.nama + " tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
+                                alert("Isian tanggal atau form belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
                             }
-                        }
-                        else{
-                            alert("Isian tanggal atau form belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
-                        }
-                        
+                            
+                            $('#wait_progres').modal('hide');
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#form_pelatihan').modal('hide');
+                        });
+                    }
+                    else{
                         $('#wait_progres').modal('hide');
-                    }).fail(function (msg) {
-                        console.log(JSON.stringify(msg));
-                        $('#form_pelatihan').modal('hide');
-                    });
+                        alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
+                    } 
                 }
                 else{
                     if(self.cur_rincian.nama!='' && self.cur_rincian.kendaraan!='' && self.cur_rincian.tingkat_biaya!=''){

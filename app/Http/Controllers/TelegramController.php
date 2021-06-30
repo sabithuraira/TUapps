@@ -89,4 +89,199 @@ class TelegramController extends Controller
 
         return 1;
     }
+
+    
+    public function sp2020lf(Request $request)
+    {
+        $client = new \GuzzleHttp\Client();
+     
+        $update = json_decode($request->getContent());
+        $chatID = $update->message->chat->id;
+        $message = $update->message->text;
+        
+        // Listing: LF.P-id_bs-jlhrutahasil-Pddkhasillaki-Pddkhasilperempuan-JlhrutaAdaKematian (LF.P-1681052001004B-80-89-102-4)
+        // Sampel: LF.C2-id_bs-status-namaKRT-pendidikanKRT-jlhARTLaki-jlhARTPerempuan-jmlARTPerempuan15sd49-jlhkematian  
+        //        (LF.C2-1681052001004B-1-Ahmad joko-5-2-3-1-0)
+
+        $pesan = '';
+
+        if(strtolower(str_replace(' ', '', $message))=='panduan'){
+            $pesan = "Kirim laporan progres Long Form SP2020 dengan format berikut:<br/>
+                Untuk <strong>PEMUTAKHIRAN</strong>: <strong><u>LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian</u></strong>. Contoh: <strong>LF.P-1681052001004B-80-89-102-4</strong><br/>
+                Untuk Pendataan <strong>C2</strong>: <strong><u>LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Pendidikan Akhir KRT - Jumlah ART Laki-laki -  Jumlah ART Perempuan - Jumlah ART Perempuan Usia 15 s/d 49 - Jumlah Kematian</u></strong>. Contoh: <strong>LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0</strong>";
+        }
+        else{
+            $lower_msg = strtolower($message);
+            $rincian_msg = explode("-", $lower_msg);
+
+            if(count($rincian_msg)==6 || count($rincian_msg)==10){
+                $is_true = true;
+                $msg_error = [];
+
+                $id_bs = str_replace(' ', '', $rincian_msg[1]);
+                if(count($rincian_msg)==6){
+                    // (LF.P-1681052001004B-80-89-102-4)
+                    if(str_replace(' ', '', $rincian_msg[0])=="lf.p"){
+                        $jumlah_ruta = str_replace(' ', '', $rincian_msg[2]);
+                        $jumlah_laki = str_replace(' ', '', $rincian_msg[3]);
+                        $jumlah_perempuan = str_replace(' ', '', $rincian_msg[4]);
+                        $jumlah_mati = str_replace(' ', '', $rincian_msg[5]);
+                        
+                        //cek numerik
+                        if(!is_numeric($jumlah_ruta)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah Rumah Tangga' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_laki)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah Penduduk Laki-laki' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_perempuan)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah Penduduk Perempuan' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_mati)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah Rumah Tangga Ada Kematian' Harus Angka";
+                        }
+                        /////
+
+                        /////////
+                        if($is_true==false){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            $data = \App\Sp2020LfBs::where([['idbs', '=', $id_bs],])->first();
+            
+                            if($data==null){
+                                $pesan = "Identitas Blok Sensus ini tidak ditemukan, kayaknya kakak salah masukin ID BS nya ya, mohon ulangi lagi dengan ID BS yang benar ya kak..";
+                            }
+                            else{
+                                $data->jumlah_ruta = $jumlah_ruta;
+                                $data->jumlah_laki = $jumlah_laki;
+                                $data->jumlah_perempuan = $jumlah_perempuan;
+                                $data->jumlah_ruta_ada_mati = $jumlah_mati;
+                                $data->save();
+                                $pesan = "Sukses kakak.. data berhasil disimpan.";  
+                            }
+                        } 
+                        /////////
+                    }
+                    else{
+                        $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                    }
+                }
+                else if(count($rincian_msg)==10){
+                    // (LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0)
+                    if(str_replace(' ', '', $rincian_msg[0])=="lf.c2"){
+                        $nurts = str_replace(' ', '', $rincian_msg[2]);
+                        $status_ruta = str_replace(' ', '', $rincian_msg[3]);
+                        $nama_krt = $rincian_msg[4];
+                        $pendidikan_krt = str_replace(' ', '', $rincian_msg[5]);
+                        $jumlah_laki = str_replace(' ', '', $rincian_msg[6]);
+                        $jumlah_perempuan = str_replace(' ', '', $rincian_msg[7]);
+                        $jumlah_perempuan1549 = str_replace(' ', '', $rincian_msg[8]);
+                        $jumlah_mati = str_replace(' ', '', $rincian_msg[9]);
+                        
+                        if(!is_numeric($nurts)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Nomor Urut Rumah Tangga Sampel' Harus Angka";
+                        }
+                        else{
+                            if($nurts<1 || $nurts>16){
+                                $is_true = false;
+                                $msg_error[] = "Isian 'Nomor Urut Rumah Tangga Sampel' Tidak Boleh Lebih dari 16";
+                            }
+                        }
+                        
+                        if(!is_numeric($status_ruta)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Status Kunjungan' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($pendidikan_krt)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Pendidikan KRT' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_laki)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah ART Laki-laki' Harus Angka";
+                        }
+
+                        if(!is_numeric($jumlah_perempuan)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah ART Perempuan' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_perempuan1549)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah ART Perempuan Usia 15-49 Tahun' Harus Angka";
+                        }
+                        
+                        if(!is_numeric($jumlah_mati)) {
+                            $is_true = false;
+                            $msg_error[] = "Isian 'Jumlah ART Mati' Harus Angka";
+                        }
+
+                        /////////
+                        if($is_true==false){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            $data = \App\Sp2020LfBs::where([['idbs', '=', $id_bs]])->first();
+            
+                            if($data==null){
+                                $pesan = "Identitas Blok Sensus ini tidak ditemukan, kayaknya kakak salah masukin ID BS nya ya, mohon ulangi lagi dengan ID BS yang benar ya kak..";
+                            }
+                            else{
+                                $model = \App\Sp2020LfRt::where([['idbs', '=', $id_bs], ['nurts', '=', $nurts]])->first();
+
+                                if($model==null){
+                                    $model = new \App\Sp2020LfRt;
+                                    $model->kd_prov = substr($id_bs, 0,2);
+                                    $model->kd_kab = substr($id_bs, 2,2);
+                                    $model->kd_kec = substr($id_bs, 4,3);
+                                    $model->kd_desa = substr($id_bs, 7,3);
+                                    $model->idbs = $id_bs;
+                                    $model->nurts = $nurts;
+                                }
+
+                                $model->status_rt =  $status_ruta;
+                                $model->nama_krt =  $nama_krt;
+                                $model->pendidikan_krt =  $pendidikan_krt;
+                                $model->jumlah_laki =  $jumlah_laki;
+                                $model->jumlah_perempuan =  $jumlah_perempuan;
+                                $model->jumlah_perempuan_1549 =  $jumlah_perempuan1549;
+                                $model->jumlah_mati =  $jumlah_mati;
+                                $model->save();
+
+                                $pesan = "Sukses kakak.. data berhasil disimpan.";  
+                            }
+                        } 
+                        /////////
+                    }
+                    else{
+                        $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                    }
+                } 
+            }
+            else{
+                $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+            }
+        }
+
+        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&reply_markup=".$options_markup;
+        // $API_poll = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendPoll?chat_id=".$chatID."&question=".$pesan."&options=".$options;
+
+
+        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
+        
+        $res = $client->get($API_message);
+
+        return 1;
+    }
 }

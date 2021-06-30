@@ -22,6 +22,7 @@ class CreateSp2020lfRtTable extends Migration
             $table->char('kd_desa',3);
             $table->char('idbs',14);
 
+            $table->integer('nurts');
             $table->integer('status_rt');
             $table->string('nama_krt');
             $table->integer('pendidikan_krt');

@@ -68,7 +68,7 @@
                         {{ $model_pelatihan->attributes()['kendaraan'] }}
                         <div class="form-line">
                             <select class="form-control" v-model="cur_rincian.kendaraan">
-                                @foreach ($model_rincian->listKendaraan as $key=>$value)
+                                @foreach ($model_pelatihan->listKendaraan as $key=>$value)
                                     <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
