@@ -20,14 +20,38 @@ class DashboardController extends Controller
 
         $label_kab = ''; $label_kec = ''; $label_desa = '';
 
-        $kab = $request->get('kab'); $kec = $request->get('kec'); $desa = $request->get('desa');
+        $kab = $request->get('kab'); $kec = $request->get('kec'); 
+        $desa = $request->get('desa'); $bs = $request->get('bs');
 
         if(strlen($kab)==0) $kab = null;
         if(strlen($kec)==0) $kec = null;
         if(strlen($desa)==0) $desa = null;
+        if(strlen($bs)==0) $bs = null;
         $model = new \App\Sp2020LfBs();
+        $model_c2 = new \App\Sp2020LfRt();
 
-        if($desa!=null){
+        if($bs!=null){
+            $label = 'bs';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if($model_kab!=null) $label_kab = $model_kab->nmKab;
+            
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if($model_kec!=null) $label_kec = $model_kec->nmKec;
+            
+            $model_desa = \App\Pdesa::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec],
+                ['idDesa', '=', $desa],
+            ])->first();
+            if($model_desa!=null) $label_desa = $model_desa->nmDesa;
+
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+            $datas_c2 = $model_c2->Rekapitulasi($kab, $kec, $desa, $bs);
+        }
+        else if($bs==null && $desa!=null){
             $label = 'desa';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
@@ -46,8 +70,9 @@ class DashboardController extends Controller
             if($model_desa!=null) $label_desa = $model_desa->nmDesa;
 
             $datas = $model->Rekapitulasi($kab, $kec, $desa);
+            $datas_c2 = $model_c2->Rekapitulasi($kab, $kec, $desa);
         }
-        else if($desa==null && $kec!=null){
+        else if($bs==null && $desa==null && $kec!=null){
             $label = 'kec';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
@@ -58,28 +83,47 @@ class DashboardController extends Controller
             ])->first();
             if($model_kec!=null) $label_kec = $model_kec->nmKec;
 
-            $datas = $model->Rekapitulasi($kab, $kec);    
+            $datas = $model->Rekapitulasi($kab, $kec);   
+            $datas_c2 = $model_c2->Rekapitulasi($kab, $kec); 
         }
-        else if($desa==null && $kec==null && $kab!=null){
+        else if($bs==null && $desa==null && $kec==null && $kab!=null){
             $label = 'kab';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
 
             $datas = $model->Rekapitulasi($kab); 
+            $datas_c2 = $model_c2->Rekapitulasi($kab);
         }
         else{
             $datas = $model->Rekapitulasi(); 
+            $datas_c2 = $model_c2->Rekapitulasi();
         }
 
-        // $labels = [];
-        // $persens = [];
+        $labels = [];
+        $persens = [];
+        
+        $labels_c2 = [];
+        $persens_c2 = [];
+
+        // print_r($datas_c2);die();
 
         foreach($datas as $key=>$data){
             $labels[] = $data->nama;
             $persen = 100;
-            $persen = round(($data->terlapor/$data->total*100),3);
+
+            if($data->total==0) $persen = 0;
+            else $persen = round(($data->terlapor/$data->total*100),3);
             
             $persens[] = $persen;
+        }
+        
+        foreach($datas_c2 as $key=>$data){
+            $labels_c2[] = $data->nama;
+            $persen = 100;
+            if($data->total==0) $persen = 0;
+            else $persen = round(($data->terlapor/$data->total*100),3);
+            
+            $persens_c2[] = $persen;
         }
 
         /////////////
@@ -90,7 +134,8 @@ class DashboardController extends Controller
         return view('dashboard.index',compact(
             'random_user', 'unit_kerja', 'dl_per_uk', 
             'model', 'datas', 'labels', 'persens', 
-            'kab', 'kec', 'desa', 'label',
+            'model_c2', 'datas_c2', 'labels_c2', 'persens_c2', 
+            'kab', 'kec', 'desa', 'bs', 'label',
             'label_kab', 'label_kec', 'label_desa'));
     }
 

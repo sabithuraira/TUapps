@@ -90,14 +90,16 @@ class TelegramController extends Controller
         return 1;
     }
 
-    
     public function sp2020lf(Request $request)
     {
         $client = new \GuzzleHttp\Client();
      
-        $update = json_decode($request->getContent());
-        $chatID = $update->message->chat->id;
-        $message = $update->message->text;
+        // $update = json_decode($request->getContent());
+        // $chatID = $update->message->chat->id;
+        // $message = $update->message->text;
+
+        // $message = "LF.P-1605070031009B-80-89-102-4";
+        $message = "LF.C2-1605070031009B-3-1-Ahmad joko-5-2-3-1-0";
         
         // Listing: LF.P-id_bs-jlhrutahasil-Pddkhasillaki-Pddkhasilperempuan-JlhrutaAdaKematian (LF.P-1681052001004B-80-89-102-4)
         // Sampel: LF.C2-id_bs-status-namaKRT-pendidikanKRT-jlhARTLaki-jlhARTPerempuan-jmlARTPerempuan15sd49-jlhkematian  
@@ -278,9 +280,10 @@ class TelegramController extends Controller
         // $API_poll = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendPoll?chat_id=".$chatID."&question=".$pesan."&options=".$options;
 
 
-        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
+        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
         
-        $res = $client->get($API_message);
+        // $res = $client->get($API_message);
+        print_r($pesan);
 
         return 1;
     }

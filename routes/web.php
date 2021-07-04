@@ -200,3 +200,4 @@ Route::get('/d4ft4r_2612', 'HomeController@d4ft4r_2612');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('guest', 'HomeController@guest')->name('guest');
 Route::post('telegram/sp2020', 'TelegramController@sp2020');
+Route::get('telegram/sp2020lf', 'TelegramController@sp2020lf');

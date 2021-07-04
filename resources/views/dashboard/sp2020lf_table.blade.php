@@ -40,13 +40,13 @@
                     <td>{{ ($key+1) }}</td>
                     <td>
                         @if($label == 'prov')
-                            <a href="{{ url('hai?kab='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
+                            <a href="{{ url('dashboard/index?kab='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @elseif ($label == 'kab')
-                            <a href="{{ url('hai?kab='.$kab.'&kec='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
+                            <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @elseif ($label == 'kec')
-                            <a href="{{ url('hai?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
+                            <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @else
-                            {{ $data->idw }} - {{ $data->nama }}
+                            {{ $data->idw }}
                         @endif
                     </td>
                     <td class="text-center">{{ number_format($data->jumlah_ruta,0,",",".") }}</td>

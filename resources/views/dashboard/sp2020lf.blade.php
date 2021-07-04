@@ -1,54 +1,61 @@
-@extends('layouts.admin')
-
-@section('content')
 <style>
 .c3-axis-x text 
 {
   font-size: 10px;
 }
 </style>
-    <div class="container">
-        <div class="alert alert-primary" role="alert">
-            <p>Ingatkan petugas untuk selalu melaporkan progres lapangan Long Form SP2020 melalui TELEGRAM dan PANTAU progres nya ya..</p>
-        </div>
-                            
-        <div class="card">
-            <div class="body profilepage_2 blog-page">
-                @if ($label == 'prov')
-                    SUMATERA SELATAN
-                    <a class="float-right" href="{{ url('download_sp2020') }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
-                @elseif ($label == 'kab')
-                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
-                    - {{ $label_kab }}
-                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
-                @elseif ($label == 'kec')
-                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
-                    - <u><a href="{{ url('hai?kab='.$kab) }}">{{ $label_kab }}</a></u>
-                    - {{ $label_kec }}
+<div class="alert alert-primary" role="alert">
+    <p>Ingatkan petugas untuk selalu melaporkan progres lapangan Long Form SP2020 melalui TELEGRAM dan PANTAU progres nya ya..</p>
+</div>
                     
-                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
-                @elseif($label=='desa')
-                    <u><a href="{{ url('hai') }}">SUMATERA SELATAN</a></u>
-                    - <u><a href="{{ url('hai?kab='.$kab) }}">{{ $label_kab }}</a></u>
-                    - <u><a href="{{ url('hai?kab='.$kab.'&kec='.$kec) }}">{{ $label_kec }}</a></u> 
-                    - {{ $label_desa }}   
-                    
-                    <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a>
-                @endif
-                <br/><br/>
-                <div>
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#hai_table">Table</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hai_grafik">Grafik</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        @include('dashboard.sp2020lf_table')
-                    </div>
-                </div>
+<div class="card">
+    <div class="body profilepage_2 blog-page">
+        @if ($label == 'prov')
+            SUMATERA SELATAN
+            <!-- <a class="float-right" href="{{ url('download_sp2020') }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> -->
+        @elseif ($label == 'kab')
+            <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
+            - {{ $label_kab }}
+            <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> -->
+        @elseif ($label == 'kec')
+            <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
+            - <u><a href="{{ url('dashboard/index?kab='.$kab) }}">{{ $label_kab }}</a></u>
+            - {{ $label_kec }}
+            
+            <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> -->
+        @elseif($label=='desa')
+            <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
+            - <u><a href="{{ url('dashboard/index?kab='.$kab) }}">{{ $label_kab }}</a></u>
+            - <u><a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec) }}">{{ $label_kec }}</a></u> 
+            - {{ $label_desa }}   
+            
+            <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> -->
+        @elseif($label=='bs')
+        <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
+        - <u><a href="{{ url('dashboard/index?kab='.$kab) }}">{{ $label_kab }}</a></u>
+        - <u><a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec) }}">{{ $label_kec }}</a></u> 
+        - <u><a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}">{{ $label_desa }}</a></u> 
+        - {{ $bs }}   
+        
+        <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> --> 
+        @endif
+        <br/><br/>
+        <div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#hai_table">Table Pemutakhiran</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hai_grafik">Grafik Pemutakhiran</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#c2_table">Table C2</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#c2_grafik">Grafik C2</a></li>
+            </ul>
+            <div class="tab-content">
+                @include('dashboard.sp2020lf_table')
+                @include('dashboard.sp2020lf_grafik')
+                @include('dashboard.sp2020lfc2_table')
+                @include('dashboard.sp2020lfc2_grafik')
             </div>
         </div>
-  </div>
-@endsection
+    </div>
+</div>
 
 @section('scripts')
 <script src="{!! asset('assets/bundles/c3.bundle.js') !!}"></script>
@@ -66,7 +73,7 @@
                 'data1': lucid.colors["blue"]
             },
             names: {
-                'data1': 'Persentase selesai: '
+                'data1': 'Persentase dilaporkan: '
             }
         },
         axis: {
