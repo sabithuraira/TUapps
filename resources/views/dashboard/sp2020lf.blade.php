@@ -5,7 +5,8 @@
 }
 </style>
 <div class="alert alert-primary" role="alert">
-    <p>Ingatkan petugas untuk selalu melaporkan progres lapangan Long Form SP2020 melalui TELEGRAM dan PANTAU progres nya ya..</p>
+    <!-- <p>Ingatkan petugas untuk selalu melaporkan progres lapangan Long Form SP2020 melalui TELEGRAM dan PANTAU progres nya ya..</p> -->
+    <p><span style="font-size:30px">&#128071;</span> Persiapan monitoring Long Form SP2020... <span style="font-size:30px">&#9203;</span></p>
 </div>
                     
 <div class="card">

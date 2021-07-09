@@ -20,6 +20,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        '/telegram/sp2020'
+        '/telegram/sp2020',
+        '/telegram/sp2020lf',
     ];
 }

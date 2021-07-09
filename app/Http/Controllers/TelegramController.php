@@ -9,97 +9,96 @@ use Log;
 
 class TelegramController extends Controller
 {
-    public function sp2020(Request $request)
-    {
-        $client = new \GuzzleHttp\Client();
+    // public function sp2020(Request $request){
+    //     $client = new \GuzzleHttp\Client();
      
-        $update = json_decode($request->getContent());
-        // Log::info('info request:', ['isi'=>$update]);
-        $chatID = $update->message->chat->id;
-        $message = $update->message->text; //$update["message"]["text"];
-        // $options = json_encode(["OKU", "OKI", "Muara Enim"]);
+    //     $update = json_decode($request->getContent());
+    //     Log::info('info request:', ['isi'=>$update]);
+    //     $chatID = $update->message->chat->id;
+    //     $message = $update->message->text; //$update["message"]["text"];
+    //     // $options = json_encode(["OKU", "OKI", "Muara Enim"]);
 
-        // $options_markup = json_encode([
-        //     'resize_keyboard'=>true,
-        //     'one_time_keyboard'=>true,
-        //     'keyboard'=>[[['text'=>"OKU"],['text'=>"OKI"],['text'=>"Muara Enim"]],]
-        // ]);
+    //     // $options_markup = json_encode([
+    //     //     'resize_keyboard'=>true,
+    //     //     'one_time_keyboard'=>true,
+    //     //     'keyboard'=>[[['text'=>"OKU"],['text'=>"OKI"],['text'=>"Muara Enim"]],]
+    //     // ]);
 
-        $pesan = '';
+    //     $pesan = '';
 
-        if(strtolower(str_replace(' ', '', $message))=='sp2020'){
-            $pesan = "Kirim laporan progres Sensus Penduduk dengan format <strong><u>ID SLS/Non SLS - Estimasi Jumlah Penduduk - Jumlah Penduduk yang telah selesai</u></strong>. Contoh: <strong>1607110012000600 - 69 - 30</strong>";
-        }
-        else{
-            $rincian_msg = explode("-", $message);
-            if(count($rincian_msg)==3){
-                $is_true = true;
+    //     if(strtolower(str_replace(' ', '', $message))=='sp2020'){
+    //         $pesan = "Kirim laporan progres Sensus Penduduk dengan format <strong><u>ID SLS/Non SLS - Estimasi Jumlah Penduduk - Jumlah Penduduk yang telah selesai</u></strong>. Contoh: <strong>1607110012000600 - 69 - 30</strong>";
+    //     }
+    //     else{
+    //         $rincian_msg = explode("-", $message);
+    //         if(count($rincian_msg)==3){
+    //             $is_true = true;
 
-                $id_sls = str_replace(' ', '', $rincian_msg[0]);
-                $estimasi_penduduk = str_replace(' ', '', $rincian_msg[1]);
-                $jumlah_selesai = str_replace(' ', '', $rincian_msg[2]);
+    //             $id_sls = str_replace(' ', '', $rincian_msg[0]);
+    //             $estimasi_penduduk = str_replace(' ', '', $rincian_msg[1]);
+    //             $jumlah_selesai = str_replace(' ', '', $rincian_msg[2]);
 
-                if(!is_numeric($id_sls)) $is_true = false;
-                if(!is_numeric($estimasi_penduduk)) $is_true = false;
-                if(!is_numeric($jumlah_selesai)) $is_true = false;
+    //             if(!is_numeric($id_sls)) $is_true = false;
+    //             if(!is_numeric($estimasi_penduduk)) $is_true = false;
+    //             if(!is_numeric($jumlah_selesai)) $is_true = false;
 
-                if($is_true==false){
-                    $pesan = "Isian <b>ID SLS</b>=$id_sls, <b>Estimasi Jumlah Penduduk</b>=$estimasi_penduduk dan <b>Jumlah Penduduk yang telah selesai</b>=$jumlah_selesai harus angka";
-                }
-                else if($estimasi_penduduk<$jumlah_selesai){
-                    $pesan = "Bro/sis, isian <b>Jumlah Penduduk yang telah selesai</b> harus lebih kecil atau sama dengan isian <b>Estimasi Jumlah Penduduk</b>";
-                }
-                else{
-                    $data = \App\Sp2020Sls::where([
-                        ['id_sls', '=', $id_sls],
-                    ])
-                    ->first();
+    //             if($is_true==false){
+    //                 $pesan = "Isian <b>ID SLS</b>=$id_sls, <b>Estimasi Jumlah Penduduk</b>=$estimasi_penduduk dan <b>Jumlah Penduduk yang telah selesai</b>=$jumlah_selesai harus angka";
+    //             }
+    //             else if($estimasi_penduduk<$jumlah_selesai){
+    //                 $pesan = "Bro/sis, isian <b>Jumlah Penduduk yang telah selesai</b> harus lebih kecil atau sama dengan isian <b>Estimasi Jumlah Penduduk</b>";
+    //             }
+    //             else{
+    //                 $data = \App\Sp2020Sls::where([
+    //                     ['id_sls', '=', $id_sls],
+    //                 ])
+    //                 ->first();
     
-                    if($data==null){
-                        $pesan = "ID SLS/Non SLS/Sub SLS tidak ditemukan. Silahkan ulangi lagi dengan ID SLS/Non SLS yang benar";
-                    }
-                    else{
-                        if($data->flag_update==1){
-                            $pesan = "Maaf banget.. data SLS/Non SLS ini tidak bisa di update lagi karena dikunci BPS Kabupaten/Kota atau BPS Provinsi."; 
-                        }
-                        else{
-                            $data->target_penduduk = $estimasi_penduduk;
-                            $data->realisasi_penduduk = $jumlah_selesai;
-                            $data->save();
+    //                 if($data==null){
+    //                     $pesan = "ID SLS/Non SLS/Sub SLS tidak ditemukan. Silahkan ulangi lagi dengan ID SLS/Non SLS yang benar";
+    //                 }
+    //                 else{
+    //                     if($data->flag_update==1){
+    //                         $pesan = "Maaf banget.. data SLS/Non SLS ini tidak bisa di update lagi karena dikunci BPS Kabupaten/Kota atau BPS Provinsi."; 
+    //                     }
+    //                     else{
+    //                         $data->target_penduduk = $estimasi_penduduk;
+    //                         $data->realisasi_penduduk = $jumlah_selesai;
+    //                         $data->save();
     
-                            $pesan = "Mantap.. data berhasil disimpan."; 
-                        } 
-                    }
-                }  
-            }
-            else{
-                $pesan = "Format pesan anda salah. Balas dengan 'sp2020' untuk bantuan format yang benar";  
-            }
+    //                         $pesan = "Mantap.. data berhasil disimpan."; 
+    //                     } 
+    //                 }
+    //             }  
+    //         }
+    //         else{
+    //             $pesan = "Format pesan anda salah. Balas dengan 'sp2020' untuk bantuan format yang benar";  
+    //         }
 
             
-        }
+    //     }
 
-        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&reply_markup=".$options_markup;
-        // $API_poll = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendPoll?chat_id=".$chatID."&question=".$pesan."&options=".$options;
+    //     // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&reply_markup=".$options_markup;
+    //     // $API_poll = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendPoll?chat_id=".$chatID."&question=".$pesan."&options=".$options;
 
 
-        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
+    //     $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
         
-        $res = $client->get($API_message);
+    //     $res = $client->get($API_message);
 
-        return 1;
-    }
+    //     return 1;
+    // }
 
     public function sp2020lf(Request $request)
     {
         $client = new \GuzzleHttp\Client();
-     
-        // $update = json_decode($request->getContent());
-        // $chatID = $update->message->chat->id;
-        // $message = $update->message->text;
-
+        $update = json_decode($request->getContent());
+        Log::info('info request:', ['isi'=>$update]);
+        $chatID = $update->message->chat->id;
+        $message = $update->message->text;
+        
         // $message = "LF.P-1605070031009B-80-89-102-4";
-        $message = "LF.C2-1605070031009B-3-1-Ahmad joko-5-2-3-1-0";
+        // $message = "LF.C2-1605070031009B-3-1-Ahmad joko-5-2-3-1-0";
         
         // Listing: LF.P-id_bs-jlhrutahasil-Pddkhasillaki-Pddkhasilperempuan-JlhrutaAdaKematian (LF.P-1681052001004B-80-89-102-4)
         // Sampel: LF.C2-id_bs-status-namaKRT-pendidikanKRT-jlhARTLaki-jlhARTPerempuan-jmlARTPerempuan15sd49-jlhkematian  
@@ -108,9 +107,9 @@ class TelegramController extends Controller
         $pesan = '';
 
         if(strtolower(str_replace(' ', '', $message))=='panduan'){
-            $pesan = "Kirim laporan progres Long Form SP2020 dengan format berikut:<br/>
-                Untuk <strong>PEMUTAKHIRAN</strong>: <strong><u>LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian</u></strong>. Contoh: <strong>LF.P-1681052001004B-80-89-102-4</strong><br/>
-                Untuk Pendataan <strong>C2</strong>: <strong><u>LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Pendidikan Akhir KRT - Jumlah ART Laki-laki -  Jumlah ART Perempuan - Jumlah ART Perempuan Usia 15 s/d 49 - Jumlah Kematian</u></strong>. Contoh: <strong>LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0</strong>";
+            $pesan = urlencode("Kirim laporan progres Long Form SP2020 dengan format berikut: \n
+                <strong>PEMUTAKHIRAN</strong>: LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian. Contoh: <pre>LF.P-1681052001004B-80-89-102-4</pre> \n
+                <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Pendidikan Akhir KRT - Jumlah ART Laki-laki -  Jumlah ART Perempuan - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0</code>");
         }
         else{
             $lower_msg = strtolower($message);
@@ -173,7 +172,7 @@ class TelegramController extends Controller
                         /////////
                     }
                     else{
-                        $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                        $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
                     }
                 }
                 else if(count($rincian_msg)==10){
@@ -272,18 +271,13 @@ class TelegramController extends Controller
                 } 
             }
             else{
-                $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
             }
         }
 
-        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&reply_markup=".$options_markup;
-        // $API_poll = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendPoll?chat_id=".$chatID."&question=".$pesan."&options=".$options;
-
-
-        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";
-        
-        // $res = $client->get($API_message);
-        print_r($pesan);
+        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_LF')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
+        $res = $client->get($API_message);
+        // print_r($pesan);
 
         return 1;
     }
