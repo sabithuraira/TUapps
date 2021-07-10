@@ -109,7 +109,7 @@ class TelegramController extends Controller
         if(strtolower(str_replace(' ', '', $message))=='panduan'){
             $pesan = urlencode("Kirim laporan progres Long Form SP2020 dengan format berikut: \n
                 <strong>PEMUTAKHIRAN</strong>: LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian. Contoh: <pre>LF.P-1681052001004B-80-89-102-4</pre> \n
-                <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Pendidikan Akhir KRT - Jumlah ART Laki-laki -  Jumlah ART Perempuan - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0</code>");
+                <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Ijazah Terakhir KRT - Jumlah ART Laki-laki -  Jumlah ART Perempuan - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-2-3-1-0</code>");
         }
         else{
             $lower_msg = strtolower($message);
@@ -147,6 +147,14 @@ class TelegramController extends Controller
                         if(!is_numeric($jumlah_mati)) {
                             $is_true = false;
                             $msg_error[] = "Isian 'Jumlah Rumah Tangga Ada Kematian' Harus Angka";
+                        }
+
+                        //cek jumlah RT cant more than jumlah laki+perempuan
+                        if($is_true){
+                            if($jumlah_ruta>=($jumlah_perempuan+$jumlah_laki)){
+                                $is_true = false;
+                                $msg_error[] = "Isian Jumlah RT tidak boleh lebih besar sama dengan dari Jumlah Perempuan+Jumlah Laki-laki";    
+                            }
                         }
                         /////
 
@@ -202,10 +210,22 @@ class TelegramController extends Controller
                             $is_true = false;
                             $msg_error[] = "Isian 'Status Kunjungan' Harus Angka";
                         }
+                        else{
+                            if($status_ruta<1 || $status_ruta>3){
+                                $is_true = false;
+                                $msg_error[] = "Isian 'Status Kunjungan' Harus diantara angka 1-3";
+                            }
+                        }
                         
                         if(!is_numeric($pendidikan_krt)) {
                             $is_true = false;
-                            $msg_error[] = "Isian 'Pendidikan KRT' Harus Angka";
+                            $msg_error[] = "Isian 'Ijazah Terakhir KRT' Harus Angka";
+                        }
+                        else{
+                            if($pendidikan_krt>9 || $pendidikan_krt<1){
+                                $is_true = false;
+                                $msg_error[] = "Isian 'Ijazah Terakhir KRT' Harus diantara angka 1-9";
+                            }
                         }
                         
                         if(!is_numeric($jumlah_laki)) {
