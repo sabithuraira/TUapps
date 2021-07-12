@@ -46,8 +46,35 @@
 
 <script>
     var oneDay = 24 * 60 * 60 * 1000; 
-    function calculateTimimg(d) {
-            var months = 0, years = 0, days = 0, weeks = 0;
+   
+    var vm = new Vue({
+        el: "#app_vue",
+        data:  {
+            list_pegawai:  {!! json_encode($list_pegawai) !!},
+            id_user:  {!! json_encode($model->id_user) !!},
+            nama:  {!! json_encode($model->nama) !!},
+            nip: {!! json_encode($model->nip) !!},
+            catatan_cuti :{!! json_encode($catatan_cuti) !!},
+        },
+        methods: {
+            setPegawai:function(event){
+                var self = this;
+                var selected_index = event.currentTarget.selectedIndex;
+                $("#jabatan").val(self.list_pegawai[selected_index].nmjab)
+                self.nama = self.list_pegawai[selected_index].name
+                self.nip = self.list_pegawai[selected_index].nip_baru
+                var tgl_hari_ini = new Date()
+                var tgl_mulai_kerja = new Date( self.list_pegawai[selected_index].nip_baru.substring(8,12)+'-'+ self.list_pegawai[selected_index].nip_baru.substring(12,14)+'-'+self.list_pegawai[selected_index].nip_baru.substring(14,16)  )
+                var harikerja = Math.round(Math.abs((tgl_mulai_kerja - tgl_hari_ini) / oneDay));
+                $('#masa_kerja').val(self.calculateTimimg(harikerja)['years']+' Tahun '+self.calculateTimimg(harikerja)['months']+' Bulan')
+            },
+            setPejabat:function(event){
+                var self = this;
+                var selected_index = event.currentTarget.selectedIndex;
+                $("#nip_pejabat").val(self.list_pegawai[selected_index].nip_baru)
+            },
+            calculateTimimg: function(d){
+                var months = 0, years = 0, days = 0, weeks = 0;
                 while(d){
                     if(d >= 365){
                         years++;
@@ -63,50 +90,7 @@
                         d--;
                     }
                 };
-            return {
-                years, months, weeks, days
-            };
-        };
-    
-    
-    var vm = new Vue({
-        el: "#app_vue",
-        data:  {
-            list_pegawai:  {!! json_encode($list_pegawai) !!},
-            id_user:  {!! json_encode($model->id_user) !!},
-            nama:  {!! json_encode($model->nama) !!},
-            nip: {!! json_encode($model->nip) !!},
-            jabatan : {!! json_encode($model->jabatan) !!},
-            jenis_cuti: {!! json_encode($model->jenis_cuti) !!},
-            lama_cuti : {!! json_encode($model->lama_cuti) !!},
-            // masa_kerja : calculateTimimg(harikerja)['years']+' Tahun '+calculateTimimg(harikerja)['months']+' Bulan',
-            masa_kerja :  {!! json_encode($model->masa_kerja) !!},
-            tanggal_mulai : {!! json_encode($model->tanggal_mulai) !!},
-            tanggal_selesai : {!! json_encode($model->tanggal_selesai) !!},
-            catatan_cuti :{!! json_encode($catatan_cuti) !!},
-        },
-        methods: {
-            setPegawai:function(event){
-                var self = this;
-                var selected_index = event.currentTarget.selectedIndex;
-                $("#jabatan").val(self.list_pegawai[selected_index].nmjab)
-                $("#nama").val(self.list_pegawai[selected_index].name)
-                $("#nip").val(self.list_pegawai[selected_index].nip_baru)
-                var tgl_hari_ini = new Date()
-                var tgl_mulai_kerja = new Date( self.list_pegawai[selected_index].nip_baru.substring(8,12)+'-'+ self.list_pegawai[selected_index].nip_baru.substring(12,14)+'-'+self.list_pegawai[selected_index].nip_baru.substring(14,16)  )
-                var harikerja = Math.round(Math.abs((tgl_mulai_kerja - tgl_hari_ini) / oneDay));
-                $('#masa_kerja').val(calculateTimimg(harikerja)['years']+' Tahun '+calculateTimimg(harikerja)['months']+' Bulan')
-            },
-            setPejabat:function(event){
-                var self = this;
-                var selected_index = event.currentTarget.selectedIndex;
-                // $("#jabatan").val(self.list_pegawai[selected_index].nmjab)
-                // $("#nama").val(self.list_pegawai[selected_index].name)
-                $("#nip_pejabat").val(self.list_pegawai[selected_index].nip_baru)
-                // var tgl_hari_ini = new Date()
-                // var tgl_mulai_kerja = new Date( self.list_pegawai[selected_index].nip_baru.substring(8,12)+'-'+ self.list_pegawai[selected_index].nip_baru.substring(12,14)+'-'+self.list_pegawai[selected_index].nip_baru.substring(14,16)  )
-                // var harikerja = Math.round(Math.abs((tgl_mulai_kerja - tgl_hari_ini) / oneDay));
-                // $('#masa_kerja').val(calculateTimimg(harikerja)['years']+' Tahun '+calculateTimimg(harikerja)['months']+' Bulan')
+                return { years, months, weeks, days };
             }
         }
     });
@@ -116,7 +100,5 @@
             format: 'yyyy-mm-dd',
         });
     });
-
-    
 </script>
 @endsection

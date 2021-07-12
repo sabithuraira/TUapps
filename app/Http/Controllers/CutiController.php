@@ -19,8 +19,7 @@ class CutiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         //
         $keyword = $request->get('search');
         $month = '';
@@ -107,8 +106,7 @@ class CutiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CutiRequest $request)
-    {
+    public function store(CutiRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)

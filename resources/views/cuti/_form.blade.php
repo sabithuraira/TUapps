@@ -9,7 +9,7 @@
                     <option value="{{$value['id']}}" @if($value['id']==old('id_user', $model->id_user))
                         selected="selected"
                         @endif>
-                        {{$value['name']}} - {{ $value['nip_baru'] }}
+                        {{ $value['name'] }} - {{ $value['nip_baru'] }}
                     </option>
                     @endforeach
                 </select>
@@ -17,14 +17,9 @@
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-        </div>
-        <div class="form-group">
-            <input class=" col-md-6 form-control form-control-sm" hidden name="nama" id="nama" v-model="nama"
-                readonly="readonly">
-        </div>
-        <div class="form-group">
-            <input class=" col-md-6 form-control form-control-sm" hidden name="nip" id="nip" v-model="nip"
-                readonly="readonly">
+            
+            <input type="hidden" name="nama" v-model="nama">
+            <input type="hidden" name="nip" v-model="nip">
         </div>
         <div class="col-md-6">
             <div class="form-group">{{ $model->attributes()['jabatan'] }}
@@ -88,7 +83,7 @@
                 <div class="input-group">
                     <input type="text"
                         class="form-control datepicker form-control-sm {{($errors->first('tanggal_mulai') ? ' parsley-error' : '')}}"
-                        name="tanggal_mulai" id="tanggal_mulai" autocomplete="off"
+                        name="tanggal_mulai" autocomplete="off"
                         value="{{ old('tanggal_mulai', $model->tanggal_mulai) }}">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
@@ -105,7 +100,7 @@
                     <div class="input-group">
                         <input type="text"
                             class="form-control datepicker form-control-sm {{($errors->first('tanggal_selesai') ? ' parsley-error' : '')}}"
-                            name="tanggal_selesai" autocomplete="off" id="tanggal_selesai"
+                            name="tanggal_selesai" autocomplete="off" 
                             value="{{ old('tanggal_selesai', $model->tanggal_selesai) }}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button"><i
@@ -249,6 +244,6 @@
             
         </div>
     </div>
-    <input type="text" name="nip_pejabat" id="nip_pejabat" hidden>
+    <input type="hidden" name="nip_pejabat" id="nip_pejabat">
     <button type="submit" class="btn btn-primary mt-2">Simpan</button>
 </div>

@@ -57,27 +57,6 @@
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>
-    const calculateTimimg = d => {
-        let months = 0, years = 0, days = 0, weeks = 0;
-            while(d){
-                if(d >= 365){
-                    years++;
-                    d -= 365;
-                }else if(d >= 30){
-                    months++;
-                    d -= 30;
-                }else if(d >= 7){
-                    weeks++;
-                    d -= 7;
-                }else{
-                    days++;
-                    d--;
-                }
-            };
-        return {
-            years, months, weeks, days
-        };
-    };
     var vm = new Vue({
         el: "#app_vue",
         data:  {
@@ -85,12 +64,6 @@
             id_user:  {!! json_encode($model->id_user) !!},
             nama:  {!! json_encode($model->nama) !!},
             nip: {!! json_encode($model->nip) !!},
-            jabatan : {!! json_encode($model->jabatan) !!},
-            jenis_cuti: {!! json_encode($model->jenis_cuti) !!},
-            lama_cuti : {!! json_encode($model->lama_cuti) !!},
-            masa_kerja : {!! json_encode($model->masa_kerja) !!},
-            tanggal_mulai : {!! json_encode($model->tanggal_mulai) !!},
-            tanggal_selesai : {!! json_encode($model->tanggal_selesai) !!},
             catatan_cuti :{!! json_encode($catatan_cuti) !!},
         },
         methods: {
