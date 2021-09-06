@@ -18,8 +18,7 @@ class SuratTugasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
         $month = '';
         $year = '';
@@ -85,8 +84,7 @@ class SuratTugasController extends Controller
         }
     }
 
-    public function daftar(Request $request)
-    {
+    public function daftar(Request $request){
         $keyword = $request->get('search');
         $datas = \App\SuratTugasRincian::where('unit_kerja', '=', Auth::user()->kdprop . Auth::user()->kdkab)
             ->where(
@@ -105,8 +103,7 @@ class SuratTugasController extends Controller
         return view('surat_tugas.daftar',compact('datas', 'keyword'));
     }
 
-    public function calendar(Request $request)
-    {
+    public function calendar(Request $request){
         $unit_kerja = \App\UnitKerja::all();
         $cur_unit_kerja =  \App\UnitKerja::where('kode','=',config('app.kode_prov').Auth::user()->kdkab)->first()->id;
         return view('surat_tugas.calendar', compact(
@@ -147,8 +144,7 @@ class SuratTugasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $model= new \App\SuratTugas;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
                     ->where('kdkab','=',Auth::user()->kdkab)->get();
@@ -197,8 +193,7 @@ class SuratTugasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SuratTugasRequest $request)
-    {
+    public function store(SuratTugasRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_tugas/create')
                 ->withErrors($validator)
@@ -316,8 +311,7 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
-    public function create_tim()
-    {
+    public function create_tim(){
         $model = new \App\SuratTugas;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
@@ -379,8 +373,7 @@ class SuratTugasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store_tim(SuratTugasRequest $request)
-    {
+    public function store_tim(SuratTugasRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_tugas/create')
                 ->withErrors($validator)
@@ -502,8 +495,7 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
-    public function create_pelatihan()
-    {
+    public function create_pelatihan(){
         $model = new \App\SuratTugas;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
             ->where('kdkab', '=', Auth::user()->kdkab)->get();

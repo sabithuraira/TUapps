@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['jenis_st'] }}:</label>
-                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}" id="jenis_st" name="jenis_st">
+                <select class="form-control {{($errors->first('jenis_st') ? ' parsley-error' : '')}}" id="jenis_st" name="jenis_st" v-model="jenis_st">
                     @foreach ($model->listJenis as $key=>$value)
                         <option  value="{{ $key }}" 
                             @if ($key == old('jenis_st', $model->jenis_st))
@@ -96,6 +96,7 @@
         el: "#app_vue",
         data:  {
             pathname :(window.location.pathname).replace("/create", ""),
+            jenis_st : 1,
             sumber_anggaran:  1,
             mak: {!! json_encode($model->mak) !!},
             list_tingkat_biaya:  {!! json_encode($model_rincian->listTingkatBiaya) !!},
@@ -163,87 +164,146 @@
                 $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
                 
                 if(jenis_petugas==1){
-                    $.ajax({
-                        url :  vm.pathname + "/is_available",
-                        method : 'post',
-                        dataType: 'json',
-                        data:{
-                            nip: self.cur_rincian.nip,
-                            t_start: self.cur_rincian.tanggal_mulai,
-                            t_end: self.cur_rincian.tanggal_selesai,
-                        },
-                    }).done(function (data) {
-                        if(data.response==1){
-                            // console.log(data.result[0].total)
-                            if(data.result[0].total==0){
-                                self.setAllNamaAndPejabat()
-                                ////////
-                                if(self.cur_rincian.id){
-                                    self.rincian[self.cur_rincian.index] = {
-                                        'id': self.cur_rincian.id,
-                                        'nip'   : self.cur_rincian.nip,
-                                        'nama'   : self.cur_rincian.nama,
-                                        'jabatan'   : self.cur_rincian.jabatan,
-                                        'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                        'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                        'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                        'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                        'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                                        'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                                        'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                                        'kendaraan'     : self.cur_rincian.kendaraan,
-                                        'jenis_petugas'     : jenis_petugas,
-                                    };
+                    if(self.jenis_st!=4){
+                        $.ajax({
+                            url :  vm.pathname + "/is_available",
+                            method : 'post',
+                            dataType: 'json',
+                            data:{
+                                nip: self.cur_rincian.nip,
+                                t_start: self.cur_rincian.tanggal_mulai,
+                                t_end: self.cur_rincian.tanggal_selesai,
+                            },
+                        }).done(function (data) {
+                            if(data.response==1){
+                                // console.log(data.result[0].total)
+                                if(data.result[0].total==0){
+                                    self.setAllNamaAndPejabat()
+                                    ////////
+                                    if(self.cur_rincian.id){
+                                        self.rincian[self.cur_rincian.index] = {
+                                            'id': self.cur_rincian.id,
+                                            'nip'   : self.cur_rincian.nip,
+                                            'nama'   : self.cur_rincian.nama,
+                                            'jabatan'   : self.cur_rincian.jabatan,
+                                            'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
+                                            'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
+                                            'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
+                                            'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
+                                            'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                                            'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                            'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
+                                            'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                            'kendaraan'     : self.cur_rincian.kendaraan,
+                                            'jenis_petugas'     : jenis_petugas,
+                                        };
+                                    }
+                                    else{
+                                        self.rincian.push({
+                                            'id': 'au'+(self.total_utama),
+                                            'nip'   : self.cur_rincian.nip,
+                                            'nama'   : self.cur_rincian.nama,
+                                            'jabatan'   : self.cur_rincian.jabatan,
+                                            'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
+                                            'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
+                                            'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
+                                            'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
+                                            'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                                            'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                            'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
+                                            'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                            'kendaraan'     : self.cur_rincian.kendaraan,
+                                            'jenis_petugas'     : jenis_petugas,
+                                        });
+                                        self.total_utama++;
+                                    }
+
+                                    self.cur_rincian.nip = '';
+                                    self.cur_rincian.nama = '';
+                                    self.cur_rincian.tujuan_tugas = '';
+                                    self.cur_rincian.tanggal_mulai = '';
+                                    self.cur_rincian.tanggal_selesai = '';
+                                    self.cur_rincian.pejabat_ttd_nip = '';
+                                    self.cur_rincian.pejabat_ttd_nama = '';
+                                    self.cur_rincian.pejabat_ttd_jabatan = '';
+                                    self.cur_rincian.unit_kerja_ttd = '';
+                                    self.cur_rincian.tingkat_biaya = '';
+                                    self.cur_rincian.kendaraan = '';
+                                    self.cur_rincian.id = '';
+                                    //////////
+                                    $('#form_rincian').modal('hide');
                                 }
                                 else{
-                                    self.rincian.push({
-                                        'id': 'au'+(self.total_utama),
-                                        'nip'   : self.cur_rincian.nip,
-                                        'nama'   : self.cur_rincian.nama,
-                                        'jabatan'   : self.cur_rincian.jabatan,
-                                        'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
-                                        'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
-                                        'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
-                                        'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
-                                        'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
-                                        'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
-                                        'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
-                                        'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
-                                        'kendaraan'     : self.cur_rincian.kendaraan,
-                                        'jenis_petugas'     : jenis_petugas,
-                                    });
-                                    self.total_utama++;
+                                    alert(self.cur_rincian.nama + " tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
                                 }
-
-                                self.cur_rincian.nip = '';
-                                self.cur_rincian.nama = '';
-                                self.cur_rincian.tujuan_tugas = '';
-                                self.cur_rincian.tanggal_mulai = '';
-                                self.cur_rincian.tanggal_selesai = '';
-                                self.cur_rincian.pejabat_ttd_nip = '';
-                                self.cur_rincian.pejabat_ttd_nama = '';
-                                self.cur_rincian.pejabat_ttd_jabatan = '';
-                                self.cur_rincian.unit_kerja_ttd = '';
-                                self.cur_rincian.tingkat_biaya = '';
-                                self.cur_rincian.kendaraan = '';
-                                self.cur_rincian.id = '';
-                                //////////
-                                $('#form_rincian').modal('hide');
                             }
                             else{
-                                alert(self.cur_rincian.nama + " tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
+                                alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
                             }
+                            
+                            $('#wait_progres').modal('hide');
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#form_rincian').modal('hide');
+                        });
+                    }
+                    else{
+                        self.setAllNamaAndPejabat()
+                        ////////
+                        if(self.cur_rincian.id){
+                            self.rincian[self.cur_rincian.index] = {
+                                'id': self.cur_rincian.id,
+                                'nip'   : self.cur_rincian.nip,
+                                'nama'   : self.cur_rincian.nama,
+                                'jabatan'   : self.cur_rincian.jabatan,
+                                'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
+                                'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
+                                'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
+                                'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
+                                'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                                'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
+                                'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                'kendaraan'     : self.cur_rincian.kendaraan,
+                                'jenis_petugas'     : jenis_petugas,
+                            };
                         }
                         else{
-                            alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
+                            self.rincian.push({
+                                'id': 'au'+(self.total_utama),
+                                'nip'   : self.cur_rincian.nip,
+                                'nama'   : self.cur_rincian.nama,
+                                'jabatan'   : self.cur_rincian.jabatan,
+                                'tujuan_tugas'   : self.cur_rincian.tujuan_tugas,
+                                'tanggal_mulai'   : self.cur_rincian.tanggal_mulai,
+                                'tanggal_selesai'   : self.cur_rincian.tanggal_selesai,
+                                'pejabat_ttd_nip'   : self.cur_rincian.pejabat_ttd_nip,
+                                'pejabat_ttd_nama'     : self.cur_rincian.pejabat_ttd_nama,
+                                'pejabat_ttd_jabatan'     : self.cur_rincian.pejabat_ttd_jabatan,
+                                'unit_kerja_ttd'     : self.cur_rincian.unit_kerja_ttd,
+                                'tingkat_biaya'     : self.cur_rincian.tingkat_biaya,
+                                'kendaraan'     : self.cur_rincian.kendaraan,
+                                'jenis_petugas'     : jenis_petugas,
+                            });
+                            self.total_utama++;
                         }
-                        
-                        $('#wait_progres').modal('hide');
-                    }).fail(function (msg) {
-                        console.log(JSON.stringify(msg));
+
+                        self.cur_rincian.nip = '';
+                        self.cur_rincian.nama = '';
+                        self.cur_rincian.tujuan_tugas = '';
+                        self.cur_rincian.tanggal_mulai = '';
+                        self.cur_rincian.tanggal_selesai = '';
+                        self.cur_rincian.pejabat_ttd_nip = '';
+                        self.cur_rincian.pejabat_ttd_nama = '';
+                        self.cur_rincian.pejabat_ttd_jabatan = '';
+                        self.cur_rincian.unit_kerja_ttd = '';
+                        self.cur_rincian.tingkat_biaya = '';
+                        self.cur_rincian.kendaraan = '';
+                        self.cur_rincian.id = '';
+                        //////////
                         $('#form_rincian').modal('hide');
-                    });
+                        $('#wait_progres').modal('hide');
+                    }
                 }
                 else{
                     self.setAllPejabat()
