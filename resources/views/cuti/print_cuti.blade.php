@@ -70,7 +70,8 @@
 
 <body>
     <div class="container">
-        <div style="margin-right: 5px;float: right;">Palembang, ................202....</div>
+        <div style="margin-right: 5px;float: right;">{{$unit_kerja->ibu_kota}} ................<?php echo date("Y"); ?>
+        </div>
         <table class=" ">
             <tr>
                 <td>Kepada Yth: </td>
@@ -79,10 +80,10 @@
                 <td>Kepala Bagian...</td>
             </tr>
             <tr>
-                <td>BPS Provinsi Sumatera Selatan</td>
+                <td>BPS {{$unit_kerja->nama}}</td>
             </tr>
             <tr>
-                <td>di Palembang</td>
+                <td>di {{$unit_kerja->ibu_kota}}</td>
             </tr>
         </table>
         <br>
@@ -246,7 +247,7 @@
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-                    Palembang, ..............2021
+                    {{ $unit_kerja->ibu_kota }}, ..............<?php echo date("Y"); ?>
                     <br>
                     <br>
                     <br>
@@ -279,7 +280,8 @@
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-                    Palembang, ..............2021
+
+                    {{ $unit_kerja->ibu_kota }}, ..............<?php echo date("Y"); ?>
                     <br>
                     <br>
                     <br>

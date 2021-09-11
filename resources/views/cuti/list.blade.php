@@ -60,6 +60,7 @@
 
                 <td class="text-center">
                     <div class="btn-group" role="group" aria-label="Basic example">
+                        @if ($data['status_pejabat'] == 0 || $data['status_atasan'] == 0 )
                         <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
                             data-id="{{ Crypt::encrypt($data->id) }}" data-target="#set_aktif">
                             <i class="icon-trash text-danger"></i>
@@ -70,6 +71,18 @@
                             <i class="icon-pencil text-primary"></i>
                             <p class='text-primary small'>Edit</p>
                         </a>
+                        @elseif ($data['status_pejabat'] > 3 || $data['status_atasan'] > 3 )
+                        <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
+                            data-id="{{ Crypt::encrypt($data->id) }}" data-target="#set_aktif">
+                            <i class="icon-trash text-danger"></i>
+                            <p class='text-danger small'>Hapus</p>
+                        </a>
+                        &nbsp;
+                        <a href="{{ action('CutiController@edit', Crypt::encrypt($data['id']))}}">
+                            <i class="icon-pencil text-primary"></i>
+                            <p class='text-primary small'>Edit</p>
+                        </a>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -109,6 +122,16 @@
                         @{{ value }}
                     </option>
                 </select>
+                <div class="form-group">
+                    {{-- {{ $model->attributes()['alasan_cuti'] }} --}}
+                    Lama cuti yang disetujui
+                    <input type="number" name="lama_cuti"
+                        class="form-control form-control-sm {{($errors->first('lama_cuti') ? ' parsley-error' : '')}}"
+                        value="{{ old('lama_cuti', $data['lama_cuti']) }}">
+                    @foreach ($errors->get('lama_cuti') as $msg)
+                    <p class="text-danger">{{ $msg }}</p>
+                    @endforeach
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="setStatus_pejabat">Ya</button>
