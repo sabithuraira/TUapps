@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cuti;
 use App\Http\Requests\CutiRequest;
+use App\UnitKerja;
 use App\User;
 use Doctrine\DBAL\Types\JsonType;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class CutiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         //
         $keyword = $request->get('search');
         $month = '';
@@ -93,10 +95,10 @@ class CutiController extends Controller
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
         $current_date =  date('Y-m-d');
         return view('cuti.create', compact(
-                'list_pegawai',
-                'model',
-                'current_date',
-                'catatan_cuti'
+            'list_pegawai',
+            'model',
+            'current_date',
+            'catatan_cuti'
         ));
     }
 
@@ -106,7 +108,8 @@ class CutiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CutiRequest $request){
+    public function store(CutiRequest $request)
+    {
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)
@@ -290,21 +293,29 @@ class CutiController extends Controller
 
         $model = Cuti::find($real_id);
         $user = User::find($model->id_user);
+        $kodewil = $user->kdprop . $user->kdkab;
+        $unit_kerja = UnitKerja::where('kode', $kodewil)->first();
         // dd($user->pimpinan);
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
         $current_date =  date('Y-m-d');
 
         $pdf = PDF::loadView('cuti.print_cuti', compact(
-            'real_id', 'catatan_cuti', 'model', 'user'
+            'real_id',
+            'catatan_cuti',
+            'model',
+            'user',
+            'unit_kerja'
         ))->setPaper('a4', 'potrait');
 
         $nama_file = 'cuti_' . $model->nama . '.pdf';
-        return $pdf->download($nama_file);
-        // return view('cuti.print_cuti', compact(
-        //     'real_id',
-        //     'catatan_cuti',
-        //     'user',
-        //     'model',
-        // ));
+        // return $pdf->download($nama_file);
+        // dd($user);
+        return view('cuti.print_cuti', compact(
+            'real_id',
+            'catatan_cuti',
+            'user',
+            'model',
+            'unit_kerja'
+        ));
     }
 }
