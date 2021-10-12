@@ -9,7 +9,6 @@
 
 @section('content')
     <div class="container">
-        @include('dashboard.sp2020lf')
         
             <div class="row clearfix">
                 <div class="col-lg-6 col-md-12">

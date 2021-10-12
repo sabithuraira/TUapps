@@ -107,7 +107,6 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
-
 Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], function () {    
     //
     Route::resource('penugasan', 'PenugasanController')->except('show');

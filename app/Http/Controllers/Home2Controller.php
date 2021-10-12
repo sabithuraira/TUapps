@@ -81,8 +81,6 @@ class Home2Controller extends Controller
      */
     public function index(Request $request)
     {
-        // return redirect('ckp');
-        // return view('home');
         $provider = new \JKD\SSO\Client\Provider\Keycloak([
             'authServerUrl'         => 'https://sso.bps.go.id',
             'realm'                 => 'pegawai-bps',
@@ -90,7 +88,6 @@ class Home2Controller extends Controller
             'clientSecret'          => 'c9da3629-8a2d-4563-b9a9-043590445e45',
             'redirectUri'           => 'https://webapps.bps.go.id/sumsel/musi/'
         ]);
-
 
         //////////
             $request->session()->put('oauth2state', $provider->getState());

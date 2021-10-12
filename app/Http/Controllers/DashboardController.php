@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $random_user = \App\UserModel::inRandomOrder()->first();
         $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
         $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
