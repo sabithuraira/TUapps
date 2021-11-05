@@ -72,10 +72,7 @@
                                 @endfor
                         </select>
                     </div>
-
                 </div>
-
-
             </form>
             <br />
             <section class="datas">

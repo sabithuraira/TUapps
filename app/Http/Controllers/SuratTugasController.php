@@ -25,9 +25,7 @@ class SuratTugasController extends Controller
         $unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
         $type = 1;
         
-        if(strlen($request->get('action'))>0){
-            $type = $request->get('action');
-        }
+        if(strlen($request->get('action'))>0) $type = $request->get('action');
 
         if(Auth::user()->kdkab=='00'){
             if(strlen($request->get('unit_kerja'))>0){
@@ -72,6 +70,34 @@ class SuratTugasController extends Controller
             $datas->withPath('surat_tugas');
             $datas->appends($request->all());
             $model = new \App\SuratTugasRincian;
+
+            if(Auth::user()->kdkab=='00'){            
+                $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
+                            ->where('kdkab','=',Auth::user()->kdkab)
+                            ->where(
+                                (function ($query) {
+                                    $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                                }))->get();
+            }
+            else{
+                $list_pejabat = \App\UserModel::where(
+                            (function ($query) {
+                                $query->where('kdprop', '=', config('app.kode_prov'))
+                                    ->where('kdkab', '=', Auth::user()->kdkab)
+                                    ->where(
+                                        (function ($query) {
+                                            $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
+                                        }));
+                        }))
+                        ->orWhere(
+                            (function ($query) {
+                                $query->where('kdprop', '=', config('app.kode_prov'))
+                                    ->where('kdkab', '=', '00')
+                                    ->where(
+                                        (function ($query) {
+                                            $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
+                                        }));}))->get();
+            }
             // dd($datas);
             return view('surat_tugas.index', compact(
                 'datas',
@@ -79,7 +105,8 @@ class SuratTugasController extends Controller
                 'model',
                 'month',
                 'year',
-                'unit_kerja'
+                'unit_kerja',
+                'list_pejabat'
             ));
         }
     }
@@ -560,8 +587,7 @@ class SuratTugasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store_pelatihan(SuratTugasRequest $request)
-    {
+    public function store_pelatihan(SuratTugasRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_tugas/create')
                 ->withErrors($validator)
@@ -832,8 +858,7 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
-    public function insert_kwitansi($id)
-    {
+    public function insert_kwitansi($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -852,8 +877,7 @@ class SuratTugasController extends Controller
         }
     }
 
-    public function store_kwitansi(Request $request, $id)
-    {
+    public function store_kwitansi(Request $request, $id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -896,8 +920,7 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Information has been added');
     }
 
-    public function insert_kwitansi_pelatihan($id)
-    {
+    public function insert_kwitansi_pelatihan($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -918,8 +941,7 @@ class SuratTugasController extends Controller
         }
     }
 
-    public function store_kwitansi_pelatihan(Request $request, $id)
-    {
+    public function store_kwitansi_pelatihan(Request $request, $id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -946,8 +968,7 @@ class SuratTugasController extends Controller
     {
     }
 
-    public function print_st($id)
-    {
+    public function print_st($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $user_ttd = \App\UserModel::where('nip_baru', '=', $model_rincian->pejabat_ttd_nip)->first();
@@ -977,8 +998,7 @@ class SuratTugasController extends Controller
         //     'model_rincian', 'model', 'unit_kerja'));
     }
 
-    public function print_st_pelatihan($id)
-    {
+    public function print_st_pelatihan($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $user_ttd = \App\UserModel::where('nip_baru', '=', $model_rincian->pejabat_ttd_nip)->first();
@@ -1004,8 +1024,7 @@ class SuratTugasController extends Controller
         //     'list_anggota'));
     }
 
-    public function print_spd($id)
-    {
+    public function print_spd($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -1033,8 +1052,7 @@ class SuratTugasController extends Controller
         //     'model_rincian', 'model', 'unit_kerja', 'unit_kerja_spd', 'pegawai', 'mak'));
     }
 
-    public function print_spd_pelatihan($id)
-    {
+    public function print_spd_pelatihan($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -1084,8 +1102,7 @@ class SuratTugasController extends Controller
             ]);
     }
 
-    public function print_kwitansi($id)
-    {
+    public function print_kwitansi($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -1129,8 +1146,7 @@ class SuratTugasController extends Controller
         //     'unit_kerja', 'pegawai', 'mak'));
     }
 
-    public function print_kwitansi_pelatihan($id)
-    {
+    public function print_kwitansi_pelatihan($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -1164,8 +1180,7 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $real_id = Crypt::decrypt($id);
         $model_rincian = \App\SuratTugasRincian::find($real_id);
         $model = \App\SuratTugas::find($model_rincian->id_surtug);
@@ -1231,8 +1246,7 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         // if (isset($request->validator) && $request->validator->fails()) {
         //     return redirect('surat_tugas/edit',$id)
         //                 ->withErrors($validator)
@@ -1269,16 +1283,14 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');
     }
 
-    public function edit_unit_kerja()
-    {
+    public function edit_unit_kerja(){
         $model = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)->where('kdkab', '=', Auth::user()->kdkab)->get();
 
         return view('surat_tugas.edit_unit_kerja', compact('model', 'list_pegawai'));
     }
 
-    public function update_unit_kerja(Request $request)
-    {
+    public function update_unit_kerja(Request $request){
         $model = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
         $model->kepala_nip  = $request->get('kepala_nip');
         $model->kepala_nama = $request->get('kepala_nama');
@@ -1296,8 +1308,7 @@ class SuratTugasController extends Controller
         return redirect('surat_tugas')->with('success', 'Data berhasil diperbaharui');
     }
 
-    public function set_status(Request $request)
-    {
+    public function set_status(Request $request){
         if ($request->form_id_data != '') {
             $real_id = Crypt::decrypt($request->form_id_data);
             $model_rincian = \App\SuratTugasRincian::find($real_id);
@@ -1308,9 +1319,22 @@ class SuratTugasController extends Controller
             return response()->json(['result' => 'Terjadi kesalahan, refresh halaman dan coba lagi']);
         }
     }
+    
+    public function set_pejabat_spd(Request $request){
+        if ($request->form_id_data != '') {
+            $real_id = Crypt::decrypt($request->form_id_data);
+            $model_rincian = \App\SuratTugasRincian::find($real_id);
+            $model_rincian->spd_ttd_nip = $request->spd_ttd_nip;
+            $model_rincian->spd_ttd_nama = $request->spd_ttd_nama;
+            $model_rincian->spd_ttd_jabatan = $request->spd_ttd_jabatan;
+            $model_rincian->save();
+            return response()->json(['result' => 'Data berhasil disimpan']);
+        } else {
+            return response()->json(['result' => 'Terjadi kesalahan, refresh halaman dan coba lagi']);
+        }
+    }
 
-    public function set_aktif(Request $request)
-    {
+    public function set_aktif(Request $request){
         if ($request->form_id_data != '') {
             $real_id = Crypt::decrypt($request->form_id_data);
             $model_rincian = \App\SuratTugasRincian::find($real_id);
@@ -1323,8 +1347,7 @@ class SuratTugasController extends Controller
         }
     }
 
-    public function is_available(Request $request)
-    {
+    public function is_available(Request $request){
         if ($request->nip != '' && $request->t_start != '' && $request->t_end != '') {
             $model = new \App\SuratTugasRincian;
             $result = $model->isAvailable($request->nip, $request->t_start, $request->t_end);
@@ -1349,15 +1372,13 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $model = \App\SuratTugas::find($id);
         $model->delete();
         return redirect('surat_tugas')->with('success', 'Information has been  deleted');
     }
 
-    public function destroy_kwitansi($id)
-    {
+    public function destroy_kwitansi($id){
         $model = \App\SuratTugasKwitansi::find($id);
         $model->delete();
         return response()->json(['success' => 'Sukses']);

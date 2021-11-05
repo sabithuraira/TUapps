@@ -72,6 +72,12 @@
                                 @if($data->SuratIndukRel->jenis_st==5)
                                     <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
                                 @else
+                                    <a href="#" role="button" v-on:click="setNipSpd" 
+                                            data-toggle="modal" data-id="{{ Crypt::encrypt($data['id']) }}" 
+                                            data-nip_spd="{{ $data['spd_ttd_nip'] }}" 
+                                            data-target="#set_spd">
+                                        <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Pejabat TTD SPD</u></p>
+                                    </a>
                                     <a href="{{action('SuratTugasController@print_spd', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
                                 @endif
                             @endif
@@ -160,6 +166,25 @@
     </div>
 </div>
 
+<div class="modal" id="set_spd" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Pilih Pejabat yang menandatangani SPD:
+                <select class="form-control" v-model="st_spd_ttd_nip" id="ttd_spd">
+                    @foreach ($list_pejabat as $value)
+                        <option value="{{ $value->nip_baru }}">{{ $value->name }} - {{ $value->nip_baru }} </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" v-on:click="setPejabatSpd">Ya</button>
+                <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="set_aktif" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -219,15 +244,56 @@
         pathname : window.location.pathname,
         st_id: 0,
         st_status: 1,
+        st_spd_ttd_nip: '',
+        st_spd_ttd_nama: '',
+        st_spd_ttd_jabatan: '',
         list_label_status: {!! json_encode($model->listLabelStatus) !!},
+        list_pejabat:  {!! json_encode($list_pejabat) !!},
     },
     methods: {
+        setDataPejabat(){
+            var self = this;
+            var pejabat_ttd_nip = $("#ttd_spd")[0].selectedIndex;
+            
+            self.st_spd_ttd_nama = self.list_pejabat[pejabat_ttd_nip].name;
+            self.st_spd_ttd_jabatan = self.list_pejabat[pejabat_ttd_nip].nmjab;
+        },
+        setNipSpd(event){
+            var self = this;
+            if (event) {
+                self.st_id = event.currentTarget.getAttribute('data-id');
+                self.st_spd_ttd_nip = event.currentTarget.getAttribute('data-nip_spd');
+            }
+        },
         sendStId: function (event) {
             var self = this;
             if (event) {
                 self.st_id = event.currentTarget.getAttribute('data-id');
                 self.st_status = event.currentTarget.getAttribute('data-status');
             }
+        },
+        setPejabatSpd: function (jenis) {
+            var self = this;
+            self.setDataPejabat();
+            $('#set_spd').modal('hide');
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+            $.ajax({
+                url :  self.pathname + '/set_pejabat_spd',
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    form_id_data: self.st_id,
+                    spd_ttd_nip: self.st_spd_ttd_nip,
+                    spd_ttd_nama: self.st_spd_ttd_nama,
+                    spd_ttd_jabatan: self.st_spd_ttd_jabatan,
+                },
+            }).done(function (data) {
+                window.location.reload(false); 
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
         },
         setStatus: function (jenis) {
             var self = this;
