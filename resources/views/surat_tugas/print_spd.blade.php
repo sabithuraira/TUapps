@@ -285,13 +285,25 @@
                         <td width="65%">: {{ $model_rincian->tujuan_tugas }}<br/></td>
                     </tr>
                     
-                    <tr><td colspan="2" align="center">Kepala Badan Pusat Statistik<br/> 
-                        {{ $unit_kerja->nama }}
-                    </td></tr>
-                    <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
-                    
-                    <tr><td colspan="2" align="center"><u>{{ $unit_kerja->kepala_nama }}</u></td></tr>
-                    <tr><td colspan="2" align="center">NIP. {{ $unit_kerja->kepala_nip }}</td></tr>
+                    <!-- Setting pejabat SPD -->
+                    @if($model_rincian->spd_ttd_nip==null)
+                        <tr><td colspan="2" align="center">Kepala Badan Pusat Statistik<br/> 
+                            {{ $unit_kerja->nama }}
+                        </td></tr>
+                        <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
+                        
+                        <tr><td colspan="2" align="center"><u>{{ $unit_kerja->kepala_nama }}</u></td></tr>
+                        <tr><td colspan="2" align="center">NIP. {{ $unit_kerja->kepala_nip }}</td></tr>
+                    @else
+                        <tr><td colspan="2" align="center">{{ $model_rincian->spd_ttd_jabatan }}<br/> 
+                            {{ $unit_kerja->nama }}
+                        </td></tr>
+                        <tr><td colspan="2" align="center"><br/><br/><br/><br/></td></tr>
+                        
+                        <tr><td colspan="2" align="center"><u>{{ $model_rincian->spd_ttd_nama }}</u></td></tr>
+                        <tr><td colspan="2" align="center">NIP. {{$model_rincian->spd_ttd_nip }}</td></tr>
+                    @endif
+                    <!--  Batas setting pejabat SPD -->
                 </table>
             </td>
         </tr>
