@@ -17,7 +17,7 @@
           </div>
 
           <div class="body">
-              <form method="post" action="{{action('SuratTugasController@update', $id)}}" enctype="multipart/form-data">
+              <form method="post" id="form_data" action="{{action('SuratTugasController@update', $id)}}" enctype="multipart/form-data">
               @csrf
                 <input name="_method" type="hidden" value="PATCH">
                 <div id="app_vue">
@@ -119,7 +119,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 
                     <div class="form-group">{{ $model_rincian->attributes()['tujuan_tugas'] }}
                         <div class="form-line">
@@ -186,6 +185,7 @@
                             </div>
                         </div>
                     </div>
+                    <br/>
 
                     <div class="row clearfix">
                         <div class="col-md-12">
@@ -209,8 +209,7 @@
                     <input type="hidden" name="unit_kerja_ttd" v-model="unit_kerja_ttd">
 
                     <br>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <input type="hidden" name="total_utama" id="total_utama" v-model="total_utama">
+                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
 
                     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
@@ -247,8 +246,11 @@
     var vm = new Vue({
         el: "#app_vue",
         data:  {
+            enc_id: {!! json_encode($id) !!},
+            real_id: {!! json_encode($model_rincian->id) !!},
             jenis_st: {!! json_encode($model->jenis_st) !!},
             sumber_anggaran:  {!! json_encode($model->sumber_anggaran) !!},
+            jenis_petugas:  {!! json_encode($model_rincian->jenis_petugas) !!},
             mak: {!! json_encode($model->mak) !!},
             kode_mak:  {!! json_encode($model->kode_mak) !!}, 
             tugas:  {!! json_encode($model->tugas) !!}, 
@@ -261,7 +263,13 @@
             list_anggaran:  {!! json_encode($list_anggaran) !!},
             list_anggaran_prov:  {!! json_encode($list_anggaran_prov) !!},
             nama: '', jabatan: '', pejabat_ttd_nama: '',
-            pejabat_ttd_jabatan: '', unit_kerja_ttd: ''
+            pejabat_ttd_jabatan: '', unit_kerja_ttd: '',
+            rincian_nip: {!! json_encode($model_rincian->nip) !!},
+        },
+        computed: {
+            pathname: function () {
+                return (window.location.pathname).replace("/"+ this.enc_id + "/edit", "")
+            }
         },
         methods: {
             setNamaJabatan: function(event){
@@ -287,6 +295,46 @@
                 if(value==1) self.list_select_anggaran = self.list_anggaran;
                 else if(value==2) self.list_select_anggaran = self.list_anggaran_prov;
                 else if(value==3) self.list_select_anggaran = null;
+            },
+            simpan(){
+                var self = this;
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                if(self.jenis_petugas==1){
+                    if(self.jenis_st!=4){
+                        var tanggal_mulai = $("#rincian_tanggal_mulai").val();
+                        var tanggal_selesai = $("#rincian_tanggal_selesai").val();
+                        $.ajax({
+                            url :  self.pathname + "/is_available",
+                            method : 'post',
+                            dataType: 'json',
+                            data:{
+                                nip: self.rincian_nip,
+                                t_start: tanggal_mulai,
+                                t_end: tanggal_selesai,
+                                cur_id: self.real_id,
+                            },
+                        }).done(function (data) {
+                            if(data.response==1){
+                                if(data.result[0].total==0) $("#form_data").submit()
+                                else alert("Tidak dapat DL pada tanggal tersebut karena telah melakukan DL atau CUTI")
+                            }
+                            else{
+                                alert("Isian belum lengkap atau terjadi kesalahan, silahkan ulangi lagi!")
+                            }
+                            
+                            $('#wait_progres').modal('hide');
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#form_rincian').modal('hide');
+                        });
+                    }
+                    else{  $("#form_data").submit() }
+                }
+                else{  $("#form_data").submit() }
+                
+                ///////////////////////
             },
         }
     });

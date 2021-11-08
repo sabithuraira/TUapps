@@ -279,6 +279,7 @@
                                 nip: self.cur_rincian.nip,
                                 t_start: self.tanggal_mulai,
                                 t_end: self.tanggal_selesai,
+                                cur_id: 0,
                             },
                         }).done(function (data) {
                             if(data.response==1){

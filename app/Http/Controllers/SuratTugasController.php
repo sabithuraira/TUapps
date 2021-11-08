@@ -964,8 +964,7 @@ class SuratTugasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
     }
 
     public function print_st($id){
@@ -1350,7 +1349,8 @@ class SuratTugasController extends Controller
     public function is_available(Request $request){
         if ($request->nip != '' && $request->t_start != '' && $request->t_end != '') {
             $model = new \App\SuratTugasRincian;
-            $result = $model->isAvailable($request->nip, $request->t_start, $request->t_end);
+            
+            $result = $model->isAvailable($request->nip, $request->t_start, $request->t_end, $request->cur_id);
 
             return response()->json([
                 'response' => 1,

@@ -173,6 +173,7 @@
                                 nip: self.cur_rincian.nip,
                                 t_start: self.cur_rincian.tanggal_mulai,
                                 t_end: self.cur_rincian.tanggal_selesai,
+                                cur_id: 0,
                             },
                         }).done(function (data) {
                             if(data.response==1){

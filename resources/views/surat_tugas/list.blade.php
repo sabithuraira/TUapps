@@ -61,7 +61,7 @@
                         </td>
                         
                         <td class="text-center">
-                            @if($data->SuratIndukRel->jenis_st==5)
+                            @if($data->SuratIndukRel->kategori==3)
                                 <a href="{{action('SuratTugasController@print_st_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
                             @else
                                 <a href="{{action('SuratTugasController@print_st', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
@@ -69,7 +69,7 @@
                         </td>
                         <td class="text-center">
                             @if($data['nomor_spd']!='' && $data->SuratIndukRel->sumber_anggaran!=3)
-                                @if($data->SuratIndukRel->jenis_st==5)
+                                @if($data->SuratIndukRel->kategori==5)
                                     <a href="{{action('SuratTugasController@print_spd_pelatihan', Crypt::encrypt($data['id']))}}"><i class="fa fa-file-pdf-o text-info"></i></a>
                                 @else
                                     <a href="#" role="button" v-on:click="setNipSpd" 

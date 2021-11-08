@@ -102,12 +102,15 @@ class SuratTugasRincian extends Model
 		return $hasil;
 	}
 
-	public function isAvailable($nip, $t_start, $t_end){
+	public function isAvailable($nip, $t_start, $t_end, $id=0){
+		$add_where = "";
+		if($id!=0) $add_where = " sr.id<>".$id." AND ";
 		$sql="SELECT count(sr.id) as total 
 			FROM surat_tugas_rincian as sr, surat_tugas as s  
 			WHERE 
 			sr.id_surtug = s.id AND s.mak IS NOT NULL AND 
 			s.jenis_st <> 4 AND
+			".$add_where."
 			nip='".$nip."' AND status_aktif<>2 
 			AND  (('".$t_start."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
 			('".$t_end."' BETWEEN tanggal_mulai AND tanggal_selesai) OR 
