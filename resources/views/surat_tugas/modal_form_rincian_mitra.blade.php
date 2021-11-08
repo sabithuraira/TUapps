@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 
-                <div class="form-group">{{ $model_rincian->attributes()['tujuan_tugas'] }}
+                <div class="form-group">{{ $model_rincian->attributes()['tujuan_tugas'] }}  <small class="text-muted">Isikan '-' jika tidak ada tujuan tugas</small>
                     <div class="form-line">
                         <input class="form-control form-control-sm" type="text" v-model="cur_rincian.tujuan_tugas">
                     </div>

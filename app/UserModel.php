@@ -65,6 +65,7 @@ class UserModel extends Model
         $total_biasa = DB::table("surat_tugas_rincian")
                     ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
                     ->where('surat_tugas.sumber_anggaran', '<>', 3)
+                    ->where('surat_tugas.jenis_st', '<>', 3)
                     ->where('surat_tugas_rincian.nip', '=', $nip)
                     ->where('surat_tugas_rincian.status_aktif', '<>', 2)
                     ->whereNotNull('surat_tugas_rincian.nomor_spd')

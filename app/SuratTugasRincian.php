@@ -141,6 +141,7 @@ class SuratTugasRincian extends Model
         				AND surat_tugas_rincian.status_aktif<>2  
         				AND surat_tugas_rincian.nomor_spd IS NOT NULL
 				        AND surat_tugas.sumber_anggaran <> 3  
+				        AND surat_tugas.jenis_st <> 3  
                 ) AS str ON str.nip=users.nip_baru
 			WHERE kdkab='" . $uk . "' 
 			GROUP BY nip_baru, users.kdorg, name, users.id

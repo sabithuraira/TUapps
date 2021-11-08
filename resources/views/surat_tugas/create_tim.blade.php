@@ -104,7 +104,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>{{ $model_rincian->attributes()['tujuan_tugas'] }}:</label>
+                                <label>{{ $model_rincian->attributes()['tujuan_tugas'] }}  <small class="text-muted">Isikan '-' jika tidak ada tujuan tugas</small>:</label>
                                 <div class="form-line">
                                     <textarea id="tujuan_tugas" name="tujuan_tugas" class="form-control form-control-sm {{($errors->first('tujuan_tugas') ? ' parsley-error' : '')}}" rows="3">{{ old('tujuan_tugas') }}</textarea>
                                 </div>
