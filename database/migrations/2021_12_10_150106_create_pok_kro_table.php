@@ -16,10 +16,12 @@ class CreatePokKroTable extends Migration
         Schema::create('pok_kro', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->char("kode_program",9);
-            $table->char("kode_aktivitas", 4);
+            $table->integer("id_program");
+            $table->integer("id_aktivitas");
             $table->char("kode",8);
             $table->string("label");
+            $table->integer("tahun");
+            $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");
 

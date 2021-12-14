@@ -16,14 +16,16 @@ class CreatePokMataAnggaranTable extends Migration
         Schema::create('pok_mata_anggaran', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->char("kode_program",9);
-            $table->char("kode_aktivitas", 4);
-            $table->char("kode_kro",8);
-            $table->char("kode_ro", 12);
-            $table->char("kode_komponen",2);
-            $table->char("kode_sub_komponen",1);
-            $table->char("kode",1);
-            $table->string("label",6);
+            $table->integer("id_program");
+            $table->integer("id_aktivitas");
+            $table->integer("id_kro");
+            $table->integer("id_ro");
+            $table->integer("id_komponen");
+            $table->integer("id_sub_komponen");
+            $table->char("kode",6);
+            $table->string("label");
+            $table->integer("tahun");
+            $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");
 
