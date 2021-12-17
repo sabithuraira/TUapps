@@ -20,7 +20,7 @@ class CreatePokKomponenTable extends Migration
             $table->integer("id_aktivitas");
             $table->integer("id_kro");
             $table->integer("id_ro");
-            $table->char("kode",2);
+            $table->char("kode",3);
             $table->string("label");
             $table->integer("tahun");
             $table->char("unit_kerja", 4);

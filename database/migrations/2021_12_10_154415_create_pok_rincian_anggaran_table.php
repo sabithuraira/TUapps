@@ -21,8 +21,8 @@ class CreatePokRincianAnggaranTable extends Migration
             $table->integer("tahun");
             $table->float("volume",8,2)->nullable();
             $table->string("satuan")->nullable();
-            $table->float("harga_satuan",8,2)->nullable();
-            $table->float("harga_jumlah",14,2)->nullable();
+            $table->float("harga_satuan",15,2)->nullable();
+            $table->float("harga_jumlah",15,2)->nullable();
             $table->integer("created_by");
             $table->integer("updated_by");
 

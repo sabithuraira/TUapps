@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PokImport;
 
 class PokController extends Controller
 {
@@ -11,9 +15,19 @@ class PokController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         //
+    }
+
+    public function upload_pok(Request $request){
+        $model = new \App\PokMataAnggaran();
+        return view('pok.upload_pok',compact('model'));
+    }
+
+    public function import_pok(Request $request){
+        // Excel::import(new Sp2020SlsPartialImport(), $request->file('excel_file'));
+        Excel::import(new PokImport($request->tahun), $request->file('excel_file'));
+        return redirect('pok/import_pok')->with('success', 'Information has been added');
     }
 
     /**
@@ -21,8 +35,7 @@ class PokController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         //
     }
 
@@ -32,8 +45,7 @@ class PokController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
@@ -43,8 +55,7 @@ class PokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -54,8 +65,7 @@ class PokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         //
     }
 
@@ -66,8 +76,7 @@ class PokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         //
     }
 
@@ -77,8 +86,7 @@ class PokController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
     }
 }

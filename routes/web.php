@@ -65,6 +65,14 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('jabatan_fungsional/hapus', 'JabatanFungsionalController@hapus');
 });
 
+
+Route::group(['middleware' => ['role:superadmin']], function () {
+    Route::resource('pok', 'PokController')->except(['show']);
+
+    Route::get('pok/import_pok', 'PokController@upload_pok');
+    Route::post('pok/import_pok', 'PokController@import_pok');
+});
+
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     // Route::resource('jadwal_dinas','JadwalDinasController');
     Route::get('mata_anggaran/index', 'MataAnggaranController@index');
