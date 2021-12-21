@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\JsonType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Util\Json;
 use PDF;
 
@@ -42,12 +43,12 @@ class CutiController extends Controller
 
         if (strlen($request->get('month')) > 0) {
             $month = $request->get('month');
-            $arr_where[] = [\DB::raw('MONTH(created_at)'), '=', $month];
+            $arr_where[] = [DB::raw('MONTH(created_at)'), '=', $month];
         }
 
         if (strlen($request->get('year')) > 0) {
             $year = $request->get('year');
-            $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
+            $arr_where[] = [DB::raw('YEAR(created_at)'), '=', $year];
         }
 
         if ($type == 2) {
@@ -110,6 +111,8 @@ class CutiController extends Controller
      */
     public function store(CutiRequest $request)
     {
+
+        // var_dump($request->all());
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)
@@ -128,7 +131,9 @@ class CutiController extends Controller
         $model->jenis_cuti = $request->get('jenis_cuti');
         $model->alasan = $request->get('alasan_cuti');
 
-        $model->lama_cuti = $request->get('lama_cuti');
+        // $model->lama_cuti = $request->get('lama_cuti');
+        $model->lama_cuti_hari_kerja = $request->get('lama_cuti_hari_kerja');
+        $model->lama_cuti_hari_libur = $request->get('lama_cuti_hari_libur');
         $model->tanggal_mulai = $request->get('tanggal_mulai');
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
@@ -212,11 +217,12 @@ class CutiController extends Controller
         //
         $real_id = Crypt::decrypt($id);
         $model = \App\Cuti::find($real_id);
-
+        // var_dump($model);
         $model->jenis_cuti = $request->get('jenis_cuti');
         $model->alasan = $request->get('alasan_cuti');
 
-        $model->lama_cuti = $request->get('lama_cuti');
+        $model->lama_cuti_hari_kerja = $request->get('lama_cuti_hari_kerja');
+        $model->lama_cuti_hari_libur = $request->get('lama_cuti_hari_libur');
         $model->tanggal_mulai = $request->get('tanggal_mulai');
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
@@ -279,6 +285,8 @@ class CutiController extends Controller
             $real_id = Crypt::decrypt($request->form_id_data);
             $model = \App\Cuti::find($real_id);
             $model->status_pejabat = $request->form_status_data;
+            $model->cuti_disetujui_pejabat = $request->form_cuti_disetujui_pejabat;
+            $model->keterangan_pejabat = $request->form_keterangan_pejabat;
             $model->tanggal_status_pejabat = date('Y-m-d H:i:s');
             $model->save();
             return response()->json(['result' => 'Data berhasil disimpan']);
@@ -295,27 +303,24 @@ class CutiController extends Controller
         $user = User::find($model->id_user);
         $kodewil = $user->kdprop . $user->kdkab;
         $unit_kerja = UnitKerja::where('kode', $kodewil)->first();
-        // dd($user->pimpinan);
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
-        $current_date =  date('Y-m-d');
+        setlocale (LC_TIME, 'id_ID');
 
         $pdf = PDF::loadView('cuti.print_cuti', compact(
             'real_id',
             'catatan_cuti',
             'model',
             'user',
-            'unit_kerja'
+            'unit_kerja',
         ))->setPaper('a4', 'potrait');
 
         $nama_file = 'cuti_' . $model->nama . '.pdf';
-        // return $pdf->download($nama_file);
-        // dd($user);
         return view('cuti.print_cuti', compact(
             'real_id',
             'catatan_cuti',
             'user',
             'model',
-            'unit_kerja'
+            'unit_kerja',
         ));
     }
 }

@@ -32,7 +32,8 @@
             <tr>
                 <td class="text-center">
                     <u>{{ $data['nip'] }}</u><br />
-                    {{ $data['nama'] }}</td>
+                    {{ $data['nama'] }}
+                </td>
                 <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
                 <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
                 <td class="text-center">{{ $data['jenis_cuti'] }}</td>
@@ -41,6 +42,7 @@
                     {!! $data->listStatus[$data['status_atasan']] !!}<br />
                     <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
                         data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_atasan'] }}"
+                        data-nama_atasan="{{ $data['nama_atasan'] }}" data-nip_atasan="{{ $data['nip_atasan'] }}"
                         data-target="#set_status_atasan">
                         <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
                     </a>
@@ -49,13 +51,16 @@
                     {!! $data->listStatus[$data['status_pejabat']] !!}<br />
                     <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
                         data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_pejabat'] }}"
-                        data-target="#set_status_pejabat">
+                        data-nama_pejabat="{{ $data['nama_pejabat'] }}" data-nip_pejabat="{{ $data['nip_pejabat'] }}"
+                        data-cuti_disetujui_pejabat="{{ $data['cuti_disetujui_pejabat'] }}"
+                        data-keterangan_pejabat="{{ $data['keterangan_pejabat'] }}" data-target="#set_status_pejabat">
                         <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
                     </a>
                 </td>
                 <td class="text-center">
                     <a href="{{action('CutiController@print_cuti', Crypt::encrypt($data['id']))}}"><i
-                            class="fa fa-file-pdf-o text-info"></i></a>
+                            class="fa fa-file-pdf-o text-info"></i>
+                    </a>
                 </td>
 
                 <td class="text-center">
@@ -98,12 +103,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
+                Nama Atasan : <input class="form-control" v-model="nama_atasan" readonly>
+                NIP Atasan : <input class="form-control" v-model="nip_atasan" readonly>
                 Rubah status menjadi:
                 <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" v-model="st_status">
                     <option v-for="(value, index) in list_label_status" :value="index">
                         @{{ value }}
                     </option>
                 </select>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="setStatus_atasan">Ya</button>
@@ -116,6 +124,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
+                Nama Pejabat : <input class="form-control" v-model="nama_pejabat" readonly>
+                NIP Pejabat : <input class="form-control" v-model="nip_pejabat" readonly>
                 Rubah status menjadi:
                 <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" v-model="st_status">
                     <option v-for="(value, index) in list_label_status" :value="index">
@@ -125,12 +135,21 @@
                 <div class="form-group">
                     {{-- {{ $model->attributes()['alasan_cuti'] }} --}}
                     Lama cuti yang disetujui
-                    <input type="number" name="lama_cuti"
-                        class="form-control form-control-sm {{($errors->first('lama_cuti') ? ' parsley-error' : '')}}"
-                        value="{{ old('lama_cuti', $data['lama_cuti']) }}">
-                    @foreach ($errors->get('lama_cuti') as $msg)
+                    <input type="number" name="cuti_disetujui_pejabat"
+                        class="form-control form-control-sm {{($errors->first('cuti_disetujui_pejabat') ? ' parsley-error' : '')}}"
+                        v-model="cuti_disetujui_pejabat"
+                        value="{{ old('cuti_disetujui_pejabat', $data['cuti_disetujui_pejabat']) }}">
+                    @foreach ($errors->get('cuti_disetujui_pejabat') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                     @endforeach
+                </div>
+                <div class="form-group">
+                    Keterangan :
+                    <textarea name="keterangan_pejabat"
+                        class="form-control form-control-sm {{($errors->first('keterangan_pejabat') ? ' parsley-error' : '')}}"
+                        v-model="keterangan_pejabat"
+                        value="{{ old('keterangan_pejabat', $data['keterangan_pejabat']) }}">
+                    </textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -149,9 +168,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="setDelete">Ya</button>
                 {{-- <form method="POST" action="/cuti/{{ $data->id }}">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-                <button type="submit" class="btn btn-primary">Ya</button>
+                    {{ csrf_field() }}
+                    {{ method_field('DELETE') }}
+                    <button type="submit" class="btn btn-primary">Ya</button>
                 </form> --}}
                 <button type="button" class="btn btn-simple" data-dismiss="modal">batal</button>
             </div>
@@ -189,6 +208,7 @@
         font-size: small;
     }
 </style>
+
 <link rel="stylesheet"
     href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
 @endsection
@@ -198,13 +218,19 @@
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
 <script>
-    var vm = new Vue({  
+    var vm = new Vue({
     el: "#app_vue",
     data:  {
         datas: [],
         pathname : window.location.pathname,
         st_id: 0,
         st_status: 1,
+        nama_atasan: "1",
+        nip_atasan :1,
+        nama_pejabat : "",
+        nip_pejabat : 1,
+        cuti_disetujui_pejabat:1,
+        keterangan_pejabat : 1,
         list_label_status: {!! json_encode($model->listLabelStatus) !!},
     },
     methods: {
@@ -213,6 +239,12 @@
             if (event) {
                 self.st_id = event.currentTarget.getAttribute('data-id');
                 self.st_status = event.currentTarget.getAttribute('data-status');
+                self.nama_atasan = event.currentTarget.getAttribute('data-nama_atasan');
+                self.nip_atasan = event.currentTarget.getAttribute('data-nip_atasan');
+                self.nip_pejabat = event.currentTarget.getAttribute('data-nip_pejabat');
+                self.nama_pejabat = event.currentTarget.getAttribute('data-nama_pejabat');
+                self.cuti_disetujui_pejabat = event.currentTarget.getAttribute('data-cuti_disetujui_pejabat');
+                self.keterangan_pejabat = event.currentTarget.getAttribute('data-keterangan_pejabat');
             }
         },
         setStatus_atasan: function ($tipe) {
@@ -228,7 +260,7 @@
                     form_status_data: self.st_status,
                 },
             }).done(function (data) {
-                window.location.reload(false); 
+                window.location.reload(false);
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
@@ -245,9 +277,11 @@
                 data:{
                     form_id_data: self.st_id,
                     form_status_data: self.st_status,
+                    form_cuti_disetujui_pejabat: self.cuti_disetujui_pejabat,
+                    form_keterangan_pejabat: self.keterangan_pejabat,
                 },
             }).done(function (data) {
-                window.location.reload(false); 
+                window.location.reload(false);
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
@@ -257,18 +291,6 @@
             var self = this;
             $('#wait_progres').modal('show');
             window.location.href = self.pathname +"/"+ self.st_id +"/delete";
-            // $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
-            // $.ajax({
-            //     url :  self.pathname +"/"+ self.st_id +"/delete",
-            //     method : 'GET',
-            // }).done(function (data) {
-            //     $('#wait_progres').modal('hide');
-            //     window.location.reload(true); 
-            //     // return redirect('cuti')->with('success', 'Data berhasil dihapus');
-            // }).fail(function (msg) {
-            //     console.log(JSON.stringify(msg));
-            //     $('#wait_progres').modal('hide');
-            // });
         },
     }
 });
