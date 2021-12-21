@@ -16,12 +16,14 @@ class CreatePokKomponenTable extends Migration
         Schema::create('pok_komponen', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->char("kode_program",9);
-            $table->char("kode_aktivitas", 4);
-            $table->char("kode_kro",8);
-            $table->char("kode_ro", 12);
-            $table->char("kode",2);
+            $table->integer("id_program");
+            $table->integer("id_aktivitas");
+            $table->integer("id_kro");
+            $table->integer("id_ro");
+            $table->char("kode",3);
             $table->string("label");
+            $table->integer("tahun");
+            $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");
 

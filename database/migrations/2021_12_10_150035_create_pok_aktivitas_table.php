@@ -16,9 +16,11 @@ class CreatePokAktivitasTable extends Migration
         Schema::create('pok_aktivitas', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->char("kode_program",9);
+            $table->integer("id_program");
             $table->char("kode", 4);
             $table->string("label");
+            $table->integer("tahun");
+            $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");
 

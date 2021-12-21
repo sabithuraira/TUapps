@@ -18,6 +18,8 @@ class CreatePokProgramTable extends Migration
 
             $table->char("kode", 9);
             $table->string("label");
+            $table->integer("tahun");
+            $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");
 

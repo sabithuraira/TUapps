@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePokSubKomponenTable extends Migration
+class CreatePokRincianAnggaranTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreatePokSubKomponenTable extends Migration
      */
     public function up()
     {
-        Schema::create('pok_sub_komponen', function (Blueprint $table) {
+        Schema::create('pok_rincian_anggaran', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->integer("id_program");
-            $table->integer("id_aktivitas");
-            $table->integer("id_kro");
-            $table->integer("id_ro");
-            $table->integer("id_komponen");
-            $table->char("kode",1);
+            $table->integer("id_mata_anggaran");
             $table->string("label");
             $table->integer("tahun");
-            $table->char("unit_kerja", 4);
+            $table->float("volume",8,2)->nullable();
+            $table->string("satuan")->nullable();
+            $table->float("harga_satuan",15,2)->nullable();
+            $table->float("harga_jumlah",15,2)->nullable();
             $table->integer("created_by");
             $table->integer("updated_by");
 
@@ -39,6 +37,6 @@ class CreatePokSubKomponenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pok_sub_komponen');
+        Schema::dropIfExists('pok_rincian_anggaran');
     }
 }
