@@ -32,7 +32,9 @@ class CutiRequest extends FormRequest
             'alasan_cuti' => 'required',
             'tanggal_mulai' => 'required',
             'tanggal_selesai' => 'required',
-            'lama_cuti' => 'required|numeric',
+            // 'lama_cuti' => 'required|numeric',
+            'lama_cuti_hari_kerja' => 'required|numeric',
+            'lama_cuti_hari_libur' => 'required|numeric',
             'alamat_cuti' => 'required',
             'no_telp' => 'required',
         ];

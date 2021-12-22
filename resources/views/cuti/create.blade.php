@@ -45,8 +45,8 @@
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 
 <script>
-    var oneDay = 24 * 60 * 60 * 1000; 
-   
+    var oneDay = 24 * 60 * 60 * 1000;
+
     var vm = new Vue({
         el: "#app_vue",
         data:  {
@@ -91,10 +91,32 @@
                     }
                 };
                 return { years, months, weeks, days };
+            },
+            lamacuti:function(event){
+                lama = $("input[name='lama_cuti_hari_kerja']").val()
+                mulai = $("input[name='tanggal_mulai']").val()
+                selesai = $("input[name='tanggal_selesai']").val()
+                var datemulai = new Date(mulai);
+                var dateselesai = new Date(selesai);
+                difference = dateselesai.getTime() - datemulai.getTime()
+                var days = Math.ceil(difference / (1000 * 3600 * 24));
+                // console.log("tanggal :"+days );
+                // console.log("lama    :"+lama )
+                // console.log(days*60/100)
+                if(lama>days){
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity('Lama (hari) terlalu banyak');
+                    $("input[name='lama_cuti_hari_kerja']")[0].reportValidity();
+                }else if(lama<(days*60/100)){
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity('Lama (hari) minimal');
+                    $("input[name='lama_cuti_hari_kerja']")[0].reportValidity();
+                }else{
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity("");
+                }
             }
+
         }
     });
-    
+
     $(document).ready(function() {
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',

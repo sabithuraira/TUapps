@@ -17,7 +17,7 @@
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-            
+
             <input type="hidden" name="nama" v-model="nama">
             <input type="hidden" name="nip" v-model="nip">
         </div>
@@ -67,18 +67,30 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
+            {{ $model->attributes()['lama_cuti'] }}
             <div class="form-group">
-                {{ $model->attributes()['lama_cuti'] }}
-                <input type="number" name="lama_cuti" class="form-control form-control-sm {{($errors->first('lama_cuti') ? ' parsley-error' : '')}}"
-                    value="{{ old('lama_cuti', $model->lama_cuti) }}">
-                @foreach ($errors->get('lama_cuti') as $msg)
+                Hari kerja
+                <input type="number" name="lama_cuti_hari_kerja"
+                    class="form-control form-control-sm {{($errors->first('lama_cuti_hari_kerja') ? ' parsley-error' : '')}}"
+                    value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)">
+                @foreach ($errors->get('lama_cuti_hari_kerja') as $msg)
+                <p class="text-danger">{{ $msg }}</p>
+                @endforeach
+            </div>
+            <div class="form-group">
+                Hari Libur
+                <input type="number" name="lama_cuti_hari_libur"
+                    class="form-control form-control-sm {{($errors->first('lama_cuti_hari_libur') ? ' parsley-error' : '')}}"
+                    value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}">
+                @foreach ($errors->get('lama_cuti_hari_libur') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
+            &nbsp;
             <div class="form-group">{{ $model->attributes()['tanggal_mulai'] }}
                 <div class="input-group">
                     <input type="text"
@@ -93,14 +105,12 @@
                 <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-        </div>
-        <div class="col-md-4">
             <div class="form-group">{{ $model->attributes()['tanggal_selesai'] }}
                 <div class="form-line">
                     <div class="input-group">
                         <input type="text"
                             class="form-control datepicker form-control-sm {{($errors->first('tanggal_selesai') ? ' parsley-error' : '')}}"
-                            name="tanggal_selesai" autocomplete="off" 
+                            name="tanggal_selesai" autocomplete="off"
                             value="{{ old('tanggal_selesai', $model->tanggal_selesai) }}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button"><i
@@ -113,6 +123,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="col-md-12">
             <label for="">Catatan Cuti Pegawai : </label>
@@ -128,7 +139,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- {{  $catatan_cuti = json_encode($catatan_cuti) }} --}}
+                    {{-- {{ $catatan_cuti = json_encode($catatan_cuti) }} --}}
                     <tr>
                         <td rowspan="2" class="text-left">Cuti Tahunan</td>
                         <td>{{ date('Y')-1 }}</td>
@@ -140,22 +151,26 @@
                             @endforeach
                         </td>
                         <td>
-                            <input name="keterangan_cuti_tahunan_sebelum" style=" width: 100%" value="{{ old('keterangan_cuti_tahunan_sebelum', $catatan_cuti->keterangan_cuti_tahunan_sebelum) }}">
+                            <input name="keterangan_cuti_tahunan_sebelum" style=" width: 100%"
+                                value="{{ old('keterangan_cuti_tahunan_sebelum', $catatan_cuti->keterangan_cuti_tahunan_sebelum) }}">
                         </td>
                     </tr>
                     <tr>
                         <td>{{ date('Y') }}</td>
                         <td>
-                            <input type="number" name="cuti_tahunan" style="width: 100%" value="{{ old('cuti_tahunan', $catatan_cuti->cuti_tahunan) }}">
+                            <input type="number" name="cuti_tahunan" style="width: 100%"
+                                value="{{ old('cuti_tahunan', $catatan_cuti->cuti_tahunan) }}">
                         </td>
                         <td>
-                            <input name="keterangan_cuti_tahunan" style=" width: 100%" value="{{ old('keterangan_cuti_tahunan', $catatan_cuti->keterangan_cuti_tahunan) }}">
+                            <input name="keterangan_cuti_tahunan" style=" width: 100%"
+                                value="{{ old('keterangan_cuti_tahunan', $catatan_cuti->keterangan_cuti_tahunan) }}">
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Besar</td>
                         <td>
-                            <input type="number" name="cuti_besar" style="width: 100%" value="{{ old('cuti_besar', $catatan_cuti->cuti_besar) }}">
+                            <input type="number" name="cuti_besar" style="width: 100%"
+                                value="{{ old('cuti_besar', $catatan_cuti->cuti_besar) }}">
                         </td>
                         <td><input name="keterangan_cuti_besar" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_besar', $catatan_cuti->keterangan_cuti_besar) }}">
@@ -164,7 +179,8 @@
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Sakit</td>
                         <td>
-                            <input type="number" name="cuti_sakit" style="width: 100%" value="{{ old('cuti_sakit', $catatan_cuti->cuti_sakit) }}">
+                            <input type="number" name="cuti_sakit" style="width: 100%"
+                                value="{{ old('cuti_sakit', $catatan_cuti->cuti_sakit) }}">
                         </td>
                         <td><input name="keterangan_cuti_sakit" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_sakit', $catatan_cuti->keterangan_cuti_sakit) }}">
@@ -173,7 +189,8 @@
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Melahirkan</td>
                         <td>
-                            <input type="number" name="cuti_melahirkan" style="width: 100%" value="{{ old('cuti_melahirkan', $catatan_cuti->cuti_melahirkan) }}">
+                            <input type="number" name="cuti_melahirkan" style="width: 100%"
+                                value="{{ old('cuti_melahirkan', $catatan_cuti->cuti_melahirkan) }}">
                         </td>
                         <td><input name="keterangan_cuti_melahirkan" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_melahirkan', $catatan_cuti->keterangan_cuti_melahirkan) }}">
@@ -182,7 +199,8 @@
                     <tr>
                         <td colspan="2" class=" text-left">Cuti Karena Alasan Penting</td>
                         <td>
-                            <input type="number" name="cuti_penting" style="width: 100%" value="{{ old('cuti_penting', $catatan_cuti->cuti_penting) }}">
+                            <input type="number" name="cuti_penting" style="width: 100%"
+                                value="{{ old('cuti_penting', $catatan_cuti->cuti_penting) }}">
                         </td>
                         <td><input name="keterangan_cuti_penting" style=" width: 100%"
                                 value="{{ old('keterangan_cuti_penting', $catatan_cuti->keterangan_cuti_penting) }}">
@@ -191,7 +209,8 @@
                     <tr>
                         <td colspan="2" class=" text-left">Cuti di Luar Tanggunan Negara</td>
                         <td>
-                            <input type="number" name="cuti_luar_tanggungan" style="width: 100%" value="{{ old('cuti_luar_tanggungan', $catatan_cuti->cuti_luar_tanggungan) }}">
+                            <input type="number" name="cuti_luar_tanggungan" style="width: 100%"
+                                value="{{ old('cuti_luar_tanggungan', $catatan_cuti->cuti_luar_tanggungan) }}">
                         </td>
                         <td><input name="keterangan_luar_tanggunan" style=" width: 100%"
                                 value="{{ old('keterangan_luar_tanggunan', $catatan_cuti->keterangan_luar_tanggunan) }}">
@@ -241,7 +260,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            
+
         </div>
     </div>
     <input type="hidden" name="nip_pejabat" id="nip_pejabat">

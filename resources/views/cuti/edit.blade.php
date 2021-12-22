@@ -67,15 +67,35 @@
             catatan_cuti :{!! json_encode($catatan_cuti) !!},
         },
         methods: {
+            lamacuti:function(event){
+                lama = $("input[name='lama_cuti_hari_kerja']").val()
+                mulai = $("input[name='tanggal_mulai']").val()
+                selesai = $("input[name='tanggal_selesai']").val()
+                var datemulai = new Date(mulai);
+                var dateselesai = new Date(selesai);
+                difference = dateselesai.getTime() - datemulai.getTime()
+                var days = Math.ceil(difference / (1000 * 3600 * 24));
+                console.log("tanggal :"+ (days + 1) )
+                console.log(typeof days);
+                console.log(days*60/100)
+                if(lama>days+1){
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity('Lama (hari) maksimal '+ (days+1) +" hari");
+                    $("input[name='lama_cuti_hari_kerja']")[0].reportValidity();
+                }else if(lama<(days*60/100)){
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity('Lama (hari) minimal '+ Math.ceil(days*60/100) + " hari");
+                    $("input[name='lama_cuti_hari_kerja']")[0].reportValidity();
+                }else{
+                    $("input[name='lama_cuti_hari_kerja']")[0].setCustomValidity("");
+                }
+            }
         },
-       
+
     });
 
     $(document).ready(function() {
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',
         });
-
         $('#id_user').attr('disabled','disabled')
         $('#nama_pejabat').attr('disabled','disabled')
     });
