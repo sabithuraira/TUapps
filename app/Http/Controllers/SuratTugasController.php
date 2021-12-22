@@ -283,8 +283,10 @@ class SuratTugasController extends Controller
                     $nomor_st = 1;
                     $nomor_spd = 1;
 
-                    $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $model_r->unit_kerja_ttd)
-                        ->orderBy('id', 'desc')->first();
+                    $datas = \App\SuratTugasRincian::where([
+                            ['unit_kerja_ttd', '=', $model_r->unit_kerja_ttd],
+                            [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                        ])->orderBy('id', 'desc')->first();
 
                     if ($datas != null) {
                         $exp_nomor_st = explode("/", $datas->nomor_st)[0];
@@ -298,9 +300,11 @@ class SuratTugasController extends Controller
                     $model_r->nomor_st = $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . date('m') . '/' . date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
-                        $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
-                            ->where('unit_kerja_spd', '=', $unit_kerja->kode)
-                            ->orderBy('id', 'desc')->first();
+                        $datas_spd = \App\SuratTugasRincian::where([
+                                ['nomor_spd', '<>', ''],
+                                ['unit_kerja_spd', '=', $unit_kerja->kode],
+                                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                            ])->orderBy('id', 'desc')->first();
 
                         if ($datas_spd != null) {
                             $exp_nomor_spd = explode("/", $datas_spd->nomor_spd)[0];
@@ -426,7 +430,10 @@ class SuratTugasController extends Controller
         }
 
         $nomor_st = 1;
-        $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $request->get('unit_kerja_ttd'))
+        $datas = \App\SuratTugasRincian::where([
+                ['unit_kerja_ttd', '=', $request->get('unit_kerja_ttd')],
+                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+            ])
             ->orderBy('id', 'desc')->first();
 
         if ($datas != null) {
@@ -440,7 +447,10 @@ class SuratTugasController extends Controller
         ////////
         $nomor_spd = 1;
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
-            ->where('unit_kerja_spd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
+            ->where([
+                ['unit_kerja_spd', '=', $unit_kerja->kode],
+                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+            ])->orderBy('id', 'desc')->first();
 
         if ($datas_spd != null) {
             $exp_nomor_spd = explode("/", $datas_spd->nomor_spd)[0];
@@ -616,7 +626,10 @@ class SuratTugasController extends Controller
         }
 
         $nomor_st = 1;
-        $datas = \App\SuratTugasRincian::where('unit_kerja_ttd', '=', $request->get('unit_kerja_ttd'))
+        $datas = \App\SuratTugasRincian::where([
+                ['unit_kerja_ttd', '=', $request->get('unit_kerja_ttd')],
+                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+            ])
             ->orderBy('id', 'desc')->first();
 
         if ($datas != null) {
@@ -627,7 +640,10 @@ class SuratTugasController extends Controller
         ////////
         $nomor_spd = 1;
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
-            ->where('unit_kerja_spd', '=', $unit_kerja->kode)->orderBy('id', 'desc')->first();
+            ->where([
+                ['unit_kerja_spd', '=', $unit_kerja->kode],
+                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+            ])->orderBy('id', 'desc')->first();
 
         if ($datas_spd != null) {
             $exp_nomor_spd = explode("/", $datas_spd->nomor_spd)[0];
