@@ -3,7 +3,6 @@
         <div class="form-group">
             <label>Nomor Urut:</label>
             <input type="text" class="form-control" name="nomor_urut" v-model="form.nomor_urut">
-            <small class="text-info">Nomor urut dibuat otomatis, kecuali karena keadaan khusus harap tidak merubah isian ini.</small>
         </div>
     </div>
 

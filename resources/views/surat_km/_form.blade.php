@@ -19,33 +19,33 @@
         </div>
     </div>
 
-    <template v-if="form.jenis_surat==1">
+    <div v-show="form.jenis_surat==1">
         @include('surat_km._form_surat_masuk')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==2">
+    <div v-show="form.jenis_surat==2">
         @include('surat_km._form_surat_keluar')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==3">
+    <div v-show="form.jenis_surat==3">
         @include('surat_km._form_memorandum')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==4">
+    <div v-show="form.jenis_surat==4">
         @include('surat_km._form_surat_pengantar')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==5">
+    <div v-show="form.jenis_surat==5">
         @include('surat_km._form_disposisi')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==6">
+    <div v-show="form.jenis_surat==6">
         @include('surat_km._form_surat_keputusan')
-    </template>
+    </div>
     
-    <template v-if="form.jenis_surat==7">
+    <div v-show="form.jenis_surat==7">
         @include('surat_km._form_surat_keterangan')
-    </template>
+    </div>
 
     <br>
     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -194,6 +194,7 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.form.nomor_urut = data.total;
+                console.log(data)
              
                 if((self.form.jenis_surat>=2 && self.form.jenis_surat<=4) || self.form.jenis_surat==7){
                     $('#isi').summernote();
@@ -288,17 +289,23 @@ var vm = new Vue({
                 // }
             }
         },
+        // changeDate(){
+        //     console.log("masuk sini")
+        //     this.form.tanggal = $('#tanggal').val();
+        //     this.setNomor();
+        // },
     }
 });
 
 $(document).ready(function() {
     if(vm.id_data=='') vm.setNomor();
+    // $("#tanggal").val(vm.form.tanggal);
     vm.setDatas();
 });
 
 $('.date').datepicker()
-    .on('changeDate', function(e) {
-        vm.form.tanggal = $('#tanggal').val();
+    .on('change', function(e) {
+        vm.form.tanggal = e.target.value;
         vm.setNomor();
 });
 </script>

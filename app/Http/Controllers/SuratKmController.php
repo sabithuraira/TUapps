@@ -64,13 +64,17 @@ class SuratKmController extends Controller
             $tanggal = date('Y-m-d', strtotime($request->get('tanggal')));
         }
 
+        // $tahun = date('Y', strtotime($tanggal));
+
         $total_after = \App\SuratKm::where([
                 ['tanggal', '>', $tanggal],
                 ['jenis_surat', '=', $jenis_surat],
                 ['kdprop', '=', Auth::user()->kdprop],
                 ['kdkab', '=', Auth::user()->kdkab],
+                // [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
             ])->count();
         
+        // return response()->json(['success'=>'Sukses', 'total'=>$total_after, 'tanggal' => $tanggal, 'kdprop' => Auth::user()->kdprop, 'kdkab'=>Auth::user()->kdkab]);
         if ($total_after == 0) {
             $last_data = \App\SuratKm::where([
                     [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
@@ -101,8 +105,10 @@ class SuratKmController extends Controller
                     ['jenis_surat', '=', $jenis_surat],
                     ['kdprop', '=', Auth::user()->kdprop],
                     ['kdkab', '=', Auth::user()->kdkab],
+                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
                     // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
+                ->orderBy('tanggal', 'asc')
                 ->orderBy('nomor_urut', 'asc')
                 ->first();
 
@@ -122,6 +128,7 @@ class SuratKmController extends Controller
                 ['jenis_surat', '=', $jenis_surat],
                 ['kdprop', '=', Auth::user()->kdprop],
                 ['kdkab', '=', Auth::user()->kdkab],
+                [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
             ])
             ->count();
 
