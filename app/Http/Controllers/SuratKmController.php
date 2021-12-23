@@ -148,8 +148,7 @@ class SuratKmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $model= new \App\SuratKm;
         $model->tanggal = date('Y-m-d');
         $model->jenis_surat = 1;
