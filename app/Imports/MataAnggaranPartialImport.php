@@ -10,8 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class MataAnggaranPartialImport implements ToCollection
 {
     use Importable;
-    public function collection(Collection $rows)
-    {
+    public $tahun;
+
+    public function __construct($tahun) {
+        $this->tahun = $tahun;
+    }
+
+    public function collection(Collection $rows){
         foreach ($rows as $row) 
         {
             if($row[1]!==null){
@@ -29,7 +34,7 @@ class MataAnggaranPartialImport implements ToCollection
                 $model->label_komponen = $row[9];
                 $model->kode_subkomponen = $row[10];
                 $model->label_subkomponen = $row[11];
-                $model->tahun = date('Y');
+                $model->tahun = $this->tahun;
                 $model->created_by=Auth::id();
                 $model->updated_by=Auth::id();
                 $model->save();

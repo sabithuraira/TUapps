@@ -204,6 +204,7 @@ class SuratTugasController extends Controller
                                     }));}))->get();
         }
                     
+        $tahun = date('Y');
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)->get();
         $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.'00')->get();
 
@@ -380,6 +381,7 @@ class SuratTugasController extends Controller
                 )->get();
         }
 
+        $tahun = date('Y');
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . Auth::user()->kdkab)->get();
         $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . '00')->get();
 
@@ -564,6 +566,7 @@ class SuratTugasController extends Controller
                 )->get();
         }
 
+        $tahun = date('Y');
         $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . Auth::user()->kdkab)->get();
         $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . '00')->get();
         $list_unit_kerja = \App\UnitKerja::orderBy('kode')->get();
@@ -1236,6 +1239,7 @@ class SuratTugasController extends Controller
                     )->get();
             }
 
+            $tahun = date('Y');
             $list_anggaran = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . Auth::user()->kdkab)->get();
             $list_anggaran_prov = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop . '00')->get();
 

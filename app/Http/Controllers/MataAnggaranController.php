@@ -18,7 +18,7 @@ class MataAnggaranController extends Controller
     }
 
     public function import_some(Request $request){
-        Excel::import(new MataAnggaranPartialImport(), $request->file('excel_file'));
+        Excel::import(new MataAnggaranPartialImport($request->tahun), $request->file('excel_file'));
         return redirect('mata_anggaran/index')->with('success', 'Information has been added');
     }
 
