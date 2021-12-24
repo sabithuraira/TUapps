@@ -2,14 +2,14 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Nomor Urut:</label>
-            <input type="text" class="form-control" name="nomor_urut" v-model="form.nomor_urut">
+            <input type="text" class="form-control" name="nomor_urut6" v-model="form.nomor_urut">
         </div>
     </div>
 
     <div class="col-md-6 left">
         <div class="form-group">
             <label>Nomor:</label>
-            <input type="text" class="form-control" name="nomor" v-model="form.nomor">
+            <input type="text" class="form-control" name="nomor6" v-model="form.nomor">
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Tentang:</label>
-            <textarea id="tentang" class="summernote form-control" name="tentang" rows="3"></textarea>
+            <textarea id="tentang" class="summernote form-control" name="tentang6" rows="3"></textarea>
         </div>
     </div>
 </div>
@@ -27,7 +27,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Menimbang:</label>
-            <textarea id="menimbang" class="summernote form-control" name="menimbang" rows="10"></textarea>
+            <textarea id="menimbang" class="summernote form-control" name="menimbang6" rows="10"></textarea>
         </div>
     </div>
 </div>
@@ -36,7 +36,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Mengingat:</label>
-            <textarea id="mengingat" class="summernote form-control" name="mengingat" rows="10"></textarea>
+            <textarea id="mengingat" class="summernote form-control" name="mengingat6" rows="10"></textarea>
         </div>
     </div>
 </div>
@@ -46,7 +46,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Menetapkan:</label>
-            <textarea id="menetapkan" class="summernote form-control" name="menetapkan" rows="10"></textarea>
+            <textarea id="menetapkan" class="summernote form-control" name="menetapkan6" rows="10"></textarea>
         </div>
     </div>
 </div>
@@ -74,7 +74,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>Tembusan:</label>
-            <textarea id="tembusan" class="summernote form-control" name="tembusan" rows="10"></textarea>
+            <textarea id="tembusan" class="summernote form-control" name="tembusan6" rows="10"></textarea>
         </div>
     </div>
 </div>
@@ -84,7 +84,7 @@
     <div class="col-md-6">
         <div class="form-group">
             Tempat:<br/>
-            <input type="text" class="form-control" name="ditetapkan_di" v-model="form.ditetapkan_di">
+            <input type="text" class="form-control" name="ditetapkan_di6" v-model="form.ditetapkan_di">
         </div>
     </div>
     
@@ -92,7 +92,7 @@
         <div class="form-group">
             Tanggal:<br/>
             <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                <input type="text" class="form-control" name="ditetapkan_tanggal" id="ditetapkan_tanggal">
+                <input type="text" class="form-control" name="ditetapkan_tanggal6" id="ditetapkan_tanggal">
                 <div class="input-group-append">                                            
                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                 </div>
@@ -105,14 +105,14 @@
     <div class="col-md-6">
         <div class="form-group">
             Nama:<br/>
-            <input type="text" class="form-control" name="ditetapkan_nama"  v-model="form.ditetapkan_nama">
+            <input type="text" class="form-control" name="ditetapkan_nama6"  v-model="form.ditetapkan_nama">
         </div>
     </div>
     
     <div class="col-md-6 left">
         <div class="form-group">
             Jabatan:<br/>
-            <input type="text" class="form-control" name="ditetapkan_oleh"  v-model="form.ditetapkan_oleh">
+            <input type="text" class="form-control" name="ditetapkan_oleh6"  v-model="form.ditetapkan_oleh">
         </div>
     </div>
 </div>

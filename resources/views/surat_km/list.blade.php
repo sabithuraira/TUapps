@@ -18,8 +18,10 @@
                     @foreach($list_surat as $data)
                     <tr>
                         <td class="text-center"><p class="badge badge-success">{{ $data->listJenis[$data->jenis_surat] }}</p></td>
-                        <td class="text-center">
+                        <td class="text-center">                            
+                            @if($data['jenis_surat']!=1)
                             <h6 class="margin-0">{{ $data['nomor_urut'] }}</h6>
+                            @endif
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                         </td>
                         <td>
@@ -67,11 +69,11 @@
                         <td class="text-center"><a href="{{ action('SuratKmController@show', Crypt::encrypt($data['id'])) }}" class="btn btn-sm"><i class="icon-eye text-info"></i></a></td>
                         <td class="text-center"><a href="{{ action('SuratKmController@edit', Crypt::encrypt($data['id'])) }}" class="btn btn-sm"><i class="icon-pencil text-info"></i></a></td>
                         <td class="text-center">
-                        <form action="{{action('SuratKmController@destroy', $data['id'])}}" method="post">
-                            @csrf
-                            <input name="_method" type="hidden" value="DELETE">
-                            <button type="submit" class="btn btn-sm"><i class="icon-trash text-danger"></i></button>
-                        </form>
+                            <form action="{{action('SuratKmController@destroy', $data['id'])}}" method="post">
+                                @csrf
+                                <input name="_method" type="hidden" value="DELETE">
+                                <button type="submit" class="btn btn-sm"><i class="icon-trash text-danger"></i></button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach

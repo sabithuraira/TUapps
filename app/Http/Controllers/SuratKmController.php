@@ -245,142 +245,187 @@ class SuratKmController extends Controller
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
 
-        $tanggal_format = date('Y-m-d');
-        if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
-    
-        $bulan = date('m', strtotime($request->get('tanggal')));
-        $tahun = date('Y', strtotime($request->get('tanggal')));
+        // print_r($request->all());
+        // print_r($request->jenis_surat);
+        // print_r($request->isi2);
+        // print_r($request->lampiran2);
+        // print_r($request->kepada2);
+        // print_r($request->kepada_di2);
+        // print_r($request->dibuat_di2);
+        // die();
+        
+        // $model_rincian->isi = $request->isi2;
+        // $model_rincian->lampiran = $request->lampiran2;
+        // $model_rincian->kepada = $request->kepada2;
+        // $model_rincian->kepada_di = $request->kepada_di2;
+        // $model_rincian->dibuat_di = $request->dibuat_di2;
 
-        if($model->jenis_surat==1){
-            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->alamat= $request->get('alamat');
-            $model->nomor= $request->get('nomor');
-            $model->perihal= $request->get('perihal');
-            $model->nomor_petunjuk= $request->get('nomor_petunjuk');
-            $model->penerima= $request->get('penerima');
+        $tanggal_format = date('Y-m-d');
+        // if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
+    
+        // $bulan = date('m', strtotime($request->get('tanggal')));
+        // $tahun = date('Y', strtotime($request->get('tanggal')));
+
+        if($model->jenis_surat==1){    
+            if($request->has('tanggal1')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal1')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal1')));
+            $tahun = date('Y', strtotime($request->get('tanggal1')));
+
+            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal1')));
+            // $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->alamat= $request->get('alamat1');
+            $model->nomor= $request->get('nomor1');
+            $model->perihal= $request->get('perihal1');
+            // $model->nomor_petunjuk= $request->get('nomor_petunjuk');
+            $model->penerima= $request->get('penerima1');
             $model->save();
         }
         else if($model->jenis_surat==2){
+            if($request->has('tanggal2')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal2')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal2')));
+            $tahun = date('Y', strtotime($request->get('tanggal2')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->perihal= $request->get('perihal');
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->tingkat_keamanan = $request->tingkat_keamanan2;
+            $model->kode_unit_kerja = $request->kode_unit_kerja2;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip2;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$bulan."/".$tahun;
+            $model->perihal= $request->get('perihal2');
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh2;
+            $model->ditetapkan_nama = $request->ditetapkan_nama2;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->lampiran)>0 && 
-                    strlen($request->kepada)>0 && 
-                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+                if(strlen($request->isi2)>0 && strlen($request->lampiran2)>0 && 
+                    strlen($request->kepada2)>0 && 
+                    strlen($request->kepada_di2)>0 && strlen($request->dibuat_di2)>0){
 
                     $model_rincian = new \App\SuratKmRincianSuratLuar;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->lampiran = $request->lampiran;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->kepada_di = $request->kepada_di;
-                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->isi = $request->isi2;
+                    $model_rincian->lampiran = $request->lampiran2;
+                    $model_rincian->kepada = $request->kepada2;
+                    $model_rincian->kepada_di = $request->kepada_di2;
+                    $model_rincian->dibuat_di = $request->dibuat_di2;
                     $model_rincian->save();
 
                 }
             }
         }
         else if($model->jenis_surat==3){
+            if($request->has('tanggal3')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal3')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal3')));
+            $tahun = date('Y', strtotime($request->get('tanggal3')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->perihal= $request->get('perihal');
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->perihal= $request->get('perihal3');
+            $model->kode_unit_kerja = $request->kode_unit_kerja3;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip3;
             // @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} 
-            $model->nomor= $request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh3;
+            $model->ditetapkan_nama = $request->ditetapkan_nama3;
             if($model->save()){
-                if(strlen($request->dari)>0 && strlen($request->isi)>0 && 
-                    strlen($request->kepada)>0 && strlen($request->tembusan)>0){
+                if(strlen($request->dari3)>0 && strlen($request->isi3)>0 && 
+                    strlen($request->kepada3)>0 && strlen($request->tembusan3)>0){
                     $model_rincian = new \App\SuratKmRincianMemorandum;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->dari = $request->dari;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->dari = $request->dari3;
+                    $model_rincian->isi = $request->isi3;
+                    $model_rincian->kepada = $request->kepada3;
+                    $model_rincian->tembusan = $request->tembusan3;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==4){
+            if($request->has('tanggal4')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal4')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal4')));
+            $tahun = date('Y', strtotime($request->get('tanggal4')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
-            $model->ditetapkan_nip = $request->ditetapkan_nip;
+            $model->tingkat_keamanan = $request->tingkat_keamanan4;
+            $model->kode_unit_kerja = $request->kode_unit_kerja4;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip4;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh4;
+            $model->ditetapkan_nama = $request->ditetapkan_nama4;
+            $model->ditetapkan_nip = $request->ditetapkan_nip4;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->kepada)>0 && 
-                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+                if(strlen($request->isi4)>0 && strlen($request->kepada4)>0 && 
+                    strlen($request->kepada_di4)>0 && strlen($request->dibuat_di4)>0){
                     $model_rincian = new \App\SuratKmRincianSuratPengantar;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->kepada_di = $request->kepada_di;
-                    $model_rincian->diterima_tanggal = $request->diterima_tanggal;
-                    $model_rincian->diterima_jabatan = $request->diterima_jabatan;
-                    $model_rincian->diterima_nama = $request->diterima_nama;
-                    $model_rincian->diterima_nip = $request->diterima_nip;
-                    $model_rincian->diterima_no_hp = $request->diterima_no_hp;
-                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->isi = $request->isi4;
+                    $model_rincian->kepada = $request->kepada4;
+                    $model_rincian->kepada_di = $request->kepada_di4;
+                    $model_rincian->diterima_tanggal = $request->diterima_tanggal4;
+                    $model_rincian->diterima_jabatan = $request->diterima_jabatan4;
+                    $model_rincian->diterima_nama = $request->diterima_nama4;
+                    $model_rincian->diterima_nip = $request->diterima_nip4;
+                    $model_rincian->diterima_no_hp = $request->diterima_no_hp4;
+                    $model_rincian->dibuat_di = $request->dibuat_di4;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==5){
+            if($request->has('tanggal5')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal5')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal5')));
+            $tahun = date('Y', strtotime($request->get('tanggal5')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->nomor= $request->nomor;
+            $model->tingkat_keamanan = $request->tingkat_keamanan5;
+            $model->nomor= $request->nomor5;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->nomor_agenda)>0 && 
-                    strlen($request->tanggal_penerimaan)>0 && strlen($request->tanggal_penyelesaian)>0
-                    && strlen($request->dari)>0 && strlen($request->isi)>0){
+                if(strlen($request->isi5)>0 && strlen($request->nomor_agenda5)>0 && 
+                    strlen($request->tanggal_penerimaan5)>0 && strlen($request->tanggal_penyelesaian5)>0
+                    && strlen($request->dari5)>0 && strlen($request->isi5)>0){
                     $model_rincian = new \App\SuratKmRincianDisposisi;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->nomor_agenda = $request->nomor_agenda;
-                    $model_rincian->tanggal_penerimaan = date('Y-m-d', strtotime($request->tanggal_penerimaan));
-                    $model_rincian->tanggal_penyelesaian = date('Y-m-d', strtotime($request->tanggal_penyelesaian));
-                    $model_rincian->dari = $request->dari;
-                    $model_rincian->lampiran = $request->lampiran;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->isi_disposisi = $request->isi_disposisi;
-                    $model_rincian->diteruskan_kepada = $request->diteruskan_kepada;
+                    $model_rincian->nomor_agenda = $request->nomor_agenda5;
+                    $model_rincian->tanggal_penerimaan = date('Y-m-d', strtotime($request->tanggal_penerimaan5));
+                    $model_rincian->tanggal_penyelesaian = date('Y-m-d', strtotime($request->tanggal_penyelesaian5));
+                    $model_rincian->dari = $request->dari5;
+                    $model_rincian->lampiran = $request->lampiran5;
+                    $model_rincian->isi = $request->isi5;
+                    $model_rincian->isi_disposisi = $request->isi_disposisi5;
+                    $model_rincian->diteruskan_kepada = $request->diteruskan_kepada5;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==6){
+            if($request->has('tanggal6')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal6')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal6')));
+            $tahun = date('Y', strtotime($request->get('tanggal6')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
-            $model->nomor= $request->nomor;
-            $model->ditetapkan_di= $request->ditetapkan_di;
-            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal));
-            $model->ditetapkan_oleh= $request->ditetapkan_oleh;
-            $model->ditetapkan_nama= $request->ditetapkan_nama;
+            $model->nomor= $request->nomor6;
+            $model->ditetapkan_di= $request->ditetapkan_di6;
+            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal6));
+            $model->ditetapkan_oleh= $request->ditetapkan_oleh6;
+            $model->ditetapkan_nama= $request->ditetapkan_nama6;
             if($model->save()){
-                if(strlen($request->tentang)>0 && strlen($request->menimbang)>0 && 
-                    strlen($request->mengingat)>0 && strlen($request->menetapkan)>0
-                    && strlen($request->tembusan)>0 && strlen($request->jumlah_keputusan)>0){
+                if(strlen($request->tentang6)>0 && strlen($request->menimbang6)>0 && 
+                    strlen($request->mengingat6)>0 && strlen($request->menetapkan6)>0
+                    && strlen($request->tembusan6)>0 && strlen($request->jumlah_keputusan6)>0){
                     $model_rincian = new \App\SuratKmRincianSuratKeputusan;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->tentang = $request->tentang;
-                    $model_rincian->menimbang = $request->menimbang;
-                    $model_rincian->mengingat = $request->mengingat;
-                    $model_rincian->menetapkan = $request->menetapkan;
-                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->tentang = $request->tentang6;
+                    $model_rincian->menimbang = $request->menimbang6;
+                    $model_rincian->mengingat = $request->mengingat6;
+                    $model_rincian->menetapkan = $request->menetapkan6;
+                    $model_rincian->tembusan = $request->tembusan6;
                     $model_rincian->save();
     
                     $jumlah_keputusan = $request->jumlah_keputusan;
@@ -391,25 +436,29 @@ class SuratKmController extends Controller
                         $model_keputusan->save();
                     } 
                 }
-
             }
         }
         else if($model->jenis_surat==7){
+            if($request->has('tanggal7')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal7')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal7')));
+            $tahun = date('Y', strtotime($request->get('tanggal7')));
+
             $model->tanggal= $tanggal_format;
             $model->nomor_urut= $this->getNomorUrutDirect( $tanggal_format, $model->jenis_surat);
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_di = $request->ditetapkan_di;
-            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal));
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->tingkat_keamanan = $request->tingkat_keamanan7;
+            $model->kode_unit_kerja = $request->kode_unit_kerja7;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip7;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$bulan."/".$tahun;
+            $model->ditetapkan_di = $request->ditetapkan_di7;
+            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal7));
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh7;
+            $model->ditetapkan_nama = $request->ditetapkan_nama7;
             if($model->save()){
                 if(strlen($request->isi)>0){
                     $model_rincian = new \App\SuratKmRincianSuratKeterangan;
                     $model_rincian->induk_id = $model->id;
-                    $model_rincian->isi = $request->isi;
+                    $model_rincian->isi = $request->isi7;
                     $model_rincian->save();
                 }
             }
@@ -424,8 +473,7 @@ class SuratKmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         $real_id = Crypt::decrypt($id);
         $model = \App\SuratKm::find($real_id);
         $model_rincian = null;
@@ -511,8 +559,7 @@ class SuratKmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $real_id = Crypt::decrypt($id);
         $model = \App\SuratKm::find($real_id);
         $model_rincian = null;
@@ -549,8 +596,7 @@ class SuratKmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SuratKmRequest $request, $id)
-    {
+    public function update(SuratKmRequest $request, $id){
         $real_id = Crypt::decrypt($id);
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_km/edit',$id)
@@ -562,34 +608,43 @@ class SuratKmController extends Controller
         $model->updated_by=Auth::id();
 
         $tanggal_format = date('Y-m-d');
-        if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
+        // if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
     
-        $bulan = date('m', strtotime($request->get('tanggal')));
-        $tahun = date('Y', strtotime($request->get('tanggal')));
+        // $bulan = date('m', strtotime($request->get('tanggal')));
+        // $tahun = date('Y', strtotime($request->get('tanggal')));
 
         if($model->jenis_surat==1){
-            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal')));
-            $model->alamat= $request->get('alamat');
-            $model->nomor= $request->get('nomor');
-            $model->perihal= $request->get('perihal');
-            $model->nomor_petunjuk= $request->get('nomor_petunjuk');
-            $model->penerima= $request->get('penerima');
+            if($request->has('tanggal1')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal1')));
+            $bulan = date('m', strtotime($request->get('tanggal1')));
+            $tahun = date('Y', strtotime($request->get('tanggal1')));
+
+            $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal1')));
+            $model->alamat= $request->get('alamat1');
+            $model->nomor= $request->get('nomor1');
+            $model->perihal= $request->get('perihal1');
+            // $model->nomor_petunjuk= $request->get('nomor_petunjuk');
+            $model->penerima= $request->get('penerima1');
             $model->save();
         }
         else if($model->jenis_surat==2){
+            if($request->has('tanggal2')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal2')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal2')));
+            $tahun = date('Y', strtotime($request->get('tanggal2')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->perihal= $request->get('perihal');
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->nomor_urut= $request->nomor_urut2;
+            $model->tingkat_keamanan = $request->tingkat_keamanan2;
+            $model->kode_unit_kerja = $request->kode_unit_kerja2;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip2;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$bulan."/".$tahun;
+            $model->perihal= $request->get('perihal2');
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh2;
+            $model->ditetapkan_nama = $request->ditetapkan_nama2;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->lampiran)>0 && 
-                    strlen($request->kepada)>0 && 
-                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+                if(strlen($request->isi2)>0 && strlen($request->lampiran2)>0 && 
+                    strlen($request->kepada2)>0 && 
+                    strlen($request->kepada_di2)>0 && strlen($request->dibuat_di2)>0){
 
                     $model_rincian = \App\SuratKmRincianSuratLuar::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
@@ -597,120 +652,140 @@ class SuratKmController extends Controller
                         $model_rincian->induk_id = $model->id;
                     }
 
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->lampiran = $request->lampiran;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->kepada_di = $request->kepada_di;
-                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->isi = $request->isi2;
+                    $model_rincian->lampiran = $request->lampiran2;
+                    $model_rincian->kepada = $request->kepada2;
+                    $model_rincian->kepada_di = $request->kepada_di2;
+                    $model_rincian->dibuat_di = $request->dibuat_di2;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==3){
+            if($request->has('tanggal3')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal3')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal3')));
+            $tahun = date('Y', strtotime($request->get('tanggal3')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->perihal= $request->get('perihal');
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
+            $model->nomor_urut= $request->nomor_urut3;
+            $model->perihal= $request->get('perihal3');
+            $model->kode_unit_kerja = $request->kode_unit_kerja3;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip3;
             // @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} 
-            $model->nomor= $request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh3;
+            $model->ditetapkan_nama = $request->ditetapkan_nama3;
             if($model->save()){
-                if(strlen($request->dari)>0 && strlen($request->isi)>0 && 
-                    strlen($request->kepada)>0 && strlen($request->tembusan)>0){
+                if(strlen($request->dari3)>0 && strlen($request->isi3)>0 && 
+                    strlen($request->kepada3)>0 && strlen($request->tembusan3)>0){
                     $model_rincian =\App\SuratKmRincianMemorandum::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
                         $model_rincian = new \App\SuratKmRincianMemorandum;
                         $model_rincian->induk_id = $model->id;
                     }
-                    $model_rincian->dari = $request->dari;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->dari = $request->dari3;
+                    $model_rincian->isi = $request->isi3;
+                    $model_rincian->kepada = $request->kepada3;
+                    $model_rincian->tembusan = $request->tembusan3;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==4){
+            if($request->has('tanggal4')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal4')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal4')));
+            $tahun = date('Y', strtotime($request->get('tanggal4')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
-            $model->ditetapkan_nip = $request->ditetapkan_nip;
+            $model->nomor_urut= $request->nomor_urut4;
+            $model->tingkat_keamanan = $request->tingkat_keamanan4;
+            $model->kode_unit_kerja = $request->kode_unit_kerja4;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip4;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$bulan."/".$tahun;
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh4;
+            $model->ditetapkan_nama = $request->ditetapkan_nama4;
+            $model->ditetapkan_nip = $request->ditetapkan_nip4;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->kepada)>0 && 
-                    strlen($request->kepada_di)>0 && strlen($request->dibuat_di)>0){
+                if(strlen($request->isi4)>0 && strlen($request->kepada4)>0 && 
+                    strlen($request->kepada_di4)>0 && strlen($request->dibuat_di4)>0){
                     $model_rincian = \App\SuratKmRincianSuratPengantar::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
                         $model_rincian = new \App\SuratKmRincianSuratPengantar;
                         $model_rincian->induk_id = $model->id;
                     }
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->kepada = $request->kepada;
-                    $model_rincian->kepada_di = $request->kepada_di;
-                    $model_rincian->diterima_tanggal = $request->diterima_tanggal;
-                    $model_rincian->diterima_jabatan = $request->diterima_jabatan;
-                    $model_rincian->diterima_nama = $request->diterima_nama;
-                    $model_rincian->diterima_nip = $request->diterima_nip;
-                    $model_rincian->diterima_no_hp = $request->diterima_no_hp;
-                    $model_rincian->dibuat_di = $request->dibuat_di;
+                    $model_rincian->isi = $request->isi4;
+                    $model_rincian->kepada = $request->kepada4;
+                    $model_rincian->kepada_di = $request->kepada_di4;
+                    $model_rincian->diterima_tanggal = $request->diterima_tanggal4;
+                    $model_rincian->diterima_jabatan = $request->diterima_jabatan4;
+                    $model_rincian->diterima_nama = $request->diterima_nama4;
+                    $model_rincian->diterima_nip = $request->diterima_nip4;
+                    $model_rincian->diterima_no_hp = $request->diterima_no_hp4;
+                    $model_rincian->dibuat_di = $request->dibuat_di4;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==5){
+            if($request->has('tanggal5')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal5')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal5')));
+            $tahun = date('Y', strtotime($request->get('tanggal5')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->nomor= $request->nomor;
+            $model->nomor_urut= $request->nomor_urut5;
+            $model->tingkat_keamanan = $request->tingkat_keamanan5;
+            $model->nomor= $request->nomor5;
             if($model->save()){
-                if(strlen($request->isi)>0 && strlen($request->nomor_agenda)>0 && 
-                    strlen($request->tanggal_penerimaan)>0 && strlen($request->tanggal_penyelesaian)>0
-                    && strlen($request->dari)>0 && strlen($request->isi)>0){
+                if(strlen($request->isi5)>0 && strlen($request->nomor_agenda5)>0 && 
+                    strlen($request->tanggal_penerimaan5)>0 && strlen($request->tanggal_penyelesaian5)>0
+                    && strlen($request->dari5)>0 && strlen($request->isi5)>0){
                     $model_rincian = \App\SuratKmRincianDisposisi::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
                         $model_rincian = new \App\SuratKmRincianDisposisi;
                         $model_rincian->induk_id = $model->id;
                     }
-                    $model_rincian->nomor_agenda = $request->nomor_agenda;
-                    $model_rincian->tanggal_penerimaan = date('Y-m-d', strtotime($request->tanggal_penerimaan));
-                    $model_rincian->tanggal_penyelesaian = date('Y-m-d', strtotime($request->tanggal_penyelesaian));
-                    $model_rincian->dari = $request->dari;
-                    $model_rincian->lampiran = $request->lampiran;
-                    $model_rincian->isi = $request->isi;
-                    $model_rincian->isi_disposisi = $request->isi_disposisi;
-                    $model_rincian->diteruskan_kepada = $request->diteruskan_kepada;
+                    $model_rincian->nomor_agenda = $request->nomor_agenda5;
+                    $model_rincian->tanggal_penerimaan = date('Y-m-d', strtotime($request->tanggal_penerimaan5));
+                    $model_rincian->tanggal_penyelesaian = date('Y-m-d', strtotime($request->tanggal_penyelesaian5));
+                    $model_rincian->dari = $request->dari5;
+                    $model_rincian->lampiran = $request->lampiran5;
+                    $model_rincian->isi = $request->isi5;
+                    $model_rincian->isi_disposisi = $request->isi_disposisi5;
+                    $model_rincian->diteruskan_kepada = $request->diteruskan_kepada5;
                     $model_rincian->save();
                 }
             }
         }
         else if($model->jenis_surat==6){
+            if($request->has('tanggal6')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal6')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal6')));
+            $tahun = date('Y', strtotime($request->get('tanggal6')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->nomor= $request->nomor;
-            $model->ditetapkan_di= $request->ditetapkan_di;
-            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal));
-            $model->ditetapkan_oleh= $request->ditetapkan_oleh;
-            $model->ditetapkan_nama= $request->ditetapkan_nama;
+            $model->nomor_urut= $request->nomor_urut6;
+            $model->nomor= $request->nomor6;
+            $model->ditetapkan_di= $request->ditetapkan_di6;
+            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal6));
+            $model->ditetapkan_oleh= $request->ditetapkan_oleh6;
+            $model->ditetapkan_nama= $request->ditetapkan_nama6;
             if($model->save()){
-                if(strlen($request->tentang)>0 && strlen($request->menimbang)>0 && 
-                    strlen($request->mengingat)>0 && strlen($request->menetapkan)>0
-                    && strlen($request->tembusan)>0 && strlen($request->jumlah_keputusan)>0){
+                if(strlen($request->tentang6)>0 && strlen($request->menimbang6)>0 && 
+                    strlen($request->mengingat6)>0 && strlen($request->menetapkan6)>0
+                    && strlen($request->tembusan6)>0 && strlen($request->jumlah_keputusan6)>0){
                     $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
                         $model_rincian = new \App\SuratKmRincianSuratKeputusan;
                         $model_rincian->induk_id = $model->id;
                     }
-                    $model_rincian->tentang = $request->tentang;
-                    $model_rincian->menimbang = $request->menimbang;
-                    $model_rincian->mengingat = $request->mengingat;
-                    $model_rincian->menetapkan = $request->menetapkan;
-                    $model_rincian->tembusan = $request->tembusan;
+                    $model_rincian->tentang = $request->tentang6;
+                    $model_rincian->menimbang = $request->menimbang6;
+                    $model_rincian->mengingat = $request->mengingat6;
+                    $model_rincian->menetapkan = $request->menetapkan6;
+                    $model_rincian->tembusan = $request->tembusan6;
                     $model_rincian->save();
     
                     $jumlah_keputusan = $request->jumlah_keputusan;
@@ -737,16 +812,21 @@ class SuratKmController extends Controller
             }
         }
         else if($model->jenis_surat==7){
+            if($request->has('tanggal7')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal7')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal7')));
+            $tahun = date('Y', strtotime($request->get('tanggal7')));
+
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $request->nomor_urut;
-            $model->tingkat_keamanan = $request->tingkat_keamanan;
-            $model->kode_unit_kerja = $request->kode_unit_kerja;
-            $model->klasifikasi_arsip = $request->klasifikasi_arsip;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut."/".$request->kode_unit_kerja."/".$request->klasifikasi_arsip."/".$bulan."/".$tahun;
-            $model->ditetapkan_di = $request->ditetapkan_di;
-            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal));
-            $model->ditetapkan_oleh = $request->ditetapkan_oleh;
-            $model->ditetapkan_nama = $request->ditetapkan_nama;
+            $model->nomor_urut= $request->nomor_urut7;
+            $model->tingkat_keamanan = $request->tingkat_keamanan7;
+            $model->kode_unit_kerja = $request->kode_unit_kerja7;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip7;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$bulan."/".$tahun;
+            $model->ditetapkan_di = $request->ditetapkan_di7;
+            $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal7));
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh7;
+            $model->ditetapkan_nama = $request->ditetapkan_nama7;
             if($model->save()){
                 if(strlen($request->isi)>0){
                     $model_rincian = \App\SuratKmRincianSuratKeterangan::where('induk_id', '=', $model->id)->first();
@@ -754,7 +834,7 @@ class SuratKmController extends Controller
                         $model_rincian = new \App\SuratKmRincianMemorandum;
                         $model_rincian->induk_id = $model->id;
                     }
-                    $model_rincian->isi = $request->isi;
+                    $model_rincian->isi = $request->isi7;
                     $model_rincian->save();
                 }
             }
@@ -769,8 +849,7 @@ class SuratKmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $model = \App\SuratKm::find($id);
         $model->delete();
         return redirect('surat_km')->with('success','Information has been  deleted');

@@ -194,14 +194,15 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.form.nomor_urut = data.total;
-                console.log(data)
-             
-                if((self.form.jenis_surat>=2 && self.form.jenis_surat<=4) || self.form.jenis_surat==7){
-                    $('#isi').summernote();
-                }
+
+                if(self.form.jenis_surat==2) $('#isi2').summernote();
+                if(self.form.jenis_surat==4) $('#isi4').summernote();
+                if(self.form.jenis_surat==7) $('#isi7').summernote();
                 
-                if(self.form.jenis_surat==3)
+                if(self.form.jenis_surat==3){
+                    $('#isi3').summernote();
                     $('#tembusan').summernote();
+                }
                 
                 if(self.form.jenis_surat==6){
                     $('#tentang').summernote();
@@ -238,20 +239,20 @@ var vm = new Vue({
                     var temp_data = {!! json_encode($model_rincian) !!}
                     if(temp_data!=null)
                         this.form_surat_keluar = {!! json_encode($model_rincian) !!};  
-                    $('#isi').summernote('code', this.form_surat_keluar.isi);   
+                    $('#isi2').summernote('code', this.form_surat_keluar.isi);   
                 }
                 else if(this.form.jenis_surat==3){
                     var temp_data = {!! json_encode($model_rincian) !!}
                     if(temp_data!=null)
                         this.form_memorandum = {!! json_encode($model_rincian) !!};   
-                    $('#isi').summernote('code', this.form_memorandum.isi);   
+                    $('#isi3').summernote('code', this.form_memorandum.isi);   
                     $('#tembusan').summernote('code', this.form_memorandum.tembusan);
                 } 
                 else if(this.form.jenis_surat==4){
                     var temp_data = {!! json_encode($model_rincian) !!}
                     if(temp_data!=null)
                         this.form_surat_pengantar = {!! json_encode($model_rincian) !!}; 
-                    $('#isi').summernote('code', this.form_surat_pengantar.isi);   
+                    $('#isi4').summernote('code', this.form_surat_pengantar.isi);   
                 } 
                 else if(this.form.jenis_surat==5){
                     var temp_data = {!! json_encode($model_rincian) !!}
@@ -281,7 +282,7 @@ var vm = new Vue({
                         this.form_surat_keterangan = {!! json_encode($model_rincian) !!}; 
                         $('#ditetapkan_tanggal').val(this.form.ditetapkan_tanggal);
                     }
-                    $('#isi').summernote('code', this.form_surat_keterangan.isi); 
+                    $('#isi7').summernote('code', this.form_surat_keterangan.isi); 
                 } 
 
                 // if((this.form.jenis_surat>=2 && this.form.jenis_surat<=4) || this.form.jenis_surat==7){
