@@ -18,10 +18,8 @@
                     @foreach($list_surat as $data)
                     <tr>
                         <td class="text-center"><p class="badge badge-success">{{ $data->listJenis[$data->jenis_surat] }}</p></td>
-                        <td class="text-center">                            
-                            @if($data['jenis_surat']!=1)
+                        <td class="text-center">           
                             <h6 class="margin-0">{{ $data['nomor_urut'] }}</h6>
-                            @endif
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                         </td>
                         <td>

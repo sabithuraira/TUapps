@@ -286,7 +286,8 @@ class SuratTugasController extends Controller
 
                     $datas = \App\SuratTugasRincian::where([
                             ['unit_kerja_ttd', '=', $model_r->unit_kerja_ttd],
-                            [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                            // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                            [DB::raw('YEAR(created_at)'), '=', date('Y', strtotime($model->created_at))],
                         ])->orderBy('id', 'desc')->first();
 
                     if ($datas != null) {
@@ -304,7 +305,8 @@ class SuratTugasController extends Controller
                         $datas_spd = \App\SuratTugasRincian::where([
                                 ['nomor_spd', '<>', ''],
                                 ['unit_kerja_spd', '=', $unit_kerja->kode],
-                                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                                // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($model_r->tanggal_mulai))],
+                                [DB::raw('YEAR(created_at)'), '=', date('Y', strtotime($model->created_at))],
                             ])->orderBy('id', 'desc')->first();
 
                         if ($datas_spd != null) {
@@ -434,7 +436,8 @@ class SuratTugasController extends Controller
         $nomor_st = 1;
         $datas = \App\SuratTugasRincian::where([
                 ['unit_kerja_ttd', '=', $request->get('unit_kerja_ttd')],
-                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+                [DB::raw('YEAR(created_at)'), '=', date('Y')],
+                // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
             ])
             ->orderBy('id', 'desc')->first();
 
@@ -451,7 +454,8 @@ class SuratTugasController extends Controller
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
             ->where([
                 ['unit_kerja_spd', '=', $unit_kerja->kode],
-                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+                [DB::raw('YEAR(created_at)'), '=', date('Y')],
+                // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
             ])->orderBy('id', 'desc')->first();
 
         if ($datas_spd != null) {
@@ -631,7 +635,8 @@ class SuratTugasController extends Controller
         $nomor_st = 1;
         $datas = \App\SuratTugasRincian::where([
                 ['unit_kerja_ttd', '=', $request->get('unit_kerja_ttd')],
-                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+                [DB::raw('YEAR(created_at)'), '=', date('Y')],
+                // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
             ])
             ->orderBy('id', 'desc')->first();
 
@@ -645,7 +650,8 @@ class SuratTugasController extends Controller
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
             ->where([
                 ['unit_kerja_spd', '=', $unit_kerja->kode],
-                [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
+                [DB::raw('YEAR(created_at)'), '=', date('Y')],
+                // [DB::raw('YEAR(tanggal_mulai)'), '=', date('Y', strtotime($request->get('tanggal_mulai')))],
             ])->orderBy('id', 'desc')->first();
 
         if ($datas_spd != null) {

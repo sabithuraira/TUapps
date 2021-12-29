@@ -21,6 +21,8 @@ class CreatePokKroTable extends Migration
             $table->char("kode",8);
             $table->string("label");
             $table->integer("tahun");
+            $table->float("volume",8,2)->nullable();
+            $table->string("satuan")->nullable();
             $table->char("unit_kerja", 4);
             $table->integer("created_by");
             $table->integer("updated_by");

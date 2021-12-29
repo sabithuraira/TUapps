@@ -15,8 +15,18 @@ class PokController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        //
+    public function index(Request $request){
+        $tahun = date('Y');
+        if(strlen($request->tahun)>0) $tahun = $request->tahun;
+
+        $model = new \App\PokRincianAnggaran;
+        $datas = $model->getDataAnggaran($tahun);
+        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
+
+        return view('pok.index', compact(
+            'tahun', 'model', 'datas',
+            'list_pegawai'
+        ));
     }
 
     public function upload_pok(Request $request){
@@ -28,6 +38,10 @@ class PokController extends Controller
         // Excel::import(new Sp2020SlsPartialImport(), $request->file('excel_file'));
         Excel::import(new PokImport($request->tahun), $request->file('excel_file'));
         return redirect('pok/import_pok')->with('success', 'Information has been added');
+    }
+
+    public function set_pj(Request $request){
+        //
     }
 
     /**

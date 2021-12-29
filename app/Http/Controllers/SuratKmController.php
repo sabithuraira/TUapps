@@ -273,7 +273,7 @@ class SuratKmController extends Controller
             $tahun = date('Y', strtotime($request->get('tanggal1')));
 
             $model->tanggal= date('Y-m-d', strtotime($request->get('tanggal1')));
-            // $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
             $model->alamat= $request->get('alamat1');
             $model->nomor= $request->get('nomor1');
             $model->perihal= $request->get('perihal1');

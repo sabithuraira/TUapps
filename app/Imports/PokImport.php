@@ -54,7 +54,7 @@ class PokImport implements ToCollection
                         $model->save();
                     }
                     else if($len_col0>=1 && $len_col0<=3){ //komponen & subkomponen
-                        if($len_col0==1 && is_numeric($row[0])){ // sub komponen
+                        if($len_col0==1 && !is_numeric($row[0])){ // sub komponen
                             $model = PokSubKomponen::where('kode','=', $row[0])
                                         ->where('unit_kerja', '=', Auth::user()->kdprop . Auth::user()->kdkab)
                                         ->where('id_ro', '=', $last_id_ro)
@@ -128,16 +128,17 @@ class PokImport implements ToCollection
                         if($model->save()) $last_id_aktivitas = $model->id;
                     }
                     else if($len_col0==6){ //mata anggaran
-                        $model = PokMataAnggaran::where('kode','=', $row[0])
-                        ->where('unit_kerja', '=', Auth::user()->kdprop . Auth::user()->kdkab)
-                        ->first();
-                        if($model==null){
+                        // $model = PokMataAnggaran::where('kode','=', $row[0])
+                        //             ->where('unit_kerja', '=', Auth::user()->kdprop . Auth::user()->kdkab)
+                        //             ->first();
+
+                        // if($model==null){
                             $model = new PokMataAnggaran;
                             $model->kode = $row[0];
                             $model->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
                             $model->created_at = date('Y-m-d h:i:s');
                             $model->created_by = Auth::id();
-                        }
+                        // }
                         
                         $model->id_program = $last_id_program;
                         $model->id_aktivitas = $last_id_aktivitas;
@@ -167,6 +168,8 @@ class PokImport implements ToCollection
                         $model->id_program = $last_id_program;
                         $model->id_aktivitas = $last_id_aktivitas;
                         $model->label = $row[1];
+                        $model->volume = $row[2];
+                        $model->satuan = $row[3];
                         $model->tahun = $this->tahun;
                         $model->updated_at = date('Y-m-d h:i:s');
                         $model->updated_by = Auth::id();
@@ -208,6 +211,8 @@ class PokImport implements ToCollection
                         $model->id_aktivitas = $last_id_aktivitas;
                         $model->id_kro = $last_id_kro;
                         $model->label = $row[1];
+                        $model->volume = $row[2];
+                        $model->satuan = $row[3];
                         $model->tahun = $this->tahun;
                         $model->updated_at = date('Y-m-d h:i:s');
                         $model->updated_by = Auth::id();

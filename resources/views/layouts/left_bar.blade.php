@@ -101,6 +101,8 @@
                 <li class="{{ (request()->is('pok*')) ? 'active' : '' }}">
                     <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Anggaran</span></a>
                     <ul>
+                        <li class="{{ request()->is('pok') ? 'active' : '' }}"><a
+                                href="{{url('pok')}}">POK</a></li>
                         <li class="{{ request()->is('pok/import_pok*') ? 'active' : '' }}"><a
                                 href="{{url('pok/import_pok')}}">Import POK</a></li>
                     </ul>
