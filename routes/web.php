@@ -71,7 +71,7 @@ Route::group(['middleware' => ['role:superadmin']], function () {
 
     Route::get('pok/import_pok', 'PokController@upload_pok');
     Route::post('pok/import_pok', 'PokController@import_pok');
-    Route::post('pok/set_pj', 'PokController@set_pj');
+    Route::post('pok/save_pj', 'PokController@save_pj');
 });
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {

@@ -132,26 +132,32 @@
                                     <i class="icon-calendar text-info"></i>
                                     <p class='text-info small'>History</p>
                                 </a>
+                                @hasanyrole('superadmin|kuasa_anggaran')
                                 &nbsp;&nbsp;
-                                <a href="#">
+                                <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
+                                    data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
                                     <i class="icon-user text-info"></i> 
                                     <p class='text-info small'>Set PJ</p>
                                 </a>
+                                @endhasanyrole
                             </div>
                             
-                            @hasanyrole('superadmin|kuasa_anggaran')
                             <div class="btn-group" role="group" aria-label="Basic example">
+                                @if(auth()->user()->id==$data->id_pj)
                                 <a href="#">
                                     <i class="icon-note text-info"></i> 
                                     <p class='text-info small'>Estimasi</p>
                                 </a>
+                                @endif
+
+                                @hasanyrole('superadmin|kuasa_anggaran')
                                 &nbsp;&nbsp;
                                 <a href="#">
                                     <i class="icon-note text-info"></i> 
                                     <p class='text-info small'>Realisasi</p>
                                 </a>
+                                @endhasanyrole
                             </div>
-                            @endhasanyrole
 
                             @hasanyrole('superadmin|kuasa_anggaran')
                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -219,31 +225,40 @@
         el: "#app_vue",
         data:  {
             datas: [],
-            cur_pj_id: '',
-            cur_pj_label: '',
             form_pj: {
                 id_pegawai: '',
-                id_rincian: '',
+                rincian_id: '',
+                rincian_label: '',
             },
         },
         methods: {
-            setPj: function (jenis) {
+            setPj: function (event) {
+                var self = this;
+                if(event){
+                    self.form_pj = {
+                        id_pegawai:   event.currentTarget.getAttribute('data-pegawai'),   
+                        rincian_id:  event.currentTarget.getAttribute('data-id'),  
+                        rincian_label:  event.currentTarget.getAttribute('data-label'),                   };
+                }
+            },
+            savePj: function () {
                 var self = this;
                 
                 $('#wait_progres').modal('show');
                 $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
                 $.ajax({
-                    url :  self.pathname + '/send_to_ckp',
+                    url :  "{{ url('pok/save_pj') }}",
                     method : 'post',
                     dataType: 'json',
                     data:{
-                        form_id_data: self.ckp_id,
-                        jenis: jenis,
+                        rincian_id: self.form_pj.rincian_id,
+                        id_pegawai: self.form_pj.id_pegawai,
                     },
                 }).done(function (data) {
                     $('#wait_progress').modal('hide');
-                    self.setDatas();
+                    if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                    else location.reload(); 
                 }).fail(function (msg) {
                     console.log(JSON.stringify(msg));
                     $('#wait_progres').modal('hide');
@@ -390,7 +405,7 @@
 
     $(document).ready(function() {
         $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
-        vm.setDatas();
+        // vm.setDatas();
         
         $('.datepicker').datepicker({
             endDate: 'd',

@@ -12,9 +12,6 @@
 <div class="row clearfix">
     <div class="col-md-12">
         <div class="card">
-            <div class="header">
-                <h2>Import Excel</h2>
-            </div>
             <div class="body">
                 <section class="datas">
                     @include('pok.list')

@@ -40,8 +40,29 @@ class PokController extends Controller
         return redirect('pok/import_pok')->with('success', 'Information has been added');
     }
 
-    public function set_pj(Request $request){
-        //
+    public function save_pj(Request $request){
+        if(strlen($request->get('rincian_id'))>0){
+            $model =  \App\PokRincianAnggaran::find($request->get('rincian_id'));
+            if($model!=null){
+                $model->id_pj = $request->get('id_pegawai');
+                $model_pegawai = \App\UserModel::find($request->get('id_pegawai'));
+                
+                if($model_pegawai!=null){
+                    $model->nip_pj = $model_pegawai->nip_baru;
+                    $model->nama_pj = $model_pegawai->name;
+                }
+
+                if($model->save()){
+                    return response()->json(['status'=>'success', 
+                        'datas' => $model,
+                    ]);
+                }
+            }
+        }
+
+        return response()->json(['status'=>'error', 
+            'datas' => null,
+        ]);
     }
 
     /**

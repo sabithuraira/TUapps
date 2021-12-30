@@ -9,18 +9,15 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LogBookController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
 
-    public function downloadExcel($tanggal, $unit_kerja)
-    {
+    public function downloadExcel($tanggal, $unit_kerja){
         return Excel::download(new \App\Exports\LogBookExport($tanggal, $unit_kerja), 'log_book.xlsx');
     }
     
-    public function downloadExcelWfh(Request $request)
-    {
+    public function downloadExcelWfh(Request $request){
         $user_id = 'admin@email.com';
         // $tanggal = date('Y-m-d');
         $tanggal = '2020-04-04';
@@ -56,8 +53,7 @@ class LogBookController extends Controller
         // ]);
     }
 
-    public function laporan_wfh(Request $request)
-    {
+    public function laporan_wfh(Request $request){
         $idnya = Auth::id();
         $model = \App\User::find($idnya);
         $tanggal = date('Y-m-d');

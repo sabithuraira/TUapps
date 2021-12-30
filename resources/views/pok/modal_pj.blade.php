@@ -1,9 +1,8 @@
 <div class="modal" id="modal_pj" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header"><b>Pilih Penanggung Jawab</b></div>
+            <div class="modal-header"><b>Penanggung Jawab : @{{ form_pj.rincian_label }}</b></div>
             <div class="modal-body">
-                <input type="hidden" v-model="form_id">
                 Pilih Penanggung Jawab Anggaran:
                 <div class="form-line">
                     <select class="form form-control" v-model="form_pj.id_pegawai">

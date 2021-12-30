@@ -68,7 +68,7 @@ class PokRincianAnggaran extends Model{
                     INNER JOIN  pok_rincian_anggaran r ON m.id=r.id_mata_anggaran
                     
                     WHERE 
-                        m.tahun=2022
+                        m.tahun=2022 AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . "
                     ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
                         m.id_komponen, m.id_sub_komponen, m.id;";
                         
