@@ -118,13 +118,41 @@
 
                     <tr>
                         <td></td>
-                        <td>{{ $data->label }}</td>
+                        <td>
+                            {{ $data->label }}
+                            @if($data->nama_pj!='')
+                                <br/>
+                                <div class='badge badge-info'>PJ: {{ $data->nama_pj }}</div>
+                            @endif
+                        </td>
                         <td>{{ $data->volume }}</td>
                         <td class="text-center">{{ $data->satuan }}</td>
                         <td class="text-right">{{ number_format($data->harga_satuan) }}</td>
                         <td class="text-right">{{ number_format($data->harga_jumlah) }}</td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            <div class="text-center">
+                                <a href="#" role="button" @click="setTransaksi" 
+                                    data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
+                                    data-toggle="modal" data-target="#modal_estimasi"> <i class="fa fa-search"></i></a>
+                            </div>
+                            <br/>
+                            
+                            @if($data->total_estimasi!=null)
+                                <div class='badge badge-info'>Rp. {{ number_format($data->total_estimasi) }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                <a href="#" role="button" @click="setTransaksi" 
+                                    data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
+                                    data-toggle="modal" data-target="#modal_realisasi"> <i class="fa fa-search"></i></a>
+                            </div>
+                            <br/>
+                            
+                            @if($data->total_realisasi!=null)
+                                <div class='badge badge-info'>Rp. {{ number_format($data->total_realisasi) }}</div>
+                            @endif
+                        </td>
                         <td class="text-center">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="#" role="button"  
@@ -138,23 +166,6 @@
                                     data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
                                     <i class="icon-user text-info"></i> 
                                     <p class='text-info small'>Set PJ</p>
-                                </a>
-                                @endhasanyrole
-                            </div>
-                            
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                @if(auth()->user()->id==$data->id_pj)
-                                <a href="#">
-                                    <i class="icon-note text-info"></i> 
-                                    <p class='text-info small'>Estimasi</p>
-                                </a>
-                                @endif
-
-                                @hasanyrole('superadmin|kuasa_anggaran')
-                                &nbsp;&nbsp;
-                                <a href="#">
-                                    <i class="icon-note text-info"></i> 
-                                    <p class='text-info small'>Realisasi</p>
                                 </a>
                                 @endhasanyrole
                             </div>
@@ -180,6 +191,10 @@
     </table>
     
     @include('pok.modal_pj')
+    @include('pok.modal_estimasi')
+    @include('pok.modal_form_estimasi')
+    @include('pok.modal_realisasi')
+    @include('pok.modal_form_realisasi')
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -224,14 +239,41 @@
     var vm = new Vue({  
         el: "#app_vue",
         data:  {
+            id_user: {{ auth()->user()->id }},
             datas: [],
             form_pj: {
                 id_pegawai: '',
                 rincian_id: '',
                 rincian_label: '',
             },
+            form_transaksi: {
+                rincian_id: '',
+                rincian_label: '',
+                rincian_pj: '',
+                id: '',
+                label: '',
+                ket_estimasi: '',
+                total_estimasi: '',
+                ket_realisasi: '',
+                total_realisasi: '',
+            },
+            list_transaksi: [],
         },
         methods: {
+            moneyFormat:function(amount){
+                var decimalCount = 0;
+                var decimal = ".";
+                var thousands = ",";
+                decimalCount = Math.abs(decimalCount);
+                decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+                const negativeSign = amount < 0 ? "-" : "";
+
+                let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+                let j = (i.length > 3) ? i.length % 3 : 0;
+
+                return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");      
+            },
             setPj: function (event) {
                 var self = this;
                 if(event){
@@ -254,6 +296,99 @@
                     data:{
                         rincian_id: self.form_pj.rincian_id,
                         id_pegawai: self.form_pj.id_pegawai,
+                    },
+                }).done(function (data) {
+                    $('#wait_progress').modal('hide');
+                    if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                    else location.reload(); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            },
+            setTransaksi: function (event) {
+                var self = this;
+                if(event){
+                    self.form_transaksi.rincian_id = event.currentTarget.getAttribute('data-id');
+                    self.form_transaksi.rincian_label = event.currentTarget.getAttribute('data-label');
+                    self.form_transaksi.rincian_pj = event.currentTarget.getAttribute('data-pj');
+                }
+
+                $('#wait_progress').modal('show'); 
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                $.ajax({
+                    url :  "{{ url('pok/show_transaksi') }}/" + self.form_transaksi.rincian_id,
+                    method : 'get',
+                    dataType: 'json',
+                }).done(function (data) {
+                    self.list_transaksi = data.data;
+                    $('#wait_progress').modal('hide'); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            },
+            setTransaksiDetail: function (event) {
+                var self = this;
+                if(event){
+                    self.form_transaksi.id = event.currentTarget.getAttribute('data-id');
+                    self.form_transaksi.label = event.currentTarget.getAttribute('data-label');
+                    self.form_transaksi.ket_estimasi = event.currentTarget.getAttribute('data-ket_estimasi');
+                    self.form_transaksi.total_estimasi = event.currentTarget.getAttribute('data-total_estimasi');
+                    self.form_transaksi.ket_realisasi = event.currentTarget.getAttribute('data-ket_realisasi');
+                    self.form_transaksi.total_realisasi = event.currentTarget.getAttribute('data-total_realisasi');
+                }
+            },
+            saveTransaksi: function (jenis_transaksi) { //1=estimasi, 2=realisasi
+                var self = this;
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+                
+                var biaya = 0;
+                var keterangan = '';
+                if(jenis_transaksi==1){
+                    biaya = self.form_transaksi.total_estimasi;
+                    keterangan = self.form_transaksi.ket_estimasi;
+                }
+                else{
+                    biaya = self.form_transaksi.total_realisasi;
+                    keterangan = self.form_transaksi.ket_realisasi;
+                }
+
+                $.ajax({
+                    url :  "{{ url('pok/save_transaksi') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        rincian_id: self.form_transaksi.rincian_id,
+                        transaksi_id: self.form_transaksi.id,
+                        transaksi_biaya: biaya,
+                        transaksi_ket: keterangan,
+                        transaksi_label: self.form_transaksi.label,
+                        transaksi_jenis: jenis_transaksi,
+                    },
+                }).done(function (data) {
+                    $('#wait_progress').modal('hide');
+                    if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                    else location.reload(); 
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                });
+            },
+            delTransaksi: function () { 
+                var self = this;
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                $.ajax({
+                    url :  "{{ url('pok/delete_transaksi') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        transaksi_id: self.form_transaksi.id,
                     },
                 }).done(function (data) {
                     $('#wait_progress').modal('hide');
