@@ -13,9 +13,9 @@ class AddPjToRincianAnggaranTable extends Migration
      */
     public function up(){
         Schema::table('pok_rincian_anggaran', function (Blueprint $table) {
-            $table->integer("id_pj");
-            $table->string("nip_pj");
-            $table->string("nama_pj");
+            $table->integer("id_pj")->nullable();
+            $table->string("nip_pj")->nullable();
+            $table->string("nama_pj")->nullable();
             $table->integer("jumlah_rincian_estimasi")->nullable();
             $table->float("total_estimasi",15,2)->nullable();
             $table->integer("jumlah_rincian_realisasi")->nullable();

@@ -59,8 +59,8 @@ class UserModel extends Model
         return $total_biasa;// + $total_pelatihan;
     }
 
-    public function getJumlahDlByNip($nip){
-        $cur_year = date('Y');
+    public function getJumlahDlByNip($nip, $cur_year){
+        // $cur_year = date('Y');
 
         $total_biasa = DB::table("surat_tugas_rincian")
                     ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")

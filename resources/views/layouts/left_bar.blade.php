@@ -97,17 +97,20 @@
                 </li>
                 @endif
 
-                @hasanyrole('superadmin')
+                @if(Auth::user()->kdkab=='00')
                 <li class="{{ (request()->is('pok*')) ? 'active' : '' }}">
-                    <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Anggaran</span></a>
+                    <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Anggaran</span> <span class="badge badge-warning float-right">New</span></a>
                     <ul>
                         <li class="{{ request()->is('pok') ? 'active' : '' }}"><a
                                 href="{{url('pok')}}">POK</a></li>
+                                
+                        @hasanyrole('superadmin')
                         <li class="{{ request()->is('pok/import_pok*') ? 'active' : '' }}"><a
-                                href="{{url('pok/import_pok')}}">Import POK</a></li>
+                                href="{{url('pok/import_pok')}}">Import POK</a></li>        
+                        @endhasanyrole
                     </ul>
                 </li>
-                @endhasanyrole
+                @endif
 
                 @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                 <li class="{{ (request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
