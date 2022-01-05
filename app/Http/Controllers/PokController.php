@@ -159,6 +159,20 @@ class PokController extends Controller
         ]);
     }
 
+    public function revisi(Request $request){
+        $tahun = date('Y');
+        if(strlen($request->tahun)>0) $tahun = $request->tahun;
+
+        $model = new \App\PokRincianAnggaran;
+        $datas = $model->getDataAnggaran($tahun);
+        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
+
+        return view('pok.revisi', compact(
+            'tahun', 'model', 'datas',
+            'list_pegawai'
+        ));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

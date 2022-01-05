@@ -173,11 +173,6 @@
                             @hasanyrole('superadmin|kuasa_anggaran')
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="#">
-                                    <i class="icon-pencil text-info"></i> 
-                                    <p class='text-info small'>Edit</p>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="#">
                                     <i class="icon-magic-wand text-info"></i> 
                                     <p class='text-info small'>Revisi</p>
                                 </a>
