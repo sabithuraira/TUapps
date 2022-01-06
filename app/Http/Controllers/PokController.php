@@ -160,16 +160,20 @@ class PokController extends Controller
     }
 
     public function revisi(Request $request){
-        $tahun = date('Y');
-        if(strlen($request->tahun)>0) $tahun = $request->tahun;
+        $keyword = $request->get('search');
+        $model = new \App\PokRevisi;
 
-        $model = new \App\PokRincianAnggaran;
-        $datas = $model->getDataAnggaran($tahun);
-        $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
+        
+        $datas = \App\PokRevisi::where('judul', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('keterangan', 'LIKE', '%' . $keyword . '%')
+                    ->orderBy('id', 'desc')
+                    ->paginate();
+
+        $datas->withPath('revisi');
+        $datas->appends($request->all());
 
         return view('pok.revisi', compact(
-            'tahun', 'model', 'datas',
-            'list_pegawai'
+            'datas', 'keyword'
         ));
     }
 

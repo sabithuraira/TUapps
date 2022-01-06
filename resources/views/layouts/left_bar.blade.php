@@ -104,6 +104,9 @@
                         <li class="{{ request()->is('pok') ? 'active' : '' }}"><a
                                 href="{{url('pok')}}">POK</a></li>
                                 
+                        <li class="{{ request()->is('pok/revisi') ? 'active' : '' }}"><a
+                                href="{{url('pok/revisi')}}">Revisi</a></li>
+                                
                         @hasanyrole('superadmin')
                         <li class="{{ request()->is('pok/import_pok*') ? 'active' : '' }}"><a
                                 href="{{url('pok/import_pok')}}">Import POK</a></li>        

@@ -65,10 +65,12 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('jabatan_fungsional/hapus', 'JabatanFungsionalController@hapus');
 });
 
-Route::resource('pok', 'PokController')->only(['index']);
-Route::get('pok/show_transaksi/{id}', 'PokController@show_transaksi');
-Route::post('pok/save_transaksi', 'PokController@save_transaksi');
-Route::post('pok/delete_transaksi', 'PokController@delete_transaksi');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('pok', 'PokController')->only(['index']);
+    Route::get('pok/show_transaksi/{id}', 'PokController@show_transaksi');
+    Route::post('pok/save_transaksi', 'PokController@save_transaksi');
+    Route::post('pok/delete_transaksi', 'PokController@delete_transaksi');
+});
 
 Route::group(['middleware' => ['role:superadmin']], function () {
     Route::get('pok/import_pok', 'PokController@upload_pok');
