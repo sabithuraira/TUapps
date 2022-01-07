@@ -51,6 +51,51 @@ class LogBook extends Model
                 ['log_books.tanggal', '<=', $end_date],
                 ['log_books.user_id', '=', $user_id],
             ])
+            ->orWhere(
+                (function ($query) {
+                    $query->where('log_books.is_rencana', '=', 0)
+                        ->orWhereNull('log_books.is_rencana');
+                })
+            )
+            ->orderBy('log_books.tanggal', 'desc')
+            ->get();
+
+        foreach($datas as $key=>$value){
+            $result[]=array(
+                'id'                =>$value->id,
+                'user_id'           =>$value->user_id,
+                'tanggal'           =>date('d M Y', strtotime($value->tanggal)),
+                'real_tanggal'      =>date('m/d/Y', strtotime($value->tanggal)),
+                'waktu_mulai'       =>date('H:i', strtotime($value->waktu_mulai)),
+                'waktu_selesai'     =>date('H:i', strtotime($value->waktu_selesai)),
+                'isi'               =>$value->isi,
+                'hasil'             =>$value->hasil,
+                'catatan_pimpinan'  =>$value->catatan_pimpinan,
+                'created_by'        =>$value->created_by,
+                'updated_by'        =>$value->updated_by,
+                'ckp_id'            =>$value->ckp_id,
+                'volume'            =>$value->volume,
+                'satuan'            =>$value->satuan,
+                'pemberi_tugas'     =>$value->pemberi_tugas,
+                'status_penyelesaian' =>$value->status_penyelesaian,
+            );
+        }
+
+        return $result;
+    }
+
+    //rekap per pegawai dalam rentang waktu tertentu
+    public function RencanaKerjaRekap($start_date, $end_date, $user_id){
+        $result = array();
+        $datas = array();
+
+        $datas = DB::table('log_books')
+            ->where([
+                ['log_books.tanggal', '>=', $start_date],
+                ['log_books.tanggal', '<=', $end_date],
+                ['log_books.user_id', '=', $user_id],
+                ['log_books.is_rencana', '=', 1],
+            ])
             ->orderBy('log_books.tanggal', 'desc')
             ->get();
 

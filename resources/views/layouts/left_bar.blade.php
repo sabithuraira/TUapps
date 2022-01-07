@@ -42,10 +42,9 @@
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
                     <ul>
                         <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a>
-                        <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP <span class="badge badge-warning float-right">Uji Coba</span></a>
-                        </li>
-                        <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a
-                                href="{{ url('log_book') }}">Log Book</a></li>
+                        <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP <span class="badge badge-warning float-right">Uji Coba</span></a></li>
+                        <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a href="{{ url('log_book') }}">Log Book</a></li>
+                        <li class="{{ request()->is('rencana_kerja') ? 'active' : '' }}"><a href="{{ url('rencana_kerja') }}">Rencana Kerja</a></li>
                         <li class="{{ request()->is('log_book/laporan_wfh*') ? 'active' : '' }}"><a
                                 href="{{ url('log_book/laporan_wfh') }}">Laporan WFH</a></li>
 

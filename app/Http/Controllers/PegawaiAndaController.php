@@ -115,8 +115,12 @@ class PegawaiAndaController extends Controller
 
         $start = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."-1 month" ));
         $end = date('m/d/Y');
+        
+        $start_rencana = date('m/d/Y');
+        $end_rencana = date("m/d/Y", strtotime(date( "Y-m-d",strtotime(date("Y-m-d") ))."+1 week" ));
+        
 
         return view('pegawai_anda.profile',compact('model','id', 'real_id', 'ckp', 'month', 
-            'year', 'start', 'end'));
+            'year', 'start', 'end', 'start_rencana', 'end_rencana'));
     }
 }

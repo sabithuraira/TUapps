@@ -151,11 +151,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('surat_km', 'SuratKmController');
     Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
     Route::get('surat_km/{id}/print', 'SuratKmController@print');
+    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
 
     //////////////////////////
     Route::resource('log_book', 'LogBookController')->except(['show']);
     Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
-    Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
     Route::post('log_book/komentar', 'LogBookController@dataKomentar');
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
@@ -164,6 +164,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
     Route::post('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
+    ///////////////
+    Route::resource('rencana_kerja', 'RencanaKerjaController')->except(['show']);
+    Route::post('rencana_kerja/data_rencana_kerja', 'RencanaKerjaController@dataRencanaKerja');
+    Route::post('rencana_kerja/send_to_logbook', 'RencanaKerjaController@send_to_logbook');
+    Route::get('rencana_kerja/rekap_pegawai', 'RencanaKerjaController@rekap_pegawai');
+    Route::get('rencana_kerja/destroy_rencana_kerja/{id}', 'RencanaKerjaController@destroy_rencana_kerja');
+    //////////////////
 
     //CKP
     Route::resource('ckp', 'CkpController');

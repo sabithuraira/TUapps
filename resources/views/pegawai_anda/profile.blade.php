@@ -42,11 +42,13 @@
                         <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp">CKP UTAMA</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ckp_penilaian">CKP PENILAIAN</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rencana_kerja">Rencana Kerja</a></li>
                     </ul>
                     <div class="tab-content">
                         @include('pegawai_anda.ckp_utama')
                         @include('pegawai_anda.ckp_penilaian')
                         @include('pegawai_anda.log_book')
+                        @include('pegawai_anda.rencana_kerja')
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     <br/>
@@ -139,6 +141,10 @@ var vm = new Vue({
       datas: [],
       start: {!! json_encode($start) !!},
       end: {!! json_encode($end) !!},
+      
+      datas_rencana: [],
+      start_rencana: {!! json_encode($start_rencana) !!},
+      end_rencana: {!! json_encode($end_rencana) !!},
       catatan_approve: '',
       id_row: 0,
     },
@@ -341,6 +347,32 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
+        setDatasRencanaKerja: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            $.ajax({
+                url : "{{ url('/rencana_kerja/data_rencana_kerja/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    start: self.start_rencana, 
+                    end: self.end_rencana, 
+                    user_id: {!! json_encode($model->email) !!},
+                },
+            }).done(function (data) {
+                self.datas_rencana = data.datas;
+                console.log(data)
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
         showIsi: function(tanggal, waktu){
             var self = this;
             const rowData = self.datas.find(el => (el.tanggal == tanggal && el.waktu == waktu));
@@ -374,6 +406,7 @@ var vm = new Vue({
     $(document).ready(function() {
         vm.setDatas();
         vm.setDatasLogBook();
+        vm.setDatasRencanaKerja();
     });
 
 
@@ -392,5 +425,15 @@ var vm = new Vue({
         vm.end = this.value;
         vm.setDatasLogBook();
     });
-</script>
+    
+    $('#start_rencana').change(function() {
+        vm.start = this.value;
+        vm.setDatasRencanaKerja();
+    });
+
+    $('#end_rencana').change(function() {
+        vm.end = this.value;
+        vm.setDatasRencanaKerja();
+    });
+</script
 @endsection

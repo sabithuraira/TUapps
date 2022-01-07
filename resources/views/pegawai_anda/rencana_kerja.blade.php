@@ -1,5 +1,5 @@
 
-<div class="tab-pane" id="log_book">
+<div class="tab-pane" id="rencana_kerja">
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 left-box">
 
@@ -7,10 +7,10 @@
                 <label>Rentang Waktu:</label>
                 
                 <div class="input-daterange input-group" data-provide="datepicker">
-                    <input type="text" class="input-sm form-control" v-model="start" id="start" name="start">
+                    <input type="text" class="input-sm form-control" v-model="start_rencana" id="start_rencana" name="start_rencana">
                     <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
                     
-                    <input type="text" class="input-sm form-control" v-model="end" id="end" name="end">
+                    <input type="text" class="input-sm form-control" v-model="end_rencana" id="end_rencana" name="end_rencana">
                 </div>
             </div>
         </div>
@@ -25,12 +25,11 @@
                         <th class="text-center">Keterangan</th>
                         <th class="text-center">Durasi & waktu</th>
                         <th class="text-center">Isi & Hasil</th>
-                        <th class="text-center">Status Penyelesaian (%)</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr v-for="(data, index) in datas" :key="data.id">
+                    <tr v-for="(data, index) in datas_rencana" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td class="text-center">
                             Pemberi Tugas: @{{ data.pemberi_tugas }}
@@ -48,7 +47,6 @@
                             @{{ data.isi }}
                             <p class="text-muted">Hasil: @{{ data.hasil }}</p>
                         </td>
-                        <td><input class="form-control  form-control-sm" type="number" min="0" max="100" :name="'u_status_penyelesaian'+data.id" v-model="data.status_penyelesaian"></td>
                     </tr>
                 </tbody>
             </table>
