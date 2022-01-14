@@ -34,8 +34,7 @@ class OpnamePersediaanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $month = date('m');
         $year = date('Y');
         $master_barang = \App\MasterBarang::all();
@@ -52,8 +51,7 @@ class OpnamePersediaanController extends Controller
                 'year', 'month'));
     }
 
-    public function print_persediaan(Request $request)
-    {
+    public function print_persediaan(Request $request){
         $datas=array();
         $month = date('m');
         $year = date('Y');

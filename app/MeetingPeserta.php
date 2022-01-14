@@ -8,8 +8,7 @@ class MeetingPeserta extends Model
 {
     protected $table = 'meeting_peserta';
 
-    public function attributes()
-    {
+    public function attributes(){
         return (new \App\Http\Requests\MeetingRequest())->attributes();
     }
 }

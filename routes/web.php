@@ -68,6 +68,9 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('pok', 'PokController')->only(['index']);
     Route::get('pok/show_transaksi/{id}', 'PokController@show_transaksi');
+    Route::get('pok/revisi', 'PokController@revisi');
+    Route::post('pok/revisi', 'PokController@store_revisi');
+    Route::get('pok/create_revisi', 'PokController@create_revisi');
     Route::post('pok/save_transaksi', 'PokController@save_transaksi');
     Route::post('pok/delete_transaksi', 'PokController@delete_transaksi');
 });

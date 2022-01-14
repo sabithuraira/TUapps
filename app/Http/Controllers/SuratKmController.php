@@ -28,7 +28,8 @@ class SuratKmController extends Controller
         if($jenis!='') $where_condition[] = ['jenis_surat', '=', $jenis];
 
         $list_surat = \App\SuratKm::where($where_condition)->orderBy('created_at', 'desc')->paginate();
-        
+        $model = new \App\SuratKm;
+
         if(strlen($keyword)>0){
             $list_surat = \App\SuratKm::where($where_condition)
                 ->where(
@@ -45,7 +46,7 @@ class SuratKmController extends Controller
         $list_surat->appends($request->all());
 
 
-        return view('surat_km.index',compact('list_surat', 'keyword', 'jenis'));
+        return view('surat_km.index',compact('list_surat', 'keyword', 'jenis', 'model'));
     }
 
     public function getNomorUrut(Request $request){
@@ -189,8 +190,10 @@ class SuratKmController extends Controller
                     ['jenis_surat', '=', $jenis_surat],
                     ['kdprop', '=', Auth::user()->kdprop],
                     ['kdkab', '=', Auth::user()->kdkab],
+                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
                     // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
+                ->orderBy('tanggal', 'asc')
                 ->orderBy('nomor_urut', 'asc')
                 ->first();
 
@@ -210,8 +213,10 @@ class SuratKmController extends Controller
                 ['jenis_surat', '=', $jenis_surat],
                 ['kdprop', '=', Auth::user()->kdprop],
                 ['kdkab', '=', Auth::user()->kdkab],
+                [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
             ])
             ->count();
+
 
             $alphabet = range('A', 'Z');
             
@@ -230,8 +235,7 @@ class SuratKmController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SuratKmRequest $request)
-    {
+    public function store(SuratKmRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('surat_km/create')
                         ->withErrors($validator)
@@ -245,26 +249,7 @@ class SuratKmController extends Controller
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
 
-        // print_r($request->all());
-        // print_r($request->jenis_surat);
-        // print_r($request->isi2);
-        // print_r($request->lampiran2);
-        // print_r($request->kepada2);
-        // print_r($request->kepada_di2);
-        // print_r($request->dibuat_di2);
-        // die();
-        
-        // $model_rincian->isi = $request->isi2;
-        // $model_rincian->lampiran = $request->lampiran2;
-        // $model_rincian->kepada = $request->kepada2;
-        // $model_rincian->kepada_di = $request->kepada_di2;
-        // $model_rincian->dibuat_di = $request->dibuat_di2;
-
         $tanggal_format = date('Y-m-d');
-        // if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
-    
-        // $bulan = date('m', strtotime($request->get('tanggal')));
-        // $tahun = date('Y', strtotime($request->get('tanggal')));
 
         if($model->jenis_surat==1){    
             if($request->has('tanggal1')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal1')));

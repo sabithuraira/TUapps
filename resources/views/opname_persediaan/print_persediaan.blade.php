@@ -61,21 +61,29 @@
     </thead>
 
     <tbody>
+        @php
+            $no_urut = 1;
+        @endphp
         @foreach($datas as $key=>$data)
-            <tr>
-                <td align="center">{{ $key+1 }}</td>
-                <td>{{ $data->nama_barang }}</td>
-                <td>{{ $data->op_awal }}</td>
-                <td>{{ $data->satuan }}</td>
-                <td>{{ $data->op_tambah }}</td>
-                <td>{{ $data->satuan }}</td>
-                <td>{{ $data->op_kurang }}</td>
-                <td>{{ $data->satuan }}</td>
-                
-                <td>{{ ((int)$data->op_awal+(int)$data->op_tambah-(int)$data->op_kurang) }}</td>
-                <td>{{ $data->satuan }}</td>
-                <td align="right">{{  number_format($data->harga_satuan,0,",",".") }}</td>
-            </tr>
+            @if($data->op_awal!=0 || $data->op_tambah!=0 || $data->op_kurang!=0)
+                <tr>
+                    <td align="center">{{ $no_urut }}</td>
+                    <td>{{ $data->nama_barang }}</td>
+                    <td>{{ $data->op_awal }}</td>
+                    <td>{{ $data->satuan }}</td>
+                    <td>{{ $data->op_tambah }}</td>
+                    <td>{{ $data->satuan }}</td>
+                    <td>{{ $data->op_kurang }}</td>
+                    <td>{{ $data->satuan }}</td>
+                    
+                    <td>{{ ((int)$data->op_awal+(int)$data->op_tambah-(int)$data->op_kurang) }}</td>
+                    <td>{{ $data->satuan }}</td>
+                    <td align="right">{{  number_format($data->harga_satuan,0,",",".") }}</td>
+                </tr>
+                @php
+                    ++$no_urut;
+                @endphp
+            @endif
         @endforeach
     </tbody>
   </table>
