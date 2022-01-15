@@ -13,8 +13,7 @@ class PemegangBmnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
         $datas = \App\PemegangBmn::where('nama', 'LIKE', '%' . $keyword . '%')
             ->orWhere('nama_barang', 'LIKE', '%' . $keyword . '%')
@@ -36,8 +35,7 @@ class PemegangBmnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $model= new \App\PemegangBmn;
         $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('id', 'asc')
@@ -51,8 +49,7 @@ class PemegangBmnController extends Controller
      * @param  App\Http\Requests  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PemegangBmnRequest $request)
-    {
+    public function store(PemegangBmnRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('pemegang_bmn/create')
                         ->withErrors($validator)
@@ -91,8 +88,7 @@ class PemegangBmnController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $model = \App\PemegangBmn::find($id);
         $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('id', 'asc')
@@ -107,8 +103,7 @@ class PemegangBmnController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PemegangBmnRequest $request, $id)
-    {
+    public function update(PemegangBmnRequest $request, $id){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('pemegang_bmn/edit',$id)
                         ->withErrors($validator)
@@ -134,8 +129,7 @@ class PemegangBmnController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $model = \App\PemegangBmn::find($id);
         $model->delete();
         return redirect('pemegang_bmn')->with('success','Information has been  deleted');

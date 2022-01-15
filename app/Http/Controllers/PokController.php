@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\PokRevisiRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PokImport;
+use Illuminate\Support\Facades\Storage;
+use Response;
+use Illuminate\Support\Facades\File;
 
 class PokController extends Controller
 {
@@ -163,7 +167,6 @@ class PokController extends Controller
         $keyword = $request->get('search');
         $model = new \App\PokRevisi;
 
-        
         $datas = \App\PokRevisi::where('judul', 'LIKE', '%' . $keyword . '%')
                     ->orWhere('keterangan', 'LIKE', '%' . $keyword . '%')
                     ->orderBy('id', 'desc')
@@ -173,8 +176,87 @@ class PokController extends Controller
         $datas->appends($request->all());
 
         return view('pok.revisi', compact(
-            'datas', 'keyword'
+            'datas', 'keyword', 'model'
         ));
+    }
+
+    public function create_revisi(){
+        $model= new \App\PokRevisi;
+        
+        return view('pok.revisi_create', compact(
+            'model'
+        ));
+    }
+
+    public function store_revisi(PokRevisiRequest $request){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('pok/create_revisi')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $model= new \App\PokRevisi;
+        $model->judul=$request->get('judul');
+        $model->keterangan=$request->get('keterangan');
+        // $model->nama=$request->get('nama');
+        
+        if ($request->hasFile('kak')) {
+            $file = $request->file('kak');
+            $name = (strlen($model->kak)>3) ? $model->kak : time().str_replace(' ','',$file->getClientOriginalName());
+
+            $file->move('upload/kak', $name);
+            $model->kak = $name;
+        }
+        
+        if ($request->hasFile('nota_dinas')) {
+            $file = $request->file('nota_dinas');
+            $name = (strlen($model->nota_dinas)>3) ? $model->nota_dinas : time().str_replace(' ','',$file->getClientOriginalName());
+
+            $file->move('upload/nota_dinas', $name);
+            $model->nota_dinas = $name;
+        }
+        
+        if ($request->hasFile('matrik_anggaran')) {
+            $file = $request->file('matrik_anggaran');
+            $name = (strlen($model->matrik_anggaran)>3) ? $model->matrik_anggaran : time().str_replace(' ','',$file->getClientOriginalName());
+
+            $file->move('upload/matrik_anggaran', $name);
+            $model->matrik_anggaran = $name;
+        }
+
+        $model->status_revisi = 0;
+
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
+        
+        return redirect('pok/revisi')->with('success', 'Information has been added');
+    }
+    
+    public function destroy_revisi($id){
+        $model = \App\PokRevisi::find($id);
+
+        File::delete('upload/kak/'.$model->kak);
+        File::delete('upload/nota_dinas/'.$model->nota_dinas);
+        File::delete('upload/matrik_anggaran/'.$model->matrik_anggaran);
+
+        $model->delete();
+        return redirect('pok/revisi')->with('success','Information has been  deleted');
+    }
+    
+    public function approve_revisi($id){
+        $model = \App\PokRevisi::find($id);
+        $model->status_revisi = 1;
+        $model->approved_ppk_by = Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
+        return redirect('pok/revisi')->with('success','Information has been  deleted');
+    }
+    
+    public function download($jenis, $file_name){
+        $file = public_path()."/upload/".$jenis."/". $file_name;
+        $headers = array('Content-Type: application/pdf',);
+        return Response::download($file, $file_name, $headers);
     }
 
     /**

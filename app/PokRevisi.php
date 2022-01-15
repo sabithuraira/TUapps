@@ -9,12 +9,19 @@ class PokRevisi extends Model{
     
     public function getListStatusAttribute(){
         return array(
-            1 => "<div class='badge badge-warning'>Diajukan</div>", 
-            2 => "<div class='badge badge-info'>Disetujui PPK</div>", 
-            4 => "<div class='badge badge-success'>Sudah direvisi</div>", 
-            5 => "<div class='badge badge-warning'>Konfirmasi PPK</div>", 
-            6 => "<div class='badge badge-warning'>Proses Pembayaran</div>", 
-            7 => "<div class='badge badge-success'>Sudah dibayar/selesai</div>",
+            0 => "<div class='badge badge-warning'>Menunggu Persetujuan PPK</div>", 
+            1 => "<div class='badge badge-info'>Disetujui PPK</div>", 
+            2 => "<div class='badge badge-danger'>Ditolak PPK</div>", 
+            3 => "<div class='badge badge-success'>Sudah direvisi</div>", 
+            4 => "<div class='badge badge-danger'>Dibatalkan</div>", 
         );
+    }
+    
+    public function attributes(){
+        return (new \App\Http\Requests\PokRevisiRequest())->attributes();
+    }
+    
+    public function User(){
+        return $this->hasOne('App\User', 'id', 'created_by');
     }
 }

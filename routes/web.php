@@ -73,6 +73,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pok/create_revisi', 'PokController@create_revisi');
     Route::post('pok/save_transaksi', 'PokController@save_transaksi');
     Route::post('pok/delete_transaksi', 'PokController@delete_transaksi');
+    Route::get('pok/download/{jenis}/{file_name}', 'PokController@download');
+    Route::delete('pok/{id}/destroy_revisi', 'PokController@destroy_revisi');
+    Route::post('pok/{id}/approve_revisi', 'PokController@approve_revisi');
 });
 
 Route::group(['middleware' => ['role:superadmin']], function () {

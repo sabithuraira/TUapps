@@ -17,14 +17,13 @@
 
     <div class="card" id="app_vue">
         <div class="body">
+            <a href="{{action('PokController@create_revisi')}}" class="'btn btn-info btn-sm"><i
+                    class='fa fa-plus'></i> Buat Revisi</a>
+            <br /><br />
             <form action="{{url('pok/revisi')}}" method="get">
-                <a href="{{action('PokController@create_revisi')}}" class="'btn btn-info btn-sm"><i
-                        class='fa fa-plus'></i> Buat Revisi</a>
-                <br />
                 @csrf
-
                 <div class="row clearfix">
-                    <div class="col-md-8 left">
+                    <div class="col-md-12 left">
                         <input type="text" class="form-control form-control-sm" name="search" id="search"
                             value="{{ $keyword }}" placeholder="Search..">
                     </div>
