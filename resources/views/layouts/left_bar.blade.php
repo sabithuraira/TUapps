@@ -106,6 +106,11 @@
                         <li class="{{ request()->is('pok/revisi') ? 'active' : '' }}"><a
                                 href="{{url('pok/revisi')}}">Revisi</a></li>
                                 
+                        @hasanyrole('superadmin|kuasa_anggaran')
+                        <li class="{{ request()->is('pok_versi*') ? 'active' : '' }}"><a
+                                href="{{url('pok_versi')}}">Versi POK</a></li>        
+                        @endhasanyrole
+                                
                         @hasanyrole('superadmin')
                         <li class="{{ request()->is('pok/import_pok*') ? 'active' : '' }}"><a
                                 href="{{url('pok/import_pok')}}">Import POK</a></li>        
