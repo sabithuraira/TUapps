@@ -24,7 +24,12 @@ class PokController extends Controller
         if(strlen($request->tahun)>0) $tahun = $request->tahun;
 
         $model = new \App\PokRincianAnggaran;
-        $datas = $model->getDataAnggaran($tahun);
+        
+        $last = \App\PokVersiRevisi::latest()->first();
+        $versi_id = 0;
+        if($last!=null) $versi_id = $last->id;
+
+        $datas = $model->getDataAnggaran($tahun, $versi_id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
 
         return view('pok.index', compact(
@@ -138,6 +143,196 @@ class PokController extends Controller
                 }
             }
         }
+
+    }
+
+    public function get_list_pok(Request $request){
+        if(strlen($request->get('jenis_form'))>0){
+            $jenis_form = $request->get('jenis_form');
+            $datas = [];
+            //1=program, 2=kegiatan, 3=kro, 4=ro
+            //5=komponen, 6=sub komponen, 7=mata anggaran
+            if($jenis_form==1){ //program
+                $datas = \App\PokProgram::where('tahun', '=', date('Y'))->get();
+            }
+            else if($jenis_form==2){ //kegiatan
+                $datas = \App\PokAktivitas::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program')) 
+                            ->get();
+            }
+            else if($jenis_form==3){ //kro
+                $datas = \App\PokKro::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program'))
+                            ->where('id_aktivitas', '=', $request->get('id_aktivitas'))
+                            ->get();
+            }
+            else if($jenis_form==4){ //ro
+                $datas = \App\PokRo::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program'))
+                            ->where('id_aktivitas', '=', $request->get('id_aktivitas'))
+                            ->where('id_kro', '=', $request->get('id_kro'))
+                            ->get();
+            }
+            else if($jenis_form==5){ //komponen
+                $datas = \App\PokKomponen::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program'))
+                            ->where('id_aktivitas', '=', $request->get('id_aktivitas'))
+                            ->where('id_kro', '=', $request->get('id_kro'))
+                            ->where('id_ro', '=', $request->get('id_ro'))
+                            ->get();
+            }
+            else if($jenis_form==6){ //sub komponen
+                $datas = \App\PokSubKomponen::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program'))
+                            ->where('id_aktivitas', '=', $request->get('id_aktivitas'))
+                            ->where('id_kro', '=', $request->get('id_kro'))
+                            ->where('id_ro', '=', $request->get('id_ro'))
+                            ->where('id_komponen', '=', $request->get('id_komponen'))
+                            ->get();
+            }
+            else if($jenis_form==7){ //mata rincian
+                $datas = \App\PokMataAnggaran::where('tahun', '=', date('Y'))
+                            ->where('id_program', '=', $request->get('id_program'))
+                            ->where('id_aktivitas', '=', $request->get('id_aktivitas'))
+                            ->where('id_kro', '=', $request->get('id_kro'))
+                            ->where('id_ro', '=', $request->get('id_ro'))
+                            ->where('id_komponen', '=', $request->get('id_komponen'))
+                            ->where('id_sub_komponen', '=', $request->get('id_sub_komponen'))
+                            ->get();
+            }
+            
+            return response()->json(['status'=>'success', 
+                'datas' => $datas,
+            ]);
+        }
+
+        return response()->json(['status'=>'error', 
+            'datas' => null,
+        ]);
+    }
+
+    public function save_new_pok(Request $request){
+        if(strlen($request->get('jenis_form'))>0){
+            $jenis_form = $request->get('jenis_form');
+            //1=program, 2=kegiatan, 3=kro, 4=ro
+            //5=komponen, 6=sub komponen, 7=mata anggaran
+            if($jenis_form==1){ //program
+                $model = new \App\PokProgram;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==2){ //kegiatan
+                $model = new \App\PokAktivitas;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->id_program = $request->get('id_program');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==3){ //kro
+                $model = new \App\PokKro;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->volume = $request->get('rincian_volume');
+                $model->satuan = $request->get('rincian_satuan');
+                $model->id_program = $request->get('id_program');
+                $model->id_aktivitas = $request->get('id_aktivitas');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==4){ //ro
+                $model = new \App\PokRo;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->id_program = $request->get('id_program');
+                $model->id_aktivitas = $request->get('id_aktivitas');
+                $model->id_kro = $request->get('id_kro');
+                $model->volume = $request->get('rincian_volume');
+                $model->satuan = $request->get('rincian_satuan');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==5){ //komponen
+                $model = new \App\PokKomponen;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->id_program = $request->get('id_program');
+                $model->id_aktivitas = $request->get('id_aktivitas');
+                $model->id_kro = $request->get('id_kro');
+                $model->id_ro = $request->get('id_ro');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==6){ //sub komponen
+                $model = new \App\PokSubKomponen;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->id_program = $request->get('id_program');
+                $model->id_aktivitas = $request->get('id_aktivitas');
+                $model->id_kro = $request->get('id_kro');
+                $model->id_ro = $request->get('id_ro');
+                $model->id_komponen = $request->get('id_komponen');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==7){ //mata rincian
+                $model = new \App\PokMataAnggaran;
+                $model->kode =  $request->get('rincian_kode');
+                $model->label = $request->get('rincian_label');
+                $model->id_program = $request->get('id_program');
+                $model->id_aktivitas = $request->get('id_aktivitas');
+                $model->id_kro = $request->get('id_kro');
+                $model->id_ro = $request->get('id_ro');
+                $model->id_komponen = $request->get('id_komponen');
+                $model->id_sub_komponen = $request->get('id_sub_komponen');
+                $model->tahun = date('Y');
+                $model->unit_kerja = Auth::user()->kdprop.Auth::user()->kdkab;
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            else if($jenis_form==8){ //rincian anggaran
+                $model = new \App\PokRincianAnggaran;
+                $model->id_mata_anggaran = $request->get('id_mata_anggaran');
+                
+                $model->label = $request->get('rincian_label');
+                $model->volume = $request->get('rincian_volume');
+                $model->satuan = $request->get('rincian_satuan');
+                $model->harga_satuan = $request->get('rincian_harga_satuan');
+                $model->harga_jumlah = (int)$model->satuan*(float)$model->harga_satuan;
+                $model->status = 0;
+                $last = \App\PokVersiRevisi::latest()->first();
+                $model->versi_id = $last->id;
+                $model->tahun = date('Y');
+                $model->created_by=Auth::id();
+                $model->updated_by=Auth::id();
+                $model->save();
+            }
+            
+            return response()->json(['status'=>'success']);
+        }
+
+        return response()->json(['status'=>'error']);
 
     }
     

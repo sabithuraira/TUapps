@@ -1,11 +1,9 @@
 <!doctype html>
-<html lang="id">
-<?php  $months = config('app.months') ?>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    {{--
-    <meta charset="UTF-8"> --}}
+    {{-- <meta charset="UTF-8"> --}}
     <style type="text/css">
         * {
             font-family: Segoe UI, Arial, sans-serif;
@@ -66,30 +64,36 @@
         }
     </style>
 
-    {{--
-    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap/css/bootstrap.min.css') !!}"> --}}
+    {{-- <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap/css/bootstrap.min.css') !!}"> --}}
 
 </head>
 
 <body>
     <div class="container">
-        <div style="margin-right: 5px;float: right;">{{$unit_kerja->ibu_kota}}
-            {{ date('d ', strtotime($model->created_at)) . $months[ intval(date('m', strtotime($model->created_at)))] .
-            date(' Y', strtotime($model->created_at))}}
-        </div>
+        <div style="margin-right: 5px;float: right;">Palembang, ................ 202....</div>
         <table class=" ">
             <tr>
                 <td>Kepada Yth: </td>
             </tr>
+            @if($user->kd_kab=='00')
             <tr>
                 <td>Kepala Bagian...</td>
             </tr>
             <tr>
-                <td>BPS {{$unit_kerja->nama}}</td>
+                <td>BPS Provinsi Sumatera Selatan</td>
             </tr>
             <tr>
-                <td>di {{$unit_kerja->ibu_kota}}</td>
+                <td>di Palembang</td>
             </tr>
+            @else
+            <tr>
+                <td>Kepala BPS {{ $unit_kerja->nama }}</td>
+            </tr>
+            <tr>
+                <td>di {{ $unit_kerja->ibu_kota }}</td>
+            </tr>
+            
+            @endif
         </table>
         <br>
         <div style="text-align:center">FORMULIR PERMINTAAN DAN PEMBERIAN CUTI</div>
@@ -112,6 +116,7 @@
             <tr>
                 <td>Unit Kerja</td>
                 <td colspan="3">
+                    {{-- {{ substr($model->unit_kerja, 2, 2) }} --}}
                     BPS {{ config('app.unit_kerjas')[ substr($model->unit_kerja, 2, 2) ] }}
                 </td>
             </tr>
@@ -123,21 +128,21 @@
             </tr>
             <tr>
                 <td>1. Cuti Tahunan</td>
-                <td width="10%" class="text-center">@if($model->jenis_cuti == 'Cuti Tahunan') ✓ @endif</td>
+                <td width="10%" class="text-center">@if($model->jenis_cuti == 'Cuti Tahunan') V @endif</td>
                 <td>2. Cuti Besar</td>
                 <td width="10%" class="text-center">@if($model->jenis_cuti == 'Cuti Besar') &#10004; @endif </td>
             </tr>
             <tr>
                 <td>3. Cuti Sakit</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Sakit') ✓ @endif</td>
+                <td class="text-center">@if($model->jenis_cuti == 'Cuti Sakit') V @endif</td>
                 <td>4. Cuti Melahirkan</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Melahirkan') ✓ @endif</td>
+                <td class="text-center">@if($model->jenis_cuti == 'Cuti Melahirkan') V @endif</td>
             </tr>
             <tr>
                 <td>5. Cuti Karena Alasan Penting</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Karena Alasan Penting') ✓ @endif</td>
+                <td class="text-center">@if($model->jenis_cuti == 'Cuti Karena Alasan Penting') V @endif</td>
                 <td>6. Cuti di Luar Tanggungan Negara</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti di Luar Tanggungan Negara') ✓ @endif</td>
+                <td class="text-center">@if($model->jenis_cuti == 'Cuti di Luar Tanggungan Negara') V @endif</td>
             </tr>
         </table>
         <br>
@@ -185,14 +190,14 @@
                 <td class="text-center">{{$catatan_cuti->cuti_sakit}} </td>
             </tr>
             <tr>
-                <td class="text-center">2020</td>
+                <td class="text-center">{{ date('Y')-1 }}</td>
                 <td class="text-center">{{$catatan_cuti->cuti_tahunan_sebelum}} </td>
                 <td class="text-center"> {{$catatan_cuti->keterangan_cuti_tahunan_sebelum}}</td>
                 <td>4. Cuti Melahirkan</td>
                 <td class="text-center"> {{$catatan_cuti->cuti_melahirkan}}</td>
             </tr>
             <tr>
-                <td class="text-center">2021</td>
+                <td class="text-center">{{ date('Y') }}</td>
                 <td class="text-center"> {{$catatan_cuti->cuti_tahunan}}</td>
                 <td class="text-center">{{$catatan_cuti->keterangan_cuti_tahunan}} </td>
                 <td>5. Cuti Karena Alasan Penting</td>
@@ -232,61 +237,26 @@
         <table class="table-border ">
             <tr>
                 <td colspan="4">VI. PERTIMBANGAN ATASAN LANGSUNG</td>
+
             </tr>
             <tr class="text-center">
-                <td width="23%">Disetujui</td>
-                <td width="23%">Disetujui dengan Perubahan</td>
-                <td width="23%">Ditangguhkan</td>
-                <td width="30%">Tidak Disetujui</td>
+                <td width="20%">Disetujui</td>
+                <td width="25%">Disetujui dgn Perubahan</td>
+                <td width="20%">Ditangguhkan</td>
+                <td width="35%">Tidak Disetujui</td>
             </tr>
             <tr>
-                <td>
-                    @if ($model->status_atasan == 1 )
-                    <div style="text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td>
-                    @if ($model->status_atasan == 2 )
-                    {{-- {{$model->status_atasan}} --}}
-                    <div style="text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td>
-                    @if ($model->status_atasan == 4 )
-                    <div style="text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td>
-                    @if ($model->status_atasan == 5 )
-                    <div style="text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
+                <td><br><br><br></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td style="border: 1px solid transparent; "></td>
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-                    {{ $unit_kerja->ibu_kota }},
-                    {{ date('d ', strtotime($model->tanggal_status_atasan)) . $months[ intval(date('m',
-                    strtotime($model->tanggal_status_atasan)))] .
-                    date(' Y', strtotime($model->tanggal_status_atasan))}}
+                    Palembang, .............. 202........
                     <br>
                     <br>
                     <br>
@@ -303,75 +273,23 @@
 
             </tr>
             <tr class="text-center">
-                <td width="23%">Disetujui</td>
-                <td width="23%">Disetujui dgn Perubahan</td>
-                <td width="23%">Ditangguhkan</td>
-                <td width="30%">Tidak Disetujui</td>
+                <td width="20%">Disetujui</td>
+                <td width="25%">Disetujui dgn Perubahan</td>
+                <td width="20%">Ditangguhkan</td>
+                <td width="35%">Tidak Disetujui</td>
             </tr>
             <tr>
-                <td style="white-space:normal;">
-                    @if ($model->status_pejabat == 1 )
-                    <div style=" text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    keterangan :
-                    {{$model->keterangan_pejabat }}
-                    <br>
-                    lama cuti yang disetujui : {{ $model->cuti_disetujui_pejabat }}
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td style="white-space:normal;">
-                    @if ($model->status_pejabat == 2 )
-                    <div style=" text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    keterangan :
-                    {{$model->keterangan_pejabat }}
-                    <br>
-                    lama cuti yang disetujui : {{ $model->cuti_disetujui_pejabat }}
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td style="white-space:normal;">
-                    @if ($model->status_pejabat == 4 )
-                    <div style=" text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    keterangan :
-                    {{$model->keterangan_pejabat }}
-                    <br>
-                    lama cuti yang disetujui : {{ $model->cuti_disetujui_pejabat }}
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
-                <td style="white-space:normal;">
-                    @if ($model->status_pejabat == 5 )
-                    <div style=" text-align: center; font-size: 20px">
-                        &#10003;
-                    </div>
-                    keterangan :
-                    {{$model->keterangan_pejabat }}
-                    <br>
-                    lama cuti yang disetujui : {{ $model->cuti_disetujui_pejabat }}
-                    @else
-                    <br><br><br>
-                    @endif
-                </td>
+                <td><br><br><br></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td style="border: 1px solid transparent; "></td>
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-
-                    {{ $unit_kerja->ibu_kota }},
-                    {{ date('d ', strtotime($model->tanggal_status_pejabat)) . $months[ intval(date('m',
-                    strtotime($model->tanggal_status_pejabat)))] .
-                    date(' Y', strtotime($model->tanggal_status_pejabat))}}
+                    Palembang, .............. 202.....
                     <br>
                     <br>
                     <br>

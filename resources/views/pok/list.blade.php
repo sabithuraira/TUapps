@@ -1,4 +1,20 @@
 <div id="app_vue" class="table-responsive">
+    @hasanyrole('superadmin|kuasa_anggaran')
+    <div class="row clearfix">
+        <div class="col-md-6">
+            <a href="#" class="btn btn-info" @click="emptyFormAdd" data-toggle="modal" data-target="#modal_form_add">
+                Tambah POK
+            </a>
+        </div>
+        
+        <div class="col-md-6">
+            <a href="#" class="btn btn-success float-right">
+                SIMPAN REVISI
+            </a>
+        </div>
+    </div>
+    <br/>
+    @endhasanyrole
     <table class="table-sm table-bordered m-b-0" style="min-width:100%">
         @if (count($datas)==0)
         <thead>
@@ -173,7 +189,7 @@
                             @hasanyrole('superadmin|kuasa_anggaran')
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a href="#">
-                                    <i class="icon-magic-wand text-info"></i> 
+                                    <i class="icon-pencil text-info"></i> 
                                     <p class='text-info small'>Revisi</p>
                                 </a>
                             </div>
@@ -190,6 +206,7 @@
     @include('pok.modal_form_estimasi')
     @include('pok.modal_realisasi')
     @include('pok.modal_form_realisasi')
+    @include('pok.modal_form_add')
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -253,6 +270,28 @@
                 total_realisasi: '',
             },
             list_transaksi: [],
+            form_add: {
+                jenis_form: '',
+                program: '',
+                aktivitas: '',
+                kro: '',
+                ro: '',
+                komponen: '',
+                sub_komponen: '',
+                mata_anggaran: '',
+                rincian_label: '',
+                rincian_kode: '',
+                rincian_volume: '',
+                rincian_satuan: '',
+                rincian_harga_satuan: '',
+                rincian_harga_jumlah: '',
+                list_program: [],
+                list_aktivitas: [],
+                list_kro: [], list_ro: [],
+                list_komponen: [], 
+                list_sub_komponen: [],
+                list_mata_anggaran: [],
+            },
         },
         methods: {
             moneyFormat:function(amount){
@@ -268,6 +307,112 @@
                 let j = (i.length > 3) ? i.length % 3 : 0;
 
                 return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");      
+            },
+            emptyFormAdd: function(){
+                var self = this;
+                
+                self.form_add.jenis_form = '';
+                self.form_add.program = '';
+                self.form_add.aktivitas = '';
+                self.form_add.kro = '';
+                self.form_add.ro = '';
+                self.form_add.komponen = '';
+                self.form_add.sub_komponen = '';
+                self.form_add.mata_anggaran = '';
+                self.form_add.rincian_label = '';
+                self.form_add.rincian_kode = '';
+                self.form_add.rincian_volume = '';
+                self.form_add.rincian_satuan = '';
+                self.form_add.rincian_harga_satuan = '';
+                self.form_add.rincian_harga_jumlah = '';
+                self.form_add.list_program = [];
+                self.form_add.list_aktivitas = [];
+                self.form_add.list_kro = []; 
+                self.form_add.list_ro = [];
+                self.form_add.list_komponen = []; 
+                self.form_add.list_sub_komponen = [];
+                self.form_add.list_mata_anggaran = [];
+            },
+            getListPok: function (jenis) { //1=estimasi, 2=realisasi
+                var self = this;
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                $.ajax({
+                    url :  "{{ url('pok/get_list_pok') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        jenis_form: jenis,
+                        id_program: self.form_add.program,
+                        id_aktivitas: self.form_add.aktivitas,
+                        id_kro: self.form_add.kro,
+                        id_ro: self.form_add.ro,
+                        id_komponen: self.form_add.komponen,
+                        id_sub_komponen: self.form_add.sub_komponen,
+                        id_mata_anggaran: self.form_add.mata_anggaran,
+                    },
+                }).done(function (data) {
+                    if(data.status=='error'){
+                        alert('error, refresh halaman dan ulangi lagi');
+                    }
+                    else{
+                        if(jenis==1) self.form_add.list_program = data.datas;
+                        else if(jenis==2) self.form_add.list_aktivitas = data.datas;
+                        else if(jenis==3) self.form_add.list_kro = data.datas;
+                        else if(jenis==4) self.form_add.list_ro = data.datas;
+                        else if(jenis==5) self.form_add.list_komponen = data.datas;
+                        else if(jenis==6) self.form_add.list_sub_komponen = data.datas;
+                        else if(jenis==7) self.form_add.list_mata_anggaran = data.datas;
+                    } 
+
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progre').modal('hide');
+                });
+            },
+            savePokBaru: function() { 
+                var self = this;
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                $.ajax({
+                    url :  "{{ url('pok/save_new_pok') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        jenis_form: self.form_add.jenis_form,
+                        id_program: self.form_add.program,
+                        id_aktivitas: self.form_add.aktivitas,
+                        id_kro: self.form_add.kro,
+                        id_ro: self.form_add.ro,
+                        id_komponen: self.form_add.komponen,
+                        id_sub_komponen: self.form_add.sub_komponen,
+                        id_mata_anggaran: self.form_add.mata_anggaran,
+                        rincian_label: self.form_add.rincian_label,
+                        rincian_kode: self.form_add.rincian_kode,
+                        rincian_volume: self.form_add.rincian_volume,
+                        rincian_satuan: self.form_add.rincian_satuan,
+                        rincian_harga_satuan: self.form_add.rincian_harga_satuan,
+                        rincian_harga_jumlah: self.form_add.rincian_harga_jumlah,
+                    },
+                }).done(function (data) {
+                    if(data.status=='error'){
+                        alert('error, refresh halaman dan ulangi lagi');
+                    }
+                    else{
+                        alert("Data berhasil disimpan")
+                        $('#modal_form_add').modal('hide');
+                    }
+
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progre').modal('hide');
+                });
             },
             setPj: function (event) {
                 var self = this;

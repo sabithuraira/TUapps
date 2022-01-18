@@ -25,7 +25,7 @@ class PokRincianAnggaran extends Model{
         return $this->hasOne('App\PokMataAnggaran', 'id', 'id_mata_anggaran');
     }
 
-    public function getDataAnggaran($tahun){
+    public function getDataAnggaran($tahun, $versi_id){
         // $sql = "SELECT 
         // program.kode as kode_program, program.label as label_program,
         // aktivitas.kode as kode_aktivitas, aktivitas.label as label_aktivitas,
@@ -50,6 +50,9 @@ class PokRincianAnggaran extends Model{
         // ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
         //     m.id_komponen, m.id_sub_komponen, m.id";
 
+        $where_versi = "";
+        if($versi_id!=0) $where_versi = " AND (r.versi_id IS NULL OR r.versi_id=$versi_id) ";
+
         $sql = "SELECT 
                     m.id_program, m.id_aktivitas, m.id_kro, m.id_ro,
                     m.id_komponen, m.id_sub_komponen, m.id as id_mata_anggaran,
@@ -68,7 +71,8 @@ class PokRincianAnggaran extends Model{
                     INNER JOIN  pok_rincian_anggaran r ON m.id=r.id_mata_anggaran
                     
                     WHERE 
-                        m.tahun=2022 AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . "
+                        m.tahun=$tahun AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . " 
+                        AND r.status = 1 $where_versi 
                     ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
                         m.id_komponen, m.id_sub_komponen, m.id;";
                         
