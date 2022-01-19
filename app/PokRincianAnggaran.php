@@ -79,4 +79,32 @@ class PokRincianAnggaran extends Model{
         $result = DB::select(DB::raw($sql));
         return $result;
     }
+
+    public function getListRevisi($tahun, $versi_id){
+        $sql = "SELECT 
+                    m.id_program, m.id_aktivitas, m.id_kro, m.id_ro,
+                    m.id_komponen, m.id_sub_komponen, m.id as id_mata_anggaran,
+                    komponen.kode as kode_komponen, komponen.label as label_komponen,
+                    sub_komponen.kode as kode_sub_komponen, sub_komponen.label as label_sub_komponen,
+                    m.kode as kode_mata_anggaran, m.label as label_mata_anggaran,
+                    r.*
+                    FROM pok_mata_anggaran m
+                    
+                    INNER JOIN  pok_program program ON m.id_program=program.id 
+                    INNER JOIN  pok_aktivitas aktivitas ON m.id_aktivitas=aktivitas.id 
+                    INNER JOIN  pok_kro kro ON m.id_kro=kro.id 
+                    INNER JOIN  pok_ro ro ON m.id_ro=ro.id 
+                    INNER JOIN  pok_komponen komponen ON m.id_komponen=komponen.id 
+                    INNER JOIN  pok_sub_komponen sub_komponen ON m.id_sub_komponen=sub_komponen.id 
+                    INNER JOIN  pok_rincian_anggaran r ON m.id=r.id_mata_anggaran
+                    
+                    WHERE 
+                        m.tahun=$tahun AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . " 
+                        AND r.status = 0 AND r.versi_id=$versi_id 
+                    ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
+                        m.id_komponen, m.id_sub_komponen, m.id;";
+                        
+        $result = DB::select(DB::raw($sql));
+        return $result;
+    }
 }

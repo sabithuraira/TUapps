@@ -38,11 +38,11 @@
 
             <tbody>
                 @php 
-                    $id_program = '';
-                    $id_aktivitas = '';
-                    $id_kro = '';
-                    $id_ro = '';
-                    $id_komponen = '';
+                    $id_program = ''; $program = null;
+                    $id_aktivitas = ''; $aktivitas = null;
+                    $id_kro = ''; $kro = null;
+                    $id_ro = ''; $ro = null;
+                    $id_komponen = ''; 
                     $id_sub_komponen = '';
                     $id_mata_anggaran = '';
                 @endphp
@@ -176,6 +176,7 @@
                                     <i class="icon-calendar text-info"></i>
                                     <p class='text-info small'>History</p>
                                 </a>
+
                                 @hasanyrole('superadmin|kuasa_anggaran')
                                 &nbsp;&nbsp;
                                 <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
@@ -188,7 +189,17 @@
 
                             @hasanyrole('superadmin|kuasa_anggaran')
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="#">
+                                <a href="#" @click="setFormEdit" 
+                                    data-program="{{ $program->label  }}" data-kode_program="{{ $program->kode  }}" 
+                                    data-aktivitas="{{ $aktivitas->label  }}" data-kode_aktivitas="{{ $aktivitas->kode  }}" 
+                                    data-kro="{{ $kro->label  }}" data-kode_kro="{{ $kro->kode  }}" 
+                                    data-ro="{{ $ro->label  }}" data-kode_ro="{{ $ro->kode  }}" 
+                                    data-komponen="{{ $data->label_komponen  }}" data-kode_komponen="{{ $data->kode_komponen  }}" 
+                                    data-sub_komponen="{{ $data->label_sub_komponen  }}" data-kode_sub_komponen="{{ $data->kode_sub_komponen  }}" 
+                                    data-mata_anggaran="{{ $data->label_mata_anggaran  }}" data-kode_mata_anggaran="{{ $data->kode_mata_anggaran  }}" 
+                                    data-id="{{ $data->id  }}" data-label="{{ $data->label }}"  data-tahun="{{ $data->tahun }}" 
+                                    data-volume="{{ $data->volume  }}" data-satuan="{{ $data->satuan }}"  data-harga_satuan="{{ $data->harga_satuan }}" 
+                                    data-toggle="modal" data-target="#modal_form_edit">
                                     <i class="icon-pencil text-info"></i> 
                                     <p class='text-info small'>Revisi</p>
                                 </a>
@@ -207,6 +218,7 @@
     @include('pok.modal_realisasi')
     @include('pok.modal_form_realisasi')
     @include('pok.modal_form_add')
+    @include('pok.modal_form_edit')
 
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -292,6 +304,21 @@
                 list_sub_komponen: [],
                 list_mata_anggaran: [],
             },
+            form_edit: {
+                program: '', kode_program: '',
+                aktivitas: '',kode_aktivitas: '',
+                kro: '',kode_kro: '',
+                ro: '',kode_ro: '',
+                komponen: '', kode_komponen: '',
+                sub_komponen: '',kode_sub_komponen: '',
+                mata_anggaran: '',kode_mata_anggaran: '',
+                id: '',
+                label: '',
+                tahun: '',
+                volume: '',
+                satuan: '',
+                harga_satuan: ''
+            },
         },
         methods: {
             moneyFormat:function(amount){
@@ -307,6 +334,67 @@
                 let j = (i.length > 3) ? i.length % 3 : 0;
 
                 return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");      
+            },
+            setFormEdit: function(event){
+                var self = this;
+                
+                if(event){
+                    self.form_edit = {
+                        program: event.currentTarget.getAttribute('data-program'),
+                        kode_program: event.currentTarget.getAttribute('data-kode_program'),
+                        aktivitas: event.currentTarget.getAttribute('data-aktivitas'),
+                        kode_aktivitas: event.currentTarget.getAttribute('data-kode_aktivitas'),
+                        kro: event.currentTarget.getAttribute('data-kro'),
+                        kode_kro: event.currentTarget.getAttribute('data-kode_kro'),
+                        ro: event.currentTarget.getAttribute('data-ro'),
+                        kode_ro: event.currentTarget.getAttribute('data-kode_ro'),
+                        komponen: event.currentTarget.getAttribute('data-komponen'), 
+                        kode_komponen: event.currentTarget.getAttribute('data-kode_komponen'),
+                        sub_komponen: event.currentTarget.getAttribute('data-sub_komponen'),
+                        kode_sub_komponen: event.currentTarget.getAttribute('data-kode_sub_komponen'),
+                        mata_anggaran: event.currentTarget.getAttribute('data-mata_anggaran'),
+                        kode_mata_anggaran: event.currentTarget.getAttribute('data-kode_mata_anggaran'),
+                        id: event.currentTarget.getAttribute('data-id'),
+                        label: event.currentTarget.getAttribute('data-label'),
+                        tahun: event.currentTarget.getAttribute('data-tahun'),
+                        volume: event.currentTarget.getAttribute('data-volume'),
+                        satuan: event.currentTarget.getAttribute('data-satuan'),
+                        harga_satuan: event.currentTarget.getAttribute('data-harga_satuan'),
+                    };
+                }
+            },
+            savePok: function() { 
+                var self = this;
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                $.ajax({
+                    url :  "{{ url('pok/save_pok') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data:{
+                        rincian_id: self.form_edit.id,
+                        rincian_label: self.form_edit.label,
+                        rincian_tahun: self.form_edit.tahun,
+                        rincian_volume: self.form_edit.volume,
+                        rincian_satuan: self.form_edit.satuan,
+                        rincian_harga_satuan: self.form_edit.harga_satuan,
+                    },
+                }).done(function (data) {
+                    if(data.status=='error'){
+                        alert('error, refresh halaman dan ulangi lagi');
+                    }
+                    else{
+                        alert("Data berhasil disimpan")
+                        $('#modal_form_edit').modal('hide');
+                    }
+
+                    $('#wait_progres').modal('hide');
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progre').modal('hide');
+                });
             },
             emptyFormAdd: function(){
                 var self = this;
@@ -420,7 +508,8 @@
                     self.form_pj = {
                         id_pegawai:   event.currentTarget.getAttribute('data-pegawai'),   
                         rincian_id:  event.currentTarget.getAttribute('data-id'),  
-                        rincian_label:  event.currentTarget.getAttribute('data-label'),                   };
+                        rincian_label:  event.currentTarget.getAttribute('data-label'),
+                    };
                 }
             },
             savePj: function () {

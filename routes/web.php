@@ -88,6 +88,8 @@ Route::group(['middleware' => ['role:superadmin|kuasa_anggaran']], function () {
     Route::resource('pok_versi', 'PokVersiController');
     Route::post('pok/get_list_pok', 'PokController@get_list_pok');
     Route::post('pok/save_new_pok', 'PokController@save_new_pok');
+    Route::post('pok/save_pok', 'PokController@save_pok');
+    Route::get('pok/simpan_revisi', 'PokController@simpan_revisi');
 });
 
 Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {

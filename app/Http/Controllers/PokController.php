@@ -335,6 +335,50 @@ class PokController extends Controller
         return response()->json(['status'=>'error']);
 
     }
+
+    
+    public function save_pok(Request $request){
+        $model = new \App\PokRincianAnggaran;
+
+        $old_rincian = \App\PokRincianAnggaran::find($request->get('rincian_id'));
+
+        $model->id_mata_anggaran = $old_rincian->id_mata_anggaran; 
+        $model->label = $request->get('rincian_label');
+        $model->tahun = $request->get('rincian_tahun');
+        $model->volume = $request->get('rincian_volume');
+        $model->satuan = $request->get('rincian_satuan');
+        $model->harga_satuan = $request->get('rincian_harga_satuan');
+        $model->harga_jumlah = (int)$model->satuan*(float)$model->harga_satuan;
+        $model->status = 0;
+        $last = \App\PokVersiRevisi::latest()->first();
+        $model->versi_id = $last->id;
+        $model->old_rencana_id = $old_rincian->id;
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        if($model->save()){
+            return response()->json(['status'=>'success']);
+        }
+
+        return response()->json(['status'=>'error']);
+
+    }
+
+    public function simpan_revisi(Request $request){
+        $tahun = date('Y');
+        if(strlen($request->tahun)>0) $tahun = $request->tahun;
+
+        $model = new \App\PokRincianAnggaran;
+        
+        $last = \App\PokVersiRevisi::latest()->first();
+        $versi_id = 0;
+        if($last!=null) $versi_id = $last->id;
+
+        $datas = $model->getListRevisi($tahun, $versi_id);
+        
+        return view('pok.simpan_revisi', compact(
+            'tahun', 'model', 'datas'
+        ));
+    }
     
     public function delete_transaksi(Request $request){
         $model_transaksi = \App\PokTransaksi::find($request->get('transaksi_id'));
