@@ -1,0 +1,234 @@
+<div id="app_vue" class="table-responsive">
+    @hasanyrole('superadmin|kuasa_anggaran')
+    <div class="row clearfix">
+        <div class="col-md-6"></div>
+        
+        <div class="col-md-6">
+            <a href="#" @click="simpanRevisi" class="btn btn-success float-right">
+                SIMPAN
+            </a>
+        </div>
+    </div>
+    <br/>
+    @endhasanyrole
+    <table class="table-sm table-bordered m-b-0" style="min-width:100%">
+        @if (count($datas)==0)
+        <thead>
+            <tr><th>Tidak ditemukan data</th></tr>
+        </thead>
+        @else
+            <thead>
+                <tr class="text-center">
+                    <th colspan="3">SEMULA</th>
+                    <th colspan="3">MENJADI</th>
+                    <th rowspan="2"></th>
+                </tr>
+                
+                <tr class="text-center">
+                    <th>Ket POK</th>
+                    <th>Rincian Jumlah</th>
+                    <th>Biaya</th>
+                    <th>Ket POK</th>
+                    <th>Rincian Jumlah</th>
+                    <th>Biaya</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @php 
+                    $id_kro = ''; $kro = null;
+                    $id_ro = ''; $ro = null;
+                    $id_komponen = ''; 
+                    $id_sub_komponen = '';
+                    $id_mata_anggaran = '';
+                @endphp
+                @foreach($datas as $data) 
+
+                    @php 
+                        $old_data = null;
+                        if($data->old_rencana_id!=null){
+                            $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
+                            $old_mata_anggaran = \App\PokMataAnggaran::find($old_data->id_mata_anggaran);
+                        }
+                    @endphp 
+
+                    <tr>
+                        @if($old_data==null)
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        @else
+                                @php 
+                                    $old_id_kro = $old_mata_anggaran->id_kro;
+                                    $old_kro = \App\PokKro::find($old_id_kro);
+                                    $old_id_ro = $old_mata_anggaran->id_ro;
+                                    $old_ro = \App\PokRo::find($old_id_ro);
+                                @endphp
+                            <td>
+                                <b>KRO</b>: {{ $old_kro->kode }} - {{ $old_kro->label }}<br/>
+                                <b>RO</b>:  {{ $old_ro->kode }} - {{ $old_ro->label }}<br/>
+                                <b>Komponen</b>: {{ $old_data->kode_komponen }} - {{ $old_data->label_komponen }}<br/>
+                                <b>Sub Komponen</b>: {{ $old_data->kode_sub_komponen }} - {{ $old_data->label_sub_komponen }}<br/>
+                                <b>Akun</b>: {{ $old_data->kode_mata_anggaran }} - {{ $old_data->label_mata_anggaran }}<br/>    
+                                <b>Detail</b>: {{ $old_data->label }}<br/>    
+                            </td>
+                            <td>
+                                <b>Volume</b>: {{ $old_data->volume }}<br/>
+                                <b>Satuan</b>:  {{ $old_data->satuan }}<br/>
+                                <b>Harga Satuan</b>:  {{ number_format($old_data->harga_satuan) }}<br/>
+                            </td>
+                            <td>
+                                <b>Biaya</b>: {{ number_format($old_data->harga_jumlah) }}<br/>
+                                <b>Estimasi</b>: {{ number_format($old_data->jumlah_rincian_estimasi) }}<br/>
+                                <b>Realisasi</b>: {{ number_format($old_data->jumlah_rincian_realisasi) }}<br/>
+                            </td>
+                        @endif
+                        
+                        @if($id_kro!=$data->id_kro)
+                            @php 
+                                $id_kro = $data->id_kro;
+                                $kro = \App\PokKro::find($id_kro);
+                            @endphp
+                        @endif
+                        
+                        @if($id_ro!=$data->id_ro)
+                            @php 
+                                $id_ro = $data->id_ro;
+                                $ro = \App\PokRo::find($id_ro);
+                            @endphp
+                        @endif
+                        <td>
+                            <b>KRO</b>: {{ $kro->kode }} - {{ $kro->label }}<br/>
+                            <b>RO</b>: {{ $ro->kode }} - {{ $ro->label }}<br/>
+                            <b>Komponen</b>: {{ $data->kode_komponen }} - {{ $data->label_komponen }}<br/>
+                            <b>Sub Komponen</b>: {{ $data->kode_sub_komponen }} - {{ $data->label_sub_komponen }}<br/>
+                            <b>Akun</b>: {{ $data->kode_mata_anggaran }} - {{ $data->label_mata_anggaran }}<br/>    
+                            <b>Detail</b>: {{ $data->label }}<br/>    
+                        </td>
+                        <td>
+                            <b>Volume</b>: {{ $data->volume }}<br/>
+                            <b>Satuan</b>: {{ $data->satuan }}<br/>
+                            <b>Harga Satuan</b>: {{ number_format($data->harga_satuan) }}<br/>
+                        </td>
+                        <td>
+                            Biaya</b>: {{ number_format($data->harga_jumlah) }}<br/>
+                        </td>
+                        <td class="text-center">
+                            <a href="#" role="button" data-revisi_id="{{ $data->id }}" @click="deleteRevisi"> 
+                                <i class="icon-trash text-danger"></i>
+                                <p class='text-danger small'>Hapus Revisi</p>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        @endif
+    </table>
+
+    <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200"
+                            height="200" alt="Loading..."></div>
+                    <h4 class="text-center">Please wait...</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section('css')
+<meta name="_token" content="{{csrf_token()}}" />
+<meta name="csrf-token" content="@csrf">
+<style type="text/css">
+    * {
+        font-family: Segoe UI, Arial, sans-serif;
+    }
+
+    table {
+        font-size: small;
+        border-collapse: collapse;
+    }
+
+    tfoot tr td {
+        font-weight: bold;
+        font-size: small;
+    }
+</style>
+<link rel="stylesheet"
+    href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
+@endsection
+
+@section('scripts')
+<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
+<script>
+    var vm = new Vue({  
+        el: "#app_vue",
+        data:  {
+        },
+        methods: {
+            deleteRevisi: function() { 
+                var self = this;
+                
+                if(confirm("Anda yakin ingin menghapus data ini?")){
+                    if(event){
+                        var revisi_id = event.currentTarget.getAttribute('data-revisi_id');
+                        
+                        $('#wait_progres').modal('show');
+                        $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                        $.ajax({
+                            url :  "{{ url('pok/delete_revisi') }}",
+                            method : 'post',
+                            dataType: 'json',
+                            data:{
+                                revisi_id: revisi_id,
+                            },
+                        }).done(function (data) {
+                            if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                            else location.reload() //alert("Data berhasil disimpan")
+
+                            $('#wait_progres').modal('hide');
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#wait_progre').modal('hide');
+                        });
+                    }
+                }
+            },
+            simpanRevisi: function() { 
+                var self = this;
+                
+                if(confirm("Anda yakin ingin menyimpan dan menampilkan revisi?")){
+                    
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                    $.ajax({
+                        url :  "{{ url('pok/save_revisi') }}",
+                        method : 'post',
+                        dataType: 'json',
+                    }).done(function (data) {
+                        if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                        else{
+                            alert("Data berhasil disimpan")
+                            location.reload() 
+                        }
+
+                        $('#wait_progres').modal('hide');
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progre').modal('hide');
+                    });
+                }
+            },
+        }
+    });
+
+    $(document).ready(function() {
+    });
+</script>
+@endsection

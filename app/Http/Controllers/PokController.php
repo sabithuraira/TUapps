@@ -319,7 +319,7 @@ class PokController extends Controller
                 $model->volume = $request->get('rincian_volume');
                 $model->satuan = $request->get('rincian_satuan');
                 $model->harga_satuan = $request->get('rincian_harga_satuan');
-                $model->harga_jumlah = (int)$model->satuan*(float)$model->harga_satuan;
+                $model->harga_jumlah = (int)$model->volume*(float)$model->harga_satuan;
                 $model->status = 0;
                 $last = \App\PokVersiRevisi::latest()->first();
                 $model->versi_id = $last->id;
@@ -348,7 +348,7 @@ class PokController extends Controller
         $model->volume = $request->get('rincian_volume');
         $model->satuan = $request->get('rincian_satuan');
         $model->harga_satuan = $request->get('rincian_harga_satuan');
-        $model->harga_jumlah = (int)$model->satuan*(float)$model->harga_satuan;
+        $model->harga_jumlah = (int)$model->volume*(float)$model->harga_satuan;
         $model->status = 0;
         $last = \App\PokVersiRevisi::latest()->first();
         $model->versi_id = $last->id;
@@ -378,6 +378,38 @@ class PokController extends Controller
         return view('pok.simpan_revisi', compact(
             'tahun', 'model', 'datas'
         ));
+    }
+    
+    public function save_revisi(Request $request){
+        $last = \App\PokVersiRevisi::latest()->first();
+        $versi_id = 0;
+        if($last!=null) $versi_id = $last->id;
+
+        $datas = \App\PokRincianAnggaran::where('status','=', 0)
+                    ->where('versi_id','=', $versi_id)->get();
+
+        foreach($datas as $key=>$data){
+            if(strlen($data->old_rencana_id)>0){
+                $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
+                $old_data->status = 0;
+                $old_data->save();
+            }
+
+            $data->status = 1;
+            $data->save();
+        }
+        
+        return response()->json(['status'=>'success']);
+    }
+    
+    public function delete_revisi(Request $request){
+        $model = \App\PokRincianAnggaran::find($request->get('revisi_id'));
+        if($model!=null){
+            $model->delete();     
+            return response()->json(['status'=>'success']);
+        }
+        
+        return response()->json(['status'=>'error']);
     }
     
     public function delete_transaksi(Request $request){

@@ -8,7 +8,7 @@
         </div>
         
         <div class="col-md-6">
-            <a href="#" class="btn btn-success float-right">
+            <a href="{{ url('pok/simpan_revisi') }}" class="btn btn-success float-right">
                 SIMPAN REVISI
             </a>
         </div>
