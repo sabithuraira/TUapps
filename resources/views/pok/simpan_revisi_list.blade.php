@@ -1,16 +1,27 @@
 <div id="app_vue" class="table-responsive">
     @hasanyrole('superadmin|kuasa_anggaran')
-    <div class="row clearfix">
-        <div class="col-md-6"></div>
-        
-        <div class="col-md-6">
-            <a href="#" @click="simpanRevisi" class="btn btn-success float-right">
-                SIMPAN
-            </a>
+        @if (count($datas)>0)
+        <div class="row clearfix">
+            <div class="col-md-6"></div>
+            
+            <div class="col-md-6 float-right text-right">
+                <a href="#" @click="simpanRevisiDipa" class="btn btn-success">
+                    SIMPAN DIPA
+                </a>
+                &nbsp;&nbsp;
+                <a href="#" @click="simpanRevisi" class="btn btn-success">
+                    SIMPAN POK
+                </a>
+            </div>
         </div>
-    </div>
-    <br/>
+        <br/>
+        @endif
     @endhasanyrole
+    
+    @php 
+        $total_lama = 0;
+        $total_baru = 0;
+    @endphp
     <table class="table-sm table-bordered m-b-0" style="min-width:100%">
         @if (count($datas)==0)
         <thead>
@@ -46,9 +57,23 @@
 
                     @php 
                         $old_data = null;
+
+                        $total_baru += $data->harga_jumlah;
                         if($data->old_rencana_id!=null){
                             $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
                             $old_mata_anggaran = \App\PokMataAnggaran::find($old_data->id_mata_anggaran);
+
+                            if($old_data->jumlah_rincian_estimasi!=null){
+                                if($old_data->jumlah_rincian_realisasi!=null){
+                                    $total_lama += ($old_lama->harga_jumlah-$old_lama->jumlah_rincian_realisasi);
+                                }
+                                else{
+                                    $total_lama += ($old_lama->harga_jumlah-$old_lama->jumlah_rincian_estimasi);
+                                }
+                            }
+                            else{
+                                $total_lama += $old_data->harga_jumlah;
+                            }
                         }
                     @endphp 
 
@@ -125,6 +150,9 @@
         @endif
     </table>
 
+    <input type="hidden" id="total_lama" value="{{ $total_lama }}">
+    <input type="hidden" id="total_baru" value="{{ $total_baru }}">
+
     <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -200,6 +228,44 @@
                 }
             },
             simpanRevisi: function() { 
+                var self = this;
+                
+                if(confirm("Anda yakin ingin menyimpan dan menampilkan revisi?")){
+                    
+                    var total_lama = $("#total_lama").val();
+                    var total_baru = $("#total_baru").val();
+
+                    if(total_lama>total_baru){
+                        alert("Anggaran pada DETAIL lama masih lebih besar dari anggaran pada DETAIL perubahan");
+                    }
+                    else if(total_lama<total_baru){
+                        alert("Jumlah biaya pada REVISI tidak cukup, mohon periksa kembali");    
+                    }
+                    else{
+
+                        $('#wait_progres').modal('show');
+                        $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                        $.ajax({
+                            url :  "{{ url('pok/save_revisi') }}",
+                            method : 'post',
+                            dataType: 'json',
+                        }).done(function (data) {
+                            if(data.status=='error') alert('error, refresh halaman dan ulangi lagi');
+                            else{
+                                alert("Data berhasil disimpan")
+                                location.reload() 
+                            }
+
+                            $('#wait_progres').modal('hide');
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#wait_progre').modal('hide');
+                        });
+                    }
+                }
+            },
+            simpanRevisiDipa: function() { 
                 var self = this;
                 
                 if(confirm("Anda yakin ingin menyimpan dan menampilkan revisi?")){

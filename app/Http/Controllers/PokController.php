@@ -336,13 +336,19 @@ class PokController extends Controller
 
     }
 
-    
     public function save_pok(Request $request){
         $model = new \App\PokRincianAnggaran;
 
         $old_rincian = \App\PokRincianAnggaran::find($request->get('rincian_id'));
 
-        $model->id_mata_anggaran = $old_rincian->id_mata_anggaran; 
+        $model->id_mata_anggaran = $old_rincian->id_mata_anggaran;
+        $model->id_pj = $old_rincian->id_pj;
+        $model->nama_pj = $old_rincian->nama_pj;
+        $model->nip_pj = $old_rincian->nip_pj;
+        $model->jumlah_rincian_estimasi = $old_rincian->jumlah_rincian_estimasi;
+        $model->total_estimasi = $old_rincian->total_estimasi;
+        $model->jumlah_rincian_realisasi = $old_rincian->jumlah_rincian_realisasi;
+        $model->total_realisasi = $old_rincian->total_realisasi;
         $model->label = $request->get('rincian_label');
         $model->tahun = $request->get('rincian_tahun');
         $model->volume = $request->get('rincian_volume');
@@ -356,11 +362,28 @@ class PokController extends Controller
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         if($model->save()){
+            $list_transaksi = \App\PokTransaksi::where('id_rincian', '=', $old_rincian->id);
+            foreach($list_transaksi as $transaksi){
+                $new_transaksi = new \App\PokTransaksi;
+                $new_transaksi->id_rincian = $model->id;
+                $new_transaksi->total_estimasi = $transaksi->total_estimasi;
+                $new_transaksi->waktu_estimasi = $transaksi->waktu_estimasi;
+                $new_transaksi->estimasi_by = $transaksi->estimasi_by;
+                $new_transaksi->total_realisasi = $transaksi->total_realisasi;
+                $new_transaksi->waktu_realisasi = $transaksi->waktu_realisasi;
+                $new_transaksi->realisasi_by = $transaksi->realisasi_by;
+                $new_transaksi->label = $transaksi->label;
+                $new_transaksi->ket_estimasi = $transaksi->ket_estimasi;
+                $new_transaksi->ket_realisasi = $transaksi->ket_realisasi;
+                $new_transaksi->created_by = Auth::id();
+                $new_transaksi->updated_by = Auth::id();
+                $new_transaksi->save();
+            }
+
             return response()->json(['status'=>'success']);
         }
 
         return response()->json(['status'=>'error']);
-
     }
 
     public function simpan_revisi(Request $request){
