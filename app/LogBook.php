@@ -77,6 +77,8 @@ class LogBook extends Model
                 'volume'            =>$value->volume,
                 'satuan'            =>$value->satuan,
                 'pemberi_tugas'     =>$value->pemberi_tugas,
+                'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
+                'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
                 'status_penyelesaian' =>$value->status_penyelesaian,
             );
         }
@@ -116,6 +118,8 @@ class LogBook extends Model
                 'volume'            =>$value->volume,
                 'satuan'            =>$value->satuan,
                 'pemberi_tugas'     =>$value->pemberi_tugas,
+                'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
+                'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
                 'status_penyelesaian' =>$value->status_penyelesaian,
             );
         }

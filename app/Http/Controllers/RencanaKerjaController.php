@@ -44,8 +44,7 @@ class RencanaKerjaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $datas=array();
 
         $start = date('m/d/Y');
@@ -53,9 +52,11 @@ class RencanaKerjaController extends Controller
         
         $model = new \App\LogBook;
         $pemberi_tugas = Auth::user()->pimpinan->nmjab;
+        $list_pegawai = \App\UserModel::where('id', '<>', 1)
+                            ->where('kdkab', '=', Auth::user()->kdkab)->get();
 
         return view('rencana_kerja.index', compact('model', 
-            'datas', 'start', 'end', 'pemberi_tugas'));
+            'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));
     }
 
     public function rekap_pegawai(Request $request){
@@ -123,7 +124,10 @@ class RencanaKerjaController extends Controller
         $model->hasil = $request->get('hasil');
         $model->volume = $request->get('volume');
         $model->satuan = $request->get('satuan');
-        $model->pemberi_tugas = $request->get('pemberi_tugas');
+        $model->pemberi_tugas_id = $request->get('pemberi_tugas');
+        $data_user = \App\UserModel::find($request->get("pemberi_tugas"));
+        $model->pemberi_tugas = $data_user->name;
+        $model->pemberi_tugas_jabatan = $data_user->nmjab;
         $model->is_rencana = 1;
         $model->status_rencana = 0;
         $model->updated_by=Auth::id();
@@ -138,8 +142,7 @@ class RencanaKerjaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $model = \App\LogBook::find($id);
         $item_waktu = \App\MasterTime::all();
 
@@ -153,8 +156,7 @@ class RencanaKerjaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(LogBookRequest $request, $id)
-    {
+    public function update(LogBookRequest $request, $id){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('rencana_kerja/edit',$id)
                         ->withErrors($validator)
@@ -176,14 +178,12 @@ class RencanaKerjaController extends Controller
         return redirect('/rencana_kerja')->with('success', 'Information has been updated');
     }
 
-    public function show($id)
-    {
+    public function show($id){
         $model = \App\LogBook::find($id);
         return view('rencana_kerja.show',compact('model','id'));
     }
     
-    public function print($id)
-    {
+    public function print($id){
         $model = \App\LogBook::find($id);
         return view('rencana_kerja.print',compact('model','id'));
     }
@@ -194,8 +194,7 @@ class RencanaKerjaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {   
+    public function destroy($id){
         $model = \App\LogBook::find($id);
         $model->delete();
         return redirect('rencana_kerja')->with('success','Information has been  deleted');

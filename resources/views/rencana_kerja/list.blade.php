@@ -134,7 +134,7 @@ var vm = new Vue({
                 self.form_hasil = '';
                 self.form_volume = '';
                 self.form_satuan = '';
-                self.form_pemberi_tugas = {!! json_encode($pemberi_tugas) !!};
+                self.form_pemberi_tugas = '';
             }
         },
         updateRencanaKerja: function (event) {

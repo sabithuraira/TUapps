@@ -17,7 +17,7 @@
                             :data-waktu_mulai="data.waktu_mulai" :data-waktu_selesai="data.waktu_selesai" 
                             :data-isi="data.isi" :data-hasil="data.hasil" 
                             :data-volume="data.volume" :data-satuan="data.satuan" 
-                            :data-pemberi_tugas="data.pemberi_tugas" 
+                            :data-pemberi_tugas="data.pemberi_tugas_id" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
                     &nbsp;
                     <a :data-id="data.id" v-on:click="delLogBook(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
@@ -136,7 +136,7 @@ var vm = new Vue({
                 self.form_hasil = '';
                 self.form_volume = '';
                 self.form_satuan = '';
-                self.form_pemberi_tugas = {!! json_encode($pemberi_tugas) !!};
+                self.form_pemberi_tugas = '';
             }
         },
         updateLogBook: function (event) {
