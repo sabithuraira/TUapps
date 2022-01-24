@@ -86,8 +86,7 @@ class CkpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $datas=array();
         $month = date('m');
         $year = date('Y');
@@ -108,8 +107,7 @@ class CkpController extends Controller
             'year', 'type'));
     }
 
-    public function pemantau_ckp(Request $request)
-    {
+    public function pemantau_ckp(Request $request){
         $idnya = Auth::id();
         $model = \App\UserModel::find($idnya);
         $unit_kerja = Auth::user()->kdkab;
@@ -132,8 +130,7 @@ class CkpController extends Controller
             'year', 'start', 'end', 'list_user', 'unit_kerja'));
     }
 
-    public function rekap_ckp(Request $request)
-    {
+    public function rekap_ckp(Request $request){
         $unit_kerja = Auth::user()->kdkab;
         $month = date('m');
         $year = date('Y');
@@ -142,8 +139,7 @@ class CkpController extends Controller
             'year', 'unit_kerja'));
     }
 
-    public function data_rekap_ckp(Request $request)
-    {
+    public function data_rekap_ckp(Request $request){
         $unit_kerja = Auth::user()->kdkab;
 
         $datas=array();
@@ -170,21 +166,21 @@ class CkpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $month = date('m');
         $year = date('Y');
 
         $model = new \App\Ckp;
+        $list_pegawai = \App\UserModel::where('id', '<>', 1)
+                            ->where('kdkab', '=', Auth::user()->kdkab)->get();
         
         return view('ckp.create', compact('month', 
-            'year', 'model'));
+            'year', 'model', 'list_pegawai'));
     }
     
     public function show($id){}
 
-    public function print(Request $request)
-    {
+    public function print(Request $request){
         $user = Auth::user();
         $user_id =  Auth::user()->email;
 
@@ -245,8 +241,7 @@ class CkpController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $user = Auth::user();
         $user_id =  Auth::user()->email;
 
@@ -412,8 +407,7 @@ class CkpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         //
     }
 
@@ -424,8 +418,7 @@ class CkpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         //
     }
 
@@ -435,8 +428,7 @@ class CkpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $model = \App\Ckp::find($id);
         $model->delete();
         return response()->json(['success'=>'Sukses']);

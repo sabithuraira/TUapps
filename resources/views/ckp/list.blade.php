@@ -23,6 +23,7 @@
                     <tr>
                         <td rowspan="2">No</td>
                         <td class="text-center" style="width:100%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
+                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
                         <td class="text-center" rowspan="2">{{ $model->attributes()['satuan'] }}</td>
                         
                         <td class="text-center" colspan="3">Kuantitas</td>
@@ -41,10 +42,11 @@
                 </thead>
 
                 <tbody>
-                    <tr><td colspan="10">UTAMA</td></tr>
+                    <tr><td colspan="11">UTAMA</td></tr>
                     <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         
@@ -57,10 +59,11 @@
                         <td>@{{ data.keterangan }}</td>
                     </tr>
                     
-                    <tr><td colspan="10">TAMBAHAN</td></tr>
+                    <tr><td colspan="11">TAMBAHAN</td></tr>
                     <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
@@ -73,28 +76,21 @@
 
                     <template>
                         <tr>
-                            <td colspan="5"><b>JUMLAH</b></td>
+                            <td colspan="6"><b>JUMLAH</b></td>
                             <td class="text-center">@{{ total_kuantitas }} %</td>
                             <td class="text-center">@{{ total_kualitas }} %</td>
-                            
-
                             <td colspan="9"></td>
                         </tr>
                         
                         <tr>
-                            <td colspan="5"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
+                            <td colspan="6"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
                             <td class="text-center" colspan="2">@{{ ((Number(total_kuantitas)+Number(total_kualitas))/2).toFixed(2) }}</td>
                             <td colspan="9"></td>
                         </tr>
                     </template>
-
                 </tbody>
-
-                
             </table>
         </div>
-
-
     </div>
     
     <div class="tab-pane" id="penilaian">
@@ -104,7 +100,7 @@
                     <tr>
                         <td rowspan="2">No</td>
                         <td class="text-center" style="width:100%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
-                        
+                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
                         <td class="text-center" colspan="5">Pengukuran</td>
                         <td class="text-center" rowspan="2">Catatan Koreksi</td>
                         <td class="text-center" rowspan="2">IKI</td>
@@ -120,10 +116,11 @@
                 </thead>
 
                 <tbody>
-                    <tr><td colspan="9">UTAMA</td></tr>
+                    <tr><td colspan="10">UTAMA</td></tr>
                     <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td> 
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td>@{{ data.kecepatan }}</td>
                         <td>@{{ data.ketepatan }}</td>
                         <td>@{{ data.ketuntasan }}</td>
@@ -135,7 +132,7 @@
                         </td>
                     </tr>
                     
-                    <tr><td colspan="9">TAMBAHAN</td></tr>
+                    <tr><td colspan="10">TAMBAHAN</td></tr>
                     <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>

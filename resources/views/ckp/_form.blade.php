@@ -43,8 +43,6 @@
 
 <br/><br/>
 <section class="datas">
-
-    
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#utama">UTAMA</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#penilaian">PENILAIAN</a></li>
@@ -57,6 +55,7 @@
                         <tr>
                             <td rowspan="2">No</td>
                             <td class="text-center" style="width: 50%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
+                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
                             <td class="text-center" style="width: 15%" rowspan="2">{{ $model->attributes()['satuan'] }}</td>
                             
                             <td class="text-center" colspan="3">Kuantitas</td>
@@ -75,7 +74,7 @@
                     </thead>
 
                     <tbody>
-                        <tr><td colspan="10">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr><td colspan="11">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                             <td>
                                 <template v-if="is_delete(data.id)">
@@ -84,6 +83,13 @@
                                 @{{ index+1 }}
                             </td>
                             <td><div style="width:300px"></div><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
+                            <td>
+                                <select class="form-control  form-control-sm" :name="'u_pemberi_tugas_id_'+data.id" v-model="data.pemberi_tugas_id">
+                                    @foreach($list_pegawai as $value)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'u_satuan'+data.id" v-model="data.satuan"></td>
                             <td><input class="form-control  form-control-sm" type="number" :name="'u_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                             
@@ -96,7 +102,7 @@
                             <td><input class="form-control  form-control-sm" type="text" :name="'u_keterangan'+data.id" v-model="data.keterangan"></td>
                         </tr>
                         
-                        <tr><td :colspan="10">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr><td :colspan="11">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                             <td class="freeze">
                                 <template v-if="is_delete(data.id)">
@@ -105,6 +111,13 @@
                                 @{{ index+1 }}
                             </td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
+                            <td>
+                                <select class="form-control  form-control-sm" :name="'t_pemberi_tugas_id_'+data.id" v-model="data.pemberi_tugas_id">
+                                    @foreach($list_pegawai as $value)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_satuan'+data.id" v-model="data.satuan"></td>
                             <td><input class="form-control  form-control-sm" type="number" :name="'t_target_kuantitas'+data.id" v-model="data.target_kuantitas"></td>
                             
@@ -119,7 +132,7 @@
 
                         <template>
                             <tr>
-                                <td colspan="5"><h4>JUMLAH</h4></td>
+                                <td colspan="6"><h4>JUMLAH</h4></td>
                                 <td class="text-center">@{{ total_kuantitas }} %</td>
                                 <td class="text-center">@{{ total_kualitas }} %</td>
                                 <td colspan="3"></td>
@@ -137,6 +150,7 @@
                         <tr>
                             <td rowspan="2">No</td>
                             <td class="text-center" style="width: 60%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
+                            <td class="text-center" rowspan="2">Pemberi Tugas</td>
                             <td class="text-center" colspan="5">Pengukuran</td>
                             <td class="text-center" rowspan="2">Catatan Koreksi</td>
                             <td class="text-center" rowspan="2">IKI</td>
@@ -152,10 +166,17 @@
                     </thead>
 
                     <tbody>
-                        <tr><td colspan="9">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr><td colspan="10">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                             <td>@{{ index+1 }}</td>
                             <td><div style="width:300px"></div>@{{ data.uraian }}</td>
+                            <td>
+                                <select class="form-control  form-control-sm" disabled v-model="data.pemberi_tugas_id">
+                                    @foreach($list_pegawai as $value)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>@{{ data. kecepatan }}</td>
                             <td>@{{ data. ketepatan }}</td>
                             <td>@{{ data. ketuntasan }}</td>
@@ -169,10 +190,17 @@
                             </td>
                         </tr>
                         
-                        <tr><td colspan="9">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
+                        <tr><td colspan="10">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                             <td>@{{ index+1 }}</td>
                             <td>@{{ data.uraian }}</td>
+                            <td>
+                                <select class="form-control  form-control-sm" disabled v-model="data.pemberi_tugas_id">
+                                    @foreach($list_pegawai as $value)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>@{{ data. kecepatan }}</td>
                             <td>@{{ data. ketepatan }}</td>
                             <td>@{{ data. ketuntasan }}</td>
@@ -185,7 +213,6 @@
                                 <br/>@{{ data.iki_label }}
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>

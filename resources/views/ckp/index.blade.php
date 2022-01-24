@@ -22,8 +22,6 @@
           <p class="text-small text-muted font-italic float-left">*Klik "Buat CKP" untuk merubah, menambah atau menghapus rincian CKP.</p>          
           <br/><br/>
           <div class="row clearfix">
-
-                
                 <div class="col-lg-6 col-md-12 left-box">
                     <div class="form-group">
                         <label>Bulan:</label>

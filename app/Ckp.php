@@ -9,28 +9,23 @@ class Ckp extends Model
 {
     protected $table = 'ckps';
 
-    public function attributes()
-    {
+    public function attributes(){
         return (new \App\Http\Requests\CkpRequest())->attributes();
     }
 
-    public function User()
-    {
+    public function User(){
         return $this->hasOne('App\User', 'id', 'user_id');
     }
     
-    public function IkiRel()
-    {
+    public function IkiRel(){
         return $this->hasOne('App\Iki', 'id', 'iki');
     }
     
-    public function getListTypeAttribute()
-    {
+    public function getListTypeAttribute(){
         return array(1 => 'CKP-T', 2 => 'CKP-R');
     }
     
-    public function getListJenisAttribute()
-    {
+    public function getListJenisAttribute(){
         return array(1 => 'Kegiatan Utama', 2 => 'Kegiatan Tambahan');
     }
 
