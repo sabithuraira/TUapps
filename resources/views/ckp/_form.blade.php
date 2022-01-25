@@ -84,7 +84,7 @@
                             </td>
                             <td><div style="width:300px"></div><input class="form-control  form-control-sm" type="text" :name="'u_uraian'+data.id" v-model="data.uraian"></td>
                             <td>
-                                <select class="form-control  form-control-sm" :name="'u_pemberi_tugas_id_'+data.id" v-model="data.pemberi_tugas_id">
+                                <select class="form-control  form-control-sm" :name="'u_pemberi_tugas_id'+data.id" v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                     @endforeach
@@ -112,7 +112,7 @@
                             </td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
                             <td>
-                                <select class="form-control  form-control-sm" :name="'t_pemberi_tugas_id_'+data.id" v-model="data.pemberi_tugas_id">
+                                <select class="form-control  form-control-sm" :name="'t_pemberi_tugas_id'+data.id" v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                     @endforeach
@@ -177,9 +177,9 @@
                                     @endforeach
                                 </select>
                             </td>
-                            <td>@{{ data. kecepatan }}</td>
-                            <td>@{{ data. ketepatan }}</td>
-                            <td>@{{ data. ketuntasan }}</td>
+                            <td>@{{ data.kecepatan }}</td>
+                            <td>@{{ data.ketepatan }}</td>
+                            <td>@{{ data.ketuntasan }}</td>
                             <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                             <td>@{{ data.penilaian_pimpinan }}</td>
                             <td>@{{ data.catatan_koreksi }}</td>

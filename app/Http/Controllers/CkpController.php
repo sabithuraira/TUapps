@@ -272,6 +272,11 @@ class CkpController extends Controller
                 
                 $model_utama = \App\Ckp::find($data->id);
                 $model_utama->uraian = $request->get('u_uraian'.$data->id);
+                $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_id'.$data->id);
+                $data_user = \App\UserModel::find($request->get('u_pemberi_tugas_id'.$data->id));
+                $model_utama->pemberi_tugas_nama = $data_user->name;
+                $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+
                 $model_utama->satuan = $request->get('u_satuan'.$data->id);
                 $model_utama->target_kuantitas = $request->get('u_target_kuantitas'.$data->id);
 
@@ -298,6 +303,11 @@ class CkpController extends Controller
                 
                 $model_tambahan = \App\Ckp::find($data->id);
                 $model_tambahan->uraian = $request->get('t_uraian'.$data->id);
+                $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_id'.$data->id);
+                $data_user = \App\UserModel::find($request->get('t_pemberi_tugas_id'.$data->id));
+                $model_tambahan->pemberi_tugas_nama = $data_user->name;
+                $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+
                 $model_tambahan->satuan = $request->get('t_satuan'.$data->id);
                 $model_tambahan->target_kuantitas = $request->get('t_target_kuantitas'.$data->id);
                 $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitas'.$data->id);
@@ -331,6 +341,12 @@ class CkpController extends Controller
                     $model_utama->jenis = 1;
 
                     $model_utama->uraian = $request->get('u_uraianau'.$i);
+                    
+                    $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_idau'.$data->id);
+                    $data_user = \App\UserModel::find($request->get('u_pemberi_tugas_idau'.$data->id));
+                    $model_utama->pemberi_tugas_nama = $data_user->name;
+                    $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+
                     $model_utama->satuan = $request->get('u_satuanau'.$i);
                     $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
 
@@ -370,6 +386,11 @@ class CkpController extends Controller
                     $model_tambahan->jenis = 2;
 
                     $model_tambahan->uraian = $request->get('t_uraianat'.$i);
+                    $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_idat'.$data->id);
+                    $data_user = \App\UserModel::find($request->get('t_pemberi_tugas_idat'.$data->id));
+                    $model_tambahan->pemberi_tugas_nama = $data_user->name;
+                    $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+
                     $model_tambahan->satuan = $request->get('t_satuanat'.$i);
                     $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);
                     $model_tambahan->realisasi_kuantitas = $request->get('t_realisasi_kuantitasat'.$i);
