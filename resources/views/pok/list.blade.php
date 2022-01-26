@@ -14,6 +14,26 @@
         </div>
     </div>
     <br/>
+    <form action="{{url('pok')}}" method="get">
+        <div class="row clearfix">
+            <div class="col-md-6">
+                <b>Pilih Versi POK:</b>
+                <select class="form form-control" name="versi_id" onchange="this.form.submit()">
+                    @foreach($list_versi as $value)
+                        <option value="{{ $value->id }}" @if($value->id == $versi_id) selected="selected" @endif>
+                            {{ $value->versi }} - {{ $value->keterangan }}
+                        </option>
+                    @endforeach
+                    <option value="0" @if(0 == $versi_id) selected="selected" @endif>POK Awal</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 text-right">
+                <span class="bg-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="text-muted">Rincian anggaran yang mengalami revisi sesuai versi</span>
+            </div>
+        </div>
+    </form>
+    <br/>
     @endhasanyrole
     <table class="table-sm table-bordered m-b-0" style="min-width:100%">
         @if (count($datas)==0)
@@ -132,7 +152,7 @@
                         </tr>
                     @endif
 
-                    <tr>
+                    <tr @if($data->versi_id == $versi_id) class="bg-warning" @endif>
                         <td></td>
                         <td>
                             {{ $data->label }}
@@ -170,41 +190,43 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="#" role="button"  
-                                    data-target="#set_aktif"> 
-                                    <i class="icon-calendar text-info"></i>
-                                    <p class='text-info small'>History</p>
-                                </a>
+                            @if($data->status==1)
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="#" role="button"  
+                                        data-target="#set_aktif"> 
+                                        <i class="icon-calendar text-info"></i>
+                                        <p class='text-info small'>History</p>
+                                    </a>
+
+                                    @hasanyrole('superadmin|kuasa_anggaran')
+                                    &nbsp;&nbsp;
+                                    <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
+                                        data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
+                                        <i class="icon-user text-info"></i> 
+                                        <p class='text-info small'>Set PJ</p>
+                                    </a>
+                                    @endhasanyrole
+                                </div>
 
                                 @hasanyrole('superadmin|kuasa_anggaran')
-                                &nbsp;&nbsp;
-                                <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
-                                    data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
-                                    <i class="icon-user text-info"></i> 
-                                    <p class='text-info small'>Set PJ</p>
-                                </a>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="#" @click="setFormEdit" 
+                                        data-program="{{ $program->label  }}" data-kode_program="{{ $program->kode  }}" 
+                                        data-aktivitas="{{ $aktivitas->label  }}" data-kode_aktivitas="{{ $aktivitas->kode  }}" 
+                                        data-kro="{{ $kro->label  }}" data-kode_kro="{{ $kro->kode  }}" 
+                                        data-ro="{{ $ro->label  }}" data-kode_ro="{{ $ro->kode  }}" 
+                                        data-komponen="{{ $data->label_komponen  }}" data-kode_komponen="{{ $data->kode_komponen  }}" 
+                                        data-sub_komponen="{{ $data->label_sub_komponen  }}" data-kode_sub_komponen="{{ $data->kode_sub_komponen  }}" 
+                                        data-mata_anggaran="{{ $data->label_mata_anggaran  }}" data-kode_mata_anggaran="{{ $data->kode_mata_anggaran  }}" 
+                                        data-id="{{ $data->id  }}" data-label="{{ $data->label }}"  data-tahun="{{ $data->tahun }}" 
+                                        data-volume="{{ $data->volume  }}" data-satuan="{{ $data->satuan }}"  data-harga_satuan="{{ $data->harga_satuan }}" 
+                                        data-toggle="modal" data-target="#modal_form_edit">
+                                        <i class="icon-pencil text-info"></i> 
+                                        <p class='text-info small'>Revisi</p>
+                                    </a>
+                                </div>
                                 @endhasanyrole
-                            </div>
-
-                            @hasanyrole('superadmin|kuasa_anggaran')
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="#" @click="setFormEdit" 
-                                    data-program="{{ $program->label  }}" data-kode_program="{{ $program->kode  }}" 
-                                    data-aktivitas="{{ $aktivitas->label  }}" data-kode_aktivitas="{{ $aktivitas->kode  }}" 
-                                    data-kro="{{ $kro->label  }}" data-kode_kro="{{ $kro->kode  }}" 
-                                    data-ro="{{ $ro->label  }}" data-kode_ro="{{ $ro->kode  }}" 
-                                    data-komponen="{{ $data->label_komponen  }}" data-kode_komponen="{{ $data->kode_komponen  }}" 
-                                    data-sub_komponen="{{ $data->label_sub_komponen  }}" data-kode_sub_komponen="{{ $data->kode_sub_komponen  }}" 
-                                    data-mata_anggaran="{{ $data->label_mata_anggaran  }}" data-kode_mata_anggaran="{{ $data->kode_mata_anggaran  }}" 
-                                    data-id="{{ $data->id  }}" data-label="{{ $data->label }}"  data-tahun="{{ $data->tahun }}" 
-                                    data-volume="{{ $data->volume  }}" data-satuan="{{ $data->satuan }}"  data-harga_satuan="{{ $data->harga_satuan }}" 
-                                    data-toggle="modal" data-target="#modal_form_edit">
-                                    <i class="icon-pencil text-info"></i> 
-                                    <p class='text-info small'>Revisi</p>
-                                </a>
-                            </div>
-                            @endhasanyrole
+                            @endif 
                         </td>
                     </tr>
                 @endforeach

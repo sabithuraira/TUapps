@@ -23,18 +23,26 @@ class PokController extends Controller
         $tahun = date('Y');
         if(strlen($request->tahun)>0) $tahun = $request->tahun;
 
-        $model = new \App\PokRincianAnggaran;
-        
-        $last = \App\PokVersiRevisi::latest()->first();
         $versi_id = 0;
-        if($last!=null) $versi_id = $last->id;
+
+        $model = new \App\PokRincianAnggaran;
+        $list_versi = \App\PokVersiRevisi::orderBy('id', 'DESC')->get(); 
+        
+        if(strlen($request->get('versi_id'))==0){
+            $last = \App\PokVersiRevisi::latest()->first();
+            $versi_id = 0;
+            if($last!=null) $versi_id = $last->id;
+        }
+        else{
+            $versi_id = $request->get('versi_id');
+        }
 
         $datas = $model->getDataAnggaran($tahun, $versi_id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
 
         return view('pok.index', compact(
             'tahun', 'model', 'datas',
-            'list_pegawai'
+            'list_pegawai', 'list_versi', 'versi_id'
         ));
     }
 

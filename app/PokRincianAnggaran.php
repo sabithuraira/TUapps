@@ -51,7 +51,18 @@ class PokRincianAnggaran extends Model{
         //     m.id_komponen, m.id_sub_komponen, m.id";
 
         $where_versi = "";
-        if($versi_id!=0) $where_versi = " AND (r.versi_id IS NULL OR r.versi_id=$versi_id) ";
+
+        $last = \App\PokVersiRevisi::latest()->first();
+        $versi_id_cek = 0;
+        if($last!=null) $versi_id_cek = $last->id;
+
+        if($versi_id!=0){
+            if($versi_id==$versi_id_cek) $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id AND r.status=1))";
+            else  $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id))";
+        }
+        else{
+            $where_versi = " AND r.versi_id IS NULL ";
+        }
 
         $sql = "SELECT 
                     m.id_program, m.id_aktivitas, m.id_kro, m.id_ro,
@@ -72,7 +83,7 @@ class PokRincianAnggaran extends Model{
                     
                     WHERE 
                         m.tahun=$tahun AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . " 
-                        AND r.status = 1 $where_versi 
+                        $where_versi 
                     ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
                         m.id_komponen, m.id_sub_komponen, m.id;";
                         

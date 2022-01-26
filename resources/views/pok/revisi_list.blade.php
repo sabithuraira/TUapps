@@ -48,17 +48,17 @@
                             
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 @if($data->status_revisi==0)
-                                    <form id="form-delete" action="{{action('PokController@destroy_revisi', $data['id'])}}" method="post">
-                                        @csrf
-                                        <input name="_method" type="hidden" value="DELETE">
-                                        
-                                        <a href="#" onclick="document.getElementById('form-delete').submit();">
-                                            <i class="icon-trash text-danger"></i> 
-                                            <p class='text-danger small'>Hapus</p>
-                                        </a>
-                                    </form>
-                                    &nbsp;
                                     @hasanyrole('superadmin|ppk_unit_kerja')
+                                        <form id="form-delete" action="{{action('PokController@destroy_revisi', $data['id'])}}" method="post">
+                                            @csrf
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            
+                                            <a href="#" onclick="document.getElementById('form-delete').submit();">
+                                                <i class="icon-trash text-danger"></i> 
+                                                <p class='text-danger small'>Hapus</p>
+                                            </a>
+                                        </form>
+                                        &nbsp;
                                         <form id="form-approve" action="{{action('PokController@approve_revisi', $data['id'])}}" method="post">
                                             @csrf
                                             <a href="#" onclick="document.getElementById('form-approve').submit();">
