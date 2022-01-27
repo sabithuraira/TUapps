@@ -44,6 +44,9 @@ class PokController extends Controller
             if($list_before_versi!=null) $before_versi_id = $list_before_versi->id;
         }
 
+        // print_r($versi_id);
+        // print_r($before_versi_id);die();
+
         $datas = $model->getDataAnggaran($tahun, $versi_id, $before_versi_id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
 
@@ -426,10 +429,18 @@ class PokController extends Controller
         $datas = \App\PokRincianAnggaran::where('status','=', 0)
                     ->where('versi_id','=', $versi_id)->get();
 
+        ///////
+        $before_versi_id = 0;
+        if($versi_id!=0){
+            $list_before_versi = \App\PokVersiRevisi::where('id', '<', $versi_id)->orderBy('id', 'DESC')->first(); 
+            if($list_before_versi!=null) $before_versi_id = $list_before_versi->id;
+        }
+        //////
+
         foreach($datas as $key=>$data){
             if(strlen($data->old_rencana_id)>0){
                 $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
-                $old_data->revisi_tujuan_id = $versi_id;
+                $old_data->revisi_tujuan_id = $before_versi_id;
                 $old_data->status = 0;
                 $old_data->save();
             }

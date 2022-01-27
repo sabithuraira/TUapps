@@ -152,7 +152,7 @@
                         </tr>
                     @endif
 
-                    <tr @if($data->versi_id == $versi_id) class="bg-warning" @endif>
+                    <tr @if($data->versi_id == $versi_id && $versi_id!=0) class="bg-warning" @endif>
                         <td></td>
                         <td>
                             {{ $data->label }}

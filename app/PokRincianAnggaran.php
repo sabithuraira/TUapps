@@ -59,7 +59,7 @@ class PokRincianAnggaran extends Model{
         if($versi_id!=0){
             // if($versi_id==$versi_id_cek) $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id AND r.status=1))";
             // else  $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id))";
-            $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR r.revisi_tujuan_id=$versi_id OR r.versi_id=$versi_id)";
+            $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR r.revisi_tujuan_id=$before_versi_id OR r.versi_id=$versi_id OR r.status=1)";
         }
         else{
             $where_versi = " AND r.versi_id IS NULL ";
