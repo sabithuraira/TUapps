@@ -25,7 +25,7 @@ class PokRincianAnggaran extends Model{
         return $this->hasOne('App\PokMataAnggaran', 'id', 'id_mata_anggaran');
     }
 
-    public function getDataAnggaran($tahun, $versi_id){
+    public function getDataAnggaran($tahun, $versi_id, $before_versi_id){
         // $sql = "SELECT 
         // program.kode as kode_program, program.label as label_program,
         // aktivitas.kode as kode_aktivitas, aktivitas.label as label_aktivitas,
@@ -57,8 +57,9 @@ class PokRincianAnggaran extends Model{
         if($last!=null) $versi_id_cek = $last->id;
 
         if($versi_id!=0){
-            if($versi_id==$versi_id_cek) $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id AND r.status=1))";
-            else  $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id))";
+            // if($versi_id==$versi_id_cek) $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id AND r.status=1))";
+            // else  $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR (r.versi_id=$versi_id))";
+            $where_versi = " AND ((r.versi_id IS NULL AND r.status=1) OR r.revisi_tujuan_id=$versi_id OR r.versi_id=$versi_id)";
         }
         else{
             $where_versi = " AND r.versi_id IS NULL ";

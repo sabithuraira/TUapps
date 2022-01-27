@@ -24,6 +24,7 @@ class PokController extends Controller
         if(strlen($request->tahun)>0) $tahun = $request->tahun;
 
         $versi_id = 0;
+        $before_versi_id = 0;
 
         $model = new \App\PokRincianAnggaran;
         $list_versi = \App\PokVersiRevisi::orderBy('id', 'DESC')->get(); 
@@ -31,13 +32,19 @@ class PokController extends Controller
         if(strlen($request->get('versi_id'))==0){
             $last = \App\PokVersiRevisi::latest()->first();
             $versi_id = 0;
-            if($last!=null) $versi_id = $last->id;
+            if($last!=null){
+                $list_before_versi = \App\PokVersiRevisi::where('id', '<', $versi_id)->orderBy('id', 'DESC')->first(); 
+                $versi_id = $last->id;
+                if($list_before_versi!=null) $before_versi_id = $list_before_versi->id;
+            }
         }
         else{
             $versi_id = $request->get('versi_id');
+            $list_before_versi = \App\PokVersiRevisi::where('id', '<', $versi_id)->orderBy('id', 'DESC')->first(); 
+            if($list_before_versi!=null) $before_versi_id = $list_before_versi->id;
         }
 
-        $datas = $model->getDataAnggaran($tahun, $versi_id);
+        $datas = $model->getDataAnggaran($tahun, $versi_id, $before_versi_id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))->where('kdkab', '=', Auth::user()->kdkab)->get();
 
         return view('pok.index', compact(
@@ -422,6 +429,7 @@ class PokController extends Controller
         foreach($datas as $key=>$data){
             if(strlen($data->old_rencana_id)>0){
                 $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
+                $old_data->revisi_tujuan_id = $versi_id;
                 $old_data->status = 0;
                 $old_data->save();
             }
