@@ -35,204 +35,206 @@
     </form>
     <br/>
     @endhasanyrole
-    <table class="table-sm table-bordered m-b-0" style="min-width:100%">
-        @if (count($datas)==0)
-        <thead>
-            <tr><th>Tidak ditemukan data</th></tr>
-        </thead>
-        @else
+    <div class="tableFixHead">
+        <table class="table-sm table-bordered m-b-0" style="min-width:100%">
+            @if (count($datas)==0)
             <thead>
-                <tr class="text-center">
-                    <th rowspan="2">KODE</th>
-                    <th rowspan="2">PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUB KOMPONEN/DETIL</th>
-                    <th colspan="4">PERHITUNGAN TAHUN {{ $tahun }}</th>
-                    <th rowspan="2">ESTIMASI</th>
-                    <th rowspan="2">REALISASI</th>
-                    <th rowspan="2">AKSI</th>
-                </tr>
-                
-                <tr class="text-center">
-                    <th>VOLUME</th><th>SATUAN</th><th>HARGA SATUAN</th><th>JUMLAH BIAYA</th>
-                </tr>
+                <tr><th>Tidak ditemukan data</th></tr>
             </thead>
+            @else
+                <thead>
+                    <tr class="text-center">
+                        <th rowspan="2">KODE</th>
+                        <th rowspan="2">PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUB KOMPONEN/DETIL</th>
+                        <th colspan="4">PERHITUNGAN TAHUN {{ $tahun }}</th>
+                        <th rowspan="2">ESTIMASI</th>
+                        <th rowspan="2">REALISASI</th>
+                        <th rowspan="2">AKSI</th>
+                    </tr>
+                    
+                    <tr class="text-center">
+                        <th>VOLUME</th><th>SATUAN</th><th>HARGA SATUAN</th><th>JUMLAH BIAYA</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @php 
-                    $id_program = ''; $program = null;
-                    $id_aktivitas = ''; $aktivitas = null;
-                    $id_kro = ''; $kro = null;
-                    $id_ro = ''; $ro = null;
-                    $id_komponen = ''; 
-                    $id_sub_komponen = '';
-                    $id_mata_anggaran = '';
-                @endphp
-                @foreach($datas as $data)
-                    @if($id_program!=$data->id_program)
-                        @php 
-                            $id_program = $data->id_program;
-                            $program = \App\PokProgram::find($id_program);
-                        @endphp
-                        <tr>
-                            <td class="text-center"><b>{{ $program->kode }}</b></td>
-                            <td><b>{{ $program->label }}</b></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_aktivitas!=$data->id_aktivitas)
-                        @php 
-                            $id_aktivitas = $data->id_aktivitas;
-                            $aktivitas = \App\PokAktivitas::find($id_aktivitas);
-                        @endphp
-                        <tr>
-                            <td class="text-center"><b class="text-primary">{{ $aktivitas->kode }}</b></td>
-                            <td><b class="text-primary">{{ $aktivitas->label }}</b></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_kro!=$data->id_kro)
-                        @php 
-                            $id_kro = $data->id_kro;
-                            $kro = \App\PokKro::find($id_kro);
-                        @endphp
-                        <tr>
-                            <td class="text-center"><b class="text-danger">{{ $kro->kode }}</b></td>
-                            <td><b class="text-danger">{{ $kro->label }}</b></td>
-                            <td><b class="text-danger">{{ $kro->volume }}</b></td>
-                            <td class="text-center"><b class="text-danger">{{ $kro->satuan }}</b></td>
-                            <td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_ro!=$data->id_ro)
-                        @php 
-                            $id_ro = $data->id_ro;
-                            $ro = \App\PokRo::find($id_ro);
-                        @endphp
-                        <tr>
-                            <td class="text-center"><b>{{ $ro->kode }}</b></td>
-                            <td><b>{{ $ro->label }}</b></td>
-                            <td><b class="text-danger">{{ $ro->volume }}</b></td>
-                            <td class="text-center"><b class="text-danger">{{ $ro->satuan }}</b></td>
-                            <td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_komponen!=$data->id_komponen)
-                        @php 
-                            $id_komponen = $data->id_komponen;
-                        @endphp
-                        <tr>
-                            <td class="text-center"><b>{{ $data->kode_komponen }}</b></td>
-                            <td><b>{{ $data->label_komponen }}</b></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_sub_komponen!=$data->id_sub_komponen)
-                        @php 
-                            $id_sub_komponen = $data->id_sub_komponen;
-                        @endphp
-                        <tr>
-                            <td class="text-center">{{ $data->kode_sub_komponen }}</td>
-                            <td>{{ $data->label_sub_komponen }}</td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
-                    
-                    @if($id_mata_anggaran!=$data->id_mata_anggaran)
-                        @php 
-                            $id_mata_anggaran = $data->id_mata_anggaran;
-                        @endphp
-                        <tr>
-                            <td class="text-center">{{ $data->kode_mata_anggaran }}</td>
-                            <td>{{ $data->label_mata_anggaran }}</td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endif
+                <tbody>
+                    @php 
+                        $id_program = ''; $program = null;
+                        $id_aktivitas = ''; $aktivitas = null;
+                        $id_kro = ''; $kro = null;
+                        $id_ro = ''; $ro = null;
+                        $id_komponen = ''; 
+                        $id_sub_komponen = '';
+                        $id_mata_anggaran = '';
+                    @endphp
+                    @foreach($datas as $data)
+                        @if($id_program!=$data->id_program)
+                            @php 
+                                $id_program = $data->id_program;
+                                $program = \App\PokProgram::find($id_program);
+                            @endphp
+                            <tr>
+                                <td class="text-center"><b>{{ $program->kode }}</b></td>
+                                <td><b>{{ $program->label }}</b></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_aktivitas!=$data->id_aktivitas)
+                            @php 
+                                $id_aktivitas = $data->id_aktivitas;
+                                $aktivitas = \App\PokAktivitas::find($id_aktivitas);
+                            @endphp
+                            <tr>
+                                <td class="text-center"><b class="text-primary">{{ $aktivitas->kode }}</b></td>
+                                <td><b class="text-primary">{{ $aktivitas->label }}</b></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_kro!=$data->id_kro)
+                            @php 
+                                $id_kro = $data->id_kro;
+                                $kro = \App\PokKro::find($id_kro);
+                            @endphp
+                            <tr>
+                                <td class="text-center"><b class="text-danger">{{ $kro->kode }}</b></td>
+                                <td><b class="text-danger">{{ $kro->label }}</b></td>
+                                <td><b class="text-danger">{{ $kro->volume }}</b></td>
+                                <td class="text-center"><b class="text-danger">{{ $kro->satuan }}</b></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_ro!=$data->id_ro)
+                            @php 
+                                $id_ro = $data->id_ro;
+                                $ro = \App\PokRo::find($id_ro);
+                            @endphp
+                            <tr>
+                                <td class="text-center"><b>{{ $ro->kode }}</b></td>
+                                <td><b>{{ $ro->label }}</b></td>
+                                <td><b class="text-danger">{{ $ro->volume }}</b></td>
+                                <td class="text-center"><b class="text-danger">{{ $ro->satuan }}</b></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_komponen!=$data->id_komponen)
+                            @php 
+                                $id_komponen = $data->id_komponen;
+                            @endphp
+                            <tr>
+                                <td class="text-center"><b>{{ $data->kode_komponen }}</b></td>
+                                <td><b>{{ $data->label_komponen }}</b></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_sub_komponen!=$data->id_sub_komponen)
+                            @php 
+                                $id_sub_komponen = $data->id_sub_komponen;
+                            @endphp
+                            <tr>
+                                <td class="text-center">{{ $data->kode_sub_komponen }}</td>
+                                <td>{{ $data->label_sub_komponen }}</td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
+                        
+                        @if($id_mata_anggaran!=$data->id_mata_anggaran)
+                            @php 
+                                $id_mata_anggaran = $data->id_mata_anggaran;
+                            @endphp
+                            <tr>
+                                <td class="text-center">{{ $data->kode_mata_anggaran }}</td>
+                                <td>{{ $data->label_mata_anggaran }}</td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        @endif
 
-                    <tr @if($data->versi_id == $versi_id && $versi_id!=0) class="bg-warning" @endif>
-                        <td></td>
-                        <td>
-                            {{ $data->label }}
-                            @if($data->nama_pj!='')
+                        <tr @if($data->versi_id == $versi_id && $versi_id!=0) class="bg-warning" @endif>
+                            <td></td>
+                            <td>
+                                {{ $data->label }}
+                                @if($data->nama_pj!='')
+                                    <br/>
+                                    <div class='badge badge-info'>PJ: {{ $data->nama_pj }}</div>
+                                @endif
+                            </td>
+                            <td>{{ $data->volume }}</td>
+                            <td class="text-center">{{ $data->satuan }}</td>
+                            <td class="text-right">{{ number_format($data->harga_satuan) }}</td>
+                            <td class="text-right">{{ number_format($data->harga_jumlah) }}</td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="#" role="button" @click="setTransaksi" 
+                                        data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
+                                        data-toggle="modal" data-target="#modal_estimasi"> <i class="fa fa-search"></i></a>
+                                </div>
                                 <br/>
-                                <div class='badge badge-info'>PJ: {{ $data->nama_pj }}</div>
-                            @endif
-                        </td>
-                        <td>{{ $data->volume }}</td>
-                        <td class="text-center">{{ $data->satuan }}</td>
-                        <td class="text-right">{{ number_format($data->harga_satuan) }}</td>
-                        <td class="text-right">{{ number_format($data->harga_jumlah) }}</td>
-                        <td>
-                            <div class="text-center">
-                                <a href="#" role="button" @click="setTransaksi" 
-                                    data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
-                                    data-toggle="modal" data-target="#modal_estimasi"> <i class="fa fa-search"></i></a>
-                            </div>
-                            <br/>
-                            
-                            @if($data->total_estimasi!=null)
-                                <div class='badge badge-info'>Rp. {{ number_format($data->total_estimasi) }}</div>
-                            @endif
-                        </td>
-                        <td>
-                            <div class="text-center">
-                                <a href="#" role="button" @click="setTransaksi" 
-                                    data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
-                                    data-toggle="modal" data-target="#modal_realisasi"> <i class="fa fa-search"></i></a>
-                            </div>
-                            <br/>
-                            
-                            @if($data->total_realisasi!=null)
-                                <div class='badge badge-info'>Rp. {{ number_format($data->total_realisasi) }}</div>
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            @if($data->status==1)
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="#" role="button"  
-                                        data-target="#set_aktif"> 
-                                        <i class="icon-calendar text-info"></i>
-                                        <p class='text-info small'>History</p>
-                                    </a>
+                                
+                                @if($data->total_estimasi!=null)
+                                    <div class='badge badge-info'>Rp. {{ number_format($data->total_estimasi) }}</div>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="#" role="button" @click="setTransaksi" 
+                                        data-id="{{ $data->id }}" data-label="{{ $data->label }}" data-pj="{{ $data->id_pj }}" 
+                                        data-toggle="modal" data-target="#modal_realisasi"> <i class="fa fa-search"></i></a>
+                                </div>
+                                <br/>
+                                
+                                @if($data->total_realisasi!=null)
+                                    <div class='badge badge-info'>Rp. {{ number_format($data->total_realisasi) }}</div>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if($data->status==1)
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="#" role="button"  
+                                            data-target="#set_aktif"> 
+                                            <i class="icon-calendar text-info"></i>
+                                            <p class='text-info small'>History</p>
+                                        </a>
+
+                                        @hasanyrole('superadmin|kuasa_anggaran')
+                                        &nbsp;&nbsp;
+                                        <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
+                                            data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
+                                            <i class="icon-user text-info"></i> 
+                                            <p class='text-info small'>Set PJ</p>
+                                        </a>
+                                        @endhasanyrole
+                                    </div>
 
                                     @hasanyrole('superadmin|kuasa_anggaran')
-                                    &nbsp;&nbsp;
-                                    <a href="#" data-id="{{ $data->id }}" data-label="{{ $data->label }}" 
-                                        data-pegawai="{{ $data->id_pj }}" v-on:click="setPj" data-toggle="modal" data-target="#modal_pj">
-                                        <i class="icon-user text-info"></i> 
-                                        <p class='text-info small'>Set PJ</p>
-                                    </a>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="#" @click="setFormEdit" 
+                                            data-program="{{ $program->label  }}" data-kode_program="{{ $program->kode  }}" 
+                                            data-aktivitas="{{ $aktivitas->label  }}" data-kode_aktivitas="{{ $aktivitas->kode  }}" 
+                                            data-kro="{{ $kro->label  }}" data-kode_kro="{{ $kro->kode  }}" 
+                                            data-ro="{{ $ro->label  }}" data-kode_ro="{{ $ro->kode  }}" 
+                                            data-komponen="{{ $data->label_komponen  }}" data-kode_komponen="{{ $data->kode_komponen  }}" 
+                                            data-sub_komponen="{{ $data->label_sub_komponen  }}" data-kode_sub_komponen="{{ $data->kode_sub_komponen  }}" 
+                                            data-mata_anggaran="{{ $data->label_mata_anggaran  }}" data-kode_mata_anggaran="{{ $data->kode_mata_anggaran  }}" 
+                                            data-id="{{ $data->id  }}" data-label="{{ $data->label }}"  data-tahun="{{ $data->tahun }}" 
+                                            data-volume="{{ $data->volume  }}" data-satuan="{{ $data->satuan }}"  data-harga_satuan="{{ $data->harga_satuan }}" 
+                                            data-toggle="modal" data-target="#modal_form_edit">
+                                            <i class="icon-pencil text-info"></i> 
+                                            <p class='text-info small'>Revisi</p>
+                                        </a>
+                                    </div>
                                     @endhasanyrole
-                                </div>
-
-                                @hasanyrole('superadmin|kuasa_anggaran')
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="#" @click="setFormEdit" 
-                                        data-program="{{ $program->label  }}" data-kode_program="{{ $program->kode  }}" 
-                                        data-aktivitas="{{ $aktivitas->label  }}" data-kode_aktivitas="{{ $aktivitas->kode  }}" 
-                                        data-kro="{{ $kro->label  }}" data-kode_kro="{{ $kro->kode  }}" 
-                                        data-ro="{{ $ro->label  }}" data-kode_ro="{{ $ro->kode  }}" 
-                                        data-komponen="{{ $data->label_komponen  }}" data-kode_komponen="{{ $data->kode_komponen  }}" 
-                                        data-sub_komponen="{{ $data->label_sub_komponen  }}" data-kode_sub_komponen="{{ $data->kode_sub_komponen  }}" 
-                                        data-mata_anggaran="{{ $data->label_mata_anggaran  }}" data-kode_mata_anggaran="{{ $data->kode_mata_anggaran  }}" 
-                                        data-id="{{ $data->id  }}" data-label="{{ $data->label }}"  data-tahun="{{ $data->tahun }}" 
-                                        data-volume="{{ $data->volume  }}" data-satuan="{{ $data->satuan }}"  data-harga_satuan="{{ $data->harga_satuan }}" 
-                                        data-toggle="modal" data-target="#modal_form_edit">
-                                        <i class="icon-pencil text-info"></i> 
-                                        <p class='text-info small'>Revisi</p>
-                                    </a>
-                                </div>
-                                @endhasanyrole
-                            @endif 
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        @endif
-    </table>
+                                @endif 
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            @endif
+        </table>
+    </div>
     
     @include('pok.modal_pj')
     @include('pok.modal_estimasi')
@@ -272,6 +274,11 @@
         font-weight: bold;
         font-size: small;
     }
+    .tableFixHead          { overflow: auto; height: 600px; }
+    .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+    /* Just common table stuff. Really. */
+    th     { background:#eee; }
 </style>
 <link rel="stylesheet"
     href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
