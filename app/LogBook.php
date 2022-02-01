@@ -30,7 +30,8 @@ class LogBook extends Model
             GROUP_CONCAT(log_books.hasil SEPARATOR '$separate') hasil
             
             FROM `users` u 
-            LEFT JOIN log_books ON log_books.user_id=u.email AND  log_books.tanggal='$tanggal'
+            LEFT JOIN log_books ON (log_books.user_id=u.email AND  log_books.tanggal='$tanggal' 
+                AND (log_books.is_rencana=0 OR log_books.is_rencana IS NULL))
             
             WHERE $str_where
             GROUP BY u.id, u.name, u.nip_baru, u.kdorg , u.kdesl
@@ -46,11 +47,19 @@ class LogBook extends Model
         $datas = array();
 
         $datas = DB::table('log_books')
-            ->where([
-                ['log_books.tanggal', '>=', $start_date],
-                ['log_books.tanggal', '<=', $end_date],
-                ['log_books.user_id', '=', $user_id],
-            ])
+            ->where(
+                // [
+                //     ['log_books.tanggal', '>=', $start_date],
+                //     ['log_books.tanggal', '<=', $end_date],
+                //     ['log_books.user_id', '=', $user_id],
+                // ]
+
+                (function ($query) {
+                    $query->where('log_books.tanggal', '>=', $start_date)
+                        ->Where('log_books.tanggal', '<=', $end_date)
+                        ->Where('log_books.user_id', '=', $user_id);
+                })
+            )
             ->orWhere(
                 (function ($query) {
                     $query->where('log_books.is_rencana', '=', 0)

@@ -367,6 +367,7 @@ var vm = new Vue({
             }).done(function (data) {
                 self.datas_rencana = data.datas;
                 console.log(data)
+                console.log("")
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -427,12 +428,12 @@ var vm = new Vue({
     });
     
     $('#start_rencana').change(function() {
-        vm.start = this.value;
+        vm.start_rencana = this.value;
         vm.setDatasRencanaKerja();
     });
 
     $('#end_rencana').change(function() {
-        vm.end = this.value;
+        vm.end_rencana = this.value;
         vm.setDatasRencanaKerja();
     });
 </script
