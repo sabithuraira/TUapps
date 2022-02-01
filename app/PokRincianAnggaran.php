@@ -113,7 +113,7 @@ class PokRincianAnggaran extends Model{
                     WHERE 
                         m.tahun=$tahun AND m.unit_kerja=" . Auth::user()->kdprop.Auth::user()->kdkab . " 
                         AND r.status = 0 AND r.versi_id=$versi_id 
-                    ORDER BY m.id_program, m.id_aktivitas, m.id_kro, m.id_ro, 
+                    ORDER BY m.id_kro, r.old_rencana_id DESC,  m.id_ro, 
                         m.id_komponen, m.id_sub_komponen, m.id;";
                         
         $result = DB::select(DB::raw($sql));

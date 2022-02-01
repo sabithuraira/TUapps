@@ -52,8 +52,11 @@
                     $id_komponen = ''; 
                     $id_sub_komponen = '';
                     $id_mata_anggaran = '';
+
+                    $total_kro_semula = 0;
+                    $total_kro_menjadi = 0;
                 @endphp
-                @foreach($datas as $data) 
+                @foreach($datas as $key=>$data) 
 
                     @php 
                         $old_data = null;
@@ -77,24 +80,58 @@
                         }
                     @endphp 
 
+                    @if($id_kro!=$data->id_kro)
+                        @if($id_kro!='')
+                            <tr>
+                                <td colspan="3">
+                                    <b>Jumlah Semula</b>: Rp. {{ number_format($total_kro_semula) }}
+                                </td>
+                                <td colspan="3">
+                                    <b>Jumlah Menjadi</b>: Rp. {{ number_format($total_kro_menjadi) }}
+                                </td>
+                                <td></td>
+                            </tr>
+                        @endif
+                        @php 
+                            $total_kro_semula = 0;
+                            $total_kro_menjadi = 0;
+                            $id_kro = $data->id_kro;
+                            $kro = \App\PokKro::find($id_kro);
+                        @endphp
+                        <tr>
+                            <td colspan="7">
+                                <b>KRO</b>: {{ $kro->kode }} - {{ $kro->label }}
+                            </td>
+                        </tr>
+                    @else 
+                        @php 
+                            if($old_data!=null) $total_kro_semula += $old_data->harga_jumlah;
+                            $total_kro_menjadi += $data->harga_jumlah;
+                        @endphp
+                    @endif
+
                     <tr>
+                        @if($id_ro!=$data->id_ro)
+                            @php 
+                                $id_ro = $data->id_ro;
+                                $ro = \App\PokRo::find($id_ro);
+                            @endphp
+                        @endif
+
                         @if($old_data==null)
                             <td></td>
                             <td></td>
                             <td></td>
                         @else
                                 @php 
-                                    $old_id_kro = $old_mata_anggaran->id_kro;
-                                    $old_kro = \App\PokKro::find($old_id_kro);
                                     $old_id_ro = $old_mata_anggaran->id_ro;
                                     $old_ro = \App\PokRo::find($old_id_ro);
                                 @endphp
                             <td>
-                                <b>KRO</b>: {{ $old_kro->kode }} - {{ $old_kro->label }}<br/>
-                                <b>RO</b>:  {{ $old_ro->kode }} - {{ $old_ro->label }}<br/>
-                                <b>Komponen</b>: {{ $old_data->kode_komponen }} - {{ $old_data->label_komponen }}<br/>
-                                <b>Sub Komponen</b>: {{ $old_data->kode_sub_komponen }} - {{ $old_data->label_sub_komponen }}<br/>
-                                <b>Akun</b>: {{ $old_data->kode_mata_anggaran }} - {{ $old_data->label_mata_anggaran }}<br/>    
+                                <b>RO</b>:  {{ $ro->kode }} - {{ $ro->label }}<br/>
+                                <b>Komponen</b>: {{ $data->kode_komponen }} - {{ $data->label_komponen }}<br/>
+                                <b>Sub Komponen</b>: {{ $data->kode_sub_komponen }} - {{ $data->label_sub_komponen }}<br/>
+                                <b>Akun</b>: {{ $data->kode_mata_anggaran }} - {{ $data->label_mata_anggaran }}<br/>    
                                 <b>Detail</b>: {{ $old_data->label }}<br/>    
                             </td>
                             <td>
@@ -109,21 +146,7 @@
                             </td>
                         @endif
                         
-                        @if($id_kro!=$data->id_kro)
-                            @php 
-                                $id_kro = $data->id_kro;
-                                $kro = \App\PokKro::find($id_kro);
-                            @endphp
-                        @endif
-                        
-                        @if($id_ro!=$data->id_ro)
-                            @php 
-                                $id_ro = $data->id_ro;
-                                $ro = \App\PokRo::find($id_ro);
-                            @endphp
-                        @endif
                         <td>
-                            <b>KRO</b>: {{ $kro->kode }} - {{ $kro->label }}<br/>
                             <b>RO</b>: {{ $ro->kode }} - {{ $ro->label }}<br/>
                             <b>Komponen</b>: {{ $data->kode_komponen }} - {{ $data->label_komponen }}<br/>
                             <b>Sub Komponen</b>: {{ $data->kode_sub_komponen }} - {{ $data->label_sub_komponen }}<br/>
@@ -145,7 +168,28 @@
                             </a>
                         </td>
                     </tr>
+
+                    
+                    @if($key+1==count($datas))
+                        <tr>
+                            <td colspan="3">
+                                <b>Jumlah Semula</b>: Rp. {{ number_format($total_kro_semula) }}
+                            </td>
+                            <td colspan="3">
+                                <b>Jumlah Menjadi</b>: Rp. {{ number_format($total_kro_menjadi) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                    @endif
+
                 @endforeach
+                <tr>
+                    <td colspan="2" class="text-center"><b>JUMLAH SEMULA</b></td>
+                    <td><b>Rp. {{ number_format($total_lama) }}</b></td>
+                    <td colspan="2" class="text-center"><b>JUMLAH MENJADI</b></td>
+                    <td><b>Rp. {{ number_format($total_baru) }}</b></td>
+                    <td></td>
+                </tr>
             </tbody>
         @endif
     </table>

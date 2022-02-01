@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class PegawaiAndaController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
 
         $user = Auth::user();
@@ -99,8 +98,7 @@ class PegawaiAndaController extends Controller
         return redirect('/pegawai_anda/'.$id.'/profile')->with('success', 'Information has been added');
     }
 
-    public function profile($id)
-    {
+    public function profile($id){
         $real_id = Crypt::decrypt($id);
         // $model = \App\User::find($id);
         $model = \App\User::find($real_id);
