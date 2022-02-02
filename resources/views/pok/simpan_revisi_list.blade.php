@@ -21,6 +21,14 @@
     @php 
         $total_lama = 0;
         $total_baru = 0;
+
+        function pembulatan($anggaran){
+            if (substr($anggaran,-3)>499){
+                return round($anggaran,-3)-1000;
+            } else {
+                return round($anggaran,-3);
+            } 
+        }
     @endphp
     <table class="table-sm table-bordered m-b-0" style="min-width:100%">
         @if (count($datas)==0)
@@ -61,21 +69,21 @@
                     @php 
                         $old_data = null;
 
-                        $total_baru += $data->harga_jumlah;
+                        $total_baru += pembulatan($data->harga_jumlah);
                         if($data->old_rencana_id!=null){
                             $old_data = \App\PokRincianAnggaran::find($data->old_rencana_id);
                             $old_mata_anggaran = \App\PokMataAnggaran::find($old_data->id_mata_anggaran);
 
                             if($old_data->jumlah_rincian_estimasi!=null){
                                 if($old_data->jumlah_rincian_realisasi!=null){
-                                    $total_lama += ($old_lama->harga_jumlah-$old_lama->jumlah_rincian_realisasi);
+                                    $total_lama += (pembulatan($old_lama->harga_jumlah)-pembulatan($old_lama->jumlah_rincian_realisasi));
                                 }
                                 else{
-                                    $total_lama += ($old_lama->harga_jumlah-$old_lama->jumlah_rincian_estimasi);
+                                    $total_lama += (pembulatan($old_lama->harga_jumlah)-pembulatan($old_lama->jumlah_rincian_estimasi));
                                 }
                             }
                             else{
-                                $total_lama += $old_data->harga_jumlah;
+                                $total_lama += pembulatan($old_data->harga_jumlah);
                             }
                         }
                     @endphp 
@@ -95,6 +103,8 @@
                         @php 
                             $total_kro_semula = 0;
                             $total_kro_menjadi = 0;
+                            if($old_data!=null) $total_kro_semula += pembulatan($old_data->harga_jumlah);
+                            $total_kro_menjadi += pembulatan($data->harga_jumlah);
                             $id_kro = $data->id_kro;
                             $kro = \App\PokKro::find($id_kro);
                         @endphp
@@ -105,8 +115,8 @@
                         </tr>
                     @else 
                         @php 
-                            if($old_data!=null) $total_kro_semula += $old_data->harga_jumlah;
-                            $total_kro_menjadi += $data->harga_jumlah;
+                            if($old_data!=null) $total_kro_semula += pembulatan($old_data->harga_jumlah);
+                            $total_kro_menjadi += pembulatan($data->harga_jumlah);
                         @endphp
                     @endif
 
