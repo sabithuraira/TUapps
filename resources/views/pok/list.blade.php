@@ -282,11 +282,13 @@
 </style>
 <link rel="stylesheet"
     href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}">
 @endsection
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/select2/select2.js') !!}"></script>
 <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
 <script>
     var vm = new Vue({  
@@ -349,6 +351,16 @@
                 harga_satuan: ''
             },
         },
+        // mounted() {
+        //     $('#id_pegawai').select2().on('change', function() {
+        //         // you need to listen to change event to get the new value to Vue data
+        //         // you don't need to use `selects` attribute. You can change any property in this call.
+        //         // vm.selects[$(this).attr('id')] = $(this).val();
+                
+        //         this.form_pj.id_pegawai = $(this).val();
+        //         console.log($(this).val())
+        //     });
+        // },
         methods: {
             moneyFormat:function(amount){
                 var decimalCount = 0;
@@ -539,8 +551,20 @@
                         rincian_id:  event.currentTarget.getAttribute('data-id'),  
                         rincian_label:  event.currentTarget.getAttribute('data-label'),
                     };
+                    // console.log(event.currentTarget.getAttribute('data-pegawai'))
+                    // console.log(self.form_pj)
+                    
+                    $(".select2").select2('destroy');
+                    $(".select2").val(self.form_pj.id_pegawai)
+                    $(".select2").select2().on('change', function() {
+                        vm.form_pj.id_pegawai = $(this).val();
+                    });;
                 }
             },
+            // setPjValue: function () {
+            //     this.form_pj.id_pegawai = $("#id_pegawai").val();
+            //     console.log( $("#id_pegawai").val())
+            // },
             savePj: function () {
                 var self = this;
                 
@@ -657,142 +681,6 @@
                     $('#wait_progres').modal('hide');
                 });
             },
-            // updateLogBook: function (event) {
-            //     var self = this;
-            //     if (event) {
-            //         self.form_id = event.currentTarget.getAttribute('data-id');
-            //         self.form_tanggal = event.currentTarget.getAttribute('data-tanggal');
-            //         $('#form_tanggal').val(self.form_tanggal);
-            //         self.form_waktu_mulai = event.currentTarget.getAttribute('data-waktu_mulai');
-            //         self.form_waktu_selesai = event.currentTarget.getAttribute('data-waktu_selesai');
-            //         self.form_isi = event.currentTarget.getAttribute('data-isi');
-            //         self.form_hasil = event.currentTarget.getAttribute('data-hasil');
-            //         self.form_volume = event.currentTarget.getAttribute('data-volume');
-            //         self.form_satuan = event.currentTarget.getAttribute('data-satuan');
-            //         self.form_pemberi_tugas = event.currentTarget.getAttribute('data-pemberi_tugas');
-            //     }
-            // },
-            // addLogBook: function (event) {
-            //     var self = this;
-            //     if (event) {
-            //         self.form_id = 0;
-            //         self.form_tanggal = '';
-            //         $('#form_tanggal').val(self.form_tanggal);
-            //         self.form_waktu_mulai = '';
-            //         self.form_waktu_selesai = '';
-            //         self.form_isi = '';
-            //         self.form_hasil = '';
-            //         self.form_volume = '';
-            //         self.form_satuan = '';
-            //     }
-            // },
-            // updateLogBook: function (event) {
-            //     var self = this;
-            //     if (event) {
-            //         self.form_id = event.currentTarget.getAttribute('data-id');
-            //         self.form_tanggal = event.currentTarget.getAttribute('data-tanggal');
-            //         $('#form_tanggal').val(self.form_tanggal);
-            //         self.form_waktu_mulai = event.currentTarget.getAttribute('data-waktu_mulai');
-            //         self.form_waktu_selesai = event.currentTarget.getAttribute('data-waktu_selesai');
-            //         self.form_isi = event.currentTarget.getAttribute('data-isi');
-            //         self.form_hasil = event.currentTarget.getAttribute('data-hasil');
-            //         self.form_volume = event.currentTarget.getAttribute('data-volume');
-            //         self.form_satuan = event.currentTarget.getAttribute('data-satuan');
-            //         self.form_pemberi_tugas = event.currentTarget.getAttribute('data-pemberi_tugas');
-            //     }
-            // },
-            // saveLogBook: function () {
-            //     var self = this;
-
-            //     if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_mulai.length==0 || 
-            //         self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
-            //         self.form_pemberi_tugas.length==0){
-            //         alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
-            //     }
-            //     else{
-            //         if(isNaN(self.form_volume)){
-            //             alert("Isian 'Volume' harus angka");    
-            //         }
-            //         else{
-            //             $('#wait_progres').modal('show');
-            //             $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
-
-            //             $.ajax({
-            //                 url :  self.pathname,
-            //                 method : 'post',
-            //                 dataType: 'json',
-            //                 data:{
-            //                     id: self.form_id,
-            //                     tanggal: self.form_tanggal,
-            //                     waktu_mulai: self.form_waktu_mulai,
-            //                     waktu_selesai: self.form_waktu_selesai, 
-            //                     isi: self.form_isi, 
-            //                     hasil: self.form_hasil,
-            //                     volume: self.form_volume,
-            //                     satuan: self.form_satuan,
-            //                     pemberi_tugas: self.form_pemberi_tugas,
-            //                 },
-            //             }).done(function (data) {
-            //                 $('#add_logbooks').modal('hide');
-            //                 self.setDatas();
-            //             }).fail(function (msg) {
-            //                 console.log(JSON.stringify(msg));
-            //                 $('#wait_progres').modal('hide');
-            //             });
-            //         }  
-            //     }
-            // },
-            // delLogBook: function (idnya) {
-            //     if (confirm('anda yakin mau menghapus data ini?')) {
-            //         var self = this;
-
-            //         $('#send_ckp').modal('hide');
-            //         $('#wait_progres').modal('show');
-            //         $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
-
-            //         $.ajax({
-            //             url :  self.pathname + '/destroy_logbook/' + idnya,
-            //             method : 'get',
-            //             dataType: 'json',
-            //         }).done(function (data) {
-            //             $('#wait_progress').modal('hide');
-            //             self.setDatas();
-            //         }).fail(function (msg) {
-            //             console.log(JSON.stringify(msg));
-            //             $('#wait_progres').modal('hide');
-            //         });
-            //     }
-            // },
-            // sendCkpId: function (event) {
-            //     var self = this;
-            //     if (event) {
-            //         self.ckp_id = event.currentTarget.getAttribute('data-id');
-            //     }
-            // },
-            // setDatas: function(){
-            //     var self = this;
-            //     $('#wait_progres').modal('show');
-            //     $.ajaxSetup({
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            //         }
-            //     })
-            //     $.ajax({
-            //         url : self.pathname+"/data_log_book",
-            //         method : 'post',
-            //         dataType: 'json',
-            //         data:{
-            //             start: self.start, 
-            //             end: self.end, 
-            //         },
-            //     }).done(function (data) {
-            //         self.datas = data.datas;
-            //         $('#wait_progres').modal('hide');
-            //     }).fail(function (msg) {
-            //         console.log(JSON.stringify(msg));
-            //         $('#wait_progres').modal('hide');
-            //     });
-            // }
         }
     });
 

@@ -26,6 +26,26 @@ class PegawaiAndaController extends Controller
         return view('pegawai_anda.index',compact('datas', 'keyword'));
     }
 
+    public function penilaian_anda(Request $request){
+        $keyword = $request->get('search');
+
+        $user = Auth::user();
+        $user_id =  Auth::user()->email;
+        $model = \App\User::where('email', '=', $user_id)->first();
+
+        $datas = $model->getPegawaiAnda($keyword);
+        $datas->withPath('pegawai_anda');
+        $datas->appends($request->all());
+        
+        if ($request->ajax()) {
+            return \Response::json(\View::make('pegawai_anda.list', array('datas' => $datas))->render());
+        }
+
+        return view('pegawai_anda.index',compact('datas', 'keyword'));
+    }
+
+
+
     public function store(Request $request, $id){
         // $user = \App\User::find($id);
         $real_id = Crypt::decrypt($id);

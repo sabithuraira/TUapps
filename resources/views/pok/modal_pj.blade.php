@@ -5,7 +5,7 @@
             <div class="modal-body">
                 Pilih Penanggung Jawab Anggaran:
                 <div class="form-line">
-                    <select class="form form-control" v-model="form_pj.id_pegawai">
+                    <select class="form form-control show-tick ms select2" id="id_pegawai" v-model="form_pj.id_pegawai" data-placeholder="Pilih">
                         @foreach($list_pegawai as $value)
                             <option value="{{ $value->id }}">{{ $value->nip_baru }} - {{ $value->name }}</option>
                         @endforeach
