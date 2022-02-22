@@ -29,19 +29,36 @@ class PegawaiAndaController extends Controller
     public function penilaian_anda(Request $request){
         $keyword = $request->get('search');
 
+        $month = date("m");
+        $year = date("Y");
+
         $user = Auth::user();
         $user_id =  Auth::user()->email;
         $model = \App\User::where('email', '=', $user_id)->first();
+        $empty_ckp = new \App\Ckp;
 
-        $datas = $model->getPegawaiAnda($keyword);
-        $datas->withPath('pegawai_anda');
-        $datas->appends($request->all());
+        $arr_condition_ckp = [];
+        $arr_condition_ckp[] = ['pemberi_tugas_id', '=', $user->id];
+        $arr_condition_ckp[] = ['month', '=', $month];
+        $arr_condition_ckp[] = ['year', '=', $year];
+        
+        $arr_condition_logbook = [];
+        $arr_condition_logbook[] = ['pemberi_tugas_id', '=', $user->id];
+        $arr_condition_logbook[] = [\DB::raw('MONTH(tanggal)'), '=', $month];
+        $arr_condition_logbook[] = [\DB::raw('YEAR(tanggal)'), '=', $year];
+
+        $ckp = \App\Ckp::where($arr_condition_ckp)->get();
+        $log_book = \App\LogBook::where($arr_condition_logbook)->get();
         
         if ($request->ajax()) {
-            return \Response::json(\View::make('pegawai_anda.list', array('datas' => $datas))->render());
+            return \Response::json(\View::make('pegawai_anda.penilaian_anda_list', 
+                array('ckp' => $ckp, 'log_book' => $log_book, 
+                    'month' => $month, 'year' => $year, 
+                    'empty_ckp' => $empty_ckp))->render());
         }
 
-        return view('pegawai_anda.index',compact('datas', 'keyword'));
+        return view('pegawai_anda.penilaian_anda',compact('ckp', 'log_book', 'month', 
+            'year', 'empty_ckp'));
     }
 
 

@@ -67,6 +67,10 @@
                     <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
                 </li>
                 
+                <li class="{{ (request()->is('pegawai_anda/penilaian_anda*')) ? 'active' : '' }}">
+                    <a href="{{ url('pegawai_anda/penilaian_anda') }}"> <i class="icon-users"></i><span>Penilaian Anda</span></a>
+                </li>
+                
                 <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
                     <a href="#Jadwal" class="has-arrow"><i class="fa fa-tasks"></i> <span>Matrik Tugas</span>  <span class="badge badge-warning float-right">Uji Coba</span></a>
                     <ul>

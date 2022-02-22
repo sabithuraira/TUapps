@@ -56,6 +56,27 @@ class CkpController extends Controller
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
 
+    public function dataCkpTim(Request $request){
+        $datas=array();
+        $user_id =  "0";
+        $month = date('m');
+        $year = date('Y');
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+        
+        $model = new \App\Ckp;
+        $datas = $model->CkpBulananTim(1, $month, $year, $user_id);
+
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
     public function dataProfile(Request $request){
         $datas=array();
         $user_id =  Auth::user()->email;
@@ -371,7 +392,6 @@ class CkpController extends Controller
             }
         }
 
-        
         for($i=1;$i<=$total_tambahan;++$i){
             if(strlen($request->get('t_uraianat'.$i))>0 && strlen($request->get('t_satuanat'.$i))>0 && strlen($request->get('t_target_kuantitasat'.$i))>0){
                 $is_valid_by_type = true;

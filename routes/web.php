@@ -209,9 +209,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('iki/list_json', 'IkiController@list_json');
 
     //PEGAWAI ANDA
-    Route::resource('pegawai_anda', 'PegawaiAndaController');
+    Route::resource('pegawai_anda', 'PegawaiAndaController')->except(['show']);
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
+    Route::get('pegawai_anda/penilaian_anda', 'PegawaiAndaController@penilaian_anda');
 
     Route::resource('meeting', 'MeetingController')->except(['show']);
     Route::get('meeting/{id}/detail', 'MeetingController@detail');
