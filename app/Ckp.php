@@ -67,4 +67,23 @@ class Ckp extends Model
 
         return $datas;
     }
+
+    
+    public function CkpBulananTim($type, $bulan, $year,$user){
+        $datas = array();
+
+        $datas = DB::table('ckps')
+            ->leftJoin('iki', 'ckps.iki', '=', 'iki.id')
+            ->where([
+                ['ckps.month', '=', $bulan],
+                ['ckps.year', '=', $year],
+                ['ckps.type', '=', $type],
+                ['ckps.pemberi_tugas_id', '=', $user],
+            ])
+            ->select('ckps.*', 'iki.iki_label')
+            ->orderBy('ckps.user_id')
+            ->get();
+
+        return $datas;
+    }
 }

@@ -88,12 +88,14 @@
         tfoot tr td{font-weight: bold;font-size: small;}
     </style>
     <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}" />
 @endsection
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
 <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script> <!-- Select2 Js -->
 <script>
     
 var vm = new Vue({  
@@ -157,10 +159,16 @@ var vm = new Vue({
         saveLogBook: function () {
             var self = this;
 
-            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_mulai.length==0 || 
+            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
                 self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
                 self.form_pemberi_tugas.length==0){
                 alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+                console.log(self.form_tanggal)
+                console.log(self.form_waktu_mulai)
+                console.log(self.form_waktu_selesai)
+                console.log(self.form_pemberi_tugas)
+                console.log(self.form_volume)
+                console.log(self.form_satuan)
             }
             else{
                 if(isNaN(self.form_volume)){
@@ -249,9 +257,7 @@ var vm = new Vue({
             var self = this;
             $('#wait_progres').modal('show');
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
             $.ajax({
                 url : self.pathname+"/data_log_book",
@@ -274,11 +280,13 @@ var vm = new Vue({
 
 $(document).ready(function() {
     $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
+    $('.select2').select2();
     vm.setDatas();
     
     $('.datepicker').datepicker({
         endDate: 'd',
     });
+    
 });
 
 $('#start').change(function() {

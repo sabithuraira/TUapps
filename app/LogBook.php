@@ -48,17 +48,17 @@ class LogBook extends Model
 
         $datas = DB::table('log_books')
             ->where(
-                // [
-                //     ['log_books.tanggal', '>=', $start_date],
-                //     ['log_books.tanggal', '<=', $end_date],
-                //     ['log_books.user_id', '=', $user_id],
-                // ]
+                [
+                    ['log_books.tanggal', '>=', $start_date],
+                    ['log_books.tanggal', '<=', $end_date],
+                    ['log_books.user_id', '=', $user_id],
+                ]
 
-                (function ($query) {
-                    $query->where('log_books.tanggal', '>=', $start_date)
-                        ->Where('log_books.tanggal', '<=', $end_date)
-                        ->Where('log_books.user_id', '=', $user_id);
-                })
+                // (function ($query) {
+                //     $query->where('log_books.tanggal', '>=', $start_date)
+                //         ->Where('log_books.tanggal', '<=', $end_date)
+                //         ->Where('log_books.user_id', '=', $user_id);
+                // })
             )
             ->orWhere(
                 (function ($query) {

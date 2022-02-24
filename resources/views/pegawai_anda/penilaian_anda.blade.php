@@ -10,7 +10,6 @@
 @section('content')
 <div id="app_vue">
     <div class="container">
-      <br />
       @if (\Session::has('success'))
         <div class="alert alert-success">
           <p>{{ \Session::get('success') }}</p>
@@ -19,7 +18,6 @@
 
       <div class="card">
         <div class="body profilepage_2 blog-page">
-            
             <div class="row clearfix">
                 <div class="col-lg-6 col-md-12 left-box">
                     <div class="form-group">
@@ -71,8 +69,7 @@
             </form>
       </div>
     </div>
-  </div>
-
+</div>
 
 <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -147,67 +144,65 @@ var vm = new Vue({
       ckps: [],
       month: parseInt({!! json_encode($month) !!}),
       year: {!! json_encode($year) !!},
-      total_utama: 1,
-      total_tambahan: 1,
-      total_column: 10,
+      user_id: {!! json_encode($user_id) !!},
       datas: [],
       catatan_approve: '',
       id_row: 0,
     },
     computed: {
-        total_kuantitas: function(){
-            var result = 0;
-            var jumlah_kegiatan=0;
+        // total_kuantitas: function(){
+        //     var result = 0;
+        //     var jumlah_kegiatan=0;
 
-            for(i=0;i<this.kegiatan_utama.length;++i){
-                if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
-                    if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
-                        result+=100;
-                    }
-                    else{
-                        result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
-                    }
-                    jumlah_kegiatan++;
-                }
-            }
+        //     for(i=0;i<this.kegiatan_utama.length;++i){
+        //         if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
+        //             if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
+        //                 result+=100;
+        //             }
+        //             else{
+        //                 result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
+        //             }
+        //             jumlah_kegiatan++;
+        //         }
+        //     }
             
-            for(i=0;i<this.kegiatan_tambahan.length;++i){
-                if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
-                    if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
-                        result+=100;
-                    }
-                    else{           
-                        result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
-                    }
-                    jumlah_kegiatan++;
-                }
-            }
+        //     for(i=0;i<this.kegiatan_tambahan.length;++i){
+        //         if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
+        //             if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
+        //                 result+=100;
+        //             }
+        //             else{           
+        //                 result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
+        //             }
+        //             jumlah_kegiatan++;
+        //         }
+        //     }
             
-            return parseFloat(result/jumlah_kegiatan).toFixed(2);
-        },
-        total_kualitas: function(){
-            var result = 0;
+        //     return parseFloat(result/jumlah_kegiatan).toFixed(2);
+        // },
+        // total_kualitas: function(){
+        //     var result = 0;
 
-            for(i=0;i<this.kegiatan_utama.length;++i){
-                // if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
-                //     result+= parseInt(this.kegiatan_utama[i].kualitas);
-                result += parseFloat(this.nilaiRata2(
-                            this.kegiatan_utama[i].kecepatan,
-                            this.kegiatan_utama[i].ketepatan,
-                            this.kegiatan_utama[i].ketuntasan));
-            }
+        //     for(i=0;i<this.kegiatan_utama.length;++i){
+        //         // if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
+        //         //     result+= parseInt(this.kegiatan_utama[i].kualitas);
+        //         result += parseFloat(this.nilaiRata2(
+        //                     this.kegiatan_utama[i].kecepatan,
+        //                     this.kegiatan_utama[i].ketepatan,
+        //                     this.kegiatan_utama[i].ketuntasan));
+        //     }
             
-            for(i=0;i<this.kegiatan_tambahan.length;++i){
-                // if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
-                //     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
-                result += parseFloat(this.nilaiRata2(
-                            this.kegiatan_tambahan[i].kecepatan,
-                            this.kegiatan_tambahan[i].ketepatan,
-                            this.kegiatan_tambahan[i].ketuntasan));
-            }
+        //     for(i=0;i<this.kegiatan_tambahan.length;++i){
+        //         // if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
+        //         //     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
+        //         result += parseFloat(this.nilaiRata2(
+        //                     this.kegiatan_tambahan[i].kecepatan,
+        //                     this.kegiatan_tambahan[i].ketepatan,
+        //                     this.kegiatan_tambahan[i].ketuntasan));
+        //     }
 
-            return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
-        }
+        //     return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
+        // }
     },
     watch: {
         month: function (val) {
@@ -242,19 +237,18 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url :  "{{ url('/ckp/data_ckp/') }}",
+                url :  "{{ url('/ckp/data_ckp_tim/') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    user_id: '',
+                    user_id: ,
                     month: self.month, 
                     year: self.year, 
                     type: 1,
                 },
             }).done(function (data) {
                 // console.log(data);
-                self.kegiatan_utama = data.datas.utama;
-                self.kegiatan_tambahan = data.datas.tambahan;
+                self.ckps = data.datas;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -268,64 +262,6 @@ var vm = new Vue({
             if(typeof val3 == 'undefined' || val3 == '' || val3 == null) val3 = 0;
 
             return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
-        },
-
-        komentar: function (event) {
-            var self = this;
-            if (event) {
-                self.id_row = event.currentTarget.dataset.id;
-
-                $('#wait_progres').modal('show');
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                })
-                $.ajax({
-                    // url : self.pathname+"/"+self.id_row+"/komentar",
-                    url : "{{ url('/log_book/komentar/') }}",
-                    method : 'post',
-                    dataType: 'json',
-                    data:{
-                        id: self.id_row,
-                    },
-                }).done(function (data) {
-                    self.catatan_approve = data.result;
-                    $('#wait_progres').modal('hide');
-                }).fail(function (msg) {
-                    console.log(JSON.stringify(msg));
-                    $('#wait_progres').modal('hide');
-                });
-
-            }
-        },
-        saveKomentar: function (event) {
-            console.log("masuk save");
-            var self = this;
-            if (event) {
-                $('#wait_progres').modal('show');
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                })
-                $.ajax({
-                    url : "{{ url('/log_book/save_komentar/') }}",
-                    method : 'post',
-                    dataType: 'json',
-                    data:{
-                        id: self.id_row, 
-                        catatan_approve: self.catatan_approve,
-                    },
-                }).done(function (data) {
-                    $('#wait_progres').modal('hide');
-                    window.location.reload(false); 
-                }).fail(function (msg) {
-                    console.log(JSON.stringify(msg));
-                    $('#wait_progres').modal('hide');
-                });
-
-            }
         },
         setDatasLogBook: function(){
             var self = this;
@@ -380,33 +316,6 @@ var vm = new Vue({
                 $('#wait_progres').modal('hide');
             });
         },
-        showIsi: function(tanggal, waktu){
-            var self = this;
-            const rowData = self.datas.find(el => (el.tanggal == tanggal && el.waktu == waktu));
-
-            if(rowData!=undefined) result=rowData.isi;
-            else result = '';
-
-            return result;
-        },
-        showKomentar: function(tanggal, waktu){
-            var self = this;
-            const rowData = self.datas.find(el =>  (el.tanggal == tanggal && el.waktu == waktu));
-
-            if(rowData!=undefined) result=rowData.catatan_approve;
-            else result = '';
-
-            return result;
-        },
-        getId: function(tanggal, waktu){
-            var self = this;
-            const rowData = self.datas.find(el =>  (el.tanggal == tanggal && el.waktu == waktu));
-
-            if(rowData!=undefined) result=rowData.id;
-            else result = 0;
-
-            return result;
-        },
     }
 });
 
@@ -414,33 +323,6 @@ var vm = new Vue({
         vm.setDatas();
         // vm.setDatasLogBook();
         // vm.setDatasRencanaKerja();
-    });
-
-
-    $('#btn_comment').click(function() {
-        $('#form_modal').modal('show');
-        vm.id_row = 0;
-    });
-
-    $('#start').change(function() {
-        vm.start = this.value;
-        vm.setDatasLogBook();
-    });
-
-
-    $('#end').change(function() {
-        vm.end = this.value;
-        vm.setDatasLogBook();
-    });
-    
-    $('#start_rencana').change(function() {
-        vm.start_rencana = this.value;
-        vm.setDatasRencanaKerja();
-    });
-
-    $('#end_rencana').change(function() {
-        vm.end_rencana = this.value;
-        vm.setDatasRencanaKerja();
     });
 </script
 @endsection

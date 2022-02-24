@@ -248,7 +248,7 @@ class LogBookController extends Controller
         $model->volume = $request->get('volume');
         $model->satuan = $request->get('satuan');
         $model->pemberi_tugas_id = $request->get('pemberi_tugas');
-        $data_user = \App\UserModel::find($request->get("pemberi_tugas"));
+        $data_user = \App\UserModel::where('email', '=', $request->get("pemberi_tugas"))->first();
         $model->pemberi_tugas = $data_user->name;
         $model->pemberi_tugas_jabatan = $data_user->nmjab;
         $model->updated_by=Auth::id();

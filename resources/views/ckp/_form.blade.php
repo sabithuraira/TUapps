@@ -55,7 +55,7 @@
                         <tr>
                             <td rowspan="2">No</td>
                             <td class="text-center" style="width: 50%" rowspan="2">{{ $model->attributes()['uraian'] }}</td>
-                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
+                            <td class="text-center" rowspan="2">Pemberi Tugas</td>
                             <td class="text-center" style="width: 15%" rowspan="2">{{ $model->attributes()['satuan'] }}</td>
                             
                             <td class="text-center" colspan="3">Kuantitas</td>
@@ -86,7 +86,7 @@
                             <td>
                                 <select class="form-control  form-control-sm" :name="'u_pemberi_tugas_id'+data.id" v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
-                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                        <option value="{{ $value->email }}">{{ $value->name }}</option>
                                     @endforeach
                                 </select>
                             </td>

@@ -34,25 +34,25 @@
                             <span>Persentase pemasukan dokumen (response rate) survei statistik tanaman pangan dengan pendekatan non rumah tangga non usaha</span>
                         </td>
                         <td>
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Kecepatan:</span>
-                                        <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                </div>
+                            <div class="form-inline">
+                                <span for="kecepatan" class="col-lg-6">Kecepatan:</span>
+                                    <input class="form-control form-control-sm col-lg-6" type="number" max="100">
+                            </div>
 
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Ketuntasan:</span>
-                                    <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                </div>
+                            <div class="form-inline">
+                                <span for="kecepatan" class="col-lg-6">Ketuntasan:</span>
+                                <input class="form-control form-control-sm col-lg-6" type="number" max="100">
+                            </div>
+                            
+                            <div class="form-inline">
+                                <span for="kecepatan" class="col-lg-6">Ketepatan:</span>
+                                <input class="form-control form-control-sm col-lg-6" type="number" max="100">
                                 
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Ketepatan:</span>
-                                    <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                    
-                                </div>
-                                <br/>
-                                <div class="form-inline float-right">
-                                    <span class="badge badge-success m-l-10 hidden-sm-down">RATA-RATA: 100</span>
-                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-inline float-right">
+                                <span class="badge badge-success m-l-10 hidden-sm-down">RATA-RATA: 100</span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

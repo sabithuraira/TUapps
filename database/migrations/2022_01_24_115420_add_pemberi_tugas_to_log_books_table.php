@@ -14,7 +14,7 @@ class AddPemberiTugasToLogBooksTable extends Migration
     public function up()
     {
         Schema::table('log_books', function (Blueprint $table) {
-            $table->integer("pemberi_tugas_id")->nullable();
+            $table->string("pemberi_tugas_id")->nullable();
             $table->string("pemberi_tugas_jabatan")->nullable();
         });
     }
