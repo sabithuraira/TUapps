@@ -74,13 +74,14 @@ class Ckp extends Model
 
         $datas = DB::table('ckps')
             ->leftJoin('iki', 'ckps.iki', '=', 'iki.id')
+            ->leftJoin('users', 'ckps.user_id', '=', 'users.email')
             ->where([
                 ['ckps.month', '=', $bulan],
                 ['ckps.year', '=', $year],
                 ['ckps.type', '=', $type],
                 ['ckps.pemberi_tugas_id', '=', $user],
             ])
-            ->select('ckps.*', 'iki.iki_label')
+            ->select('ckps.*', 'iki.iki_label', 'users.name', 'users.nmjab')
             ->orderBy('ckps.user_id')
             ->get();
 

@@ -82,34 +82,6 @@
     </div>
 </div>
 
-
-<div id="form_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span id="myModalLabel">Catatan Pimpinan</span>
-            </div>
-            
-            <div class="modal-body">
-                <table class="table table-hover table-bordered table-condensed">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input type="hidden" v-model="id_row"/>
-                                <textarea class="form-control" v-model="catatan_approve" data-provide="markdown" rows="10"></textarea>
-                            </td>  
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button v-on:click="saveKomentar" class="btn btn-primary" data-dismiss="modal" id="btn-submit">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 @endsection
 
@@ -241,13 +213,13 @@ var vm = new Vue({
                 method : 'post',
                 dataType: 'json',
                 data:{
-                    user_id: ,
+                    user_id: self.user_id,
                     month: self.month, 
                     year: self.year, 
                     type: 1,
                 },
             }).done(function (data) {
-                // console.log(data);
+                console.log(data);
                 self.ckps = data.datas;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {

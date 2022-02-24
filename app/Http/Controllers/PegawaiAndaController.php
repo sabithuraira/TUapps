@@ -54,11 +54,11 @@ class PegawaiAndaController extends Controller
             return \Response::json(\View::make('pegawai_anda.penilaian_anda_list', 
                 array('ckp' => $ckp, 'log_book' => $log_book, 
                     'month' => $month, 'year' => $year, 
-                    'empty_ckp' => $empty_ckp))->render());
+                    'empty_ckp' => $empty_ckp, 'user_id' => $user_id))->render());
         }
 
         return view('pegawai_anda.penilaian_anda',compact('ckp', 'log_book', 'month', 
-            'year', 'empty_ckp'));
+            'year', 'empty_ckp', 'user_id'));
     }
 
 
