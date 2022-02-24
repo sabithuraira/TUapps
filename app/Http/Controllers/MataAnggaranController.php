@@ -27,8 +27,7 @@ class MataAnggaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
         $datas = \App\MataAnggaran::where('kode_uker', '=', Auth::user()->kdprop.Auth::user()->kdkab)
             ->orderByDesc('created_by')
@@ -49,8 +48,7 @@ class MataAnggaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $model= new \App\MataAnggaran;
         return view('mata_anggaran.create',compact('model'));
     }
@@ -61,8 +59,7 @@ class MataAnggaranController extends Controller
      * @param  App\Http\Requests  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MataAnggaranRequest $request)
-    {
+    public function store(MataAnggaranRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('mata_anggaran/create')
                         ->withErrors($validator)
@@ -83,7 +80,7 @@ class MataAnggaranController extends Controller
         $model->label_komponen=$request->get('label_komponen');
         $model->kode_subkomponen=$request->get('kode_subkomponen');
         $model->label_subkomponen=$request->get('label_subkomponen');
-        $model->tahun = date('Y');
+        $model->tahun = $request->get('tahun');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
@@ -143,6 +140,7 @@ class MataAnggaranController extends Controller
         $model->label_komponen=$request->get('label_komponen');
         $model->kode_subkomponen=$request->get('kode_subkomponen');
         $model->label_subkomponen=$request->get('label_subkomponen');
+        $model->tahun = $request->get('tahun');
         $model->updated_by=Auth::id();
         $model->save();
         return redirect('mata_anggaran');

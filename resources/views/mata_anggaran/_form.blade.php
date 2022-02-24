@@ -1,6 +1,19 @@
 <div class="row clearfix">
     <div class="col-md-6">
         <div class="form-group">
+            <label>Pilih Tahun:</label>
+            <select class="form form-control" name="tahun">
+                @for($i=2021;$i <= date('Y')+1;++$i)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-md-6">
+        <div class="form-group">
             <label>{{ $model->attributes()['kode_program'] }}:</label>
             <input type="text" class="form-control {{($errors->first('kode_program') ? ' parsley-error' : '')}}" name="kode_program" value="{{ old('kode_program', $model->kode_program) }}" autofocus>
             @foreach ($errors->get('kode_program') as $msg)
