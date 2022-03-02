@@ -1,6 +1,8 @@
 <div class="tab-pane show active" id="ckp_penilaian">
     <section class="datas">
         <div class="table-responsive">
+
+            <button type="button" class="btn btn-primary float-right mb-2" @click="saveData">Simpan</button>
             <table class="table-sm table-bordered m-b-0" style="width:100%">
                 <thead>
                     <tr class="text-center">
@@ -58,6 +60,7 @@
                     </template>
                 </tbody>
             </table>
+            <button type="button" class="btn btn-primary float-right mt-2" @click="saveData">Simpan</button>
         </div>    
     </section>
 </div>

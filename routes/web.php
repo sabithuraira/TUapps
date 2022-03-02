@@ -214,6 +214,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
     Route::get('pegawai_anda/penilaian_anda', 'PegawaiAndaController@penilaian_anda');
     Route::post('pegawai_anda/data_ckp_tim', 'PegawaiAndaController@dataCkpTim');
+    Route::post('pegawai_anda/store_tim', 'PegawaiAndaController@store_tim');
 
     Route::resource('meeting', 'MeetingController')->except(['show']);
     Route::get('meeting/{id}/detail', 'MeetingController@detail');

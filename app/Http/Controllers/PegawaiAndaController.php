@@ -27,38 +27,13 @@ class PegawaiAndaController extends Controller
     }
 
     public function penilaian_anda(Request $request){
-        // $keyword = $request->get('search');
 
         $month = date("m");
         $year = date("Y");
 
         $user = Auth::user();
         $user_id =  Auth::user()->email;
-        // $model = \App\User::where('email', '=', $user_id)->first();
         $empty_ckp = new \App\Ckp;
-
-        // $arr_condition_ckp = [];
-        // $arr_condition_ckp[] = ['pemberi_tugas_id', '=', $user->id];
-        // $arr_condition_ckp[] = ['month', '=', $month];
-        // $arr_condition_ckp[] = ['year', '=', $year];
-        
-        // $arr_condition_logbook = [];
-        // $arr_condition_logbook[] = ['pemberi_tugas_id', '=', $user->id];
-        // $arr_condition_logbook[] = [\DB::raw('MONTH(tanggal)'), '=', $month];
-        // $arr_condition_logbook[] = [\DB::raw('YEAR(tanggal)'), '=', $year];
-
-        // $ckp = \App\Ckp::where($arr_condition_ckp)->get();
-        // $log_book = \App\LogBook::where($arr_condition_logbook)->get();
-        
-        // if ($request->ajax()) {
-        //     return \Response::json(\View::make('pegawai_anda.penilaian_anda_list', 
-        //         array('ckp' => $ckp, 'log_book' => $log_book, 
-        //             'month' => $month, 'year' => $year, 
-        //             'empty_ckp' => $empty_ckp, 'user_id' => $user_id))->render());
-        // }
-
-        // return view('pegawai_anda.penilaian_anda',compact('ckp', 'log_book', 'month', 
-        //     'year', 'empty_ckp', 'user_id'));
 
         return view('pegawai_anda.penilaian_anda',compact('month', 
             'year', 'empty_ckp', 'user_id'));
@@ -187,5 +162,47 @@ class PegawaiAndaController extends Controller
 
         return view('pegawai_anda.profile',compact('model','id', 'real_id', 'ckp', 'month', 
             'year', 'start', 'end', 'start_rencana', 'end_rencana'));
+    }
+
+
+    public function store_tim(Request $request){
+        $data_ckp = $request->ckps;
+        $data_logbook = $request->logbooks;
+        $user_list = [];
+        $month = $request->month;
+        $year = $request->year;
+
+        foreach($data_ckp as $data){
+            $model = \App\Ckp::find($data['id']);
+            if($model!=null){
+                $model->kecepatan = $data['kecepatan'];
+                $model->ketepatan = $data['ketepatan'];
+                $model->ketuntasan = $data['ketuntasan'];
+                $model->kualitas = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
+                $model->save();
+
+                if(!in_array($model->user_id, $user_list)){
+                    $user_list[] = $model->user_id;
+                }
+            }
+
+        }
+
+        foreach($data_logbook as $data){
+            $model = \App\LogBook::find($data['id']);
+            if($model!=null){
+                $model->status_penyelesaian = $data["status_penyelesaian"];
+                $model->save();
+            }
+        }
+
+        foreach($user_list as $data){
+            $ckp_log = new \App\CkpLogBulanan();
+            $ckp_log->triggerCkp($data, Auth::id(), $month, $year);
+        }
+
+        return response()->json([
+            'success'=>'Sukses', 
+        ]);
     }
 }

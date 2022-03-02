@@ -2,6 +2,7 @@
 <div class="tab-pane" id="log_book">
     <section class="datas">
         <div class="table-responsive">
+            <button type="button" class="btn btn-primary float-right mb-2" @click="saveData">Simpan</button>
             <table class="table-bordered m-b-0" style="min-width:100%">
                 <thead>
                     <tr>
@@ -41,6 +42,7 @@
                     </tr>
                 </tbody>
             </table>
+            <button type="button" class="btn btn-primary float-right mt-2" @click="saveData">Simpan</button>
         </div>
     </section>
 </div>

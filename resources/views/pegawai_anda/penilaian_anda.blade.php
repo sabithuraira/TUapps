@@ -49,24 +49,16 @@
                 </div>
             </div>
 
-            <form method="post" action="{{url('pegawai_anda/store_penilaian')}}" enctype="multipart/form-data">
-                @csrf
-                <div>
-                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
-                    <br/>
-                    <hr/>
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp_penilaian">CKP PENILAIAN</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        @include('pegawai_anda.penilaian_ckp_penilaian')
-                        @include('pegawai_anda.penilaian_log_book')
-                    </div>
-                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
-                    <br/>
+            <div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#ckp_penilaian">CKP PENILAIAN</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#log_book">Log Book</a></li>
+                </ul>
+                <div class="tab-content">
+                    @include('pegawai_anda.penilaian_ckp_penilaian')
+                    @include('pegawai_anda.penilaian_log_book')
                 </div>
-            </form>
+            </div>
       </div>
     </div>
 </div>
@@ -150,9 +142,7 @@ var vm = new Vue({
             var self = this;
             $('#wait_progres').modal('show');
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
             $.ajax({
                 url :  "{{ url('/pegawai_anda/data_ckp_tim/') }}",
@@ -168,6 +158,29 @@ var vm = new Vue({
                 console.log(data);
                 self.ckps = data.datas;
                 self.logbooks = data.datas_logbooks;
+                $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
+        saveData: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
+            })
+            $.ajax({
+                url :  "{{ url('/pegawai_anda/store_tim/') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month, 
+                    year: self.year, 
+                    ckps: self.ckps,
+                    logbooks: self.logbooks,
+                },
+            }).done(function (data) {
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
