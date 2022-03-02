@@ -6,6 +6,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th class="text-center">Pegawai</th>
                         <th class="text-center">Keterangan</th>
                         <th class="text-center">Durasi & waktu</th>
                         <th class="text-center">Isi & Hasil</th>
@@ -14,8 +15,12 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="(data, index) in datas" :key="data.id">
+                    <tr v-for="(data, index) in logbooks" :key="data.id">
                         <td>@{{ index+1 }}</td>
+                        <td class="text-center">
+                            @{{ data.user_name }}<br/>
+                            @{{ data.user_nmjab }}
+                        </td>
                         <td class="text-center">
                             Pemberi Tugas: @{{ data.pemberi_tugas }}
                             <p class="text-muted">Volume(satuan): @{{ data.volume }} (@{{ data.satuan }})</p>

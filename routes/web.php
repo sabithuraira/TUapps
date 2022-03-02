@@ -188,7 +188,6 @@ Route::group(['middleware' => 'auth'], function () {
     //CKP
     Route::resource('ckp', 'CkpController');
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
-    Route::post('ckp/data_ckp_tim', 'CkpController@dataCkpTim');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');
     Route::post('ckp/data_unit_kerja', 'CkpController@dataUnitKerja');
     Route::post('ckp/print', array('as' => 'print', 'uses' => 'CkpController@print'));
@@ -214,6 +213,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pegawai_anda/{id}/profile', 'PegawaiAndaController@profile');
     Route::post('pegawai_anda/{id}/store', 'PegawaiAndaController@store');
     Route::get('pegawai_anda/penilaian_anda', 'PegawaiAndaController@penilaian_anda');
+    Route::post('pegawai_anda/data_ckp_tim', 'PegawaiAndaController@dataCkpTim');
 
     Route::resource('meeting', 'MeetingController')->except(['show']);
     Route::get('meeting/{id}/detail', 'MeetingController@detail');

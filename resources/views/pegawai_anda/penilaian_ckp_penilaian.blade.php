@@ -12,51 +12,50 @@
                 </thead>
 
                 <tbody>
-                    <div v-for="(data, index) in ckps" :key="data.id">
-                        <tr class="align-middle">
+                    <template v-for="(data, index) in ckps">
+                        <tr class="align-middle" :key="'identitas'+data.id">
                             <td colspan="3">
-                                <div class="float-left p-1">
-                                    <img src="https://community.bps.go.id/images/avatar/340055914.jpg" width="40" class="rounded-circle" alt="">
-                                </div>
                                 <div class="float-left pt-2 pr-2">
-                                    <b class="m-b-0">Sabit Huraira</b>
-                                    <p>Pranata Komputer Bla bla bla</p>
+                                    <b class="m-b-0">@{{ data.name }} - @{{ data.nmjab }}</b>
                                 </div>
                             </td>
                         </tr>
-                        <tr class="align-top">
+                        <tr class="align-top" :key="'konten'+data.id">
                             <td>
-                                <span class="badge badge-info m-l-10 hidden-sm-down">Satuan: Usaha</span>
-                                <span class="badge badge-success m-l-10 hidden-sm-down">Realisasi: 33/33 100%</span><br/>
-                                <span>Melakukan entry data Survei Harga Produsen Sektor Jasa (HP-J) dan Harga Produsen Sektor Pertanian (HP-T) Kabupaten/Kota bulan Januari 2022</span>
+                                <span class="badge badge-info m-l-10 hidden-sm-down">Satuan: @{{ data.satuan }}</span>
+                                <span class="badge badge-success m-l-10 hidden-sm-down">Realisasi: @{{ data.target_kuantitas }}/@{{ data.realisasi_kuantitas }} @{{ (data.target_kuantitas/data.realisasi_kuantitas)*100 }}%</span><br/>
+                                <span>@{{ data.uraian }}</span>
                             </td>
                             <td>
-                                <span class="badge badge-info m-l-10 hidden-sm-down">II.B.4.a. : 0.014</span><br/>
-                                <span>Persentase pemasukan dokumen (response rate) survei statistik tanaman pangan dengan pendekatan non rumah tangga non usaha</span>
-                            </td>
-                            <td>
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Kecepatan:</span>
-                                        <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                </div>
-
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Ketuntasan:</span>
-                                    <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                </div>
+                                <span v-if="(data.kode_butir!='' && data.kode_butir!=null) || (data.angka_kredit!='' && data.angka_kredit!=null)" class="badge badge-info m-l-10 hidden-sm-down">@{{ data.kode_butir }} : @{{ data.angka_kredit }}</span>
+                                <span v-else class="badge badge-warning m-l-10 hidden-sm-down">Tidak tersedia informasi AK</span>
                                 
-                                <div class="form-inline">
-                                    <span for="kecepatan" class="col-lg-6">Ketepatan:</span>
-                                    <input class="form-control form-control-sm col-lg-6" type="number" max="100">
-                                    
+                                <span v-if="data.iki_label!='' && data.iki_label!=null">@{{ data.iki_label }}</span>
+                                <span v-else class="badge badge-warning m-l-10 hidden-sm-down mt-2">Tidak tersedia informasi IKI</span>
+                            </td>
+                            <td>
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <span>Kecepatan:</span>
+                                        <input class="form-control form-control-sm" v-model="data.kecepatan" type="number" max="100">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <span>Ketuntasan:</span>
+                                        <input class="form-control form-control-sm" v-model="data.ketuntasan" type="number" max="100">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <span>Ketepatan:</span>
+                                        <input class="form-control form-control-sm" v-model="data.ketepatan" type="number" max="100">
+                                    </div>
                                 </div>
-                                <br/>
-                                <div class="form-inline float-right">
+                                <div class="text-center mt-2">
                                     <span class="badge badge-success m-l-10 hidden-sm-down">RATA-RATA: 100</span>
                                 </div>
                             </td>
                         </tr>
-                    </div>
+                    </template>
                 </tbody>
             </table>
         </div>    

@@ -27,40 +27,70 @@ class PegawaiAndaController extends Controller
     }
 
     public function penilaian_anda(Request $request){
-        $keyword = $request->get('search');
+        // $keyword = $request->get('search');
 
         $month = date("m");
         $year = date("Y");
 
         $user = Auth::user();
         $user_id =  Auth::user()->email;
-        $model = \App\User::where('email', '=', $user_id)->first();
+        // $model = \App\User::where('email', '=', $user_id)->first();
         $empty_ckp = new \App\Ckp;
 
-        $arr_condition_ckp = [];
-        $arr_condition_ckp[] = ['pemberi_tugas_id', '=', $user->id];
-        $arr_condition_ckp[] = ['month', '=', $month];
-        $arr_condition_ckp[] = ['year', '=', $year];
+        // $arr_condition_ckp = [];
+        // $arr_condition_ckp[] = ['pemberi_tugas_id', '=', $user->id];
+        // $arr_condition_ckp[] = ['month', '=', $month];
+        // $arr_condition_ckp[] = ['year', '=', $year];
         
-        $arr_condition_logbook = [];
-        $arr_condition_logbook[] = ['pemberi_tugas_id', '=', $user->id];
-        $arr_condition_logbook[] = [\DB::raw('MONTH(tanggal)'), '=', $month];
-        $arr_condition_logbook[] = [\DB::raw('YEAR(tanggal)'), '=', $year];
+        // $arr_condition_logbook = [];
+        // $arr_condition_logbook[] = ['pemberi_tugas_id', '=', $user->id];
+        // $arr_condition_logbook[] = [\DB::raw('MONTH(tanggal)'), '=', $month];
+        // $arr_condition_logbook[] = [\DB::raw('YEAR(tanggal)'), '=', $year];
 
-        $ckp = \App\Ckp::where($arr_condition_ckp)->get();
-        $log_book = \App\LogBook::where($arr_condition_logbook)->get();
+        // $ckp = \App\Ckp::where($arr_condition_ckp)->get();
+        // $log_book = \App\LogBook::where($arr_condition_logbook)->get();
         
-        if ($request->ajax()) {
-            return \Response::json(\View::make('pegawai_anda.penilaian_anda_list', 
-                array('ckp' => $ckp, 'log_book' => $log_book, 
-                    'month' => $month, 'year' => $year, 
-                    'empty_ckp' => $empty_ckp, 'user_id' => $user_id))->render());
-        }
+        // if ($request->ajax()) {
+        //     return \Response::json(\View::make('pegawai_anda.penilaian_anda_list', 
+        //         array('ckp' => $ckp, 'log_book' => $log_book, 
+        //             'month' => $month, 'year' => $year, 
+        //             'empty_ckp' => $empty_ckp, 'user_id' => $user_id))->render());
+        // }
 
-        return view('pegawai_anda.penilaian_anda',compact('ckp', 'log_book', 'month', 
+        // return view('pegawai_anda.penilaian_anda',compact('ckp', 'log_book', 'month', 
+        //     'year', 'empty_ckp', 'user_id'));
+
+        return view('pegawai_anda.penilaian_anda',compact('month', 
             'year', 'empty_ckp', 'user_id'));
     }
 
+    public function dataCkpTim(Request $request){
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $user_id =  Auth::user()->email;
+
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+        
+        $model = new \App\Ckp;
+        $datas = $model->CkpBulananTim(1, $month, $year, $user_id);
+
+        $model_logbook = new \App\LogBook;
+        $datas_logbooks = $model_logbook->LogBookRekapTim($month, $year, $user_id);
+
+        return response()->json([
+            'success'=>'Sukses', 
+            'datas'=>$datas,
+            'datas_logbooks'=>$datas_logbooks,
+        ]);
+    }
 
 
     public function store(Request $request, $id){

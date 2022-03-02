@@ -114,67 +114,13 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
       ckps: [],
+      logbooks: [],
       month: parseInt({!! json_encode($month) !!}),
       year: {!! json_encode($year) !!},
       user_id: {!! json_encode($user_id) !!},
       datas: [],
       catatan_approve: '',
       id_row: 0,
-    },
-    computed: {
-        // total_kuantitas: function(){
-        //     var result = 0;
-        //     var jumlah_kegiatan=0;
-
-        //     for(i=0;i<this.kegiatan_utama.length;++i){
-        //         if(typeof this.kegiatan_utama[i].target_kuantitas !== 'undefined'){
-        //             if((this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)>100){
-        //                 result+=100;
-        //             }
-        //             else{
-        //                 result+= (this.kegiatan_utama[i].realisasi_kuantitas/this.kegiatan_utama[i].target_kuantitas*100)
-        //             }
-        //             jumlah_kegiatan++;
-        //         }
-        //     }
-            
-        //     for(i=0;i<this.kegiatan_tambahan.length;++i){
-        //         if(typeof this.kegiatan_tambahan[i].target_kuantitas !== 'undefined'){
-        //             if((this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)>100){
-        //                 result+=100;
-        //             }
-        //             else{           
-        //                 result+= (this.kegiatan_tambahan[i].realisasi_kuantitas/this.kegiatan_tambahan[i].target_kuantitas*100)
-        //             }
-        //             jumlah_kegiatan++;
-        //         }
-        //     }
-            
-        //     return parseFloat(result/jumlah_kegiatan).toFixed(2);
-        // },
-        // total_kualitas: function(){
-        //     var result = 0;
-
-        //     for(i=0;i<this.kegiatan_utama.length;++i){
-        //         // if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
-        //         //     result+= parseInt(this.kegiatan_utama[i].kualitas);
-        //         result += parseFloat(this.nilaiRata2(
-        //                     this.kegiatan_utama[i].kecepatan,
-        //                     this.kegiatan_utama[i].ketepatan,
-        //                     this.kegiatan_utama[i].ketuntasan));
-        //     }
-            
-        //     for(i=0;i<this.kegiatan_tambahan.length;++i){
-        //         // if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
-        //         //     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
-        //         result += parseFloat(this.nilaiRata2(
-        //                     this.kegiatan_tambahan[i].kecepatan,
-        //                     this.kegiatan_tambahan[i].ketepatan,
-        //                     this.kegiatan_tambahan[i].ketuntasan));
-        //     }
-
-        //     return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);
-        // }
     },
     watch: {
         month: function (val) {
@@ -209,7 +155,7 @@ var vm = new Vue({
                 }
             })
             $.ajax({
-                url :  "{{ url('/ckp/data_ckp_tim/') }}",
+                url :  "{{ url('/pegawai_anda/data_ckp_tim/') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -221,6 +167,7 @@ var vm = new Vue({
             }).done(function (data) {
                 console.log(data);
                 self.ckps = data.datas;
+                self.logbooks = data.datas_logbooks;
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -235,66 +182,11 @@ var vm = new Vue({
 
             return ((parseInt(val1)+parseInt(val2)+parseInt(val3))/3).toFixed(2);
         },
-        setDatasLogBook: function(){
-            var self = this;
-            $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
-            $.ajax({
-                // url : self.pathname+"/data_log_book",
-                url : "{{ url('/log_book/data_log_book/') }}",
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    start: self.start, 
-                    end: self.end, 
-                    user_id:'',
-                },
-            }).done(function (data) {
-                self.datas = data.datas;
-                $('#wait_progres').modal('hide');
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
-        },
-        setDatasRencanaKerja: function(){
-            var self = this;
-            $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
-            $.ajax({
-                url : "{{ url('/rencana_kerja/data_rencana_kerja/') }}",
-                method : 'post',
-                dataType: 'json',
-                data:{
-                    start: self.start_rencana, 
-                    end: self.end_rencana, 
-                    user_id: '',
-                },
-            }).done(function (data) {
-                self.datas_rencana = data.datas;
-                console.log(data)
-                console.log("")
-                $('#wait_progres').modal('hide');
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-            });
-        },
     }
 });
 
     $(document).ready(function() {
         vm.setDatas();
-        // vm.setDatasLogBook();
-        // vm.setDatasRencanaKerja();
     });
 </script
 @endsection

@@ -56,27 +56,6 @@ class CkpController extends Controller
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
 
-    public function dataCkpTim(Request $request){
-        $datas=array();
-        $month = date('m');
-        $year = date('Y');
-        $user_id =  Auth::user()->email;
-
-        if(strlen($request->get('user_id'))>0)
-            $user_id = $request->get('user_id');
-
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
-        
-        $model = new \App\Ckp;
-        $datas = $model->CkpBulananTim(1, $month, $year, $user_id);
-
-        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
-    }
-
     public function dataProfile(Request $request){
         $datas=array();
         $user_id =  Auth::user()->email;

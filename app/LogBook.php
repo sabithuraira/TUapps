@@ -135,4 +135,56 @@ class LogBook extends Model
 
         return $result;
     }
+
+    //rekap tim
+    public function LogBookRekapTim($month, $year, $user_id){
+        $result = array();
+        $datas = array();
+
+        $datas = DB::table('log_books')
+            ->leftJoin('users', 'log_books.user_id', '=', 'users.email')
+            ->where(
+                [
+                    [\DB::raw('MONTH(tanggal)'), '=', $month],
+                    [\DB::raw('YEAR(tanggal)'), '=', $year],
+                    ['log_books.pemberi_tugas_id', '=', $user_id],
+                ]
+            )
+            ->where(
+                (function ($query) {
+                    $query->where('log_books.is_rencana', '=', 0)
+                        ->orWhereNull('log_books.is_rencana');
+                })
+            )
+            ->select('log_books.*', 'users.name', 'users.nmjab')
+            ->orderBy('log_books.tanggal', 'desc')
+            ->get();
+
+        foreach($datas as $key=>$value){
+            $result[]=array(
+                'id'                =>$value->id,
+                'user_id'           =>$value->user_id,
+                'user_name'           =>$value->name,
+                'user_nmjab'           =>$value->nmjab,
+                'tanggal'           =>date('d M Y', strtotime($value->tanggal)),
+                'real_tanggal'      =>date('m/d/Y', strtotime($value->tanggal)),
+                'waktu_mulai'       =>date('H:i', strtotime($value->waktu_mulai)),
+                'waktu_selesai'     =>date('H:i', strtotime($value->waktu_selesai)),
+                'isi'               =>$value->isi,
+                'hasil'             =>$value->hasil,
+                'catatan_pimpinan'  =>$value->catatan_pimpinan,
+                'created_by'        =>$value->created_by,
+                'updated_by'        =>$value->updated_by,
+                'ckp_id'            =>$value->ckp_id,
+                'volume'            =>$value->volume,
+                'satuan'            =>$value->satuan,
+                'pemberi_tugas'     =>$value->pemberi_tugas,
+                'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
+                'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
+                'status_penyelesaian' =>$value->status_penyelesaian,
+            );
+        }
+
+        return $result;
+    }
 }
