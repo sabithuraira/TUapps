@@ -147,6 +147,7 @@ var vm = new Vue({
       end_rencana: {!! json_encode($end_rencana) !!},
       catatan_approve: '',
       id_row: 0,
+      penilaian_pimpinan: {!! json_encode($penilaian_pimpinan) !!},
     },
     computed: {
         total_kuantitas: function(){
@@ -294,7 +295,6 @@ var vm = new Vue({
             }
         },
         saveKomentar: function (event) {
-            console.log("masuk save");
             var self = this;
             if (event) {
                 $('#wait_progres').modal('show');
@@ -366,8 +366,6 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas_rencana = data.datas;
-                console.log(data)
-                console.log("")
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

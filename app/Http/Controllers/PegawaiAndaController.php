@@ -92,6 +92,11 @@ class PegawaiAndaController extends Controller
         
         if(strlen($request->get('end'))>0)
             $end = date("Y-m-d", strtotime($request->get('end')));
+
+        $penilaian_pimpinan = 0 ;
+        if(strlen($request->penilaian_pimpinan)>0){
+            $penilaian_pimpinan = $request->penilaian_pimpinan;
+        }
             
         $model = new \App\Ckp;
         $datas = $model->CkpBulanan(1, $month, $year, $user->email);
@@ -103,11 +108,18 @@ class PegawaiAndaController extends Controller
             // if(strlen($request->get('u_uraian'.$data->id))>0 && strlen($request->get('u_satuan'.$data->id))>0 && strlen($request->get('u_target_kuantitas'.$data->id))>0){
                 
                 $model_utama = \App\Ckp::find($data->id);
-                $model_utama->kualitas = $request->get('u_kualitas'.$data->id);
+                // $model_utama->kualitas = $request->get('u_kualitas'.$data->id);
                 $model_utama->kecepatan = $request->get('u_kecepatan'.$data->id);
                 $model_utama->ketepatan = $request->get('u_ketepatan'.$data->id);
                 $model_utama->ketuntasan = $request->get('u_ketuntasan'.$data->id);
-                $model_utama->penilaian_pimpinan = $request->get('u_penilaian_pimpinan'.$data->id);
+                $model_utama->penilaian_pimpinan = $penilaian_pimpinan;
+                if($penilaian_pimpinan>0){
+                    $total_nilai_tim = ((int)$model_utama->kecepatan + (int)$model_utama->ketepatan + (int)$model_utama->ketuntasan)/3;
+                    $model_utama->kualitas = ((int)$total_nilai_tim + (int)$penilaian_pimpinan)/2;
+                }
+                else{
+                    $model_utama->kualitas = ((int)$model_utama->kecepatan + (int)$model_utama->ketepatan + (int)$model_utama->ketuntasan)/3;
+                }
                 $model_utama->catatan_koreksi = $request->get('u_catatan_koreksi'.$data->id);
                 $model_utama->save();
             // }
@@ -116,11 +128,19 @@ class PegawaiAndaController extends Controller
         foreach($datas['tambahan'] as $data){
             // if(strlen($request->get('t_uraian'.$data->id))>0 && strlen($request->get('t_satuan'.$data->id))>0 && strlen($request->get('t_target_kuantitas'.$data->id))>0){
                 $model_tambahan = \App\Ckp::find($data->id);
-                $model_tambahan->kualitas = $request->get('t_kualitas'.$data->id);
+                // $model_tambahan->kualitas = $request->get('t_kualitas'.$data->id);
                 $model_tambahan->kecepatan = $request->get('t_kecepatan'.$data->id);
                 $model_tambahan->ketepatan = $request->get('t_ketepatan'.$data->id);
                 $model_tambahan->ketuntasan = $request->get('t_ketuntasan'.$data->id);
-                $model_tambahan->penilaian_pimpinan = $request->get('t_penilaian_pimpinan'.$data->id);
+                $model_tambahan->penilaian_pimpinan = $penilaian_pimpinan;
+
+                if($penilaian_pimpinan>0){
+                    $total_nilai_tim = ((int)$model_tambahan->kecepatan + (int)$model_tambahan->ketepatan + (int)$model_tambahan->ketuntasan)/3;
+                    $model_tambahan->kualitas = ((int)$total_nilai_tim + (int)$penilaian_pimpinan)/2;
+                }
+                else{
+                    $model_tambahan->kualitas = ((int)$model_tambahan->kecepatan + (int)$model_tambahan->ketepatan + (int)$model_tambahan->ketuntasan)/3;
+                }
                 $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksi'.$data->id);
                 $model_tambahan->save();
             // }
@@ -148,8 +168,16 @@ class PegawaiAndaController extends Controller
         $datas=array();
         $month = date('m');
         $year = date('Y');
+        $penilaian_pimpinan = 0;
 
         $ckp = new \App\Ckp;
+        $ckp_log = \App\CkpLogBulanan::where([
+                ['user_id', '=', $model->email],
+                ['month', '=', $month],
+                ['year', '=', $year],
+            ])->first();
+
+        if($ckp_log!=null) $penilaian_pimpinan = $ckp_log->penilaian_pimpinan;
 
         $lb_datas=array();
 
@@ -161,9 +189,8 @@ class PegawaiAndaController extends Controller
         
 
         return view('pegawai_anda.profile',compact('model','id', 'real_id', 'ckp', 'month', 
-            'year', 'start', 'end', 'start_rencana', 'end_rencana'));
+            'year', 'start', 'end', 'start_rencana', 'end_rencana', 'penilaian_pimpinan'));
     }
-
 
     public function store_tim(Request $request){
         $data_ckp = $request->ckps;
@@ -178,7 +205,13 @@ class PegawaiAndaController extends Controller
                 $model->kecepatan = $data['kecepatan'];
                 $model->ketepatan = $data['ketepatan'];
                 $model->ketuntasan = $data['ketuntasan'];
-                $model->kualitas = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
+                if($model->penilaian_pimpinan!='' && $model->penilaian_pimpinan!=null && $model->penilaian_pimpinan!=0){
+                    $total_tim = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
+                    $model->kualitas = ((int)$total_tim+(int)$model->penilaian_pimpinan)/2;
+                }
+                else{
+                    $model->kualitas = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
+                }
                 $model->save();
 
                 if(!in_array($model->user_id, $user_list)){
