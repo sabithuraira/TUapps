@@ -272,10 +272,13 @@ class CkpController extends Controller
                 
                 $model_utama = \App\Ckp::find($data->id);
                 $model_utama->uraian = $request->get('u_uraian'.$data->id);
-                $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_id'.$data->id);
+
                 $data_user = \App\UserModel::where('email', '=', $request->get('u_pemberi_tugas_id'.$data->id))->first();
-                $model_utama->pemberi_tugas_nama = $data_user->name;
-                $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+                if($data_user!=null){
+                    $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_id'.$data->id);
+                    $model_utama->pemberi_tugas_nama = $data_user->name;
+                    $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+                }
 
                 $model_utama->satuan = $request->get('u_satuan'.$data->id);
                 $model_utama->target_kuantitas = $request->get('u_target_kuantitas'.$data->id);
@@ -303,10 +306,13 @@ class CkpController extends Controller
                 
                 $model_tambahan = \App\Ckp::find($data->id);
                 $model_tambahan->uraian = $request->get('t_uraian'.$data->id);
-                $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_id'.$data->id);
+
                 $data_user = \App\UserModel::where('email', '=', $request->get('t_pemberi_tugas_id'.$data->id))->first();
-                $model_tambahan->pemberi_tugas_nama = $data_user->name;
-                $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+                if($data_user!=null){
+                    $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_id'.$data->id);
+                    $model_tambahan->pemberi_tugas_nama = $data_user->name;
+                    $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+                }
 
                 $model_tambahan->satuan = $request->get('t_satuan'.$data->id);
                 $model_tambahan->target_kuantitas = $request->get('t_target_kuantitas'.$data->id);
@@ -342,10 +348,12 @@ class CkpController extends Controller
 
                     $model_utama->uraian = $request->get('u_uraianau'.$i);
                     
-                    $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_idau'.$i);
                     $data_user = \App\UserModel::where('email', '=', $request->get('u_pemberi_tugas_idau'.$i))->first();
-                    $model_utama->pemberi_tugas_nama = $data_user->name;
-                    $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+                    if($data_user!=null){
+                        $model_utama->pemberi_tugas_id = $request->get('u_pemberi_tugas_idau'.$i);
+                        $model_utama->pemberi_tugas_nama = $data_user->name;
+                        $model_utama->pemberi_tugas_jabatan = $data_user->nmjab;
+                    }
 
                     $model_utama->satuan = $request->get('u_satuanau'.$i);
                     $model_utama->target_kuantitas = $request->get('u_target_kuantitasau'.$i);
@@ -385,10 +393,13 @@ class CkpController extends Controller
                     $model_tambahan->jenis = 2;
 
                     $model_tambahan->uraian = $request->get('t_uraianat'.$i);
-                    $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_idat'.$i);
+
                     $data_user = \App\UserModel::where('email', '=', $request->get('t_pemberi_tugas_idat'.$i))->first();
-                    $model_tambahan->pemberi_tugas_nama = $data_user->name;
-                    $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+                    if($data_user!=null){
+                        $model_tambahan->pemberi_tugas_id = $request->get('t_pemberi_tugas_idat'.$i);
+                        $model_tambahan->pemberi_tugas_nama = $data_user->name;
+                        $model_tambahan->pemberi_tugas_jabatan = $data_user->nmjab;
+                    }
 
                     $model_tambahan->satuan = $request->get('t_satuanat'.$i);
                     $model_tambahan->target_kuantitas = $request->get('t_target_kuantitasat'.$i);

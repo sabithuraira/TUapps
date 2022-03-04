@@ -163,12 +163,6 @@ var vm = new Vue({
                 self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
                 self.form_pemberi_tugas.length==0){
                 alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
-                console.log(self.form_tanggal)
-                console.log(self.form_waktu_mulai)
-                console.log(self.form_waktu_selesai)
-                console.log(self.form_pemberi_tugas)
-                console.log(self.form_volume)
-                console.log(self.form_satuan)
             }
             else{
                 if(isNaN(self.form_volume)){

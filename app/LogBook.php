@@ -60,7 +60,7 @@ class LogBook extends Model
                 //         ->Where('log_books.user_id', '=', $user_id);
                 // })
             )
-            ->orWhere(
+            ->where(
                 (function ($query) {
                     $query->where('log_books.is_rencana', '=', 0)
                         ->orWhereNull('log_books.is_rencana');
