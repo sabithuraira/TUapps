@@ -129,8 +129,13 @@ class LogBookController extends Controller
 
         $model = new \App\LogBook;
         $pemberi_tugas = Auth::user()->pimpinan->nmjab;
-        $list_pegawai = \App\UserModel::where('id', '<>', 1)
-                            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $list_pegawai = \App\UserModel::where([
+                                ['id', '<>', 1],
+                                ['kdkab', '=', Auth::user()->kdkab]
+                            ])
+                            ->orWhere([
+                                ['kdesl', '=', 2]
+                            ])->orderBy('kdorg', 'ASC')->get();
 
         return view('log_book.index', compact('model', 
             'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));

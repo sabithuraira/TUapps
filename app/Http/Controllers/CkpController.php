@@ -171,8 +171,17 @@ class CkpController extends Controller
         $year = date('Y');
 
         $model = new \App\Ckp;
-        $list_pegawai = \App\UserModel::where('id', '<>', 1)
-                            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        // $list_pegawai = \App\UserModel::where('id', '<>', 1)
+        //                     ->where('kdkab', '=', Auth::user()->kdkab)->get();
+
+        $list_pegawai = \App\UserModel::where([
+                            ['id', '<>', 1],
+                            ['kdkab', '=', Auth::user()->kdkab]
+                        ])
+                        ->orWhere([
+                            ['kdesl', '=', 2]
+                        ])
+                        ->orderBy('kdorg', 'ASC')->get();
         
         return view('ckp.create', compact('month', 
             'year', 'model', 'list_pegawai'));

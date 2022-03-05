@@ -77,7 +77,7 @@
                         <tr><td colspan="11">UTAMA &nbsp &nbsp<a id="add-utama" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                             <td>
-                                <template v-if="is_delete(data.id)">
+                                <template v-if="is_delete(data.id) && (data.kualitas=='' || data.kualitas==null || data.kualitas==0)">
                                     <a id="del-utama" data-jenis="utama" :data-id="data.id" v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                                 </template>
                                 @{{ index+1 }}
@@ -105,7 +105,7 @@
                         <tr><td :colspan="11">TAMBAHAN &nbsp &nbsp<a id="add-tambahan" v-on:click="addData"><i class="icon-plus text-info"></i></a></td></tr>
                         <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                             <td class="freeze">
-                                <template v-if="is_delete(data.id)">
+                                <template v-if="is_delete(data.id) && (data.kualitas=='' || data.kualitas==null || data.kualitas==0)">
                                     <a id="del-tambahan" data-jenis="tambahan" :data-id="data.id"  v-on:click="delData(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                                 </template>
                                 @{{ index+1 }}

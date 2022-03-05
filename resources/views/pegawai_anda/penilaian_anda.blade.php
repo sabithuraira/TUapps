@@ -155,7 +155,6 @@ var vm = new Vue({
                     type: 1,
                 },
             }).done(function (data) {
-                console.log(data);
                 self.ckps = data.datas;
                 self.logbooks = data.datas_logbooks;
                 $('#wait_progres').modal('hide');
@@ -181,6 +180,7 @@ var vm = new Vue({
                     logbooks: self.logbooks,
                 },
             }).done(function (data) {
+                alert("Data berhasil disimpan")
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

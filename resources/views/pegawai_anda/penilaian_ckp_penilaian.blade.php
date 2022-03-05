@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center mt-2">
-                                    <span class="badge badge-success m-l-10 hidden-sm-down">RATA-RATA: 100</span>
+                                    <span class="badge badge-success m-l-10 hidden-sm-down">RATA-RATA: @{{ nilaiRata2(data.kecepatan, data.ketuntasan, data.ketepatan) }}</span>
                                 </div>
                             </td>
                         </tr>
