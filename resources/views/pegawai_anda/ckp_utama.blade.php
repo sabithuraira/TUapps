@@ -37,6 +37,7 @@
                     <tr>
                         <td rowspan="2">No</td>
                         <td class="text-center" style="width:100%" rowspan="2">{{ $ckp->attributes()['uraian'] }}</td>
+                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
                         <td class="text-center" rowspan="2">{{ $ckp->attributes()['satuan'] }}</td>
                         
                         <td class="text-center" colspan="3">Kuantitas</td>
@@ -58,6 +59,7 @@
                     <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         
@@ -75,6 +77,7 @@
                     <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td>@{{data.satuan }}</td>
                         <td class="text-center">@{{data.target_kuantitas }}</td>
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>

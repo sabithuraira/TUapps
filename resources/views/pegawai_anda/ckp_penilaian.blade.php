@@ -37,7 +37,7 @@
                     <tr>
                         <td rowspan="2">No</td>
                         <td class="text-center" style="width:100%" rowspan="2">{{ $ckp->attributes()['uraian'] }}</td>
-                        
+                        <td class="text-center" rowspan="2">Pemberi Tugas</td>
                         <td class="text-center" colspan="4">Pengukuran</td>
                         <td class="text-center" rowspan="2">Catatan Koreksi</td>
                         <td class="text-center" rowspan="2">IKI</td>
@@ -56,6 +56,7 @@
                     <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td> 
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_kecepatan'+data.id" v-model="data.kecepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
@@ -70,6 +71,7 @@
                     <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
+                        <td>@{{ data.pemberi_tugas_nama }}</td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_kecepatan'+data.id" v-model="data.kecepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_ketepatan'+data.id" v-model="data.ketepatan"></td>
                         <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_ketuntasan'+data.id" v-model="data.ketuntasan"></td>

@@ -5,7 +5,7 @@
                 <th>No</th><th></th>
                 <th class="text-center">Keterangan</th>
                 <th class="text-center">Durasi & waktu</th>
-                <th style="min-width:55%" class="text-center">Isi & Hasil</th>
+                <th style="min-width:45%" class="text-center">Isi & Hasil</th>
             </tr>
         </thead>
 
@@ -34,7 +34,9 @@
                 </td>
                 
                 <td class="text-center">
-                    Pemberi Tugas: @{{ data.pemberi_tugas }}
+                    Pemberi Tugas: <br/>
+                    @{{ data.pemberi_tugas }}
+                    <span v-if="data.pemberi_tugas_jabatan!='' && data.pemberi_tugas_jabatan!=null">- @{{ data.pemberi_tugas_jabatan }}</span>
                     <p class="text-muted">Volume(satuan): @{{ data.volume }} (@{{ data.satuan }})</p>
                     <span class="text-muted">Progres: @{{ data.status_penyelesaian }} %</span>
                 </td>
