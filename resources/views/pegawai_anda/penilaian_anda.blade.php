@@ -18,6 +18,28 @@
 
       <div class="card">
         <div class="body profilepage_2 blog-page">
+            
+            @hasanyrole('superadmin')
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 left-box">
+                        <div class="form-group">
+                            <label>Pegawai:</label>
+                            <div class="input-group">
+                                <select class="form-control  form-control-sm" name="user_id">
+                                    @foreach($list_user as $key=>$value)
+                                        <option value="{{ $value->email }}"  @if ($user_id == $value->email)
+                                                    selected="selected"
+                                                @endif >
+                                            {{ $value->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endhasanyrole
+
             <div class="row clearfix">
                 <div class="col-lg-6 col-md-12 left-box">
                     <div class="form-group">

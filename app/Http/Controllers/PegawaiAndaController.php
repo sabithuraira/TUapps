@@ -34,9 +34,16 @@ class PegawaiAndaController extends Controller
         $user = Auth::user();
         $user_id =  Auth::user()->email;
         $empty_ckp = new \App\Ckp;
+        
+        $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
+            ->orderBy('kdorg', 'asc')
+            ->get();
 
+        if(strlen($request->get('user_id'))>0)
+            $user_id = $request->get('user_id');
+            
         return view('pegawai_anda.penilaian_anda',compact('month', 
-            'year', 'empty_ckp', 'user_id'));
+            'year', 'empty_ckp', 'user_id', 'list_user'));
     }
 
     public function dataCkpTim(Request $request){
@@ -212,6 +219,7 @@ class PegawaiAndaController extends Controller
                 else{
                     $model->kualitas = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
                 }
+
                 $model->save();
 
                 if(!in_array($model->user_id, $user_list)){
