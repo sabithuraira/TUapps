@@ -23,13 +23,11 @@
                 <div class="row clearfix">
                     <div class="col-lg-12 col-md-12 left-box">
                         <div class="form-group">
-                            <label>Pegawai:</label>
+                            <label>Pegawai Penilai:</label>
                             <div class="input-group">
-                                <select class="form-control  form-control-sm" name="user_id">
+                                <select class="form-control  form-control-sm" name="user_id" v-model="user_id">
                                     @foreach($list_user as $key=>$value)
-                                        <option value="{{ $value->email }}"  @if ($user_id == $value->email)
-                                                    selected="selected"
-                                                @endif >
+                                        <option value="{{ $value->email }}">
                                             {{ $value->name }}
                                         </option>
                                     @endforeach
@@ -143,6 +141,9 @@ var vm = new Vue({
         year: function (val) {
             this.setDatas();
         },
+        user_id: function (val) {
+            this.setDatas();
+        },
     },
     methods: {
         durasi: function(val1, val2){
@@ -179,6 +180,7 @@ var vm = new Vue({
             }).done(function (data) {
                 self.ckps = data.datas;
                 self.logbooks = data.datas_logbooks;
+                
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));

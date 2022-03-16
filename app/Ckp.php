@@ -68,7 +68,6 @@ class Ckp extends Model
         return $datas;
     }
 
-    
     public function CkpBulananTim($type, $bulan, $year,$user){
         $datas = array();
 

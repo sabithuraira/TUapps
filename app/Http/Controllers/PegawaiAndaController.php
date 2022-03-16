@@ -200,18 +200,20 @@ class PegawaiAndaController extends Controller
     }
 
     public function store_tim(Request $request){
-        $data_ckp = $request->ckps;
-        $data_logbook = $request->logbooks;
+        $data_ckp = (array)$request->ckps;
+        $data_logbook = (array)$request->logbooks;
         $user_list = [];
         $month = $request->month;
         $year = $request->year;
 
+        print_r($data_ckp);die();
+
         foreach($data_ckp as $data){
             $model = \App\Ckp::find($data['id']);
             if($model!=null){
-                $model->kecepatan = $data['kecepatan'];
-                $model->ketepatan = $data['ketepatan'];
-                $model->ketuntasan = $data['ketuntasan'];
+                $model->kecepatan = (int)$data['kecepatan'];
+                $model->ketepatan = (int)$data['ketepatan'];
+                $model->ketuntasan = (int)$data['ketuntasan'];
                 if($model->penilaian_pimpinan!='' && $model->penilaian_pimpinan!=null && $model->penilaian_pimpinan!=0){
                     $total_tim = ((int)$data['kecepatan']+(int)$data['ketepatan']+(int)$data['ketuntasan'])/3;
                     $model->kualitas = ((int)$total_tim+(int)$model->penilaian_pimpinan)/2;

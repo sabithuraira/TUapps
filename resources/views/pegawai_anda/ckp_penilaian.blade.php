@@ -52,14 +52,14 @@
                 </thead>
 
                 <tbody>
-                    <tr><td colspan="8">UTAMA</td></tr>
+                    <tr><td colspan="9">UTAMA</td></tr>
                     <tr v-for="(data, index) in kegiatan_utama" :key="data.id">
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td> 
                         <td>@{{ data.pemberi_tugas_nama }}</td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_kecepatan'+data.id" v-model="data.kecepatan"></td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_ketepatan'+data.id" v-model="data.ketepatan"></td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'u_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
+                        <td>@{{ data.kecepatan }}</td>
+                        <td>@{{ data.ketepatan }}</td>
+                        <td>@{{ data.ketuntasan }}</td>
                         <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td><input class="form-control  form-control-sm" type="text" :name="'u_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
                         <td>
@@ -67,14 +67,14 @@
                         </td>
                     </tr>
                     
-                    <tr><td colspan="8">TAMBAHAN</td></tr>
+                    <tr><td colspan="9">TAMBAHAN</td></tr>
                     <tr v-for="(data, index) in kegiatan_tambahan" :key="data.id" >
                         <td>@{{ index+1 }}</td>
                         <td>@{{ data.uraian }}</td>
                         <td>@{{ data.pemberi_tugas_nama }}</td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_kecepatan'+data.id" v-model="data.kecepatan"></td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_ketepatan'+data.id" v-model="data.ketepatan"></td>
-                        <td><input class="form-control  form-control-sm" type="number" max="100" :name="'t_ketuntasan'+data.id" v-model="data.ketuntasan"></td>
+                        <td>@{{ data.kecepatan }}</td>
+                        <td>@{{ data.ketepatan }}</td>
+                        <td>@{{ data.ketuntasan }}</td>
                         <td>@{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }}</td>
                         <td><input class="form-control  form-control-sm" type="text" :name="'t_catatan_koreksi'+data.id" v-model="data.catatan_koreksi"></td>
                         <td>@{{ data.iki_label }}</td>
