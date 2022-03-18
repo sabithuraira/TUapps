@@ -105,15 +105,31 @@
                     </div> 
 
                     <div v-if="form_current_jenis==2" class="form-group">
-                        Unit Kerja:
+                        Barang Usang
                         <div class="form-line">
-                            <select class="form-control"  v-model="form_unit_kerja" autofocus>
-                                <option value="">- Pilih Unit Kerja -</option>
-                                @foreach ($unit_kerja as $key=>$value)
-                                    <option value="{{ $value->id }}">{{ $value->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <label class="fancy-checkbox">
+                                <input type="checkbox" name="checkbox" v-model="form_is_usang">
+                                <span>Check jika barang ini keluar karena dinyatakan "USANG"</span>
+                            </label>
+                        </div>
+
+                        <div v-if="!form_is_usang" class="form-group">
+                            Unit Kerja:
+                            <div class="form-line">
+                                <select class="form-control"  v-model="form_unit_kerja" autofocus>
+                                    <option value="">- Pilih Unit Kerja -</option>
+                                    @foreach ($unit_kerja as $key=>$value)
+                                        <option value="{{ $value->id }}">{{ $value->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div v-else>
+                            Keterangan Usang:
+                            <div class="form-line">
+                                <input type="text" v-model="form_keterangan_usang" class="form-control" placeholder="Keterangan usang..">
+                            </div>
                         </div>
                     </div>
 
@@ -136,7 +152,6 @@
                             </select>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="add-btn">SAVE</button>
@@ -185,6 +200,8 @@ var vm = new Vue({
       form_unit_kerja: '',
       form_nama_penyedia: '',
       form_tanggal: '',
+      form_is_usang: '',
+      form_keterangan_usang: '',
       form_current_jenis: 1, //1 penambahan, 2 pengurangan
       current_nama_barang: '',
     },
@@ -273,6 +290,8 @@ var vm = new Vue({
                 self.form_jumlah = '';
                 self.form_unit_kerja = '';
                 self.form_tanggal = '';
+                self.form_is_usang = '';
+                self.form_keterangan_usang = '';
             }
         },
         updateBarangKeluar: function (event) {
@@ -284,6 +303,7 @@ var vm = new Vue({
                 self.form_id_barang = event.currentTarget.getAttribute('data-idbarang');
                 self.form_jumlah = event.currentTarget.getAttribute('data-jumlah');
                 self.form_unit_kerja = event.currentTarget.getAttribute('data-unitkerja');
+                self.form_keterangan_usang = event.curketerangan_usang.getAttribute('data-unitkerja');
                 var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
             }
@@ -313,7 +333,6 @@ var vm = new Vue({
 
             }
         },
-
         saveBarangKeluarMasuk: function () {
             var self = this;
             $('#wait_progres').modal('show');
@@ -356,7 +375,7 @@ var vm = new Vue({
                         form_year: self.year,
                         form_id_barang: self.form_id_barang, 
                         form_jumlah: self.form_jumlah, 
-                        form_unit_kerja: self.form_unit_kerja,
+                        form_keterangan_usang: self.form_keterangan_usang,
                         form_tanggal: self.form_tanggal, 
                     },
                 }).done(function (data) {

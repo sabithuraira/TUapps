@@ -96,6 +96,8 @@
                                     <a href="#" v-on:click="updateBarangKeluar" :data-id="data.id" 
                                         :data-idbarang="data.id_barang" :data-jumlah="data.jumlah_kurang" 
                                         :data-unitkerja="data.unit_kerja.id" :data-tanggal="data.tanggal"
+                                        
+                                        :data-keterangan_usang="data.keterangan_usang"
                                         data-toggle="modal" data-target="#add_pengurangan"> <i class="fa fa-pencil-square-o"></i></a>
                                 </td>
                             </template>
