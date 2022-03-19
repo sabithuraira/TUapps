@@ -69,7 +69,7 @@ class Ckp extends Model
     }
 
     public function CkpBulananTim($type, $bulan, $year,$user){
-        $datas = array();
+        $result = [];
 
         $datas = DB::table('ckps')
             ->leftJoin('iki', 'ckps.iki', '=', 'iki.id')
@@ -84,6 +84,42 @@ class Ckp extends Model
             ->orderBy('ckps.user_id')
             ->get();
 
+        // foreach($datas as $key=>$value){
+        //     $result[] = array(
+        //         'angka_kredit'      => $value->angka_kredit,
+        //         'catatan_koreksi'      => $value->catatan_koreksi,
+        //         'created_at'      => $value->created_at,
+        //         'created_by'      => $value->created_by,
+        //         'id'      => $value->id,
+        //         'iki'      => $value->iki,
+        //         'iki_label'      => $value->iki_label,
+        //         'jenis'      => $value->jenis,
+        //         'kecepatan'      => $value->kecepatan,
+        //         'ketepatan'      => $value->ketepatan,
+        //         'keterangan'      => $value->keterangan,
+        //         'ketuntasan'      => $value->ketuntasan,
+        //         'kode_butir'      => $value->kode_butir,
+        //         'kualitas'      => $value->kualitas,
+        //         'month'      => $value->month,
+        //         'name'      => $value->name,
+        //         'nmjab'      => $value->nmjab,
+        //         'pemberi_tugas_id'      => $value->pemberi_tugas_id,
+        //         'pemberi_tugas_jabatan'      => $value->pemberi_tugas_jabatan,
+        //         'pemberi_tugas_nama'      => $value->pemberi_tugas_nama,
+        //         'penilaian_pimpinan'      => $value->penilaian_pimpinan,
+        //         'realisasi_kuantitas'      => $value->realisasi_kuantitas,
+        //         'satuan'      => $value->satuan,
+        //         'target_kuantitas'      => $value->target_kuantitas,
+        //         'type'      => $value->type,
+        //         'updated_at'      => $value->updated_at,
+        //         'updated_by'      => $value->updated_by,
+        //         'uraian'      => $value->uraian,
+        //         'user_id'      => $value->user_id,
+        //         'year'      => $value->year,
+        //     );
+        // }
+
+        // return $result;
         return $datas;
     }
 }
