@@ -23,11 +23,9 @@
           <br/><br/>
           
           <div class="row clearfix">
-
                 <div class="col-lg-4 col-md-12 left-box">
                     <div class="form-group">
                         <label>Barang:</label>
-
                         <div class="input-group">
                           <select class="form-control  form-control-sm" v-model="barang" name="barang">
                                 @foreach ($list_barang as $key=>$value)
@@ -176,6 +174,8 @@
                     if(typeof self.persediaan.saldo_awal=='undefined'){
                         alert("Barang ini belum tersedia pada bulan yang dipilih");
                     }
+
+                    console.log(self.datas)
                 $('#wait_progres').modal('hide');
               }).fail(function (msg) {
                   console.log(JSON.stringify(msg));

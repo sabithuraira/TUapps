@@ -54,7 +54,10 @@
                 </tr>
                 <tr align="right" v-for="(data, index) in datas" :key="data.id">
                     <td align="center">@{{ dateFormat(data.tanggal) }}</td>
-                    <td align="left" style ="word-break:break-all;">@{{ data.label }}</td>
+                    <td align="left" style ="word-break:break-all;">
+                        <template v-if="data.label==null"><span class="text-danger"><b>BARANG USANG </b></span></template>
+                        <template v-else>@{{ data.label }}</template>
+                    </td>
                     <template v-if="data.jenis==2">
                         <td></td><td></td><td></td>
                         

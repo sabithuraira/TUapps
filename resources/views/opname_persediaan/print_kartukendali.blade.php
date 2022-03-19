@@ -97,8 +97,13 @@
                 @foreach ($datas as $key=>$data)
                     <tr align="right">
                         <td align="center">{{ date('d-M', strtotime($data->tanggal)) }}</td>
-                        <td align="left">{{ $data->label }}</td>
-
+                        <td align="left">
+                            @if($data->label==null)
+                                BARANG USANG
+                            @else 
+                                {{ $data->label }}
+                            @endif  
+                        </td>
                         @if ($data->jenis==2)
                             <td></td><td></td><td></td>
                             <td>{{ $data->jumlah }}</td>

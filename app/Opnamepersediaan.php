@@ -10,8 +10,7 @@ class Opnamepersediaan extends Model
 {
     protected $table = 'opname_persediaan';
 
-    public function attributes()
-    {
+    public function attributes(){
         return (new \App\Http\Requests\OpnamepersediaanRequest())->attributes();
     }
 
@@ -192,9 +191,9 @@ class Opnamepersediaan extends Model
                 UNION
                 SELECT op.id as id, jumlah_kurang as jumlah,
                         uk.nama as label, harga_kurang as harga, tanggal, 2 as jenis 
-                    FROM `opname_pengurangan` op, unit_kerja4 uk WHERE 
-                    bulan=$month AND tahun=$year AND id_barang=$barang
-                    AND op.unit_kerja4=uk.id
+                    FROM `opname_pengurangan` op 
+                    LEFT JOIN unit_kerja4 uk ON uk.id=op.unit_kerja4 
+                    WHERE bulan=$month AND tahun=$year AND id_barang=$barang 
                     
                     ORDER BY tanggal
                     ";

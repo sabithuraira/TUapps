@@ -157,8 +157,7 @@ class OpnamePersediaanController extends Controller
                 'year', 'list_barang'));
     }
 
-    public function loadKartukendali(Request $request)
-    { 
+    public function loadKartukendali(Request $request){
         $datas=array();
         $barang = \App\MasterBarang::first()->id;
         $month = date('m');
@@ -213,8 +212,7 @@ class OpnamePersediaanController extends Controller
             'persediaan'=>$persediaan, 'detail_barang'=>$detail_barang]);
     }
 
-    public function print_kartukendali(Request $request)
-    {
+    public function print_kartukendali(Request $request){
         $datas=array();
         $month = date('m');
         $year = date('Y');
@@ -283,8 +281,7 @@ class OpnamePersediaanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $month = date('m');
         $year = date('Y');
 
@@ -297,8 +294,7 @@ class OpnamePersediaanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $month = date('m');
         $year = date('Y');
         
@@ -369,12 +365,13 @@ class OpnamePersediaanController extends Controller
                             ->first();
         $model->unit_kerja = $model_unit_kerja->id;
 
-        $model->unit_kerja4 = $request->form_unit_kerja;
+        if($request->form_is_usang==1) $model->keterangan_usang = $request->form_keterangan_usang;
+        else $model->unit_kerja4 = $request->form_unit_kerja;
+
         $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
-        if($model->save())
-        {
+        if($model->save()){
             $model_o = new \App\Opnamepersediaan();
             $model_o->triggerPersediaan($request->form_id_barang, $request->form_month, 
                     $request->form_year, $model_barang->nama_barang);
@@ -440,7 +437,6 @@ class OpnamePersediaanController extends Controller
         return response()->json(['success'=>'Data berhasil ditambah']);
     }
 
-    
     public function deleteBarangMasuk(Request $request){
         $msg = "";
         if($request->form_id_data!=0 && $request->form_id_data!='')

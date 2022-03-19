@@ -1,5 +1,4 @@
 <div id="load">
-
     <form action="{{action('OpnamePersediaanController@print_persediaan')}}" method="post">
         @csrf 
         <input type="hidden"  v-model="month" name="p_month">
@@ -29,7 +28,7 @@
                 
                 <td>
                     @{{ data.op_tambah }}
-                    &nbsp <a href="#" role="button" v-on:click="detailTambah" data-toggle="modal" 
+                    &nbsp <a href="#" role="button" @click="detailTambah" data-toggle="modal" 
                         :data-idbarang="data.id" :data-namabarang="data.nama_barang" data-jenis="1" 
                         data-target="#detail_tambah"> <i class="fa fa-search"></i></a>
                 </td>
@@ -37,7 +36,7 @@
                 
                 <td>
                     @{{ data.op_kurang }}
-                    &nbsp <a href="#" role="button" v-on:click="detailTambah" data-toggle="modal" 
+                    &nbsp <a href="#" role="button" @click="detailTambah" data-toggle="modal" 
                         :data-idbarang="data.id" :data-namabarang="data.nama_barang" data-jenis="2" 
                         data-target="#detail_tambah"> <i class="fa fa-search"></i></a>
                 </td>
@@ -51,7 +50,6 @@
         </tbody>
     </table>
 </div>
-
 
 <div class="modal" id="detail_tambah" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -89,13 +87,20 @@
                                 </td>
                             </template>
                             <template v-if="form_current_jenis==2">
-                                <td>@{{ data.unit_kerja.nama }}</td>
+                                <td>
+                                    <div class="text-danger" v-if="data.unit_kerja4==null">
+                                        BARANG USANG
+                                    </div>
+                                    <div v-else>
+                                        @{{ data.unit_kerja.nama }}
+                                    </div>
+                                </td>
                                 <td class="text-center">@{{ data.jumlah_kurang }}</td>
                                 <td>@{{ data.harga_kurang }}</td>
                                 <td>
                                     <a href="#" v-on:click="updateBarangKeluar" :data-id="data.id" 
                                         :data-idbarang="data.id_barang" :data-jumlah="data.jumlah_kurang" 
-                                        :data-unitkerja="data.unit_kerja.id" :data-tanggal="data.tanggal"
+                                        :data-unitkerja="data.unit_kerja4" :data-tanggal="data.tanggal"
                                         
                                         :data-keterangan_usang="data.keterangan_usang"
                                         data-toggle="modal" data-target="#add_pengurangan"> <i class="fa fa-pencil-square-o"></i></a>

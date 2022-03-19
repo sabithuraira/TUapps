@@ -9,7 +9,6 @@
 
 @section('content')
     <div class="container" id="app_vue">
-      <br />
       @if (\Session::has('success'))
         <div class="alert alert-success">
           <p>{{ \Session::get('success') }}</p>
@@ -21,7 +20,7 @@
           <a href="#" role="button" v-on:click="addBarangMasuk"  class="btn btn-primary" data-toggle="modal" data-target="#add_pengurangan"><i class="fa fa-plus-circle"></i> <span>Penambahan</span></a>
           
           <a href="#" role="button" v-on:click="addBarangKeluar"  class="btn btn-danger" data-toggle="modal" data-target="#add_pengurangan"><i class="fa fa-minus-circle"></i> <span>Barang Keluar</span></a>
-          <br/><br/>
+          <br/>
           <form action="{{url('opname_persediaan')}}" method="get">
             <div class="input-group mb-3">
                     
@@ -111,6 +110,8 @@
                                 <input type="checkbox" name="checkbox" v-model="form_is_usang">
                                 <span>Check jika barang ini keluar karena dinyatakan "USANG"</span>
                             </label>
+                            <br/>
+                            <small class="text-danger">@{{ form_message_usang }}</small>
                         </div>
 
                         <div v-if="!form_is_usang" class="form-group">
@@ -202,6 +203,7 @@ var vm = new Vue({
       form_tanggal: '',
       form_is_usang: '',
       form_keterangan_usang: '',
+      form_message_usang: '',
       form_current_jenis: 1, //1 penambahan, 2 pengurangan
       current_nama_barang: '',
     },
@@ -235,12 +237,11 @@ var vm = new Vue({
             self.current_nama_barang = event.currentTarget.getAttribute('data-namabarang');
 
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
+
             $.ajax({
-                url : self.pathname+"/load_rincian",
+                url : "{{ url('/opname_persediaan/load_rincian/') }}",
                 method : 'post',
                 dataType: 'json',
                 data:{
@@ -251,6 +252,7 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.list_detail = data.datas;
+                console.log(self.list_detail[0])
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -292,6 +294,7 @@ var vm = new Vue({
                 self.form_tanggal = '';
                 self.form_is_usang = '';
                 self.form_keterangan_usang = '';
+                self.form_message_usang = '';
             }
         },
         updateBarangKeluar: function (event) {
@@ -303,7 +306,9 @@ var vm = new Vue({
                 self.form_id_barang = event.currentTarget.getAttribute('data-idbarang');
                 self.form_jumlah = event.currentTarget.getAttribute('data-jumlah');
                 self.form_unit_kerja = event.currentTarget.getAttribute('data-unitkerja');
-                self.form_keterangan_usang = event.curketerangan_usang.getAttribute('data-unitkerja');
+                self.form_keterangan_usang = event.currentTarget.getAttribute('data-keterangan_usang');
+                self.form_is_usang = false;
+                if(self.form_keterangan_usang!='' && self.form_keterangan_usang!=null) self.form_is_usang = true;
                 var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
             }
@@ -335,7 +340,6 @@ var vm = new Vue({
         },
         saveBarangKeluarMasuk: function () {
             var self = this;
-            $('#wait_progres').modal('show');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -343,6 +347,7 @@ var vm = new Vue({
             })
 
             if(self.form_current_jenis==1){
+                $('#wait_progres').modal('show');
                 $.ajax({
                     url : "{{ url('/opname_persediaan/store_barang_masuk/') }}",
                     method : 'post',
@@ -354,7 +359,7 @@ var vm = new Vue({
                         form_id_barang: self.form_id_barang, 
                         form_jumlah: self.form_jumlah, 
                         form_nama_penyedia: self.form_nama_penyedia,
-                        form_tanggal: self.form_tanggal,
+                        form_tanggal: self.form_tanggal
                     },
                 }).done(function (data) {
                     $('#add_pengurangan').modal('hide');
@@ -365,26 +370,38 @@ var vm = new Vue({
                 });
             }
             else{
-                $.ajax({
-                    url : "{{ url('/opname_persediaan/store_barang_keluar/') }}",
-                    method : 'post',
-                    dataType: 'json',
-                    data:{
-                        form_id_data: self.form_id_data,
-                        form_month: self.month,
-                        form_year: self.year,
-                        form_id_barang: self.form_id_barang, 
-                        form_jumlah: self.form_jumlah, 
-                        form_keterangan_usang: self.form_keterangan_usang,
-                        form_tanggal: self.form_tanggal, 
-                    },
-                }).done(function (data) {
-                    $('#add_pengurangan').modal('hide');
-                    window.location.reload(false); 
-                }).fail(function (msg) {
-                    console.log(JSON.stringify(msg));
-                $('#wait_progres').modal('hide');
-                });
+                let is_usang = 0;
+                if(self.form_is_usang!='' && self.form_is_usang==true) is_usang = 1;
+
+                if(is_usang==1 && (self.form_keterangan_usang==null || self.form_keterangan_usang=='')){
+                    self.form_message_usang = "Isian untuk BARANG USANG wajib mengisi keterangan usang"
+                }
+                else{
+                    $('#wait_progres').modal('show');
+                    $.ajax({
+                        url : "{{ url('/opname_persediaan/store_barang_keluar/') }}",
+                        method : 'post',
+                        dataType: 'json',
+                        data:{
+                            form_id_data: self.form_id_data,
+                            form_month: self.month,
+                            form_year: self.year,
+                            form_id_barang: self.form_id_barang, 
+                            form_jumlah: self.form_jumlah, 
+                            form_unit_kerja: self.form_unit_kerja, 
+                            form_keterangan_usang: self.form_keterangan_usang,
+                            form_tanggal: self.form_tanggal, 
+                            form_is_usang: is_usang,
+                            form_keterangan_usang: self.form_keterangan_usang
+                        },
+                    }).done(function (data) {
+                        $('#add_pengurangan').modal('hide');
+                        window.location.reload(false); 
+                    }).fail(function (msg) {
+                        console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                    });
+                }
             }
         },
         deleteBarang: function () {
