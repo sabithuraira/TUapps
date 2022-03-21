@@ -14,8 +14,7 @@ class OpnamePengurangan extends Model
         return (new \App\Http\Requests\OpnamePenguranganRequest())->attributes();
     }
 
-    public function unitKerja()
-    {
+    public function unitKerja(){
         return $this->belongsTo('App\UnitKerja4', 'unit_kerja4');
     }
 }

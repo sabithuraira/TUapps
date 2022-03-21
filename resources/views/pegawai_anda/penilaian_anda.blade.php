@@ -180,7 +180,7 @@ var vm = new Vue({
             }).done(function (data) {
                 self.ckps = data.datas;
                 self.logbooks = data.datas_logbooks;
-                
+                console.log(self.ckps)
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
