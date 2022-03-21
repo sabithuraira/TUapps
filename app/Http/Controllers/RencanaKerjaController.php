@@ -52,8 +52,14 @@ class RencanaKerjaController extends Controller
         
         $model = new \App\LogBook;
         $pemberi_tugas = Auth::user()->pimpinan->nmjab;
-        $list_pegawai = \App\UserModel::where('id', '<>', 1)
-                            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        
+        $list_pegawai = \App\UserModel::where([
+                ['id', '<>', 1],
+                ['kdkab', '=', Auth::user()->kdkab]
+            ])
+            ->orWhere([
+                ['kdesl', '=', 2]
+            ])->orderBy('kdorg', 'ASC')->get();
 
         return view('rencana_kerja.index', compact('model', 
             'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));
@@ -125,7 +131,7 @@ class RencanaKerjaController extends Controller
         $model->volume = $request->get('volume');
         $model->satuan = $request->get('satuan');
         $model->pemberi_tugas_id = $request->get('pemberi_tugas');
-        $data_user = \App\UserModel::find($request->get("pemberi_tugas"));
+        $data_user = \App\UserModel::where('email', '=', $request->get("pemberi_tugas"))->first();
         $model->pemberi_tugas = $data_user->name;
         $model->pemberi_tugas_jabatan = $data_user->nmjab;
         $model->is_rencana = 1;
