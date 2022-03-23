@@ -20,8 +20,8 @@ class Sp2020LfBs extends Model
         $label_join = "";
         $label_where = "";
 
-        if($desa!=null){ //sls in kecamatan
-            $label_select = "s.idbs as idw, s.idbs as nama, 
+        if($desa!=null){ //sls in desaa
+            $label_select = "s.idbs as idw, s.nama_sls as nama, 
                 SUM(if(s.jumlah_ruta IS NOT NULL, 1, 0)) AS terlapor,
                 COUNT(s.idbs) AS total,
                 SUM(s.jumlah_ruta) as jumlah_ruta, 

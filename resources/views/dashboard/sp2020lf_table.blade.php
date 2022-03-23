@@ -46,7 +46,7 @@
                         @elseif ($label == 'kec')
                             <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @else
-                            {{ $data->idw }}
+                            {{ $data->idw }} - {{ $data->nama }}
                         @endif
                     </td>
                     <td class="text-center">{{ number_format($data->jumlah_ruta,0,",",".") }}</td>

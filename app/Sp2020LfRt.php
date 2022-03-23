@@ -21,8 +21,8 @@ class Sp2020LfRt extends Model
 
         if($bs!=null){
         }
-        else if($bs==null && $desa!=null){ //sls in kecamatan
-            $label_select = "sp2020lf_bs.idbs as idw, sp2020lf_bs.idbs as nama, 
+        else if($bs==null && $desa!=null){ //sls in desa
+            $label_select = "sp2020lf_bs.idbs as idw, sp2020lf_bs.nama_sls as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
                 SUM(sp2020lf_rt.jumlah_laki) as jumlah_laki, 

@@ -179,7 +179,10 @@ class CkpController extends Controller
                             ['kdkab', '=', Auth::user()->kdkab]
                         ])
                         ->orWhere([
-                            ['kdesl', '=', 2]
+                            ['kdesl', '=', 2],
+                        ])
+                        ->orWhere([
+                            ['kdorg', '=', 92100],
                         ])
                         ->orderBy('kdorg', 'ASC')->get();
         

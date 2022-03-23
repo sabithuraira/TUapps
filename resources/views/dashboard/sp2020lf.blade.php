@@ -1,16 +1,10 @@
 <style>
-.c3-axis-x text 
-{
-  font-size: 10px;
-}
+.c3-axis-x text { font-size: 10px; }
 </style>
-<div class="alert alert-primary" role="alert">
-    <!-- <p>Ingatkan petugas untuk selalu melaporkan progres lapangan Long Form SP2020 melalui TELEGRAM dan PANTAU progres nya ya..</p> -->
-    <p><span style="font-size:30px">&#128071;</span> Persiapan monitoring Long Form SP2020... <span style="font-size:30px">&#9203;</span></p>
-</div>
-                    
+             
 <div class="card">
     <div class="body profilepage_2 blog-page">
+        <b>MONITORING LF SP2020 :</b> 
         @if ($label == 'prov')
             SUMATERA SELATAN
             <!-- <a class="float-right" href="{{ url('download_sp2020') }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> -->

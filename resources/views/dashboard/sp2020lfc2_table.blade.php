@@ -49,7 +49,7 @@
                         @elseif ($label == 'kec')
                             <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @elseif($label=='desa')
-                            <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$desa.'&bs='.$data->idw) }}">{{ $data->idw }}</a>
+                            <a href="{{ url('dashboard/index?kab='.$kab.'&kec='.$kec.'&desa='.$desa.'&bs='.$data->idw) }}">{{ $data->idw }} - {{ $data->nama }}</a>
                         @else
                             {{ $data->idw }} - {{ $data->nama }} 
                         @endif

@@ -135,7 +135,11 @@ class LogBookController extends Controller
                             ])
                             ->orWhere([
                                 ['kdesl', '=', 2]
-                            ])->orderBy('kdorg', 'ASC')->get();
+                            ])
+                            ->orWhere([
+                                ['kdorg', '=', 92100],
+                            ])
+                            ->orderBy('kdorg', 'ASC')->get();
 
         return view('log_book.index', compact('model', 
             'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));

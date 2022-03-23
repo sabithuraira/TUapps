@@ -59,7 +59,11 @@ class RencanaKerjaController extends Controller
             ])
             ->orWhere([
                 ['kdesl', '=', 2]
-            ])->orderBy('kdorg', 'ASC')->get();
+            ])
+            ->orWhere([
+                ['kdorg', '=', 92100],
+            ])
+            ->orderBy('kdorg', 'ASC')->get();
 
         return view('rencana_kerja.index', compact('model', 
             'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));
