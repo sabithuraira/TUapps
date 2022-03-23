@@ -33,6 +33,7 @@ class SuratTugas extends Model
             3 => 'Honor/Upah/Transport Mitra', 
             4 => 'Lainnya (Kontrak, tanpa anggaran, dll)',
             // 5 => 'Pelatihan'
+            6 => 'Perjadin Paket Meeting Luar Kota', 
         );
     }
 
@@ -52,7 +53,8 @@ class SuratTugas extends Model
             2 => '524111', 
             3 => '521213',
             4 => '',
-            5 => '524114'
+            5 => '524114',
+            6 => '524119'
         );
     }
     

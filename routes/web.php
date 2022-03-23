@@ -28,6 +28,8 @@ Route::group(['middleware' => ['role:superadmin']], function () {
 
     Route::get('sp2020sls/import_some', 'Sp2020SlsController@upload_some');
     Route::post('sp2020sls/import_some', 'Sp2020SlsController@import_some');
+    Route::get('sp2020sls/import_pengganti', 'Sp2020SlsController@upload_pengganti');
+    Route::post('sp2020sls/import_pengganti', 'Sp2020SlsController@import_pengganti');
 });
 
 Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {

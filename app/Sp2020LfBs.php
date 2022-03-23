@@ -11,8 +11,9 @@ class Sp2020LfBs extends Model
     
     protected $fillable = [ 'kd_prov', 'kd_kab', 'kd_kec',
         'kd_desa', 'idbs', 'jumlah_ruta', 'jumlah_laki', 
-        'jumlah_perempuan', 'jumlah_ruta_ada_mati'];
-
+        'jumlah_perempuan', 'jumlah_ruta_ada_mati', 'nks', 
+        'jenis_sampel', 'jumlah_kk_lama', 'nama_sls'
+    ];
 
     public function Rekapitulasi($kab=null, $kec=null, $desa=null){
         $label_select = "";

@@ -1,12 +1,10 @@
 <div class="card weather2">
-    <div class="body city-selected">
-        <div class="row">
-            <div class="col-12">
-                <div class="city">Jumlah DL Pegawai Hari Ini</div>
-            </div>
-        </div>
-    </div>
-    <table class="table table-striped">
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr class="text-center">
+                <th colspan="2">Jumlah DL Pegawai Hari Ini</th>
+            </tr>
+        </thead>
         <tbody>
             @foreach($dl_per_uk as $value)
                 <tr>
