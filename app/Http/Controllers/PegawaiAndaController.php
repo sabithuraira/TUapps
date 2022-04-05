@@ -27,7 +27,6 @@ class PegawaiAndaController extends Controller
     }
 
     public function penilaian_anda(Request $request){
-
         $month = date("m");
         $year = date("Y");
 
@@ -206,7 +205,7 @@ class PegawaiAndaController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-        print_r($data_ckp);die();
+        // print_r($data_ckp);die();
 
         foreach($data_ckp as $data){
             $model = \App\Ckp::find($data['id']);

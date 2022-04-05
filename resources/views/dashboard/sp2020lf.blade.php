@@ -34,6 +34,8 @@
         
         <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> --> 
         @endif
+        <br/>
+        <small class="text-danger"><i>*Data progres hanya uji coba, semua data akan direset menjadi 0 sebelum proses lapangan dimulai</i></small>
         <br/><br/>
         <div>
             <ul class="nav nav-tabs">

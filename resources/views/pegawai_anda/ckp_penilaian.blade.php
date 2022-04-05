@@ -45,8 +45,8 @@
 
                     <tr>
                         <td class="text-center">Kecepatan</td>
-                        <td class="text-center">Ketuntasan</td>
                         <td class="text-center">Ketepatan</td>
+                        <td class="text-center">Ketuntasan</td>
                         <td class="text-center">rata2</td>
                     </tr>
                 </thead>

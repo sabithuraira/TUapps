@@ -180,7 +180,6 @@ var vm = new Vue({
             }).done(function (data) {
                 self.ckps = data.datas;
                 self.logbooks = data.datas_logbooks;
-                console.log(self.ckps)
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
@@ -193,6 +192,19 @@ var vm = new Vue({
             $.ajaxSetup({
                 headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
             })
+
+            const short_ckp = self.ckps.map(item => {
+                    return {
+                        id: item.id, kecepatan: item.kecepatan,
+                        ketepatan: item.ketepatan, ketuntasan: item.ketuntasan,
+                    }
+                });
+                
+            const short_logbook = self.logbooks.map(item => {
+                    return {
+                        id: item.id, status_penyelesaian: item.status_penyelesaian
+                    }});
+
             $.ajax({
                 url :  "{{ url('/pegawai_anda/store_tim/') }}",
                 method : 'post',
@@ -200,8 +212,8 @@ var vm = new Vue({
                 data:{
                     month: self.month, 
                     year: self.year, 
-                    ckps: self.ckps,
-                    logbooks: self.logbooks,
+                    ckps: short_ckp,
+                    logbooks: short_logbook,
                 },
             }).done(function (data) {
                 alert("Data berhasil disimpan")

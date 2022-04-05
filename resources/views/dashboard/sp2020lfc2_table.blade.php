@@ -8,23 +8,21 @@
                 @else 
                     <th rowspan="2">NURTS - Nama KRT</th>
                 @endif
-                <th colspan="4">Jumlah ART</th>
+                <th colspan="3">Jumlah ART</th>
                 @if($label!='bs')
                 <th rowspan="2">Progres Dilaporkan</th>
                 @endif
             </tr>
             
             <tr class="text-center">
-                <th>Laki-laki</th>
-                <th>Perempuan</th>
+                <th>Total</th>
                 <th>Perempuan 10-54</th>
                 <th>Mati</th>
             </tr>
         </thead>
         <tbody>
             @php
-                $total_laki = 0;
-                $total_perempuan = 0;
+                $total_art = 0;
                 $total_perempuan_1549 = 0;
                 $total_mati = 0;
                 $total_terlapor = 0;
@@ -32,8 +30,7 @@
             @endphp
             @foreach($datas_c2 as $key=>$data)
                 @php
-                    $total_laki += $data->jumlah_laki; 
-                    $total_perempuan += $data->jumlah_perempuan;
+                    $total_art += $data->jumlah_art; 
                     $total_perempuan_1549 += $data->jumlah_perempuan_1549; 
                     $total_mati += $data->jumlah_mati;
                     $total_terlapor += $data->terlapor;
@@ -54,8 +51,7 @@
                             {{ $data->idw }} - {{ $data->nama }} 
                         @endif
                     </td>
-                    <td class="text-center">{{ number_format($data->jumlah_laki,0,",",".") }}</td>
-                    <td class="text-center">{{ number_format($data->jumlah_perempuan,0,",",".") }}</td>
+                    <td class="text-center">{{ number_format($data->jumlah_art,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_perempuan_1549,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_mati,0,",",".") }}</td>
                     @if($label!='bs')
@@ -72,8 +68,7 @@
             
             <tr class="text-center">
                 <td colspan="2"><b>TOTAL</b></td> 
-                <td>{{ number_format($total_laki,0,",",".") }}</td>
-                <td>{{ number_format($total_perempuan,0,",",".") }}</td>
+                <td>{{ number_format($total_art,0,",",".") }}</td>
                 <td>{{ number_format($total_perempuan_1549,0,",",".") }}</td>
                 <td>{{ number_format($total_mati,0,",",".") }}</td>
                 @if($label!='bs')

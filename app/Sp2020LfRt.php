@@ -11,8 +11,7 @@ class Sp2020LfRt extends Model
     
     protected $fillable = [ 'kd_prov', 'kd_kab', 'kd_kec',
         'kd_desa', 'idbs', 'status_rt', 'nama_krt', 
-        'pendidikan_krt', 'jumlah_laki', 'jumlah_perempuan'
-        , 'jumlah_perempuan_1549', 'jumlah_mati'];
+        'jumlah_art', 'jumlah_perempuan_1549', 'jumlah_mati'];
 
     public function Rekapitulasi($kab=null, $kec=null, $desa=null, $bs=null){
         $label_select = "";
@@ -25,8 +24,7 @@ class Sp2020LfRt extends Model
             $label_select = "sp2020lf_bs.idbs as idw, sp2020lf_bs.nama_sls as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
-                SUM(sp2020lf_rt.jumlah_laki) as jumlah_laki, 
-                SUM(sp2020lf_rt.jumlah_perempuan) as jumlah_perempuan, 
+                SUM(sp2020lf_rt.jumlah_art) as jumlah_art,  
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
 
@@ -40,8 +38,7 @@ class Sp2020LfRt extends Model
             $label_select = "w.idDesa as idw, w.nmDesa as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
-                SUM(sp2020lf_rt.jumlah_laki) as jumlah_laki, 
-                SUM(sp2020lf_rt.jumlah_perempuan) as jumlah_perempuan, 
+                SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
 
@@ -57,8 +54,7 @@ class Sp2020LfRt extends Model
             $label_select = "w.idKec as idw, w.nmKec as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
-                SUM(sp2020lf_rt.jumlah_laki) as jumlah_laki, 
-                SUM(sp2020lf_rt.jumlah_perempuan) as jumlah_perempuan, 
+                SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
 
@@ -71,8 +67,7 @@ class Sp2020LfRt extends Model
             $label_select = "w.idKab as idw, w.nmKab as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
-                SUM(sp2020lf_rt.jumlah_laki) as jumlah_laki, 
-                SUM(sp2020lf_rt.jumlah_perempuan) as jumlah_perempuan, 
+                SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
 
@@ -83,8 +78,7 @@ class Sp2020LfRt extends Model
             $sql = "SELECT sp2020lf_rt.nurts as idw, sp2020lf_rt.nama_krt as nama, 
                     1 AS terlapor,
                     1 AS total,
-                    sp2020lf_rt.jumlah_laki as jumlah_laki, 
-                    sp2020lf_rt.jumlah_perempuan as jumlah_perempuan, 
+                    sp2020lf_rt.jumlah_art as jumlah_art, 
                     sp2020lf_rt.jumlah_perempuan_1549 as jumlah_perempuan_1549, 
                     sp2020lf_rt.jumlah_mati as jumlah_mati 
                 FROM sp2020lf_rt 
