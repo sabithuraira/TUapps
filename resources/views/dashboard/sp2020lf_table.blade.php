@@ -4,7 +4,7 @@
             <tr class="text-center">
                 <th rowspan="2">No</th>
                 <th rowspan="2">Nama Wilayah</th>
-                <th colspan="4">Jumlah</th>
+                <th colspan="6">Jumlah</th>
                 <th rowspan="2">Progres Dilaporkan</th>
             </tr>
             
@@ -13,6 +13,8 @@
                 <th>Laki-laki</th>
                 <th>Perempuan</th>
                 <th>RT Ada Kematian</th>
+                <th>BS Target</th>
+                <th>BS Terlapor</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +55,8 @@
                     <td class="text-center">{{ number_format($data->jumlah_laki,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_perempuan,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_ruta_ada_mati,0,",",".") }}</td>
+                    <td class="text-center">{{ number_format($data->total,0,",",".") }}</td>
+                    <td class="text-center">{{ number_format($data->terlapor,0,",",".") }}</td>
                     <td class="text-center">
                         ({{ round(($data->terlapor/$data->total*100),3) }} %)
                     </td>
