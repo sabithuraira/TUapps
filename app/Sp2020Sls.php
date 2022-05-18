@@ -29,7 +29,6 @@ class Sp2020Sls extends Model
         ];
     }
 
-
     public function Rekapitulasi($kab=null, $kec=null, $desa=null){
         $label_select = "";
         $label_join = "";

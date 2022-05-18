@@ -91,14 +91,14 @@ class TelegramController extends Controller
 
     public function sp2020lf(Request $request)
     {
-        // $client = new \GuzzleHttp\Client();
-        // $update = json_decode($request->getContent());
-        // Log::info('info request:', ['isi'=>$update]);
-        // $chatID = $update->message->chat->id;
-        // $message = $update->message->text;
+        $client = new \GuzzleHttp\Client();
+        $update = json_decode($request->getContent());
+        Log::info('info request:', ['isi'=>$update]);
+        $chatID = $update->message->chat->id;
+        $message = $update->message->text;
         
         // $message = "LF.P-1605070031009B-80-89-102-4";
-        // $message = "LF.C2-1605070031009B-3-1-Ahmad joko-3-1-0";
+        // $message = "LF.C2-1605070031009B-3-1-Ahmad joko-5-2-3-1-0";
         
         // Listing: LF.P-id_bs-jlhrutahasil-Pddkhasillaki-Pddkhasilperempuan-JlhrutaAdaKematian (LF.P-1681052001004B-80-89-102-4)
         // Sampel: LF.C2-id_bs-status-namaKRT-pendidikanKRT-jlhARTLaki-jlhARTPerempuan-jmlARTPerempuan15sd49-jlhkematian  
@@ -244,10 +244,10 @@ class TelegramController extends Controller
                 $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
             }
         }
-        // $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_LF')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
-        // $res = $client->get($API_message);
-        return $pesan;
 
-        // return 1;
+        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_LF')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
+        $res = $client->get($API_message);
+
+        return 1;
     }
 }

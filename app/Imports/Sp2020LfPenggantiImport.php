@@ -16,12 +16,11 @@ class Sp2020LfPenggantiImport implements ToCollection
                 $model = Sp2020LfBs::where('idbs', '=' , $row[1])->first();
     
                 $jenis = 1;//1=pengganti, 0=diganti
-                $kode_hasil = substr($row[9],0,1);
+                $kode_hasil = substr($row[8],0,1);
                 
                 if($kode_hasil=='G') $jenis = 0;
                 else if($kode_hasil=='P') $jenis = 1;
-                else $jenis = 2;
-
+                // else $jenis = 2;
 
                 if($jenis==0){
                     if($model!=null){
@@ -29,9 +28,9 @@ class Sp2020LfPenggantiImport implements ToCollection
                     }
                 }
                 else if($jenis==1){
-                    print_r($kode_hasil);
-                    print_r($jenis);
-                    print_r($key);die();
+                    // print_r($kode_hasil);
+                    // print_r($jenis);
+                    // print_r($key);die();
                     if($model==null){
                         $model = new Sp2020LfBs;
                     }
@@ -52,7 +51,7 @@ class Sp2020LfPenggantiImport implements ToCollection
                     $model->kd_desa     = $kd_desa;
                     $model->idbs       = $idbs;
                     $model->nks         = $row[7];
-                    $model->jenis_sampel= $row[8];
+                    $model->jenis_sampel= $row[6];
                     $model->jumlah_kk_lama = 0;
                     $model->save();
                 }
