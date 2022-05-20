@@ -69,6 +69,8 @@
                 <td>{{ number_format($total_laki,0,",",".") }}</td>
                 <td>{{ number_format($total_perempuan,0,",",".") }}</td>
                 <td>{{ number_format($total_ruta_ada_mati,0,",",".") }}</td>
+                <td>{{ number_format($total_total,0,",",".") }}</td>
+                <td>{{ number_format($total_terlapor,0,",",".") }}</td>
                 <td class="text-center">
                     ({{ round(($total_terlapor/$total_total*100),3) }} %)
                 </td>
