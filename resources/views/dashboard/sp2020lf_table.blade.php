@@ -1,5 +1,5 @@
 <div class="tab-pane show active" id="hai_table">
-    <table class="table table-bordered table-sm">
+    <table class="table-bordered table-sm">
         <thead>
             <tr class="text-center">
                 <th rowspan="2">No</th>
@@ -66,8 +66,8 @@
                     <td class="text-center">
                         ({{ round(($data->terlapor/$data->total*100),3) }} %)
                     </td>
-                    <td class="text-center">{{ number_format($data->terima_kortim,0,",",".") }}</td>
-                    <td class="text-center">{{ number_format($data->terima_koseka,0,",",".") }}</td>
+                    <td class="text-center">{{ number_format($data->terima_kortim,0,",",".") }} ({{ round(($data->terima_kortim/$data->total*100),3) }} %)</td>
+                    <td class="text-center">{{ number_format($data->terima_koseka,0,",",".") }} ({{ round(($data->terima_koseka/$data->total*100),3) }} %)</td>
                 </tr>
             @endforeach
             
@@ -82,8 +82,8 @@
                 <td class="text-center">
                     ({{ round(($total_terlapor/$total_total*100),3) }} %)
                 </td>
-                <td>{{ number_format($total_kortim,0,",",".") }}</td>
-                <td>{{ number_format($total_koseka,0,",",".") }}</td>
+                <td>{{ number_format($total_kortim,0,",",".") }} ({{ round(($total_kortim/$total_total*100),3) }} %)</td>
+                <td>{{ number_format($total_koseka,0,",",".") }} ({{ round(($total_koseka/$total_total*100),3) }} %)</td>
             </tr>
         </tbody>
     </table>
