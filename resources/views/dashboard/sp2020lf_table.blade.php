@@ -6,6 +6,8 @@
                 <th rowspan="2">Nama Wilayah</th>
                 <th colspan="6">Jumlah</th>
                 <th rowspan="2">Progres Dilaporkan</th>
+                <th rowspan="2">Diterima Kortim</th>
+                <th rowspan="2">Diterima Koseka</th>
             </tr>
             
             <tr class="text-center">
@@ -25,6 +27,8 @@
                 $total_ruta_ada_mati = 0;
                 $total_terlapor = 0;
                 $total_total = 0;
+                $total_kortim = 0;
+                $total_koseka = 0;
             @endphp
             @foreach($datas as $key=>$data)
                 @php
@@ -37,6 +41,8 @@
                     
                     $total_terlapor += $data->terlapor;
                     $total_total += $data->total;
+                    $total_kortim += $data->terima_kortim;
+                    $total_koseka += $data->terima_koseka;
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -60,6 +66,8 @@
                     <td class="text-center">
                         ({{ round(($data->terlapor/$data->total*100),3) }} %)
                     </td>
+                    <td class="text-center">{{ number_format($data->terima_kortim,0,",",".") }}</td>
+                    <td class="text-center">{{ number_format($data->terima_koseka,0,",",".") }}</td>
                 </tr>
             @endforeach
             
@@ -74,6 +82,8 @@
                 <td class="text-center">
                     ({{ round(($total_terlapor/$total_total*100),3) }} %)
                 </td>
+                <td>{{ number_format($total_kortim,0,",",".") }}</td>
+                <td>{{ number_format($total_koseka,0,",",".") }}</td>
             </tr>
         </tbody>
     </table>

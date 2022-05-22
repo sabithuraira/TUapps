@@ -23,6 +23,8 @@ class Sp2020LfBs extends Model
         if($desa!=null){ //sls in desaa
             $label_select = "s.idbs as idw, s.nama_sls as nama, 
                 SUM(if(s.jumlah_ruta<>0, 1, 0)) AS terlapor,
+                SUM(if(s.terima_kortim<>0, 1, 0)) AS terima_kortim,
+                SUM(if(s.terima_koseka<>0, 1, 0)) AS terima_koseka,
                 COUNT(s.idbs) AS total,
                 SUM(s.jumlah_ruta) as jumlah_ruta, 
                 SUM(s.jumlah_laki) as jumlah_laki, 
@@ -36,6 +38,8 @@ class Sp2020LfBs extends Model
         else if($desa==null && $kec!=null){ //desa in kecamatan
             $label_select = "w.idDesa as idw, w.nmDesa as nama, 
                 SUM(if(s.jumlah_ruta<>0, 1, 0)) AS terlapor,
+                SUM(if(s.terima_kortim<>0, 1, 0)) AS terima_kortim,
+                SUM(if(s.terima_koseka<>0, 1, 0)) AS terima_koseka,
                 COUNT(s.idbs) AS total,
                 SUM(s.jumlah_ruta) as jumlah_ruta, 
                 SUM(s.jumlah_laki) as jumlah_laki, 
@@ -51,6 +55,8 @@ class Sp2020LfBs extends Model
 
             $label_select = "w.idKec as idw, w.nmKec as nama, 
                 SUM(if(s.jumlah_ruta<>0, 1, 0)) AS terlapor,
+                SUM(if(s.terima_kortim<>0, 1, 0)) AS terima_kortim,
+                SUM(if(s.terima_koseka<>0, 1, 0)) AS terima_koseka,
                 COUNT(s.idbs) AS total,
                 SUM(s.jumlah_ruta) as jumlah_ruta, 
                 SUM(s.jumlah_laki) as jumlah_laki, 
@@ -64,6 +70,8 @@ class Sp2020LfBs extends Model
         else{ // all kabupaten in provinsi
             $label_select = "w.idKab as idw, w.nmKab as nama, 
                 SUM(if(s.jumlah_ruta<>0, 1, 0)) AS terlapor,
+                SUM(if(s.terima_kortim<>0, 1, 0)) AS terima_kortim,
+                SUM(if(s.terima_koseka<>0, 1, 0)) AS terima_koseka,
                 COUNT(s.idbs) AS total,
                 SUM(s.jumlah_ruta) as jumlah_ruta, 
                 SUM(s.jumlah_laki) as jumlah_laki, 

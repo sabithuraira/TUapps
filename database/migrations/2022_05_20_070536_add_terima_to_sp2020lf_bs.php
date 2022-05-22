@@ -15,7 +15,7 @@ class AddTerimaToSp2020lfBs extends Migration
     {
         Schema::table('sp2020lf_bs', function (Blueprint $table) {
             $table->integer("terima_kortim")->default(0);
-            $table->integer("terima_koseka")->defautl(0);
+            $table->integer("terima_koseka")->default(0);
         });
     }
 
