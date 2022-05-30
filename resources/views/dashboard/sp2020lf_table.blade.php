@@ -64,10 +64,10 @@
                     <td class="text-center">{{ number_format($data->total,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->terlapor,0,",",".") }}</td>
                     <td class="text-center">
-                        ({{ round(($data->terlapor/$data->total*100),3) }} %)
+                        ({{ round(($data->terlapor/$data->total*100),1) }} %)
                     </td>
-                    <td class="text-center">{{ number_format($data->terima_kortim,0,",",".") }} ({{ round(($data->terima_kortim/$data->total*100),3) }} %)</td>
-                    <td class="text-center">{{ number_format($data->terima_koseka,0,",",".") }} ({{ round(($data->terima_koseka/$data->total*100),3) }} %)</td>
+                    <td class="text-center">{{ number_format($data->terima_kortim,0,",",".") }} ({{ round(($data->terima_kortim/$data->total*100),1) }} %)</td>
+                    <td class="text-center">{{ number_format($data->terima_koseka,0,",",".") }} ({{ round(($data->terima_koseka/$data->total*100),1) }} %)</td>
                 </tr>
             @endforeach
             
@@ -80,10 +80,10 @@
                 <td>{{ number_format($total_total,0,",",".") }}</td>
                 <td>{{ number_format($total_terlapor,0,",",".") }}</td>
                 <td class="text-center">
-                    ({{ round(($total_terlapor/$total_total*100),3) }} %)
+                    ({{ round(($total_terlapor/$total_total*100),1) }} %)
                 </td>
-                <td>{{ number_format($total_kortim,0,",",".") }} ({{ round(($total_kortim/$total_total*100),3) }} %)</td>
-                <td>{{ number_format($total_koseka,0,",",".") }} ({{ round(($total_koseka/$total_total*100),3) }} %)</td>
+                <td>{{ number_format($total_kortim,0,",",".") }} ({{ round(($total_kortim/$total_total*100),1) }} %)</td>
+                <td>{{ number_format($total_koseka,0,",",".") }} ({{ round(($total_koseka/$total_total*100),1) }} %)</td>
             </tr>
         </tbody>
     </table>

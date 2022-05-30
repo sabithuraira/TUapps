@@ -59,7 +59,7 @@
                         @if($data->total==0)
                             (0 %)
                         @else 
-                            ({{ round(($data->terlapor/($data->total*16)*100),3) }} %)
+                            ({{ round(($data->terlapor/($data->total*16)*100),1) }} %)
                         @endif
                     </td>
                     @endif
@@ -76,7 +76,7 @@
                         @if($total_total==0)
                             (0 %)
                         @else
-                            ({{ round(($total_terlapor/$total_total*100),3) }} %)
+                            ({{ round(($total_terlapor/$total_total*100),1) }} %)
                         @endif
                     </td>
                 @endif
