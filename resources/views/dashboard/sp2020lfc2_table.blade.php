@@ -1,5 +1,7 @@
 <div class="tab-pane" id="c2_table">
-    <table class="table table-bordered table-sm">
+    <a href="#" onclick="tableToExcel2();" class="btn btn-info float-right">Unduh Excel</a>
+    <br/><br/>
+    <table id="initabel2" class="table table-bordered table-sm">
         <thead>
             <tr class="text-center">
                 <th rowspan="2">No</th>
