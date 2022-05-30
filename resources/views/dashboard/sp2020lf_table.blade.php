@@ -1,5 +1,8 @@
 <div class="tab-pane show active" id="hai_table">
-    <table class="table-bordered table-sm">
+    <img src="<?php echo Yii::app()->request->baseUrl; ?>/images/download.jpg" style="padding: 5px" width="35"  id='xlsBtn' title="XLS" onclick="tableToExcel();">
+    
+    <a href="#"  onclick="tableToExcel();" class="btn btn-info">Unduh Excel</a>
+    <table id="initabel" class="table-bordered table-sm">
         <thead>
             <tr class="text-center">
                 <th rowspan="2">No</th>
