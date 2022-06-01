@@ -1,4 +1,4 @@
-<div class="tab-pane show active" id="hai_table">
+<div class="tab-pane" id="hai_table">
     <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
     <br/><br/>
     <table id="initabel" class="table-bordered table-sm">

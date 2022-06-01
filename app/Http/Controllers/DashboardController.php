@@ -120,7 +120,7 @@ class DashboardController extends Controller
             $labels_c2[] = $data->nama;
             $persen = 100;
             if($data->total==0) $persen = 0;
-            else $persen = round(($data->terlapor/$data->total*100),3);
+            else $persen = round(($data->terlapor/($data->total*16)*100),3);
             
             $persens_c2[] = $persen;
         }

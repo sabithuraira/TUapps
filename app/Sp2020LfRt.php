@@ -24,6 +24,8 @@ class Sp2020LfRt extends Model
             $label_select = "sp2020lf_bs.idbs as idw, sp2020lf_bs.nama_sls as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
+                SUM(sp2020lf_bs.c2_terima_kortim) AS kortim,
+                SUM(sp2020lf_bs.c2_terima_koseka) AS koseka,
                 SUM(sp2020lf_rt.jumlah_art) as jumlah_art,  
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
@@ -38,6 +40,8 @@ class Sp2020LfRt extends Model
             $label_select = "w.idDesa as idw, w.nmDesa as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
+                SUM(sp2020lf_bs.c2_terima_kortim) AS kortim,
+                SUM(sp2020lf_bs.c2_terima_koseka) AS koseka,
                 SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
@@ -54,6 +58,8 @@ class Sp2020LfRt extends Model
             $label_select = "w.idKec as idw, w.nmKec as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
+                SUM(sp2020lf_bs.c2_terima_kortim) AS kortim,
+                SUM(sp2020lf_bs.c2_terima_koseka) AS koseka,
                 SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";
@@ -67,6 +73,8 @@ class Sp2020LfRt extends Model
             $label_select = "w.idKab as idw, w.nmKab as nama, 
                 COUNT(sp2020lf_rt.idbs) AS terlapor,
                 COUNT(sp2020lf_bs.idbs) AS total,
+                SUM(sp2020lf_bs.c2_terima_kortim) AS kortim,
+                SUM(sp2020lf_bs.c2_terima_koseka) AS koseka,
                 SUM(sp2020lf_rt.jumlah_art) as jumlah_art, 
                 SUM(sp2020lf_rt.jumlah_perempuan_1549) as jumlah_perempuan_1549, 
                 SUM(sp2020lf_rt.jumlah_mati) as jumlah_mati";

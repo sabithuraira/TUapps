@@ -1,4 +1,4 @@
-<div class="tab-pane" id="c2_table">
+<div class="tab-pane show active" id="c2_table">
     <a href="#" onclick="tableToExcel2();" class="btn btn-info float-right">Unduh Excel</a>
     <br/><br/>
     <table id="initabel2" class="table table-bordered table-sm">
@@ -12,7 +12,7 @@
                 @endif
                 <th colspan="3">Jumlah ART</th>
                 @if($label!='bs')
-                <th rowspan="2">Progres Dilaporkan</th>
+                <th colspan="5">Jumlah RT</th>
                 @endif
             </tr>
             
@@ -20,6 +20,14 @@
                 <th>Total</th>
                 <th>Perempuan 10-54</th>
                 <th>Mati</th>
+
+                @if($label!='bs')
+                <th>Target</th>
+                <th>Realisasi</th>
+                <th>Dilaporkan</th>
+                <th>Diterima Kortim</th>
+                <th>Diterima Koseka</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -29,6 +37,8 @@
                 $total_mati = 0;
                 $total_terlapor = 0;
                 $total_total = 0;
+                $total_kortim = 0;
+                $total_koseka = 0;
             @endphp
             @foreach($datas_c2 as $key=>$data)
                 @php
@@ -37,6 +47,8 @@
                     $total_mati += $data->jumlah_mati;
                     $total_terlapor += $data->terlapor;
                     $total_total += ($data->total*16);
+                    $total_kortim += $data->kortim;
+                    $total_total += $data->koseka;
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -57,12 +69,23 @@
                     <td class="text-center">{{ number_format($data->jumlah_perempuan_1549,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_mati,0,",",".") }}</td>
                     @if($label!='bs')
+                    <td class="text-center">{{ $data->total*16 }}</td>
+                    <td class="text-center">{{ $data->terlapor }}</td>
                     <td class="text-center">
                         @if($data->total==0)
                             (0 %)
                         @else 
                             ({{ round(($data->terlapor/($data->total*16)*100),1) }} %)
                         @endif
+                    </td>
+
+                    <td class="text-center">
+                        {{ $data->kortim }}
+                        ({{ round(($data->kortim/($data->total*16)*100),1) }} %)
+                    </td>
+                    <td class="text-center">
+                        {{ $data->koseka }}
+                        ({{ round(($data->koseka/($data->total*16)*100),1) }} %)
                     </td>
                     @endif
                 </tr>
@@ -74,12 +97,23 @@
                 <td>{{ number_format($total_perempuan_1549,0,",",".") }}</td>
                 <td>{{ number_format($total_mati,0,",",".") }}</td>
                 @if($label!='bs')
+                    <td class="text-center">{{ $total_total }}</td>
+                    <td class="text-center">{{ $total_terlapor }}</td>
                     <td class="text-center">
                         @if($total_total==0)
                             (0 %)
                         @else
                             ({{ round(($total_terlapor/$total_total*100),1) }} %)
                         @endif
+                    </td>
+                
+                    <td class="text-center">
+                        {{ $total_kortim }}
+                        ({{ round(($total_kortim/$total_total*100),1) }} %)
+                    </td>
+                    <td class="text-center">
+                        {{ $total_koseka }}
+                        ({{ round(($total_koseka/$total_total*100),1) }} %)
                     </td>
                 @endif
             </tr>

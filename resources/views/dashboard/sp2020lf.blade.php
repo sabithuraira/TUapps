@@ -34,21 +34,20 @@
         
         <!-- <a class="float-right" href="{{ url('download_sp2020?kab='.$kab.'&kec='.$kec.'&desa='.$desa) }}"><button><i class="fa fa-file-excel-o"></i>&nbsp Unduh Excel &nbsp</button></a> --> 
         @endif
-        <br/>
-        <small class="text-danger"><i>*Data progres hanya uji coba, semua data akan direset menjadi 0 sebelum proses lapangan dimulai</i></small>
         <br/><br/>
         <div>
             <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#hai_table">Table Pemutakhiran</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hai_grafik">Grafik Pemutakhiran</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#c2_table">Table C2</a></li>
+                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#c2_table">Table C2</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#c2_grafik">Grafik C2</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hai_table">Table Pemutakhiran</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hai_grafik">Grafik Pemutakhiran</a></li>
             </ul>
+
             <div class="tab-content">
-                @include('dashboard.sp2020lf_table')
-                @include('dashboard.sp2020lf_grafik')
                 @include('dashboard.sp2020lfc2_table')
                 @include('dashboard.sp2020lfc2_grafik')
+                @include('dashboard.sp2020lf_table')
+                @include('dashboard.sp2020lf_grafik')
             </div>
         </div>
     </div>
@@ -77,6 +76,44 @@
             x: {
                 type: 'category',
                 categories: {!! json_encode($labels) !!},
+            },
+            y: {
+                max: 100,
+            },
+        },
+        bar: {
+            ratio: 0.5
+        },
+        legend: {
+            show: false, //hide legend
+        },
+        padding: {
+            bottom: 100,
+            top: 10
+        },
+    });
+
+
+    var series2 =  {!! json_encode($persens_c2) !!};
+    var chart2 = c3.generate({
+        bindto: '#chart-bar2', // id of chart wrapper
+        data: {
+            columns: [
+                // each columns data
+                ['data1'].concat(series2),
+            ],
+            type: 'bar', 
+            colors: {
+                'data1': lucid.colors["blue"]
+            },
+            names: {
+                'data1': 'Persentase dilaporkan: '
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: {!! json_encode($labels_c2) !!},
             },
             y: {
                 max: 100,
