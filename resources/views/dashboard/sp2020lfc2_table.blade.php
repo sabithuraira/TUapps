@@ -47,8 +47,8 @@
                     $total_mati += $data->jumlah_mati;
                     $total_terlapor += $data->terlapor;
                     $total_total += ($datas[$key]->total*16);
-                    $total_kortim += $data->kortim;
-                    $total_koseka += $data->koseka;
+                    $total_kortim += $datas[$key]->kortim;
+                    $total_koseka += $datas[$key]->koseka;
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -81,11 +81,11 @@
 
                     <td class="text-center">
                         {{ $data->kortim }}
-                        ({{ round(($data->kortim/($datas[$key]->total*16)*100),1) }} %)
+                        ({{ round(($datas[$key]->kortim/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     <td class="text-center">
                         {{ $data->koseka }}
-                        ({{ round(($data->koseka/($datas[$key]->total*16)*100),1) }} %)
+                        ({{ round(($datas[$key]->koseka/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     @endif
                 </tr>
