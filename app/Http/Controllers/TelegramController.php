@@ -109,17 +109,22 @@ class TelegramController extends Controller
         $pesan = '';
 
         if(strtolower(str_replace(' ', '', $message))=='panduan'){
-            $pesan = urlencode("Kirim laporan progres Long Form SP2020 dengan format berikut: \n
-                <strong>PEMUTAKHIRAN</strong>: LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian. Contoh: <pre>LF.P-1681052001004B-80-89-102-4</pre> \n
+            // $pesan = urlencode("Kirim laporan progres Long Form SP2020 dengan format berikut: \n
+            //     <strong>PEMUTAKHIRAN</strong>: LF.P- ID BS - Jumlah Rumah Tangga - Jumlah Penduduk Laki-laki -  Jumlah Penduduk Perempuan - Jumlah Rumah Tangga Ada Kematian. Contoh: <pre>LF.P-1681052001004B-80-89-102-4</pre> \n
 
-                <strong>PENERIMAAN PEMUTAKHIRAN</strong>: LF.P.TERIMA- ID BS - Penerima (KORTIM/KOSEKA). Contoh: <pre>LF.P.TERIMA-1681052001004B-KORTIM</pre> \n
-                <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Jumlah ART - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-1-0</code>");
+            //     <strong>PENERIMAAN PEMUTAKHIRAN</strong>: LF.P.TERIMA- ID BS - Penerima (KORTIM/KOSEKA). Contoh: <pre>LF.P.TERIMA-1681052001004B-KORTIM</pre> \n
+            //     <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Jumlah ART - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-1-0</code>");
+
+
+            $pesan = urlencode("Kirim laporan progres Long Form SP2020 dengan format berikut: \n
+                <strong>PENDATAAN C2</strong>: LF.C2- ID BS - No Urut Rumah Tangga Sampel (Rincian 109) - Status Kunjungan - Nama KRT - Jumlah ART - Jumlah ART Perempuan Usia 10 s/d 54 Tahun - Jumlah Kematian. Contoh: <code>LF.C2-1681052001004B-3-1-Ahmad joko-5-1-0</code> \n
+                <strong>PENERIMAAN C2</strong>: LF.C2.TERIMA- ID BS - Penerima (KORTIM/KOSEKA) - Jumlah RUTA telah Diterima. Contoh: <pre>LF.C2.TERIMA-1681052001004B-KORTIM-5</pre>");
         }
         else{
             $lower_msg = strtolower($message);
             $rincian_msg = explode("-", $lower_msg);
 
-            if(count($rincian_msg)==6 || count($rincian_msg)==8 ||  count($rincian_msg)==3){
+            if(count($rincian_msg)==6 || count($rincian_msg)==8 || count($rincian_msg)==4 || count($rincian_msg)==3){
                 $msg_error = [];
 
                 $id_bs = str_replace(' ', '', $rincian_msg[1]);
@@ -240,6 +245,47 @@ class TelegramController extends Controller
                         $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
                     }
                 } 
+                else if(count($rincian_msg)==4){
+                    // (LF.P.TERIMA-1681052001004B-80-89-102-4)
+                    if(str_replace(' ', '', $rincian_msg[0])=="lf.c2.terima"){
+                        $penerima = str_replace(' ', '', $rincian_msg[2]);
+                        $jumlah_terima = str_replace(' ', '', $rincian_msg[3]);
+                        $data = \App\Sp2020LfBs::where([['idbs', '=', $id_bs],])->first();
+                        
+                        if(!is_numeric($jumlah_terima)){
+                            $msg_error[] = "Isian 'Jumlah RUTA telah Diterima' Harus Angka";
+                        }
+                        else{
+                            if($jumlah_terima<0 || $jumlah_terima>16) $msg_error[] = "Isian 'Jumlah RUTA telah Diterima' tidak boleh kurang dari 0 atau lebih dari 16";
+                        }
+
+                        if(strtolower($penerima)!='kortim' && strtolower($penerima)!='koseka')  $msg_error[] = "Penerima dokumen hanya bisa 'KORTIM' atau 'KOSEKA' saja, benerin lagi ya formatnya..";
+
+                        if(count($msg_error)>0){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            if($data==null){
+                                $pesan = "Identitas Blok Sensus ini tidak ditemukan, kayaknya kamu salah masukin ID BS-nya ya..";
+                            }
+                            else{
+                                if(strtolower($penerima)=='kortim'){
+                                    $data->c2_terima_kortim = $jumlah_terima;
+                                    $data->save();
+                                }
+                                else if(strtolower($penerima)=='koseka'){
+                                    $data->c2_terima_koseka = $jumlah_terima;
+                                    $data->save();
+                                }
+                                    $pesan = "Sukses.. data berhasil disimpan.";
+                            }
+                        }
+                        /////////
+                    }
+                    else{
+                        $pesan = "Format pesan kamu salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+                    }
+                }
                 else if(count($rincian_msg)==3){
                     // (LF.P.TERIMA-1681052001004B-80-89-102-4)
                     if(str_replace(' ', '', $rincian_msg[0])=="lf.p.terima"){

@@ -46,9 +46,9 @@
                     $total_perempuan_1549 += $data->jumlah_perempuan_1549; 
                     $total_mati += $data->jumlah_mati;
                     $total_terlapor += $data->terlapor;
-                    $total_total += ($data->total*16);
+                    $total_total += ($datas[$key]->total*16);
                     $total_kortim += $data->kortim;
-                    $total_total += $data->koseka;
+                    $total_koseka += $data->koseka;
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -69,23 +69,23 @@
                     <td class="text-center">{{ number_format($data->jumlah_perempuan_1549,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_mati,0,",",".") }}</td>
                     @if($label!='bs')
-                    <td class="text-center">{{ $data->total*16 }}</td>
+                    <td class="text-center">{{ $datas[$key]->total*16 }}</td>
                     <td class="text-center">{{ $data->terlapor }}</td>
                     <td class="text-center">
-                        @if($data->total==0)
+                        @if($datas[$key]->total==0)
                             (0 %)
                         @else 
-                            ({{ round(($data->terlapor/($data->total*16)*100),1) }} %)
+                            ({{ round(($data->terlapor/($datas[$key]->total*16)*100),1) }} %)
                         @endif
                     </td>
 
                     <td class="text-center">
                         {{ $data->kortim }}
-                        ({{ round(($data->kortim/($data->total*16)*100),1) }} %)
+                        ({{ round(($data->kortim/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     <td class="text-center">
                         {{ $data->koseka }}
-                        ({{ round(($data->koseka/($data->total*16)*100),1) }} %)
+                        ({{ round(($data->koseka/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     @endif
                 </tr>

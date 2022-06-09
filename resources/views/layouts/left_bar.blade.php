@@ -27,21 +27,41 @@
 
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
+                
                 <li class="{{ (request()->is('dashboard*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
                         <span>Dashboard</span></a>
                     <ul>
                         <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/index') }}">Overview</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="{{ (request()->is('rekap_dl*')) ? 'active' : '' }}">
+                    <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
+                        <span>Operasionalisasi SDM</span></a>
+                    <ul>
                         <li class="{{ request()->is('dashboard/rekap_dl*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/rekap_dl') }}">Kalender DL</a></li>
                     </ul>
                 </li>
+
                 <li
                     class="{{ (request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') ||  request()->is('skp*') || request()->is('iki*')) ? 'active' : '' }}">
-                    <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Aktivitas</span></a>
+                    <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Pengukuran Kinerja</span></a>
                     <ul>
                         <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{url('ckp')}}">CKP</a>
+
+
+                        <li class="{{ (request()->is('pegawai_anda*')) ? 'active' : '' }}">
+                            <a href="{{ url('pegawai_anda') }}"> <span>Pegawai Anda</span></a>
+                        </li>
+
+                        <li class="{{ (request()->is('pegawai_anda/penilaian_anda*')) ? 'active' : '' }}">
+                            <a href="{{ url('pegawai_anda/penilaian_anda') }}"> <span>Penilaian Anda</span></a>
+                        </li>
+
                         <!-- <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{url('skp')}}">SKP <span class="badge badge-warning float-right">Uji Coba</span></a></li> -->
                         <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a href="{{ url('log_book') }}">Log Book</a></li>
                         <li class="{{ request()->is('rencana_kerja') ? 'active' : '' }}"><a href="{{ url('rencana_kerja') }}">Rencana Kerja</a></li>
@@ -62,43 +82,6 @@
                                 href="{{ url('iki') }}">Kelola IKI</a></li>
                     </ul>
                 </li>
-
-                <li class="{{ (request()->is('pegawai_anda*')) ? 'active' : '' }}">
-                    <a href="{{ url('pegawai_anda') }}"> <i class="icon-users"></i><span>Pegawai Anda</span></a>
-                </li>
-                
-                <li class="{{ (request()->is('pegawai_anda/penilaian_anda*')) ? 'active' : '' }}">
-                    <a href="{{ url('pegawai_anda/penilaian_anda') }}"> <i class="icon-users"></i><span>Penilaian Anda</span></a>
-                </li>
-                
-                <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
-                    <a href="#Jadwal" class="has-arrow"><i class="fa fa-tasks"></i> <span>Matrik Tugas</span>  <span class="badge badge-warning float-right">Uji Coba</span></a>
-                    <ul>
-                        <li class="{{ request()->is('penugasan/anda*') ? 'active' : '' }}"><a
-                                href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
-                        
-                        @hasanyrole('superadmin|admin_uker|pemberi_tugas')
-                            <li class="{{ (request()->is('penugasan*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda') && !request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
-                                    href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>   
-                                    
-                            <li class="{{ (request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
-                                    href="{{url('penugasan/rekap')}}">Rekap Matrik Tugas</a></li>   
-                        @endhasanyrole
-
-                        @hasanyrole('superadmin|admin_uker')
-                            <li class="{{ request()->is('penugasan/user_role') ? 'active' : '' }}"><a
-                                        href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>  
-                        @endhasanyrole
-                          
-                    </ul>
-                </li>
-
-                @if(Auth::user()->kdkab=='00')
-                <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
-                    <a href="{{ url('vicon') }}"> <i class="icon-grid"></i><span>Penggunaan Ruang
-                            Vicon</span></a>
-                </li>
-                @endif
 
                 @if(Auth::user()->kdkab=='00')
                 <li class="{{ (request()->is('pok*')) ? 'active' : '' }}">
@@ -123,6 +106,28 @@
                 </li>
                 @endif
 
+                <li class="{{ (request()->is('penugasan*')) ? 'active' : '' }}">
+                    <a href="#Jadwal" class="has-arrow"><i class="fa fa-tasks"></i> <span>Matrik Tugas</span>  <span class="badge badge-warning float-right">Uji Coba</span></a>
+                    <ul>
+                        <li class="{{ request()->is('penugasan/anda*') ? 'active' : '' }}"><a
+                                href="{{url('penugasan/anda')}}">Penugasan Anda</a></li>
+                        
+                        @hasanyrole('superadmin|admin_uker|pemberi_tugas')
+                            <li class="{{ (request()->is('penugasan*') && !request()->is('penugasan/user_role') && !request()->is('penugasan/anda') && !request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
+                                    href="{{url('penugasan')}}">Kelola Matrik Tugas</a></li>   
+                                    
+                            <li class="{{ (request()->is('penugasan/rekap')) ? 'active' : '' }}"><a
+                                    href="{{url('penugasan/rekap')}}">Rekap Matrik Tugas</a></li>   
+                        @endhasanyrole
+
+                        @hasanyrole('superadmin|admin_uker')
+                            <li class="{{ request()->is('penugasan/user_role') ? 'active' : '' }}"><a
+                                        href="{{url('penugasan/user_role')}}">Kelola User Penugas</a></li>  
+                        @endhasanyrole
+                          
+                    </ul>
+                </li>
+
                 @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                 <li class="{{ (request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
                     <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas &
@@ -142,29 +147,34 @@
                 </li>
                 @endhasanyrole
 
-                @hasanyrole('superadmin|subbag-umum')
-                <li
-                    class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*')) ? 'active' : '' }}">
-                    <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Barang
-                            Persediaan</span></a>
-                    <ul>
-                        <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a
-                                href="{{url('master_barang')}}">Master Barang</a></li>
-                        <li
-                            class="{{ (request()->is('opname_persediaan') || request()->is('opname_persediaan/create')) ? 'active' : '' }}">
-                            <a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
-                        <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
-                                href="{{url('opname_persediaan/kartu_kendali')}}">Kartu Kendali</a></li>
-                    </ul>
-                </li>
-                @endhasanyrole
+                @if(Auth::user()->kdkab=='00')
+                    @hasanyrole('superadmin|subbag-umum')
+                    <li
+                        class="{{ (request()->is('master_barang*') || request()->is('opname_persediaan*') 
+                            || request()->is('pemegang_bmn*') || request()->is('vicon*')) ? 'active' : '' }}">
+                        <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Fasilitas Perkantoran</span></a>
+                        <ul>
+                            <li class="{{ request()->is('master_barang*') ? 'active' : '' }}"><a
+                                    href="{{url('master_barang')}}">Master Barang</a></li>
+                            <li
+                                class="{{ (request()->is('opname_persediaan') || request()->is('opname_persediaan/create')) ? 'active' : '' }}">
+                                <a href="{{url('opname_persediaan')}}">Opname Persediaan</a></li>
+                            <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
+                                    href="{{url('opname_persediaan/kartu_kendali')}}">Kartu Kendali</a></li>
+                            @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
+                            <li class="{{ (request()->is('pemegang_bmn*')) ? 'active' : '' }}">
+                                <a href="{{ url('pemegang_bmn') }}"> <span>Pemegang BMN</span></a>
+                            </li>
+                            @endhasanyrole
 
-                @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
-                <li class="{{ (request()->is('pemegang_bmn*')) ? 'active' : '' }}">
-                    <a href="{{ url('pemegang_bmn') }}"> <i class="icon-basket-loaded"></i><span>Pemegang
-                            BMN</span></a>
-                </li>
-                @endhasanyrole
+                            <li class="{{ (request()->is('vicon*')) ? 'active' : '' }}">
+                                <a href="{{ url('vicon') }}"> <span>Penggunaan Ruang Vicon</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    @endhasanyrole
+                @endif
+
 
                 <li class="{{ (request()->is('meeting*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-users"></i>
