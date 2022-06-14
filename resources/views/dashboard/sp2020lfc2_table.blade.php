@@ -35,20 +35,28 @@
                 $total_art = 0;
                 $total_perempuan_1549 = 0;
                 $total_mati = 0;
-                $total_terlapor = 0;
-                $total_total = 0;
-                $total_kortim = 0;
-                $total_koseka = 0;
+
+                if($label!='bs'){
+                    $total_terlapor = 0;
+                    $total_total = 0;
+                    $total_kortim = 0;
+                    $total_koseka = 0;
+                }
             @endphp
             @foreach($datas_c2 as $key=>$data)
                 @php
                     $total_art += $data->jumlah_art; 
                     $total_perempuan_1549 += $data->jumlah_perempuan_1549; 
                     $total_mati += $data->jumlah_mati;
-                    $total_terlapor += $data->terlapor;
-                    $total_total += ($datas[$key]->total*16);
-                    $total_kortim += $datas[$key]->kortim;
-                    $total_koseka += $datas[$key]->koseka;
+
+                    if($label!='bs'){
+                        $total_terlapor += $data->terlapor;
+                        $total_total += ($datas[$key]->total*16);
+                        $total_kortim += $datas[$key]->c2_terima_kortim;
+                        $total_koseka += $datas[$key]->c2_terima_koseka;
+
+                        $total_koseka = 0;
+                    }
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -80,12 +88,12 @@
                     </td>
 
                     <td class="text-center">
-                        {{ $data->kortim }}
-                        ({{ round(($datas[$key]->kortim/($datas[$key]->total*16)*100),1) }} %)
+                        {{ $datas[$key]->c2_terima_kortim }}
+                        ({{ round(($datas[$key]->c2_terima_kortim/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     <td class="text-center">
-                        {{ $data->koseka }}
-                        ({{ round(($datas[$key]->koseka/($datas[$key]->total*16)*100),1) }} %)
+                        {{ $datas[$key]->c2_terima_koseka }}
+                        ({{ round(($datas[$key]->c2_terima_koseka/($datas[$key]->total*16)*100),1) }} %)
                     </td>
                     @endif
                 </tr>
