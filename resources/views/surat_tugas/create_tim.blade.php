@@ -60,6 +60,16 @@
                     </div>
 
                     <div class="row clearfix">
+                        <div class="col-md-12 left">
+                            <div class="form-group">
+                                <label>Kode Klasifikasi:</label>
+                                <input type="text" class="form-control" name="kode_klasifikasi" value="{{ old('kode_klasifikasi') }}">
+                                <small class="text-info font-italic">Selanjutnya surat tugas harus menggunakan kode klasifikasi. Kode klasifikasi adalah kode klasifikasi arsip sesuai aturan arsiparis, misal: KU.010. Daftar kode klasifikasi dapat dilihat <a href="https://docs.google.com/spreadsheets/d/1gdPQhEbXWbaEX048Rp2toB_0LeqJUCRgqRNak3S_a-s/edit?usp=sharing" target="_blank">disini</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{ $model->attributes()['mak'] }}:</label>
