@@ -1311,7 +1311,7 @@ class SuratTugasController extends Controller
             if(count($explode_spd)==6){
                 $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[4]. '/' . $explode_spd[5];
             }
-            else{
+            else if(count($explode_spd)==7){
                 $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/' . $explode_spd[2] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[5]. '/' . $explode_spd[6];
             }
         }
