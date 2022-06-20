@@ -136,20 +136,42 @@ class SuratTugasRincian extends Model
 				SELECT users.id, users.kdorg, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
 			FROM users 
 			LEFT JOIN 
-			    (SELECT surat_tugas_rincian.* FROM surat_tugas_rincian, surat_tugas 
-                    WHERE surat_tugas_rincian.id_surtug=surat_tugas.id 
-                        AND YEAR(surat_tugas_rincian.tanggal_mulai)=".$year." 
-        				AND MONTH(surat_tugas_rincian.tanggal_mulai)=".$month." 
-        				AND surat_tugas_rincian.nip IS NOT NULL
-        				AND surat_tugas_rincian.status_aktif<>2  
-        				AND surat_tugas_rincian.nomor_spd IS NOT NULL
-				        AND surat_tugas.sumber_anggaran <> 3  
-				        AND surat_tugas.jenis_st IN(2,5)  
-                ) AS str ON str.nip=users.nip_baru
+				(SELECT surat_tugas_rincian.* FROM surat_tugas_rincian, surat_tugas 
+					WHERE surat_tugas_rincian.id_surtug=surat_tugas.id 
+						AND YEAR(surat_tugas_rincian.tanggal_mulai)=".$year." 
+						AND MONTH(surat_tugas_rincian.tanggal_mulai)=".$month." 
+						AND surat_tugas_rincian.nip IS NOT NULL
+						AND surat_tugas_rincian.status_aktif<>2  
+						AND surat_tugas_rincian.nomor_spd IS NOT NULL
+						AND surat_tugas.sumber_anggaran <> 3  
+						AND surat_tugas.jenis_st IN(2,5)  
+				) AS str ON str.nip=users.nip_baru
 			WHERE kdkab='" . $uk . "' 
 			GROUP BY nip_baru, users.kdorg, name, users.id
 				ORDER BY users.kdorg, users.id
 			) AS CA";
+
+		if($uk!='00'){
+			$sql = "SELECT nip, nama, kdorg, ".join(",", $label_select)."
+				FROM (
+					SELECT users.id, users.kdorg, nip_baru as nip, users.name as nama, ".join(",", $label_case)."
+				FROM users 
+				LEFT JOIN 
+					(SELECT surat_tugas_rincian.* FROM surat_tugas_rincian, surat_tugas 
+						WHERE surat_tugas_rincian.id_surtug=surat_tugas.id 
+							AND YEAR(surat_tugas_rincian.tanggal_mulai)=".$year." 
+							AND MONTH(surat_tugas_rincian.tanggal_mulai)=".$month." 
+							AND surat_tugas_rincian.nip IS NOT NULL
+							AND surat_tugas_rincian.status_aktif<>2  
+							AND surat_tugas_rincian.nomor_spd IS NOT NULL
+							AND surat_tugas.sumber_anggaran <> 3  
+							AND surat_tugas.jenis_st IN(2,3,5)  
+					) AS str ON str.nip=users.nip_baru
+				WHERE kdkab='" . $uk . "' 
+				GROUP BY nip_baru, users.kdorg, name, users.id
+					ORDER BY users.kdorg, users.id
+				) AS CA";
+		}
 		
 		//ini percobaan query baru, kalo bulan 10 2021 ga ada masalah, hapus code di bawah
 		// $sql = "SELECT nip, nama, ".join(",", $label_select)."

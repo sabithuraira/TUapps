@@ -62,16 +62,38 @@ class UserModel extends Model
     public function getJumlahDlByNip($nip, $cur_year){
         // $cur_year = date('Y');
 
-        $total_biasa = DB::table("surat_tugas_rincian")
-                    ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
-                    ->where('surat_tugas.sumber_anggaran', '<>', 3)
-                    // ->where('surat_tugas.jenis_st', '<>', 3)
-                    ->whereIn('surat_tugas.jenis_st', array(2,5))
-                    ->where('surat_tugas_rincian.nip', '=', $nip)
-                    ->where('surat_tugas_rincian.status_aktif', '<>', 2)
-                    ->whereNotNull('surat_tugas_rincian.nomor_spd')
-                    ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
-                    ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
+        $user_kab = UserModel::where('nip_baru', '=', $nip)->first();
+        $kode_kab = '';
+        $total_biasa = 0;
+        if($user_kab!=null) $kode_kab = $user_kab->kdkab;
+        
+
+        if($kode_kab=='00'){
+            $total_biasa = DB::table("surat_tugas_rincian")
+                ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
+                ->where('surat_tugas.sumber_anggaran', '<>', 3)
+                // ->where('surat_tugas.jenis_st', '<>', 3)
+                ->whereIn('surat_tugas.jenis_st', array(2,5))
+                ->where('surat_tugas_rincian.nip', '=', $nip)
+                ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                ->whereNotNull('surat_tugas_rincian.nomor_spd')
+                ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
+                ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
+        }
+        else{
+            $total_biasa = DB::table("surat_tugas_rincian")
+                ->join("surat_tugas","surat_tugas_rincian.id_surtug","=","surat_tugas.id")
+                ->where('surat_tugas.sumber_anggaran', '<>', 3)
+                // ->where('surat_tugas.jenis_st', '<>', 3)
+                ->whereIn('surat_tugas.jenis_st', array(2,3,5))
+                ->where('surat_tugas_rincian.nip', '=', $nip)
+                ->where('surat_tugas_rincian.status_aktif', '<>', 2)
+                ->whereNotNull('surat_tugas_rincian.nomor_spd')
+                ->where(\DB::raw('YEAR(surat_tugas_rincian.tanggal_mulai)'), '=', $cur_year)
+                ->sum(\DB::raw('DATEDIFF(surat_tugas_rincian.tanggal_selesai, surat_tugas_rincian.tanggal_mulai)+1'));
+        }
+
+        
                     
         // $total_pelatihan = DB::table("surat_tugas_peserta_pelatihan")
         //             ->join("surat_tugas_rincian","surat_tugas_rincian.id","=","surat_tugas_peserta_pelatihan.id_surtug")
