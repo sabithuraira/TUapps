@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('uker', 'UkerController');
     Route::resource('uker4', 'Uker4Controller');
@@ -139,7 +143,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
-Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], function () {    
+Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], function () {
     //
     Route::resource('penugasan', 'PenugasanController')->except('show');
     Route::get('penugasan/{id}/show', 'PenugasanController@show');
@@ -149,11 +153,27 @@ Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], fun
     Route::post('penugasan/{id}/store_progres', 'PenugasanController@store_progres');
 });
 
-Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {    
+Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
     Route::get('penugasan/user_role', 'PenugasanController@user_role');
     Route::get('penugasan/{id}/user_role_edit', 'PenugasanController@user_role_edit');
     Route::patch('penugasan/{id}/user_role_update', 'PenugasanController@user_role_update');
 });
+
+
+Route::group(
+    ['middleware' => ['role:superadmin|eselon4']],
+    function () {
+        Route::get('pengadaan', 'PengadaanController@index');
+        Route::get('pengadaan/create', 'PengadaanController@create');
+        Route::post('pengadaan/store', 'PengadaanController@store');
+
+        Route::get('pengadaan/edit/{id}', 'PengadaanController@edit');
+        Route::post('pengadaan/update/{id}', 'PengadaanController@update');
+
+        Route::get('pengadaan/unduh/{file_name}', 'PengadaanController@unduh');
+        Route::post('pengadaan/set_aktif', 'PengadaanController@set_aktif');
+    }
+);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('penugasan/anda', 'PenugasanController@anda');
