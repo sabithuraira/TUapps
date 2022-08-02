@@ -3,12 +3,13 @@
 @section('breadcrumb')
     <ul class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="icon-home"></i></a></li>
-        <li class="breadcrumb-item">Daftar Surat Tugas</li>
+        <li class="breadcrumb-item">Daftar Pengadaan</li>
     </ul>
 @endsection
 
 @section('content')
     <div class="container">
+
         @if (\Session::has('success'))
             <div class="alert alert-success">
                 <p>{{ \Session::get('success') }}</p>
@@ -17,6 +18,44 @@
 
         <div class="card" id="app_vue">
             <div class="body">
+                <div class="row clearfix">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card top_counter">
+                            <div class="body">
+                                <div class="icon text-info"><i class="fa fa-user"></i> </div>
+                                <div class="content">
+                                    <div class="text">Total pengajuan</div>
+                                    <h5 class="number">{{ $jumlah_pengajuan }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card top_counter">
+                            <div class="body">
+                                <div class="icon text-warning"><i class="fa fa-tags"></i> </div>
+                                <div class="content">
+                                    <div class="text">Selesai</div>
+                                    <h5 class="number">{{ $jumlah_selesai }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card top_counter">
+                            <div class="body">
+                                <div class="icon text-warning"><i class="fa fa-tags"></i> </div>
+                                <div class="content">
+                                    <div class="text">Ditolak</div>
+                                    <h5 class="number">{{ $jumlah_ditolak }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <form action="{{ url('pengadaan') }}" method="get">
                     @if ($auth->hasrole('superadmin|eselon4'))
                         <a href="{{ url('pengadaan/create') }}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>

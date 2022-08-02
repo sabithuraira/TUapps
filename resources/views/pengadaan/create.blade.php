@@ -21,8 +21,7 @@
                             <p>{{ \Session::get('success') }}</p>
                         </div>
                     @endif
-                    <form method="post" class="frep" action="{{ url('pengadaan/store') }}"
-                        enctype="multipart/form-data">
+                    <form method="post" class="frep" action="{{ url('pengadaan/store') }}" enctype="multipart/form-data">
                         @csrf
                         @include('pengadaan._form')
                     </form>
@@ -57,16 +56,13 @@
     <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script> <!-- Select2 Js -->
+    <script src="{!! asset('js/jquery.mask.js') !!}"></script> <!-- Select2 Js -->
     <script>
         $(document).ready(function() {
-            // $('.time24').inputmask('hh:mm', {
-            //     placeholder: '__:__',
-            //     alias: 'time24',
-            //     hourFormat: '24'
-            // });
-            // $('.select2').select2();
-            // vm.setDatas();
 
+            $('.uang').mask('000.000.000.000.000', {
+                reverse: true
+            });
             $('.datepicker').datepicker({
                 // endDate: 'd',
             });

@@ -19,32 +19,33 @@ class CreatePengadaanTable extends Migration
             $table->string('kd_kab', 5);
             $table->string('judul');
             $table->string('kode_anggaran');
-            $table->string('nilai');
-            $table->string('waktu_pemakaian');
+            $table->bigInteger('nilai_anggaran');
+            $table->dateTime('waktu_pemakaian');
             $table->string('nota_dinas_skf');
-            $table->string('kak_skf');
             // ppk
             $table->string('konfirmasi_ppk')->nullable();
+            $table->text('spek')->nullable();
+            $table->string('spek_file')->nullable();
+            $table->bigInteger('perkiraan_nilai')->nullable();
             $table->string('lk_hps')->nullable();
             $table->string('hps')->nullable();
-            $table->text('spek')->nullable();
-            $table->string('nota_dinas_ppk')->nullable();
             $table->string('alokasi_anggaran')->nullable();
-            $table->dateTime('tgl_penolakan')->nullable();
-            $table->text('alasan_penolakan')->nullable();
+            $table->string('nota_dinas_ppk')->nullable();
+            $table->string('kak_ppk')->nullable();
+            $table->dateTime('tgl_penolakan_ppk')->nullable();
+            $table->text('alasan_penolakan_ppk')->nullable();
 
             //pbj
             $table->string('konfirmasi_pbj')->nullable();
-            $table->string('revisi_anggaran')->nullable();
-            $table->string('revisi_nilai')->nullable();
-            $table->string('tgl_mulai_pelaksanaan')->nullable();
-            $table->string('tgl_akhir_pelaksanaan')->nullable();
+            $table->bigInteger('nilai_kwitansi')->nullable();
+            $table->dateTime('tgl_mulai_pelaksanaan')->nullable();
+            $table->dateTime('tgl_akhir_pelaksanaan')->nullable();
+            $table->integer('status_pengadaan')->nullable();
             $table->string('foto')->nullable();
             $table->string('bast')->nullable();
-            $table->string('kwitansi')->nullable();
+            $table->string('kontrak')->nullable();
             $table->dateTime('tgl_penolakan_pbj')->nullable();
             $table->text('alasan_penolakan_pbj')->nullable();
-
 
             $table->integer('status_aktif')->default(1);
             $table->integer("created_by");

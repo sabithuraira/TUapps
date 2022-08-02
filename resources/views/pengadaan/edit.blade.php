@@ -57,22 +57,28 @@
     <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js') !!}"></script>
     <script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script> <!-- Select2 Js -->
+    <script src="{!! asset('js/jquery.mask.js') !!}"></script> <!-- Select2 Js -->
     <script>
         //
         // var konfirmasi_ppk = JSON.parse({{ json_encode($model->konfirmasi_ppk) }});
         var konfirmasi_ppk = @json($model->konfirmasi_ppk);
         var auth = @json($auth->getRoleNames());
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-                // endDate: 'd',
+            $('.uang').mask('000.000.000.000.000', {
+                reverse: true
             });
+            $('.datepicker').datepicker({});
             $('#skffield').attr("disabled", "disabled");
-
             var ppk = auth.includes("ppk") || auth.includes("superadmin")
             if (konfirmasi_ppk != "Diterima" && ppk) {
                 $('#ppkfield').removeAttr("disabled");
                 $('#konfirmasi_ppk').removeAttr("disabled");
-                $('#field_hps').css('background-color', 'white');
+                // $('#field_hps').css('background-color', 'white');
+                if ($('#perkiraan_nilai').val().replaceAll('.', '') > 9999999) {
+                    $('#lk_hps').removeAttr("disabled");
+                    $('#hps').removeAttr("disabled");
+                    $('#field_hps').css('background-color', 'white');
+                }
             }
             if (konfirmasi_ppk == "Ditolak") {
                 $("#ppkfield").attr("hidden", true);
@@ -87,11 +93,17 @@
                 $("#konfirmasi_pbj").removeAttr("disabled");
             }
 
-            if ($('#nilai').val() < 10000000) {
-                $('#lk_hps').attr("disabled", "disabled");
-                $('#hps').attr("disabled", "disabled");
-                $('#field_hps').css('background-color', '#e9ecef');
-            }
+            $('#perkiraan_nilai').on('keyup', function() {
+                if ($('#perkiraan_nilai').val().replaceAll('.', '') > 9999999) {
+                    $('#lk_hps').removeAttr("disabled");
+                    $('#hps').removeAttr("disabled");
+                    $('#field_hps').css('background-color', 'white');
+                } else {
+                    $('#lk_hps').attr("disabled", "disabled");
+                    $('#hps').attr("disabled", "disabled");
+                    $('#field_hps').css('background-color', '#e9ecef');
+                }
+            })
 
             if (konfirmasi_pbj == "Ditolak") {
                 $("#pbjfield").attr("hidden", true);
@@ -132,8 +144,22 @@
                 }
             })
 
+            cek_status_pengadaan();
+            $('#status_pengadaan').change(function() {
+                cek_status_pengadaan();
+            })
 
-
+            function cek_status_pengadaan() {
+                if ($('#status_pengadaan').prop('checked')) {
+                    $('#foto').removeAttr("disabled");
+                    $('#bast').removeAttr("disabled");
+                    $('#kontrak').removeAttr("disabled");
+                } else {
+                    $('#foto').attr("disabled", "disabled");
+                    $('#bast').attr("disabled", "disabled");
+                    $('#kontrak').attr("disabled", "disabled");
+                }
+            }
         });
     </script>
 @endsection

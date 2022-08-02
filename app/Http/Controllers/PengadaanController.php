@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class PengadaanController extends Controller
 {
@@ -24,17 +25,25 @@ class PengadaanController extends Controller
             }
         }
 
-
+        $arr_where = [];
         if (strlen($request->get('month')) > 0) {
             $month = $request->get('month');
-            $arr_where[] = [\DB::raw('MONTH(created_at)'), '=', $month];
+            $arr_where[] = [DB::raw('MONTH(created_at)'), '=', $month];
         }
-
         if (strlen($request->get('year')) > 0) {
             $year = $request->get('year');
-            $arr_where[] = [\DB::raw('YEAR(created_at)'), '=', $year];
+            $arr_where[] = [DB::raw('YEAR(created_at)'), '=', $year];
         }
-        $datas = Pengadaan::orderBy('id', 'DESC')->paginate(15);
+        $datas = Pengadaan::orderBy('id', 'DESC')
+            ->whereYear('created_at', 'LIKE', '%' . $year . '%')
+            ->whereMonth('created_at', 'LIKE', '%' . $month . '%')
+            ->where('judul', 'LIKE', '%' . $keyword . '%')
+            // ->orwhere('kode_anggaran', 'LIKE', '%' . $keyword . '%')
+            ->paginate(15);
+
+        $jumlah_pengajuan = Pengadaan::count('*');
+        $jumlah_ditolak = Pengadaan::where('konfirmasi_ppk', 'Ditolak')->count('*');
+        $jumlah_selesai = Pengadaan::where('status_pengadaan', '1')->count('*');
         $datas->withPath('pengadaan');
         $datas->appends($request->all());
         $model = new Pengadaan();
@@ -46,7 +55,10 @@ class PengadaanController extends Controller
             'month',
             'year',
             'unit_kerja',
-            'auth'
+            'auth',
+            'jumlah_pengajuan',
+            'jumlah_ditolak',
+            'jumlah_selesai'
         ));
     }
 
@@ -68,32 +80,19 @@ class PengadaanController extends Controller
             'kd_kab' => $auth->kdkab,
             'judul' => $request->judul,
             'kode_anggaran' => $request->kode_anggaran,
-            'nilai' => $request->nilai,
+            'nilai_anggaran' =>  str_replace('.', '', $request->nilai_anggaran),
             'waktu_pemakaian' => date("Y-m-d", strtotime($request->get('waktu_pemakaian'))),
             'nota_dinas_skf' => 'input_file',
-            'kak_skf' => 'input_file',
-            'konfirmasi_ppk' => null,
-            'konfirmasi_pbj' => null,
-            'created_by' => $auth->id,
-            'updated_by' => $auth->id
+            'created_by' => $auth->id
         ]);
 
         if ($request->hasFile('nota_dinas_skf')) {
             $file = $request->file('nota_dinas_skf');
-            $name = $data->id . '_notadinasskf_' . str_replace(' ', '', $file->getClientOriginalName());
+            $name = $data->id . '_nota_dinas_skf_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $data->nota_dinas_skf = $name;
             $data->save();
         }
-
-        if ($request->hasFile('kak_skf')) {
-            $file = $request->file('kak_skf');
-            $name = $data->id . '_kak_skf_' . str_replace(' ', '', $file->getClientOriginalName());
-            $file->move('upload/pengadaan', $name);
-            $data->kak_skf = $name;
-            $data->save();
-        }
-
         return redirect('pengadaan')->with('success', 'Data berhasil diperbaharui');
     }
 
@@ -111,8 +110,7 @@ class PengadaanController extends Controller
     {
         $real_id = Crypt::decrypt($id);
         $model = Pengadaan::find($real_id);
-        // dd($request->all());
-        // dd($request->spek);
+        // ppk
         if ($request->konfirmasi_ppk) {
             $model->konfirmasi_ppk = $request->konfirmasi_ppk;
         }
@@ -120,30 +118,58 @@ class PengadaanController extends Controller
         if ($request->spek) {
             $model->spek = $request->spek;
         }
-        if ($request->alokasi_anggaran) {
-            $model->alokasi_anggaran = $request->alokasi_anggaran;
+
+        if ($request->hasFile('spek_file')) {
+            if ($model->spek_file) {
+                unlink('upload/pengadaan/' . $model->spek_file);
+            }
+            $file = $request->file('spek_file');
+            $name = $model->id . '_spek_file_' . str_replace(' ', '', $file->getClientOriginalName());
+            $file->move('upload/pengadaan', $name);
+            $model->spek_file = $name;
+        }
+
+        if ($request->perkiraan_nilai) {
+            $model->perkiraan_nilai =  str_replace('.', '', $request->perkiraan_nilai);
         }
 
         if ($request->hasFile('lk_hps')) {
+            if ($model->lk_hps) {
+                unlink('upload/pengadaan/' . $model->lk_hps);
+            }
             $file = $request->file('lk_hps');
-            $name = $model->id . 'lk_hps' . str_replace(' ', '', $file->getClientOriginalName());
+            $name = $model->id . '_lk_hps_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $model->lk_hps = $name;
         }
 
         if ($request->hasFile('hps')) {
+            if ($model->hps) {
+                unlink('upload/pengadaan/' . $model->hps);
+            }
             $file = $request->file('hps');
-            $name = $model->id . 'hps' . str_replace(' ', '', $file->getClientOriginalName());
+            $name = $model->id . '_hps_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $model->hps = $name;
         }
+
+        if ($request->alokasi_anggaran) {
+            $model->alokasi_anggaran = $request->alokasi_anggaran;
+        }
+
         if ($request->hasFile('nota_dinas_ppk')) {
+            if ($model->nota_dinas_ppk) {
+                unlink('upload/pengadaan/' . $model->nota_dinas_ppk);
+            }
             $file = $request->file('nota_dinas_ppk');
             $name = $model->id . '_nota_dinas_ppk_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $model->nota_dinas_ppk = $name;
         }
         if ($request->hasFile('kak_ppk')) {
+            if ($model->kak_ppk) {
+                unlink('upload/pengadaan/' . $model->kak_ppk);
+            }
             $file = $request->file('kak_ppk');
             $name = $model->id . '_kak_ppk_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
@@ -160,34 +186,56 @@ class PengadaanController extends Controller
         if ($request->konfirmasi_pbj) {
             $model->konfirmasi_pbj = $request->konfirmasi_pbj;
         }
-        if ($request->revisi_nilai) {
-            $model->revisi_nilai = $request->revisi_nilai;
+        if ($request->nilai_kwitansi) {
+            $model->nilai_kwitansi = $request->nilai_kwitansi;
         }
         if ($request->tgl_mulai_pelaksanaan) {
-            $model->tgl_mulai_pelaksanaan = $request->tgl_mulai_pelaksanaan;
+            $model->tgl_mulai_pelaksanaan = date("Y-m-d", strtotime($request->get('tgl_mulai_pelaksanaan')));
         }
         if ($request->tgl_akhir_pelaksanaan) {
-            $model->tgl_akhir_pelaksanaan = $request->tgl_akhir_pelaksanaan;
+            $model->tgl_akhir_pelaksanaan =  date("Y-m-d", strtotime($request->get('tgl_akhir_pelaksanaan')));
+        }
+        if ($request->status_pengadaan) {
+            $model->status_pengadaan = $request->status_pengadaan;
+        } else {
+            $model->status_pengadaan = "0";
         }
         if ($request->hasFile('foto')) {
+            if ($model->foto) {
+                unlink('upload/pengadaan/' . $model->foto);
+            }
             $file = $request->file('foto');
             $name = $model->id . '_foto_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $model->foto = $name;
         }
         if ($request->hasFile('bast')) {
+            if ($model->bast) {
+                unlink('upload/pengadaan/' . $model->bast);
+            }
             $file = $request->file('bast');
             $name = $model->id . '_bast_' . str_replace(' ', '', $file->getClientOriginalName());
             $file->move('upload/pengadaan', $name);
             $model->bast = $name;
         }
+        if ($request->hasFile('kontrak')) {
+            if ($model->kontrak) {
+                unlink('upload/pengadaan/' . $model->kontrak);
+            }
+            $file = $request->file('kontrak');
+            $name = $model->id . '_kontrak_' . str_replace(' ', '', $file->getClientOriginalName());
+            $file->move('upload/pengadaan', $name);
+            $model->bast = $name;
+        }
 
         if ($request->tgl_penolakan_pbj) {
-            $model->tgl_penolakan_pbj = $request->tgl_penolakan_pbj;
+            $model->tgl_penolakan_pbj =  date("Y-m-d", strtotime($request->get('tgl_penolakan_pbj')));
         }
         if ($request->alasan_penolakan_pbj) {
             $model->alasan_penolakan_pbj = $request->alasan_penolakan_pbj;
         }
+
+        $model->updated_by = Auth::user()->id;
 
         $rows = $model->save();
         if ($rows > 0) {

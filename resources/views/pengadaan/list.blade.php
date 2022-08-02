@@ -24,35 +24,40 @@
                         <td class="text-center">
                             {{ ++$key }}
                         </td>
-                        <td class="text-ceter">
-                            {{ $data->kode_anggaran }}
+                        <td class="text-center">
+                            <u>{{ $data->kode_anggaran }}</u> <br>
+                            {{ $data->user->name }}
                         </td>
                         <td class="text-center">
                             {{ $data->judul }}
                         </td>
-
-                        <td class="text-center">
-                            Rp {{ $data->nilai }}
+                        <td class="text-center uang">
+                            Rp {{ $data->nilai_anggaran }}
                         </td>
                         @if ($data->status_aktif == 1)
                             <td class="text-center">
-                                {!! $data->badge_konf_ppk($data->konfirmasi_ppk) !!}<br />
-
+                                {!! $data->badge_konf_ppk($data->konfirmasi_ppk) !!}
                             </td>
                             <td class="text-center">
                                 @if ($data->konfirmasi_ppk == 'Ditolak')
                                 @else
-                                    {!! $data->badge_konf_pbj($data->konfirmasi_pbj) !!}<br />
+                                    @if ($data->status_pengadaan == '1')
+                                        {!! $data->badge_konf_pbj('Selesai') !!}<br />
+                                    @else
+                                        {!! $data->badge_konf_pbj($data->konfirmasi_pbj) !!}<br />
+                                        {{ $data->tgl_akhir_pelaksanaan }}
+                                    @endif
                                 @endif
-
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="#" role="button" data-toggle="modal" v-on:click="sendId"
-                                        data-id="{{ Crypt::encrypt($data['id']) }}" data-target="#set_aktif">
-                                        <i class="icon-trash text-danger"></i>
-                                        <p class='text-danger small'>Batalkan</p>
-                                    </a>
+                                    @hasanyrole(['superadmin|ppk|pbj'])
+                                        <a href="#" role="button" data-toggle="modal" v-on:click="sendId"
+                                            data-id="{{ Crypt::encrypt($data['id']) }}" data-target="#set_aktif">
+                                            <i class="icon-trash text-danger"></i>
+                                            <p class='text-danger small'>Batalkan</p>
+                                        </a>
+                                    @endhasanyrole
                                     &nbsp;
                                     <a href="{{ url('pengadaan/edit/' . Crypt::encrypt($data['id'])) }}">
                                         <i class="icon-pencil text-primary"></i>
@@ -161,5 +166,11 @@
                 },
             }
         });
+
+        $(document).ready(function() {
+            $('.uang').mask('000.000.000.000.000', {
+                reverse: true
+            });
+        })
     </script>
 @endsection
