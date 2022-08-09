@@ -4,10 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Scopes\PegawaiScope;
 
 class UserModel extends Model
 {
     protected $table = 'users';
+
+    protected static function boot(){
+        parent::boot();
+        static::addGlobalScope(new PegawaiScope);
+    }
 
     public function getListPangkatAttribute(){
         return array(

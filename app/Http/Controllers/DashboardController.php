@@ -14,6 +14,11 @@ class DashboardController extends Controller
         $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
         $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
 
+        return view('dashboard.index',compact(
+            'random_user', 'unit_kerja', 'dl_per_uk'));
+    }
+
+    public function lfsp2020(Request $request){
         //////////////
         $label = 'prov';
 
@@ -100,7 +105,7 @@ class DashboardController extends Controller
 
         $labels = [];
         $persens = [];
-        
+
         $labels_c2 = [];
         $persens_c2 = [];
 
@@ -115,7 +120,7 @@ class DashboardController extends Controller
             
             $persens[] = $persen;
         }
-        
+
         foreach($datas_c2 as $key=>$data){
             $labels_c2[] = $data->nama;
             $persen = 100;
@@ -124,14 +129,9 @@ class DashboardController extends Controller
             
             $persens_c2[] = $persen;
         }
-
         /////////////
 
-        // return view('dashboard.index',compact(
-        //     'random_user', 'unit_kerja', 'dl_per_uk'));
-        
-        return view('dashboard.index',compact(
-            'random_user', 'unit_kerja', 'dl_per_uk', 
+        return view('dashboard.lfsp2020',compact(
             'model', 'datas', 'labels', 'persens', 
             'model_c2', 'datas_c2', 'labels_c2', 'persens_c2', 
             'kab', 'kec', 'desa', 'bs', 'label',

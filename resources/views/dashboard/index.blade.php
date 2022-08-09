@@ -10,10 +10,6 @@
 @section('content')
     <div class="container">
 
-        {{-- <div class="col-lg-12 col-md-12">
-        @include('dashboard.sp2020lf')
-    </div> --}}
-
         <div class="col-lg-12 col-md-12">
             <div class="row clearfix">
                 <div class="col-lg-6 col-md-12">

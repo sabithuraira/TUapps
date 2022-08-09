@@ -253,6 +253,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/rekap_dl', 'DashboardController@rekap_dl');
     Route::get('dashboard/{id}/profile', 'DashboardController@profile');
     Route::get('download_sp2020', 'HomeController@downloadSp2020');
+    Route::get('dashboard/lfsp2020', 'DashboardController@lfsp2020');
 });
 
 Auth::routes();

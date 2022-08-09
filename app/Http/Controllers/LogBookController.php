@@ -9,9 +9,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LogBookController extends Controller
 {
-    public function __construct(){
-        $this->middleware('auth');
-    }
+    // public function __construct(){
+    //     $this->middleware('auth');
+    // }
 
     public function downloadExcel($tanggal, $unit_kerja){
         return Excel::download(new \App\Exports\LogBookExport($tanggal, $unit_kerja), 'log_book.xlsx');
@@ -137,6 +137,7 @@ class LogBookController extends Controller
                                 ['kdesl', '=', 2]
                             ])
                             ->orWhere([
+                                ['kdesl', '=', 3],
                                 ['kdorg', '=', 92100],
                             ])
                             ->orderBy('kdorg', 'ASC')->get();

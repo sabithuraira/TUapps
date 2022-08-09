@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
+use App\Scopes\PegawaiScope;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected static function boot(){
+        parent::boot();
+        static::addGlobalScope(new PegawaiScope);
+    }
 
     public function getFotoUrlAttribute(){
         $nip_id = substr($this->email, -5);

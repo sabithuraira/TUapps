@@ -35,10 +35,20 @@
                             </ul>
                         </li>
                         <li>#KaloBukanKitaSiapaLagi</li>
-                        <li>
-                            <a href="{{ url('hai') }}">
-                                <img src="{!! asset('lucid/assets/images/logo_sp2020.png') !!}" alt="SP2020 Logo" style="width:70px" class="img-responsive logo">
-                            </a>   
+
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                <i class="icon-target"></i>
+                            </a>
+                            <ul class="dropdown-menu notifications">
+                                <li>
+                                    <a href="{{ url('hai') }}"> <i class="icon-doc"></i> <span>SP 2020</span></a>
+                                </li> 
+                                
+                                <li>
+                                    <a href="{{ url('dashboard/lfsp2020') }}"> <i class="icon-doc"></i> <span>Long Form SP 2020</span></a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="https://www.youtube.com/channel/UC-9WQN-5cNTVTGDF8Rkiu6A" class="icon-menu"><i class="fa fa-youtube-play"></i></a>

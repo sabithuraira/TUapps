@@ -8,9 +8,9 @@ use PDF;
 
 class CkpController extends Controller
 {
-    public function __construct(){
-        $this->middleware('auth');
-    }
+    // public function __construct(){
+    //     $this->middleware('auth');
+    // }
 
     // public function print($id){
     //     $model= \App\Sppk::find($id);

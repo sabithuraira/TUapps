@@ -11,13 +11,11 @@ class SuratTugasRincian extends Model
 	protected $table = 'surat_tugas_rincian';
 	protected $appends = ["kategori_petugas"];
     
-    public function SuratIndukRel()
-    {
+    public function SuratIndukRel(){
         return $this->hasOne('App\SuratTugas', 'id', 'id_surtug');
     }
 
-    public function attributes()
-    {
+    public function attributes(){
         return (new \App\Http\Requests\SuratTugasRincianRequest())->attributes();
 	}
 	
@@ -146,7 +144,7 @@ class SuratTugasRincian extends Model
 						AND surat_tugas.sumber_anggaran <> 3  
 						AND surat_tugas.jenis_st IN(2,5)  
 				) AS str ON str.nip=users.nip_baru
-			WHERE kdkab='" . $uk . "' 
+			WHERE kdkab='" . $uk . "' AND LENGTH(users.nip_baru)=18 
 			GROUP BY nip_baru, users.kdorg, name, users.id
 				ORDER BY users.kdorg, users.id
 			) AS CA";
@@ -167,7 +165,7 @@ class SuratTugasRincian extends Model
 							AND surat_tugas.sumber_anggaran <> 3  
 							AND surat_tugas.jenis_st IN(2,3,5)  
 					) AS str ON str.nip=users.nip_baru
-				WHERE kdkab='" . $uk . "' 
+				WHERE kdkab='" . $uk . "'  AND LENGTH(users.nip_baru)=18
 				GROUP BY nip_baru, users.kdorg, name, users.id
 					ORDER BY users.kdorg, users.id
 				) AS CA";
