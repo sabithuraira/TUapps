@@ -45,10 +45,11 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card top_counter">
                             <div class="body">
-                                <div class="icon text-warning"><i class="fa fa-tags"></i> </div>
+                                <div class="icon text-danger"><i class="fa fa-frown-o"></i> </div>
                                 <div class="content">
                                     <div class="text">Ditolak</div>
-                                    <h5 class="number">{{ $jumlah_ditolak }}</h5>
+                                    <h5 class="number" style="font-size: 1rem">{{ $jumlah_ditolak_ppk }} PPK,
+                                        {{ $jumlah_ditolak_pbj }} PBJ</h5>
                                 </div>
 
                             </div>

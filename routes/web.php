@@ -161,7 +161,7 @@ Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
 
 
 Route::group(
-    ['middleware' => ['role:superadmin|eselon4']],
+    ['middleware' => ['role:superadmin|skf|pbj|ppk']],
     function () {
         Route::get('pengadaan', 'PengadaanController@index');
         Route::get('pengadaan/create', 'PengadaanController@create');

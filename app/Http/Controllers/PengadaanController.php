@@ -42,7 +42,8 @@ class PengadaanController extends Controller
             ->paginate(15);
 
         $jumlah_pengajuan = Pengadaan::count('*');
-        $jumlah_ditolak = Pengadaan::where('konfirmasi_ppk', 'Ditolak')->count('*');
+        $jumlah_ditolak_ppk = Pengadaan::where('konfirmasi_ppk', 'Ditolak')->count('*');
+        $jumlah_ditolak_pbj = Pengadaan::where('konfirmasi_pbj', 'Ditolak')->count('*');
         $jumlah_selesai = Pengadaan::where('status_pengadaan', '1')->count('*');
         $datas->withPath('pengadaan');
         $datas->appends($request->all());
@@ -57,7 +58,8 @@ class PengadaanController extends Controller
             'unit_kerja',
             'auth',
             'jumlah_pengajuan',
-            'jumlah_ditolak',
+            'jumlah_ditolak_ppk',
+            'jumlah_ditolak_pbj',
             'jumlah_selesai'
         ));
     }

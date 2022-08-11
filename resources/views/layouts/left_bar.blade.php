@@ -51,8 +51,7 @@
                     class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || request()->is('skp*') || request()->is('iki*') ? 'active' : '' }}">
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Pengukuran Kinerja</span></a>
                     <ul>
-                        <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a
-                                href="{{ url('ckp') }}">CKP</a>
+                        <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{ url('ckp') }}">CKP</a>
 
 
                         <li class="{{ request()->is('pegawai_anda*') ? 'active' : '' }}">
@@ -143,8 +142,8 @@
                         <ul>
                             <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
                                     href="{{ url('surat_tugas') }}">Daftar Surat Tugas</a></li>
-                            <li class="{{ request()->is('cuti*') ? 'active' : '' }}"><a
-                                    href="{{ url('cuti') }}">Daftar Cuti</a></li>
+                            <li class="{{ request()->is('cuti*') ? 'active' : '' }}"><a href="{{ url('cuti') }}">Daftar
+                                    Cuti</a></li>
                             <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
                                     href="{{ url('surat_tugas') }}">Calender</a></li>
                             <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a
@@ -155,20 +154,13 @@
                     </li>
                 @endhasanyrole
 
-                @hasanyrole('superadmin|eselon4')
+                @hasanyrole('superadmin|skf|pbj|ppk')
                     <li class="{{ request()->is('pengadaan*') ? 'active' : '' }}">
                         <a href="#Jadwal" class="has-arrow"><i class="icon-social-dropbox"></i> <span>Pengajuan
                                 Pengadaan</span></a>
                         <ul>
                             <li class="{{ request()->is('pengadaan') ? 'active' : '' }}"><a
                                     href="{{ url('pengadaan') }}">Pengajuan SKF</a></li>
-
-                            {{-- <li class="{{ request()->is('pengadaan/ppk') ? 'active' : '' }}"><a
-                                    href="{{ url('pengadaan/ppk') }}">Konfirmasi PPK</a></li>
-
-                            <li class="{{ request()->is('pengadaan/pbj') ? 'active' : '' }}"><a
-                                    href="{{ url('pengadaan/pbj') }}">PBJ</a></li> --}}
-
                         </ul>
                     </li>
                 @endhasanyrole
@@ -229,11 +221,9 @@
                         <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master
                                 Data</span></a>
                         <ul>
-                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a
-                                    href="{{ url('uker') }}">Unit
+                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
-                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
-                                    href="{{ url('uker4') }}">Unit
+                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{ url('uker4') }}">Unit
                                     Kerja 4</a></li>
                             <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a
                                     href="{{ url('angka_kredit') }}">Angka Kredit</a></li>
