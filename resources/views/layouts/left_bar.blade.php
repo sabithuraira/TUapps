@@ -199,7 +199,6 @@
                     @endhasanyrole
                 @endif
 
-
                 <li class="{{ request()->is('meeting*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-users"></i>
                         <span>Rapat/Pertemuan</span></a>
@@ -215,11 +214,16 @@
                     <a href="{{ url('surat_km') }}"> <i class="icon-doc"></i><span>Surat Menyurat</span></a>
                 </li>
 
+                @hasanyrole('superadmin|kepegawaian')
+                <li class="{{ request()->is('user*') ? 'active' : '' }}">
+                    <a href="{{ url('user') }}"> <i class="icon-users"></i><span>Kelola User</span></a>
+                </li>
+                @endhasanyrole
+
                 @role('superadmin')
                     <li
-                        class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') || request()->is('user*') ? 'active' : '' }}">
-                        <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master
-                                Data</span></a>
+                        class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') ? 'active' : '' }}">
+                        <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                         <ul>
                             <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
                                     Kerja</a></li>

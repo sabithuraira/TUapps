@@ -119,12 +119,12 @@ class Authenticate extends Middleware
         }
     }
 
-    protected function attemptLogin($params)
-    {
-        return $this->guard()->attempt(
-            $params, true
-        );
-    }
+    // protected function attemptLogin($params)
+    // {
+    //     return $this->guard()->attempt(
+    //         $params, true
+    //     );
+    // }
 
     // protected function credentials(Request $request)
     // {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -11,12 +12,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
-        $datas = \App\User::where('name', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('email', 'LIKE', '%' . $keyword . '%')
-            ->paginate();
+
+        if(Auth::user()->kdkab!='00'){
+            $datas = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
+                ->where(
+                    (function ($query) use ($keyword) {
+                        $query->where('name', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+                    })
+                )->paginate();
+        }
+        else{
+            $datas = \App\UserModel::where('name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+                ->paginate();
+        }
 
         $datas->withPath('user');
         $datas->appends($request->all());
@@ -66,9 +78,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){
+        $model = \App\UserModel::find($id);
+
+        $list_pegawai = \App\UserModel::where([
+                ['id', '<>', 1],
+                ['kdkab', '=', Auth::user()->kdkab]
+            ])
+            ->orWhere([['kdesl', '=', 2],])
+            ->orderBy('name', 'ASC')->get();
+
+        return view('user.edit',compact('model','id', 
+            'list_pegawai'));
     }
 
     /**
@@ -78,9 +99,24 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('user/edit',$id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
+        $model= \App\UserModel::find($id);
+        $pimpinan = \App\UserModel::find($request->pimpinan_id);
+        if($pimpinan!=null){
+            $model->pimpinan_id    = $pimpinan->id;
+            $model->pimpinan_nik    = $pimpinan->nip_baru;
+            $model->pimpinan_nama    = $pimpinan->name;
+            $model->pimpinan_jabatan    = $pimpinan->nmjab;
+            $model->save();
+        }
+
+        return redirect('user');
     }
 
     /**

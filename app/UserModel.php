@@ -10,10 +10,10 @@ class UserModel extends Model
 {
     protected $table = 'users';
 
-    protected static function boot(){
-        parent::boot();
-        static::addGlobalScope(new PegawaiScope);
-    }
+    // protected static function boot(){
+    //     parent::boot();
+    //     static::addGlobalScope(new PegawaiScope);
+    // }
 
     public function getListPangkatAttribute(){
         return array(
@@ -158,5 +158,11 @@ class UserModel extends Model
         }
         // $headers=get_headers($url);
         // return stripos($headers[0],"200 OK")?true:false;
+    }
+
+    public function getPimpinanAttribute(){
+        $bos = $this::find($this->pimpinan_id);
+        if($bos==null) $bos = new UserModel;
+        return $bos;
     }
 }

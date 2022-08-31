@@ -20,7 +20,6 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('type_kredit', 'TypeKreditController');
     Route::resource('rincian_kredit', 'RincianKreditController');
     Route::resource('angka_kredit', 'AngkaKreditController');
-    Route::resource('user', 'UserController');
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
@@ -59,6 +58,8 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::get('ckp/pemantau_ckp', 'CkpController@pemantau_ckp');
     Route::get('ckp/rekap_ckp', 'CkpController@rekap_ckp');
     Route::post('ckp/data_rekap_ckp', 'CkpController@data_rekap_ckp');
+
+    Route::resource('user', 'UserController')->except(['show']);
 
     Route::resource('jabatan_fungsional', 'JabatanFungsionalController');
     Route::post('jabatan_fungsional/tambah_jabatan', 'JabatanFungsionalController@tambah_jabatan');

@@ -10,23 +10,19 @@ class SuratTugas extends Model
 {
     protected $table = 'surat_tugas';
 
-    public function attributes()
-    {
+    public function attributes(){
         return (new \App\Http\Requests\SuratTugasRequest())->attributes();
     }
 
-    public function unitKerja()
-    {
+    public function unitKerja(){
         return $this->belongsTo('App\UnitKerja', 'unit_kerja');
     }
 
-    public function MakRel()
-    {
+    public function MakRel(){
         return $this->hasOne('App\MataAnggaran', 'id', 'mak');
     }
     
-    public function getListJenisAttribute()
-    {
+    public function getListJenisAttribute(){
         return array(
             1 => 'Perjadin Organik Dalam Kota', 
             2 => 'Perjadin Organik Luar Kota', 
@@ -37,8 +33,7 @@ class SuratTugas extends Model
         );
     }
 
-    public function getListKategoriAttribute()
-    {
+    public function getListKategoriAttribute(){
         return array(
             1 => 'Biasa', 
             2 => 'Tim', 
