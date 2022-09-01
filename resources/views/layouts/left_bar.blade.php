@@ -38,12 +38,26 @@
                 </li>
 
 
-                <li class="{{ request()->is('rekap_dl*') ? 'active' : '' }}">
-                    <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
+                <li class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
+                    <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
                         <span>Operasionalisasi SDM</span></a>
                     <ul>
                         <li class="{{ request()->is('dashboard/rekap_dl*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/rekap_dl') }}">Kalender DL</a></li>
+
+                        <li class="{{ request()->is('cuti*') ? 'active' : '' }}"><a
+                                href="{{ url('surat_tugas') }}">Cuti</a></li>
+
+                        @hasanyrole('superadmin|tatausaha|subbag-keuangan')
+                            <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
+                                    href="{{ url('surat_tugas') }}">Daftar Surat Tugas</a></li>
+                            <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
+                                    href="{{ url('surat_tugas') }}">Calender</a></li>
+                            <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a
+                                    href="{{ url('surat_tugas/edit_unit_kerja') }}">Informasi Unit Kerja</a></li>
+                            <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a
+                                    href="{{ url('mata_anggaran/index') }}">MAK</a></li>
+                        @endhasanyrole
                     </ul>
                 </li>
 
@@ -134,25 +148,6 @@
 
                     </ul>
                 </li>
-
-                @hasanyrole('superadmin|tatausaha|subbag-keuangan')
-                    <li class="{{ request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">
-                        <a href="#Jadwal" class="has-arrow"><i class="icon-doc"></i> <span>Surat Tugas &
-                                Cuti</span></a>
-                        <ul>
-                            <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
-                                    href="{{ url('surat_tugas') }}">Daftar Surat Tugas</a></li>
-                            <li class="{{ request()->is('cuti*') ? 'active' : '' }}"><a href="{{ url('cuti') }}">Daftar
-                                    Cuti</a></li>
-                            <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
-                                    href="{{ url('surat_tugas') }}">Calender</a></li>
-                            <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a
-                                    href="{{ url('surat_tugas/edit_unit_kerja') }}">Informasi Unit Kerja</a></li>
-                            <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a
-                                    href="{{ url('mata_anggaran/index') }}">MAK</a></li>
-                        </ul>
-                    </li>
-                @endhasanyrole
 
                 @hasanyrole('superadmin|skf|pbj|ppk')
                     <li class="{{ request()->is('pengadaan*') ? 'active' : '' }}">
