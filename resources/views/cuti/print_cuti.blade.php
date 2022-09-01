@@ -75,24 +75,23 @@
             <tr>
                 <td>Kepada Yth: </td>
             </tr>
-            @if($user->kd_kab=='00')
-            <tr>
-                <td>Kepala Bagian...</td>
-            </tr>
-            <tr>
-                <td>BPS Provinsi Sumatera Selatan</td>
-            </tr>
-            <tr>
-                <td>di Palembang</td>
-            </tr>
+            @if ($user->kd_kab == '00')
+                <tr>
+                    <td>Kepala Bagian...</td>
+                </tr>
+                <tr>
+                    <td>BPS Provinsi Sumatera Selatan</td>
+                </tr>
+                <tr>
+                    <td>di Palembang</td>
+                </tr>
             @else
-            <tr>
-                <td>Kepala BPS {{ $unit_kerja->nama }}</td>
-            </tr>
-            <tr>
-                <td>di {{ $unit_kerja->ibu_kota }}</td>
-            </tr>
-            
+                <tr>
+                    <td>Kepala BPS {{ $unit_kerja->nama }}</td>
+                </tr>
+                <tr>
+                    <td>di {{ $unit_kerja->ibu_kota }}</td>
+                </tr>
             @endif
         </table>
         <br>
@@ -103,21 +102,21 @@
             </tr>
             <tr>
                 <td width="10%">Nama</td>
-                <td width="40%">{{$model->nama}}</td>
+                <td width="40%">{{ $model->nama }}</td>
                 <td width="12%">NIP</td>
-                <td>{{$model->nip}}</td>
+                <td>{{ $model->nip }}</td>
             </tr>
             <tr>
                 <td>Jabatan</td>
-                <td>{{$model->jabatan}}</td>
+                <td>{{ $model->jabatan }}</td>
                 <td>Masa Kerja</td>
-                <td>{{$model->masa_kerja}}</td>
+                <td>{{ $model->masa_kerja }}</td>
             </tr>
             <tr>
                 <td>Unit Kerja</td>
                 <td colspan="3">
                     {{-- {{ substr($model->unit_kerja, 2, 2) }} --}}
-                    BPS {{ config('app.unit_kerjas')[ substr($model->unit_kerja, 2, 2) ] }}
+                    BPS {{ config('app.unit_kerjas')[substr($model->unit_kerja, 2, 2)] }}
                 </td>
             </tr>
         </table>
@@ -128,21 +127,45 @@
             </tr>
             <tr>
                 <td>1. Cuti Tahunan</td>
-                <td width="10%" class="text-center">@if($model->jenis_cuti == 'Cuti Tahunan') V @endif</td>
+                <td width="10%" class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti Tahunan')
+                        V
+                    @endif
+                </td>
                 <td>2. Cuti Besar</td>
-                <td width="10%" class="text-center">@if($model->jenis_cuti == 'Cuti Besar') &#10004; @endif </td>
+                <td width="10%" class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti Besar')
+                        &#10004;
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>3. Cuti Sakit</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Sakit') V @endif</td>
+                <td class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti Sakit')
+                        V
+                    @endif
+                </td>
                 <td>4. Cuti Melahirkan</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Melahirkan') V @endif</td>
+                <td class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti Melahirkan')
+                        V
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>5. Cuti Karena Alasan Penting</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti Karena Alasan Penting') V @endif</td>
+                <td class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti Karena Alasan Penting')
+                        V
+                    @endif
+                </td>
                 <td>6. Cuti di Luar Tanggungan Negara</td>
-                <td class="text-center">@if($model->jenis_cuti == 'Cuti di Luar Tanggungan Negara') V @endif</td>
+                <td class="text-center">
+                    @if ($model->jenis_cuti == 'Cuti di Luar Tanggungan Negara')
+                        V
+                    @endif
+                </td>
             </tr>
         </table>
         <br>
@@ -152,7 +175,7 @@
             </tr>
             <tr>
                 <td>
-                    {{$model->alasan}}
+                    {{ $model->alasan }}
                     <br>
                     <br>
                 </td>
@@ -165,11 +188,12 @@
             </tr>
             <tr>
                 <td>Selama</td>
-                <td style="text-align: center"> {{$model->lama_cuti}} (hari)</td>
+                <td style="text-align: center"> {{ $model->lama_cuti_hari_kerja + $model->lama_cuti_hari_libur }} (hari)
+                </td>
                 <td style="text-align:center">mulai tanggal</td>
-                <td style="text-align: center"> {{$model->tanggal_mulai}}</td>
+                <td style="text-align: center"> {{ $model->tanggal_mulai }}</td>
                 <td style="width: 5%; text-align:center">s/d</td>
-                <td style="text-align: center"> {{$model->tanggal_selesai}}</td>
+                <td style="text-align: center"> {{ $model->tanggal_selesai }}</td>
             </tr>
         </table>
         <br>
@@ -180,35 +204,35 @@
             <tr>
                 <td colspan="3">1. Cuti Tahunan</td>
                 <td width="35%">2. Cuti Besar</td>
-                <td class="text-center" width="25%"> {{$catatan_cuti->cuti_besar}}</td>
+                <td class="text-center" width="25%"> {{ $catatan_cuti->cuti_besar }}</td>
             </tr>
             <tr>
                 <td class="text-center">Tahun</td>
                 <td style="text-align:center">Sisa</td>
                 <td style="text-align:center">Keterangan</td>
                 <td>3. Cuti Sakit</td>
-                <td class="text-center">{{$catatan_cuti->cuti_sakit}} </td>
+                <td class="text-center">{{ $catatan_cuti->cuti_sakit }} </td>
             </tr>
             <tr>
-                <td class="text-center">{{ date('Y')-1 }}</td>
-                <td class="text-center">{{$catatan_cuti->cuti_tahunan_sebelum}} </td>
-                <td class="text-center"> {{$catatan_cuti->keterangan_cuti_tahunan_sebelum}}</td>
+                <td class="text-center">{{ date('Y') - 1 }}</td>
+                <td class="text-center">{{ $catatan_cuti->cuti_tahunan_sebelum }} </td>
+                <td class="text-center"> {{ $catatan_cuti->keterangan_cuti_tahunan_sebelum }}</td>
                 <td>4. Cuti Melahirkan</td>
-                <td class="text-center"> {{$catatan_cuti->cuti_melahirkan}}</td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_melahirkan }}</td>
             </tr>
             <tr>
                 <td class="text-center">{{ date('Y') }}</td>
-                <td class="text-center"> {{$catatan_cuti->cuti_tahunan}}</td>
-                <td class="text-center">{{$catatan_cuti->keterangan_cuti_tahunan}} </td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_tahunan }}</td>
+                <td class="text-center">{{ $catatan_cuti->keterangan_cuti_tahunan }} </td>
                 <td>5. Cuti Karena Alasan Penting</td>
-                <td class="text-center"> {{$catatan_cuti->cuti_penting}}</td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_penting }}</td>
             </tr>
             <tr>
                 <td class="text-center">Total</td>
-                <td class="text-center"> {{$catatan_cuti->cuti_tahunan + $catatan_cuti->cuti_tahunan_sebelum}}</td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_tahunan + $catatan_cuti->cuti_tahunan_sebelum }}</td>
                 <td> </td>
                 <td>6. Cuti di Luar Tanggungan Negara</td>
-                <td class="text-center"> {{ $catatan_cuti->cuti_luar_tanggungan}} </td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_luar_tanggungan }} </td>
             </tr>
         </table>
         <br>
@@ -217,9 +241,9 @@
                 <td colspan="3">VI. ALAMAT SELAMA MENJALANKAN CUTI</td>
             </tr>
             <tr>
-                <td rowspan="2" style="vertical-align: topx">{{$model->alamat_cuti}} </td>
+                <td rowspan="2" style="vertical-align: topx">{{ $model->alamat_cuti }} </td>
                 <td width="15%" style="white-space: nowrap;">Telp/HP (Aktif)</td>
-                <td width="30%"> {{$model->no_telp}} </td>
+                <td width="30%"> {{ $model->no_telp }} </td>
             </tr>
             <tr>
 
@@ -227,9 +251,9 @@
                     <br>
                     <br>
                     <br>
-                    {{$model->nama}}
+                    {{ $model->nama }}
                     <br>
-                    NIP. {{$model->nip}}
+                    NIP. {{ $model->nip }}
                 </td>
             </tr>
         </table>
@@ -260,9 +284,9 @@
                     <br>
                     <br>
                     <br>
-                    {{$model->nama_atasan}}
+                    {{ $model->nama_atasan }}
                     <br>
-                    NIP. {{$model->nip_atasan}}
+                    NIP. {{ $model->nip_atasan }}
                 </td>
             </tr>
         </table>
@@ -293,9 +317,9 @@
                     <br>
                     <br>
                     <br>
-                    {{$model->nama_pejabat}}
+                    {{ $model->nama_pejabat }}
                     <br>
-                    NIP. {{$model->nip_pejabat}}
+                    NIP. {{ $model->nip_pejabat }}
                 </td>
             </tr>
         </table>

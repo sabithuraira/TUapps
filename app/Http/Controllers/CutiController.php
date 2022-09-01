@@ -112,7 +112,7 @@ class CutiController extends Controller
     public function store(CutiRequest $request)
     {
 
-        // var_dump($request->all());
+        // dd($request->all());
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)
@@ -159,12 +159,14 @@ class CutiController extends Controller
         $model->alamat_cuti = $request->get('alamat_cuti');
         $model->no_telp = $request->get('no_telp');
 
-        $model->nama_atasan =  $user->pimpinan->name;
-        $model->nip_atasan = $user->pimpinan->nip_baru;
+        // $model->nama_atasan =  $user->pimpinan->name;
+        // $model->nip_atasan = $user->pimpinan->nip_baru;
+        $model->nama_atasan = $request->get('nama_atasan');
+        $model->nip_atasan = $request->get('nip_atasan');
         $model->status_atasan = 0;
 
-        $model->nama_pejabat = $request->get('nama_pejabat');;
-        $model->nip_pejabat = $request->get('nip_pejabat');;
+        $model->nama_pejabat = $request->get('nama_pejabat');
+        $model->nip_pejabat = $request->get('nip_pejabat');
         $model->status_pejabat = 0;
         $model->created_by = Auth::id();
         $model->updated_by = Auth::id();
@@ -217,7 +219,6 @@ class CutiController extends Controller
         //
         $real_id = Crypt::decrypt($id);
         $model = \App\Cuti::find($real_id);
-        // var_dump($model);
         $model->jenis_cuti = $request->get('jenis_cuti');
         $model->alasan = $request->get('alasan_cuti');
 
@@ -304,7 +305,7 @@ class CutiController extends Controller
         $kodewil = $user->kdprop . $user->kdkab;
         $unit_kerja = UnitKerja::where('kode', $kodewil)->first();
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
-        setlocale (LC_TIME, 'id_ID');
+        setlocale(LC_TIME, 'id_ID');
 
         $pdf = PDF::loadView('cuti.print_cuti', compact(
             'real_id',
@@ -315,12 +316,13 @@ class CutiController extends Controller
         ))->setPaper('a4', 'potrait');
 
         $nama_file = 'cuti_' . $model->nama . '.pdf';
-        return view('cuti.print_cuti', compact(
-            'real_id',
-            'catatan_cuti',
-            'user',
-            'model',
-            'unit_kerja',
-        ));
+        return $pdf->download($nama_file);
+        // return view('cuti.print_cuti', compact(
+        //     'real_id',
+        //     'catatan_cuti',
+        //     'user',
+        //     'model',
+        //     'unit_kerja',
+        // ));
     }
 }

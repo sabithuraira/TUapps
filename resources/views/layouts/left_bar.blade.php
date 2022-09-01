@@ -38,7 +38,8 @@
                 </li>
 
 
-                <li class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
+                <li
+                    class="{{ request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
                         <span>Operasionalisasi SDM</span></a>
                     <ul>
@@ -46,7 +47,7 @@
                                 href="{{ url('dashboard/rekap_dl') }}">Kalender DL</a></li>
 
                         <li class="{{ request()->is('cuti*') ? 'active' : '' }}"><a
-                                href="{{ url('surat_tugas') }}">Cuti</a></li>
+                                href="{{ url('cuti') }}">Cuti</a></li>
 
                         @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                             <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
@@ -149,7 +150,7 @@
                     </ul>
                 </li>
 
-                @hasanyrole('superadmin|skf|pbj|ppk')
+                @hasanyrole('superadmin|skf|ppk|pbj')
                     <li class="{{ request()->is('pengadaan*') ? 'active' : '' }}">
                         <a href="#Jadwal" class="has-arrow"><i class="icon-social-dropbox"></i> <span>Pengajuan
                                 Pengadaan</span></a>
@@ -210,9 +211,9 @@
                 </li>
 
                 @hasanyrole('superadmin|kepegawaian')
-                <li class="{{ request()->is('user*') ? 'active' : '' }}">
-                    <a href="{{ url('user') }}"> <i class="icon-users"></i><span>Kelola User</span></a>
-                </li>
+                    <li class="{{ request()->is('user*') ? 'active' : '' }}">
+                        <a href="{{ url('user') }}"> <i class="icon-users"></i><span>Kelola User</span></a>
+                    </li>
                 @endhasanyrole
 
                 @role('superadmin')

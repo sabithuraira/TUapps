@@ -58,7 +58,7 @@
 
                 </div>
                 <form action="{{ url('pengadaan') }}" method="get">
-                    @if ($auth->hasrole('superadmin|eselon4'))
+                    @if ($auth->hasrole('superadmin|pbj|ppk|skf'))
                         <a href="{{ url('pengadaan/create') }}" class="'btn btn-info btn-sm"><i class='fa fa-plus'></i>
                             Ajukan Pengadaan</a>
                         <button hidden name="action" type="submit" value="1"></button>
