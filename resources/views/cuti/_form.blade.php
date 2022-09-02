@@ -69,7 +69,8 @@
                 Hari kerja
                 <input type="number" name="lama_cuti_hari_kerja"
                     class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_kerja') ? ' parsley-error' : '' }}"
-                    value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)">
+                    value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)"
+                    min="0">
                 @foreach ($errors->get('lama_cuti_hari_kerja') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -78,7 +79,7 @@
                 Hari Libur
                 <input type="number" name="lama_cuti_hari_libur"
                     class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_libur') ? ' parsley-error' : '' }}"
-                    value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}">
+                    value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}" min="0">
                 @foreach ($errors->get('lama_cuti_hari_libur') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach

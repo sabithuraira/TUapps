@@ -24,6 +24,7 @@ class CutiController extends Controller
     public function index(Request $request)
     {
         //
+        $auth = Auth::user();
         $keyword = $request->get('search');
         $month = '';
         $year = '';
@@ -72,6 +73,7 @@ class CutiController extends Controller
             $model = new \App\Cuti;
             // dd($datas);
             return view('cuti.index', compact(
+                'auth',
                 'datas',
                 'keyword',
                 'model',

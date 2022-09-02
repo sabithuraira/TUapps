@@ -137,6 +137,8 @@
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd',
             });
+
+            $('input[name="lama_cuti_hari_libur"]').val(0)
         });
     </script>
 @endsection

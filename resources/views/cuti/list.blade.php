@@ -37,28 +37,35 @@
                         <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_mulai'])) }}</td>
                         <td class="text-center">{{ date('d M Y', strtotime($data['tanggal_selesai'])) }}</td>
                         <td class="text-center">{{ $data['jenis_cuti'] }}</td>
-                        <td class="text-center">{{ $data['lama_cuti'] }}</td>
+                        <td class="text-center">{{ $data['lama_cuti_hari_kerja'] + $data['lam_cuti_hari_libur'] }}</td>
                         <td class="text-center">
                             {!! $data->listStatus[$data['status_atasan']] !!}<br />
-                            <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                                data-id="{{ Crypt::encrypt($data['id']) }}" data-status="{{ $data['status_atasan'] }}"
-                                data-nama_atasan="{{ $data['nama_atasan'] }}"
-                                data-nip_atasan="{{ $data['nip_atasan'] }}" data-target="#set_status_atasan">
-                                <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
-                            </a>
+                            @if ($auth->hasanyrole('kepegawaian|superadmin') || $auth->name == $data['nama_atasan'])
+                                <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
+                                    data-id="{{ Crypt::encrypt($data['id']) }}"
+                                    data-status="{{ $data['status_atasan'] }}"
+                                    data-nama_atasan="{{ $data['nama_atasan'] }}"
+                                    data-nip_atasan="{{ $data['nip_atasan'] }}" data-target="#set_status_atasan">
+                                    <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u>
+                                    </p>
+                                </a>
+                            @endif
                         </td>
                         <td class="text-center">
                             {!! $data->listStatus[$data['status_pejabat']] !!}<br />
-                            <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
-                                data-id="{{ Crypt::encrypt($data['id']) }}"
-                                data-status="{{ $data['status_pejabat'] }}"
-                                data-nama_pejabat="{{ $data['nama_pejabat'] }}"
-                                data-nip_pejabat="{{ $data['nip_pejabat'] }}"
-                                data-cuti_disetujui_pejabat="{{ $data['cuti_disetujui_pejabat'] }}"
-                                data-keterangan_pejabat="{{ $data['keterangan_pejabat'] }}"
-                                data-target="#set_status_pejabat">
-                                <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u></p>
-                            </a>
+                            @if ($auth->hasanyrole('kepegawaian|superadmin') || $auth->name == $data['nama_pejabat'])
+                                <a href="#" role="button" v-on:click="sendStId" data-toggle="modal"
+                                    data-id="{{ Crypt::encrypt($data['id']) }}"
+                                    data-status="{{ $data['status_pejabat'] }}"
+                                    data-nama_pejabat="{{ $data['nama_pejabat'] }}"
+                                    data-nip_pejabat="{{ $data['nip_pejabat'] }}"
+                                    data-cuti_disetujui_pejabat="{{ $data['cuti_disetujui_pejabat'] }}"
+                                    data-keterangan_pejabat="{{ $data['keterangan_pejabat'] }}"
+                                    data-target="#set_status_pejabat">
+                                    <p class='text-muted small'><i class="icon-arrow-up"></i> &nbsp; <u>Ubah Status</u>
+                                    </p>
+                                </a>
+                            @endif
                         </td>
                         <td class="text-center">
                             <a href="{{ action('CutiController@print_cuti', Crypt::encrypt($data['id'])) }}"><i
