@@ -37,9 +37,7 @@
                     </ul>
                 </li>
 
-
-                <li
-                    class="{{ request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">
+                <li class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
                         <span>Operasionalisasi SDM</span></a>
                     <ul>

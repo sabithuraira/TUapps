@@ -108,13 +108,6 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
 
-    //Cuti
-    Route::resource('cuti', 'CutiController')->except(['show']);
-    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
-    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
-    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
-    Route::get('cuti/{id}/delete', 'CutiController@destroy');
-
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
     Route::post('surat_tugas/calendar', 'SuratTugasController@calendar');
@@ -177,6 +170,13 @@ Route::group(
 );
 
 Route::group(['middleware' => 'auth'], function () {
+    //Cuti
+    Route::resource('cuti', 'CutiController')->except(['show']);
+    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
+    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
+    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
+    Route::get('cuti/{id}/delete', 'CutiController@destroy');
+
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
     Route::get('penugasan/rekap', 'PenugasanController@rekap');
