@@ -70,7 +70,7 @@ class User extends Authenticatable
                     else return $this->getBosRI();
                 }
             }
-            else if($this->kdstjab==2 && $this->kdgol>40){
+            else if($this->kdstjab==2 && $this->kdgol>40 && $this->kdkab='00'){
                 $bos = $this->getEselon2();
                 
                 if($bos!=null) return $bos;

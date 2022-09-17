@@ -186,19 +186,30 @@ var vm = new Vue({
             for(i=0;i<this.kegiatan_utama.length;++i){
                 // if(typeof this.kegiatan_utama[i].kualitas !== 'undefined' && this.kegiatan_utama[i].kualitas!=null && this.kegiatan_utama[i].kualitas!='') 
                 //     result+= parseInt(this.kegiatan_utama[i].kualitas);
-                result += parseFloat(this.nilaiRata2(
-                            this.kegiatan_utama[i].kecepatan,
-                            this.kegiatan_utama[i].ketepatan,
-                            this.kegiatan_utama[i].ketuntasan));
+                // result += parseFloat(this.nilaiRata2(
+                //             this.kegiatan_utama[i].kecepatan,
+                //             this.kegiatan_utama[i].ketepatan,
+                //             this.kegiatan_utama[i].ketuntasan));
+                if(this.kegiatan_utama[i].kualitas>0)
+                    result += parseFloat(this.kegiatan_utama[i].kualitas);
+                else 
+                    result += parseFloat(this.nilaiRata2(
+                                this.kegiatan_utama[i].kecepatan,
+                                this.kegiatan_utama[i].ketepatan,
+                                this.kegiatan_utama[i].ketuntasan));
             }
             
             for(i=0;i<this.kegiatan_tambahan.length;++i){
                 // if(typeof this.kegiatan_tambahan[i].kualitas !== 'undefined' && this.kegiatan_tambahan[i].kualitas!=null && this.kegiatan_tambahan[i].kualitas!='')
                 //     result+= parseInt(this.kegiatan_tambahan[i].kualitas);
-                result += parseFloat(this.nilaiRata2(
-                            this.kegiatan_tambahan[i].kecepatan,
-                            this.kegiatan_tambahan[i].ketepatan,
-                            this.kegiatan_tambahan[i].ketuntasan));
+                
+                if(this.kegiatan_tambahan[i].kualitas>0)
+                    result += parseFloat(this.kegiatan_tambahan[i].kualitas);
+                else
+                    result += parseFloat(this.nilaiRata2(
+                                this.kegiatan_tambahan[i].kecepatan,
+                                this.kegiatan_tambahan[i].ketepatan,
+                                this.kegiatan_tambahan[i].ketuntasan));
             }
 
             return parseFloat(result/(this.kegiatan_utama.length+this.kegiatan_tambahan.length)).toFixed(2);

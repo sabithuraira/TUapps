@@ -66,8 +66,8 @@
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                         <td class="text-center">@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
                         <td>
-                            @{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }} %
-                            <input type="hidden" :name="'u_kualitas'+data.id" :value="nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan)">
+                            @{{ data.kualitas }} %
+                            <input type="hidden" :name="'u_kualitas'+data.id" :value="data.kualitas">
                         </td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
@@ -83,8 +83,8 @@
                         <td class="text-center">@{{ data.realisasi_kuantitas }}</td>
                         <td class="text-center">@{{ ((data.realisasi_kuantitas/data.target_kuantitas)>1) ? 100 : (data.realisasi_kuantitas/data.target_kuantitas*100).toFixed(1) }}%</td>
                         <td>
-                            @{{ nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan) }} %
-                            <input type="hidden" :name="'t_kualitas'+data.id" :value="nilaiRata2(data.kecepatan,data.ketepatan,data.ketuntasan)">     
+                            @{{ data.kualitas }} %
+                            <input type="hidden" :name="'t_kualitas'+data.id" :value="data.kualitas">     
                         </td>
                         <td>@{{ data.kode_butir }}</td>
                         <td>@{{ data.angka_kredit }}</td>
@@ -92,14 +92,14 @@
 
                     <template>
                         <tr>
-                            <td colspan="5"><b>JUMLAH</b></td>
+                            <td colspan="6"><b>JUMLAH</b></td>
                             <td class="text-center">@{{ total_kuantitas }} %</td>
                             <td class="text-center">@{{ total_kualitas }} %</td>
                             <td colspan="9"></td>
                         </tr>
                         
                         <tr>
-                            <td colspan="5"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
+                            <td colspan="6"><b>CAPAIAN KINERJA PEGAWAI (CKP)</b></td>
                             <td class="text-center" colspan="2">@{{ ((Number(total_kuantitas)+Number(total_kualitas))/2).toFixed(2) }}</td>
                             <td colspan="9"></td>
                         </tr>
