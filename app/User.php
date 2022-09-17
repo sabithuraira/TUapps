@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
+use App\Scopes\PegawaiScope;
 
 class User extends Authenticatable
 {
@@ -33,6 +34,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    // protected static function boot(){
+    //     parent::boot();
+    //     static::addGlobalScope(new PegawaiScope);
+    // }
+
     public function getFotoUrlAttribute(){
         $nip_id = substr($this->email, -5);
         if(strlen($this->foto)>0){
@@ -58,68 +64,80 @@ class User extends Authenticatable
     }
 
     public function getPimpinanAttribute(){
-        if($this->kdstjab<4){
-            if($this->kdstjab==2 && $this->kdgol>32 && $this->kdgol<40){
-                $bos = $this->getEselon3();
+        $bos = $this::find($this->pimpinan_id);
+        if($bos==null) $bos = new UserModel;
+        return $bos;
+        // if($this->kdstjab<4){
+        //     if($this->kdstjab==2 && $this->kdgol>32 && $this->kdgol<40){
+        //         $bos = $this->getEselon3();
     
-                if($bos!=null) return $bos;
-                else{
-                    $bos = $this->getEselon2();
+        //         if($bos!=null) return $bos;
+        //         else{
+        //             $bos = $this->getEselon2();
                     
+<<<<<<< HEAD
                     if($bos!=null) return $bos;
                     else return $this->getBosRI();
                 }
             }
             else if($this->kdstjab==2 && $this->kdgol>40 && $this->kdkab='00'){
                 $bos = $this->getEselon2();
+=======
+        //             if($bos!=null) return $bos;
+        //             else return $this->getBosRI();
+        //         }
+        //     }
+        //     else if($this->kdstjab==2 && $this->kdgol>40){
+        //         $bos = $this->getEselon2();
+>>>>>>> 0d7aeb4276c715f38dead06ef01d4fc9b2287da1
                 
-                if($bos!=null) return $bos;
-                else return $this->getBosRI();
-            }
-            else{
-                $bos = $this::where([
-                    ['kdorg', '=', $this->kdorg],
-                    ['kdesl', '=', 4], 
-                    ['kdprop', '=', $this->kdprop], 
-                    ['kdkab', '=', $this->kdkab], 
-                ])->first();
+        //         if($bos!=null) return $bos;
+        //         else return $this->getBosRI();
+        //     }
+        //     else{
+        //         $bos = $this::where([
+        //             ['kdorg', '=', $this->kdorg],
+        //             ['kdesl', '=', 4], 
+        //             ['kdprop', '=', $this->kdprop], 
+        //             ['kdkab', '=', $this->kdkab], 
+        //         ])->first();
     
-                if($bos!=null) return $bos;
-                else{
-                    $bos = $this->getEselon3();
+        //         if($bos!=null) return $bos;
+        //         else{
+        //             $bos = $this->getEselon3();
     
-                    if($bos!=null) return $bos;
-                    else{
-                        $bos = $this->getEselon2();
+        //             if($bos!=null) return $bos;
+        //             else{
+        //                 $bos = $this->getEselon2();
                         
-                        if($bos!=null) return $bos;
-                        else return $this->getBosRI();
-                    }
-                }
-            }
-        }
-        else{
-            if($this->kdesl==4){
-                $bos = $this->getEselon3();
+        //                 if($bos!=null) return $bos;
+        //                 else return $this->getBosRI();
+        //             }
+        //         }
+        //     }
+        // }
+        // else{
+        //     if($this->kdesl==4){
+        //         $bos = $this->getEselon3();
 
-                if($bos!=null) return $bos;
-                else{
-                    $bos = $this->getEselon2();
+        //         if($bos!=null) return $bos;
+        //         else{
+        //             $bos = $this->getEselon2();
                     
-                    if($bos!=null) return $bos;
-                    else return $this->getBosRI();
-                }
-            }
-            else if($this->kdesl==3){
-                $bos = $this->getEselon2();
+        //             if($bos!=null) return $bos;
+        //             else return $this->getBosRI();
+        //         }
+        //     }
+        //     else if($this->kdesl==3){
+        //         $bos = $this->getEselon2();
                 
-                if($bos!=null) return $bos;
-                else return $this->getBosRI();
-            }
-            else if($this->kdesl==2){
-                return $this->getBosRI();
-            }
-        }
+        //         if($bos!=null) return $bos;
+        //         else return $this->getBosRI();
+        //     }
+        //     else if($this->kdesl==2){
+        //         return $this->getBosRI();
+        //     }
+        // }
     }
 
     function getEselon3(){
@@ -166,25 +184,25 @@ class User extends Authenticatable
             $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
         }
 
-        if($this->kdstjab==4){
-            if($this->kdesl==4){
+        // if($this->kdstjab==4){
+            // if($this->kdesl==4){
                 
-                $arr_where[] = ['kdorg', '=', $this->kdorg];
-                $arr_where[] = ['kdstjab', '<>', 4];
-                $arr_where[] = ['kdkab', '=',  $this->kdkab];
+            //     $arr_where[] = ['kdorg', '=', $this->kdorg];
+            //     $arr_where[] = ['kdstjab', '<>', 4];
+            //     $arr_where[] = ['kdkab', '=',  $this->kdkab];
 
-                $or_where[] = ['kdorg', '=', 92870];
-                $or_where[] = ['kdstjab', '<>', 4];
-                $or_where[] = ['kdkab', '=',  $this->kdkab];
+            //     $or_where[] = ['kdorg', '=', 92870];
+            //     $or_where[] = ['kdstjab', '<>', 4];
+            //     $or_where[] = ['kdkab', '=',  $this->kdkab];
 
-                $pegawai = $this::where($arr_where)
-                    ->orWhere(
-                        (function ($query) use ($or_where) {
-                            $query->where($or_where);
-                        })
-                    )->paginate();
-            }
-            else if($this->kdesl==3){
+            //     $pegawai = $this::where($arr_where)
+            //         ->orWhere(
+            //             (function ($query) use ($or_where) {
+            //                 $query->where($or_where);
+            //             })
+            //         )->paginate();
+            // }
+            if($this->kdesl==3){
                 if($this->kdkab=='00'){
                     $or_where1 = [];
                     $or_where2 = [];
@@ -202,6 +220,7 @@ class User extends Authenticatable
                                     ->orWhere($or_where2);
                             })
                         )
+                        ->orderBy('kdorg')
                         ->paginate();
                 }
                 else{
@@ -210,16 +229,21 @@ class User extends Authenticatable
                     $pegawai = $this::where($arr_where)->paginate();
                 }
             }
-            else{
+            else if($this->kdesl==2){
                 $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
-                $pegawai = $this::where($arr_where)->paginate();
+                $pegawai = $this::where($arr_where)->orderBy('kdorg')->paginate();
             }
-        }
-        else{
-            $pegawai = $this::where([
-                ['kdstjab', '=', '999'],
-            ])->paginate();
-        }
+            else{
+                $pegawai = $this::where([
+                    ['pimpinan_id', '=', $this->id],
+                ])->orderBy('kdorg')->paginate();
+            }
+        // }
+        // else{
+        //     $pegawai = $this::where([
+        //         ['kdstjab', '=', '999'],
+        //     ])->paginate();
+        // }
 
         if(Auth::user()->hasRole('superadmin')){
             $arr_where = [];
@@ -230,8 +254,9 @@ class User extends Authenticatable
                 $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
             }
             
-            $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
-            $pegawai = $this::where($arr_where)->paginate();
+            // $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
+            $pegawai = $this::where($arr_where)
+                            ->orderBy('kdorg')->paginate();
         }
 
         return $pegawai;
