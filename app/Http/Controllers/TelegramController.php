@@ -89,8 +89,7 @@ class TelegramController extends Controller
     //     return 1;
     // }
 
-    public function sp2020lf(Request $request)
-    {
+    public function sp2020lf(Request $request){
         $client = new \GuzzleHttp\Client();
         $update = json_decode($request->getContent());
         Log::info('info request:', ['isi'=>$update]);
@@ -325,6 +324,231 @@ class TelegramController extends Controller
 
         $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_LF')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
         $res = $client->get($API_message);
+
+        return 1;
+    }
+
+
+    public function regsosek(Request $request){
+        //////////////FOR PRODUCTION
+        $client = new \GuzzleHttp\Client();
+        $update = json_decode($request->getContent());
+        Log::info('info request:', ['isi'=>$update]);
+        $chatID = $update->message->chat->id;
+        $message = $update->message->text;
+        /////////////FOR TESTING
+        // $message = "KSK-0112-1601052001000100-120";
+        // $message = "VK-0002-1601052001000100-150-15-25-110-0";
+        
+        // $message = "VK-0012-1678080008000100-150-15-25-110-0";
+        // $message = "K-0012-1678080008000100-120-1-0";
+        // $message = "PML-0012-1678080008000100-120";
+        // $message = "KSK-0012-1678080008000100-120";
+
+        if(strtolower(str_replace(' ', '', $message))=='panduan'){
+            $pesan = urlencode("Kirim laporan progres REGSOSEK dengan format berikut: \n
+                <strong>PCL dari ketua SLS/Non SLS</strong>: VK-Kode PCL-IDSLS-Jumlah KK Verifikasi-Jumlah KK Sangat Miskin-Jumlah KK Miskin-Jumlah KK Tidak Miskin-Informasi apakah SLS/Non SLS berubah batas(jika berubah isi 1 jika tidak isi 0). Contoh: <pre>VK-0012-1678080008000100-150-15-25-110-0</pre> \n
+                <strong>PCL Lapangan</strong>: K-Kode Petugas-IDSLS-Jumlah KK Yang Selesai Di cacah-Jumlah NR-Keterangan Sudah Selesai atau belum (1 jika telah selesai, 0 jika belum). Contoh: <pre>K-0012-1678080008000100-120-1-0</pre> \n
+
+                <strong>PML</strong>: PML-Kode Petugas-IDSLS-Jumlah Dokumen K diterima. Contoh: <pre>PML-0012-1678080008000100-120</pre> \n
+                <strong>KOSEKA</strong>: KSK-Kode Petugas-IDSLS-Jumlah Dokumen K diterima. Contoh: <code>KSK-0012-1678080008000100-120</code>");
+        }
+        else{
+            $lower_msg = strtolower($message);
+            $rincian_msg = explode("-", $lower_msg);
+
+            if(count($rincian_msg)==8 || count($rincian_msg)==6 || count($rincian_msg)==4){
+                $msg_error = [];
+
+                $id_sls = str_replace(' ', '', $rincian_msg[2]);
+                if(count($rincian_msg)==4){
+                    // $message = "PML-0012-1678080008000100-120";
+                    // $message = "KSK-0012-1678080008000100-120";
+
+                    if(str_replace(' ', '', $rincian_msg[0])=="pml" || str_replace(' ', '', $rincian_msg[0])=="ksk"){
+                        $jumlah_diterima = str_replace(' ', '', $rincian_msg[3]);
+                        $id_sls = str_replace(' ', '', $rincian_msg[2]);
+                        $kode_petugas = str_replace(' ', '', $rincian_msg[1]);
+                        
+                        //cek numerik
+                        if(!is_numeric($jumlah_diterima)) $msg_error[] = "Isian 'Jumlah Dokumen K diterima' Harus Angka";
+                        if(strlen($id_sls)!=16)  $msg_error[] = "Format 'IDSLS' Salah. Pastikan jumlah karakter ID SLS/Non SLS 16 karakter";
+
+                        if(count($msg_error)>0){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            $kd_prov = substr($id_sls, 0,2);
+                            $kd_kab = substr($id_sls, 2,2);
+                            $kd_kec = substr($id_sls, 4,3);
+                            $kd_desa = substr($id_sls, 7,3);
+                            $kd_sls = substr($id_sls, 10,4);
+                            $kd_sub_sls = substr($id_sls, 14,2);
+
+                            $data = \App\RegsosekSls::where([
+                                ['kode_prov', '=', $kd_prov],
+                                ['kode_kab', '=', $kd_kab],
+                                ['kode_kec', '=', $kd_kec],
+                                ['kode_desa', '=', $kd_desa],
+                                ['id_sls', '=', $kd_sls],
+                                ['id_sub_sls', '=', $kd_sub_sls],
+                                ['status_sls', '=', 1],
+                                ])->first();
+                            
+                            if($data==null){
+                                $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                            }
+                             else{
+                                 if(str_replace(' ', '', $rincian_msg[0])=="pml"){
+                                    $data->j_keluarga_pml = $jumlah_diterima;
+                                    $data->kode_pml = $kode_petugas;
+                                 }
+                                 else if(str_replace(' ', '', $rincian_msg[0])=="ksk"){
+                                    $data->j_keluarga_koseka = $jumlah_diterima;
+                                    $data->kode_koseka = $kode_petugas;
+                                 }
+
+                                $data->save();
+                                $pesan = "Sukses.. data berhasil disimpan.";  
+                            }
+                        }
+                    }
+                    else{
+                        $pesan = "Format pesan kamu salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+                    }
+                }
+                else if(count($rincian_msg)==8){
+                    if(str_replace(' ', '', $rincian_msg[0])=="vk"){
+                        // $message = "VK-0012-1678080008000100-150-15-25-110-0";
+                        // <strong>VK-Kode PCL-IDSLS-Jumlah KK Verifikasi-Jumlah KK Sangat Miskin-Jumlah KK Miskin-Jumlah KK Tidak Miskin-Informasi apakah SLS/Non SLS berubah batas(jika berubah isi 1 jika tidak isi 0). Contoh: <pre>VK-0012-1678080008000100-150-15-25-110-0</pre> \n
+                        $kode_petugas = str_replace(' ', '', $rincian_msg[1]);
+                        $id_sls = str_replace(' ', '', $rincian_msg[2]);
+                        $jumlah_kk = str_replace(' ', '', $rincian_msg[3]);
+                        $jumlah_kk_sangat_miskin = str_replace(' ', '', $rincian_msg[4]);
+                        $jumlah_kk_miskin = str_replace(' ', '', $rincian_msg[5]);
+                        $jumlah_kk_tidak_miskin = str_replace(' ', '', $rincian_msg[6]);
+                        $is_sls_berubah = str_replace(' ', '', $rincian_msg[7]);
+                        
+                        //cek numerik
+                        if(!is_numeric($jumlah_kk)) $msg_error[] = "Isian 'Jumlah KK Verifikasi' Harus Angka";
+                        if(!is_numeric($jumlah_kk_sangat_miskin)) $msg_error[] = "Isian 'Jumlah KK Sangat Miskin' Harus Angka";
+                        if(!is_numeric($jumlah_kk_miskin)) $msg_error[] = "Isian 'Jumlah KK Miskin' Harus Angka";
+                        if(!is_numeric($jumlah_kk_tidak_miskin)) $msg_error[] = "Isian 'Jumlah KK Tidak Miskin' Harus Angka";
+                        if($is_sls_berubah!='0' && $is_sls_berubah!='1') $msg_error[] = "Isian 'Perubahan SLS' Harus 0 atau 1";
+                        if(strlen($id_sls)!=16)  $msg_error[] = "Format 'IDSLS' Salah. Pastikan jumlah karakter ID SLS/Non SLS 16 karakter";
+                        
+                        if(count($msg_error)==0){
+                            $total_kk = $jumlah_kk_sangat_miskin + $jumlah_kk_miskin + $jumlah_kk_tidak_miskin;
+                            if($total_kk!=$jumlah_kk)  $msg_error[] = "Jumlah KK harus sama dengan Jumlah KK sangat miskin + KK miskin + KK tidak miskin";
+                        }
+
+                        if(count($msg_error)>0){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            $kd_prov = substr($id_sls, 0,2);
+                            $kd_kab = substr($id_sls, 2,2);
+                            $kd_kec = substr($id_sls, 4,3);
+                            $kd_desa = substr($id_sls, 7,3);
+                            $kd_sls = substr($id_sls, 10,4);
+                            $kd_sub_sls = substr($id_sls, 14,2);
+
+                            $data = \App\RegsosekSls::where([
+                                ['kode_prov', '=', $kd_prov],
+                                ['kode_kab', '=', $kd_kab],
+                                ['kode_kec', '=', $kd_kec],
+                                ['kode_desa', '=', $kd_desa],
+                                ['id_sls', '=', $kd_sls],
+                                ['id_sub_sls', '=', $kd_sub_sls],
+                                ['status_sls', '=', 1],
+                                ])->first();
+                            
+                            if($data==null){
+                                $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                            }
+                             else{
+                                $data->j_keluarga_pengakuan = $jumlah_kk;
+                                $data->j_sangat_miskin = $jumlah_kk_sangat_miskin;
+                                $data->j_miskin = $jumlah_kk_miskin;
+                                $data->j_tidak_miskin = $jumlah_kk_tidak_miskin;
+                                $data->kode_pcl = $kode_petugas;
+                                $data->is_berubah_batas = $is_sls_berubah;
+                                $data->save();
+
+                                $pesan = "Sukses.. data berhasil disimpan.";  
+                            }
+                        }
+                    }
+                    else{
+                        $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                    }
+                } 
+                else if(count($rincian_msg)==6){
+                    if(str_replace(' ', '', $rincian_msg[0])=="k"){
+                        // $message = "K-0012-1678080008000100-120-1-0";
+                        // K-Kode Petugas-IDSLS-Jumlah KK Yang Selesai Di cacah-Jumlah NR-Keterangan Sudah Selesai atau belum (1 jika telah selesai, 0 jika belum)
+            
+                        $kode_petugas = str_replace(' ', '', $rincian_msg[1]);
+                        $id_sls = str_replace(' ', '', $rincian_msg[2]);
+                        $jumlah_kk = str_replace(' ', '', $rincian_msg[3]);
+                        $jumlah_nr = str_replace(' ', '', $rincian_msg[4]);
+                        $ket_selesai = str_replace(' ', '', $rincian_msg[5]);
+
+                        if(strlen($id_sls)!=16)  $msg_error[] = "Format 'IDSLS' Salah. Pastikan jumlah karakter ID SLS/Non SLS 16 karakter"; 
+                        if(!is_numeric($jumlah_kk)) $msg_error[] = "Isian 'Jumlah KK yang selesai dicacah' Harus Angka";
+                        if(!is_numeric($jumlah_nr)) $msg_error[] = "Isian 'Jumlah NR' Harus Angka";
+                        if($ket_selesai!='0' && $ket_selesai!='1') $msg_error[] = "Isian 'Keterangan sudah selesai atau belum' Harus 0 atau 1";
+
+                        ///
+                        if(count($msg_error)>0){
+                            $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
+                        }
+                        else{
+                            $kd_prov = substr($id_sls, 0,2);
+                            $kd_kab = substr($id_sls, 2,2);
+                            $kd_kec = substr($id_sls, 4,3);
+                            $kd_desa = substr($id_sls, 7,3);
+                            $kd_sls = substr($id_sls, 10,4);
+                            $kd_sub_sls = substr($id_sls, 14,2);
+
+                            $data = \App\RegsosekSls::where([
+                                ['kode_prov', '=', $kd_prov],
+                                ['kode_kab', '=', $kd_kab],
+                                ['kode_kec', '=', $kd_kec],
+                                ['kode_desa', '=', $kd_desa],
+                                ['id_sls', '=', $kd_sls],
+                                ['id_sub_sls', '=', $kd_sub_sls],
+                                ['status_sls', '=', 1],
+                                ])->first();
+                            
+                            if($data==null){
+                                $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                            }
+                             else{
+                                $data->j_keluarga_pcl = $jumlah_kk;
+                                $data->j_nr = $jumlah_nr;
+                                $data->kode_pcl = $kode_petugas;
+                                $data->status_selesai_pcl = $ket_selesai;
+                                $data->save();
+
+                                $pesan = "Sukses.. data berhasil disimpan.";  
+                            }
+                        }
+                        //
+                    }
+                    else{
+                        $pesan = "Format pesan anda salah. Balas pesan ini dengan 'panduan' untuk bantuan format yang benar";  
+                    }
+                }
+            }
+            else{
+                $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+            }
+        }
+
+        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_REGSOSEK')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
+        $res = $client->get($API_message);
+        // print_r($pesan);
 
         return 1;
     }
