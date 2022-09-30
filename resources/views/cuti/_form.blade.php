@@ -3,18 +3,16 @@
         <div class="col-md-6">
             <div class="form-group">
                 {{ $model->attributes()['nama'] }}
-                <select class="form-control {{($errors->first('id_user') ? ' parsley-error' : '')}}" name="id_user"
+                <select class="form-control {{ $errors->first('id_user') ? ' parsley-error' : '' }}" name="id_user"
                     id="id_user" @change="setPegawai($event)">
-                    @foreach ($list_pegawai as $key=>$value)
-                    <option value="{{$value['id']}}" @if($value['id']==old('id_user', $model->id_user))
-                        selected="selected"
-                        @endif>
-                        {{ $value['name'] }} - {{ $value['nip_baru'] }}
-                    </option>
+                    @foreach ($list_pegawai as $key => $value)
+                        <option value="{{ $value['id'] }}" @if ($value['id'] == old('id_user', $model->id_user)) selected="selected" @endif>
+                            {{ $value['name'] }} - {{ $value['nip_baru'] }}
+                        </option>
                     @endforeach
                 </select>
                 @foreach ($errors->get('nama') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
 
@@ -40,18 +38,17 @@
         <div class="col-md-6">
             <div class="form-group">
                 {{ $model->attributes()['jenis_cuti'] }}:
-                <select class="form-control {{($errors->first('jenis_cuti') ? ' parsley-error' : '')}}"
+                <select class="form-control {{ $errors->first('jenis_cuti') ? ' parsley-error' : '' }}"
                     name="jenis_cuti">
-                    @foreach ($model->listJenisCuti as $key=>$value)
-                    <option value="{{ $key }}" @if ($key==old('jenis_cuti', $model->jenis_cuti))
-                        selected="selected"
-                        @endif>
-                        {{ $value }}
-                    </option>
+                    @foreach ($model->listJenisCuti as $key => $value)
+                        <option value="{{ $key }}"
+                            @if ($key == old('jenis_cuti', $model->jenis_cuti)) selected="selected" @endif>
+                            {{ $value }}
+                        </option>
                     @endforeach
                 </select>
                 @foreach ($errors->get('jenis_cuti') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>
@@ -59,10 +56,9 @@
             <div class="form-group">
                 {{ $model->attributes()['alasan_cuti'] }}
                 <textarea name="alasan_cuti"
-                    class="form-control form-control-sm {{($errors->first('alasan_cuti') ? ' parsley-error' : '')}}"
-                    rows="3">{{ old('alasan_cuti', $model->alasan) }}</textarea>
+                    class="form-control form-control-sm {{ $errors->first('alasan_cuti') ? ' parsley-error' : '' }}" rows="3">{{ old('alasan_cuti', $model->alasan) }}</textarea>
                 @foreach ($errors->get('alasan_cuti') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>
@@ -72,19 +68,19 @@
             <div class="form-group">
                 Hari kerja
                 <input type="number" name="lama_cuti_hari_kerja"
-                    class="form-control form-control-sm {{($errors->first('lama_cuti_hari_kerja') ? ' parsley-error' : '')}}"
+                    class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_kerja') ? ' parsley-error' : '' }}"
                     value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)">
                 @foreach ($errors->get('lama_cuti_hari_kerja') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
             <div class="form-group">
                 Hari Libur
                 <input type="number" name="lama_cuti_hari_libur"
-                    class="form-control form-control-sm {{($errors->first('lama_cuti_hari_libur') ? ' parsley-error' : '')}}"
+                    class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_libur') ? ' parsley-error' : '' }}"
                     value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}">
                 @foreach ($errors->get('lama_cuti_hari_libur') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>
@@ -94,7 +90,7 @@
             <div class="form-group">{{ $model->attributes()['tanggal_mulai'] }}
                 <div class="input-group">
                     <input type="text"
-                        class="form-control datepicker form-control-sm {{($errors->first('tanggal_mulai') ? ' parsley-error' : '')}}"
+                        class="form-control datepicker form-control-sm {{ $errors->first('tanggal_mulai') ? ' parsley-error' : '' }}"
                         name="tanggal_mulai" autocomplete="off"
                         value="{{ old('tanggal_mulai', $model->tanggal_mulai) }}">
                     <div class="input-group-append">
@@ -102,14 +98,14 @@
                     </div>
                 </div>
                 @foreach ($errors->get('tanggal_mulai') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
             <div class="form-group">{{ $model->attributes()['tanggal_selesai'] }}
                 <div class="form-line">
                     <div class="input-group">
                         <input type="text"
-                            class="form-control datepicker form-control-sm {{($errors->first('tanggal_selesai') ? ' parsley-error' : '')}}"
+                            class="form-control datepicker form-control-sm {{ $errors->first('tanggal_selesai') ? ' parsley-error' : '' }}"
                             name="tanggal_selesai" autocomplete="off"
                             value="{{ old('tanggal_selesai', $model->tanggal_selesai) }}">
                         <div class="input-group-append">
@@ -118,7 +114,7 @@
                         </div>
                     </div>
                     @foreach ($errors->get('tanggal_selesai') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
+                        <p class="text-danger">{{ $msg }}</p>
                     @endforeach
                 </div>
             </div>
@@ -142,12 +138,37 @@
                     {{-- {{ $catatan_cuti = json_encode($catatan_cuti) }} --}}
                     <tr>
                         <td rowspan="2" class="text-left">Cuti Tahunan</td>
-                        <td>{{ date('Y')-1 }}</td>
+                        <td>{{ date('Y') - 1 }}</td>
+                        <td rowspan="3" class="text-left">Cuti Tahunan</td>
+                        <td>{{ date('Y') - 2 }}</td>
+                        <td>
+                            <input type="number" name="cuti_tahunan_sebelum_2" style="width: 100%"
+                                @isset($catatan_cuti->cuti_tahunan_sebelum_2)
+                                 value="{{ old('cuti_tahunan_sebelum_2', $catatan_cuti->cuti_tahunan_sebelum_2) }}"
+                                @else
+                                value="{{ old('cuti_tahunan_sebelum_2') }}"
+                                @endisset>
+                            @foreach ($errors->get('cuti_tahunan_sebelum_2') as $msg)
+                                <p class="text-danger">{{ $msg }}</p>
+                            @endforeach
+                        </td>
+                        <td>
+                            <input name="keterangan_cuti_tahunan_sebelum_2" style=" width: 100%"
+                                @isset($catatan_cuti->keterangan_cuti_tahunan_sebelum_2)
+                                value="{{ old('keterangan_cuti_tahunan_sebelum_2', $catatan_cuti->keterangan_cuti_tahunan_sebelum_2) }}"
+                            @else
+                            value="{{ old('keterangan_cuti_tahunan_sebelum_2') }}"
+                            @endisset>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>{{ date('Y') - 1 }}</td>
                         <td>
                             <input type="number" name="cuti_tahunan_sebelum" style="width: 100%"
                                 value="{{ old('cuti_tahunan_sebelum', $catatan_cuti->cuti_tahunan_sebelum) }}">
                             @foreach ($errors->get('cuti_tahunan_sebelum') as $msg)
-                            <p class="text-danger">{{ $msg }}</p>
+                                <p class="text-danger">{{ $msg }}</p>
                             @endforeach
                         </td>
                         <td>
@@ -224,10 +245,10 @@
             <div class="form-group">
                 {{ $model->attributes()['alamat_cuti'] }}
                 <textarea name="alamat_cuti"
-                    class="form-control form-control-sm {{($errors->first('alamat_cuti') ? ' parsley-error' : '')}}"
+                    class="form-control form-control-sm {{ $errors->first('alamat_cuti') ? ' parsley-error' : '' }}"
                     rows="4">{{ old('alamat_cuti', $model->alamat_cuti) }} </textarea>
                 @foreach ($errors->get('alamat_cuti') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>
@@ -235,27 +256,26 @@
             <div class="form-group">
                 {{ $model->attributes()['no_telp'] }}
                 <input name="no_telp"
-                    class="form-control form-control-sm {{($errors->first('no_telp') ? ' parsley-error' : '')}}"
+                    class="form-control form-control-sm {{ $errors->first('no_telp') ? ' parsley-error' : '' }}"
                     value="{{ old('no_telp', $model->no_telp) }}">
                 @foreach ($errors->get('no_telp') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
 
             <div class="form-group">
                 {{ $model->attributes()['pejabat'] }}
-                <select class="form-control {{($errors->first('id_user_pejabat') ? ' parsley-error' : '')}}"
+                <select class="form-control {{ $errors->first('id_user_pejabat') ? ' parsley-error' : '' }}"
                     name="nama_pejabat" id="nama_pejabat" @change="setPejabat($event)">
-                    @foreach ($list_pegawai as $key=>$value)
-                    <option value="{{$value['name']}}" @if($value['name']==old('nama_pejabat', $model->nama_pejabat))
-                        selected="selected"
-                        @endif>
-                        {{$value['name']}} - {{ $value['nip_baru'] }}
-                    </option>
+                    @foreach ($list_pegawai as $key => $value)
+                        <option value="{{ $value['name'] }}"
+                            @if ($value['name'] == old('nama_pejabat', $model->nama_pejabat)) selected="selected" @endif>
+                            {{ $value['name'] }} - {{ $value['nip_baru'] }}
+                        </option>
                     @endforeach
                 </select>
                 @foreach ($errors->get('nama_pejabat') as $msg)
-                <p class="text-danger">{{ $msg }}</p>
+                    <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
         </div>

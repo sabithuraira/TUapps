@@ -138,6 +138,7 @@ class CutiController extends Controller
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
         $catatan_cuti = new JsonType;
+        $catatan_cuti->cuti_tahunan_sebelum_2 = $request->get('cuti_tahunan_sebelum_2');
         $catatan_cuti->cuti_tahunan_sebelum = $request->get('cuti_tahunan_sebelum');
         $catatan_cuti->cuti_tahunan = $request->get('cuti_tahunan');
         $catatan_cuti->cuti_besar = $request->get('cuti_besar');
@@ -146,6 +147,7 @@ class CutiController extends Controller
         $catatan_cuti->cuti_penting = $request->get('cuti_penting');
         $catatan_cuti->cuti_luar_tanggungan = $request->get('cuti_luar_tanggungan');
 
+        $catatan_cuti->keterangan_cuti_tahunan_sebelum_2 = $request->get('keterangan_cuti_tahunan_sebelum_2');
         $catatan_cuti->keterangan_cuti_tahunan_sebelum = $request->get('keterangan_cuti_tahunan_sebelum');
         $catatan_cuti->keterangan_cuti_tahunan = $request->get('keterangan_cuti_tahunan');
         $catatan_cuti->keterangan_cuti_besar = $request->get('keterangan_cuti_besar');
@@ -227,6 +229,7 @@ class CutiController extends Controller
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
         $catatan_cuti = new JsonType;
+        $catatan_cuti->cuti_tahunan_sebelum_2 = $request->get('cuti_tahunan_sebelum_2');
         $catatan_cuti->cuti_tahunan_sebelum = $request->get('cuti_tahunan_sebelum');
         $catatan_cuti->cuti_tahunan = $request->get('cuti_tahunan');
         $catatan_cuti->cuti_besar = $request->get('cuti_besar');
@@ -234,6 +237,7 @@ class CutiController extends Controller
         $catatan_cuti->cuti_melahirkan = $request->get('cuti_melahirkan');
         $catatan_cuti->cuti_penting = $request->get('cuti_penting');
         $catatan_cuti->cuti_luar_tanggungan = $request->get('cuti_luar_tanggungan');
+        $catatan_cuti->keterangan_cuti_tahunan_sebelum_2 = $request->get('keterangan_cuti_tahunan_sebelum_2');
         $catatan_cuti->keterangan_cuti_tahunan_sebelum = $request->get('keterangan_cuti_tahunan_sebelum');
         $catatan_cuti->keterangan_cuti_tahunan = $request->get('keterangan_cuti_tahunan');
         $catatan_cuti->keterangan_cuti_besar = $request->get('keterangan_cuti_besar');
