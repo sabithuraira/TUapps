@@ -4,7 +4,8 @@
             <div class="form-group">
                 {{ $model->attributes()['nama'] }}
                 <select class="form-control {{ $errors->first('id_user') ? ' parsley-error' : '' }}" name="id_user"
-                    id="id_user" @change="setPegawai($event)">
+                    id="id_user" @change="setPegawai($event)" required>
+                    <option value="">Pilih Nama</option>
                     @foreach ($list_pegawai as $key => $value)
                         <option value="{{ $value['id'] }}" @if ($value['id'] == old('id_user', $model->id_user)) selected="selected" @endif>
                             {{ $value['name'] }} - {{ $value['nip_baru'] }}
@@ -15,7 +16,6 @@
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
             </div>
-
             <input type="hidden" name="nama" v-model="nama">
             <input type="hidden" name="nip" v-model="nip">
         </div>
@@ -69,7 +69,8 @@
                 Hari kerja
                 <input type="number" name="lama_cuti_hari_kerja"
                     class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_kerja') ? ' parsley-error' : '' }}"
-                    value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)">
+                    value="{{ old('lama_cuti_hari_kerja', $model->lama_cuti_hari_kerja) }}" @keyup="lamacuti($event)"
+                    min="0">
                 @foreach ($errors->get('lama_cuti_hari_kerja') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -78,7 +79,7 @@
                 Hari Libur
                 <input type="number" name="lama_cuti_hari_libur"
                     class="form-control form-control-sm {{ $errors->first('lama_cuti_hari_libur') ? ' parsley-error' : '' }}"
-                    value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}">
+                    value="{{ old('lama_cuti_hari_libur', $model->lama_cuti_hari_libur) }}" min="0">
                 @foreach ($errors->get('lama_cuti_hari_libur') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -137,8 +138,6 @@
                 <tbody>
                     {{-- {{ $catatan_cuti = json_encode($catatan_cuti) }} --}}
                     <tr>
-                        <td rowspan="2" class="text-left">Cuti Tahunan</td>
-                        <td>{{ date('Y') - 1 }}</td>
                         <td rowspan="3" class="text-left">Cuti Tahunan</td>
                         <td>{{ date('Y') - 2 }}</td>
                         <td>
@@ -245,8 +244,7 @@
             <div class="form-group">
                 {{ $model->attributes()['alamat_cuti'] }}
                 <textarea name="alamat_cuti"
-                    class="form-control form-control-sm {{ $errors->first('alamat_cuti') ? ' parsley-error' : '' }}"
-                    rows="4">{{ old('alamat_cuti', $model->alamat_cuti) }} </textarea>
+                    class="form-control form-control-sm {{ $errors->first('alamat_cuti') ? ' parsley-error' : '' }}" rows="4">{{ old('alamat_cuti', $model->alamat_cuti) }} </textarea>
                 @foreach ($errors->get('alamat_cuti') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -261,6 +259,22 @@
                 @foreach ($errors->get('no_telp') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
+            </div>
+            <div class="form-group">
+                {{ $model->attributes()['atasan'] }}
+                <select class="form-control {{ $errors->first('id_user_atasan') ? ' parsley-error' : '' }}"
+                    name="nama_atasan" id="nama_atasan" @change="setAtasan($event)">
+                    @foreach ($list_pegawai as $key => $value)
+                        <option value="{{ $value['name'] }}"
+                            @if ($value['name'] == old('nama_atasan', $model->nama_atasan)) selected="selected" @endif>
+                            {{ $value['name'] }} - {{ $value['nip_baru'] }}
+                        </option>
+                    @endforeach
+                </select>
+                @foreach ($errors->get('nama_atasan') as $msg)
+                    <p class="text-danger">{{ $msg }}</p>
+                @endforeach
+                <input type="hidden" name="nip_atasan" id="nip_atasan">
             </div>
 
             <div class="form-group">
@@ -277,12 +291,9 @@
                 @foreach ($errors->get('nama_pejabat') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
+                <input type="hidden" name="nip_pejabat" id="nip_pejabat">
             </div>
         </div>
-        <div class="col-md-6">
-
-        </div>
     </div>
-    <input type="hidden" name="nip_pejabat" id="nip_pejabat">
     <button type="submit" class="btn btn-primary mt-2">Simpan</button>
 </div>

@@ -3,7 +3,6 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    {{-- <meta charset="UTF-8"> --}}
     <style type="text/css">
         * {
             font-family: Segoe UI, Arial, sans-serif;
@@ -63,23 +62,21 @@
             text-align: center
         }
     </style>
-
-    {{-- <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap/css/bootstrap.min.css') !!}"> --}}
-
 </head>
 
 <body>
     <div class="container">
         <div style="margin-right: 5px;float: right;">
-            {{ $unit_kerja->ibu_kota }}, ................ 202...
+            {{ $unit_kerja->ibu_kota }},
+            {{ date_format($model->created_at, 'd') . ' ' . config('app.months')[(int) date_format($model->created_at, 'm')] . ' ' . date_format($model->created_at, 'Y') }}
         </div>
         <table class=" ">
             <tr>
                 <td>Kepada Yth: </td>
             </tr>
-            @if ($user->kd_kab == '00')
+            @if ($model->unit_kerja == '1600')
                 <tr>
-                    <td>Kepala Bagian...</td>
+                    <td>Kepala Bagian/Koordinator Fungsi...</td>
                 </tr>
                 <tr>
                     <td>BPS {{ $unit_kerja->nama }}</td>
@@ -117,7 +114,6 @@
             <tr>
                 <td>Unit Kerja</td>
                 <td colspan="3">
-                    {{-- {{ substr($model->unit_kerja, 2, 2) }} --}}
                     BPS {{ config('app.unit_kerjas')[substr($model->unit_kerja, 2, 2)] }}
                 </td>
             </tr>
@@ -137,7 +133,7 @@
                 <td>2. Cuti Besar</td>
                 <td width="10%" class="text-center">
                     @if ($model->jenis_cuti == 'Cuti Besar')
-                        &#10004;
+                        V
                     @endif
                 </td>
             </tr>
@@ -190,16 +186,13 @@
             </tr>
             <tr>
                 <td>Selama</td>
-                <<<<<<< Updated upstream <td style="text-align: center"> {{ $model->lama_cuti }} (hari)</td>
-                    =======
-                    <td style="text-align: center"> {{ $model->lama_cuti_hari_kerja + $model->lama_cuti_hari_libur }}
-                        (hari)
-                    </td>
-                    >>>>>>> Stashed changes
-                    <td style="text-align:center">mulai tanggal</td>
-                    <td style="text-align: center"> {{ $model->tanggal_mulai }}</td>
-                    <td style="width: 5%; text-align:center">s/d</td>
-                    <td style="text-align: center"> {{ $model->tanggal_selesai }}</td>
+                <td style="text-align: center"> {{ $model->lama_cuti_hari_kerja + $model->lama_cuti_hari_libur }}
+                    (hari)
+                </td>
+                <td style="text-align:center">mulai tanggal</td>
+                <td style="text-align: center"> {{ $model->tanggal_mulai }}</td>
+                <td style="width: 5%; text-align:center">s/d</td>
+                <td style="text-align: center"> {{ $model->tanggal_selesai }}</td>
             </tr>
         </table>
         <br>
@@ -220,22 +213,17 @@
                 <td class="text-center">{{ $catatan_cuti->cuti_sakit }} </td>
             </tr>
             <tr>
-                <<<<<<< Updated upstream <td class="text-center">{{ date('Y') - 1 }}</td>
-                    <td class="text-center">{{ $catatan_cuti->cuti_tahunan_sebelum }} </td>
-                    <td class="text-center"> {{ $catatan_cuti->keterangan_cuti_tahunan_sebelum }}</td>
-                    =======
-                    <td class="text-center">{{ date('Y') - 2 }}</td>
-                    <td class="text-center">
-                        @isset($catatan_cuti->cuti_tahunan_sebelum_2)
-                            {{ $catatan_cuti->cuti_tahunan_sebelum_2 }}
-                        @else
-                            0
-                        @endisset
-                    </td>
-                    <td class="text-center"> {{ $catatan_cuti->keterangan_cuti_tahunan_sebelum }}</td>
-                    >>>>>>> Stashed changes
-                    <td>4. Cuti Melahirkan</td>
-                    <td class="text-center"> {{ $catatan_cuti->cuti_melahirkan }}</td>
+                <td class="text-center">{{ date('Y') - 2 }}</td>
+                <td class="text-center">
+                    @isset($catatan_cuti->cuti_tahunan_sebelum_2)
+                        {{ $catatan_cuti->cuti_tahunan_sebelum_2 }}
+                    @else
+                        0
+                    @endisset
+                </td>
+                <td class="text-center"> {{ $catatan_cuti->keterangan_cuti_tahunan_sebelum }}</td>
+                <td>4. Cuti Melahirkan</td>
+                <td class="text-center"> {{ $catatan_cuti->cuti_melahirkan }}</td>
             </tr>
 
             </tr>
@@ -248,18 +236,6 @@
             </tr>
             <tr>
                 <td class="text-center">{{ date('Y') }}</td>
-                <<<<<<< Updated upstream <td class="text-center"> {{ $catatan_cuti->cuti_tahunan }}</td>
-                    <td class="text-center">{{ $catatan_cuti->keterangan_cuti_tahunan }} </td>
-                    <td>5. Cuti Karena Alasan Penting</td>
-                    <td class="text-center"> {{ $catatan_cuti->cuti_penting }}</td>
-            </tr>
-            <tr>
-                <td class="text-center">Total</td>
-                <td class="text-center"> {{ $catatan_cuti->cuti_tahunan + $catatan_cuti->cuti_tahunan_sebelum }}</td>
-                <td> </td>
-                <td>6. Cuti di Luar Tanggungan Negara</td>
-                <td class="text-center"> {{ $catatan_cuti->cuti_luar_tanggungan }} </td>
-                =======
                 <td class="text-center"> {{ $catatan_cuti->cuti_tahunan }}</td>
                 <td class="text-center">{{ $catatan_cuti->keterangan_cuti_tahunan }} </td>
                 <td>6. Cuti di Luar Tanggungan Negara</td>
@@ -279,7 +255,6 @@
                 <td></td>
                 <td></td>
 
-                >>>>>>> Stashed changes
             </tr>
         </table>
         <br>
@@ -316,18 +291,65 @@
                 <td width="20%">Ditangguhkan</td>
                 <td width="35%">Tidak Disetujui</td>
             </tr>
-            <tr>
-                <td><br><br><br></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr class="text-center">
+                <td>
+                    @if ($model->status_atasan == 1)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_atasan == 2)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_atasan == 4)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_atasan == 5)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td style="border: 1px solid transparent; "></td>
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-                    {{ $unit_kerja->ibu_kota }}, .............. 202........
+                    {{ $unit_kerja->ibu_kota }},
+                    @isset($model->tanggal_status_atasan)
+                        {{ date('d', strtotime($model->tanggal_status_atasan)) . ' ' . config('app.months')[(int) date('m', strtotime($model->tanggal_status_atasan))] . ' ' . date('Y', strtotime($model->tanggal_status_atasan)) }}
+                    @endisset()
                     <br>
                     <br>
                     <br>
@@ -349,18 +371,66 @@
                 <td width="20%">Ditangguhkan</td>
                 <td width="35%">Tidak Disetujui</td>
             </tr>
-            <tr>
-                <td><br><br><br></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr class="text-center">
+                <td>
+                    @if ($model->status_pejabat == 1)
+                        V
+                        <br>
+                        Cuti disetujui : &nbsp; {{ $model->cuti_disetujui_pejabat }} Hari
+                        <br>
+                        {{ $model->keterangan_pejabat }}
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_pejabat == 2)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_pejabat == 4)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
+                <td>
+                    @if ($model->status_pejabat == 5)
+                        V
+                        <br>
+                        <br>
+                        <br>
+                    @else
+                        <br>
+                        <br>
+                        <br>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td style="border: 1px solid transparent; "></td>
                 <td style="border: 1px solid transparent"></td>
                 <td style="border-bottom: 1px solid transparent"></td>
                 <td class="text-center">
-                    {{ $unit_kerja->ibu_kota }}, .............. 202.....
+                    {{ $unit_kerja->ibu_kota }},
+                    @isset($model->tanggal_status_pejabat)
+                        {{ date('d', strtotime($model->tanggal_status_pejabat)) . ' ' . config('app.months')[(int) date('m', strtotime($model->tanggal_status_pejabat))] . ' ' . date('Y', strtotime($model->tanggal_status_pejabat)) }}
+                    @endisset
                     <br>
                     <br>
                     <br>

@@ -13,14 +13,14 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 
+        'name', 'email', 'password',
     ];
 
     protected $appends = ['fotoUrl', 'pimpinan'];
@@ -43,13 +43,13 @@ class User extends Authenticatable
         $nip_id = substr($this->email, -5);
         if(strlen($this->foto)>0){
             if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
-                return "https://community.bps.go.id/images/avatar/".$this->foto; 
+                return "https://community.bps.go.id/images/avatar/".$this->foto;
             }
             else if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
                 return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
             }
             else{
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
             }
         }
         else{
@@ -58,7 +58,7 @@ class User extends Authenticatable
                 return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
             }
             else{
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
+                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
             }
         }
     }
@@ -70,46 +70,37 @@ class User extends Authenticatable
         // if($this->kdstjab<4){
         //     if($this->kdstjab==2 && $this->kdgol>32 && $this->kdgol<40){
         //         $bos = $this->getEselon3();
-    
+
         //         if($bos!=null) return $bos;
         //         else{
         //             $bos = $this->getEselon2();
-                    
-<<<<<<< HEAD
-                    if($bos!=null) return $bos;
-                    else return $this->getBosRI();
-                }
-            }
-            else if($this->kdstjab==2 && $this->kdgol>40 && $this->kdkab='00'){
-                $bos = $this->getEselon2();
-=======
+
         //             if($bos!=null) return $bos;
         //             else return $this->getBosRI();
         //         }
         //     }
         //     else if($this->kdstjab==2 && $this->kdgol>40){
         //         $bos = $this->getEselon2();
->>>>>>> 0d7aeb4276c715f38dead06ef01d4fc9b2287da1
-                
+
         //         if($bos!=null) return $bos;
         //         else return $this->getBosRI();
         //     }
         //     else{
         //         $bos = $this::where([
         //             ['kdorg', '=', $this->kdorg],
-        //             ['kdesl', '=', 4], 
-        //             ['kdprop', '=', $this->kdprop], 
-        //             ['kdkab', '=', $this->kdkab], 
+        //             ['kdesl', '=', 4],
+        //             ['kdprop', '=', $this->kdprop],
+        //             ['kdkab', '=', $this->kdkab],
         //         ])->first();
-    
+
         //         if($bos!=null) return $bos;
         //         else{
         //             $bos = $this->getEselon3();
-    
+
         //             if($bos!=null) return $bos;
         //             else{
         //                 $bos = $this->getEselon2();
-                        
+
         //                 if($bos!=null) return $bos;
         //                 else return $this->getBosRI();
         //             }
@@ -123,14 +114,14 @@ class User extends Authenticatable
         //         if($bos!=null) return $bos;
         //         else{
         //             $bos = $this->getEselon2();
-                    
+
         //             if($bos!=null) return $bos;
         //             else return $this->getBosRI();
         //         }
         //     }
         //     else if($this->kdesl==3){
         //         $bos = $this->getEselon2();
-                
+
         //         if($bos!=null) return $bos;
         //         else return $this->getBosRI();
         //     }
@@ -144,9 +135,9 @@ class User extends Authenticatable
         $kdorg = substr($this->kdorg, 0,3).'00';
         $bos = $this::where([
             ['kdorg', '=', $kdorg],
-            ['kdesl', '=', 3], 
-            ['kdprop', '=', $this->kdprop], 
-            ['kdkab', '=', $this->kdkab], 
+            ['kdesl', '=', 3],
+            ['kdprop', '=', $this->kdprop],
+            ['kdkab', '=', $this->kdkab],
         ])->first();
 
         return $bos;
@@ -156,9 +147,9 @@ class User extends Authenticatable
         $kdorg = substr($this->kdorg, 0,2).'000';
         $bos = $this::where([
             ['kdorg', '=', $kdorg],
-            ['kdesl', '=', 2], 
-            ['kdprop', '=', $this->kdprop], 
-            // ['kdkab', '=', $this->kdkab], 
+            ['kdesl', '=', 2],
+            ['kdprop', '=', $this->kdprop],
+            // ['kdkab', '=', $this->kdkab],
         ])->first();
 
         return $bos;
@@ -175,7 +166,7 @@ class User extends Authenticatable
 
     function getPegawaiAnda($keyword){
         $pegawai = array();
-        
+
         $arr_where = [];
         $arr_where[] = ['kdprop', '=', $this->kdprop];
         $arr_where[] = ['id', '<>', $this->id];
@@ -186,7 +177,7 @@ class User extends Authenticatable
 
         // if($this->kdstjab==4){
             // if($this->kdesl==4){
-                
+
             //     $arr_where[] = ['kdorg', '=', $this->kdorg];
             //     $arr_where[] = ['kdstjab', '<>', 4];
             //     $arr_where[] = ['kdkab', '=',  $this->kdkab];
@@ -209,7 +200,7 @@ class User extends Authenticatable
 
                     $or_where1[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
                     $or_where1[] = ['kdkab', '=',  $this->kdkab];
-                    
+
                     $or_where2[] = ['kdkab', '<>', '00'];
                     $or_where2[] = ['kdesl', '=', '3'];
 
@@ -249,11 +240,11 @@ class User extends Authenticatable
             $arr_where = [];
             $arr_where[] = ['kdprop', '=', $this->kdprop];
             // $arr_where[] = ['id', '<>', $this->id];
-    
+
             if(strlen($keyword)>0){
                 $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
             }
-            
+
             // $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
             $pegawai = $this::where($arr_where)
                             ->orderBy('kdorg')->paginate();
@@ -269,7 +260,7 @@ class User extends Authenticatable
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    
+
         $result = curl_exec($ch);
         curl_close($ch);
         if($result !== FALSE) return true;
