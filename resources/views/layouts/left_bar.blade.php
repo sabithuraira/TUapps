@@ -38,6 +38,13 @@
                 </li>
 
 
+                @hasanyrole('superadmin|pengelola_regsosek')
+                <li class="{{ (request()->is('regsosek*')) ? 'active' : '' }}">
+                    <a href="{{ url('regsosek') }}"> <i class="icon-doc"></i><span>SLS Regsosek</span></a>
+                </li>
+                @endhasanyrole
+
+
                 <li class="{{ (request()->is('rekap_dl*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
                         <span>Operasionalisasi SDM</span></a>

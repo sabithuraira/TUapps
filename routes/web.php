@@ -235,6 +235,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('download_sp2020', 'HomeController@downloadSp2020');
 });
 
+
+Route::group(['middleware' => ['role:superadmin|pengelola_regsosek']], function () {    
+    Route::resource('regsosek', 'RegsosekController')->except('show');
+});
+
 Auth::routes();
 
 Route::get('/d4ft4r_2612', 'HomeController@d4ft4r_2612');
