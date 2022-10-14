@@ -85,12 +85,21 @@
                     <td>di {{ $unit_kerja->ibu_kota }}</td>
                 </tr>
             @else
-                <tr>
-                    <td>Kepala BPS {{ $unit_kerja->nama }}</td>
-                </tr>
-                <tr>
-                    <td>di {{ $unit_kerja->ibu_kota }}</td>
-                </tr>
+                @if ($model->jabatan == 'Kepala BPS Kabupaten/Kota')
+                    <tr>
+                        <td>Kepala BPS Provinsi Sumatera Selatan</td>
+                    </tr>
+                    <tr>
+                        <td>di Palembang</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>Kepala BPS {{ $unit_kerja->nama }}</td>
+                    </tr>
+                    <tr>
+                        <td>di {{ $unit_kerja->ibu_kota }}</td>
+                    </tr>
+                @endif
             @endif
         </table>
         <br>

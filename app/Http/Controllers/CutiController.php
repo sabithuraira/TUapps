@@ -202,8 +202,12 @@ class CutiController extends Controller
      */
     public function edit($id)
     {
+        $auth = Auth::user();
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        if ($auth->kdkab != '00') {
+            $list_pegawai->push(\App\UserModel::where('nip_baru', "196807031994011001")->first());
+        }
         $real_id = Crypt::decrypt($id);
         $model = \App\Cuti::find($real_id);
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
