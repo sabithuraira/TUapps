@@ -7,6 +7,7 @@
                 <th rowspan="2">No</th>
                 <th rowspan="2">Nama Wilayah</th>
                 <th rowspan="2">Jumlah Keluarga Pengakuan</th>
+                <th rowspan="2">Jumlah Selesai Verifikasi</th>
                 <th colspan="3">Jumlah Keluarga Selesai Cacah</th>
                 <th colspan="3">Jumlah SLS</th>
             </tr>
@@ -23,6 +24,7 @@
         <tbody>
             @php
                 $total_selesai = 0;
+                $total_selesai_vk = 0;
                 $total_sls = 0;
                 $total_pcl = 0;
                 $total_pml = 0;
@@ -32,6 +34,7 @@
             @foreach($datas as $key=>$data)
                 @php
                     $total_selesai += $data->jumlah_selesai;
+                    $total_selesai_vk += $data->jumlah_selesai_vk;
                     $total_sls  += $data->jumlah_sls;
                     $total_pcl  += $data->jumlah_pcl;
                     $total_pml  += $data->jumlah_pml;
@@ -52,6 +55,15 @@
                         @endif
                     </td>
                     <td class="text-center">{{ number_format($data->jumlah_sls,0,",",".") }}</td>
+
+                    <td class="text-center">
+                        @if($data->total==0)
+                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} (0 %)
+                        @else
+                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} ({{ round(($data->jumlah_selesai_vk/$data->total*100),1) }} %)
+                        @endif 
+                    </td>
+
                     <td class="text-center">
                         @if($data->jumlah_sls==0)
                             {{ number_format($data->jumlah_pcl,0,",",".") }} (0 %)
@@ -89,6 +101,15 @@
             <tr class="text-center">
                 <td colspan="2"><b>TOTAL</b></td> 
                 <td>{{ number_format($total_sls,0,",",".") }}</td>
+
+                <td>
+                    @if($total_total==0)
+                    {{ number_format($total_selesai_vk,0,",",".") }} (0 %)
+                    @else
+                    {{ number_format($total_selesai_vk,0,",",".") }} ({{ round(($total_selesai_vk/$total_total*100),1) }} %)
+                    @endif 
+                </td>
+
                 <td>
                     @if($total_sls==0)
                     {{ number_format($total_pcl,0,",",".") }} (0 %)

@@ -14,16 +14,41 @@ class RegsosekController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $kab = $request->get('kab');
-        $kec = $request->get('kec');
-        $desa = $request->get('desa');
+        // $kab = $request->get('kab');
+        // $kec = $request->get('kec');
+        // $desa = $request->get('desa');
+        $keyword = $request->get('keyword');
 
         $arr_condition = [];
         $arr_condition[] = ['status_sls', '=', 1];
 
-        if(strlen($kab)>0) $arr_condition[] = ['kode_kab', '=', $kab];
-        if(strlen($kec)>0) $arr_condition[] = ['kode_kec', '=', $kec];
-        if(strlen($desa)>0) $arr_condition[] = ['kode_desa', '=', $desa];
+        if(strlen($keyword)>=2){
+            $prov = substr($keyword, 0, 2);
+            $arr_condition[] = ['kode_prov', '=', $prov];
+        }
+
+        if(strlen($keyword)>=4){
+            $kab = substr($keyword, 2, 2);
+            $arr_condition[] = ['kode_kab', '=', $kab];
+        }
+
+        if(strlen($keyword)>=7){
+            $kec = substr($keyword, 4, 3);
+            $arr_condition[] = ['kode_kec', '=', $kec];
+        }
+
+        if(strlen($keyword)>=10){
+            $desa = substr($keyword, 7, 3);
+            $arr_condition[] = ['kode_desa', '=', $desa];
+        }
+
+        if(strlen($keyword)>=14){
+            $idsls = substr($keyword, 10, 4);
+            $arr_condition[] = ['id_sls', '=', $idsls];
+        }
+        // if(strlen($kab)>0) $arr_condition[] = ['kode_kab', '=', $kab];
+        // if(strlen($kec)>0) $arr_condition[] = ['kode_kec', '=', $kec];
+        // if(strlen($desa)>0) $arr_condition[] = ['kode_desa', '=', $desa];
 
         $datas = \App\RegsosekSls::where($arr_condition)->paginate();
 
@@ -31,10 +56,10 @@ class RegsosekController extends Controller
         $datas->appends($request->all());
 
         if ($request->ajax()) {
-            return \Response::json(\View::make('regsosek.list', array('datas' => $datas))->render());
+            return \Response::json(\View::make('regsosek.list', array('datas' => $datas, 'keyword' => $keyword))->render());
         }
 
-        return view('regsosek.index',compact('datas', 'kab', 'kec', 'desa'));
+        return view('regsosek.index',compact('datas', 'keyword'));
     }
 
     /**

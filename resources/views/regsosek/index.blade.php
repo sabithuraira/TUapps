@@ -22,6 +22,13 @@
           <br/><br/>
           <form action="{{url('regsosek')}}" method="get">
               @csrf
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" name="keyword" id="search" value="{{ $keyword }}" placeholder="Search..">
+
+                  <div class="input-group-append">
+                      <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
           </form>
 
           <section class="datas">
