@@ -6,8 +6,7 @@
             <tr class="text-center">
                 <th rowspan="2">No</th>
                 <th rowspan="2">Nama Wilayah</th>
-                <th rowspan="2">Jumlah Keluarga Pengakuan</th>
-                <th rowspan="2">Jumlah Selesai Verifikasi</th>
+                <th rowspan="2">Jumlah Keluarga Hasil Verifikasi</th>
                 <th colspan="3">Jumlah Keluarga Selesai Cacah</th>
                 <th colspan="3">Jumlah SLS</th>
             </tr>
@@ -18,7 +17,8 @@
                 <th>KOSEKA</th>
 
                 <th>Target</th>
-                <th>Selesai</th>
+                <th>Selesai Verifikasi</th>
+                <th>Selesai Pencacahn</th>
             </tr>
         </thead>
         <tbody>
@@ -57,14 +57,6 @@
                     <td class="text-center">{{ number_format($data->jumlah_sls,0,",",".") }}</td>
 
                     <td class="text-center">
-                        @if($data->total==0)
-                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} (0 %)
-                        @else
-                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} ({{ round(($data->jumlah_selesai_vk/$data->total*100),1) }} %)
-                        @endif 
-                    </td>
-
-                    <td class="text-center">
                         @if($data->jumlah_sls==0)
                             {{ number_format($data->jumlah_pcl,0,",",".") }} (0 %)
                         @else 
@@ -85,9 +77,19 @@
                         {{ number_format($data->jumlah_koseka,0,",",".") }}  ({{ round(($data->jumlah_koseka/$data->jumlah_sls*100),1) }} %)
                         @endif
                     </td>
+
                     <td class="text-center">
                         {{ number_format($data->total,0,",",".") }}
                     </td>
+
+                    <td class="text-center">
+                        @if($data->total==0)
+                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} (0 %)
+                        @else
+                        {{ number_format($data->jumlah_selesai_vk,0,",",".") }} ({{ round(($data->jumlah_selesai_vk/$data->total*100),1) }} %)
+                        @endif 
+                    </td>
+
                     <td class="text-center">
                         @if($data->total==0)
                         {{ number_format($data->jumlah_selesai,0,",",".") }} (0 %)
@@ -101,14 +103,6 @@
             <tr class="text-center">
                 <td colspan="2"><b>TOTAL</b></td> 
                 <td>{{ number_format($total_sls,0,",",".") }}</td>
-
-                <td>
-                    @if($total_total==0)
-                    {{ number_format($total_selesai_vk,0,",",".") }} (0 %)
-                    @else
-                    {{ number_format($total_selesai_vk,0,",",".") }} ({{ round(($total_selesai_vk/$total_total*100),1) }} %)
-                    @endif 
-                </td>
 
                 <td>
                     @if($total_sls==0)
@@ -131,7 +125,17 @@
                     {{ number_format($total_koseka,0,",",".") }} ({{ round(($total_koseka/$total_sls*100),1) }} %)
                     @endif 
                 </td>
+
                 <td>{{ number_format($total_total,0,",",".") }}</td>
+
+                <td>
+                    @if($total_total==0)
+                    {{ number_format($total_selesai_vk,0,",",".") }} (0 %)
+                    @else
+                    {{ number_format($total_selesai_vk,0,",",".") }} ({{ round(($total_selesai_vk/$total_total*100),1) }} %)
+                    @endif 
+                </td>
+                
                 <td>
                     @if($total_total==0)
                     {{ number_format($total_selesai,0,",",".") }} (0 %)

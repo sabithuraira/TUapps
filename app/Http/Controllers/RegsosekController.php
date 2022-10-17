@@ -156,11 +156,14 @@ class RegsosekController extends Controller
     public function update(Request $request, $id){   
         $model= \App\RegsosekSls::find($id);
 
+        $model->id_sls = $request->id_sls;
+        $model->id_sub_sls = $request->id_sub_sls;
         $model->nama_sls= $request->nama_sls;
-        $model->j_keluarga_sls= $request->j_keluarga_sls;
+        $model->j_keluarga_pengakuan= $request->j_keluarga_pengakuan;
         $model->j_tidak_miskin= $request->j_tidak_miskin;
         $model->j_miskin= $request->j_miskin;
-        $model->j_sangat_miskin= $request->j_sangat_miskin;
+        $model->j_sangat_miskin = $request->j_sangat_miskin;
+        $model->is_berubah_batas = $request->is_berubah_batas ;
         $model->updated_by=Auth::id();
         $model->save();
 

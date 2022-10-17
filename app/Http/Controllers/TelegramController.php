@@ -623,7 +623,7 @@ class TelegramController extends Controller
                                         $data->status_selesai_pcl = $ket_selesai;
                                         $data->save();
         
-                                        $pesan = "Sukses.. data berhasil disimpan.";  
+                                        $pesan = "Sukses.. Laporan K berhasil disimpan.";  
                                     }
                                 }
                                 //
@@ -644,38 +644,60 @@ class TelegramController extends Controller
             $msg_error = [];
 
             $photo = $update->message->photo;
-            Log::info('info foto:', ['isi_foto'=>$photo]);
             
             $id_sls = "";
-            if(isset($update->message->caption)) $id_sls = $update->message->caption;
-            if(strlen($id_sls)!=16) $msg_error[] = "Format 'IDSLS' Salah. Pastikan jumlah karakter ID SLS/Non SLS 16 karakter";
+            $lower_msg = strtolower($update->message->caption);
+            $rincian_msg = explode("-", $lower_msg);
 
-            ///
-            if(count($msg_error)>0){
-                $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
-            }
-            else{
-                $kd_prov = substr($id_sls, 0,2);
-                $kd_kab = substr($id_sls, 2,2);
-                $kd_kec = substr($id_sls, 4,3);
-                $kd_desa = substr($id_sls, 7,3);
-                $kd_sls = substr($id_sls, 10,4);
-                $kd_sub_sls = substr($id_sls, 14,2);
+            if(count($rincian_msg)==1){
+                $id_sls = $rincian_msg[0];
+                if(strlen($id_sls)!=16) $msg_error[] = "Format 'IDSLS' Salah. Pastikan jumlah karakter ID SLS/Non SLS 16 karakter";
 
-                $data = \App\RegsosekSls::where([
-                    ['kode_prov', '=', $kd_prov],
-                    ['kode_kab', '=', $kd_kab],
-                    ['kode_kec', '=', $kd_kec],
-                    ['kode_desa', '=', $kd_desa],
-                    ['id_sls', '=', $kd_sls],
-                    ['id_sub_sls', '=', $kd_sub_sls],
-                    ['status_sls', '=', 1],
-                    ])->first();
-                
-                if($data==null){
-                    $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                ///
+                if(count($msg_error)>0){
+                    $pesan = "Error!! berikut rincian errornya ya kak: ".join(",", $msg_error);
                 }
                 else{
+                    $kd_prov = substr($id_sls, 0,2);
+                    $kd_kab = substr($id_sls, 2,2);
+                    $kd_kec = substr($id_sls, 4,3);
+                    $kd_desa = substr($id_sls, 7,3);
+                    $kd_sls = substr($id_sls, 10,4);
+                    $kd_sub_sls = substr($id_sls, 14,2);
+
+                    $data = \App\RegsosekSls::where([
+                        ['kode_prov', '=', $kd_prov],
+                        ['kode_kab', '=', $kd_kab],
+                        ['kode_kec', '=', $kd_kec],
+                        ['kode_desa', '=', $kd_desa],
+                        ['id_sls', '=', $kd_sls],
+                        ['id_sub_sls', '=', $kd_sub_sls],
+                        ['status_sls', '=', 1],
+                        ])->first();
+                    
+                    if($data==null){
+                        $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                    }
+                    else{
+                        $file_photo = end($photo);
+                        $data->photo_file_id = $file_photo->file_id;
+                        $data->photo_file_unique_id = $file_photo->file_unique_id;
+                        $data->photo_width = $file_photo->width;
+                        $data->photo_height = $file_photo->height;
+                        $data->photo_file_size = $file_photo->file_size;
+                        $data->photo_status_unduh = 0;
+                        $data->save();
+
+                        $pesan = "Sukses!! Foto berhasil disimpan";  
+                    }
+                }
+            }
+            else if(count($rincian_msg)==2){
+                //KSK1604-nama koseka
+                if($rincian_msg[0]=='ksk1604'){
+                    $data = new \App\RegsosekPml;
+                    
+                    $data->nama_petugas = $rincian_msg[1];
                     $file_photo = end($photo);
                     $data->photo_file_id = $file_photo->file_id;
                     $data->photo_file_unique_id = $file_photo->file_unique_id;
@@ -685,9 +707,35 @@ class TelegramController extends Controller
                     $data->photo_status_unduh = 0;
                     $data->save();
 
-                    $pesan = "Sukses.. data berhasil disimpan";  
+                    $pesan = "Sukses!! Foto Koseka berhasil disimpan";  
+                }
+                else{
+                    $pesan = "Format pesan anda salah. Gunakan format 'KSK1604-Nama Anda'";  
                 }
             }
+            else if(count($rincian_msg)==3){
+                //PML-1604-nama PML
+
+                if($rincian_msg[0]=='pml' && $rincian_msg[1]=='1604' ){
+                    $data = new \App\RegsosekPml;
+                    
+                    $data->nama_petugas = $rincian_msg[2];
+                    $file_photo = end($photo);
+                    $data->photo_file_id = $file_photo->file_id;
+                    $data->photo_file_unique_id = $file_photo->file_unique_id;
+                    $data->photo_width = $file_photo->width;
+                    $data->photo_height = $file_photo->height;
+                    $data->photo_file_size = $file_photo->file_size;
+                    $data->photo_status_unduh = 0;
+                    $data->save();
+
+                    $pesan = "Sukses!! Foto PML berhasil disimpan";  
+                }
+                else{
+                    $pesan = "Format pesan anda salah. Gunakan format 'PML-1604-Nama Anda'";  
+                }
+            }
+
         }
         else{
             $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  

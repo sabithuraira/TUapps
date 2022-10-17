@@ -34,30 +34,42 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Kode SLS/Non SLS :</label>
-            <input type="text" class="form-control" disabled value="{{ $model->id_sls }}">
+            <input type="text" class="form-control" name="id_sls" value="{{ $model->id_sls }}">
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="form-group">
             <label>Kode Sub SLS/Non SLS :</label>
-            <input type="text" class="form-control" disabled value="{{ $model->id_sub_sls }}">
+            <input type="text" class="form-control" name="id_sub_sls" value="{{ $model->id_sub_sls }}">
         </div>
     </div>
 </div>
 
 <div class="row clearfix">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
             <label>Nama SLS/Non SLS :</label>
             <input type="text" class="form-control" name="nama_sls" value="{{ $model->nama_sls }}">
         </div>
     </div>
+
     
-    <div class="col-md-6">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Apakah mengalami perubahan batas :</label>
+            <select class="form-control" name="is_berubah_batas">
+                <option> - </option>
+                <option value="0" @if($model->is_berubah_batas==0) selected @endif>Tidak</option>
+                <option value="1" @if($model->is_berubah_batas==1) selected @endif>Ya</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
         <div class="form-group">
             <label>Jumlah Keluarga Verifikasi :</label>
-            <input type="text" class="form-control" name="j_keluarga_sls" value="{{ $model->j_keluarga_sls }}">
+            <input type="text" class="form-control" name="j_keluarga_pengakuan" value="{{ $model->j_keluarga_pengakuan }}">
         </div>
     </div>
 </div>
