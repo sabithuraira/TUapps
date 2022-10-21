@@ -29,6 +29,7 @@ class RegsosekSls extends Model
                 SUM(s.j_keluarga_pcl) AS jumlah_pcl,
                 SUM(s.j_keluarga_pml) AS jumlah_pml,
                 SUM(s.j_keluarga_koseka) AS jumlah_koseka,
+                SUM(s.j_keluarga_sls) AS jumlah_prelist,
                 COUNT(s.id_sls) AS total";
 
             $label_join = "";
@@ -43,6 +44,7 @@ class RegsosekSls extends Model
                 SUM(s.j_keluarga_pcl) AS jumlah_pcl,
                 SUM(s.j_keluarga_pml) AS jumlah_pml,
                 SUM(s.j_keluarga_koseka) AS jumlah_koseka,
+                SUM(s.j_keluarga_sls) AS jumlah_prelist,
                 COUNT(s.id_sls) AS total";
 
             $label_join = " , p_desa w";
@@ -59,6 +61,7 @@ class RegsosekSls extends Model
                 SUM(s.j_keluarga_pcl) AS jumlah_pcl,
                 SUM(s.j_keluarga_pml) AS jumlah_pml,
                 SUM(s.j_keluarga_koseka) AS jumlah_koseka,
+                SUM(s.j_keluarga_sls) AS jumlah_prelist,
                 COUNT(s.id_sls) AS total";
 
             $label_join = " , p_kec w";
@@ -73,6 +76,7 @@ class RegsosekSls extends Model
                 SUM(s.j_keluarga_pcl) AS jumlah_pcl,
                 SUM(s.j_keluarga_pml) AS jumlah_pml,
                 SUM(s.j_keluarga_koseka) AS jumlah_koseka,
+                SUM(s.j_keluarga_sls) AS jumlah_prelist,
                 COUNT(s.id_sls) AS total";
 
             $label_join = " , p_kab w";

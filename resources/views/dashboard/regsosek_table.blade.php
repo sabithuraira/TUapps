@@ -6,12 +6,14 @@
             <tr class="text-center">
                 <th rowspan="2">No</th>
                 <th rowspan="2">Nama Wilayah</th>
-                <th rowspan="2">Jumlah Keluarga Hasil Verifikasi</th>
+                <th colspan="2">Jumlah Keluarga</th>
                 <th colspan="3">Jumlah Keluarga Selesai Cacah</th>
                 <th colspan="3">Jumlah SLS</th>
             </tr>
 
             <tr class="text-center">
+                <th>Prelist</th>
+                <th>Verifikasi</th>
                 <th>PCL</th>
                 <th>PML</th>
                 <th>KOSEKA</th>
@@ -24,6 +26,7 @@
         <tbody>
             @php
                 $total_selesai = 0;
+                $total_prelist = 0;
                 $total_selesai_vk = 0;
                 $total_sls = 0;
                 $total_pcl = 0;
@@ -35,6 +38,7 @@
                 @php
                     $total_selesai += $data->jumlah_selesai;
                     $total_selesai_vk += $data->jumlah_selesai_vk;
+                    $total_prelist += $data->jumlah_prelist;
                     $total_sls  += $data->jumlah_sls;
                     $total_pcl  += $data->jumlah_pcl;
                     $total_pml  += $data->jumlah_pml;
@@ -54,6 +58,7 @@
                             {{ $data->idw }} - {{ $data->nama }}
                         @endif
                     </td>
+                    <td class="text-center">{{ number_format($data->jumlah_prelist,0,",",".") }}</td>
                     <td class="text-center">{{ number_format($data->jumlah_sls,0,",",".") }}</td>
 
                     <td class="text-center">
@@ -102,6 +107,7 @@
             
             <tr class="text-center">
                 <td colspan="2"><b>TOTAL</b></td> 
+                <td>{{ number_format($total_prelist,0,",",".") }}</td>
                 <td>{{ number_format($total_sls,0,",",".") }}</td>
 
                 <td>
