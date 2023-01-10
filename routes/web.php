@@ -17,6 +17,7 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('rincian_kredit', 'RincianKreditController');
     Route::resource('angka_kredit', 'AngkaKreditController');
     Route::resource('user', 'UserController');
+    Route::get('/user_riwayat', 'UserController@riwayat');
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');

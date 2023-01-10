@@ -15,23 +15,23 @@ class CreateRiwayatSkTable extends Migration
     {
         Schema::create('riwayat_sk', function (Blueprint $table) {
             $table->increments('id');
-            $table->string(10, 'niplama');
+            $table->string('niplama',10);
             $table->integer('flagstjab');
             $table->integer('kdstjab');
             $table->integer('urutreog');
-            $table->string(6, 'kdorg');
-            $table->string(3, 'flagwil');
-            $table->string(3, 'kdprop');
-            $table->string(3, 'kdkab');
-            $table->string(4, 'kdkec');
+            $table->string('kdorg', 6);
+            $table->string('flagwil', 3);
+            $table->string('kdprop',3);
+            $table->string('kdkab',3);
+            $table->string('kdkec',4);
             $table->date('tmt');
-            $table->string(50,'nosk');
+            $table->string('nosk',50);
             $table->date('tglsk');
             $table->string('penugasan')->nullable();
-            $table->string(3,'kdstkerja')->nullable();
-            $table->string(50,'nmstjab');
-            $table->string(100,'nmorg');
-            $table->string(50,'nmwil');
+            $table->string('kdstkerja',3)->nullable();
+            $table->string('nmstjab',50);
+            $table->string('nmorg',100);
+            $table->string('nmwil',50);
             $table->integer("created_by");
             $table->integer("updated_by");
             $table->timestamps();

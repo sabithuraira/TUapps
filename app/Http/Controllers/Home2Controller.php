@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session; 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Home2Controller extends Controller
 {
     use AuthenticatesUsers;
-    
+
     protected $redirectTo = 'hai';
     /**
      * Create a new controller instance.
@@ -20,7 +22,7 @@ class Home2Controller extends Controller
     // {
     //     $this->middleware('auth');
     // }
-    
+
     public function d4ft4r_2612(){
         $c_nip = "";
 
@@ -48,7 +50,7 @@ class Home2Controller extends Controller
                     $model->name = $c_model->namagelar;
                     $model->password = Hash::make($c_model->niplama);
                 }
-                
+
                 $model->urutreog = $c_model->urutreog;
                 $model->kdorg = $c_model->kdorg;
                 $model->nmorg = $c_model->nmorg;
@@ -99,19 +101,19 @@ class Home2Controller extends Controller
             header('Location: '.$authUrl);
             dd($request->session()->all());
             exit;
-        
+
         // } elseif (empty($request->get('state')) || ($request->get('state') !== Session::get('oauth2state'))) {
         // } elseif (empty($request->get('state')) || ($request->get('state') !== $request->session()->get('oauth2state'))) {
         //     // unset($_SESSION['oauth2state']);
         //     print('session'.$request->session()->get('oauth2state'));
         //     // var_dump($request->session()->all());
-            
+
         //     // Session::forget('oauth2state');
         //     $request->session()->forget('oauth2state');
         //     print('state'.$request->get('state'));
         //     print('provider'.$provider->getState());
         //     exit('Invalid state');
-        
+
         } else {
             try {
                 $token = $provider->getAccessToken('authorization_code', [
@@ -120,7 +122,7 @@ class Home2Controller extends Controller
             } catch (Exception $e) {
                 print_r('Gagal mendapatkan akses token : '.$e->getMessage());
             }
-        
+
             // Opsional: Setelah mendapatkan token, anda dapat melihat data profil pengguna
             try {
                 $user = $provider->getResourceOwner($token);
@@ -138,7 +140,7 @@ class Home2Controller extends Controller
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
                 $curl_response = json_decode(curl_exec($curl));
-    
+
                 if(!isset($curl_response->error)){
                     if($curl_response->total==0){
                         if (!$request->expectsJson()) {
@@ -148,7 +150,7 @@ class Home2Controller extends Controller
                     else{
                         $model= \App\User::where('email','=', $c_nip)->first();
                         $c_model = $curl_response->pegawai[0];
-        
+
                         if($model==null){
                             $model = new \App\User;
                             $model->email = $c_model->niplama;
@@ -156,7 +158,7 @@ class Home2Controller extends Controller
                             $model->name = $c_model->namagelar;
                             $model->password = Hash::make($c_model->niplama);
                         }
-                        
+
                         $model->urutreog = $c_model->urutreog;
                         $model->kdorg = $c_model->kdorg;
                         $model->nmorg = $c_model->nmorg;
@@ -173,12 +175,64 @@ class Home2Controller extends Controller
                         $model->kdesl = $c_model->kdesl;
                         $model->foto = $c_model->foto;
                         $model->save();
-        
+
                         $data_request = array(
                             $this->username()=>$model->email,
                             'password'  =>$model->email
                         );
-                        
+                        try {
+                            $service_url    = 'https://simpeg.bps.go.id/api/bps16';
+                            $curl           = curl_init($service_url);
+                            $curl_post_data = array(
+                                "apiKey" =>  "L2cvVWtDaE5sczVzTHFPaHBZT0Rzdz09.".$token,
+                                "kategori"=> 'view_jabatan',
+                                "nip" => $c_nip,
+                            );
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($curl, CURLOPT_POST, true);
+                            curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
+                            $curl_response = json_decode(curl_exec($curl));
+                            if(!isset($curl_response->error)){
+                                if(sizeof($curl_response)==0){
+                                    print_r("Tidak ada Data");
+                                }
+                                else{
+                                    foreach($curl_response as $res){
+                                    $tmt = date("Y-m-d", strtotime($res->tmt) );
+                                    $tglsk = null;
+                                    if($res->tglsk){
+                                        $tglsk = date("Y-m-d", strtotime($res->tglsk) );
+                                    }
+                                    DB::table('riwayat_sk')->updateOrInsert(
+                                        [ 'niplama' => $res->niplama, 'nosk' => $res->nosk],
+                                        [
+                                            'flagstjab' => $res->flagstjab,
+                                            'kdstjab' => $res->kdstjab,
+                                            'urutreog' => $res->urutreog,
+                                            'kdorg' => $res->kdorg,
+                                            'flagwil' => $res->flagwil,
+                                            'kdprop' => $res->kdprop,
+                                            'kdkab' => $res->kdkab,
+                                            'kdkec' => $res->kdkec,
+                                            'tmt' => $tmt,
+                                            'tglsk' => $tglsk,
+                                            'penugasan' => $res->penugasan,
+                                            'kdstkerja' => $res->kdstkerja,
+                                            'nmstjab' => $res->nmstjab,
+                                            'nmorg' => $res->nmorg,
+                                            'nmwil' => $res->nmwil,
+                                            'created_by' => 1,
+                                        ]
+                                    );
+                                    }
+                                    return redirect()->back();
+                                }
+                            }
+                        } catch (Exception $e) {
+                            print_r('Gagal Mendapatkan Riwayat SK: '.$e->getMessage());
+                            die();
+                        }
+
                         if ($this->attemptLogin($data_request)) {
                             return $this->sendLoginResponse($data_request);
                         }
@@ -187,12 +241,12 @@ class Home2Controller extends Controller
             } catch (Exception $e) {
                 print_r('Gagal Mendapatkan Data Pengguna: '.$e->getMessage());
                 die();
-                
+
                 if (!$request->expectsJson()) {
                     return route('guest');
                 }
             }
-        
+
             // Gunakan token ini untuk berinteraksi dengan API di sisi pengguna
             // echo $token->getToken();
         }

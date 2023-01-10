@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\RiwayatSK;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
@@ -13,7 +14,7 @@ class DashboardController extends Controller
         $random_user = \App\UserModel::inRandomOrder()->first();
         $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
         $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
-        
+
         //////REGSOSEK
         //////////////
         $label = 'prov';
@@ -110,7 +111,7 @@ class DashboardController extends Controller
         return view('dashboard.index', compact(
             'random_user',
             'unit_kerja',
-            'dl_per_uk', 
+            'dl_per_uk',
 
             'model',
             'datas',
@@ -135,7 +136,7 @@ class DashboardController extends Controller
 
         $label_kab = ''; $label_kec = ''; $label_desa = '';
 
-        $kab = $request->get('kab'); $kec = $request->get('kec'); 
+        $kab = $request->get('kab'); $kec = $request->get('kec');
         $desa = $request->get('desa'); $bs = $request->get('bs');
 
         if(strlen($kab)==0) $kab = null;
@@ -149,13 +150,13 @@ class DashboardController extends Controller
             $label = 'bs';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
-            
+
             $model_kec = \App\Pkec::where([
                 ['idKab', '=', $kab],
                 ['idKec', '=', $kec]
             ])->first();
             if($model_kec!=null) $label_kec = $model_kec->nmKec;
-            
+
             $model_desa = \App\Pdesa::where([
                 ['idKab', '=', $kab],
                 ['idKec', '=', $kec],
@@ -170,13 +171,13 @@ class DashboardController extends Controller
             $label = 'desa';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
-            
+
             $model_kec = \App\Pkec::where([
                 ['idKab', '=', $kab],
                 ['idKec', '=', $kec]
             ])->first();
             if($model_kec!=null) $label_kec = $model_kec->nmKec;
-            
+
             $model_desa = \App\Pdesa::where([
                 ['idKab', '=', $kab],
                 ['idKec', '=', $kec],
@@ -191,32 +192,32 @@ class DashboardController extends Controller
             $label = 'kec';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
-            
+
             $model_kec = \App\Pkec::where([
                 ['idKab', '=', $kab],
                 ['idKec', '=', $kec]
             ])->first();
             if($model_kec!=null) $label_kec = $model_kec->nmKec;
 
-            $datas = $model->Rekapitulasi($kab, $kec);   
-            $datas_c2 = $model_c2->Rekapitulasi($kab, $kec); 
+            $datas = $model->Rekapitulasi($kab, $kec);
+            $datas_c2 = $model_c2->Rekapitulasi($kab, $kec);
         }
         else if($bs==null && $desa==null && $kec==null && $kab!=null){
             $label = 'kab';
             $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
             if($model_kab!=null) $label_kab = $model_kab->nmKab;
 
-            $datas = $model->Rekapitulasi($kab); 
+            $datas = $model->Rekapitulasi($kab);
             $datas_c2 = $model_c2->Rekapitulasi($kab);
         }
         else{
-            $datas = $model->Rekapitulasi(); 
+            $datas = $model->Rekapitulasi();
             $datas_c2 = $model_c2->Rekapitulasi();
         }
 
         $labels = [];
         $persens = [];
-        
+
         $labels_c2 = [];
         $persens_c2 = [];
 
@@ -228,16 +229,16 @@ class DashboardController extends Controller
 
             if($data->total==0) $persen = 0;
             else $persen = round(($data->terlapor/$data->total*100),3);
-            
+
             $persens[] = $persen;
         }
-        
+
         foreach($datas_c2 as $key=>$data){
             $labels_c2[] = $data->nama;
             $persen = 100;
             if($data->total==0) $persen = 0;
             // else $persen = round(($data->terlapor/($datas[$key]->total*16)*100),3);
-            
+
             $persens_c2[] = $persen;
         }
 
@@ -245,11 +246,11 @@ class DashboardController extends Controller
 
         // return view('dashboard.index',compact(
         //     'random_user', 'unit_kerja', 'dl_per_uk'));
-        
+
         return view('dashboard.index',compact(
-            'random_user', 'unit_kerja', 'dl_per_uk', 
-            'model', 'datas', 'labels', 'persens', 
-            'model_c2', 'datas_c2', 'labels_c2', 'persens_c2', 
+            'random_user', 'unit_kerja', 'dl_per_uk',
+            'model', 'datas', 'labels', 'persens',
+            'model_c2', 'datas_c2', 'labels_c2', 'persens_c2',
             'kab', 'kec', 'desa', 'bs', 'label',
             'label_kab', 'label_kec', 'label_desa'));
     }
@@ -265,10 +266,10 @@ class DashboardController extends Controller
 
         if(strlen($request->get('year'))>0)
             $year = $request->get('year');
-            
+
         if(strlen($request->get('uk'))>0)
             $uk = $request->get('uk');
-    
+
         $d=cal_days_in_month(CAL_GREGORIAN,$month,$year);
         for($i=1;$i<=$d;$i++){
             $hari = date('N', strtotime($year.'-'.$month.'-'.$i));
@@ -314,11 +315,12 @@ class DashboardController extends Controller
             ->with('SuratIndukRel')
             ->orderBy('id', 'desc')
             ->get();
-
+                // dd($model->email);
+        $riwayat_sk = RiwayatSK::where('niplama',$model->email)->orderby('tmt', 'desc')->get();
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop.$model->kdkab)->first();
         // dd($list_ckp[0]);
         return view('dashboard.profile', compact(
-            'id', 'model', 'unit_kerja', 'result_ckp', 'data_st'
+            'id', 'model', 'unit_kerja', 'result_ckp', 'data_st', 'riwayat_sk'
         ));
     }
 }
