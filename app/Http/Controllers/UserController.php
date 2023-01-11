@@ -33,6 +33,7 @@ class UserController extends Controller
     }
 
     public function riwayat(Request $request){
+        // dd('riwayat');
         try {
             $token = $request->session()->get('token');
             $service_url    = 'https://simpeg.bps.go.id/api/bps16';
@@ -47,6 +48,7 @@ class UserController extends Controller
             curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
             $curl_response = json_decode(curl_exec($curl));
             if(!isset($curl_response->error)){
+
                 if(sizeof($curl_response)==0){
                     print_r("Tidak ada Data");
                 }
@@ -79,12 +81,14 @@ class UserController extends Controller
                         ]
                     );
                     }
-                    return redirect()->back();
+                    return redirect()->back()->with('success', 'Berhasil Disimpan');
                 }
+            }else{
+                return redirect()->back()->with('error', $curl_response);
             }
         } catch (Exception $e) {
-            print_r('Gagal Mendapatkan Data Pengguna: '.$e->getMessage());
-            die();
+            return redirect()->back()->with('error', $e);
+            // die();
         }
 
 
