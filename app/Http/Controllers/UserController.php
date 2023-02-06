@@ -7,10 +7,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+
     /**
+     *
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -132,9 +136,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){
+        $model = \App\UserModel::find($id);
+
+        $list_pegawai = \App\UserModel::where([
+                ['id', '<>', 1],
+                ['kdkab', '=', Auth::user()->kdkab]
+            ])
+            ->orWhere([['kdesl', '=', 2],])
+            ->orderBy('name', 'ASC')->get();
+
+        return view('user.edit',compact('model','id',
+            'list_pegawai'));
     }
 
     /**
@@ -144,11 +157,25 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    public function update(Request $request, $id){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('user/edit',$id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
 
+        $model= \App\UserModel::find($id);
+        $pimpinan = \App\UserModel::find($request->pimpinan_id);
+        if($pimpinan!=null){
+            $model->pimpinan_id    = $pimpinan->id;
+            $model->pimpinan_nik    = $pimpinan->nip_baru;
+            $model->pimpinan_nama    = $pimpinan->name;
+            $model->pimpinan_jabatan    = $pimpinan->nmjab;
+            $model->save();
+        }
+
+        return redirect('user');
+    }
     /**
      * Remove the specified resource from storage.
      *
