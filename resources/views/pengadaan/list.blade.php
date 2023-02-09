@@ -32,7 +32,8 @@
                             {{ $data->judul }}
                         </td>
                         <td class="text-center uang">
-                            Rp {{ $data->nilai_anggaran }}
+                            Rp
+                            {{ number_format($data->nilai_anggaran, 0, ',', '.') }}
                         </td>
                         @if ($data->status_aktif == 1)
                             <td class="text-center">

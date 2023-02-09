@@ -50,7 +50,6 @@
         }
     </style>
 @endsection
-
 @section('scripts')
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
     <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
@@ -59,14 +58,10 @@
     <script src="{!! asset('js/jquery.mask.js') !!}"></script> <!-- Select2 Js -->
     <script>
         $(document).ready(function() {
-
             $('.uang').mask('000.000.000.000.000', {
                 reverse: true
             });
-            $('.datepicker').datepicker({
-                // endDate: 'd',
-            });
-
+            $('.datepicker').datepicker({});
         });
     </script>
 @endsection

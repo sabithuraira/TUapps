@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label>Waktu Pemakaian</label>
                     <div class="form-line">
-                        <div class="input-group">
+                        <div class="input-group ">
                             <input type="text" class="datepicker form-control" id="waktu_pemakaian"
                                 name="waktu_pemakaian" autocomplete="off"
                                 value="{{ old('waktu_pemakaian', $model->waktu_pemakaian) }}" required>
@@ -414,3 +414,4 @@
         </div>
     </div>
 </div>
+<script></script>

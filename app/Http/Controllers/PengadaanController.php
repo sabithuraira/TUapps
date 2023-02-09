@@ -49,6 +49,7 @@ class PengadaanController extends Controller
         $datas->appends($request->all());
         $model = new Pengadaan();
         $auth = Auth::user();
+        setlocale(LC_MONETARY, 'id');
         return view('pengadaan.index', compact(
             'datas',
             'keyword',
@@ -248,7 +249,7 @@ class PengadaanController extends Controller
     }
     public function unduh($file_name)
     {
-        $file = public_path() . "/upload/pengadaan/" . $file_name;
+        $file = base_path() . "/musi/upload/pengadaan/" . $file_name;
         $headers = array('Content-Type: application/pdf',);
         return response()->download($file, $file_name, $headers);
     }
