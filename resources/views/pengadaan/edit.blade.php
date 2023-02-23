@@ -9,23 +9,59 @@
 @endsection
 
 @section('content')
-    <div class="row clearfix">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h2>Pengajuan Pengadaan</h2>
-                </div>
-                <div class="body">
-                    @if (\Session::has('success'))
-                        <div class="alert alert-success">
-                            <p>{{ \Session::get('success') }}</p>
+    <div id="app_vue">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Pengajuan Pengadaan</h2>
+                    </div>
+                    <div class="body">
+                        @if (\Session::has('success'))
+                            <div class="alert alert-success">
+                                <p>{{ \Session::get('success') }}</p>
+                            </div>
+                        @endif
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Home-withicon"><i
+                                        class="fa fa-user"></i> SKF</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Profile-withicon"><i
+                                        class="fa fa-search"></i> PPK</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Contact-withicon"><i
+                                        class="fa fa-money"></i> PBJ</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="Home-withicon">
+                                <h6>SKF</h6>
+                                <form method="post" class="frep" action="{{ url('pengadaan/update_skf/' . $id) }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @include('pengadaan._form_skf')
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="Profile-withicon">
+                                <h6>PPK</h6>
+                                <form method="post" class="frep" action="{{ url('pengadaan/update_ppk/' . $id) }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @include('pengadaan._form_ppk')
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="Contact-withicon">
+                                <h6>PBJ</h6>
+                                <form method="post" class="frep" action="{{ url('pengadaan/update_pbj/' . $id) }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @include('pengadaan._form_pbj')
+                                </form>
+                            </div>
                         </div>
-                    @endif
-                    <form method="post" class="frep" action="{{ url('pengadaan/update/' . $id) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @include('pengadaan._form')
-                    </form>
+                        {{-- <form method="post" class="frep" action="{{ url('pengadaan/update/' . $id) }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @include('pengadaan._form')
+                        </form> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,8 +103,10 @@
             $('.uang').mask('000.000.000.000.000', {
                 reverse: true
             });
-            $('.datepicker').datepicker({});
-            $('#skffield').attr("disabled", "disabled");
+            $('.datepicker').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            // $('#skffield').attr("disabled", "disabled");
             var ppk = auth.includes("ppk") || auth.includes("superadmin")
             if (konfirmasi_ppk != "Diterima" && ppk) {
                 $('#ppkfield').removeAttr("disabled");

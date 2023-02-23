@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class PengadaanController extends Controller
 {
-    //
-
     public function index(Request $request)
     {
         $keyword = $request->keyword;
@@ -64,8 +62,6 @@ class PengadaanController extends Controller
             'jumlah_selesai'
         ));
     }
-
-
     public function create()
     {
         $auth = Auth::user();
@@ -247,6 +243,157 @@ class PengadaanController extends Controller
             return back()->with('errors', 'Data gagal diperbaharui');
         }
     }
+
+    public function updateskf(Request $request, $id){
+        $real_id = Crypt::decrypt($id);
+        $model = Pengadaan::find($real_id);
+        if ($request->judul) {
+            $model->konfirmasi_ppk = $request->konfirmasi_ppk;
+        }
+        if ($request->kode_anggaran) {
+            $model->spek = $request->spek;
+        }
+        if ($request->nilai_anggaran) {
+            $model->konfirmasi_ppk = str_replace('.', '', $request->nilai_anggaran);
+        }
+        if ($request->waktu_pemakaian) {
+            $model->spek = date("Y-m-d", strtotime($request->get('waktu_pemakaian')));
+        }
+            $model->updated_by = Auth::user()->id;
+        if ($request->hasFile('nota_dinas_skf')) {
+            $file = $request->file('nota_dinas_skf');
+            $name = $id . 'skf_nota_dinas_kak_spek_volume';
+            $file->move('upload/pengadaan', $name);
+            $model->nota_dinas_skf = $name;
+        }
+        $rows = $model->save();
+        if ($rows > 0) {
+            return back()->with('success', 'Data berhasil diperbaharui');
+        } else {
+            return back()->with('errors', 'Data gagal diperbaharui');
+        }
+
+    }
+    public function updateppk(Request $request, $id){
+        $real_id = Crypt::decrypt($id);
+        $model = Pengadaan::find($real_id);
+        if ($request->konfirmasi_ppk) {
+            $model->konfirmasi_ppk = $request->konfirmasi_ppk;
+        }
+        if ($request->spek) {
+            $model->spek = $request->spek;
+        }
+        if ($request->perkiraan_nilai) {
+            $model->perkiraan_nilai =  str_replace('.', '', $request->perkiraan_nilai);
+        }
+        if ($request->alokasi_anggaran) {
+            $model->alokasi_anggaran = $request->alokasi_anggaran;
+        }
+        if ($request->hasFile('hps')) {
+            if ($model->hps) {
+                unlink('upload/pengadaan/' . $model->hps);
+            }
+            $file = $request->file('hps');
+            $name = $model->id . 'ppk_hps';
+            $file->move('upload/pengadaan', $name);
+            $model->hps = $name;
+        }
+
+        if ($request->hasFile('nota_dinas_ppk')) {
+            if ($model->nota_dinas_ppk) {
+                unlink('upload/pengadaan/' . $model->nota_dinas_ppk);
+            }
+            $file = $request->file('nota_dinas_ppk');
+            $name = $model->id . 'ppk_nota_dinas_kak_spek';
+            $file->move('upload/pengadaan', $name);
+            $model->nota_dinas_ppk = $name;
+        }
+        
+        if ($request->tgl_penolakan_ppk) {
+            $model->tgl_penolakan_ppk = date("Y-m-d", strtotime($request->get('tgl_penolakan_ppk')));
+        }
+        if ($request->alasan_penolakan_ppk) {
+            $model->alasan_penolakan_ppk = $request->alasan_penolakan_ppk;
+        }
+        $model->updated_by = Auth::user()->id;
+
+        $rows = $model->save();
+        if ($rows > 0) {
+            return back()->with('success', 'Data berhasil diperbaharui');
+        } else {
+            return back()->with('errors', 'Data gagal diperbaharui');
+        }
+
+    }
+
+    
+    public function updatepbj(Request $request, $id){
+        $real_id = Crypt::decrypt($id);
+        $model = Pengadaan::find($real_id);
+        if ($request->konfirmasi_pbj) {
+            $model->konfirmasi_pbj = $request->konfirmasi_pbj;
+        }
+        if ($request->nilai_kwitansi) {
+            $model->nilai_kwitansi = $request->nilai_kwitansi;
+        }
+        if ($request->tgl_mulai_pelaksanaan) {
+            $model->tgl_mulai_pelaksanaan = date("Y-m-d", strtotime($request->get('tgl_mulai_pelaksanaan')));
+        }
+        if ($request->tgl_akhir_pelaksanaan) {
+            $model->tgl_akhir_pelaksanaan =  date("Y-m-d", strtotime($request->get('tgl_akhir_pelaksanaan')));
+        }
+        if ($request->status_pengadaan) {
+            $model->status_pengadaan = $request->status_pengadaan;
+        } else {
+            $model->status_pengadaan = "0";
+        }
+        if ($request->hasFile('foto')) {
+            if ($model->foto) {
+                unlink('upload/pengadaan/' . $model->foto);
+            }
+            $file = $request->file('foto');
+            $name = $model->id . 'pbj_foto'; 
+            $file->move('upload/pengadaan', $name);
+            $model->foto = $name;
+        }
+        if ($request->hasFile('bast')) {
+            if ($model->bast) {
+                unlink('upload/pengadaan/' . $model->bast);
+            }
+            $file = $request->file('bast');
+            $name = $model->id . 'pbj_bast';
+            $file->move('upload/pengadaan', $name);
+            $model->bast = $name;
+        }
+        if ($request->hasFile('kontrak')) {
+            if ($model->kontrak) {
+                unlink('upload/pengadaan/' . $model->kontrak);
+            }
+            $file = $request->file('kontrak');
+            $name = $model->id . 'pbj_kontrak' ;
+            $file->move('upload/pengadaan', $name);
+            $model->bast = $name;
+        }
+
+        if ($request->tgl_penolakan_pbj) {
+            $model->tgl_penolakan_pbj =  date("Y-m-d", strtotime($request->get('tgl_penolakan_pbj')));
+        }
+        if ($request->alasan_penolakan_pbj) {
+            $model->alasan_penolakan_pbj = $request->alasan_penolakan_pbj;
+        }
+
+        $model->updated_by = Auth::user()->id;
+
+        $rows = $model->save();
+        if ($rows > 0) {
+            return back()->with('success', 'Data berhasil diperbaharui');
+        } else {
+            return back()->with('errors', 'Data gagal diperbaharui');
+        }
+    }
+
+
+
     public function unduh($file_name)
     {
         $file = base_path() . "/musi/upload/pengadaan/" . $file_name;

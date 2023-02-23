@@ -62,7 +62,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     {{-- <label>Nota Dinas</label> --}}
-                    <label><span style="color: red; display:block; float:right">*</span>Nota Dinas
+                    <label><span style="color: red; display:block; float:right">*</span>Nota Dinas + Draft KAK + SPEK + Volume
                         <small>(pdf)</small>:</label>
                     <input type="file" class="form-control" id="nota_dinas_skf" name="nota_dinas_skf"
                         accept="application/pdf" required>
@@ -84,7 +84,7 @@
         <span>PPK</span>
     </div>
     <div class="row clearfix">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group">
                 <label>Konfirmasi PPK</label>
                 <select name="konfirmasi_ppk" id="konfirmasi_ppk" class="form-control" required disabled>
@@ -112,7 +112,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <div class="form-group">
                     <label><span style="color: red; display:block; float:right">*</span>SPEK
                         <small>(pdf)</small>:</label>
@@ -126,7 +126,7 @@
                                 class=" icon-arrow-down"></i> Unduh File</a>
                     @endif
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="row clearfix">
             <div class="col-md-4">
@@ -144,7 +144,7 @@
                 <label class="mb-0"><span style="color: red; display:block; float:left">*</span>
                     <small>Untuk Nilai Diatas 10jt <i class="icon-arrow-right"></i></small></label>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <label><span style="color: red; display:block; float:right">*</span>LK HPS
                     <small>(pdf)</small>:</label>
                 <input type="file" class="form-control" id="lk_hps" name="lk_hps"
@@ -156,10 +156,10 @@
                     <a href="{{ url('pengadaan/unduh/' . $model->lk_hps) }}" target="_blank"><i
                             class=" icon-arrow-down"></i> Unduh File</a>
                 @endif
-            </div>
+            </div> --}}
 
-            <div class="col-md-3">
-                <label><span style="color: red; display:block; float:right">*</span>HPS
+            <div class="col-md-6">
+                <label><span style="color: red; display:block; float:right">*</span>LK HPS + HPS
                     <small>(pdf)</small>:</label>
                 <input type="file" class="form-control" id="hps" name="hps" accept="application/pdf"
                     @if (!$model['hps']) required @endif disabled>
@@ -183,9 +183,9 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label><span style="color: red; display:block; float:right">*</span>Nota Dinas PPK
+                    <label><span style="color: red; display:block; float:right">*</span>Nota Dinas + KAK + SPEK PPK
                         <small>(pdf)</small>:</label>
                     <input type="file" class="form-control" id="nota_dinas_ppk" name="nota_dinas_ppk"
                         accept="application/pdf" @if (!$model['nota_dinas_ppk']) required @endif>
@@ -198,7 +198,7 @@
                             class=" icon-arrow-down"></i> Unduh File</a>
                 @endif
             </div>
-            <div class="col-md-3 ">
+            {{-- <div class="col-md-3 ">
                 <div class="form-group">
                     <label><span style="color: red; display:block; float:right">*</span>KAK PPK
                         <small>(pdf)</small>:</label>
@@ -212,7 +212,7 @@
                     <a href="{{ url('pengadaan/unduh/' . $model->kak_ppk) }}" target="_blank"><i
                             class=" icon-arrow-down"></i> Unduh File</a>
                 @endif
-            </div>
+            </div> --}}
         </div>
     </fieldset>
 

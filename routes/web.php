@@ -248,7 +248,9 @@ Route::group(
         Route::post('pengadaan/store', 'PengadaanController@store');
 
         Route::get('pengadaan/edit/{id}', 'PengadaanController@edit');
-        Route::post('pengadaan/update/{id}', 'PengadaanController@update');
+        Route::post('pengadaan/update_skf/{id}', 'PengadaanController@updateskf');
+        Route::post('pengadaan/update_ppk/{id}', 'PengadaanController@updateppk');
+        Route::post('pengadaan/update_pbj/{id}', 'PengadaanController@updatepbj');
 
         Route::get('pengadaan/unduh/{file_name}', 'PengadaanController@unduh');
         Route::post('pengadaan/set_aktif', 'PengadaanController@set_aktif');
