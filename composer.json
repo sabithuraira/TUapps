@@ -13,7 +13,7 @@
         "guzzlehttp/guzzle": "^6.5",
         "iio/libmergepdf": "^4.0",
         "irsadarief/jkd-sso": "^1.6",
-        "laravel/framework": "5.7.*",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "league/flysystem-webdav": "^1.0",
         "maatwebsite/excel": "^3.1",
