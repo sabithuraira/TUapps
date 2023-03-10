@@ -192,10 +192,16 @@
                     $('#foto').removeAttr("disabled");
                     $('#bast').removeAttr("disabled");
                     $('#kontrak').removeAttr("disabled");
+                    $('#link_foto').removeAttr("disabled");
+                    $('#link_bast').removeAttr("disabled");
+                    $('#link_kontrak').removeAttr("disabled");
                 } else {
                     $('#foto').attr("disabled", "disabled");
                     $('#bast').attr("disabled", "disabled");
                     $('#kontrak').attr("disabled", "disabled");
+                    $('#link_foto').attr("disabled", "disabled");
+                    $('#link_bast').attr("disabled", "disabled");
+                    $('#link_kontrak').attr("disabled", "disabled");
                 }
             }
         });

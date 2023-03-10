@@ -60,14 +60,24 @@
     <div class="row clearfix">
         <div class="col-md-3">
             <div class="form-group">
-                <label><span style="color: red; display:block; float:right">
+                <label>
+                    {{-- <span style="color: red; display:block; float:right">
                         @if (!$model->foto)
                             *
                         @endif
-                    </span>FOTO
-                    <small>(jpg, png, jpeg, img)</small>:</label>
+                    </span> --}}
+                    FOTO
+                    <small>(jpg, png, jpeg, img)</small>:
+                </label>
                 <input type="file" class="form-control" id="foto" name="foto" accept="image/*"
-                    @if (!$model->foto) required @endif disabled value="">
+                    @if (!$model->foto)  @endif disabled value="">
+                <label class="mb-1">
+                    <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file
+                        (google drive)
+                    </small>
+                </label>
+                <input class="form-control" id="link_foto" name="link_foto"
+                    value="{{ old('link_foto', $model->link_foto) }}">
                 @foreach ($errors->get('foto') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -80,15 +90,23 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label>
-                    <span style="color: red; display:block; float:right">
+                    {{-- <span style="color: red; display:block; float:right">
                         @if (!$model->bast)
                             *
                         @endif
-                    </span>Kwitansi / BAST
+                    </span> --}}
+                    Kwitansi / BAST
                     <small>(pdf)</small>:
                 </label>
                 <input type="file" class="form-control" id="bast" name="bast" accept="application/pdf"
-                    disabled @if (!$model->bast) required @endif>
+                    disabled @if (!$model->bast)  @endif>
+                <label class="mb-1">
+                    <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file
+                        (google drive)
+                    </small>
+                </label>
+                <input class="form-control" id="link_bast" name="link_bast"
+                    value="{{ old('link_bast', $model->link_bast) }}">
                 @foreach ($errors->get('bast') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach
@@ -104,6 +122,13 @@
                     <small>(pdf)</small>:</label>
                 <input type="file" class="form-control" id="kontrak" name="kontrak" accept="application/pdf"
                     disabled>
+                <label class="mb-1">
+                    <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file
+                        (google drive)
+                    </small>
+                </label>
+                <input class="form-control" id="link_kontrak" name="link_kontrak"
+                    value="{{ old('link_kontrak', $model->link_kontrak) }}">
                 @foreach ($errors->get('kontrak') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach

@@ -74,10 +74,14 @@
         </div> --}}
 
         <div class="col-md-6">
-            <label><span style="color: red; display:block; float:right">*</span>LK HPS + HPS
+            <label>LK HPS + HPS
                 <small>(pdf)</small>:</label>
             <input type="file" class="form-control" id="hps" name="hps" accept="application/pdf"
-                @if (!$model['hps']) required @endif disabled>
+                @if (!$model['hps'])  @endif disabled>
+            <label class="mb-1">
+                <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file (google
+                    drive)</small></label>
+            <input class="form-control" id="link_hps" name="link_hps" value="{{ old('link_hps', $model->link_hps) }}">
             @foreach ($errors->get('hps') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
             @endforeach
@@ -100,11 +104,19 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label><span style="color: red; display:block; float:right">*</span>Nota Dinas + KAK + SPEK PPK
+                <label>Nota Dinas + KAK + SPEK PPK
                     <small>(pdf)</small>:</label>
                 <input type="file" class="form-control" id="nota_dinas_ppk" name="nota_dinas_ppk"
-                    accept="application/pdf" @if (!$model['nota_dinas_ppk']) required @endif>
+                    accept="application/pdf" @if (!$model['nota_dinas_ppk'])  @endif>
+                <label class="mb-1">
+                    <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file
+                        (google drive)
+                    </small>
+                </label>
+                <input class="form-control" id="link_nota_dinas_ppk" name="link_nota_dinas_ppk"
+                    value="{{ old('link_nota_dinas_ppk', $model->link_nota_dinas_ppk) }}">
             </div>
+
             @foreach ($errors->get('nota_dinas_ppk') as $msg)
                 <p class="text-danger">{{ $msg }}</p>
             @endforeach

@@ -59,13 +59,15 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                {{-- <label>Nota Dinas</label> --}}
-                <label><span style="color: red; display:block; float:right">*</span>Nota Dinas + Draft KAK + SPEK +
+                <label>Nota Dinas + Draft KAK + SPEK +
                     Volume
                     <small>(pdf)</small>:</label>
-                <input type="file" class="form-control" id="nota_dinas_skf" name="nota_dinas_skf"
-                    accept="application/pdf" required>
-
+                <input type="file" class="form-control mb-1" id="nota_dinas_skf" name="nota_dinas_skf"
+                    accept="application/pdf">
+                <label class="mb-1">
+                    <small>Apabila Gagal akibat file terlalu besar silahkan masukkan link file (google
+                        drive)</small></label>
+                <input class="form-control" id="link_nota_dinas_skf" name="link_nota_dinas_skf" value="{{ old('link_nota_dinas_skf', $model->link_nota_dinas_skf) }}">
             </div>
             @foreach ($errors->get('nota_dinas_skf') as $msg)
                 <p class="text-danger">{{ $msg }}</p>

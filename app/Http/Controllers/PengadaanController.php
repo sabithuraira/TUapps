@@ -82,6 +82,7 @@ class PengadaanController extends Controller
             'nilai_anggaran' =>  str_replace('.', '', $request->nilai_anggaran),
             'waktu_pemakaian' => date("Y-m-d", strtotime($request->get('waktu_pemakaian'))),
             'nota_dinas_skf' => 'input_file',
+            'link_nota_dinas_skf' => $request->link_nota_dinas_skf,
             'created_by' => $auth->id
         ]);
 
@@ -94,7 +95,6 @@ class PengadaanController extends Controller
         }
         return redirect('pengadaan')->with('success', 'Data berhasil diperbaharui');
     }
-
 
     public function edit($id)
     {
@@ -244,7 +244,8 @@ class PengadaanController extends Controller
         }
     }
 
-    public function updateskf(Request $request, $id){
+    public function updateskf(Request $request, $id)
+    {
         $real_id = Crypt::decrypt($id);
         $model = Pengadaan::find($real_id);
         if ($request->judul) {
@@ -256,10 +257,13 @@ class PengadaanController extends Controller
         if ($request->nilai_anggaran) {
             $model->konfirmasi_ppk = str_replace('.', '', $request->nilai_anggaran);
         }
+        if ($request->link_nota_dinas_skf) {
+            $model->link_nota_dinas_skf = $request->link_nota_dinas_skf;
+        }
         if ($request->waktu_pemakaian) {
             $model->spek = date("Y-m-d", strtotime($request->get('waktu_pemakaian')));
         }
-            $model->updated_by = Auth::user()->id;
+        $model->updated_by = Auth::user()->id;
         if ($request->hasFile('nota_dinas_skf')) {
             $file = $request->file('nota_dinas_skf');
             $name = $id . 'skf_nota_dinas_kak_spek_volume';
@@ -272,9 +276,9 @@ class PengadaanController extends Controller
         } else {
             return back()->with('errors', 'Data gagal diperbaharui');
         }
-
     }
-    public function updateppk(Request $request, $id){
+    public function updateppk(Request $request, $id)
+    {
         $real_id = Crypt::decrypt($id);
         $model = Pengadaan::find($real_id);
         if ($request->konfirmasi_ppk) {
@@ -289,6 +293,9 @@ class PengadaanController extends Controller
         if ($request->alokasi_anggaran) {
             $model->alokasi_anggaran = $request->alokasi_anggaran;
         }
+        if ($request->link_hps) {
+            $model->link_hps = $request->link_hps;
+        }
         if ($request->hasFile('hps')) {
             if ($model->hps) {
                 unlink('upload/pengadaan/' . $model->hps);
@@ -298,7 +305,9 @@ class PengadaanController extends Controller
             $file->move('upload/pengadaan', $name);
             $model->hps = $name;
         }
-
+        if ($request->link_nota_dinas_ppk) {
+            $model->link_nota_dinas_ppk =  $request->link_nota_dinas_ppk;
+        }
         if ($request->hasFile('nota_dinas_ppk')) {
             if ($model->nota_dinas_ppk) {
                 unlink('upload/pengadaan/' . $model->nota_dinas_ppk);
@@ -308,7 +317,7 @@ class PengadaanController extends Controller
             $file->move('upload/pengadaan', $name);
             $model->nota_dinas_ppk = $name;
         }
-        
+
         if ($request->tgl_penolakan_ppk) {
             $model->tgl_penolakan_ppk = date("Y-m-d", strtotime($request->get('tgl_penolakan_ppk')));
         }
@@ -323,11 +332,9 @@ class PengadaanController extends Controller
         } else {
             return back()->with('errors', 'Data gagal diperbaharui');
         }
-
     }
-
-    
-    public function updatepbj(Request $request, $id){
+    public function updatepbj(Request $request, $id)
+    {
         $real_id = Crypt::decrypt($id);
         $model = Pengadaan::find($real_id);
         if ($request->konfirmasi_pbj) {
@@ -347,14 +354,20 @@ class PengadaanController extends Controller
         } else {
             $model->status_pengadaan = "0";
         }
+        if ($request->link_foto) {
+            $model->link_foto = $request->link_foto;
+        }
         if ($request->hasFile('foto')) {
             if ($model->foto) {
                 unlink('upload/pengadaan/' . $model->foto);
             }
             $file = $request->file('foto');
-            $name = $model->id . 'pbj_foto'; 
+            $name = $model->id . 'pbj_foto';
             $file->move('upload/pengadaan', $name);
             $model->foto = $name;
+        }
+        if ($request->link_bast) {
+            $model->link_bast = $request->link_bast;
         }
         if ($request->hasFile('bast')) {
             if ($model->bast) {
@@ -365,12 +378,15 @@ class PengadaanController extends Controller
             $file->move('upload/pengadaan', $name);
             $model->bast = $name;
         }
+        if ($request->link_kontrak) {
+            $model->link_kontrak = $request->link_kontrak;
+        }
         if ($request->hasFile('kontrak')) {
             if ($model->kontrak) {
                 unlink('upload/pengadaan/' . $model->kontrak);
             }
             $file = $request->file('kontrak');
-            $name = $model->id . 'pbj_kontrak' ;
+            $name = $model->id . 'pbj_kontrak';
             $file->move('upload/pengadaan', $name);
             $model->bast = $name;
         }
@@ -392,15 +408,12 @@ class PengadaanController extends Controller
         }
     }
 
-
-
     public function unduh($file_name)
     {
         $file = base_path() . "/musi/upload/pengadaan/" . $file_name;
         $headers = array('Content-Type: application/pdf',);
         return response()->download($file, $file_name, $headers);
     }
-
 
     public function set_aktif(Request $request)
     {
