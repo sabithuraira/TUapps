@@ -10,14 +10,14 @@
 @section('content')
     <div class="container">
         <br />
-        @if (\Session::has('success'))
+        @if (Session::has('success'))
             <div class="alert alert-success">
-                <p>{{ \Session::get('success') }}</p>
+                <p>{{ Session::get('success') }}</p>
             </div><br />
         @endif
-        @if (\Session::has('error'))
+        @if (Session::has('error'))
             <div class="alert alert-danger">
-                <p>{{ \Session::get('error') }}</p>
+                <p>{{ $errors }}</p>
             </div><br />
         @endif
 
@@ -25,6 +25,7 @@
             <div class="body">
                 <a href="{{ action('UserController@create') }}" class="btn btn-info">Tambah</a>
                 <a href="{{ url('user_riwayat') }}" class="btn btn-info">Load Riwayat SK Pegawai</a>
+                <a href="{{ url('user_load_data_pegawai') }}" class="btn btn-info">Load Data Pegawai</a>
                 <br /><br />
                 <form action="{{ url('user') }}" method="get">
                     <div class="input-group mb-3">
@@ -48,4 +49,8 @@
 
 @section('scripts')
     <script type="text/javascript" src="{!! asset('js/pagination.js') !!}"></script>
+    <script>
+        var token = {!! json_encode($token) !!};
+        console.log(token)
+    </script>
 @endsection

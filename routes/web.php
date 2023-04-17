@@ -18,7 +18,7 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('angka_kredit', 'AngkaKreditController');
     Route::resource('user', 'UserController');
     Route::get('user_riwayat', 'UserController@riwayat');
-    Route::get('jabatan_fungsional', 'jabatan_fungsional@index');
+    Route::get('user_load_data_pegawai', 'UserController@load_data_pegawai');
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
@@ -67,6 +67,9 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('jabatan_fungsional/edit_kegiatan', 'JabatanFungsionalController@edit_kegiatan');
     Route::post('jabatan_fungsional/edit_subkegiatan', 'JabatanFungsionalController@edit_subkegiatan');
     Route::post('jabatan_fungsional/hapus', 'JabatanFungsionalController@hapus');
+
+    Route::resource('fungsional_definitif', 'FungsionalDefinitifController');
+    Route::get('fungsional_definitif_export', 'FungsionalDefinitifController@export');
 });
 
 Route::group(['middleware' => 'auth'], function () {

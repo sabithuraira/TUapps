@@ -38,9 +38,9 @@
                 </li>
 
                 @hasanyrole('superadmin|pengelola_regsosek')
-                <li class="{{ (request()->is('regsosek*')) ? 'active' : '' }}">
-                    <a href="{{ url('regsosek') }}"> <i class="icon-doc"></i><span>SLS Regsosek</span></a>
-                </li>
+                    <li class="{{ request()->is('regsosek*') ? 'active' : '' }}">
+                        <a href="{{ url('regsosek') }}"> <i class="icon-doc"></i><span>SLS Regsosek</span></a>
+                    </li>
                 @endhasanyrole
 
                 <li
@@ -91,14 +91,14 @@
                                 href="{{ url('log_book/laporan_wfh') }}">Laporan WFH</a></li>
 
                         @if (strlen(auth()->user()->kdesl) > 0 ||
-                            auth()->user()->hasRole('superadmin') ||
-                            auth()->user()->hasRole('binagram'))
+                                auth()->user()->hasRole('superadmin') ||
+                                auth()->user()->hasRole('binagram'))
                             <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a
                                     href="{{ url('log_book/rekap_pegawai') }}">Rekap Kerja Seluruh Pegawai</a></li>
                         @endif
 
                         @if (auth()->user()->hasRole('superadmin') ||
-                            auth()->user()->hasRole('kepegawaian'))
+                                auth()->user()->hasRole('kepegawaian'))
                             <li class="{{ request()->is('ckp/rekap_ckp*') ? 'active' : '' }}"><a
                                     href="{{ url('ckp/rekap_ckp') }}">Rinciap CKP Pegawai</a></li>
                         @endif
@@ -221,7 +221,7 @@
                     </li>
                 @endhasanyrole
 
-                @role('superadmin')
+                @role('superadmin|kepegawaian')
                     <li
                         class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') ? 'active' : '' }}">
                         <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
@@ -239,9 +239,13 @@
                             <li class="{{ request()->is('user*') ? 'active' : '' }}"><a
                                     href="{{ url('user') }}">User</a>
                             </li>
+                            <li class="{{ request()->is('fungsional_definitif*') ? 'active' : '' }}"><a
+                                    href="{{ url('fungsional_definitif?kab_filter=1600') }}">Fungsional Definitif</a>
+                            </li>
                             <li class="{{ request()->is('jabatan_fungsional*') ? 'active' : '' }}"><a
                                     href="{{ url('jabatan_fungsional') }}">Jabatan Fungsional</a>
                             </li>
+
                         </ul>
                     </li>
 
