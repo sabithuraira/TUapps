@@ -302,6 +302,10 @@ $(document).ready(function() {
     if(vm.id_data=='') vm.setNomor();
     // $("#tanggal").val(vm.form.tanggal);
     vm.setDatas();
+
+    $('.datepicker').datepicker({
+        endDate: 'd',
+    });
 });
 
 $('.date').datepicker()
