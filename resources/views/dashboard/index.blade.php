@@ -11,7 +11,7 @@
     <div class="container">
 
         <div class="col-lg-12 col-md-12">
-            @include('dashboard.regsosek')
+            @include('dashboard.st2023.index')
         </div>
 
         <div class="col-lg-12 col-md-12">
