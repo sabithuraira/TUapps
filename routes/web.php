@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('uker', 'UkerController');
     Route::resource('uker4', 'Uker4Controller');
@@ -230,6 +234,10 @@ Route::group(['middleware' => 'auth'], function () {
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
     Route::get('dashboard/index', 'DashboardController@index');
+    Route::get('dashboard/petugas', 'DashboardController@petugas');
+    Route::get('dashboard/petugas/{id}', 'DashboardController@petugas_show');
+    Route::get('dashboard/alokasi', 'DashboardController@alokasi');
+    Route::get('dashboard/alokasi/{id}', 'DashboardController@alokasi_show');
     Route::get('dashboard/rekap_dl', 'DashboardController@rekap_dl');
     Route::get('dashboard/{id}/profile', 'DashboardController@profile');
     Route::get('download_sp2020', 'HomeController@downloadSp2020');

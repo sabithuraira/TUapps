@@ -1,4 +1,4 @@
-<a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
+{{-- <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a> --}}
 <br /><br />
 
 @if (!$request->sls_filter)
@@ -56,9 +56,13 @@
         <thead>
             <tr class="text-center">
                 <th>No</th>
-                <th>Nama Wilayah</th>
-
-
+                <th>Nu RT</th>
+                <th>Nama</th>
+                <th>Sektor Pertanian</th>
+                <th>Waktu Mulai</th>
+                <th>Waktu Selesai</th>
+                <th>Waktu Selesai</th>
+                <th>Latitude, Longitude</th>
             </tr>
         </thead>
         @if (sizeof($data_wilayah) > 0)
@@ -68,20 +72,27 @@
                         <td>
                             {{ ++$index }}
                         </td>
+                        <td>
+                            {{ $data['nurt'] }}
+                        </td>
                         <td class="text-left">
-                            <a
-                                href="{{ url(
-                                    'dashboard/index?kab_filter=' .
-                                        (isset($data['kode_kab']) ? $data['kode_kab'] : '') .
-                                        '&kec_filter=' .
-                                        (isset($data['kode_kec']) ? $data['kode_kec'] : '') .
-                                        '&desa_filter=' .
-                                        (isset($data['kode_desa']) ? $data['kode_desa'] : '') .
-                                        '&sls_filter=' .
-                                        (isset($data['id_sls']) ? $data['id_sls'] : ''),
-                                ) }}">
-                                {{ '[' . $data['kode_wilayah'] . '] ' . $data['nama_wilayah'] }}
-                            </a>
+                            {{ $data['kepala_ruta'] }}
+                        </td>
+                        <td>
+                            {{ $data['sektor'] }}
+                        </td>
+                        <td class="text-left">
+                            {{ $data['start_time'] }}
+                        </td>
+                        <td class="text-left">
+                            {{ $data['end_time'] }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $data['end_latitude'] }}
+                        </td>
+                        <td class="text-left">
+                            {{ $data['end_longitude'] }}
                         </td>
                     </tr>
                 @endforeach
@@ -89,5 +100,4 @@
         @else
         @endif
     </table>
-
 @endif

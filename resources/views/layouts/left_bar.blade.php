@@ -34,6 +34,10 @@
                     <ul>
                         <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/index') }}">Overview</a></li>
+                        <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
+                        <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li>
                     </ul>
                 </li>
 
