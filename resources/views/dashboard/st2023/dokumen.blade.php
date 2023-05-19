@@ -2,7 +2,6 @@
 
     @if ($request->kab_filter)
         <a href="#" onclick="export_alokasi();" class="btn btn-info ml-2">Export Alokasi</a>
-
         <a href="#" onclick="import_alokasi();" class="btn btn-info  ml-2">Import Alokasi</a>
     @endif
 
@@ -24,7 +23,6 @@
                 <th>Jumlah Non Respon</th>
                 <th>Dokumen BPS</th>
             </tr>
-
         </thead>
         @if (sizeof($data_dokumen) > 0)
             <tbody>

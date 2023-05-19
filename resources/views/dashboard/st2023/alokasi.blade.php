@@ -220,7 +220,6 @@
             mounted() {
                 const self = this;
                 const auth = {!! json_encode($auth) !!}
-                console.log(auth['kdkab'])
                 // this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 const kab_value = {!! json_encode($request->kab_filter) !!}
                 const kec_value = {!! json_encode($request->kec_filter) !!}
@@ -249,15 +248,13 @@
                     .then(response => response.json())
                     .then(data => {
                         this.csrf = data.csrf_token
-                        // console.log(this.csrf)
-                        // console.log(this.csrfToken)
                     })
                     .catch(error => {
                         console.log(error);
                     });
 
 
-                console.log(this.api_token)
+
 
             },
             methods: {
@@ -400,13 +397,9 @@
 
 
                 hapus(id, nama) {
-                    // this.encId = id;
-                    // console.log(nama);
                     this.id_hapus = id;
                     this.nama_hapus = nama;
-                    // console.log(this.id_hapus);
                     console.log(this.nama_hapus);
-                    // document.getElementById('nama_hapus').innerHTML = this.nama_hapus;
 
                 },
                 hapus_confirm() {

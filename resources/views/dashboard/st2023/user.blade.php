@@ -271,7 +271,6 @@
             mounted() {
                 const self = this;
                 const auth = {!! json_encode($auth) !!}
-                console.log(auth['kdkab'])
                 // this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 const kab_value = {!! json_encode($request->kab_filter) !!}
                 const kec_value = {!! json_encode($request->kec_filter) !!}
@@ -300,8 +299,6 @@
                     .then(response => response.json())
                     .then(data => {
                         this.csrf = data.csrf_token
-                        // console.log(this.csrf)
-                        // console.log(this.csrfToken)
                     })
                     .catch(error => {
                         console.log(error);
@@ -446,7 +443,6 @@
                 hapus(id, nama) {
                     this.id_hapus = id;
                     this.nama_hapus = nama;
-                    console.log(this.nama_hapus);
                 },
                 hapus_confirm() {
                     var self = this;
@@ -474,11 +470,6 @@
                             console.log(error)
                         });
                 },
-                // edit(event, id, name) {
-                //     this.id_edit = id;
-                //     this.nama_edit = name;
-                //     console.log(this.nama_edit);
-                // }
             }
 
         });

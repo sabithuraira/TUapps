@@ -113,13 +113,11 @@
                     .then(response => response.json())
                     .then(data => {
                         this.csrf = data.csrf_token
-                        // console.log(this.csrf)
-                        // console.log(this.csrfToken)
                     })
                     .catch(error => {
                         console.log(error);
                     });
-                console.log(this.api_token)
+
 
                 toastr.options.timeOut = "false";
                 toastr.options.closeButton = true;
@@ -144,8 +142,6 @@
             },
             methods: {
                 simpan(event) {
-                    // console.log(this.encId)
-
                     const headers = {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': this.csrfToken,
@@ -168,8 +164,6 @@
                                 console.log(response)
                                 localStorage.setItem('successMessage', 'Data berhasil disimpan');
                                 location.reload();
-
-
                                 // self.showSuccessMessage = true;
                                 // setTimeout(function() {
                                 //     location.reload(); // Merefresh halaman

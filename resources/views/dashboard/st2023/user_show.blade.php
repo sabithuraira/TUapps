@@ -42,7 +42,9 @@
                             <select name="roles" id="roles" class="form-control">
                                 <option value="">Pilih Roles</option>
                                 @foreach ($list_roles as $roles)
-                                    <option value="{{ $roles['name'] }}" @if ($roles['name'] == $data['roles'][0]['name']) selected @endif>
+                                    <option value="{{ $roles['name'] }}"
+                                        @if ($data['roles']) @if ($roles['name'] == $data['roles'][0]['name']) selected @endif
+                                        @endif>
                                         {{ $roles['name'] }}</option>
                                 @endforeach
                             </select>
@@ -76,13 +78,10 @@
                     .then(response => response.json())
                     .then(data => {
                         this.csrf = data.csrf_token
-                        // console.log(this.csrf)
-                        // console.log(this.csrfToken)
                     })
                     .catch(error => {
                         console.log(error);
                     });
-                console.log(this.api_token)
 
                 toastr.options.timeOut = "false";
                 toastr.options.closeButton = true;

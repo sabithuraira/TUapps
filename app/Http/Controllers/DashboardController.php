@@ -85,8 +85,6 @@ class DashboardController extends Controller
         //     $data_kk = $kk_result['data'];
         // }
 
-        // dd($data_kk);
-
         $ch = curl_init($dokumen_url . $filter_url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -115,6 +113,164 @@ class DashboardController extends Controller
         ));
     }
 
+    public function waktu(Request $request)
+    {
+        $auth = Auth::user();
+        $list_kab_filter = "";
+        $kab_filter = "";
+
+        $kab_filter = $request->kab_filter;
+
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+
+        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
+        // $page = '?page=' . $request->page;
+        // $headers = [
+        //     'Content-Type: application/json',
+        // ];
+
+        // $ch = curl_init($petugas_url . $page . $filter_url);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $result = curl_exec($ch);
+        // curl_close($ch);
+        // $result = json_decode($result, true);
+        $data = [];
+        // $links = [];
+
+        // if ($result) {
+        //     $data = $result['data']['data'];
+        //     $links = $result['data']['links'];
+        // }
+
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.dash_waktu', compact(
+            'auth',
+            'request',
+            'data',
+            // 'links',
+            'kabs',
+        ));
+    }
+
+    public function lokasi(Request $request)
+    {
+        $auth = Auth::user();
+        $list_kab_filter = "";
+        $kab_filter = "";
+
+        $kab_filter = $request->kab_filter;
+
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+
+        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
+        // $page = '?page=' . $request->page;
+        // $headers = [
+        //     'Content-Type: application/json',
+        // ];
+
+        // $ch = curl_init($petugas_url . $page . $filter_url);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $result = curl_exec($ch);
+        // curl_close($ch);
+        // $result = json_decode($result, true);
+        $data = [];
+        // $links = [];
+
+        // if ($result) {
+        //     $data = $result['data']['data'];
+        //     $links = $result['data']['links'];
+        // }
+
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.dash_lokasi', compact(
+            'auth',
+            'request',
+            'data',
+            // 'links',
+            'kabs',
+        ));
+    }
+
+    public function target(Request $request)
+    {
+        $auth = Auth::user();
+        $list_kab_filter = "";
+        $kab_filter = "";
+
+        $kab_filter = $request->kab_filter;
+
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+
+        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
+        // $page = '?page=' . $request->page;
+        // $headers = [
+        //     'Content-Type: application/json',
+        // ];
+
+        // $ch = curl_init($petugas_url . $page . $filter_url);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $result = curl_exec($ch);
+        // curl_close($ch);
+        // $result = json_decode($result, true);
+        $data = [];
+        // $links = [];
+
+        // if ($result) {
+        //     $data = $result['data']['data'];
+        //     $links = $result['data']['links'];
+        // }
+
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.dash_target', compact(
+            'auth',
+            'request',
+            'data',
+            // 'links',
+            'kabs',
+        ));
+    }
 
     public function petugas(Request $request)
     {
@@ -263,8 +419,6 @@ class DashboardController extends Controller
             'list_roles',
         ));
     }
-
-
 
     public function alokasi(Request $request)
     {
@@ -428,7 +582,6 @@ class DashboardController extends Controller
             'list_koseka'
         ));
     }
-
 
     // index Dashbaord Regsosek
     // public function index(Request $request){
