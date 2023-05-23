@@ -45,12 +45,12 @@
                 </a>
             </u>
         @endif
-        <br>
-        <div class=" d-flex flex-row-reverse">
+        {{-- <br> --}}
+        {{-- <div class=" d-flex flex-row-reverse">
             <a class="btn btn-info" href="{{ url('dashboard/petugas') }}">Halaman Petugas</a>
-        </div>
+        </div> --}}
     </div>
-    <br>
+    {{-- <br> --}}
     <div class="m-1">
         <ul class="nav nav-tabs">
             <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#st_wilayah">Wilayah</a>

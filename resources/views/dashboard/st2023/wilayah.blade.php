@@ -1,16 +1,17 @@
-{{-- <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a> --}}
-<br /><br />
-
+{{-- <div class="p-2 d-flex justify-content-end">
+    <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
+</div> --}}
 @if (!$request->sls_filter)
     <table id="initabel" class="table-bordered table-sm" style="min-width:100%;">
         <thead>
             <tr class="text-center">
                 <th>No</th>
                 <th>Nama Wilayah</th>
-                <th>Selesai</th>
-                <th>Jumlah</th>
-                <th>%</th>
 
+                <th>Jumlah</th>
+                <th>Selesai (persen)</th>
+                <th>Perkiraan Ruta Tani</th>
+                <th>Ruta Tani pencacahan</th>
             </tr>
         </thead>
         @if (sizeof($data_wilayah) > 0)
@@ -35,15 +36,19 @@
                                 {{ '[' . $data['kode_wilayah'] . '] ' . $data['nama_wilayah'] }}</a>
                         </td>
                         <td>
-                            {{ $data['selesai'] }}
-                        </td>
-                        <td>
                             {{ $data['jumlah'] }}
                         </td>
                         <td>
-                            @if ($data['jumlah'])
-                                {{ $data['selesai'] / $data['jumlah'] }} %
+                            {{ $data['selesai'] }} @if ($data['jumlah'])
+                                {{ '(' . round($data['selesai'] / $data['jumlah'], 3) . '%)' }}
                             @endif
+                        </td>
+
+                        <td>
+                            {{ $data['perkiraan_ruta'] }}
+                        </td>
+                        <td>
+                            {{ $data['ruta_selesai'] }}
                         </td>
                     </tr>
                 @endforeach

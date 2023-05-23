@@ -61,7 +61,7 @@
                     </form>
                 </div>
                 <br>
-                <div class="m-1 table-responsive">
+                <div class="m-1">
                     <table class="table table-bordered table-sm">
                         <thead>
                             <tr class="text-center">
@@ -70,10 +70,24 @@
                                 <th>PCL</th>
                                 <th>PML</th>
                                 <th>Koseka</th>
-                                <th>Rata-rata Perbedaan Jarak</th>
+                                <th>Rata-rata <br> Perbedaan Jarak (meter)</th>
+                                <th>Jumlah Ruta</th>
                             </tr>
                         </thead>
                         @if ($data)
+                            <tbody class="text-center">
+                                @foreach ($data as $i => $dt)
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ $dt['kode_kab'] }}</td>
+                                        <td class="text-left">{{ $dt['pcl'] }}</td>
+                                        <td class="text-left">{{ $dt['pml'] }}</td>
+                                        <td class="text-left">{{ $dt['koseka'] }}</td>
+                                        <td>{{ round($dt['rata_rata_jarak'] * 1000) . ' m' }}</td>
+                                        <td>{{ $dt['jml_ruta'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         @else
                             <tbody>
                                 <tr>
@@ -84,12 +98,12 @@
                         @endif
                     </table>
                     <ul class="pagination pagination-primary">
-                        {{-- @foreach ($links as $lk)
+                        @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
                                 <a class="page-link" href="{{ $lk['url'] }}"> {{ $lk['label'] }}
                                 </a>
                             </li>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
             </div>

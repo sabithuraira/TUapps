@@ -26,15 +26,17 @@
                         3. Import kembali file yang sudah diisi
                     </div>
                 </div>
-                <div class="">
-                    <button class="btn btn-info float-right" data-toggle="modal" data-target="#modal_import">Import
+                <div class="d-flex justify-content-end ">
+                    <button class="btn btn-info mr-2" data-toggle="modal" data-target="#modal_import">Import
                         Alokasi</button>
+                    <button type="button" class="btn btn-info mr-2" @click="export_alokasi()">export</button>
+
                 </div>
                 <br>
                 <div>
                     <form action="">
                         <div class="row px-2">
-                            <div class="col-3">
+                            <div class="col-2">
                                 <label for="" class="label">Kab/Kot</label>
                                 <select name="kab_filter" id="kab_filter" class="form-control" @change="select_kabs()">
                                     <option value="">Semua</option>
@@ -56,22 +58,26 @@
                                     <option value="">Semua</option>
                                 </select>
                             </div>
+                            <div class="col-3">
+                                <label for="" class="label">Email Petugas / Nama SLS</label>
+                                <input type="text" class="form-control" name="keyword" id="keyword"
+                                    value="{{ $request->keyword }}">
+
+                            </div>
                             <div class="col-1 ">
                                 <label for="" class="label text-white">cari</label>
                                 <button type="submit" class="btn btn-info">cari</button>
+
                             </div>
-                            <div class="col-1 ">
-                                <label for="" class="label text-white">export</label>
-                                <button type="button" class="btn btn-info" @click="export_alokasi()">export</button>
-                            </div>
+
                         </div>
                     </form>
                 </div>
-
+                <br>
                 <div class="m-1 table-responsive">
                     <table class="table table-bordered table-sm">
                         <tbody>
-                            <tr class="text-center">
+                            <tr class="text-center table-secondary">
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>Kec</th>

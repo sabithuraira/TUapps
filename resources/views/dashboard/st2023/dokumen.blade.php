@@ -1,15 +1,6 @@
-<div class="p-2 d-flex justify-content-end"">
-
-    @if ($request->kab_filter)
-        <a href="#" onclick="export_alokasi();" class="btn btn-info ml-2">Export Alokasi</a>
-        <a href="#" onclick="import_alokasi();" class="btn btn-info  ml-2">Import Alokasi</a>
-    @endif
-
-    <br>
-
-</div>
-<br /><br />
-
+{{-- <div class="p-2 d-flex justify-content-end">
+    <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
+</div> --}}
 @if (!$request->desa_filter)
     <table id="initabel" class="table-bordered table-sm" style="min-width:100%;">
         <thead>

@@ -34,6 +34,7 @@ class DashboardController extends Controller
         $wilayah_url = 'https://st23.bpssumsel.com/api/progress';
         $kk_url = 'https://st23.bpssumsel.com/api/progress_kk';
         $dokumen_url = 'https://st23.bpssumsel.com/api/progress_dokumen';
+
         $headers = [
             'Authorization: Bearer 37|wGY6bloEzGc4SlaQ0Hxx4zyHtQeIYFbKtk0duRF5',
             'Content-Type: application/json',
@@ -59,6 +60,7 @@ class DashboardController extends Controller
 
         if ($wilayah_result) {
             $data_wilayah = $wilayah_result['data'];
+            // dd($data_wilayah);
             // if (isset($data_wilayah[0]['nama_kab'])) {
             //     $label_kab = $data_wilayah[0]['nama_kab'];
             // }
@@ -116,6 +118,32 @@ class DashboardController extends Controller
     public function waktu(Request $request)
     {
         $auth = Auth::user();
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
         $list_kab_filter = "";
         $kab_filter = "";
 
@@ -126,25 +154,26 @@ class DashboardController extends Controller
         $sls_filter = $request->sls_filter;
 
         // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
-        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
-        // $page = '?page=' . $request->page;
-        // $headers = [
-        //     'Content-Type: application/json',
-        // ];
+        $filter_url = '&kab_filter=' . $kab_filter;
+        $data_url = 'http://st23.bpssumsel.com/api/dashboard_waktu';
+        $page = '?page=' . $request->page;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
 
-        // $ch = curl_init($petugas_url . $page . $filter_url);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $result = curl_exec($ch);
-        // curl_close($ch);
-        // $result = json_decode($result, true);
+        $ch = curl_init($data_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
         $data = [];
-        // $links = [];
-
-        // if ($result) {
-        //     $data = $result['data']['data'];
-        //     $links = $result['data']['links'];
-        // }
+        $links = [];
+        if ($result) {
+            $data = $result['datas']['data'];
+            $links = $result['datas']['links'];
+        }
 
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
@@ -161,7 +190,7 @@ class DashboardController extends Controller
             'auth',
             'request',
             'data',
-            // 'links',
+            'links',
             'kabs',
         ));
     }
@@ -169,6 +198,32 @@ class DashboardController extends Controller
     public function lokasi(Request $request)
     {
         $auth = Auth::user();
+        $auth = Auth::user();
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
         $list_kab_filter = "";
         $kab_filter = "";
 
@@ -178,26 +233,27 @@ class DashboardController extends Controller
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
 
-        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
-        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
-        // $page = '?page=' . $request->page;
-        // $headers = [
-        //     'Content-Type: application/json',
-        // ];
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        $data_url = 'http://st23.bpssumsel.com/api/dashboard_lokasi';
+        $page = '?page=' . $request->page;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
 
-        // $ch = curl_init($petugas_url . $page . $filter_url);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $result = curl_exec($ch);
-        // curl_close($ch);
-        // $result = json_decode($result, true);
+        $ch = curl_init($data_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
         $data = [];
-        // $links = [];
+        $links = [];
 
-        // if ($result) {
-        //     $data = $result['data']['data'];
-        //     $links = $result['data']['links'];
-        // }
+        if ($result) {
+            $data = $result['datas']['data'];
+            $links = $result['datas']['links'];
+        }
 
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
@@ -214,7 +270,7 @@ class DashboardController extends Controller
             'auth',
             'request',
             'data',
-            // 'links',
+            'links',
             'kabs',
         ));
     }
@@ -312,8 +368,9 @@ class DashboardController extends Controller
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-
-        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        $keyword = $request->keyword;
+        $keyword = str_replace(" ", "%20", $keyword);
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&keyword=' . $keyword;
         $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
         $page = '?page=' . $request->page;
         $headers = [
@@ -462,8 +519,9 @@ class DashboardController extends Controller
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-
-        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        $keyword = $request->keyword;
+        $keyword = str_replace(" ", "%20", $keyword);
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&keyword=' . $keyword;
         $sls_url = 'http://st23.bpssumsel.com/api/alokasi';
         $page = '?page=' . $request->page;
         $headers = [
@@ -584,115 +642,115 @@ class DashboardController extends Controller
     }
 
     // index Dashbaord Regsosek
-    // public function index(Request $request){
-    //     $random_user = \App\UserModel::inRandomOrder()->first();
-    //     $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop.$random_user->kdkab)->first();
-    //     $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
-    //     //////REGSOSEK
-    //     //////////////
-    //     $label = 'prov';
-    //     $label_kab = '';
-    //     $label_kec = '';
-    //     $label_desa = '';
-    //     $kab = $request->get('kab');
-    //     $kec = $request->get('kec');
-    //     $desa = $request->get('desa');
-    //     $bs = $request->get('bs');
-    //     if (strlen($kab) == 0) $kab = null;
-    //     if (strlen($kec) == 0) $kec = null;
-    //     if (strlen($desa) == 0) $desa = null;
-    //     if (strlen($bs) == 0) $bs = null;
-    //     $model = new \App\RegsosekSls();
-    //     if ($bs != null) {
-    //         $label = 'bs';
-    //         $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-    //         if ($model_kab != null) $label_kab = $model_kab->nmKab;
+    public function index2(Request $request)
+    {
+        $random_user = \App\UserModel::inRandomOrder()->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
+        $dl_per_uk = \App\UnitKerja::rekapDlPerUk();
+        //////REGSOSEK
+        //////////////
+        $label = 'prov';
+        $label_kab = '';
+        $label_kec = '';
+        $label_desa = '';
+        $kab = $request->get('kab');
+        $kec = $request->get('kec');
+        $desa = $request->get('desa');
+        $bs = $request->get('bs');
+        if (strlen($kab) == 0) $kab = null;
+        if (strlen($kec) == 0) $kec = null;
+        if (strlen($desa) == 0) $desa = null;
+        if (strlen($bs) == 0) $bs = null;
+        $model = new \App\RegsosekSls();
+        if ($bs != null) {
+            $label = 'bs';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
 
-    //         $model_kec = \App\Pkec::where([
-    //             ['idKab', '=', $kab],
-    //             ['idKec', '=', $kec]
-    //         ])->first();
-    //         if ($model_kec != null) $label_kec = $model_kec->nmKec;
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nmKec;
 
-    //         $model_desa = \App\Pdesa::where([
-    //             ['idKab', '=', $kab],
-    //             ['idKec', '=', $kec],
-    //             ['idDesa', '=', $desa],
-    //         ])->first();
-    //         if ($model_desa != null) $label_desa = $model_desa->nmDesa;
+            $model_desa = \App\Pdesa::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec],
+                ['idDesa', '=', $desa],
+            ])->first();
+            if ($model_desa != null) $label_desa = $model_desa->nmDesa;
 
-    //         $datas = $model->Rekapitulasi($kab, $kec, $desa);
-    //     } else if ($bs == null && $desa != null) {
-    //         $label = 'desa';
-    //         $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-    //         if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+        } else if ($bs == null && $desa != null) {
+            $label = 'desa';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
 
-    //         $model_kec = \App\Pkec::where([
-    //             ['idKab', '=', $kab],
-    //             ['idKec', '=', $kec]
-    //         ])->first();
-    //         if ($model_kec != null) $label_kec = $model_kec->nmKec;
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nmKec;
 
-    //         $model_desa = \App\Pdesa::where([
-    //             ['idKab', '=', $kab],
-    //             ['idKec', '=', $kec],
-    //             ['idDesa', '=', $desa],
-    //         ])->first();
-    //         if ($model_desa != null) $label_desa = $model_desa->nmDesa;
+            $model_desa = \App\Pdesa::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec],
+                ['idDesa', '=', $desa],
+            ])->first();
+            if ($model_desa != null) $label_desa = $model_desa->nmDesa;
 
-    //         $datas = $model->Rekapitulasi($kab, $kec, $desa);
-    //     } else if ($bs == null && $desa == null && $kec != null) {
-    //         $label = 'kec';
-    //         $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-    //         if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+        } else if ($bs == null && $desa == null && $kec != null) {
+            $label = 'kec';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
 
-    //         $model_kec = \App\Pkec::where([
-    //             ['idKab', '=', $kab],
-    //             ['idKec', '=', $kec]
-    //         ])->first();
-    //         if ($model_kec != null) $label_kec = $model_kec->nmKec;
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nmKec;
 
-    //         $datas = $model->Rekapitulasi($kab, $kec);
-    //     } else if ($bs == null && $desa == null && $kec == null && $kab != null) {
-    //         $label = 'kab';
-    //         $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-    //         if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $datas = $model->Rekapitulasi($kab, $kec);
+        } else if ($bs == null && $desa == null && $kec == null && $kab != null) {
+            $label = 'kab';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
 
-    //         $datas = $model->Rekapitulasi($kab);
-    //     } else {
-    //         $datas = $model->Rekapitulasi();
-    //     }
-    //     $labels = [];
-    //     $persens = [];
-    //     // foreach ($datas as $key => $data) {
-    //     //     $labels[] = $data->nama;
-    //     //     $persen = 100;
+            $datas = $model->Rekapitulasi($kab);
+        } else {
+            $datas = $model->Rekapitulasi();
+        }
+        $labels = [];
+        $persens = [];
+        // foreach ($datas as $key => $data) {
+        //     $labels[] = $data->nama;
+        //     $persen = 100;
 
-    //     //     if ($data->total == 0) $persen = 0;
-    //     //     else $persen = round(($data->terlapor / $data->total * 100), 3);
+        //     if ($data->total == 0) $persen = 0;
+        //     else $persen = round(($data->terlapor / $data->total * 100), 3);
 
-    //     //     $persens[] = $persen;
-    //     // }
-    //     /////////////
-    //     return view('dashboard.index', compact(
-    //         'random_user',
-    //         'unit_kerja',
-    //         'dl_per_uk',
-    //         'model',
-    //         'datas',
-    //         'labels',
-    //         'persens',
-    //         'kab',
-    //         'kec',
-    //         'desa',
-    //         'bs',
-    //         'label',
-    //         'label_kab',
-    //         'label_kec',
-    //         'label_desa'
-    //     ));
-    // }
-
+        //     $persens[] = $persen;
+        // }
+        /////////////
+        return view('dashboard.index', compact(
+            'random_user',
+            'unit_kerja',
+            'dl_per_uk',
+            'model',
+            'datas',
+            'labels',
+            'persens',
+            'kab',
+            'kec',
+            'desa',
+            'bs',
+            'label',
+            'label_kab',
+            'label_kec',
+            'label_desa'
+        ));
+    }
     public function lfsp2020(Request $request)
     {
         //////////////

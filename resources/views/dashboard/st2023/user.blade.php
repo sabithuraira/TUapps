@@ -14,69 +14,25 @@
         }
     </style>
     <div class="container" id="app_vue">
-
-        <div class="col-lg-12 col-md-12">
+        <div class="">
             <div class="card">
                 <div class="body profilepage_2 blog-page pb-0">
                     <b>User/Petugas ST 2023 </b>
-
-                    {{-- <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
-                    @if ($request->kab_filter)
-                        -<u>
-                            <a href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter) }}">
-                                {{ $label_kab }}
-                            </a>
-                        </u>
-                    @endif
-                    @if ($request->kec_filter)
-                        -<u><a
-                                href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter) }}">
-                                {{ $label_kec }}
-                            </a>
-                        </u>
-                    @endif
-                    @if ($request->desa_filter)
-                        -<u><a
-                                href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter . '&desa_filter=' . $request->desa_filter) }}">
-                                {{ $label_desa }}
-                            </a>
-                        </u>
-                    @endif
-                    @if ($request->sls_filter)
-                        -<u><a
-                                href="{{ url(
-                                    'dashboard/index?kab_filter=' .
-                                        $request->kab_filter .
-                                        '&kec_filter=' .
-                                        $request->kec_filter .
-                                        '&desa_filter=' .
-                                        $request->desa_filter .
-                                        '&sls_filter=' .
-                                        $request->sls_filter,
-                                ) }}">
-                                {{ $label_sls }}
-                            </a>
-                        </u>
-                    @endif --}}
-                    {{-- <br> --}}
-                    {{-- <div class=" d-flex flex-row-reverse"> --}}
-                    {{-- <a class="btn btn-info float-right" href="{{ url('dashboard/index') }}">Halaman Monitoring</a>
-                    <a class="btn btn-info float-right" href="{{ url('dashboard/alokasi') }}">Halaman Alokasi</a> --}}
-                    {{-- </div> --}}
                     <div class="alert alert-info mt-1" role="alert">
                         Import daftar petugas dengan menggunakan file excel dari hasil export petugas pada aplikasi
                         manajemen mitra
                     </div>
-                </div>
-                <div class="">
                     <button class="btn btn-info float-right" data-toggle="modal" data-target="#modal_import">Import
                         Petugas</button>
+                </div>
+                <div class="">
+
                 </div>
                 <br>
                 <div>
                     <form action="">
-                        <div class="row px-2">
-                            <div class="col-3">
+                        <div class="row">
+                            <div class="col-2">
                                 <label for="" class="label">Kab/Kot</label>
                                 <select name="kab_filter" id="kab_filter" class="form-control" @change="select_kabs()">
                                     <option value="">Semua</option>
@@ -97,18 +53,24 @@
                                     <option value="">Semua</option>
                                 </select>
                             </div>
+                            <div class="col-3">
+                                <label for="" class="label">Nama/Email</label>
+                                <input type="text" class="form-control" name="keyword" id="keyword"
+                                    value="{{ $request->keyword }}">
+
+                            </div>
                             <div class="col-1 ">
-                                <label for="" class="label text-white">carti</label>
+                                <label for="" class="label text-white">cari</label>
                                 <button type="submit" class="btn btn-info">cari</button>
                             </div>
                         </div>
                     </form>
                 </div>
-
+                <br>
                 <div class="m-1">
-                    <table class="table table-bordered table-sm">
-                        <tbody>
-                            <tr class="text-center">
+                    <table class="table table-bordered table-sm ">
+                        <thead>
+                            <tr class="text-center table-secondary">
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>Kec</th>
@@ -118,7 +80,7 @@
                                 <th>Jabatan</th>
                                 <th>Action</th>
                             </tr>
-                        </tbody>
+                        </thead>
                         @if ($data)
                             @foreach ($data as $index => $dt)
                                 <tbody>
