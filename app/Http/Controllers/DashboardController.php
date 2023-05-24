@@ -401,9 +401,6 @@ class DashboardController extends Controller
         if ($result) {
             $kabs = $result['data'];
         }
-
-
-
         return view('dashboard.st2023.user', compact(
             'auth',
             'request',
@@ -474,6 +471,61 @@ class DashboardController extends Controller
             'data',
             'api_token',
             'list_roles',
+        ));
+    }
+
+    public function petugas_sls($id)
+    {
+        $auth = Auth::user();
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
+        $data_url = 'http://st23.bpssumsel.com/api/petugas_sls/' . $id;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($data_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $data = [];
+        $links = [];
+        if ($result) {
+            $data = $result['data']['data'];
+            $links = $result['data']['links'];
+        }
+        return view('dashboard.st2023.user_sls', compact(
+            'auth',
+            'id',
+            'data',
+            'links',
+            'api_token',
         ));
     }
 

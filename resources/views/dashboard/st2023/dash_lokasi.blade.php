@@ -80,7 +80,11 @@
                                     <tr>
                                         <td>{{ $i }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
-                                        <td class="text-left">{{ $dt['pcl'] }}</td>
+                                        <td class="text-left">
+                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pcl']) }}">
+                                                {{ $dt['pcl'] }}
+                                            </a>
+                                        </td>
                                         <td class="text-left">{{ $dt['pml'] }}</td>
                                         <td class="text-left">{{ $dt['koseka'] }}</td>
                                         <td>{{ round($dt['rata_rata_jarak'] * 1000) . ' m' }}</td>

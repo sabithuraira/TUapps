@@ -7,7 +7,6 @@
             <tr class="text-center">
                 <th>No</th>
                 <th>Nama Wilayah</th>
-
                 <th>Jumlah</th>
                 <th>Selesai (persen)</th>
                 <th>Perkiraan Ruta Tani</th>
@@ -63,9 +62,8 @@
                 <th>No</th>
                 <th>Nu RT</th>
                 <th>Nama</th>
-                <th>Sektor Pertanian</th>
+                <th>Jumlah Usaha</th>
                 <th>Waktu Mulai</th>
-                <th>Waktu Selesai</th>
                 <th>Waktu Selesai</th>
                 <th>Latitude, Longitude</th>
             </tr>
@@ -84,7 +82,7 @@
                             {{ $data['kepala_ruta'] }}
                         </td>
                         <td>
-                            {{ $data['sektor'] }}
+                            {{ $data['jumlah_unit_usaha'] }}
                         </td>
                         <td class="text-left">
                             {{ $data['start_time'] }}
@@ -92,12 +90,8 @@
                         <td class="text-left">
                             {{ $data['end_time'] }}
                         </td>
-
                         <td class="text-left">
-                            {{ $data['end_latitude'] }}
-                        </td>
-                        <td class="text-left">
-                            {{ $data['end_longitude'] }}
+                            {{ $data['end_latitude'] }} , {{ $data['end_longitude'] }}
                         </td>
                     </tr>
                 @endforeach
