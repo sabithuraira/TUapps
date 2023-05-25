@@ -87,7 +87,7 @@
                     <ul class="pagination pagination-primary">
                         {{-- @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {{ $lk['label'] }}
+                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
                                 </a>
                             </li>
                         @endforeach --}}

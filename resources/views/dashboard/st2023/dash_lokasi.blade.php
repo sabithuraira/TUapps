@@ -78,7 +78,7 @@
                             <tbody class="text-center">
                                 @foreach ($data as $i => $dt)
                                     <tr>
-                                        <td>{{ $i }}</td>
+                                        <td>{{ $i+1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
                                         <td class="text-left">
                                             <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pcl']) }}">
@@ -104,7 +104,7 @@
                     <ul class="pagination pagination-primary">
                         @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {{ $lk['label'] }}
+                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
                                 </a>
                             </li>
                         @endforeach
