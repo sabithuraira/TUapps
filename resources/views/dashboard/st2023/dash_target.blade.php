@@ -20,7 +20,7 @@
                 <div class="body profilepage_2 blog-page pb-0 text-center">
                     <h3>Dashboard by PPL</h3>
                     <div class="alert alert-info mt-1 text-left" role="alert">
-                        Target Ruta Selesai Hari ini adalah ... Ruta Tani
+                        Target Ruta Selesai Hari ini adalah {{ $target_hari_ini }} Ruta Tani
                     </div>
                 </div>
                 <br>
@@ -68,13 +68,25 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>PML</th>
-                                <th>Koseka</th>
                                 <th>Jumlah Ruta Selesai</th>
                                 <th>Persentase Selesai By Target</th>
                             </tr>
                         </thead>
                         @if ($data)
+                            @foreach ($data as $index => $dt)
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ ++$index }}</td>
+                                        <td>{{ $dt['kode_kab'] }}</td>
+                                        <td class="text-left">
+                                            <p>{{ $dt['name'] }}</p>
+                                            <span class="text-secondary">{{ $dt['email'] }}</span>
+                                        </td>
+                                        <td class="text-left">{{ $dt['rutas_count'] }}</td>
+                                        <td class="text-left">{{ $dt['rutas_count']/$target_hari_ini*100 }} %</td>
+                                    </tr>
+                                </tbody>
+                            @endforeach
                         @else
                             <tbody>
                                 <tr>

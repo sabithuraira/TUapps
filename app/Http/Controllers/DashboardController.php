@@ -275,36 +275,79 @@ class DashboardController extends Controller
 
     public function target(Request $request)
     {
+        $target_hari_ini = 0;
+        $date2 = date('Y-m-d');
+        $date1 = strtotime("2023-06-01");
+        $diff = round(abs($date1 - strtotime($date2))/86400);
+        print_r($diff);
+        $target_hari_ini = 10 * ($diff+1);
+        // echo "difference " . $interval->y . " years, " . $interval->m." months, ".$interval->d." days "; 
+        // // shows the total amount of days (not divided into years, months and days like above)
+        // echo "difference " . $interval->days . " days ";
+
+
         $auth = Auth::user();
         $list_kab_filter = "";
         $kab_filter = "";
-
-        $kab_filter = $request->kab_filter;
-
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+        if ($auth->kdkab != "00") {
+            $kab_filter = $auth->kdkab;
+            $list_kab_filter = $auth->kdkab;
+        }
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-
-        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
-        // $petugas_url = 'http://st23.bpssumsel.com/api/petugas';
-        // $page = '?page=' . $request->page;
-        // $headers = [
-        //     'Content-Type: application/json',
-        // ];
-
-        // $ch = curl_init($petugas_url . $page . $filter_url);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $result = curl_exec($ch);
-        // curl_close($ch);
-        // $result = json_decode($result, true);
+        $keyword = $request->keyword;
+        $keyword = str_replace(" ", "%20", $keyword);
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&keyword=' . $keyword;
+        $petugas_url = 'http://st23.bpssumsel.com/api/petugas/data/rekap';
+        $page = '?page=' . $request->page;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($petugas_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
         $data = [];
-        // $links = [];
+        $links = [];
 
-        // if ($result) {
-        //     $data = $result['data']['data'];
-        //     $links = $result['data']['links'];
-        // }
+        if ($result) {
+            $data = $result['data']['data'];
+            $links = $result['data']['links'];
+
+            // print_r($result);die();
+        }
 
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
@@ -321,8 +364,10 @@ class DashboardController extends Controller
             'auth',
             'request',
             'data',
-            // 'links',
+            'links',
             'kabs',
+            'api_token',
+            'target_hari_ini'
         ));
     }
 
@@ -399,6 +444,7 @@ class DashboardController extends Controller
         if ($result) {
             $kabs = $result['data'];
         }
+
         return view('dashboard.st2023.user', compact(
             'auth',
             'request',
@@ -409,6 +455,7 @@ class DashboardController extends Controller
             // 'list_roles'
         ));
     }
+
     public function petugas_show($id)
     {
         $auth = Auth::user();
