@@ -78,15 +78,23 @@
                             <tbody class="text-center">
                                 @foreach ($data as $i => $dt)
                                     <tr>
-                                        <td>{{ $i+1 }}</td>
+                                        <td>{{ $i + 1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
                                         <td class="text-left">
                                             <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pcl']) }}">
                                                 {{ $dt['pcl'] }}
                                             </a>
                                         </td>
-                                        <td class="text-left">{{ $dt['pml'] }}</td>
-                                        <td class="text-left">{{ $dt['koseka'] }}</td>
+                                        <td class="text-left">
+                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pml']) }}">
+                                                {{ $dt['pml'] }}
+                                            </a>
+                                        </td>
+                                        <td class="text-left">
+                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_koseka']) }}">
+                                                {{ $dt['koseka'] }}
+                                            </a>
+                                        </td>
                                         <td>{{ round($dt['rata_rata_waktu_menit'], 2) }}</td>
                                         <td>{{ $dt['jml_ruta'] }}</td>
                                     </tr>

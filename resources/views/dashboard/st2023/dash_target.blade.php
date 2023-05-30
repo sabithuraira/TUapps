@@ -75,6 +75,17 @@
                             </tr>
                         </thead>
                         @if ($data)
+                            @foreach ($data as $i => $dt)
+                                <tr>
+                                    <td>{{ ++$i }}</td>
+                                    <td>{{ $dt['kode_kab'] }}</td>
+                                    <td>{{ $dt['kode_pcl'] }}</td>
+                                    <td>{{ $dt['kode_pml'] }}</td>
+                                    <td>{{ $dt['kode_koseka'] }}</td>
+                                    <td>{{ $dt['jumlah_ruta'] }}</td>
+                                    <td>100</td>
+                                </tr>
+                            @endforeach
                         @else
                             <tbody>
                                 <tr>
@@ -85,12 +96,12 @@
                         @endif
                     </table>
                     <ul class="pagination pagination-primary">
-                        {{-- @foreach ($links as $lk)
+                        @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
                                 <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
                                 </a>
                             </li>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
             </div>
