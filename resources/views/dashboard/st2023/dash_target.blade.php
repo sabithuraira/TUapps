@@ -12,6 +12,10 @@
         .c3-axis-x text {
             font-size: 10px;
         }
+
+        .CodeMirror {
+            display: none;
+        }
     </style>
     <div class="container" id="app_vue">
 
