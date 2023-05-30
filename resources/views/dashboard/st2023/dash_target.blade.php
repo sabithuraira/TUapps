@@ -83,11 +83,26 @@
                                         <td>{{ ++$index }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
                                         <td class="text-left">
-                                            <p>{{ $dt['name'] }}</p>
-                                            <span class="text-secondary">{{ $dt['email'] }}</span>
+                                            {{ $dt['name'] }} <span class="text-secondary">({{ $dt['email'] }})</span>
                                         </td>
-                                        <td class="text-left">{{ $dt['rutas_count'] }}</td>
-                                        <td class="text-left">{{ ($dt['rutas_count'] / $target_hari_ini) * 100 }} %</td>
+                                        <td>
+                                            @if($dt['rutas_count']<$target_hari_ini)
+                                            <span class="badge badge-danger">
+                                            @else
+                                            <span class="badge badge-success">
+                                            @endif    
+                                            {{ $dt['rutas_count'] }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($dt['rutas_count']<$target_hari_ini)
+                                            <span class="badge badge-danger">
+                                            @else
+                                            <span class="badge badge-success">
+                                            @endif
+                                            {{ $dt['rutas_count']/$target_hari_ini*100 }} %
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             @endforeach

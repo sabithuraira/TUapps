@@ -15,11 +15,11 @@ use PDF;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+
         $random_user = UserModel::inRandomOrder()->first();
         $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
 
@@ -55,9 +55,35 @@ class DashboardController extends Controller
         $label_desa = $wilayah_result['label_desa'];
         $label_sls = $wilayah_result['label_sls'];
 
+
         if ($wilayah_result) {
             $data_wilayah = $wilayah_result['data'];
+            // dd($data_wilayah);
+            // if (isset($data_wilayah[0]['nama_kab'])) {
+            //     $label_kab = $data_wilayah[0]['nama_kab'];
+            // }
+            // if (isset($data_wilayah[0]['nama_kec'])) {
+            //     $label_kec = $data_wilayah[0]['nama_kec'];
+            // }
+            // if (isset($data_wilayah[0]['nama_desa'])) {
+            //     $label_desa = $data_wilayah[0]['nama_desa'];
+            // }
+            // if (isset($data_wilayah[0]['nama_sls'])) {
+            //     $label_sls = $data_wilayah[0]['nama_sls'];
+            // }
         }
+
+        // dd($data_wilayah);
+        // $ch = curl_init($kk_url . $filter_url);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $kk_result = curl_exec($ch);
+        // curl_close($ch);
+        // $kk_result = json_decode($kk_result, true);
+        // $data_kk = [];
+        // if ($kk_result) {
+        //     $data_kk = $kk_result['data'];
+        // }
 
         $ch = curl_init($dokumen_url . $filter_url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -70,32 +96,7 @@ class DashboardController extends Controller
             $data_dokumen = $dokumen_result['data'];
         }
 
-        $auth = Auth::user();
-        if (session('api_token')) {
-            $api_token = session('api_token');
-        } else {
-            $login_url = "http://st23.bpssumsel.com/api/login";
-            $data = [
-                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
-                'password' => '123456',
-            ];
-            $ch = curl_init($login_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded',
-            ]);
-            $response = curl_exec($ch);
-            if ($response === false) {
-                $error = curl_error($ch);
-                // Handle error
-            } else {
-                $responseData = json_decode($response, true);
-                session(['api_token' => $responseData['data']['access_token']]);
-                $api_token = session('api_token');
-            }
-        }
+
         $dl_per_uk = UnitKerja::rekapDlPerUk();
         return view('dashboard.index', compact(
             'random_user',
@@ -109,8 +110,6 @@ class DashboardController extends Controller
             'data_wilayah',
             // 'data_kk',
             'data_dokumen',
-            'auth',
-            'api_token'
         ));
     }
 
@@ -197,6 +196,7 @@ class DashboardController extends Controller
     public function lokasi(Request $request)
     {
         $auth = Auth::user();
+        $auth = Auth::user();
         if (session('api_token')) {
             $api_token = session('api_token');
         } else {
@@ -278,12 +278,9 @@ class DashboardController extends Controller
         $target_hari_ini = 0;
         $date2 = date('Y-m-d');
         $date1 = strtotime("2023-06-01");
-        $diff = round(abs($date1 - strtotime($date2)) / 86400);
-        print_r($diff);
-        $target_hari_ini = 10 * ($diff + 1);
-        // echo "difference " . $interval->y . " years, " . $interval->m." months, ".$interval->d." days ";
-        // // shows the total amount of days (not divided into years, months and days like above)
-        // echo "difference " . $interval->days . " days ";
+        $diff = round(abs($date1 - strtotime($date2))/86400);
+        $target_hari_ini = 10 * ($diff+1);
+
         $auth = Auth::user();
         $list_kab_filter = "";
         $kab_filter = "";
@@ -355,6 +352,7 @@ class DashboardController extends Controller
         if ($result) {
             $kabs = $result['data'];
         }
+
         return view('dashboard.st2023.dash_target', compact(
             'auth',
             'request',
@@ -934,8 +932,6 @@ class DashboardController extends Controller
 
         $labels_c2 = [];
         $persens_c2 = [];
-
-        // print_r($datas_c2);die();
 
         foreach ($datas as $key => $data) {
             $labels[] = $data->nama;
