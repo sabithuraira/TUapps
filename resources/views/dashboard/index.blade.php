@@ -8,8 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
-
+    <div class="container" id="app_vue">
         <div class="col-lg-12 col-md-12">
             @include('dashboard.st2023.index')
         </div>
@@ -24,4 +23,8 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
+@section('scripts')
+    <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+@endsection

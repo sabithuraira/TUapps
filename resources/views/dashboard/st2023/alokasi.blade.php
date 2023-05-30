@@ -348,8 +348,6 @@
                         resolve();
                     });
                 },
-
-
                 submit_import(event) {
                     var self = this;
                     event.preventDefault();
@@ -400,8 +398,6 @@
                         }
                     }, 1000); // Memperbarui hitungan setiap detik (1000 ms)
                 },
-
-
                 hapus(id, nama) {
                     this.id_hapus = id;
                     this.nama_hapus = nama;
