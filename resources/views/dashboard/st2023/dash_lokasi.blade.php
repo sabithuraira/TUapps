@@ -95,7 +95,7 @@
                                                 {{ $dt['koseka'] }}
                                             </a>
                                         </td>
-                                        <td>{{ round($dt['rata_rata_jarak'] * 1000) . ' m' }}</td>
+                                        <td>{{ round($dt['rata_rata_jarak']) . ' m' }}</td>
                                         <td>{{ $dt['jml_ruta'] }}</td>
                                     </tr>
                                 @endforeach
