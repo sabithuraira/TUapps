@@ -103,15 +103,15 @@
                         <td class="text-right">
                             @php
                                 $earthRadius = 6371; // Radius bumi dalam kilometer
-                                
+
                                 $latDiff = deg2rad($data['end_latitude'] - $data['start_latitude']);
                                 $lonDiff = deg2rad($data['end_longitude'] - $data['start_longitude']);
-                                
+
                                 $a = sin($latDiff / 2) * sin($latDiff / 2) + cos(deg2rad($data['start_latitude'])) * cos(deg2rad($data['end_latitude'])) * sin($lonDiff / 2) * sin($lonDiff / 2);
                                 $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-                                
+
                                 $distance = $earthRadius * $c * 1000; // Mengubah jarak ke meter
-                                
+
                             @endphp
                             {{ round($distance, 2) . ' m' }}
                             {{-- {{ $data['start_longitude'] }} ,{{ $data['start_latitude'] }} , {{ $data['end_latitude'] }} , {{ $data['end_longitude'] }} --}}

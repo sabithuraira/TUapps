@@ -19,9 +19,34 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-
+        $auth = Auth::user();
         $random_user = UserModel::inRandomOrder()->first();
         $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
 
         $kab_filter = $request->kab_filter;
         $kec_filter = $request->kec_filter;
@@ -110,6 +135,8 @@ class DashboardController extends Controller
             'data_wilayah',
             // 'data_kk',
             'data_dokumen',
+            'api_token',
+            'auth'
         ));
     }
 
@@ -278,8 +305,8 @@ class DashboardController extends Controller
         $target_hari_ini = 0;
         $date2 = date('Y-m-d');
         $date1 = strtotime("2023-06-01");
-        $diff = round(abs($date1 - strtotime($date2))/86400);
-        $target_hari_ini = 10 * ($diff+1);
+        $diff = round(abs($date1 - strtotime($date2)) / 86400);
+        $target_hari_ini = 10 * ($diff + 1);
 
         $auth = Auth::user();
         $list_kab_filter = "";
