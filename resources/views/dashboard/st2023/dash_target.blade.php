@@ -86,21 +86,21 @@
                                             {{ $dt['name'] }} <span class="text-secondary">({{ $dt['email'] }})</span>
                                         </td>
                                         <td>
-                                            @if($dt['rutas_count']<$target_hari_ini)
-                                            <span class="badge badge-danger">
-                                            @else
-                                            <span class="badge badge-success">
-                                            @endif    
+                                            @if ($dt['rutas_count'] < $target_hari_ini)
+                                                <span class="badge badge-danger">
+                                                @else
+                                                    <span class="badge badge-success">
+                                            @endif
                                             {{ $dt['rutas_count'] }}
                                             </span>
                                         </td>
                                         <td>
-                                            @if($dt['rutas_count']<$target_hari_ini)
-                                            <span class="badge badge-danger">
-                                            @else
-                                            <span class="badge badge-success">
+                                            @if ($dt['rutas_count'] < $target_hari_ini)
+                                                <span class="badge badge-danger">
+                                                @else
+                                                    <span class="badge badge-success">
                                             @endif
-                                            {{ $dt['rutas_count']/$target_hari_ini*100 }} %
+                                            {{ ($dt['rutas_count'] / $target_hari_ini) * 100 }} %
                                             </span>
                                         </td>
                                     </tr>
@@ -137,6 +137,15 @@
     <script>
         var vm = new Vue({
             el: "#app_vue",
+            data() {
+                return {
+                    api_token: {!! json_encode($api_token) !!},
+                    kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
+                    kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
+                    desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
+                    sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+                }
+            },
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -247,16 +256,16 @@
                     });
                 },
                 export_dash_target(event) {
-                    var self = this;
+                    var self = this
                     const headers = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + this.api_token
                     };
-                    const kab_filter = document.getElementById('kab_filter').value;
-                    const kec_filter = document.getElementById('kec_filter').value;
-                    const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
-                    fetch('https://st23.bpssumsel.com/api/export_dash_target' + filter, {
+
+                    filter = "?kab_filter=" + self.kab_filter +
+                        "&kec_filter=" + self.kec_filter +
+                        "&desa_filter=" + self.desa_filter
+                    fetch('https://st23.bpssumsel.com/api/export_target' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
@@ -265,7 +274,8 @@
                             var url = window.URL.createObjectURL(blob);
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            a.download = "target_16" + self.kab_filter + self.kec_filter + self.desa_filter +
+                                self.sls_filter + ".xlsx";
                             document.body.appendChild(
                                 a
                             ); // we need to append the element to the dom -> otherwise it will not work in firefox
