@@ -27,6 +27,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end ">
+                    <button class="btn btn-info mr-2" data-toggle="modal" data-target="#modal_import_ruta">Import
+                        Ruta Regsosek</button>
+                    <a class="btn btn-info mr-2" target="_blank"
+                        href="https://docs.google.com/spreadsheets/d/1z16OX_OVP_Z5N-lWA-1ZL_sM1un3a7QP/edit?usp=sharing&ouid=100029928095728986268&rtpof=true&sd=true">Download
+                        Template Ruta</a>
                     <button class="btn btn-info mr-2" data-toggle="modal" data-target="#modal_import">Import
                         Alokasi</button>
                     <button type="button" class="btn btn-info mr-2" @click="export_alokasi()">export</button>
@@ -166,6 +171,46 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" form="form_import" class="btn btn-primary" @click="submit_import()">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal_import_ruta" tabindex="-1" aria-labelledby="modal_import_rutaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_import_rutaLabel">Modal Import Ruta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info mt-1" role="alert">
+                            File yang diimport berasal dari hasil export tabel dan sudah diisi
+                            jumlah_ruta_usaha_pertanian_regsosek tanpa kolom kode petugas (ppl, pml, koseka)
+                        </div>
+                        <form @submit="submit_import_ruta" enctype="multipart/form-data" id="form_import_ruta">
+                            <label for="import_file_ruta" class="label">Masukkan File</label>
+                            <input type="file" class="form-control" name="import_file" id="import_file_ruta"
+                                accept=".xlsx, .xls" required>
+                        </form>
+                        <div v-if="!loading">
+                        </div>
+                        <div v-else>
+                            <p>Loading...</p>
+                        </div>
+                        <div v-if="showSuccessMessage">
+                            <p>Data Berhasil Dikirim</p>
+                            <p>Merefresh dalam @{{ countdown }}</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" form="form_import_ruta" class="btn btn-primary"
+                            @click="submit_import_ruta()">Save
                             changes</button>
                     </div>
                 </div>
@@ -366,6 +411,47 @@
 
                         $.ajax({
                             url: 'https://st23.bpssumsel.com/api/import_alokasi',
+                            type: 'POST',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('X-CSRF-TOKEN', headers['X-CSRF-TOKEN']);
+                                xhr.setRequestHeader('Authorization', headers['Authorization']);
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(data) {
+                                console.log(data);
+                                self.loading = false;
+                                self.showSuccessMessage = true;
+                                self.startCountdown()
+                            },
+                            error: function(error) {
+                                console.log(error);
+                                self.loading = false;
+                            }
+                        });
+                    } else {
+                        console.log('FormData tidak memiliki isi file');
+                    }
+                },
+                submit_import_ruta(event) {
+                    var self = this;
+                    event.preventDefault();
+                    var fileInput = document.getElementById('import_file_ruta'); // Ganti dengan ID input file Anda
+                    var file = fileInput.files[0];
+                    if (file) {
+                        console.log('FormData memiliki isi file');
+                        self.loading = true;
+                        const formData = new FormData();
+                        formData.append('import_file', file);
+                        const headers = {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRF-TOKEN': this.csrfToken,
+                            'Authorization': 'Bearer ' + this.api_token
+                        };
+
+                        $.ajax({
+                            url: 'https://st23.bpssumsel.com/api/import_ruta_regsosek',
                             type: 'POST',
                             beforeSend: function(xhr) {
                                 xhr.setRequestHeader('X-CSRF-TOKEN', headers['X-CSRF-TOKEN']);
