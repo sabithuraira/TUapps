@@ -69,7 +69,7 @@
                 <th>Nama</th>
                 <th>Jumlah Usaha</th>
                 <th>Waktu</th>
-                <th>Jarat titik <br> mulai & selesai</th>
+                <th>Jarak titik <br> mulai & selesai</th>
             </tr>
         </thead>
         @if (sizeof($data_wilayah) > 0)
@@ -103,18 +103,17 @@
                         <td class="text-right">
                             @php
                                 $earthRadius = 6371; // Radius bumi dalam kilometer
-
+                                
                                 $latDiff = deg2rad($data['end_latitude'] - $data['start_latitude']);
                                 $lonDiff = deg2rad($data['end_longitude'] - $data['start_longitude']);
-
+                                
                                 $a = sin($latDiff / 2) * sin($latDiff / 2) + cos(deg2rad($data['start_latitude'])) * cos(deg2rad($data['end_latitude'])) * sin($lonDiff / 2) * sin($lonDiff / 2);
                                 $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-
+                                
                                 $distance = $earthRadius * $c * 1000; // Mengubah jarak ke meter
-
+                                
                             @endphp
                             {{ round($distance, 2) . ' m' }}
-                            {{-- {{ $data['start_longitude'] }} ,{{ $data['start_latitude'] }} , {{ $data['end_latitude'] }} , {{ $data['end_longitude'] }} --}}
                         </td>
                     </tr>
                 @endforeach
@@ -179,10 +178,10 @@
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + this.api_token
                 };
-                filter = "?kode_kab=" + self.kab_filter +
-                    "&kode_kec=" + self.kec_filter +
-                    "&kode_desa=" + self.desa_filter +
-                    "&id_sls=" + self.sls_filter
+                filter = "?kab_filter=" + self.kab_filter +
+                    "&kec_filter=" + self.kec_filter +
+                    "&desa_filter=" + self.desa_filter +
+                    "&sls_filter=" + self.sls_filter
                 fetch('https://st23.bpssumsel.com/api/export_progress' + filter, {
                         method: 'GET',
                         headers: headers,
