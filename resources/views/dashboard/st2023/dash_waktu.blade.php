@@ -68,8 +68,7 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>PML</th>
-                                <th>Koseka</th>
+                                <th>Jabatan</th>
                                 <th>Rata-rata Waktu <br> Pencacahan (Menit)</th>
                                 <th>Jumlah Ruta</th>
                             </tr>
@@ -81,11 +80,11 @@
                                         <td>{{ $i + 1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
                                         <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pcl']) }}">
-                                                {{ $dt['pcl'] }}
+                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['email']) }}">
+                                                {{ $dt['name'] }}
                                             </a>
                                         </td>
-                                        <td class="text-left">
+                                        {{-- <td class="text-left">
                                             <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pml']) }}">
                                                 {{ $dt['pml'] }}
                                             </a>
@@ -94,9 +93,28 @@
                                             <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_koseka']) }}">
                                                 {{ $dt['koseka'] }}
                                             </a>
+                                        </td> --}}
+
+                                        <td>
+                                            @if ($dt['roles'])
+                                                {{ $dt['roles'][0]['name'] }}
+                                            @endif
                                         </td>
-                                        <td>{{ round($dt['rata_rata_waktu_menit'], 2) }}</td>
-                                        <td>{{ $dt['jml_ruta'] }}</td>
+                                        <td>
+                                            @if ($dt['rutas'])
+                                                {{ round($dt['rutas'][0]['rata_rata_waktu_menit'], 2) }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($dt['rutas'])
+                                                {{ $dt['rutas'][0]['jml_ruta'] }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -100,7 +100,7 @@
                                                 @else
                                                     <span class="badge badge-success">
                                             @endif
-                                            {{ ($dt['rutas_count'] / $target_hari_ini) * 100 }} %
+                                            {{ round(($dt['rutas_count'] / $target_hari_ini) * 100, 2) }} %
                                             </span>
                                         </td>
                                     </tr>
