@@ -68,9 +68,8 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>PML</th>
-                                <th>Koseka</th>
-                                <th>Rata-rata <br> Perbedaan Jarak (meter)</th>
+                                <th>Rata Selisih Latitue</th>
+                                <th>Rata Selisih Longitude</th>
                                 <th>Jumlah Ruta</th>
                             </tr>
                         </thead>
@@ -81,22 +80,31 @@
                                         <td>{{ $i + 1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
                                         <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pcl']) }}">
-                                                {{ $dt['pcl'] }}
+                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['email']) }}">
+                                                {{ $dt['name'] }}
                                             </a>
                                         </td>
-                                        <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pml']) }}">
-                                                {{ $dt['pml'] }}
-                                            </a>
+                                        @if ($dt['rutas'])
+                                            <td @if (abs($dt['rutas'][0]['rata_latitude']) > 0.01) class="bg-danger text-white" @endif>
+                                                {{ $dt['rutas'][0]['rata_latitude'] }}
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
+                                        @if ($dt['rutas'])
+                                            <td @if (abs($dt['rutas'][0]['rata_longitude']) > 0.01) class="bg-danger text-white" @endif>
+                                                {{ $dt['rutas'][0]['rata_longitude'] }}
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
+                                        <td>
+                                            @if ($dt['rutas'])
+                                                {{ $dt['rutas'][0]['jml_ruta'] }}
+                                            @else
+                                                0
+                                            @endif
                                         </td>
-                                        <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_koseka']) }}">
-                                                {{ $dt['koseka'] }}
-                                            </a>
-                                        </td>
-                                        <td>{{ round($dt['rata_rata_jarak']) . ' m' }}</td>
-                                        <td>{{ $dt['jml_ruta'] }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
