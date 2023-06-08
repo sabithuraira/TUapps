@@ -336,8 +336,9 @@ class DashboardController extends Controller
                 $api_token = session('api_token');
             }
         }
+
+        $kab_filter = $auth->kdkab;
         if ($auth->kdkab != "00") {
-            $kab_filter = $auth->kdkab;
             $list_kab_filter = $auth->kdkab;
         }
         if ($request->kab_filter) {
@@ -388,6 +389,92 @@ class DashboardController extends Controller
             'kabs',
             'api_token',
             'target_hari_ini'
+        ));
+    }
+    public function koseka(Request $request)
+    {
+        $auth = Auth::user();
+        $list_kab_filter = "";
+        $kab_filter = "";
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
+        $kab_filter = $auth->kdkab;
+
+        if ($auth->kdkab != "00") {
+            $list_kab_filter = $auth->kdkab;
+        }
+
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
+
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+        // $keyword = $request->keyword;
+        // $keyword = str_replace(" ", "%20", $keyword);
+        $filter_url = '&kab_filter=' . $kab_filter;
+        $petugas_url = 'http://st23.bpssumsel.com/api/dashboard_koseka';
+        $page = '?page=' . $request->page;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($petugas_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $data = [];
+        // $links = [];
+
+        if ($result) {
+            $data = $result['datas'];
+            // $links = $result['data']['links'];
+        }
+        // dd($data);
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.dash_koseka', compact(
+            'auth',
+            'request',
+            'data',
+            'kabs',
+            'api_token',
         ));
     }
 

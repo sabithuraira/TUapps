@@ -49,7 +49,7 @@
                                         <td>{{ $dt['kode_kec'] }}</td>
                                         <td>{{ $dt['kode_desa'] }}</td>
                                         <td> <a
-                                                href="{{ url('dashboard/index?kab_filter=' . $dt['kode_kab'] . '&kec_filter=' . $dt['kode_kec'] . '&desa_filter=' . $dt['kode_desa'] . '&sls_filter=' . $dt['id_sls']) }}">{{ $dt['id_sls'] }}</a>
+                                                href="{{ url('dashboard/index?kab_filter=' . $dt['kode_kab'] . '&kec_filter=' . $dt['kode_kec'] . '&desa_filter=' . $dt['kode_desa'] . '&sls_filter=' . $dt['id_sls'] . $dt['id_sub_sls']) }}">{{ $dt['id_sls'] }}</a>
                                         </td>
                                         <td>{{ $dt['id_sub_sls'] }}</td>
                                         <td>{{ $dt['status_selesai_pcl'] }}</td>

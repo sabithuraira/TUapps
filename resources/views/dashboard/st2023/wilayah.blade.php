@@ -93,10 +93,20 @@
                                 $start = new DateTime($data['start_time']);
                                 $end = new DateTime($data['end_time']);
                                 $duration = $start->diff($end);
+                                $days = $duration->days;
                                 $hours = $duration->h; // Jam
                                 $minutes = $duration->i; // Menit
                                 $seconds = $duration->s; // Detik
-                                $durationString = $hours . ':' . $minutes . ':' . $seconds;
+                                if ($days) {
+                                    $durationString = $days . ' hari ' . $hours . ':' . $minutes . ':' . $seconds;
+                                } else {
+                                    $durationString = $hours . ':' . $minutes . ':' . $seconds;
+                                }
+                                
+                                // $minutes = $duration->days * 24 * 60; // Mengubah jumlah hari menjadi menit
+                                // $minutes += $duration->h * 60; // Menambahkan jumlah jam menjadi menit
+                                // $minutes += $duration->i; // Menambahkan jumlah menit
+                                
                             @endphp
                             {{ htmlspecialchars($durationString) }}
                         </td>

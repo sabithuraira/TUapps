@@ -40,6 +40,8 @@
                                 href="{{ url('dashboard/lokasi') }}">Dashboard Lokasi</a></li>
                         <li class="{{ request()->is('dashboard/target*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/target') }}">Dashboard Target</a></li>
+                        <li class="{{ request()->is('dashboard/koseka*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/koseka') }}">Dashboard Koseka</a></li>
                         <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
                         <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
@@ -238,7 +240,8 @@
                         <ul>
                             <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
-                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{ url('uker4') }}">Unit
+                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
+                                    href="{{ url('uker4') }}">Unit
                                     Kerja 4</a></li>
                             <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a
                                     href="{{ url('angka_kredit') }}">Angka Kredit</a></li>

@@ -12,20 +12,13 @@
         .c3-axis-x text {
             font-size: 10px;
         }
-
-        .CodeMirror {
-            display: none;
-        }
     </style>
     <div class="container" id="app_vue">
 
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="body profilepage_2 blog-page pb-0 text-center">
-                    <h3>Dashboard by PPL</h3>
-                    <div class="alert alert-info mt-1 text-left" role="alert">
-                        Target Ruta Selesai Hari ini adalah {{ $target_hari_ini }} Ruta Tani
-                    </div>
+                    <h3>Daftar Koseka Dengan Progress Pertanggal </h3>
                 </div>
                 <br>
                 <div>
@@ -41,93 +34,114 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-3">
-                                <label for="" class="label">Kec</label>
-                                <select name="kec_filter" id="kec_filter" class="form-control" @change="select_kecs()">
-                                    <option value="">Semua</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <label for="" class="label">Desa</label>
-                                <select name="desa_filter" id="desa_filter" class="form-control">
-                                    <option value="">Semua</option>
-                                </select>
-                            </div>
+
                             <div class="col-1 ">
                                 <label for="" class="label text-white">cari</label>
                                 <button type="submit" class="btn btn-info">cari</button>
                             </div>
-                            <div class="col-1 ">
+                            {{-- <div class="col-1 ">
                                 <label for="" class="label text-white">export</label>
-                                <button type="button" class="btn btn-info" @click="export_dash_target()">export</button>
-                            </div>
+                                <button type="button" class="btn btn-info" @click="export_dash_waktu()">export</button>
+                            </div> --}}
                         </div>
                     </form>
                 </div>
                 <br>
-                <div class="m-1 table-responsive">
+                <div class="m-2 table-responsive">
                     <table class="table table-bordered table-sm">
                         <thead>
                             <tr class="text-center">
-                                <th>No</th>
-                                <th>Kab</th>
-                                <th>PCL</th>
-                                <th>Jumlah Ruta Selesai</th>
-                                <th>Persentase Selesai By Target</th>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Kab</th>
+                                <th rowspan="2">Nama</th>
+                                <th colspan="30">Tanggal(Juni)</th>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th>13</th>
+                                <th>14</th>
+                                <th>15</th>
+                                <th>16</th>
+                                <th>17</th>
+                                <th>18</th>
+                                <th>19</th>
+                                <th>20</th>
+                                <th>21</th>
+                                <th>22</th>
+                                <th>23</th>
+                                <th>24</th>
+                                <th>25</th>
+                                <th>26</th>
+                                <th>27</th>
+                                <th>28</th>
+                                <th>29</th>
+                                <th>30</th>
                             </tr>
                         </thead>
                         @if ($data)
-                            @foreach ($data as $index => $dt)
-                                <tbody>
-                                    <tr class="text-center">
-                                        <td>{{ ++$index }}</td>
+                            <tbody class="text-center">
+                                @foreach ($data as $i => $dt)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
-                                        <td class="text-left">
-                                            {{ $dt['name'] }} <span class="text-secondary">({{ $dt['email'] }})</span>
+                                        <td class="text-left">{{ $dt['name'] }} <br>
+                                            {{ $dt['email'] }}
                                         </td>
-                                        <td>
-                                            @if ($dt['rutas_count'] < $target_hari_ini)
-                                                <span class="badge badge-danger">
-                                                @else
-                                                    <span class="badge badge-success">
-                                            @endif
-                                            {{ $dt['rutas_count'] }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @if ($dt['rutas_count'] < $target_hari_ini)
-                                                <span class="badge badge-danger">
-                                                @else
-                                                    <span class="badge badge-success">
-                                            @endif
-                                            {{ round(($dt['rutas_count'] / $target_hari_ini) * 100, 2) }} %
-                                            </span>
-                                        </td>
+                                        <td>{{ $dt['rt_1_juni'] }}</td>
+                                        <td>{{ $dt['rt_2_juni'] }}</td>
+                                        <td>{{ $dt['rt_3_juni'] }}</td>
+                                        <td>{{ $dt['rt_4_juni'] }}</td>
+                                        <td>{{ $dt['rt_5_juni'] }}</td>
+                                        <td>{{ $dt['rt_6_juni'] }}</td>
+                                        <td>{{ $dt['rt_7_juni'] }}</td>
+                                        <td>{{ $dt['rt_8_juni'] }}</td>
+                                        <td>{{ $dt['rt_9_juni'] }}</td>
+                                        <td>{{ $dt['rt_10_juni'] }}</td>
+                                        <td>{{ $dt['rt_11_juni'] }}</td>
+                                        <td>{{ $dt['rt_12_juni'] }}</td>
+                                        <td>{{ $dt['rt_13_juni'] }}</td>
+                                        <td>{{ $dt['rt_14_juni'] }}</td>
+                                        <td>{{ $dt['rt_15_juni'] }}</td>
+                                        <td>{{ $dt['rt_16_juni'] }}</td>
+                                        <td>{{ $dt['rt_17_juni'] }}</td>
+                                        <td>{{ $dt['rt_18_juni'] }}</td>
+                                        <td>{{ $dt['rt_19_juni'] }}</td>
+                                        <td>{{ $dt['rt_20_juni'] }}</td>
+                                        <td>{{ $dt['rt_21_juni'] }}</td>
+                                        <td>{{ $dt['rt_22_juni'] }}</td>
+                                        <td>{{ $dt['rt_23_juni'] }}</td>
+                                        <td>{{ $dt['rt_24_juni'] }}</td>
+                                        <td>{{ $dt['rt_25_juni'] }}</td>
+                                        <td>{{ $dt['rt_26_juni'] }}</td>
+                                        <td>{{ $dt['rt_27_juni'] }}</td>
+                                        <td>{{ $dt['rt_28_juni'] }}</td>
+                                        <td>{{ $dt['rt_29_juni'] }}</td>
+                                        <td>{{ $dt['rt_30_juni'] }}</td>
                                     </tr>
-                                </tbody>
-                            @endforeach
+                                @endforeach
+                            </tbody>
                         @else
                             <tbody>
                                 <tr>
-                                    <td colspan="7">Belum ada Data/Belum Pilih Kab</td>
+                                    <td colspan="34">Belum ada Data / FIlter Kab Belum Dipilih</td>
                                 </tr>
-
                             </tbody>
                         @endif
                     </table>
-                    <ul class="pagination pagination-primary">
-                        @foreach ($links as $lk)
-                            <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
                 </div>
             </div>
         </div>
-
-
     </div>
 @endsection
 
@@ -137,15 +151,6 @@
     <script>
         var vm = new Vue({
             el: "#app_vue",
-            data() {
-                return {
-                    api_token: {!! json_encode($api_token) !!},
-                    kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
-                    kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
-                    desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
-                    sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
-                }
-            },
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -255,17 +260,17 @@
                         resolve();
                     });
                 },
-                export_dash_target(event) {
-                    var self = this
+                export_dash_waktu(event) {
+                    var self = this;
                     const headers = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + this.api_token
                     };
-
-                    filter = "?kab_filter=" + self.kab_filter +
-                        "&kec_filter=" + self.kec_filter +
-                        "&desa_filter=" + self.desa_filter
-                    fetch('https://st23.bpssumsel.com/api/export_target' + filter, {
+                    const kab_filter = document.getElementById('kab_filter').value;
+                    const kec_filter = document.getElementById('kec_filter').value;
+                    const desa_filter = document.getElementById('desa_filter').value;
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    fetch('https://st23.bpssumsel.com/api/export_dash_waktu' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
@@ -274,8 +279,7 @@
                             var url = window.URL.createObjectURL(blob);
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "target_16" + self.kab_filter + self.kec_filter + self.desa_filter +
-                                self.sls_filter + ".xlsx";
+                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
                             document.body.appendChild(
                                 a
                             ); // we need to append the element to the dom -> otherwise it will not work in firefox
