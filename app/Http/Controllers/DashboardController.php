@@ -178,8 +178,16 @@ class DashboardController extends Controller
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
 
-        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
-        $filter_url = '&kab_filter=' . $kab_filter;
+
+        $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('m/d/Y');
+        $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('m/d/Y');
+
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' .
+            $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' .
+            $sls_filter . '&tanggal_awal=' . $tanggal_awal . '&tanggal_akhir=' .
+            $tanggal_akhir;
+
+        // $filter_url = '&kab_filter=' . $kab_filter;
         $data_url = 'http://st23.bpssumsel.com/api/dashboard_waktu';
         $page = '?page=' . $request->page;
         $headers = [
@@ -200,6 +208,8 @@ class DashboardController extends Controller
             $links = $result['datas']['links'];
         }
 
+        // dd($filter_url);
+
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -217,12 +227,13 @@ class DashboardController extends Controller
             'data',
             'links',
             'kabs',
+            'tanggal_awal',
+            'tanggal_akhir'
         ));
     }
 
     public function lokasi(Request $request)
     {
-        $auth = Auth::user();
         $auth = Auth::user();
         if (session('api_token')) {
             $api_token = session('api_token');
@@ -258,7 +269,10 @@ class DashboardController extends Controller
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
 
-        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('d/m/Y');
+        $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('d/m/Y');
+
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&tanggal_awal=' . $tanggal_awal . '&tanggal_akhir=' . $tanggal_akhir;
         $data_url = 'http://st23.bpssumsel.com/api/dashboard_lokasi';
         $page = '?page=' . $request->page;
         $headers = [
@@ -297,6 +311,8 @@ class DashboardController extends Controller
             'data',
             'links',
             'kabs',
+            'tanggal_awal',
+            'tanggal_akhir'
         ));
     }
 

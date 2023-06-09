@@ -8,11 +8,14 @@
 @endsection
 
 @section('content')
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
+
     <style>
         .c3-axis-x text {
             font-size: 10px;
         }
     </style>
+
     <div class="container" id="app_vue">
 
         <div class="col-lg-12 col-md-12">
@@ -26,7 +29,7 @@
                 <br>
                 <div>
                     <form action="">
-                        <div class="row px-2">
+                        <div class="row px-2 mb-2">
                             <div class="col-3">
                                 <label for="" class="label">Kab/Kot</label>
                                 <select name="kab_filter" id="kab_filter" class="form-control" @change="select_kabs()">
@@ -57,6 +60,22 @@
                                 <label for="" class="label text-white">export</label>
                                 <button type="button" class="btn btn-info" @click="export_dash_waktu()">export</button>
                             </div>
+                        </div>
+                        <div class="row px-2">
+                            <div class="col-lg-6 col-md-6 left-box">
+                                <label>Tampilkan Tanggal:</label>
+
+                                <div class="input-daterange input-group" data-provide="datepicker">
+                                    <input type="text" class="input-sm form-control" v-model="start" id="start"
+                                        autocomplete="off">
+                                    <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
+                                    <input type="text" class="input-sm form-control" v-model="end" id="end"
+                                        autocomplete="off">
+                                </div>
+
+                            </div>
+
+
                         </div>
                     </form>
                 </div>
@@ -145,10 +164,16 @@
 
 @section('scripts')
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-
+    <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
     <script>
         var vm = new Vue({
             el: "#app_vue",
+            data: {
+                datas: [],
+                start: {!! json_encode($tanggal_awal) !!},
+                end: {!! json_encode($tanggal_akhir) !!},
+            },
+
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -172,6 +197,7 @@
                             console.log(error);
                         });
                 }
+
             },
             methods: {
                 select_kabs() {
@@ -288,8 +314,57 @@
                             console.log(error)
                         });
                 },
+                setDatas: function() {
+                    var self = this;
+                    $('#wait_progres').modal('show');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    })
+                    $.ajax({
+                        url: self.pathname + "/data_log_book",
+                        method: 'post',
+                        dataType: 'json',
+                        data: {
+                            start: self.start,
+                            end: self.end,
+                        },
+                    }).done(function(data) {
+                        self.datas = data.datas;
+                        $('#wait_progres').modal('hide');
+                    }).fail(function(msg) {
+                        console.log(JSON.stringify(msg));
+                        $('#wait_progres').modal('hide');
+                    });
+                }
             }
 
+        });
+
+        $(document).ready(function() {
+            $('.time24').inputmask('hh:mm', {
+                placeholder: '__:__',
+                alias: 'time24',
+                hourFormat: '24'
+            });
+
+
+            $('.datepicker').datepicker({
+                format: 'm/d/Y',
+                endDate: 'd',
+            });
+
+        });
+
+        $('#start').change(function() {
+            vm.start = this.value;
+            vm.setDatas();
+        });
+
+        $('#end').change(function() {
+            vm.end = this.value;
+            vm.setDatas();
         });
     </script>
 @endsection
