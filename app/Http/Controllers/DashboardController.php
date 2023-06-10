@@ -907,29 +907,6 @@ class DashboardController extends Controller
         $sls_filter = $request->sls_filter;
         $keyword = $request->keyword;
         $keyword = str_replace(" ", "%20", $keyword);
-        // $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&keyword=' . $keyword;
-        
-        // $sls_url = $base_url ."ruta";
-        // // $sls_url = 'http://st23.bpssumsel.com/api/alokasi';
-        // $page = '?page=' . $request->page;
-        // $headers = [
-        //     'Authorization: Bearer ' . $api_token,
-        //     'Content-Type: application/json',
-        // ];
-        // $ch = curl_init($sls_url . $page . $filter_url);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $result = curl_exec($ch);
-        // curl_close($ch);
-        // $result = json_decode($result, true);
-        // $data = [];
-        // $links = [];
-
-        // if ($result) {
-        //     // dd($result);
-        //     $data = $result['datas']['data'];
-        //     $links = $result['datas']['links'];
-        // }
 
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
@@ -945,9 +922,8 @@ class DashboardController extends Controller
         return view('dashboard.st2023.daftar_ruta', compact(
             'auth',
             'request',
-            // 'data',
-            // 'links',
             'kabs',
+            'kab_filter',
             'api_token', 
             'base_url'
         ));

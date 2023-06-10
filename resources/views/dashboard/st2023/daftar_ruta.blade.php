@@ -203,10 +203,10 @@
                 data_rutas: [],
                 api_token: {!! json_encode($api_token) !!},
                 base_url: {!! json_encode($base_url) !!},
-                kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
-                kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
-                desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
-                sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+                kab_filter: {!! json_encode($kab_filter)  !!},
+                kec_filter: '',
+                desa_filter: '',
+                sls_filter: '',
                 list_kec: [],list_desa: [],list_sls: [],
 
                 kec_filter_pindah: '', desa_filter_pindah: '', sls_filter_pindah: '',
@@ -219,27 +219,9 @@
         mounted() {
                 const self = this;
                 const auth = {!! json_encode($auth) !!}
-                // this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const kab_value = {!! json_encode($request->kab_filter) !!}
-                const kec_value = {!! json_encode($request->kec_filter) !!}
-                const desa_value = {!! json_encode($request->desa_filter) !!}
-                if (kab_value) {
-                    this.set_kab(kab_value)
-                        .then(function() {
-                            self.select_kabs()
-                        }).then(function() {
-                            if (kec_value) {
-                                self.set_kec(kec_value)
-                            }
-                        }).then(function() {
-                            self.select_kecs()
-                        }).then(function() {
-                            if (desa_value) {
-                                self.set_desa(desa_value)
-                            }
-                        }).catch(function(error) {
-                            console.log(error);
-                        });
+
+                if (self.kab_filter!='') {
+                    self.select_kabs();
                 }
 
                 fetch('https://st23.bpssumsel.com/api/getcsrf', {
