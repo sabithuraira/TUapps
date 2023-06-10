@@ -942,6 +942,74 @@ class DashboardController extends Controller
         ));
     }
 
+    public function daftar_ruta(Request $request){
+        $auth = Auth::user();
+        // $base_url = "http://localhost:8000/api/";
+        $base_url = "https://st23.bpssumsel.com/api/";
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = $base_url ."login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
+        $list_kab_filter = "";
+        $kab_filter = "";
+        if ($auth->kdkab != "00") {
+            $kab_filter = $auth->kdkab;
+            $list_kab_filter = $auth->kdkab;
+        }
+
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
+        // $kab_filter = $request->kab_filter;
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+        $keyword = $request->keyword;
+        $keyword = str_replace(" ", "%20", $keyword);
+
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.daftar_ruta', compact(
+            'auth',
+            'request',
+            'kabs',
+            'kab_filter',
+            'api_token', 
+            'base_url'
+        ));
+    }
+
     // index Dashbaord Regsosek
     public function index2(Request $request)
     {
@@ -1052,6 +1120,7 @@ class DashboardController extends Controller
             'label_desa'
         ));
     }
+
     public function lfsp2020(Request $request)
     {
         //////////////

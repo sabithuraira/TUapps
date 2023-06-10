@@ -22,7 +22,7 @@
                 <div class="body profilepage_2 blog-page pb-0 text-center">
                     <h3>Daftar Petugas Melakukan Pendataan Titik Awal dan Akhir Pencacahan Berbeda Jauh</h3>
                     <div class="alert alert-info mt-1 text-left" role="alert">
-                        Jarak Maksimal Titik Awal dan Akhir Pencacahan adalah 200 meter
+                        Jarak Maksimal Kewajarn Titik Awal dan Akhir Pencacahan adalah 1000meter atau 1 km
                     </div>
                 </div>
                 <br>
