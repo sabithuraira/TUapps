@@ -239,6 +239,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/target', 'DashboardController@target');
     Route::get('dashboard/koseka', 'DashboardController@koseka');
     Route::get('dashboard/petugas', 'DashboardController@petugas');
+    Route::get('dashboard/daftar_ruta', 'DashboardController@daftar_ruta');
     Route::get('dashboard/petugas/{id}', 'DashboardController@petugas_show');
     Route::get('dashboard/petugas_sls/{id}', 'DashboardController@petugas_sls');
     Route::get('dashboard/alokasi', 'DashboardController@alokasi');

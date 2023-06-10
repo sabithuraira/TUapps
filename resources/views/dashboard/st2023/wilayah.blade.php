@@ -12,8 +12,8 @@
             <tr class="text-center">
                 <th>No</th>
                 <th>Nama Wilayah</th>
-                <th>Jumlah</th>
-                <th>Selesai (persen)</th>
+                <th>Jumlah SLS</th>
+                <th>SLS Selesai (persen)</th>
                 <th>Perkiraan Ruta Tani</th>
                 <th>Ruta Tani pencacahan</th>
             </tr>

@@ -44,6 +44,8 @@
                                 href="{{ url('dashboard/koseka') }}">Dashboard Koseka</a></li>
                         <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
+                        <li class="{{ request()->is('dashboard/daftar_ruta*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/daftar_ruta') }}">Pindah Ruta ST2023</a></li>
                         <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li>
                     </ul>
