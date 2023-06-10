@@ -42,6 +42,8 @@
                                 href="{{ url('dashboard/target') }}">Dashboard Target</a></li>
                         <li class="{{ request()->is('dashboard/koseka*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/koseka') }}">Dashboard Koseka</a></li>
+                        <li class="{{ request()->is('dashboard/pendampingan*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/pendampingan') }}">Dashboard pendampingan</a></li>
                         <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
                         <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a

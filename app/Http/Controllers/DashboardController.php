@@ -171,30 +171,28 @@ class DashboardController extends Controller
 
         $list_kab_filter = "";
         $kab_filter = "";
-
-        $kab_filter = $request->kab_filter;
-
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-
-
         $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('m/d/Y');
         $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('m/d/Y');
 
-        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' .
-            $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' .
-            $sls_filter . '&tanggal_awal=' . $tanggal_awal . '&tanggal_akhir=' .
-            $tanggal_akhir;
-
-        // $filter_url = '&kab_filter=' . $kab_filter;
+        // Mengambil Data Tabel
+        $filter_url = '&kab_filter=' . $kab_filter .
+            '&kec_filter=' . $kec_filter .
+            '&desa_filter=' . $desa_filter .
+            '&sls_filter=' . $sls_filter .
+            '&tanggal_awal=' . $tanggal_awal .
+            '&tanggal_akhir=' . $tanggal_akhir;
         $data_url = 'http://st23.bpssumsel.com/api/dashboard_waktu';
         $page = '?page=' . $request->page;
         $headers = [
             'Authorization: Bearer ' . $api_token,
             'Content-Type: application/json',
         ];
-
         $ch = curl_init($data_url . $page . $filter_url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -208,8 +206,7 @@ class DashboardController extends Controller
             $links = $result['datas']['links'];
         }
 
-        // dd($filter_url);
-
+        //  Mengambil List Filter KabKot
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -260,26 +257,32 @@ class DashboardController extends Controller
                 $api_token = session('api_token');
             }
         }
+
         $list_kab_filter = "";
         $kab_filter = "";
 
-        $kab_filter = $request->kab_filter;
-
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-
         $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('d/m/Y');
         $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('d/m/Y');
 
-        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&tanggal_awal=' . $tanggal_awal . '&tanggal_akhir=' . $tanggal_akhir;
+        // Mengambil Data Tabel
+        $filter_url = '&kab_filter=' . $kab_filter .
+            '&kec_filter=' . $kec_filter .
+            '&desa_filter=' . $desa_filter .
+            '&sls_filter=' . $sls_filter .
+            '&tanggal_awal=' . $tanggal_awal .
+            '&tanggal_akhir=' . $tanggal_akhir;
         $data_url = 'http://st23.bpssumsel.com/api/dashboard_lokasi';
         $page = '?page=' . $request->page;
         $headers = [
             'Authorization: Bearer ' . $api_token,
             'Content-Type: application/json',
         ];
-
         $ch = curl_init($data_url . $page . $filter_url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -288,12 +291,12 @@ class DashboardController extends Controller
         $result = json_decode($result, true);
         $data = [];
         $links = [];
-
         if ($result) {
             $data = $result['datas']['data'];
             $links = $result['datas']['links'];
         }
 
+        // Mengambil List Filter Kabkot
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -325,8 +328,6 @@ class DashboardController extends Controller
         $target_hari_ini = 10 * ($diff + 1);
 
         $auth = Auth::user();
-        $list_kab_filter = "";
-        $kab_filter = "";
         if (session('api_token')) {
             $api_token = session('api_token');
         } else {
@@ -353,10 +354,9 @@ class DashboardController extends Controller
             }
         }
 
-        $kab_filter = $auth->kdkab;
-        if ($auth->kdkab != "00") {
-            $list_kab_filter = $auth->kdkab;
-        }
+        $list_kab_filter = "";
+        $kab_filter = "";
+        $kab_filter = $auth->kdkab; // 00 supaya gagal jadi memilih kabkot dulu
         if ($request->kab_filter) {
             $kab_filter = $request->kab_filter;
         }
@@ -365,6 +365,8 @@ class DashboardController extends Controller
         $sls_filter = $request->sls_filter;
         $keyword = $request->keyword;
         $keyword = str_replace(" ", "%20", $keyword);
+
+        // Mengambil Data Table
         $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter . '&keyword=' . $keyword;
         $petugas_url = 'http://st23.bpssumsel.com/api/petugas/data/rekap';
         $page = '?page=' . $request->page;
@@ -380,12 +382,12 @@ class DashboardController extends Controller
         $result = json_decode($result, true);
         $data = [];
         $links = [];
-
         if ($result) {
             $data = $result['data']['data'];
             $links = $result['data']['links'];
         }
 
+        // Mengambil List Kabkot
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -410,8 +412,6 @@ class DashboardController extends Controller
     public function koseka(Request $request)
     {
         $auth = Auth::user();
-        $list_kab_filter = "";
-        $kab_filter = "";
         if (session('api_token')) {
             $api_token = session('api_token');
         } else {
@@ -438,12 +438,12 @@ class DashboardController extends Controller
             }
         }
 
-        $kab_filter = $auth->kdkab;
-
+        $list_kab_filter = "";
+        $kab_filter = "";
+        $kab_filter = $auth->kdkab; // supaya gagal jadi memilih kabkot dulu
         if ($auth->kdkab != "00") {
             $list_kab_filter = $auth->kdkab;
         }
-
         if ($request->kab_filter) {
             $kab_filter = $request->kab_filter;
         }
@@ -468,7 +468,6 @@ class DashboardController extends Controller
         $result = json_decode($result, true);
         $data = [];
         // $links = [];
-
         if ($result) {
             $data = $result['datas'];
             // $links = $result['data']['links'];
@@ -489,6 +488,88 @@ class DashboardController extends Controller
             'auth',
             'request',
             'data',
+            'kabs',
+            'api_token',
+        ));
+    }
+    public function pendampingan(Request $request)
+    {
+        $auth = Auth::user();
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
+        $list_kab_filter = "";
+        $kab_filter = $auth->kdkab; //00 supaya gagal jadi memilih kabkot dulu
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $sls_filter = $request->sls_filter;
+        // $keyword = $request->keyword;
+        // $keyword = str_replace(" ", "%20", $keyword);
+
+        // Mengambil Data Table
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter . '&sls_filter=' . $sls_filter;
+        $data_url = 'http://st23.bpssumsel.com/api/dashboard_pendampingan';
+        $page = '?page=' . $request->page;
+        $headers = [
+            'Authorization: Bearer ' . $api_token,
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($data_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $data = [];
+        $links = [];
+        if ($result) {
+            $data = $result['datas']['data'];
+            $links = $result['datas']['links'];
+        }
+        // dd($result);
+        // Mengambil List Filter Kabkot
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        return view('dashboard.st2023.dash_pendampingan', compact(
+            'auth',
+            'request',
+            'data',
+            'links',
             'kabs',
             'api_token',
         ));
