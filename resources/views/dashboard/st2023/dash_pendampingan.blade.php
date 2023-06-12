@@ -14,6 +14,12 @@
         .c3-axis-x text {
             font-size: 10px;
         }
+
+        .kode-petugas {
+            display: inline-block;
+            width: 260px;
+            /* Sesuaikan lebar yang diinginkan */
+        }
     </style>
 
     <div class="container" id="app_vue">
@@ -21,9 +27,9 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="body profilepage_2 blog-page pb-0 text-center">
-                    <h3>Daftar Petugas Melakukan Pendataan Dengan Rentang Waktu Tidak Wajar </h3>
+                    <h3>Daftar Petugas Dengan Jumlah Pendampingan oleh PML & Koseka </h3>
                     <div class="alert alert-info mt-1 text-left" role="alert">
-                        estimasi waktu pencacahan adalah 5-15 menit
+                        1 Petugas paling sedikit pernah didampingin oleh PML & Koseka 1 kali
                     </div>
                 </div>
                 <br>
@@ -91,11 +97,17 @@
                                         <td>
                                             {{ $dt['jml_sls'] }}
                                         </td>
-                                        <td>
-                                            {{ $dt['pendampingan_pml'] }}
+                                        <td class="text-left">
+                                            @foreach ($dt['p_pml'] as $pml)
+                                                <span class="kode-petugas">{{ $pml['kode_pml'] }}</span>
+                                                &nbsp;:&nbsp;{{ $pml['pendampingan_pml'] }}<br>
+                                            @endforeach
                                         </td>
-                                        <td>
-                                            {{ $dt['pendampingan_koseka'] }}
+                                        <td class="text-left">
+                                            @foreach ($dt['p_koseka'] as $koseka)
+                                                <span class="kode-petugas">{{ $koseka['kode_koseka'] }}</span>
+                                                &nbsp;:&nbsp;{{ $koseka['pendampingan_koseka'] }}<br>
+                                            @endforeach
                                         </td>
                                     </tr>
                                 @endforeach
