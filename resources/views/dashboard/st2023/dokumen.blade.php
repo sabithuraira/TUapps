@@ -1,6 +1,6 @@
-{{-- <div class="p-2 d-flex justify-content-end">
-    <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
-</div> --}}
+<div class="p-2 d-flex justify-content-end" id="exportcontainer">
+    <button type="button" class="btn btn-info mr-2" @click="excel_dokumen()">Export Dashboard Dokumen</button>
+</div>
 @if (!$request->desa_filter)
     <table id="initabel" class="table-bordered table-sm" style="min-width:100%;">
         <thead>
@@ -107,3 +107,56 @@
     </table>
 
 @endif
+<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script>
+    var vm = new Vue({
+        el: "#exportcontainer",
+        data() {
+            return {
+                api_token: {!! json_encode($api_token) !!},
+                kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
+                kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
+                desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
+                sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+            }
+        },
+        mounted() {
+            const self = this;
+            const auth = {!! json_encode($auth) !!}
+        },
+        methods: {
+            excel_dokumen(event) {
+                var self = this
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.api_token
+                };
+                filter = "?kab_filter=" + self.kab_filter +
+                    "&kec_filter=" + self.kec_filter +
+                    "&desa_filter=" + self.desa_filter +
+                    "&sls_filter=" + self.sls_filter
+                fetch('https://st23.bpssumsel.com/api/export_dokumen' + filter, {
+                        method: 'GET',
+                        headers: headers,
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = "dokumen_16" + self.kab_filter + self.kec_filter + self.desa_filter +
+                            self.sls_filter + ".xlsx";
+                        document.body.appendChild(
+                            a
+                        );
+                        a.click();
+                        a.remove();
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    });
+            },
+        }
+
+    });
+</script>

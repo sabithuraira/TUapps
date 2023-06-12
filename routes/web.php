@@ -20,7 +20,6 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('type_kredit', 'TypeKreditController');
     Route::resource('rincian_kredit', 'RincianKreditController');
     Route::resource('angka_kredit', 'AngkaKreditController');
-    Route::resource('user', 'UserController');
     Route::get('user_riwayat', 'UserController@riwayat');
     Route::get('user_load_data_pegawai', 'UserController@load_data_pegawai');
 
@@ -112,7 +111,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
 
-
+    Route::resource('user', 'UserController');
 
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
