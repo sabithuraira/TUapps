@@ -103,7 +103,7 @@
                                                 {{ $dt['name'] }}
                                             </a>
                                         </td>
-                                        @if ($dt['rutas'])
+                                        @if ($dt)
                                             <td @if (abs($dt['rutas'][0]['rata_latitude']) > 0.01) class="bg-danger text-white" @endif>
                                                 {{ $dt['rutas'][0]['rata_latitude'] }}
                                             </td>
@@ -283,21 +283,23 @@
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
                     filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
-                    fetch('https://st23.bpssumsel.com/api/export_dash_lokasi' + filter, {
+                    fetch('https://st23.bpssumsel.com/api/export_dashboard_lokasi' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
                         .then(response => response.blob())
                         .then(blob => {
                             var url = window.URL.createObjectURL(blob);
+                            // Buat elemen <a> untuk mengunduh file
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
-                            document.body.appendChild(
-                                a
-                            ); // we need to append the element to the dom -> otherwise it will not work in firefox
+                            a.download = "lokasi_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            // Klik elemen <a> secara otomatis
+                            a.target = "_blank";
                             a.click();
-                            a.remove(); //afterwards we remove the element again
+                            // Hapus elemen <a> setelah selesai
+                            window.URL.revokeObjectURL(url);
+                            a.remove();
                         })
                         .catch(error => {
                             console.log(error)

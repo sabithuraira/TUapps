@@ -267,8 +267,8 @@ class DashboardController extends Controller
         $kec_filter = $request->kec_filter;
         $desa_filter = $request->desa_filter;
         $sls_filter = $request->sls_filter;
-        $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('d/m/Y');
-        $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('d/m/Y');
+        $tanggal_awal = $request->tanggal_awal ? $request->tanggal_awal : now()->subDays(7)->format('m/d/Y');
+        $tanggal_akhir = $request->tanggal_akhir ? $request->tanggal_akhir : now()->format('m/d/Y');
 
         // Mengambil Data Tabel
         $filter_url = '&kab_filter=' . $kab_filter .
@@ -277,7 +277,7 @@ class DashboardController extends Controller
             '&sls_filter=' . $sls_filter .
             '&tanggal_awal=' . $tanggal_awal .
             '&tanggal_akhir=' . $tanggal_akhir;
-        $data_url = 'http://st23.bpssumsel.com/api/dashboard_lokasi';
+        $data_url = 'https://st23.bpssumsel.com/api/dashboard_lokasi';
         $page = '?page=' . $request->page;
         $headers = [
             'Authorization: Bearer ' . $api_token,
@@ -296,6 +296,7 @@ class DashboardController extends Controller
             $links = $result['datas']['links'];
         }
 
+        // dd($data);
         // Mengambil List Filter Kabkot
         $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
         $ch = curl_init($kabs_url);
@@ -942,14 +943,15 @@ class DashboardController extends Controller
         ));
     }
 
-    public function daftar_ruta(Request $request){
+    public function daftar_ruta(Request $request)
+    {
         $auth = Auth::user();
         // $base_url = "http://localhost:8000/api/";
         $base_url = "https://st23.bpssumsel.com/api/";
         if (session('api_token')) {
             $api_token = session('api_token');
         } else {
-            $login_url = $base_url ."login";
+            $login_url = $base_url . "login";
             $data = [
                 'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
                 'password' => '123456',
@@ -1005,7 +1007,7 @@ class DashboardController extends Controller
             'request',
             'kabs',
             'kab_filter',
-            'api_token', 
+            'api_token',
             'base_url'
         ));
     }
