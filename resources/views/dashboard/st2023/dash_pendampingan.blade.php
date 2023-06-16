@@ -64,8 +64,7 @@
                             </div>
                             <div class="col-1 ">
                                 <label for="" class="label text-white">export</label>
-                                <button type="button" class="btn btn-info"
-                                    @click="export_dash_pendampingan()">export</button>
+                                <button type="button" class="btn btn-info" @click="export_dash_pendampingan()">export</button>
                             </div>
                         </div>
 
@@ -267,19 +266,21 @@
                     var self = this;
                     const headers = {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + this.api_token
+                        'Authorization': 'Bearer ' + self.api_token
                     };
                     const kab_filter = document.getElementById('kab_filter').value;
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
                     filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
-                    console.log("https://st23.bpssumsel.com/api/export_dashboard_pendampingan" + filter);
+                    // console.log(JSON.stringify(headers))
+                    // console.log(JSON.stringify(filter))
                     fetch('https://st23.bpssumsel.com/api/export_dashboard_pendampingan' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
                         .then(response => response.blob())
                         .then(blob => {
+                            console.log(blob)
                             var url = window.URL.createObjectURL(blob);
                             var a = document.createElement('a');
                             a.href = url;
