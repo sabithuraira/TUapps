@@ -72,8 +72,10 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>Jumlah Ruta Selesai</th>
-                                <th>Persentase Selesai By Target</th>
+                                <th>Jumlah SLS</th>
+                                <th>Total Ruta Prelist</th>
+                                <th>Ruta Dicacah</th>
+                                <th>Persentase Pencacahan / Prelist</th>
                             </tr>
                         </thead>
                         @if ($data)
@@ -86,22 +88,27 @@
                                             {{ $dt['name'] }} <span class="text-secondary">({{ $dt['email'] }})</span>
                                         </td>
                                         <td>
-                                            @if ($dt['rutas_count'] < $target_hari_ini)
-                                                <span class="badge badge-danger">
-                                                @else
-                                                    <span class="badge badge-success">
-                                            @endif
-                                            {{ $dt['rutas_count'] }}
+                                            {{ $dt['jml_sls'] }}
+                                        </td>
+                                        <td>
+                                            {{ $dt['prelist_ruta_tani'] }}
+                                        </td>
+                                        <td>
+                                            <span class="badge badge">
+                                                {{ $dt['rutas_count'] }}
                                             </span>
                                         </td>
                                         <td>
-                                            @if ($dt['rutas_count'] < $target_hari_ini)
-                                                <span class="badge badge-danger">
-                                                @else
-                                                    <span class="badge badge-success">
+                                            @if ($dt['prelist_ruta_tani'] != '0')
+                                                <span
+                                                    @if ($dt['rutas_count'] < $dt['prelist_ruta_tani']) class="badge badge-danger" @else class="badge badge-success" @endif>
+                                                    {{ round(($dt['rutas_count'] / $dt['prelist_ruta_tani']) * 100, 2) }} %
+                                                </span>
+                                            @else
+                                                <span class="badge badge-success">
+                                                    100%
+                                                </span>
                                             @endif
-                                            {{ round(($dt['rutas_count'] / $target_hari_ini) * 100, 2) }} %
-                                            </span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -111,7 +118,6 @@
                                 <tr>
                                     <td colspan="7">Belum ada Data/Belum Pilih Kab</td>
                                 </tr>
-
                             </tbody>
                         @endif
                     </table>

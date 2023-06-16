@@ -90,7 +90,7 @@
                                 <th>ID SLS</th>
                                 <th>Sub SLS</th>
                                 <th>Nama SLS</th>
-                                <th>Jml Ruta Tani Regsosek</th>
+                                <th>Jml Ruta Tani Prelist</th>
                                 <th>PCL</th>
                                 <th>PML</th>
                                 <th>Koseka</th>
@@ -108,7 +108,7 @@
                                         <td>{{ $dt['id_sls'] }}</td>
                                         <td>{{ $dt['id_sub_sls'] }}</td>
                                         <td class="text-left">{{ $dt['nama_sls'] }}</td>
-                                        <td>{{ $dt['jml_keluarga_tani'] }}</td>
+                                        <td>{{ $dt['ruta_prelist'] }}</td>
                                         <td class="text-left">{{ $dt['kode_pcl'] }}</td>
                                         <td class="text-left">{{ $dt['kode_pml'] }}</td>
                                         <td class="text-left">{{ $dt['kode_koseka'] }}</td>

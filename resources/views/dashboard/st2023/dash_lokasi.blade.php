@@ -64,13 +64,12 @@
                         <div class="row px-2">
                             <div class="col-lg-6 col-md-6 left-box">
                                 <label>Tampilkan Tanggal:</label>
-
                                 <div class="input-daterange input-group" data-provide="datepicker">
                                     <input type="text" class="input-sm form-control" v-model="start" id="start"
-                                        autocomplete="off">
+                                        name="tanggal_awal" autocomplete="off">
                                     <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
                                     <input type="text" class="input-sm form-control" v-model="end" id="end"
-                                        autocomplete="off">
+                                        name="tanggal_akhir" autocomplete="off">
                                 </div>
 
                             </div>
@@ -87,8 +86,9 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>Rata Selisih Latitue</th>
-                                <th>Rata Selisih Longitude</th>
+                                <th>Jarak(Km)</th>
+                                {{-- <th>Rata Selisih Latitue</th>
+                                <th>Rata Selisih Longitude</th> --}}
                                 <th>Jumlah Ruta</th>
                             </tr>
                         </thead>
@@ -103,7 +103,15 @@
                                                 {{ $dt['name'] }}
                                             </a>
                                         </td>
-                                        @if ($dt)
+
+                                        @if ($dt['rutas'])
+                                            <td @if (abs($dt['rutas'][0]['rata_latitude']) > 0.01) class="bg-danger text-white" @endif>
+                                                {{ round(abs($dt['rutas'][0]['rata_latitude']) * 1000, 2) }} Km
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
+                                        {{-- @if ($dt['rutas'])
                                             <td @if (abs($dt['rutas'][0]['rata_latitude']) > 0.01) class="bg-danger text-white" @endif>
                                                 {{ $dt['rutas'][0]['rata_latitude'] }}
                                             </td>
@@ -116,7 +124,7 @@
                                             </td>
                                         @else
                                             <td></td>
-                                        @endif
+                                        @endif --}}
                                         <td>
                                             @if ($dt['rutas'])
                                                 {{ $dt['rutas'][0]['jml_ruta'] }}
@@ -161,6 +169,7 @@
             el: "#app_vue",
             data: {
                 datas: [],
+                api_token: {!! json_encode($api_token) !!},
                 start: {!! json_encode($tanggal_awal) !!},
                 end: {!! json_encode($tanggal_akhir) !!},
             },
@@ -279,10 +288,13 @@
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + this.api_token
                     };
+                    console.log(self.start);
                     const kab_filter = document.getElementById('kab_filter').value;
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter +
+                        "&tanggal_awal=" + self.start + "&tanggal_akhir=" + self.end
+                    console.log(filter)
                     fetch('https://st23.bpssumsel.com/api/export_dashboard_lokasi' + filter, {
                             method: 'GET',
                             headers: headers,

@@ -64,7 +64,8 @@
                             </div>
                             <div class="col-1 ">
                                 <label for="" class="label text-white">export</label>
-                                <button type="button" class="btn btn-info" @click="export_dash_waktu()">export</button>
+                                <button type="button" class="btn btn-info"
+                                    @click="export_dash_pendampingan()">export</button>
                             </div>
                         </div>
 
@@ -143,6 +144,15 @@
     <script>
         var vm = new Vue({
             el: "#app_vue",
+            data() {
+                return {
+                    api_token: {!! json_encode($api_token) !!},
+                    kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
+                    kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
+                    desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
+                    sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+                }
+            },
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -253,7 +263,7 @@
                         resolve();
                     });
                 },
-                export_dash_waktu(event) {
+                export_dash_pendampingan(event) {
                     var self = this;
                     const headers = {
                         'Content-Type': 'application/json',
@@ -263,7 +273,8 @@
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
                     filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
-                    fetch('https://st23.bpssumsel.com/api/export_dash_waktu' + filter, {
+                    console.log("https://st23.bpssumsel.com/api/export_dashboard_pendampingan" + filter);
+                    fetch('https://st23.bpssumsel.com/api/export_dashboard_pendampingan' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
@@ -272,12 +283,12 @@
                             var url = window.URL.createObjectURL(blob);
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            a.download = "pendampingan_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
                             document.body.appendChild(
                                 a
-                            ); // we need to append the element to the dom -> otherwise it will not work in firefox
+                            );
                             a.click();
-                            a.remove(); //afterwards we remove the element again
+                            a.remove();
                         })
                         .catch(error => {
                             console.log(error)

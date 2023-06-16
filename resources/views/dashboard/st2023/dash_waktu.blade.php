@@ -64,18 +64,14 @@
                         <div class="row px-2">
                             <div class="col-lg-6 col-md-6 left-box">
                                 <label>Tampilkan Tanggal:</label>
-
                                 <div class="input-daterange input-group" data-provide="datepicker">
                                     <input type="text" class="input-sm form-control" v-model="start" id="start"
-                                        autocomplete="off">
+                                        name="tanggal_awal" autocomplete="off">
                                     <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
                                     <input type="text" class="input-sm form-control" v-model="end" id="end"
-                                        autocomplete="off">
+                                        name="tanggal_akhir" autocomplete="off">
                                 </div>
-
                             </div>
-
-
                         </div>
                     </form>
                 </div>
@@ -170,6 +166,7 @@
             el: "#app_vue",
             data: {
                 datas: [],
+                api_token: {!! json_encode($api_token) !!},
                 start: {!! json_encode($tanggal_awal) !!},
                 end: {!! json_encode($tanggal_akhir) !!},
             },
@@ -293,7 +290,9 @@
                     const kab_filter = document.getElementById('kab_filter').value;
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter +
+                        "&tanggal_awal=" + self.start + "&tanggal_akhir=" + self.end
+                    console.log(filter)
                     // console.log("https://st23.bpssumsel.com/api/export_dashboard_waktu" + filter);
                     fetch('https://st23.bpssumsel.com/api/export_dashboard_waktu' + filter, {
                             method: 'GET',
