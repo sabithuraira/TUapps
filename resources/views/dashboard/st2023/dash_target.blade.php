@@ -73,7 +73,8 @@
                                 <th>Kab</th>
                                 <th>PCL</th>
                                 <th>Jumlah SLS</th>
-                                <th>Total Ruta Prelist</th>
+                                <th>Jumlah Prelist Ruta </th>
+                                {{-- <th>Jumlah Prelist Ruta Pertanian</th> --}}
                                 <th>Ruta Dicacah</th>
                                 <th>Persentase Pencacahan / Prelist</th>
                             </tr>
@@ -91,18 +92,23 @@
                                             {{ $dt['jml_sls'] }}
                                         </td>
                                         <td>
-                                            {{ $dt['prelist_ruta_tani'] }}
+                                            {{ $dt['prelist_ruta'] }}
                                         </td>
+                                        {{-- <td>
+                                            {{ $dt['prelist_ruta_tani'] }}
+                                        </td> --}}
                                         <td>
                                             <span class="badge badge">
                                                 {{ $dt['rutas_count'] }}
                                             </span>
                                         </td>
                                         <td>
-                                            @if ($dt['prelist_ruta_tani'] != '0')
+                                            @if ($dt['prelist_ruta'] > 0)
                                                 <span
-                                                    @if ($dt['rutas_count'] < $dt['prelist_ruta_tani']) class="badge badge-danger" @else class="badge badge-success" @endif>
-                                                    {{ round(($dt['rutas_count'] / $dt['prelist_ruta_tani']) * 100, 2) }} %
+                                                    @if ($dt['rutas_count'] < $dt['prelist_ruta']) class="badge badge-danger"
+                                                    @else
+                                                    class="badge badge-success" @endif>
+                                                    {{ round(($dt['rutas_count'] / $dt['prelist_ruta']) * 100, 2) }} %
                                                 </span>
                                             @else
                                                 <span class="badge badge-success">

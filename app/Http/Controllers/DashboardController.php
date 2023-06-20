@@ -220,6 +220,7 @@ class DashboardController extends Controller
 
         return view('dashboard.st2023.dash_waktu', compact(
             'auth',
+            'api_token',
             'request',
             'data',
             'links',
@@ -311,6 +312,7 @@ class DashboardController extends Controller
 
         return view('dashboard.st2023.dash_lokasi', compact(
             'auth',
+            'api_token',
             'request',
             'data',
             'links',

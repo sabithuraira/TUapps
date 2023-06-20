@@ -14,7 +14,8 @@
                 <th>Nama Wilayah</th>
                 <th>Jumlah SLS</th>
                 <th>SLS Selesai (persen)</th>
-                <th>Prelist Ruta Tani</th>
+                <th>Prelist Ruta</th>
+                {{-- <th>Prelist Ruta Pertanian</th> --}}
                 <th>Ruta Tani pencacahan</th>
             </tr>
         </thead>
@@ -48,10 +49,13 @@
                                 {{ '(' . round(100 * ($data['selesai'] / $data['jumlah']), 3) . '%)' }}
                             @endif
                         </td>
-
                         <td>
-                            {{ $data['prelist_ruta_tani'] }}
+                            {{ $data['prelist_ruta'] }}
                         </td>
+
+                        {{-- <td>
+                            {{ $data['prelist_ruta_tani'] }}
+                        </td> --}}
                         <td>
                             {{ $data['ruta_selesai'] }}
                         </td>
