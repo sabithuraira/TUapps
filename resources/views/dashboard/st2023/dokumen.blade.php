@@ -11,7 +11,6 @@
                 <th>Dokumen PCL</th>
                 <th>Dokumen PML</th>
                 <th>Dokumen Koseka</th>
-                <th>Dokumen Telah di Kantor BPS</th>
             </tr>
         </thead>
         @if (sizeof($data_dokumen) > 0)
@@ -43,9 +42,6 @@
                         </td>
                         <td>
                             {{ $dt_dok['dok_koseka'] }}
-                        </td>
-                        <td>
-                            {{ $dt_dok['dok_bps'] }}
                         </td>
                     </tr>
                 @endforeach
