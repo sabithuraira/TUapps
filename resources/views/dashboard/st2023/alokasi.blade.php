@@ -27,6 +27,9 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end ">
+
+                    <button type="button" class="btn btn-info mr-2" @click="export_sls_perubahan()">Download SLS
+                        Perubahan</button>
                     <button class="btn btn-info mr-2" data-toggle="modal" data-target="#modal_import_ruta">Import
                         Ruta Regsosek</button>
                     <a class="btn btn-info mr-2" target="_blank"
@@ -537,6 +540,38 @@
                             var a = document.createElement('a');
                             a.href = url;
                             a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            document.body.appendChild(
+                                a
+                            ); // we need to append the element to the dom -> otherwise it will not work in firefox
+                            a.click();
+                            a.remove(); //afterwards we remove the element again
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        });
+                },
+
+                export_sls_perubahan(event) {
+                    var self = this;
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        // 'X-CSRF-TOKEN': this.csrfToken,
+                        'Authorization': 'Bearer ' + this.api_token
+                    };
+                    const kab_filter = document.getElementById('kab_filter').value;
+                    const kec_filter = document.getElementById('kec_filter').value;
+                    const desa_filter = document.getElementById('desa_filter').value;
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    fetch('https://st23.bpssumsel.com/api/export_sls_perubahan' + filter, {
+                            method: 'GET',
+                            headers: headers,
+                        })
+                        .then(response => response.blob())
+                        .then(blob => {
+                            var url = window.URL.createObjectURL(blob);
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.download = "sls_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
                             document.body.appendChild(
                                 a
                             ); // we need to append the element to the dom -> otherwise it will not work in firefox
