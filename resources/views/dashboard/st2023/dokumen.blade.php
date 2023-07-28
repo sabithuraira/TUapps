@@ -14,6 +14,7 @@
                     <th>Dokumen Koseka</th>
                     @if(!$request->kab_filter)
                     <th>Diterima BPS Kab/Kota (SIPMEN)</th>
+                    <th>Dok. Rusak/Kosong (SIPMEN)</th>
                     @endif
                 </tr>
             </thead>
@@ -49,9 +50,10 @@
                             </td>
                             @if(!$request->kab_filter)
                             <td>
-                                <span id="{{ 'sipmen'.$dt_dok['kode_kab'] }}">
-
-                                </span>
+                                <span id="{{ 'sipmen'.$dt_dok['kode_kab'] }}"></span>
+                            </td>
+                            <td>
+                                <span id="{{ 'sipmen_rusak'.$dt_dok['kode_kab'] }}"></span>
                             </td>
                             @endif
                         </tr>
