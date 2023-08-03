@@ -20,7 +20,6 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('type_kredit', 'TypeKreditController');
     Route::resource('rincian_kredit', 'RincianKreditController');
     Route::resource('angka_kredit', 'AngkaKreditController');
-    Route::resource('user', 'UserController');
     Route::get('user_riwayat', 'UserController@riwayat');
     Route::get('user_load_data_pegawai', 'UserController@load_data_pegawai');
 
@@ -112,7 +111,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
 
-
+    Route::resource('user', 'UserController');
 
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
@@ -237,8 +236,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/waktu', 'DashboardController@waktu');
     Route::get('dashboard/lokasi', 'DashboardController@lokasi');
     Route::get('dashboard/target', 'DashboardController@target');
+    Route::get('dashboard/koseka', 'DashboardController@koseka');
+    Route::get('dashboard/pendampingan', 'DashboardController@pendampingan');
     Route::get('dashboard/petugas', 'DashboardController@petugas');
+    Route::get('dashboard/daftar_ruta', 'DashboardController@daftar_ruta');
     Route::get('dashboard/petugas/{id}', 'DashboardController@petugas_show');
+    Route::get('dashboard/petugas_sls/{id}', 'DashboardController@petugas_sls');
     Route::get('dashboard/alokasi', 'DashboardController@alokasi');
     Route::get('dashboard/alokasi/{id}', 'DashboardController@alokasi_show');
     Route::get('dashboard/rekap_dl', 'DashboardController@rekap_dl');
@@ -284,5 +287,6 @@ Route::get('guest', 'HomeController@guest')->name('guest');
 // Route::post('telegram/sp2020', 'TelegramController@sp2020');
 Route::post('telegram/sp2020lf', 'TelegramController@sp2020lf');
 Route::post('telegram/regsosek', 'TelegramController@regsosek');
+Route::post('telegram/pes_st2023', 'TelegramController@pes_st2023');
 Route::get('telegram/regsosek_belum_unduh', 'TelegramController@regsosek_belum_unduh');
 Route::post('telegram/regsosek_set_unduh', 'TelegramController@regsosek_set_unduh');

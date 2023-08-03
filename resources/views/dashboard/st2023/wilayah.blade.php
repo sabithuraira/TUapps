@@ -1,16 +1,21 @@
-{{-- <div class="p-2 d-flex justify-content-end">
-    <a href="#" onclick="tableToExcel();" class="btn btn-info float-right">Unduh Excel</a>
-</div> --}}
+<div class="p-2 d-flex justify-content-end" id="wilayah_container">
+    @if ($request->kab_filter)
+        <button type="button" class="btn btn-info mr-2" @click="excel_ruta()">Export Ruta</button>
+    @endif
+    @if (!$request->sls_filter)
+        <button type="button" class="btn btn-info mr-2" @click="excel_progress()">Export Progress</button>
+    @endif
+</div>
 @if (!$request->sls_filter)
     <table id="initabel" class="table-bordered table-sm" style="min-width:100%;">
         <thead>
             <tr class="text-center">
                 <th>No</th>
                 <th>Nama Wilayah</th>
-
-                <th>Jumlah</th>
-                <th>Selesai (persen)</th>
-                <th>Perkiraan Ruta Tani</th>
+                <th>Jumlah SLS</th>
+                <th>SLS Selesai (persen)</th>
+                <th>Prelist Ruta</th>
+                {{-- <th>Prelist Ruta Pertanian</th> --}}
                 <th>Ruta Tani pencacahan</th>
             </tr>
         </thead>
@@ -39,14 +44,18 @@
                             {{ $data['jumlah'] }}
                         </td>
                         <td>
-                            {{ $data['selesai'] }} @if ($data['jumlah'])
-                                {{ '(' . round($data['selesai'] / $data['jumlah'], 3) . '%)' }}
+                            {{ $data['selesai'] }}
+                            @if ($data['jumlah'])
+                                {{ '(' . round(100 * ($data['selesai'] / $data['jumlah']), 3) . '%)' }}
                             @endif
                         </td>
-
                         <td>
-                            {{ $data['perkiraan_ruta'] }}
+                            {{ $data['prelist_ruta'] }}
                         </td>
+
+                        {{-- <td>
+                            {{ $data['prelist_ruta_tani'] }}
+                        </td> --}}
                         <td>
                             {{ $data['ruta_selesai'] }}
                         </td>
@@ -63,11 +72,9 @@
                 <th>No</th>
                 <th>Nu RT</th>
                 <th>Nama</th>
-                <th>Sektor Pertanian</th>
-                <th>Waktu Mulai</th>
-                <th>Waktu Selesai</th>
-                <th>Waktu Selesai</th>
-                <th>Latitude, Longitude</th>
+                <th>Jumlah Usaha</th>
+                <th>Waktu</th>
+                <th>Jarak titik <br> mulai & selesai</th>
             </tr>
         </thead>
         @if (sizeof($data_wilayah) > 0)
@@ -84,20 +91,44 @@
                             {{ $data['kepala_ruta'] }}
                         </td>
                         <td>
-                            {{ $data['sektor'] }}
+                            {{ $data['jumlah_unit_usaha'] }}
                         </td>
-                        <td class="text-left">
-                            {{ $data['start_time'] }}
+                        <td class="">
+                            @php
+                                $start = new DateTime($data['start_time']);
+                                $end = new DateTime($data['end_time']);
+                                $duration = $start->diff($end);
+                                $days = $duration->days;
+                                $hours = $duration->h; // Jam
+                                $minutes = $duration->i; // Menit
+                                $seconds = $duration->s; // Detik
+                                if ($days) {
+                                    $durationString = $days . ' hari ' . $hours . ':' . $minutes . ':' . $seconds;
+                                } else {
+                                    $durationString = $hours . ':' . $minutes . ':' . $seconds;
+                                }
+                                
+                                // $minutes = $duration->days * 24 * 60; // Mengubah jumlah hari menjadi menit
+                                // $minutes += $duration->h * 60; // Menambahkan jumlah jam menjadi menit
+                                // $minutes += $duration->i; // Menambahkan jumlah menit
+                                
+                            @endphp
+                            {{ htmlspecialchars($durationString) }}
                         </td>
-                        <td class="text-left">
-                            {{ $data['end_time'] }}
-                        </td>
-
-                        <td class="text-left">
-                            {{ $data['end_latitude'] }}
-                        </td>
-                        <td class="text-left">
-                            {{ $data['end_longitude'] }}
+                        <td class="text-right">
+                            @php
+                                $earthRadius = 6371; // Radius bumi dalam kilometer
+                                
+                                $latDiff = deg2rad($data['end_latitude'] - $data['start_latitude']);
+                                $lonDiff = deg2rad($data['end_longitude'] - $data['start_longitude']);
+                                
+                                $a = sin($latDiff / 2) * sin($latDiff / 2) + cos(deg2rad($data['start_latitude'])) * cos(deg2rad($data['end_latitude'])) * sin($lonDiff / 2) * sin($lonDiff / 2);
+                                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+                                
+                                $distance = $earthRadius * $c * 1000; // Mengubah jarak ke meter
+                                
+                            @endphp
+                            {{ round($distance, 2) . ' m' }}
                         </td>
                     </tr>
                 @endforeach

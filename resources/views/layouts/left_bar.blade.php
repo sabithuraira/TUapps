@@ -40,8 +40,14 @@
                                 href="{{ url('dashboard/lokasi') }}">Dashboard Lokasi</a></li>
                         <li class="{{ request()->is('dashboard/target*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/target') }}">Dashboard Target</a></li>
+                        <li class="{{ request()->is('dashboard/koseka*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/koseka') }}">Dashboard Koseka</a></li>
+                        <li class="{{ request()->is('dashboard/pendampingan*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/pendampingan') }}">Dashboard pendampingan</a></li>
                         <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
+                        <li class="{{ request()->is('dashboard/daftar_ruta*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/daftar_ruta') }}">Pindah Ruta ST2023</a></li>
                         <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li>
                     </ul>
@@ -225,20 +231,22 @@
                     <a href="{{ url('surat_km') }}"> <i class="icon-doc"></i><span>Surat Menyurat</span></a>
                 </li>
 
-                @hasanyrole('superadmin|kepegawaian')
+                @hasanyrole('superadmin|tatausaha')
                     <li class="{{ request()->is('user*') ? 'active' : '' }}">
                         <a href="{{ url('user') }}"> <i class="icon-users"></i><span>Kelola User</span></a>
                     </li>
                 @endhasanyrole
 
-                @role('superadmin|kepegawaian')
+                @role('superadmin|tatausaha')
                     <li
                         class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') ? 'active' : '' }}">
                         <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                         <ul>
-                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
+                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a
+                                    href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
-                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{ url('uker4') }}">Unit
+                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
+                                    href="{{ url('uker4') }}">Unit
                                     Kerja 4</a></li>
                             <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a
                                     href="{{ url('angka_kredit') }}">Angka Kredit</a></li>

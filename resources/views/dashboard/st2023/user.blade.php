@@ -78,6 +78,7 @@
                                 <th>Nama</th>
                                 <th>Email</th>
                                 <th>Jabatan</th>
+                                <th>Alokasi SLS</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -94,6 +95,17 @@
                                         <td>
                                             @if ($dt['roles'])
                                                 {{ $dt['roles'][0]['name'] }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($dt['roles'])
+                                                @if ($dt['roles'][0]['name'] == 'PPL')
+                                                    {{ $dt['jumlah_sls_ppl'] }}
+                                                @elseif($dt['roles'][0]['name'] == 'PML')
+                                                    {{ $dt['jumlah_sls_pml'] }}
+                                                @elseif($dt['roles'][0]['name'] == 'Koseka')
+                                                    {{ $dt['jumlah_sls_koseka'] }}
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
@@ -122,7 +134,7 @@
                     <ul class="pagination pagination-primary">
                         @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {{ $lk['label'] }}
+                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
                                 </a>
                             </li>
                         @endforeach

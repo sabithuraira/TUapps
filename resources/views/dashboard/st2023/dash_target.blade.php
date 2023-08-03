@@ -12,6 +12,10 @@
         .c3-axis-x text {
             font-size: 10px;
         }
+
+        .CodeMirror {
+            display: none;
+        }
     </style>
     <div class="container" id="app_vue">
 
@@ -20,7 +24,7 @@
                 <div class="body profilepage_2 blog-page pb-0 text-center">
                     <h3>Dashboard by PPL</h3>
                     <div class="alert alert-info mt-1 text-left" role="alert">
-                        Target Ruta Selesai Hari ini adalah ... Ruta Tani
+                        Target Ruta Selesai Hari ini adalah {{ $target_hari_ini }} Ruta Tani
                     </div>
                 </div>
                 <br>
@@ -30,7 +34,7 @@
                             <div class="col-3">
                                 <label for="" class="label">Kab/Kot</label>
                                 <select name="kab_filter" id="kab_filter" class="form-control" @change="select_kabs()">
-                                    <option value="">Semua</option>
+                                    <option value="">Pilih Satu</option>
                                     @foreach ($kabs as $kab)
                                         <option value="{{ $kab['id_kab'] }}">[{{ $kab['id_kab'] }}] {{ $kab['alias'] }}
                                         </option>
@@ -68,29 +72,68 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>PML</th>
-                                <th>Koseka</th>
-                                <th>Jumlah Ruta Selesai</th>
-                                <th>Persentase Selesai By Target</th>
+                                <th>Jumlah SLS</th>
+                                <th>Jumlah Prelist Ruta </th>
+                                {{-- <th>Jumlah Prelist Ruta Pertanian</th> --}}
+                                <th>Ruta Dicacah</th>
+                                <th>Persentase Pencacahan / Prelist</th>
                             </tr>
                         </thead>
                         @if ($data)
+                            @foreach ($data as $index => $dt)
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td>{{ ++$index }}</td>
+                                        <td>{{ $dt['kode_kab'] }}</td>
+                                        <td class="text-left">
+                                            {{ $dt['name'] }} <span class="text-secondary">({{ $dt['email'] }})</span>
+                                        </td>
+                                        <td>
+                                            {{ $dt['jml_sls'] }}
+                                        </td>
+                                        <td>
+                                            {{ $dt['prelist_ruta'] }}
+                                        </td>
+                                        {{-- <td>
+                                            {{ $dt['prelist_ruta_tani'] }}
+                                        </td> --}}
+                                        <td>
+                                            <span class="badge badge">
+                                                {{ $dt['rutas_count'] }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if ($dt['prelist_ruta'] > 0)
+                                                <span
+                                                    @if ($dt['rutas_count'] < $dt['prelist_ruta']) class="badge badge-danger"
+                                                    @else
+                                                    class="badge badge-success" @endif>
+                                                    {{ round(($dt['rutas_count'] / $dt['prelist_ruta']) * 100, 2) }} %
+                                                </span>
+                                            @else
+                                                <span class="badge badge-success">
+                                                    100%
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            @endforeach
                         @else
                             <tbody>
                                 <tr>
-                                    <td colspan="7">Belum ada Data</td>
+                                    <td colspan="7">Belum ada Data/Belum Pilih Kab</td>
                                 </tr>
-
                             </tbody>
                         @endif
                     </table>
                     <ul class="pagination pagination-primary">
-                        {{-- @foreach ($links as $lk)
+                        @foreach ($links as $lk)
                             <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {{ $lk['label'] }}
+                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
                                 </a>
                             </li>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -106,6 +149,15 @@
     <script>
         var vm = new Vue({
             el: "#app_vue",
+            data() {
+                return {
+                    api_token: {!! json_encode($api_token) !!},
+                    kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
+                    kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
+                    desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
+                    sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+                }
+            },
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -216,16 +268,16 @@
                     });
                 },
                 export_dash_target(event) {
-                    var self = this;
+                    var self = this
                     const headers = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + this.api_token
                     };
-                    const kab_filter = document.getElementById('kab_filter').value;
-                    const kec_filter = document.getElementById('kec_filter').value;
-                    const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
-                    fetch('https://st23.bpssumsel.com/api/export_dash_target' + filter, {
+
+                    filter = "?kab_filter=" + self.kab_filter +
+                        "&kec_filter=" + self.kec_filter +
+                        "&desa_filter=" + self.desa_filter
+                    fetch('https://st23.bpssumsel.com/api/export_target' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
@@ -234,7 +286,8 @@
                             var url = window.URL.createObjectURL(blob);
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            a.download = "target_16" + self.kab_filter + self.kec_filter + self.desa_filter +
+                                self.sls_filter + ".xlsx";
                             document.body.appendChild(
                                 a
                             ); // we need to append the element to the dom -> otherwise it will not work in firefox

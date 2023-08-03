@@ -208,7 +208,7 @@ class UserController extends Controller
 
         $list_pegawai = \App\UserModel::where([
             ['id', '<>', 1],
-            ['kdkab', '=', Auth::user()->kdkab]
+            ['kdkab', '=', $model->kdkab]
         ])
             ->orWhere([['kdesl', '=', 2],])
             ->orderBy('name', 'ASC')->get();

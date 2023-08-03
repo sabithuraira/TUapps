@@ -8,84 +8,85 @@
 @endsection
 
 @section('content')
-    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') !!}">
-
     <style>
         .c3-axis-x text {
             font-size: 10px;
         }
     </style>
-
     <div class="container" id="app_vue">
 
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="body profilepage_2 blog-page pb-0 text-center">
-                    <h3>Daftar Petugas Melakukan Pendataan Dengan Rentang Waktu Tidak Wajar </h3>
-                    <div class="alert alert-info mt-1 text-left" role="alert">
-                        estimasi waktu pencacahan adalah 5-15 menit
-                    </div>
+                    <h3>Daftar Koseka Dengan Progress Pertanggal </h3>
                 </div>
                 <br>
                 <div>
                     <form action="">
-                        <div class="row px-2 mb-2">
+                        <div class="row px-2">
                             <div class="col-3">
                                 <label for="" class="label">Kab/Kot</label>
                                 <select name="kab_filter" id="kab_filter" class="form-control" @change="select_kabs()">
-                                    <option value="">Semua</option>
+                                    <option value="">Pilih Satu</option>
                                     @foreach ($kabs as $kab)
                                         <option value="{{ $kab['id_kab'] }}">[{{ $kab['id_kab'] }}] {{ $kab['alias'] }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-3">
-                                <label for="" class="label">Kec</label>
-                                <select name="kec_filter" id="kec_filter" class="form-control" @change="select_kecs()">
-                                    <option value="">Semua</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <label for="" class="label">Desa</label>
-                                <select name="desa_filter" id="desa_filter" class="form-control">
-                                    <option value="">Semua</option>
-                                </select>
-                            </div>
+
                             <div class="col-1 ">
                                 <label for="" class="label text-white">cari</label>
                                 <button type="submit" class="btn btn-info">cari</button>
                             </div>
-                            <div class="col-1 ">
+                            {{-- <div class="col-1 ">
                                 <label for="" class="label text-white">export</label>
                                 <button type="button" class="btn btn-info" @click="export_dash_waktu()">export</button>
-                            </div>
-                        </div>
-                        <div class="row px-2">
-                            <div class="col-lg-6 col-md-6 left-box">
-                                <label>Tampilkan Tanggal:</label>
-                                <div class="input-daterange input-group" data-provide="datepicker">
-                                    <input type="text" class="input-sm form-control" v-model="start" id="start"
-                                        name="tanggal_awal" autocomplete="off">
-                                    <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
-                                    <input type="text" class="input-sm form-control" v-model="end" id="end"
-                                        name="tanggal_akhir" autocomplete="off">
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </form>
                 </div>
                 <br>
-                <div class="m-2 ">
+                <div class="m-2 table-responsive">
                     <table class="table table-bordered table-sm">
                         <thead>
                             <tr class="text-center">
-                                <th>No</th>
-                                <th>Kab</th>
-                                <th>PCL</th>
-                                <th>Jabatan</th>
-                                <th>Rata-rata Waktu <br> Pencacahan (Menit)</th>
-                                <th>Jumlah Ruta</th>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Kab</th>
+                                <th rowspan="2">Nama</th>
+                                <th colspan="30">Tanggal(Juni)</th>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th>13</th>
+                                <th>14</th>
+                                <th>15</th>
+                                <th>16</th>
+                                <th>17</th>
+                                <th>18</th>
+                                <th>19</th>
+                                <th>20</th>
+                                <th>21</th>
+                                <th>22</th>
+                                <th>23</th>
+                                <th>24</th>
+                                <th>25</th>
+                                <th>26</th>
+                                <th>27</th>
+                                <th>28</th>
+                                <th>29</th>
+                                <th>30</th>
                             </tr>
                         </thead>
                         @if ($data)
@@ -94,83 +95,62 @@
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
                                         <td>{{ $dt['kode_kab'] }}</td>
-                                        <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['email']) }}">
-                                                {{ $dt['name'] }}
-                                            </a>
+                                        <td class="text-left">{{ $dt['name'] }} <br>
+                                            {{ $dt['email'] }}
                                         </td>
-                                        {{-- <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pml']) }}">
-                                                {{ $dt['pml'] }}
-                                            </a>
-                                        </td>
-                                        <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_koseka']) }}">
-                                                {{ $dt['koseka'] }}
-                                            </a>
-                                        </td> --}}
-
-                                        <td>
-                                            @if ($dt['roles'])
-                                                {{ $dt['roles'][0]['name'] }}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($dt['rutas'])
-                                                {{ round($dt['rutas'][0]['rata_rata_waktu_menit'], 2) }}
-                                            @else
-                                                0
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($dt['rutas'])
-                                                {{ $dt['rutas'][0]['jml_ruta'] }}
-                                            @else
-                                                0
-                                            @endif
-                                        </td>
-
+                                        <td>{{ $dt['rt_1_juni'] }}</td>
+                                        <td>{{ $dt['rt_2_juni'] }}</td>
+                                        <td>{{ $dt['rt_3_juni'] }}</td>
+                                        <td>{{ $dt['rt_4_juni'] }}</td>
+                                        <td>{{ $dt['rt_5_juni'] }}</td>
+                                        <td>{{ $dt['rt_6_juni'] }}</td>
+                                        <td>{{ $dt['rt_7_juni'] }}</td>
+                                        <td>{{ $dt['rt_8_juni'] }}</td>
+                                        <td>{{ $dt['rt_9_juni'] }}</td>
+                                        <td>{{ $dt['rt_10_juni'] }}</td>
+                                        <td>{{ $dt['rt_11_juni'] }}</td>
+                                        <td>{{ $dt['rt_12_juni'] }}</td>
+                                        <td>{{ $dt['rt_13_juni'] }}</td>
+                                        <td>{{ $dt['rt_14_juni'] }}</td>
+                                        <td>{{ $dt['rt_15_juni'] }}</td>
+                                        <td>{{ $dt['rt_16_juni'] }}</td>
+                                        <td>{{ $dt['rt_17_juni'] }}</td>
+                                        <td>{{ $dt['rt_18_juni'] }}</td>
+                                        <td>{{ $dt['rt_19_juni'] }}</td>
+                                        <td>{{ $dt['rt_20_juni'] }}</td>
+                                        <td>{{ $dt['rt_21_juni'] }}</td>
+                                        <td>{{ $dt['rt_22_juni'] }}</td>
+                                        <td>{{ $dt['rt_23_juni'] }}</td>
+                                        <td>{{ $dt['rt_24_juni'] }}</td>
+                                        <td>{{ $dt['rt_25_juni'] }}</td>
+                                        <td>{{ $dt['rt_26_juni'] }}</td>
+                                        <td>{{ $dt['rt_27_juni'] }}</td>
+                                        <td>{{ $dt['rt_28_juni'] }}</td>
+                                        <td>{{ $dt['rt_29_juni'] }}</td>
+                                        <td>{{ $dt['rt_30_juni'] }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         @else
                             <tbody>
                                 <tr>
-                                    <td colspan="6">Belum ada Data</td>
+                                    <td colspan="34">Belum ada Data / FIlter Kab Belum Dipilih</td>
                                 </tr>
-
                             </tbody>
                         @endif
                     </table>
-                    <ul class="pagination pagination-primary">
-                        @foreach ($links as $lk)
-                            <li class="page-item @if ($lk['active']) active @endif">
-                                <a class="page-link" href="{{ $lk['url'] }}"> {!! $lk['label'] !!}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
                 </div>
             </div>
         </div>
-
-
     </div>
 @endsection
 
 @section('scripts')
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-    <script src="{!! asset('lucid/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') !!}"></script>
+
     <script>
         var vm = new Vue({
             el: "#app_vue",
-            data: {
-                datas: [],
-                api_token: {!! json_encode($api_token) !!},
-                start: {!! json_encode($tanggal_awal) !!},
-                end: {!! json_encode($tanggal_akhir) !!},
-            },
-
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -194,7 +174,6 @@
                             console.log(error);
                         });
                 }
-
             },
             methods: {
                 select_kabs() {
@@ -290,83 +269,29 @@
                     const kab_filter = document.getElementById('kab_filter').value;
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter +
-                        "&tanggal_awal=" + self.start + "&tanggal_akhir=" + self.end
-                    console.log(filter)
-                    // console.log("https://st23.bpssumsel.com/api/export_dashboard_waktu" + filter);
-                    fetch('https://st23.bpssumsel.com/api/export_dashboard_waktu' + filter, {
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    fetch('https://st23.bpssumsel.com/api/export_dash_waktu' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
                         .then(response => response.blob())
                         .then(blob => {
                             var url = window.URL.createObjectURL(blob);
-                            // Buat elemen <a> untuk mengunduh file
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "waktu_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
-                            // Klik elemen <a> secara otomatis
-                            a.target = "_blank";
+                            a.download = "16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            document.body.appendChild(
+                                a
+                            ); // we need to append the element to the dom -> otherwise it will not work in firefox
                             a.click();
-                            // Hapus elemen <a> setelah selesai
-                            window.URL.revokeObjectURL(url);
-                            a.remove();
+                            a.remove(); //afterwards we remove the element again
                         })
                         .catch(error => {
                             console.log(error)
                         });
                 },
-                setDatas: function() {
-                    var self = this;
-                    $('#wait_progres').modal('show');
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                        }
-                    })
-                    $.ajax({
-                        url: self.pathname + "/data_log_book",
-                        method: 'post',
-                        dataType: 'json',
-                        data: {
-                            start: self.start,
-                            end: self.end,
-                        },
-                    }).done(function(data) {
-                        self.datas = data.datas;
-                        $('#wait_progres').modal('hide');
-                    }).fail(function(msg) {
-                        console.log(JSON.stringify(msg));
-                        $('#wait_progres').modal('hide');
-                    });
-                }
             }
 
-        });
-
-        $(document).ready(function() {
-            $('.time24').inputmask('hh:mm', {
-                placeholder: '__:__',
-                alias: 'time24',
-                hourFormat: '24'
-            });
-
-
-            $('.datepicker').datepicker({
-                format: 'm/d/Y',
-                endDate: 'd',
-            });
-
-        });
-
-        $('#start').change(function() {
-            vm.start = this.value;
-            vm.setDatas();
-        });
-
-        $('#end').change(function() {
-            vm.end = this.value;
-            vm.setDatas();
         });
     </script>
 @endsection

@@ -14,6 +14,12 @@
         .c3-axis-x text {
             font-size: 10px;
         }
+
+        .kode-petugas {
+            display: inline-block;
+            width: 260px;
+            /* Sesuaikan lebar yang diinginkan */
+        }
     </style>
 
     <div class="container" id="app_vue">
@@ -21,9 +27,9 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="body profilepage_2 blog-page pb-0 text-center">
-                    <h3>Daftar Petugas Melakukan Pendataan Dengan Rentang Waktu Tidak Wajar </h3>
+                    <h3>Daftar Petugas Dengan Jumlah Pendampingan oleh PML & Koseka </h3>
                     <div class="alert alert-info mt-1 text-left" role="alert">
-                        estimasi waktu pencacahan adalah 5-15 menit
+                        1 Petugas paling sedikit pernah didampingin oleh PML & Koseka 1 kali
                     </div>
                 </div>
                 <br>
@@ -58,21 +64,10 @@
                             </div>
                             <div class="col-1 ">
                                 <label for="" class="label text-white">export</label>
-                                <button type="button" class="btn btn-info" @click="export_dash_waktu()">export</button>
+                                <button type="button" class="btn btn-info" @click="export_dash_pendampingan()">export</button>
                             </div>
                         </div>
-                        <div class="row px-2">
-                            <div class="col-lg-6 col-md-6 left-box">
-                                <label>Tampilkan Tanggal:</label>
-                                <div class="input-daterange input-group" data-provide="datepicker">
-                                    <input type="text" class="input-sm form-control" v-model="start" id="start"
-                                        name="tanggal_awal" autocomplete="off">
-                                    <span class="input-group-addon">&nbsp sampai dengan &nbsp</span>
-                                    <input type="text" class="input-sm form-control" v-model="end" id="end"
-                                        name="tanggal_akhir" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
+
                     </form>
                 </div>
                 <br>
@@ -83,9 +78,9 @@
                                 <th>No</th>
                                 <th>Kab</th>
                                 <th>PCL</th>
-                                <th>Jabatan</th>
-                                <th>Rata-rata Waktu <br> Pencacahan (Menit)</th>
-                                <th>Jumlah Ruta</th>
+                                <th>Jumlah SLS</th>
+                                <th>SLS didampingi PML</th>
+                                <th>SLS didampingi Koseka</th>
                             </tr>
                         </thead>
                         @if ($data)
@@ -99,44 +94,28 @@
                                                 {{ $dt['name'] }}
                                             </a>
                                         </td>
-                                        {{-- <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_pml']) }}">
-                                                {{ $dt['pml'] }}
-                                            </a>
+                                        <td>
+                                            {{ $dt['jml_sls'] }}
                                         </td>
                                         <td class="text-left">
-                                            <a href="{{ url('dashboard/petugas_sls/' . $dt['kode_koseka']) }}">
-                                                {{ $dt['koseka'] }}
-                                            </a>
-                                        </td> --}}
-
-                                        <td>
-                                            @if ($dt['roles'])
-                                                {{ $dt['roles'][0]['name'] }}
-                                            @endif
+                                            @foreach ($dt['p_pml'] as $pml)
+                                                <span class="kode-petugas">{{ $pml['kode_pml'] }}</span>
+                                                &nbsp;:&nbsp;{{ $pml['pendampingan_pml'] }}<br>
+                                            @endforeach
                                         </td>
-                                        <td>
-                                            @if ($dt['rutas'])
-                                                {{ round($dt['rutas'][0]['rata_rata_waktu_menit'], 2) }}
-                                            @else
-                                                0
-                                            @endif
+                                        <td class="text-left">
+                                            @foreach ($dt['p_koseka'] as $koseka)
+                                                <span class="kode-petugas">{{ $koseka['kode_koseka'] }}</span>
+                                                &nbsp;:&nbsp;{{ $koseka['pendampingan_koseka'] }}<br>
+                                            @endforeach
                                         </td>
-                                        <td>
-                                            @if ($dt['rutas'])
-                                                {{ $dt['rutas'][0]['jml_ruta'] }}
-                                            @else
-                                                0
-                                            @endif
-                                        </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
                         @else
                             <tbody>
                                 <tr>
-                                    <td colspan="6">Belum ada Data</td>
+                                    <td colspan="6">Belum ada Data / Belum Pilih Kab</td>
                                 </tr>
 
                             </tbody>
@@ -164,13 +143,15 @@
     <script>
         var vm = new Vue({
             el: "#app_vue",
-            data: {
-                datas: [],
-                api_token: {!! json_encode($api_token) !!},
-                start: {!! json_encode($tanggal_awal) !!},
-                end: {!! json_encode($tanggal_akhir) !!},
+            data() {
+                return {
+                    api_token: {!! json_encode($api_token) !!},
+                    kab_filter: {!! json_encode($request->kab_filter) != 'null' ? json_encode($request->kab_filter) : '""' !!},
+                    kec_filter: {!! json_encode($request->kec_filter) != 'null' ? json_encode($request->kec_filter) : '""' !!},
+                    desa_filter: {!! json_encode($request->desa_filter) != 'null' ? json_encode($request->desa_filter) : '""' !!},
+                    sls_filter: {!! json_encode($request->sls_filter) != 'null' ? json_encode($request->sls_filter) : '""' !!},
+                }
             },
-
             mounted() {
                 const self = this;
                 const kab_value = {!! json_encode($request->kab_filter) !!}
@@ -281,92 +262,42 @@
                         resolve();
                     });
                 },
-                export_dash_waktu(event) {
+                export_dash_pendampingan(event) {
                     var self = this;
                     const headers = {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + this.api_token
+                        'Authorization': 'Bearer ' + self.api_token
                     };
                     const kab_filter = document.getElementById('kab_filter').value;
                     const kec_filter = document.getElementById('kec_filter').value;
                     const desa_filter = document.getElementById('desa_filter').value;
-                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter +
-                        "&tanggal_awal=" + self.start + "&tanggal_akhir=" + self.end
-                    console.log(filter)
-                    // console.log("https://st23.bpssumsel.com/api/export_dashboard_waktu" + filter);
-                    fetch('https://st23.bpssumsel.com/api/export_dashboard_waktu' + filter, {
+                    filter = "?kode_kab=" + kab_filter + "&kode_kec=" + kec_filter + "&kode_desa=" + desa_filter
+                    // console.log(JSON.stringify(headers))
+                    // console.log(JSON.stringify(filter))
+                    fetch('https://st23.bpssumsel.com/api/export_dashboard_pendampingan' + filter, {
                             method: 'GET',
                             headers: headers,
                         })
                         .then(response => response.blob())
                         .then(blob => {
+                            console.log(blob)
                             var url = window.URL.createObjectURL(blob);
-                            // Buat elemen <a> untuk mengunduh file
                             var a = document.createElement('a');
                             a.href = url;
-                            a.download = "waktu_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
-                            // Klik elemen <a> secara otomatis
-                            a.target = "_blank";
+                            a.download = "pendampingan_16" + kab_filter + kec_filter + desa_filter + ".xlsx";
+                            document.body.appendChild(
+                                a
+                            );
                             a.click();
-                            // Hapus elemen <a> setelah selesai
-                            window.URL.revokeObjectURL(url);
                             a.remove();
                         })
                         .catch(error => {
                             console.log(error)
                         });
                 },
-                setDatas: function() {
-                    var self = this;
-                    $('#wait_progres').modal('show');
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                        }
-                    })
-                    $.ajax({
-                        url: self.pathname + "/data_log_book",
-                        method: 'post',
-                        dataType: 'json',
-                        data: {
-                            start: self.start,
-                            end: self.end,
-                        },
-                    }).done(function(data) {
-                        self.datas = data.datas;
-                        $('#wait_progres').modal('hide');
-                    }).fail(function(msg) {
-                        console.log(JSON.stringify(msg));
-                        $('#wait_progres').modal('hide');
-                    });
-                }
+
             }
 
-        });
-
-        $(document).ready(function() {
-            $('.time24').inputmask('hh:mm', {
-                placeholder: '__:__',
-                alias: 'time24',
-                hourFormat: '24'
-            });
-
-
-            $('.datepicker').datepicker({
-                format: 'm/d/Y',
-                endDate: 'd',
-            });
-
-        });
-
-        $('#start').change(function() {
-            vm.start = this.value;
-            vm.setDatas();
-        });
-
-        $('#end').change(function() {
-            vm.end = this.value;
-            vm.setDatas();
         });
     </script>
 @endsection
