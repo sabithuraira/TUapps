@@ -15,7 +15,7 @@
         <div class="form-group">
             <label>{{ $model->attributes()['tanggal'] }}:</label>
             <div class="input-group date" id="date_id" data-date-autoclose="true" data-provide="datepicker">
-                <input type="text" class="form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal3" id="tanggal" v-model="form.tanggal">
+                <input type="text" class="datepicker form-control {{($errors->first('tanggal') ? ' parsley-error' : '')}}" name="tanggal3" id="tanggal" v-model="form.tanggal">
                 <div class="input-group-append">                                            
                     <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
                 </div>

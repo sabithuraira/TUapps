@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('uker', 'UkerController');
     Route::resource('uker4', 'Uker4Controller');
@@ -17,6 +21,8 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::resource('rincian_kredit', 'RincianKreditController');
     Route::resource('angka_kredit', 'AngkaKreditController');
     Route::resource('user', 'UserController');
+    Route::get('user_riwayat', 'UserController@riwayat');
+    Route::get('user_load_data_pegawai', 'UserController@load_data_pegawai');
 
     Route::get('opname_persediaan/aeik', 'OpnamePersediaanController@aeik');
     Route::get('ckp/{month}/{year}/aeik', 'CkpController@aeik');
@@ -65,6 +71,9 @@ Route::group(['middleware' => ['role:superadmin|kepegawaian']], function () {
     Route::post('jabatan_fungsional/edit_kegiatan', 'JabatanFungsionalController@edit_kegiatan');
     Route::post('jabatan_fungsional/edit_subkegiatan', 'JabatanFungsionalController@edit_subkegiatan');
     Route::post('jabatan_fungsional/hapus', 'JabatanFungsionalController@hapus');
+
+    Route::resource('fungsional_definitif', 'FungsionalDefinitifController');
+    Route::get('fungsional_definitif_export', 'FungsionalDefinitifController@export');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -103,12 +112,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     Route::post('mata_anggaran/import_some', 'MataAnggaranController@import_some');
     Route::resource('mata_anggaran', 'MataAnggaranController')->except(['show']);
 
-    //Cuti
-    Route::resource('cuti', 'CutiController')->except(['show']);
-    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
-    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
-    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
-    Route::get('cuti/{id}/delete', 'CutiController@destroy');
+
 
     /////////////////SURAT TUGAS TUGAS
     Route::resource('surat_tugas', 'SuratTugasController')->except(['show']);
@@ -139,7 +143,7 @@ Route::group(['middleware' => ['role:superadmin|tatausaha']], function () {
     /////////////////
 });
 
-Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], function () {    
+Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], function () {
     //
     Route::resource('penugasan', 'PenugasanController')->except('show');
     Route::get('penugasan/{id}/show', 'PenugasanController@show');
@@ -149,7 +153,7 @@ Route::group(['middleware' => ['role:superadmin|admin_uker|pemberi_tugas']], fun
     Route::post('penugasan/{id}/store_progres', 'PenugasanController@store_progres');
 });
 
-Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {    
+Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
     Route::get('penugasan/user_role', 'PenugasanController@user_role');
     Route::get('penugasan/{id}/user_role_edit', 'PenugasanController@user_role_edit');
     Route::patch('penugasan/{id}/user_role_update', 'PenugasanController@user_role_update');
@@ -230,9 +234,46 @@ Route::group(['middleware' => 'auth'], function () {
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
     Route::get('dashboard/index', 'DashboardController@index');
+    Route::get('dashboard/waktu', 'DashboardController@waktu');
+    Route::get('dashboard/lokasi', 'DashboardController@lokasi');
+    Route::get('dashboard/target', 'DashboardController@target');
+    Route::get('dashboard/petugas', 'DashboardController@petugas');
+    Route::get('dashboard/petugas/{id}', 'DashboardController@petugas_show');
+    Route::get('dashboard/alokasi', 'DashboardController@alokasi');
+    Route::get('dashboard/alokasi/{id}', 'DashboardController@alokasi_show');
     Route::get('dashboard/rekap_dl', 'DashboardController@rekap_dl');
     Route::get('dashboard/{id}/profile', 'DashboardController@profile');
     Route::get('download_sp2020', 'HomeController@downloadSp2020');
+
+    //Cuti
+    Route::resource('cuti', 'CutiController')->except(['show']);
+    Route::post('cuti/set_status_atasan', 'CutiController@set_status_atasan');
+    Route::post('cuti/set_status_pejabat', 'CutiController@set_status_pejabat');
+    Route::get('cuti/{id}/print_cuti', 'CutiController@print_cuti');
+    Route::get('cuti/{id}/delete', 'CutiController@destroy');
+});
+
+
+Route::group(
+    ['middleware' => ['role:superadmin|skf|pbj|ppk']],
+    function () {
+        Route::get('pengadaan', 'PengadaanController@index');
+        Route::get('pengadaan/create', 'PengadaanController@create');
+        Route::post('pengadaan/store', 'PengadaanController@store');
+
+        Route::get('pengadaan/edit/{id}', 'PengadaanController@edit');
+        Route::post('pengadaan/update_skf/{id}', 'PengadaanController@updateskf');
+        Route::post('pengadaan/update_ppk/{id}', 'PengadaanController@updateppk');
+        Route::post('pengadaan/update_pbj/{id}', 'PengadaanController@updatepbj');
+
+        Route::get('pengadaan/unduh/{file_name}', 'PengadaanController@unduh');
+        Route::post('pengadaan/set_aktif', 'PengadaanController@set_aktif');
+    }
+);
+
+
+Route::group(['middleware' => ['role:superadmin|pengelola_regsosek']], function () {
+    Route::resource('regsosek', 'RegsosekController')->except('show');
 });
 
 Auth::routes();
@@ -242,3 +283,6 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('guest', 'HomeController@guest')->name('guest');
 // Route::post('telegram/sp2020', 'TelegramController@sp2020');
 Route::post('telegram/sp2020lf', 'TelegramController@sp2020lf');
+Route::post('telegram/regsosek', 'TelegramController@regsosek');
+Route::get('telegram/regsosek_belum_unduh', 'TelegramController@regsosek_belum_unduh');
+Route::post('telegram/regsosek_set_unduh', 'TelegramController@regsosek_set_unduh');

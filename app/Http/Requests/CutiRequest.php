@@ -6,28 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CutiRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'nama' => 'required',
-            'nip' => 'required',
-            'jabatan' => 'required',
-            'masa_kerja' => 'required',
+            // 'nip' => 'required',
+            // 'jabatan' => 'required',
+            // 'masa_kerja' => 'required',
             'jenis_cuti' => 'required',
             'alasan_cuti' => 'required',
             'tanggal_mulai' => 'required',
@@ -35,8 +25,6 @@ class CutiRequest extends FormRequest
             // 'lama_cuti' => 'required|numeric',
             'lama_cuti_hari_kerja' => 'required|numeric',
             'lama_cuti_hari_libur' => 'required|numeric',
-            'alamat_cuti' => 'required',
-            'no_telp' => 'required',
         ];
     }
     public function attributes()
@@ -55,8 +43,8 @@ class CutiRequest extends FormRequest
             'unit_kerja' => 'Unit Kerja',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',
+            'atasan' => 'Atasan yang memberikan izin',
             'pejabat' => 'Pejabat yang Berwenang Memberikan Cuti'
-
         ];
     }
 }

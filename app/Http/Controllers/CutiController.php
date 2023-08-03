@@ -6,6 +6,7 @@ use App\Cuti;
 use App\Http\Requests\CutiRequest;
 use App\UnitKerja;
 use App\User;
+use DateTime;
 use Doctrine\DBAL\Types\JsonType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class CutiController extends Controller
     public function index(Request $request)
     {
         //
+        $auth = Auth::user();
         $keyword = $request->get('search');
         $month = '';
         $year = '';
@@ -72,6 +74,7 @@ class CutiController extends Controller
             $model = new \App\Cuti;
             // dd($datas);
             return view('cuti.index', compact(
+                'auth',
                 'datas',
                 'keyword',
                 'model',
@@ -90,10 +93,14 @@ class CutiController extends Controller
      */
     public function create()
     {
+        $auth = Auth::user();
         $model = new \App\Cuti;
         $catatan_cuti = new \App\Cuti;
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
-            ->where('kdkab', '=', Auth::user()->kdkab)->get();
+            ->where('kdkab', '=', Auth::user()->kdkab)->orderBy('nip_baru')->get();
+        if ($auth->kdkab != '00') {
+            $list_pegawai->push(\App\UserModel::where('nip_baru', "196807031994011001")->first());
+        }
         $current_date =  date('Y-m-d');
         return view('cuti.create', compact(
             'list_pegawai',
@@ -112,7 +119,7 @@ class CutiController extends Controller
     public function store(CutiRequest $request)
     {
 
-        // var_dump($request->all());
+        // dd($request->all());
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('cuti/create')
                 ->withErrors($request->validator)
@@ -138,6 +145,7 @@ class CutiController extends Controller
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
         $catatan_cuti = new JsonType;
+        $catatan_cuti->cuti_tahunan_sebelum_2 = $request->get('cuti_tahunan_sebelum_2');
         $catatan_cuti->cuti_tahunan_sebelum = $request->get('cuti_tahunan_sebelum');
         $catatan_cuti->cuti_tahunan = $request->get('cuti_tahunan');
         $catatan_cuti->cuti_besar = $request->get('cuti_besar');
@@ -146,6 +154,7 @@ class CutiController extends Controller
         $catatan_cuti->cuti_penting = $request->get('cuti_penting');
         $catatan_cuti->cuti_luar_tanggungan = $request->get('cuti_luar_tanggungan');
 
+        $catatan_cuti->keterangan_cuti_tahunan_sebelum_2 = $request->get('keterangan_cuti_tahunan_sebelum_2');
         $catatan_cuti->keterangan_cuti_tahunan_sebelum = $request->get('keterangan_cuti_tahunan_sebelum');
         $catatan_cuti->keterangan_cuti_tahunan = $request->get('keterangan_cuti_tahunan');
         $catatan_cuti->keterangan_cuti_besar = $request->get('keterangan_cuti_besar');
@@ -159,12 +168,14 @@ class CutiController extends Controller
         $model->alamat_cuti = $request->get('alamat_cuti');
         $model->no_telp = $request->get('no_telp');
 
-        $model->nama_atasan =  $user->pimpinan->name;
-        $model->nip_atasan = $user->pimpinan->nip_baru;
+        // $model->nama_atasan =  $user->pimpinan->name;
+        // $model->nip_atasan = $user->pimpinan->nip_baru;
+        $model->nama_atasan = $request->get('nama_atasan');
+        $model->nip_atasan = $request->get('nip_atasan');
         $model->status_atasan = 0;
 
-        $model->nama_pejabat = $request->get('nama_pejabat');;
-        $model->nip_pejabat = $request->get('nip_pejabat');;
+        $model->nama_pejabat = $request->get('nama_pejabat');
+        $model->nip_pejabat = $request->get('nip_pejabat');
         $model->status_pejabat = 0;
         $model->created_by = Auth::id();
         $model->updated_by = Auth::id();
@@ -191,8 +202,12 @@ class CutiController extends Controller
      */
     public function edit($id)
     {
+        $auth = Auth::user();
         $list_pegawai = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        if ($auth->kdkab != '00') {
+            $list_pegawai->push(\App\UserModel::where('nip_baru', "196807031994011001")->first());
+        }
         $real_id = Crypt::decrypt($id);
         $model = \App\Cuti::find($real_id);
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
@@ -217,7 +232,6 @@ class CutiController extends Controller
         //
         $real_id = Crypt::decrypt($id);
         $model = \App\Cuti::find($real_id);
-        // var_dump($model);
         $model->jenis_cuti = $request->get('jenis_cuti');
         $model->alasan = $request->get('alasan_cuti');
 
@@ -227,6 +241,7 @@ class CutiController extends Controller
         $model->tanggal_selesai = $request->get('tanggal_selesai');
 
         $catatan_cuti = new JsonType;
+        $catatan_cuti->cuti_tahunan_sebelum_2 = $request->get('cuti_tahunan_sebelum_2');
         $catatan_cuti->cuti_tahunan_sebelum = $request->get('cuti_tahunan_sebelum');
         $catatan_cuti->cuti_tahunan = $request->get('cuti_tahunan');
         $catatan_cuti->cuti_besar = $request->get('cuti_besar');
@@ -234,6 +249,7 @@ class CutiController extends Controller
         $catatan_cuti->cuti_melahirkan = $request->get('cuti_melahirkan');
         $catatan_cuti->cuti_penting = $request->get('cuti_penting');
         $catatan_cuti->cuti_luar_tanggungan = $request->get('cuti_luar_tanggungan');
+        $catatan_cuti->keterangan_cuti_tahunan_sebelum_2 = $request->get('keterangan_cuti_tahunan_sebelum_2');
         $catatan_cuti->keterangan_cuti_tahunan_sebelum = $request->get('keterangan_cuti_tahunan_sebelum');
         $catatan_cuti->keterangan_cuti_tahunan = $request->get('keterangan_cuti_tahunan');
         $catatan_cuti->keterangan_cuti_besar = $request->get('keterangan_cuti_besar');
@@ -295,7 +311,7 @@ class CutiController extends Controller
         }
     }
 
-    public function print_cuti($id)
+    public function print_cuti($id, Request $request)
     {
         $real_id = Crypt::decrypt($id);
 
@@ -304,8 +320,7 @@ class CutiController extends Controller
         $kodewil = $user->kdprop . $user->kdkab;
         $unit_kerja = UnitKerja::where('kode', $kodewil)->first();
         $catatan_cuti = (json_decode($model->catatan_cuti_pegawai));
-        setlocale (LC_TIME, 'id_ID');
-
+        setlocale(LC_TIME, 'id_ID');
         $pdf = PDF::loadView('cuti.print_cuti', compact(
             'real_id',
             'catatan_cuti',
@@ -313,14 +328,14 @@ class CutiController extends Controller
             'user',
             'unit_kerja',
         ))->setPaper('a4', 'potrait');
-
         $nama_file = 'cuti_' . $model->nama . '.pdf';
-        return view('cuti.print_cuti', compact(
-            'real_id',
-            'catatan_cuti',
-            'user',
-            'model',
-            'unit_kerja',
-        ));
+        return $pdf->download($nama_file);
+        // return view('cuti.print_cuti', compact(
+        //     'real_id',
+        //     'catatan_cuti',
+        //     'user',
+        //     'model',
+        //     'unit_kerja',
+        // ));
     }
 }
