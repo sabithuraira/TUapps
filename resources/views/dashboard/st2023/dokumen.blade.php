@@ -12,9 +12,9 @@
                     <th>Dokumen PCL</th>
                     <th>Dokumen PML</th>
                     <th>Dokumen Koseka</th>
-                    @if(!$request->kab_filter)
-                    <th>Diterima BPS Kab/Kota (SIPMEN)</th>
-                    <th>Dok. Rusak/Kosong (SIPMEN)</th>
+                    @if (!$request->kab_filter)
+                        <th>Diterima BPS Kab/Kota (SIPMEN)</th>
+                        <th>Dok. Rusak/Kosong (SIPMEN)</th>
                     @endif
                 </tr>
             </thead>
@@ -28,7 +28,7 @@
                             <td class="text-left">
                                 <a
                                     href="{{ url(
-                                        'dashboard/index?kab_filter=' .
+                                        'dashboard/st2023?kab_filter=' .
                                             (isset($dt_dok['kode_kab']) ? $dt_dok['kode_kab'] : '') .
                                             '&kec_filter=' .
                                             (isset($dt_dok['kode_kec']) ? $dt_dok['kode_kec'] : '') .
@@ -48,13 +48,13 @@
                             <td>
                                 {{ $dt_dok['dok_koseka'] }}
                             </td>
-                            @if(!$request->kab_filter)
-                            <td>
-                                <span id="{{ 'sipmen'.$dt_dok['kode_kab'] }}"></span>
-                            </td>
-                            <td>
-                                <span id="{{ 'sipmen_rusak'.$dt_dok['kode_kab'] }}"></span>
-                            </td>
+                            @if (!$request->kab_filter)
+                                <td>
+                                    <span id="{{ 'sipmen' . $dt_dok['kode_kab'] }}"></span>
+                                </td>
+                                <td>
+                                    <span id="{{ 'sipmen_rusak' . $dt_dok['kode_kab'] }}"></span>
+                                </td>
                             @endif
                         </tr>
                     @endforeach
@@ -90,7 +90,7 @@
                             <td class="text-left">
                                 <a
                                     href="{{ url(
-                                        'dashboard/index?kab_filter=' .
+                                        'dashboard/st2023?kab_filter=' .
                                             (isset($dt_dok['kode_kab']) ? $dt_dok['kode_kab'] : '') .
                                             '&kec_filter=' .
                                             (isset($dt_dok['kode_kec']) ? $dt_dok['kode_kec'] : '') .
@@ -121,7 +121,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200" height="200" alt="Loading..."></div>
+                    <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200" height="200"
+                            alt="Loading..."></div>
                     <h4 class="text-center">Please wait...</h4>
                 </div>
             </div>

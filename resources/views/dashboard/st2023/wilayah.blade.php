@@ -29,7 +29,7 @@
                         <td class="text-left">
                             <a
                                 href="{{ url(
-                                    'dashboard/index?kab_filter=' .
+                                    'dashboard/st2023?kab_filter=' .
                                         (isset($data['kode_kab']) ? $data['kode_kab'] : '') .
                                         '&kec_filter=' .
                                         (isset($data['kode_kec']) ? $data['kode_kec'] : '') .
