@@ -33,7 +33,9 @@
                         <span>Dashboard</span></a>
                     <ul>
                         <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/index') }}">Overview</a></li>
+                                href="{{ url('dashboard/index') }}">PES ST2023</a></li>
+                        <li class="{{ request()->is('dashboard/st2023*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/st2023') }}">ST 2023</a></li>
                         <li class="{{ request()->is('dashboard/waktu*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/waktu') }}">Dashboard Waktu</a></li>
                         <li class="{{ request()->is('dashboard/lokasi*') ? 'active' : '' }}"><a

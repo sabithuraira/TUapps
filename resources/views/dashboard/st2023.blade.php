@@ -10,10 +10,10 @@
 @section('content')
     <div class="container" id="app_vue">
         <div class="col-lg-12 col-md-12">
-            @include('dashboard.st2023.pes')
+            @include('dashboard.st2023.index')
         </div>
 
-        <div class="col-lg-12 col-md-12">
+        {{-- <div class="col-lg-12 col-md-12">
             <div class="row clearfix">
                 <div class="col-lg-6 col-md-12">
                     @include('dashboard.random_profile')
@@ -22,7 +22,7 @@
                     @include('dashboard.list_unit_kerja')
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 @section('scripts')

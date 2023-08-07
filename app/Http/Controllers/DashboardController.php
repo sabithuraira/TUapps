@@ -17,7 +17,103 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+
+
     public function index(Request $request)
+    {
+        $auth = Auth::user();
+        $random_user = UserModel::inRandomOrder()->first();
+        $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
+
+        if (session('api_token')) {
+            $api_token = session('api_token');
+        } else {
+            $login_url = "http://st23.bpssumsel.com/api/login";
+            $data = [
+                'email' => 'admin' . $auth->kdkab . '@bpssumsel.com',
+                'password' => '123456',
+            ];
+            $ch = curl_init($login_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/x-www-form-urlencoded',
+            ]);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                // Handle error
+            } else {
+                $responseData = json_decode($response, true);
+                session(['api_token' => $responseData['data']['access_token']]);
+                $api_token = session('api_token');
+            }
+        }
+
+        $list_kab_filter = "";
+        $kab_filter = "";
+        if ($request->kab_filter) {
+            $kab_filter = $request->kab_filter;
+        }
+        $kab_filter = $request->kab_filter;
+        $kec_filter = $request->kec_filter;
+        $page = '?page=' . $request->page;
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter;
+        $data_url = 'https://st23.bpssumsel.com/api/pes';
+
+        $headers = [
+            'Authorization: Bearer 37|wGY6bloEzGc4SlaQ0Hxx4zyHtQeIYFbKtk0duRF5',
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($data_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data_result = curl_exec($ch);
+        curl_close($ch);
+        $data_result = json_decode($data_result, true);
+
+        $data = [];
+        $label_kab = "";
+        $label_kec = "";
+
+        $label_kab = $data_result['label_kab'];
+        $label_kec = $data_result['label_kec'];
+
+        $links = [];
+        if ($data_result) {
+            $data = $data_result['data']['data'];
+            $links = $data_result['data']['links'];
+        }
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+
+        $dl_per_uk = UnitKerja::rekapDlPerUk();
+        return view('dashboard.index', compact(
+            'random_user',
+            'unit_kerja',
+            'dl_per_uk',
+            'request',
+            'label_kab',
+            'label_kec',
+            'data',
+            'api_token',
+            'auth',
+            'links',
+            'kabs',
+            'list_kab_filter'
+        ));
+    }
+
+    public function st2023(Request $request)
     {
         $auth = Auth::user();
         $random_user = UserModel::inRandomOrder()->first();
@@ -123,7 +219,7 @@ class DashboardController extends Controller
 
 
         $dl_per_uk = UnitKerja::rekapDlPerUk();
-        return view('dashboard.index', compact(
+        return view('dashboard.st2023', compact(
             'random_user',
             'unit_kerja',
             'dl_per_uk',
