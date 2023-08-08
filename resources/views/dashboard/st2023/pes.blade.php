@@ -92,6 +92,7 @@
                             <th>Jumlah ART</th>
                             <th>RUTA PES</th>
                             <th>ART PES</th>
+                            <th>Status Selesai</th>
                         </tr>
                     </thead>
                     @if (sizeof($data) > 0)
@@ -104,7 +105,7 @@
                                     <td class="text-left">
                                         {{ $dt['kode_prov'] . $dt['kode_kab'] . $dt['kode_kec'] . $dt['kode_desa'] . $dt['id_sls'] . $dt['id_sub_sls'] }}
                                     </td>
-                                    <td>
+                                    <td class="text-left">
                                         {{ $dt['nama_sls'] }}
                                     </td>
                                     <td>
@@ -125,6 +126,13 @@
                                             {{ '( ' . round(($dt['jml_art_pes'] / $dt['jml_art_tani']) * 100) . ' % )' }}
                                         @else
                                             (&nbsp;%)
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($dt['status_selesai'] == 1)
+                                            <span class="badge badge-success">100</span>
+                                        @else
+                                            <span class="badge badge-warning">0</span>
                                         @endif
                                     </td>
 
