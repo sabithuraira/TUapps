@@ -165,6 +165,28 @@
                                 }, 0)
                             const element = document.getElementById("sipmen" + currKab);
                             element.innerHTML = total;
+
+                            let totalTerpakai = data.data
+                                .filter(item => item.kd_dokumen == "ST2023.L2-UTP")
+                                .reduce((sum, x) => {
+                                    if (typeof x === 'object') {
+                                        if ('jml_terpakai' in x) sum += parseInt(x.jml_terpakai)
+                                    }
+                                    return sum;
+                                }, 0)
+                            const elementTerpakai = document.getElementById("sipmen_terpakai" + currKab);
+                            elementTerpakai.innerHTML = totalTerpakai;
+
+                            let totalRusak = data.data
+                                .filter(item => item.kd_dokumen == "ST2023.L2-UTP")
+                                .reduce((sum, x) => {
+                                    if (typeof x === 'object') {
+                                        if ('jml_kosong' in x || 'jml_rusak' in x) sum += (parseInt(x.jml_kosong) + parseInt(x.jml_rusak))
+                                    }
+                                    return sum;
+                                }, 0)
+                            const elementRusak = document.getElementById("sipmen_rusak" + currKab);
+                            elementRusak.innerHTML = totalRusak;
                         }).fail(function(msg) {
                             console.log(JSON.stringify(msg));
                             $('#wait_progres').modal('hide');
