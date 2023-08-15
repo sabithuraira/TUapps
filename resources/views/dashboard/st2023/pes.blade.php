@@ -89,10 +89,11 @@
                             <th>Kode Wilayah</th>
                             <th>Nama SLS</th>
                             <th>Jumlah Ruta</th>
-                            <th>Jumlah ART</th>
+                            {{-- <th>Jumlah ART</th> --}}
                             <th>RUTA PES</th>
                             <th>ART PES</th>
                             <th>Status Selesai</th>
+                            <th>PCL</th>
                         </tr>
                     </thead>
                     @if (sizeof($data) > 0)
@@ -111,9 +112,9 @@
                                     <td>
                                         {{ $dt['jml_ruta_tani'] }}
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         {{ $dt['jml_art_tani'] }}
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         {{ $dt['jml_ruta_pes'] }}
                                         @if ($dt['jml_ruta_tani'] > 0)
@@ -122,11 +123,7 @@
                                     </td>
                                     <td>
                                         {{ $dt['jml_art_pes'] }}
-                                        @if ($dt['jml_art_tani'] > 0)
-                                            {{ '( ' . round(($dt['jml_art_pes'] / $dt['jml_art_tani']) * 100) . ' % )' }}
-                                        @else
-                                            (&nbsp;%)
-                                        @endif
+
                                     </td>
                                     <td>
                                         @if ($dt['status_selesai'] == 1)
@@ -134,6 +131,9 @@
                                         @else
                                             <span class="badge badge-warning">0</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{ $dt['nama_ppl'] }}
                                     </td>
 
                                 </tr>
