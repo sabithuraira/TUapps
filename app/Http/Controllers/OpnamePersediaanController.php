@@ -71,15 +71,18 @@ class OpnamePersediaanController extends Controller
         $model = new \App\Opnamepersediaan();
         $datas = $model->OpnameRekap($month, $year);
 
-        $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
-            'year', 'datas', 'monthName', 'last_day_month',
-            'prevMonthName', 'last_day_prev_month'))
-            ->setPaper('a4', 'landscape');
+        // $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
+        //     'year', 'datas', 'monthName', 'last_day_month',
+        //     'prevMonthName', 'last_day_prev_month'))
+        //     ->setPaper('a4', 'landscape');
         
         $nama_file = 'opname_persediaan_';
-        $nama_file .= $month .'_'.$year.'_'. '.pdf';
+        $nama_file .= $month .'_'.$year.'_'. '.xlsx';
 
-        return $pdf->download($nama_file);
+        // return $pdf->download($nama_file);
+
+
+        return Excel::download(new \App\Exports\OpnamePersediaanExport($month, $year), $name_file);
 
         // return view('opname_persediaan.print_persediaan', compact('month', 
         //      'year', 'datas', 'monthName', 'last_day_month',
