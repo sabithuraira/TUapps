@@ -176,8 +176,7 @@ class Opnamepersediaan extends Model
                 FROM opname_persediaan as o 
                 WHERE tahun = $year 
                 GROUP BY o.id_barang
-            ) op ON op.id_barang=mb.id 
-            WHERE (op.saldo_kurang>0 OR op.saldo_tambah>0)";
+            ) op ON op.id_barang=mb.id ";
 
         $result = DB::select(DB::raw($sql));
 
@@ -186,17 +185,19 @@ class Opnamepersediaan extends Model
 
     public function KartuKendali($barang, $month, $year){
         $sql = "SELECT id, jumlah_tambah as jumlah,
-                        nama_penyedia as label, harga_tambah as harga, tanggal, 1 as jenis
+                        nama_penyedia as label, harga_tambah as harga, tanggal, 1 as jenis, 
+                        created_at as waktu
                     FROM `opname_penambahan` WHERE 
                     bulan=$month AND tahun=$year AND id_barang=$barang
                 UNION
                 SELECT op.id as id, jumlah_kurang as jumlah,
-                        uk.nama as label, harga_kurang as harga, tanggal, 2 as jenis 
+                        uk.nama as label, harga_kurang as harga, tanggal, 2 as jenis , 
+                        op.created_at as waktu
                     FROM `opname_pengurangan` op 
                     LEFT JOIN unit_kerja4 uk ON uk.id=op.unit_kerja4 
                     WHERE bulan=$month AND tahun=$year AND id_barang=$barang 
                     
-                    ORDER BY tanggal
+                    ORDER BY tanggal, waktu
                     ";
 
         $result = DB::select(DB::raw($sql));
