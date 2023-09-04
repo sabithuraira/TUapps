@@ -10,9 +10,9 @@ class PesSt2023 extends Model
     protected $table = 'pes_st2023';
     
     protected $fillable = ['kode_prov', 'kode_kab', 'kode_kec',
-        'kode_desa', 'id_sls', 'id_sub_sls', 'nama_sls', 
+        'kode_desa', 'id_sls', 'id_sub_sls', 'nama_sls', 'sls_op',
         'jenis_sls', 'jml_ruta_tani', 'jml_art_tani', 'jml_ruta_pes'
-        , 'jml_art_pes', "status_selesai"];
+        , 'jml_art_pes', "status_selesai", 'created_by', 'updated_by'];
 
 
     // public function Rekapitulasi($kab=null, $kec=null, $desa=null){
