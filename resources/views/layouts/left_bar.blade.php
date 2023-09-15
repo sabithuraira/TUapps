@@ -33,10 +33,12 @@
                         <span>Dashboard</span></a>
                     <ul>
                         <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/index') }}">PES ST2023</a></li>
+                                href="{{ url('dashboard/index') }}">PL-KUMKM</a></li>
+                        <li class="{{ request()->is('dashboard/pes_st2023*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/pes_st2023') }}">PES ST2023</a></li>
                         <li class="{{ request()->is('dashboard/st2023*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/st2023') }}">ST 2023</a></li>
-                        <li class="{{ request()->is('dashboard/waktu*') ? 'active' : '' }}"><a
+                        {{-- <li class="{{ request()->is('dashboard/waktu*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/waktu') }}">Dashboard Waktu</a></li>
                         <li class="{{ request()->is('dashboard/lokasi*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/lokasi') }}">Dashboard Lokasi</a></li>
@@ -51,7 +53,7 @@
                         <li class="{{ request()->is('dashboard/daftar_ruta*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/daftar_ruta') }}">Pindah Ruta ST2023</a></li>
                         <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li>
+                                href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li> --}}
                     </ul>
                 </li>
 
@@ -75,8 +77,8 @@
                         @hasanyrole('superadmin|tatausaha|subbag-keuangan')
                             <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
                                     href="{{ url('surat_tugas') }}">Daftar Surat Tugas</a></li>
-                            <li class="{{ request()->is('surat_tugas*') ? 'active' : '' }}"><a
-                                    href="{{ url('surat_tugas') }}">Calender</a></li>
+                            {{-- <li class="{{ request()->is('surat_tugas/calendar*') ? 'active' : '' }}"><a
+                                    href="{{ url('surat_tugas/calendar') }}">Calender</a></li> --}}
                             <li class="{{ request()->is('surat_tugas/edit_unit_kerja*') ? 'active' : '' }}"><a
                                     href="{{ url('surat_tugas/edit_unit_kerja') }}">Informasi Unit Kerja</a></li>
                             <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a
@@ -244,11 +246,9 @@
                         class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') ? 'active' : '' }}">
                         <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                         <ul>
-                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a
-                                    href="{{ url('uker') }}">Unit
+                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
-                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
-                                    href="{{ url('uker4') }}">Unit
+                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{ url('uker4') }}">Unit
                                     Kerja 4</a></li>
                             <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a
                                     href="{{ url('angka_kredit') }}">Angka Kredit</a></li>

@@ -25,6 +25,70 @@ class DashboardController extends Controller
         $random_user = UserModel::inRandomOrder()->first();
         $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
 
+        $list_kab_filter = "";
+        $kab_filter = "";
+        $kab_filter = $request->kab_filter;
+        $kec_filter = $request->kec_filter;
+        $desa_filter = $request->desa_filter;
+        $page = '?page=' . $request->page;
+        $filter_url = '&kab_filter=' . $kab_filter . '&kec_filter=' . $kec_filter . '&desa_filter=' . $desa_filter;
+        $data_url = 'https://st23.bpssumsel.com/api/umkm';
+
+        $headers = [
+            'Content-Type: application/json',
+        ];
+        $ch = curl_init($data_url . $page . $filter_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data_result = curl_exec($ch);
+        curl_close($ch);
+        $data_result = json_decode($data_result, true);
+
+        $data = [];
+        $label_kab = "";
+        $label_kec = "";
+        $label_desa = "";
+
+        $label_kab = $data_result['label_kab'];
+        $label_kec = $data_result['label_kec'];
+        $label_desa = $data_result['label_desa'];
+
+        if ($data_result) {
+            $data = $data_result['data'];
+        }
+
+        $kabs_url = 'https://st23.bpssumsel.com/api/list_kabs?kab_filter=' . $list_kab_filter;
+        $ch = curl_init($kabs_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($result, true);
+        $kabs = [];
+        if ($result) {
+            $kabs = $result['data'];
+        }
+        $dl_per_uk = UnitKerja::rekapDlPerUk();
+        return view('dashboard.index', compact(
+            'random_user',
+            'unit_kerja',
+            'dl_per_uk',
+            'request',
+            'label_kab',
+            'label_kec',
+            'label_desa',
+            'data',
+            'auth',
+            'kabs',
+            'list_kab_filter'
+        ));
+    }
+
+    public function pes_st2023(Request $request)
+    {
+        $auth = Auth::user();
+        $random_user = UserModel::inRandomOrder()->first();
+        $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
+
         if (session('api_token')) {
             $api_token = session('api_token');
         } else {
@@ -96,11 +160,10 @@ class DashboardController extends Controller
             $kabs = $result['data'];
         }
 
-        $dl_per_uk = UnitKerja::rekapDlPerUk();
-        return view('dashboard.index', compact(
+
+        return view('dashboard.pes_st2023', compact(
             'random_user',
             'unit_kerja',
-            'dl_per_uk',
             'request',
             'label_kab',
             'label_kec',

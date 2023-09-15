@@ -7,24 +7,24 @@
 <div class="card" id="data-container">
     <div class="body profilepage_2 blog-page">
         <b>MONITORING PES ST 2023 :</b>
-        <u><a href="{{ url('dashboard/index') }}">SUMATERA SELATAN</a></u>
+        <u><a href="{{ url('dashboard/pes_st2023') }}">SUMATERA SELATAN</a></u>
         @if ($request->kab_filter)
             -<u>
-                <a href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter) }}">
+                <a href="{{ url('dashboard/pes_st2023?kab_filter=' . $request->kab_filter) }}">
                     {{ $label_kab }}
                 </a>
             </u>
         @endif
         @if ($request->kec_filter)
             -<u><a
-                    href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter) }}">
+                    href="{{ url('dashboard/pes_st2023?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter) }}">
                     {{ $label_kec }}
                 </a>
             </u>
         @endif
         @if ($request->desa_filter)
             -<u><a
-                    href="{{ url('dashboard/index?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter . '&desa_filter=' . $request->desa_filter) }}">
+                    href="{{ url('dashboard/pes_st2023?kab_filter=' . $request->kab_filter . '&kec_filter=' . $request->kec_filter . '&desa_filter=' . $request->desa_filter) }}">
                     {{ $label_desa }}
                 </a>
             </u>
@@ -32,7 +32,7 @@
         @if ($request->sls_filter)
             -<u><a
                     href="{{ url(
-                        'dashboard/index?kab_filter=' .
+                        'dashboard/pes_st2023?kab_filter=' .
                             $request->kab_filter .
                             '&kec_filter=' .
                             $request->kec_filter .

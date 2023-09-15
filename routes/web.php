@@ -233,6 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
     ///
     Route::get('hai', 'HomeController@hai')->name('hai');
     Route::get('dashboard/index', 'DashboardController@index');
+    Route::get('dashboard/pes_st2023', 'DashboardController@pes_st2023');
     Route::get('dashboard/st2023', 'DashboardController@st2023');
     Route::get('dashboard/waktu', 'DashboardController@waktu');
     Route::get('dashboard/lokasi', 'DashboardController@lokasi');
