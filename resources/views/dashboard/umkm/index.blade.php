@@ -57,6 +57,13 @@
                     </thead>
                     @if (sizeof($data) > 0)
                         <tbody>
+                            @php 
+                                $jumlah_sls = 0;
+                                $jumlah_sls_selesai = 0;
+                                $jumlah_kk = 0;
+                                $jumlah_usaha = 0;
+                                $jumlah_koperasi = 0;
+                            @endphp
                             @foreach ($data as $index => $dt)
                                 <tr class="text-center">
                                     <td>
@@ -93,7 +100,23 @@
                                         {{ $dt['jml_koperasi'] }}
                                     </td>
                                 </tr>
+
+                                @php 
+                                    $jumlah_sls += $dt['jml_sls'];
+                                    $jumlah_sls_selesai += $dt['status_selesai'];
+                                    $jumlah_kk += $dt['jml_kk'];
+                                    $jumlah_usaha += $dt['jml_usaha'];
+                                    $jumlah_koperasi += $dt['jml_koperasi'];
+                                @endphp
                             @endforeach
+                            <tr class="text-center">
+                                <th colspan="2">TOTAL</th>
+                                <th>{{ $jumlah_sls }}</th>
+                                <th>{{ $jumlah_sls_selesai }} {{ '(' . round(100 * ($jumlah_sls_selesai / $jumlah_sls), 3) . '%)' }}</th>
+                                <th>{{ $jumlah_kk }}</th>
+                                <th>{{ $jumlah_usaha }}</th>
+                                <th>{{ $jumlah_koperasi }}</th>
+                            </tr>
                         </tbody>
                     @else
                     @endif
