@@ -57,11 +57,11 @@
                     </ul>
                 </li>
 
-                @hasanyrole('superadmin|pengelola_regsosek')
+                {{-- @hasanyrole('superadmin|pengelola_regsosek')
                     <li class="{{ request()->is('regsosek*') ? 'active' : '' }}">
                         <a href="{{ url('regsosek') }}"> <i class="icon-doc"></i><span>SLS Regsosek</span></a>
                     </li>
-                @endhasanyrole
+                @endhasanyrole --}}
 
                 <li
                     class="{{ request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">

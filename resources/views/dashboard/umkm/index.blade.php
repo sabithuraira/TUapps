@@ -42,6 +42,7 @@
                 <h6>Menunjukkan progress pencacahan berdasarkan filter wilayah</h6>
                 <div class="p-2 d-flex justify-content-end" id="wilayah_container">
                     <button type="button" class="btn btn-info mr-2" @click="excel_umkm()">Export</button>
+                    <button type="button" class="btn btn-info mr-2" @click="excel_umkm_sls()">Export SLS</button>
                 </div>
                 <table id="initabel" class="table-bordered table-sm" style="min-width:100%;">
                     <thead>
@@ -129,12 +130,21 @@
                 excel_umkm(event) {
 
                     var self = this
-                    filter = "?kode_kab=" + self.kab_filter +
-                        "&kode_kec=" + self.kec_filter +
-                        "&kode_desa=" + self.desa_filter +
-                        "&id_sls=" + self.sls_filter
-                    var url = 'https://st23.bpssumsel.com/api/export_ruta' + filter;
+                    filter = "?kab_filter=" + self.kab_filter +
+                        "&kec_filter=" + self.kec_filter +
+                        "&desa_filter=" + self.desa_filter
+                    var url = 'https://st23.bpssumsel.com/api/export_umkm' + filter;
 
+                    window.open(url, "_blank");
+                },
+
+                excel_umkm_sls(event) {
+
+                    var self = this
+                    filter = "?kab_filter=" + self.kab_filter +
+                        "&kec_filter=" + self.kec_filter +
+                        "&desa_filter=" + self.desa_filter
+                    var url = 'https://st23.bpssumsel.com/api/export_umkm_sls' + filter;
                     window.open(url, "_blank");
                 },
             }
