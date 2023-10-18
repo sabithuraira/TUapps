@@ -220,6 +220,17 @@
                     @endhasanyrole
                 @endif
 
+                @if (Auth::user()->kdkab == '00' || Auth::user()->kdkab == '04')
+                    <li
+                        class="{{ request()->is('sira*') ? 'active' : '' }}">
+                        <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi</span></a>
+                        <ul>
+                            <li class="{{ request()->is('sira*') ? 'active' : '' }}"><a
+                                    href="{{ url('sira') }}">Bukti Administrasi</a></li>
+                        </ul>
+                    </li>
+                @endif
+
                 <li class="{{ request()->is('meeting*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-users"></i>
                         <span>Rapat/Pertemuan</span></a>

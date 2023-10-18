@@ -159,6 +159,8 @@ Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::resource('sira', 'SiraController');
+
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
     Route::get('penugasan/rekap', 'PenugasanController@rekap');
