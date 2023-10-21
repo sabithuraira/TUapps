@@ -220,13 +220,17 @@
                     @endhasanyrole
                 @endif
 
-                @if (Auth::user()->kdkab == '00' || Auth::user()->kdkab == '04')
+                @if (Auth::user()->kdkab=='00' || Auth::user()->kdkab == '04')
                     <li
                         class="{{ request()->is('sira*') ? 'active' : '' }}">
-                        <a href="#Dashboard" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi</span></a>
+                        <a href="#BuktiAdministrasi" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi</span></a>
                         <ul>
-                            <li class="{{ request()->is('sira*') ? 'active' : '' }}"><a
-                                    href="{{ url('sira') }}">Bukti Administrasi</a></li>
+                            <li class="{{ request()->is('sira') ? 'active' : '' }}"><a
+                                    href="{{ url('sira') }}">Daftar</a></li>
+                            <li class="{{ request()->is('sira/crete_akun') ? 'active' : '' }}"><a
+                                    href="{{ url('sira/create_akun') }}">Tambah Akun</a></li>
+                            <li class="{{ request()->is('sira/crete_akun') ? 'active' : '' }}"><a
+                                    href="{{ url('sira/create_akun') }}">Tambah Bukti Administrasi</a></li>
                         </ul>
                     </li>
                 @endif

@@ -28,18 +28,18 @@ class SiraAkunRequest extends FormRequest
             'mak' => 'required',
             'kode_akun' => 'required',
             'akun' => 'required',
+            'tahun' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id_pemegang' => 'Pegawai Pemegang',
-            'nip_baru' => 'NIP',
-            'nama' => 'Nama',
-            'nama_barang' => 'Nama Barang',
-            'serial_number' => 'SN / Plat / Kode Unique Barang',
-            'deskripsi_barang' => 'Deskripsi Barang (Tautan BAST, keterangan barang, kondisi, dll)',
+            'kode_mak' => 'MAK',
+            'mak' => 'MAK',
+            'kode_akun' => 'Akun',
+            'akun' => 'Akun',
+            'tahun' => 'Tahun',
         ];
     }
 }

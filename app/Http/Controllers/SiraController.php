@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\PemegangBmnRequest;
+use App\Http\Requests\SiraRincianRequest;
 
 class SiraController extends Controller
 {
@@ -15,19 +15,19 @@ class SiraController extends Controller
      */
     public function index(Request $request){
         $keyword = $request->get('search');
-        $datas = \App\PemegangBmn::where('nama', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('nama_barang', 'LIKE', '%' . $keyword . '%')
+        $datas = \App\SiraAkun::where('mak', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('akun', 'LIKE', '%' . $keyword . '%')
             ->orderBy('id', 'desc')
             ->paginate();
 
-        $datas->withPath('pemegang_bmn');
+        $datas->withPath('sira');
         $datas->appends($request->all());
 
         if ($request->ajax()) {
-            return \Response::json(\View::make('pemegang_bmn.list', array('datas' => $datas, 'keyword'=>$keyword))->render());
+            return \Response::json(\View::make('sira.list', array('datas' => $datas, 'keyword'=>$keyword))->render());
         }
 
-        return view('pemegang_bmn.index',compact('datas', 'keyword'));
+        return view('sira.index',compact('datas', 'keyword'));
     }
 
     /**
@@ -40,7 +40,13 @@ class SiraController extends Controller
         $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('id', 'asc')
             ->get();
-        return view('pemegang_bmn.create',compact('model', 'list_user'));
+        return view('sira.create',compact('model', 'list_user'));
+    }
+
+
+    public function create_akun(){
+        $model= new \App\SiraAkun;
+        return view('sira.create_akun',compact('model'));
     }
 
     /**
@@ -51,7 +57,7 @@ class SiraController extends Controller
      */
     public function store(PemegangBmnRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('pemegang_bmn/create')
+            return redirect('sira/create')
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -68,7 +74,7 @@ class SiraController extends Controller
         $model->updated_by=Auth::id();
         $model->save();
         
-        return redirect('pemegang_bmn')->with('success', 'Information has been added');
+        return redirect('sira')->with('success', 'Information has been added');
     }
 
     /**
@@ -93,7 +99,7 @@ class SiraController extends Controller
         $list_user = \App\UserModel::where('kdkab', '=', Auth::user()->kdkab)
             ->orderBy('id', 'asc')
             ->get();
-        return view('pemegang_bmn.edit',compact('model','id', 'list_user'));
+        return view('sira.edit',compact('model','id', 'list_user'));
     }
 
     /**
@@ -105,7 +111,7 @@ class SiraController extends Controller
      */
     public function update(PemegangBmnRequest $request, $id){
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('pemegang_bmn/edit',$id)
+            return redirect('sira/edit',$id)
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -120,7 +126,7 @@ class SiraController extends Controller
         $model->deskripsi_barang=$request->get('deskripsi_barang');
         $model->updated_by=Auth::id();
         $model->save();
-        return redirect('pemegang_bmn');
+        return redirect('sira');
     }
 
     /**
@@ -132,6 +138,6 @@ class SiraController extends Controller
     public function destroy($id){
         $model = \App\PemegangBmn::find($id);
         $model->delete();
-        return redirect('pemegang_bmn')->with('success','Information has been  deleted');
+        return redirect('sira')->with('success','Information has been  deleted');
     }
 }
