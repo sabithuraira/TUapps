@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SiraAkunRequest extends FormRequest
+class SiraRincianRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,18 +27,27 @@ class SiraAkunRequest extends FormRequest
             'kode_mak' => 'required',
             'kode_akun' => 'required',
             'kode_fungsi' => 'required',
+            'jenis' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id_pemegang' => 'Pegawai Pemegang',
-            'nip_baru' => 'NIP',
-            'nama' => 'Nama',
-            'nama_barang' => 'Nama Barang',
-            'serial_number' => 'SN / Plat / Kode Unique Barang',
-            'deskripsi_barang' => 'Deskripsi Barang (Tautan BAST, keterangan barang, kondisi, dll)',
+            'kode_mak' => 'MAK',
+            'kode_akun' => 'Akun',
+            'kode_fungsi' => 'Fungsi',
+            'jenis' => 'Jenis',
+            'path_kak' => 'KAK',
+            'path_form_permintaan' => 'Form Permintaan',
+            'path_notdin' => 'Nota Dinas',
+            'path_undangan' => 'Undangan',
+            'path_bukti_pembayaran' => 'Bukti Pembayaran',
+            'path_kuitansi' => 'Kuitansi',
+            'path_notulen' => 'Notulen',
+            'path_daftar_hadir' => 'Daftar Hadir',
+            'path_sk' => 'SK',
+            'path_st' => 'Surat Tugas',
         ];
     }
 }

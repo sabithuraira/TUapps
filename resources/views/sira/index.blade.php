@@ -18,7 +18,8 @@
 
       <div class="card">
         <div class="body">
-          <a href="{{action('SiraController@create')}}" class="btn btn-info">Tambah Akun</a>
+          <a href="{{action('SiraController@create_akun')}}" class="btn btn-info">Tambah Akun</a>
+          <a href="{{action('SiraController@create')}}" class="btn btn-info">Tambah Bukti Administrasi</a>
           <br/><br/>
           <form action="{{url('sira')}}" method="get">
             <div class="input-group mb-3"> 

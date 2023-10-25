@@ -35,9 +35,9 @@ class SiraAkunRequest extends FormRequest
     public function attributes()
     {
         return [
-            'kode_mak' => 'MAK',
+            'kode_mak' => 'Kode MAK',
             'mak' => 'MAK',
-            'kode_akun' => 'Akun',
+            'kode_akun' => 'Kode Akun',
             'akun' => 'Akun',
             'tahun' => 'Tahun',
         ];

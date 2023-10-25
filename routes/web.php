@@ -159,7 +159,10 @@ Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::resource('sira', 'SiraController');
+    Route::resource('sira', 'SiraController')->except(['show']);
+    Route::get('sira/create_akun', 'SiraController@create_akun');
+    Route::post('sira/create_akun', 'SiraController@store_akun');
+    Route::get('sira/import_akun', 'SiraController@import_akun');
 
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
