@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label>Barang:</label>
                         <div class="input-group">
-                          <select class="form-control  form-control-sm" v-model="barang" name="barang">
+                          <select class="form-control form-control-sm show-tick ms select2" v-model="barang" name="barang">
                                 @foreach ($list_barang as $key=>$value)
                                     <option value="{{ $value->id }}">{{ $value->nama_barang }}</option>
                                 @endforeach
@@ -90,10 +90,12 @@
 @section('css')
     <meta name="_token" content="{{csrf_token()}}" />
     <meta name="csrf-token" content="@csrf">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}" />
 @endsection
 
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script>
 
 <script>
   var vm = new Vue({  
@@ -187,6 +189,7 @@
 
   $(document).ready(function() {
       vm.setDatas();
+        $('.select2').select2();
   });
 </script>
 @endsection

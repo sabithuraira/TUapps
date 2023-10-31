@@ -24,7 +24,7 @@
                         Pemberi tugas:
                         <div class="form-line">
                             <!-- <input type="text" v-model="form_pemberi_tugas" class="form-control"> -->
-                            <select v-model="form_pemberi_tugas" id="pemberi_tugas" class="form-control">
+                            <select v-model="form_pemberi_tugas" id="pemberi_tugas" class="form-control show-tick ms select2">
                                 @foreach($list_pegawai as $value)
                                     <option value="{{ $value->email }}">{{ $value->name }}</option>
                                 @endforeach
