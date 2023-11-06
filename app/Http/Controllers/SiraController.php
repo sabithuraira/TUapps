@@ -80,17 +80,18 @@ class SiraController extends Controller
      * @param  App\Http\Requests  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SiraRincianRequest $request){
-        if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('sira/create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+    public function store(Request $request){
+        // if (isset($request->validator) && $request->validator->fails()) {
+        //     return redirect('sira/create')
+        //                 ->withErrors($validator)
+        //                 ->withInput();
+        // }
 
         $model= new \App\SiraRincian;
         $model->kode_mak=$request->get('kode_mak');
-        $model->kode_akun=$request->get('kode_akun');
+        $model->kode_akun= $request->get('kode_akun');
         $model->kode_fungsi=$request->get('kode_fungsi');
+        $model->jenis = 1;
 
         $model->path_kak=$request->get('path_kak');
         $model->path_form_permintaan=$request->get('path_form_permintaan');
@@ -118,7 +119,14 @@ class SiraController extends Controller
      */
     public function show($id)
     {
-        //
+        $model = \App\SiraAkun::find($id);
+        $rincian = \App\SiraRincian::where('kode_mak', '=', $model->kode_mak)
+                        ->where('kode_akun', '=', $model->kode_akun)->get();
+
+        //$myUrl =  "https://st23.bpssumsel.com/api/file/";
+        $myUrl = "http://localhost/mon_st2023/public/api/file/";
+
+        return view('sira.show',compact('model','id', 'rincian', 'myUrl'));
     }
 
     /**
@@ -133,6 +141,11 @@ class SiraController extends Controller
             ->orderBy('id', 'asc')
             ->get();
         return view('sira.edit',compact('model','id', 'list_user'));
+    }
+
+    public function getAkun($kode_mak){
+        $result = \App\SiraAkun::where('kode_mak', '=', $kode_mak)->get();
+        return response()->json(['status'  => 'success', 'datas'=>$result]);
     }
 
     /**

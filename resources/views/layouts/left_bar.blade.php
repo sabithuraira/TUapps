@@ -230,7 +230,7 @@
                             <li class="{{ request()->is('sira/crete_akun') ? 'active' : '' }}"><a
                                     href="{{ url('sira/create_akun') }}">Tambah Akun</a></li>
                             <li class="{{ request()->is('sira/crete_akun') ? 'active' : '' }}"><a
-                                    href="{{ url('sira/create_akun') }}">Tambah Bukti Administrasi</a></li>
+                                    href="{{ url('sira/create') }}">Tambah Bukti Administrasi</a></li>
                         </ul>
                     </li>
                 @endif

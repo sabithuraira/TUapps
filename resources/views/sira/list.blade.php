@@ -25,7 +25,7 @@
                         {{ $data['kode_akun'] }}<br/>
                         <span class="text-muted">{{ $data['akun'] }}</span>
                     </td>
-                    <td>{{$data['tahun']}}</td>
+                    <td class="text-center">{{$data['tahun']}}</td>
                     <td class="text-center">
                         <a href="{{action('SiraController@show', $data['id'])}}"><i class="fa fa-search text-info"></i></a>
                     </td>

@@ -16,7 +16,7 @@
               <h2>Tambah Kelengkapan Administrasi</h2>
           </div>
           <div class="body">
-              <form method="post" action="{{url('sira')}}" enctype="multipart/form-data">
+              <form method="post" class="frep" action="{{url('sira')}}" enctype="multipart/form-data">
               @csrf
               @include('sira._form')
               </form>
