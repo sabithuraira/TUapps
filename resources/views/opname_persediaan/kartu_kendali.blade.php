@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label>Barang:</label>
                         <div class="input-group">
-                          <select class="form-control form-control-sm show-tick ms select2" v-model="barang" name="barang">
+                          <select id="barang" class="form-control form-control-sm show-tick ms select2" v-model="barang" name="barang">
                                 @foreach ($list_barang as $key=>$value)
                                     <option value="{{ $value->id }}">{{ $value->nama_barang }}</option>
                                 @endforeach
@@ -160,6 +160,7 @@
                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                   }
               })
+
               $.ajax({
                   url : self.pathname+"/load_kartukendali",
                   method : 'post',
@@ -188,8 +189,13 @@
   });
 
   $(document).ready(function() {
-      vm.setDatas();
+        vm.setDatas();
         $('.select2').select2();
   });
+
+  $('#barang').on("select2-selecting", function(e) { 
+        vm.barang = e.choice.id
+        vm.setDatas();
+    });
 </script>
 @endsection
