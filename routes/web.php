@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sira/create_akun', 'SiraController@create_akun');
     Route::post('sira/create_akun', 'SiraController@store_akun');
     Route::get('sira/import_akun', 'SiraController@import_akun');
+    Route::post('sira/import_akun', 'SiraController@upload_akun');
 
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');

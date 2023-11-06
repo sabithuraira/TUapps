@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SiraRincianRequest;
 use App\Http\Requests\SiraAkunRequest;
+use App\Imports\SiraPartialImport;
 
 class SiraController extends Controller
 {
@@ -57,10 +58,14 @@ class SiraController extends Controller
         return redirect('sira')->with('success', 'Information has been added');
     }
 
-
     public function import_akun(){
         $model= new \App\SiraAkun;
         return view('sira.import_akun',compact('model'));
+    }
+
+    public function upload_akun(Request $request){
+        Excel::import(new SiraPartialImport($request->tahun), $request->file('excel_file'));
+        return redirect('sira')->with('success', 'Data berhasil di import');
     }
 
     /**
