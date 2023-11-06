@@ -58,43 +58,73 @@
                                     <td>{{ $data->listFungsi[$data->kode_fungsi] }}</td>
                                     <td>
                                         @if($data->path_kak!='' && $data->path_kak!=null)
-                                            - <a href="{{ $myUrl.$data->path_kak }}">Unduh KAK</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_kak);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh KAK</a><br/>
                                         @endif 
 
                                         @if($data->path_form_permintaan!='' && $data->path_form_permintaan!=null)
-                                            - <a href="{{ $myUrl.$data->path_form_permintaan }}">Unduh Form Permintaan</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_form_permintaan);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Form Permintaan</a><br/>
                                         @endif 
 
                                         @if($data->path_notdin!='' && $data->path_notdin!=null)
-                                            - <a href="{{ $myUrl.$data->path_notdin }}">Unduh Nota Dinas</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_notdin);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Nota Dinas</a><br/>
                                         @endif 
 
                                         @if($data->path_undangan!='' && $data->path_undangan!=null)
-                                            - <a href="{{ $myUrl.$data->path_undangan }}">Unduh Undangan</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_undangan);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Undangan</a><br/>
                                         @endif 
 
                                         @if($data->path_bukti_pembayaran!='' && $data->path_bukti_pembayaran!=null)
-                                            - <a href="{{ $myUrl.$data->path_bukti_pembayaran }}">Unduh Bukti Pembayaran</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_bukti_pembayaran);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Bukti Pembayaran</a><br/>
                                         @endif
 
                                         @if($data->path_kuitansi!='' && $data->path_kuitansi!=null)
-                                            - <a href="{{ $myUrl.$data->path_kuitansi }}">Unduh Kuitansi</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_kuitansi);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Kuitansi</a><br/>
                                         @endif
 
                                         @if($data->path_notulen!='' && $data->path_notulen!=null)
-                                            - <a href="{{ $myUrl.$data->path_notulen }}">Unduh Notulen</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_notulen);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Notulen</a><br/>
                                         @endif
 
                                         @if($data->path_daftar_hadir!='' && $data->path_daftar_hadir!=null)
-                                            - <a href="{{ $myUrl.$data->path_daftar_hadir }}">Unduh Daftar Hadir</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_daftar_hadir);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Daftar Hadir</a><br/>
                                         @endif
 
                                         @if($data->path_sk!='' && $data->path_sk!=null)
-                                            - <a href="{{ $myUrl.$data->path_sk }}">Unduh SK</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_sk);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh SK</a><br/>
                                         @endif
 
                                         @if($data->path_st!='' && $data->path_st!=null)
-                                            - <a href="{{ $myUrl.$data->path_st }}">Unduh Surat Tugas</a><br/>
+                                            @php 
+                                                $explodeData = explode("/", $data->path_st);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Surat Tugas</a><br/>
                                         @endif
                                     </td>
                                 </tr>

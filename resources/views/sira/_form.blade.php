@@ -193,6 +193,7 @@
             methods: {
                 select_mak(){
                     var self = this;
+                    $('#wait_progres').modal('show');
                     $.ajaxSetup({
                         headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
                     })
