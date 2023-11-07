@@ -40,7 +40,7 @@ class SiraController extends Controller
 
     public function store_akun(SiraAkunRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('sira/create')
+            return redirect('sira/create_akun')
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -51,7 +51,35 @@ class SiraController extends Controller
         $model->kode_akun=$request->get('kode_akun');
         $model->akun=$request->get('akun');
         $model->tahun=$request->get('tahun');
+        $model->pagu=$request->get('pagu');
+        $model->realisasi=$request->get('realisasi');
         $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
+        
+        return redirect('sira')->with('success', 'Information has been added');
+    }
+
+    public function edit_akun($id){
+        $model= \App\SiraAkun::find($id);
+        return view('sira.edit_akun',compact('model', 'id'));
+    }
+
+    public function update_akun(SiraAkunRequest $request, $id){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('sira/edit_akun', $id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $model= \App\SiraAkun::find($id);
+        $model->kode_mak=$request->get('kode_mak');
+        $model->mak=$request->get('mak');
+        $model->kode_akun=$request->get('kode_akun');
+        $model->akun=$request->get('akun');
+        $model->tahun=$request->get('tahun');
+        $model->pagu=$request->get('pagu');
+        $model->realisasi=$request->get('realisasi');
         $model->updated_by=Auth::id();
         $model->save();
         
@@ -122,8 +150,7 @@ class SiraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         $model = \App\SiraAkun::find($id);
         $rincian = \App\SiraRincian::where('kode_mak', '=', $model->kode_mak)
                         ->where('kode_akun', '=', $model->kode_akun)->get();

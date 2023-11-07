@@ -40,6 +40,8 @@ class SiraAkunRequest extends FormRequest
             'kode_akun' => 'Kode Akun',
             'akun' => 'Akun',
             'tahun' => 'Tahun',
+            'pagu' => 'Pagu',
+            'realisasi' => 'Realisasi',
         ];
     }
 }

@@ -29,7 +29,7 @@
                     <td class="text-center">
                         <a href="{{action('SiraController@show', $data['id'])}}"><i class="fa fa-search text-info"></i></a>
                     </td>
-                    <td class="text-center"><a href="{{action('SiraController@edit', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
+                    <td class="text-center"><a href="{{action('SiraController@edit_akun', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
                     <td class="text-center">
                         <form action="{{action('SiraController@destroy', $data['id'])}}" method="post">
                             @csrf
