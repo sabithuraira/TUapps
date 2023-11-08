@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-
-
     public function index(Request $request)
     {
         $auth = Auth::user();
@@ -1528,6 +1526,17 @@ class DashboardController extends Controller
             'result_ckp',
             'data_st',
             'riwayat_sk'
+        ));
+    }
+
+    public function pegawai($id){
+        $model = \App\UserModel::where('email', '=', $id)->first();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop . $model->kdkab)->first();
+      
+        return view('dashboard.pegawai', compact(
+            'id',
+            'model',
+            'unit_kerja',
         ));
     }
 }

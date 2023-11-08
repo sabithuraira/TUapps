@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="{!! asset('assets/css/color_skins.css') !!}">
 </head>
 
-<body class="theme-blush">
+<body class="theme-cyan">
 	<!-- WRAPPER -->
 	<div id="wrapper">
         @yield('content')	
