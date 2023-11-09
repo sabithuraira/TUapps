@@ -41,26 +41,30 @@ class User extends Authenticatable
 
     public function getFotoUrlAttribute(){
         $nip_id = substr($this->email, -5);
-        if(strlen($this->foto)>0){
-            if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
-                return "https://community.bps.go.id/images/avatar/".$this->foto;
-            }
-            else if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-            }
-            else{
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
-            }
+
+        if($this->is_foto_exist("https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email)){
+            return "https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email; 
         }
-        else{
-            // $nip_id = '10080'; //10080 55914
-            if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-            }
-            else{
-                return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
-            }
-        }
+        // if(strlen($this->foto)>0){
+        //     if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
+        //         return "https://community.bps.go.id/images/avatar/".$this->foto;
+        //     }
+        //     else if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
+        //     }
+        //     else{
+        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
+        //     }
+        // }
+        // else{
+        //     // $nip_id = '10080'; //10080 55914
+        //     if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
+        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
+        //     }
+        //     else{
+        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";
+        //     }
+        // }
     }
 
     public function getPimpinanAttribute(){
