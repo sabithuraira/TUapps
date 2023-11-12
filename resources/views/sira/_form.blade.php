@@ -39,7 +39,7 @@
                 <select class="form-control {{($errors->first('kode_fungsi') ? ' parsley-error' : '')}}" id="kode_fungsi" name="kode_fungsi" v-model="data_model.kode_fungsi">
                     @foreach ($model->listFungsi as $key=>$value)
                         <option  value="{{ $key }}" 
-                            @if ($key == old('kode_akun', $model->kode_akun))
+                            @if ($key == old('kode_fungsi', $model->kode_fungsi))
                                 selected="selected"
                             @endif>
                             {{ $value }}

@@ -10,7 +10,7 @@
                 <th class="text-center">{{ $datas[0]->attributes()['mak'] }}</th>
                 <th class="text-center">{{ $datas[0]->attributes()['akun'] }}</th>
                 <th class="text-center">{{ $datas[0]->attributes()['tahun'] }}</th>
-                <th class="text-center">Bukti Administrasi</th>
+                <th class="text-center">Detail & Bukti Administrasi</th>
                 <th class="text-center" colspan="2">Action</th>
                 </tr>
             </thead>

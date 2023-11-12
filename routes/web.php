@@ -169,6 +169,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sira/import_akun', 'SiraController@import_akun');
     Route::post('sira/import_akun', 'SiraController@upload_akun');
 
+    Route::get('sira/{id}/create_realisasi', 'SiraController@create_realisasi');
+    Route::post('sira/{id}/create_realisasi', 'SiraController@store_realisasi');
+    Route::get('sira/{id}/edit_realisasi', 'SiraController@edit_realisasi');
+    Route::post('sira/{id}/edit_realisasi', 'SiraController@update_realisasi');
+
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
     Route::get('penugasan/rekap', 'PenugasanController@rekap');

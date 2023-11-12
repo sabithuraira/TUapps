@@ -64,7 +64,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label><span style="color: red; display:block; float:right">*</span>{{ $model->attributes()['pagu'] }}:</label>
-                <input type="decimal" class="form-control {{($errors->first('pagu') ? ' parsley-error' : '')}}" name="pagu" value="{{ old('pagu', $model->pagu) }}" autofocus>
+                <input type="number" class="form-control {{($errors->first('pagu') ? ' parsley-error' : '')}}" name="pagu" value="{{ old('pagu', $model->pagu) }}" autofocus>
                 @foreach ($errors->get('pagu') as $msg)
                     <p class="text-danger">{{ $msg }}</p>
                 @endforeach    
@@ -73,11 +73,8 @@
 
         <div class="col-md-6">
             <div class="form-group">
-                <label><span style="color: red; display:block; float:right">*</span>{{ $model->attributes()['realisasi'] }}:</label>
-                <input type="decimal" class="form-control {{($errors->first('realisasi') ? ' parsley-error' : '')}}" name="realisasi" value="{{ old('realisasi', $model->realisasi) }}" autofocus>
-                @foreach ($errors->get('realisasi') as $msg)
-                    <p class="text-danger">{{ $msg }}</p>
-                @endforeach    
+                <label>{{ $model->attributes()['realisasi'] }}:</label>
+                <input type="number" disabled class="form-control {{($errors->first('realisasi') ? ' parsley-error' : '')}}" name="realisasi" value="{{ old('realisasi', $model->realisasi) }}" autofocus>  
             </div>
         </div>
     </div>

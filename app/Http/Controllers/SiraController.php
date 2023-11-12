@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SiraRincianRequest;
 use App\Http\Requests\SiraAkunRequest;
+use App\Http\Requests\SiraAkunRealisasiRequest;
 use App\Imports\SiraPartialImport;
 
 class SiraController extends Controller
@@ -82,6 +83,8 @@ class SiraController extends Controller
         $model->realisasi=$request->get('realisasi');
         $model->updated_by=Auth::id();
         $model->save();
+
+        $model->syncRealisasi($id);
         
         return redirect('sira')->with('success', 'Information has been added');
     }
@@ -94,6 +97,65 @@ class SiraController extends Controller
     public function upload_akun(Request $request){
         Excel::import(new SiraPartialImport($request->tahun), $request->file('excel_file'));
         return redirect('sira')->with('success', 'Data berhasil di import');
+    }
+
+    public function create_realisasi($id){
+        $akun= \App\SiraAkun::find($id);
+        $model= new \App\SiraAkunRealisasi;
+        return view('sira.create_akun_realisasi',compact('model', 'akun', 'id'));
+    }
+
+    public function store_realisasi(SiraAkunRealisasiRequest $request, $id){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('sira/'.$id.'/create_realisasi')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $akun= \App\SiraAkun::find($id);
+        $model= new \App\SiraAkunRealisasi;
+        $model->kode_mak= $akun->kode_mak;
+        $model->kode_akun=  $akun->kode_akun;
+        $model->kode_fungsi =$request->get('kode_fungsi');
+        $model->realisasi = $request->get('realisasi');
+        $model->keterangan = $request->get('keterangan');
+        $model->created_by=Auth::id();
+        $model->updated_by=Auth::id();
+        $model->save();
+
+        $akun->syncRealisasi($id);
+        
+        return redirect('sira/'.$id.'/show')->with('success', 'Information has been added');
+    }
+
+    public function edit_realisasi($id){
+        $model= \App\SiraAkunRealisasi::find($id);
+        $akun= \App\SiraAkun::where('kode_akun', $model->kode_akun)
+                    ->where('kode_mak', $model->kode_mak)->first();
+        return view('sira.edit_akun_realisasi',compact('model', 'id', 'akun'));
+    }
+
+    public function update_realisasi(SiraAkunRealisasiRequest $request, $id){
+        if (isset($request->validator) && $request->validator->fails()) {
+            return redirect('sira/'.$id.'/edit_realisasi', $id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $model= \App\SiraAkunRealisasi::find($id);
+        $model->kode_fungsi =$request->get('kode_fungsi');
+        $model->realisasi = $request->get('realisasi');
+        $model->keterangan = $request->get('keterangan');
+        $model->updated_by=Auth::id();
+        $model->save();
+
+        $akun= \App\SiraAkun::where('kode_akun', $model->kode_akun)
+                    ->where('kode_mak', $model->kode_mak)->first();
+
+        $myAkun = new \App\SiraAkun;
+        $myAkun->syncRealisasi($akun->id);
+        
+        return redirect('sira/'.$akun->id.'/show')->with('success', 'Information has been added');
     }
 
     /**
@@ -155,10 +217,15 @@ class SiraController extends Controller
         $rincian = \App\SiraRincian::where('kode_mak', '=', $model->kode_mak)
                         ->where('kode_akun', '=', $model->kode_akun)->get();
 
+        $realisasi = \App\SiraAkunRealisasi::where('kode_mak', '=', $model->kode_mak)
+                        ->where('kode_akun', '=', $model->kode_akun)->get();
+
         //$myUrl =  "https://st23.bpssumsel.com/api/file/";
         $myUrl = "http://localhost/mon_st2023/public/api/file/";
 
-        return view('sira.show',compact('model','id', 'rincian', 'myUrl'));
+        return view('sira.show',compact('model', 'id', 
+                'realisasi',
+                'rincian', 'myUrl'));
     }
 
     /**

@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SiraRincian extends Model
+class SiraAkunRealisasi extends Model
 {
-    protected $table = 'sira_rincian';
+    protected $table = 'sira_akun_realisasi';
 
     public function attributes()
     {
-        return (new \App\Http\Requests\SiraRincianRequest())->attributes();
+        return (new \App\Http\Requests\SiraAkunRealisasiRequest())->attributes();
     }
 
     public function getListFungsiAttribute()
