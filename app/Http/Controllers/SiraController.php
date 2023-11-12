@@ -54,6 +54,7 @@ class SiraController extends Controller
         $model->tahun=$request->get('tahun');
         $model->pagu=$request->get('pagu');
         $model->realisasi=$request->get('realisasi');
+        $model->kode_fungsi=$request->get('kode_fungsi');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();
@@ -81,6 +82,7 @@ class SiraController extends Controller
         $model->tahun=$request->get('tahun');
         $model->pagu=$request->get('pagu');
         $model->realisasi=$request->get('realisasi');
+        $model->kode_fungsi=$request->get('kode_fungsi');
         $model->updated_by=Auth::id();
         $model->save();
 
@@ -245,6 +247,33 @@ class SiraController extends Controller
     public function getAkun($kode_mak){
         $result = \App\SiraAkun::where('kode_mak', '=', $kode_mak)->get();
         return response()->json(['status'  => 'success', 'datas'=>$result]);
+    }
+
+
+    public function getDashboard(){
+        $model = new \App\SiraAkun;
+        $data1 = $model->rekapPagu();
+
+        $result1 = array(
+            $data1[0]->umum,
+            $data1[0]->sosial,
+            $data1[0]->nerwilis,
+            $data1[0]->distribusi,
+            $data1[0]->produksi,
+            $data1[0]->ipds,
+        );
+
+        $data2 = $model->rekapRealisasi();
+        $result2 = [
+            $data2[0]->umum,
+            $data2[0]->sosial,
+            $data2[0]->nerwilis,
+            $data2[0]->distribusi,
+            $data2[0]->produksi,
+            $data2[0]->ipds,
+        ];
+        return response()->json(['status'  => 'success', 
+            'data1'=>$result1, 'data2'=> $result2]);
     }
 
     /**

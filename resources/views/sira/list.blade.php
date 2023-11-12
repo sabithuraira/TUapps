@@ -10,6 +10,7 @@
                 <th class="text-center">{{ $datas[0]->attributes()['mak'] }}</th>
                 <th class="text-center">{{ $datas[0]->attributes()['akun'] }}</th>
                 <th class="text-center">{{ $datas[0]->attributes()['tahun'] }}</th>
+                <th class="text-center">Pagu & Realisasi</th>
                 <th class="text-center">Detail & Bukti Administrasi</th>
                 <th class="text-center" colspan="2">Action</th>
                 </tr>
@@ -26,6 +27,10 @@
                         <span class="text-muted">{{ $data['akun'] }}</span>
                     </td>
                     <td class="text-center">{{$data['tahun']}}</td>
+                    <td>
+                        Pagu: Rp. {{ number_format($data->pagu) }}<br/>
+                        Realisasi: Rp. {{ number_format($data->realisasi) }}
+                    </td>
                     <td class="text-center">
                         <a href="{{action('SiraController@show', $data['id'])}}"><i class="fa fa-search text-info"></i></a>
                     </td>

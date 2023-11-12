@@ -57,6 +57,22 @@
             </div>
         </div>
         <div class="col-md-6">
+            <div class="form-group">
+                <label><span style="color: red; display:block; float:right">*</span>{{ $model->attributes()['kode_fungsi'] }}:</label>
+                <select class="form-control {{($errors->first('kode_fungsi') ? ' parsley-error' : '')}}" id="kode_fungsi" name="kode_fungsi" v-model="data_model.kode_fungsi">
+                    @foreach ($model->listFungsi as $key=>$value)
+                        <option  value="{{ $key }}" 
+                            @if ($key == old('kode_fungsi', $model->kode_fungsi))
+                                selected="selected"
+                            @endif>
+                            {{ $value }}
+                        </option>
+                    @endforeach
+                </select>
+                @foreach ($errors->get('kode_fungsi') as $msg)
+                    <p class="text-danger">{{ $msg }}</p>
+                @endforeach
+            </div>
         </div>
     </div>
 

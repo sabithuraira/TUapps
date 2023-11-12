@@ -29,6 +29,7 @@ class SiraAkunRequest extends FormRequest
             'kode_akun' => 'required',
             'akun' => 'required',
             'tahun' => 'required',
+            'kode_fungsi' => 'required',
         ];
     }
 
@@ -42,6 +43,7 @@ class SiraAkunRequest extends FormRequest
             'tahun' => 'Tahun',
             'pagu' => 'Pagu',
             'realisasi' => 'Realisasi',
+            'kode_fungsi' => 'Kode Fungsi',
         ];
     }
 }

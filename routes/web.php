@@ -173,6 +173,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('sira/{id}/create_realisasi', 'SiraController@store_realisasi');
     Route::get('sira/{id}/edit_realisasi', 'SiraController@edit_realisasi');
     Route::post('sira/{id}/edit_realisasi', 'SiraController@update_realisasi');
+    Route::get('sira/get_dashboard', 'SiraController@getDashboard');
 
     Route::get('penugasan/anda', 'PenugasanController@anda');
     Route::post('penugasan/storeLapor', 'PenugasanController@storeLapor');
