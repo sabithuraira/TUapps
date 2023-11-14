@@ -84,7 +84,7 @@
                     <div class="form-group">
                         Barang: 
                         <div class="form-line">
-                            <select class="form-control"  v-model="form_id_barang" autofocus>
+                            <select class="form-control show-tick ms select2"  v-model="form_id_barang" id="form_id_barang" autofocus>
                                 <option value="">- Pilih Barang -</option>
                                 @foreach ($master_barang as $key=>$value)
                                     <option value="{{ $value->id }}">{{ $value->nama_barang }}
@@ -172,6 +172,7 @@
         .modal-dialog{ overflow-y: initial !important }
         .modal-body{ height: 80vh; overflow-y: auto; }
     </style>
+<link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}" />
 @endsection
 
 @section('scripts')
@@ -181,6 +182,7 @@
 <script src="{!! asset('lucid/assets/vendor/bootstrap-markdown/bootstrap-markdown.js') !!}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{!! asset('lucid/assets/vendor/summernote/dist/summernote.js') !!}"></script>
+<script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script>
 
 <script>
 var vm = new Vue({  
@@ -473,6 +475,11 @@ var vm = new Vue({
 
 $(document).ready(function() {
     vm.setDatas();
+    $('.select2').select2();
+});
+
+$('#form_id_barang').on("select2-selecting", function(e) { 
+    vm.form_id_barang = e.choice.id
 });
 
 $( "#add-btn" ).click(function(e) {

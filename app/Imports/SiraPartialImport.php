@@ -26,7 +26,7 @@ class SiraPartialImport implements ToCollection
                 $model->kode_akun= $row[2];
                 $model->akun= $row[3];
                 $model->pagu= $row[4];
-                $model->realisasi= $row[5];
+                $model->kode_fungsi= $row[5];
                 $model->tahun = $this->tahun;
                 $model->created_by=Auth::id();
                 $model->updated_by=Auth::id();

@@ -193,7 +193,7 @@
         $('.select2').select2();
   });
 
-  $('#barang').on("select2-selecting", function(e) { 
+    $('#barang').on("select2-selecting", function(e) { 
         vm.barang = e.choice.id
         vm.setDatas();
     });

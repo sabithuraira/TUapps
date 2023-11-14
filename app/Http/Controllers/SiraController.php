@@ -53,7 +53,7 @@ class SiraController extends Controller
         $model->akun=$request->get('akun');
         $model->tahun=$request->get('tahun');
         $model->pagu=$request->get('pagu');
-        $model->realisasi=$request->get('realisasi');
+        $model->realisasi=0;
         $model->kode_fungsi=$request->get('kode_fungsi');
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
@@ -81,7 +81,6 @@ class SiraController extends Controller
         $model->akun=$request->get('akun');
         $model->tahun=$request->get('tahun');
         $model->pagu=$request->get('pagu');
-        $model->realisasi=$request->get('realisasi');
         $model->kode_fungsi=$request->get('kode_fungsi');
         $model->updated_by=Auth::id();
         $model->save();
