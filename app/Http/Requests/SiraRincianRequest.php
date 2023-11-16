@@ -34,8 +34,8 @@ class SiraRincianRequest extends FormRequest
     public function attributes()
     {
         return [
-            'kode_mak' => 'MAK',
-            'kode_akun' => 'Akun',
+            'kode_mak' => 'Kegiatan',
+            'kode_akun' => 'MAK',
             'kode_fungsi' => 'Fungsi',
             'jenis' => 'Jenis',
             'path_kak' => 'KAK',

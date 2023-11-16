@@ -76,10 +76,6 @@
 
     <div class="row clearfix">
         <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['path_notdin'] }}:</label>
-                <input type="file" class="form-control" name="path_notdin" id="path_notdin" value="{{ old('path_notdin', $model->path_notdin) }}">
-            </div>
         </div>
 
         <div class="col-md-6 left">
@@ -370,29 +366,29 @@
                             vm.sbmt()
                         }
 
-                        var pathNotdin = document.querySelector('#path_notdin');
-                        if(pathNotdin.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathNotdin.files[0]);   
-                            $.ajax({
-                                url :  my_url + "notdin/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_notdin = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
-                        }
-                        else{
+                        // var pathNotdin = document.querySelector('#path_notdin');
+                        // if(pathNotdin.files.length>0)
+                        // {
+                        //     var formData = new FormData();
+                        //     formData.append("file_data", pathNotdin.files[0]);   
+                        //     $.ajax({
+                        //         url :  my_url + "notdin/upload",
+                        //         type : 'POST',
+                        //         data : formData,
+                        //         processData: false,
+                        //         contentType: false,
+                        //         success : function(data) {
+                        //             vm.total_upload += 1;
+                        //             vm.data_model.path_notdin = data.datas;
+                        //             vm.sbmt()
+                        //         }
+                        //     });
+                        // }
+                        // else{
                             vm.total_upload += 1;
                             vm.data_model.path_notdin = "";
                             vm.sbmt()
-                        }
+                        // }
 
 
                         var pathUndangan = document.querySelector('#path_undangan');

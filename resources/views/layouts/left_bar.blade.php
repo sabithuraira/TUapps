@@ -223,7 +223,7 @@
                 @if (Auth::user()->kdkab=='00' || Auth::user()->kdkab == '04')
                     <li
                         class="{{ request()->is('sira*') ? 'active' : '' }}">
-                        <a href="#BuktiAdministrasi" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi</span></a>
+                        <a href="#BuktiAdministrasi" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi (SIRA KLASIK)</span></a>
                         <ul>
                             <li class="{{ request()->is('sira') ? 'active' : '' }}"><a
                                     href="{{ url('sira') }}">Daftar</a></li>
