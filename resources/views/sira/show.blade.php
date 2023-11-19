@@ -82,6 +82,7 @@
                             <tr>
                                 <th class="text-center">{{ $rincian[0]->attributes()['kode_fungsi'] }}</th>
                                 <th class="text-center">Bukti Administrasi</th>
+                                <th class="text-center">Persentase Kelengkapan</th>
                             </tr>
                         </thead>
 
@@ -159,6 +160,10 @@
                                             @endphp 
                                             - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Surat Tugas</a><br/>
                                         @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{ round($data->realisasi_bukti/$data->target_bukti*100,2) }}%
+                                    ({{ $data->realisasi_bukti }} dari {{ $data->target_bukti }}) bukti
                                     </td>
                                 </tr>
                             @endforeach

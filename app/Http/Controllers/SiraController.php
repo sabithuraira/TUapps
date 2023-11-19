@@ -188,18 +188,48 @@ class SiraController extends Controller
         $model->kode_akun= $request->get('kode_akun');
         $model->kode_fungsi=$request->get('kode_fungsi');
         $model->jenis = 1;
+        $bukti = 0;
 
         $model->path_kak=$request->get('path_kak');
+        if($model->path_kak!='' && $model->path_kak!=null) $bukti++;
+
         $model->path_form_permintaan=$request->get('path_form_permintaan');
+        if($model->path_form_permintaan!='' && $model->path_form_permintaan!=null) $bukti++;
+
+        if($model->kode_akun=='522111' || $model->kode_akun=='522112' || 
+                $model->kode_akun=='522113' 
+                || $model->kode_akun=='522119'
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524113'
+                || $model->kode_akun=='524111'
+                || $model->kode_akun=='522141'
+                || $model->kode_akun=='522151' 
+                || $model->kode_akun=='521811' 
+                || $model->kode_akun=='521219' 
+                || $model->kode_akun=='521213' 
+                || $model->kode_akun=='521211'){
+            $model->path_bukti_pembayaran=$request->get('path_bukti_pembayaran');
+            if($model->path_bukti_pembayaran!='' && $model->path_bukti_pembayaran!=null) $bukti++;
+            // $model->path_kuitansi=$request->get('path_kuitansi');
+        }
+
+
         $model->path_notdin=$request->get('path_notdin');
         $model->path_undangan=$request->get('path_undangan');
-        $model->path_bukti_pembayaran=$request->get('path_bukti_pembayaran');
-        $model->path_kuitansi=$request->get('path_kuitansi');
+
         $model->path_notulen=$request->get('path_notulen');
         $model->path_daftar_hadir=$request->get('path_daftar_hadir');
         $model->path_sk=$request->get('path_sk');
         $model->path_st=$request->get('path_st');
 
+        ///////////
+        if($model->kode_akun=='522111' || $model->kode_akun=='522112' || 
+            $model->kode_akun=='522113'){
+            $model->target_bukti = 3;
+        }
+        ///////////
+
+        $model->realisasi_bukti = $bukti;
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         $model->save();

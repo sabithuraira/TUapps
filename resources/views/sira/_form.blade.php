@@ -75,10 +75,24 @@
     </div>
 
     <div class="row clearfix">
-        <div class="col-md-6">
+        <div v-if="data_model.kode_akun=='522111' || data_model.kode_akun=='522112' || data_model.kode_akun=='522113' 
+                || data_model.kode_akun=='522119'
+                || data_model.kode_akun=='524114' 
+                || data_model.kode_akun=='524113'
+                || data_model.kode_akun=='524111'
+                || data_model.kode_akun=='522141'
+                || data_model.kode_akun=='522151' 
+                || data_model.kode_akun=='521811' 
+                || data_model.kode_akun=='521219' 
+                || data_model.kode_akun=='521213' 
+                || data_model.kode_akun=='521211'" class="col-md-6">
+            <div class="form-group">
+                <label>{{ $model->attributes()['path_bukti_pembayaran'] }}:</label>
+                <input type="file" class="form-control" name="path_bukti_pembayaran" id="path_bukti_pembayaran" value="{{ old('path_bukti_pembayaran', $model->path_bukti_pembayaran) }}">
+            </div>
         </div>
 
-        <div class="col-md-6 left">
+        <div v-if="false" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_undangan'] }}:</label>
                 <input type="file" class="form-control" name="path_undangan" id="path_undangan" value="{{ old('path_undangan', $model->path_undangan) }}">
@@ -87,30 +101,22 @@
     </div>
 
     <div class="row clearfix">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>{{ $model->attributes()['path_bukti_pembayaran'] }}:</label>
-                <input type="file" class="form-control" name="path_bukti_pembayaran" id="path_bukti_pembayaran" value="{{ old('path_bukti_pembayaran', $model->path_bukti_pembayaran) }}">
-            </div>
+        <div v-if="false" class="col-md-6">
         </div>
 
-        <div class="col-md-6 left">
-            <div class="form-group">
-                <label>{{ $model->attributes()['path_kuitansi'] }}:</label>
-                <input type="file" class="form-control" name="path_kuitansi" id="path_kuitansi" value="{{ old('path_kuitansi', $model->path_kuitansi) }}">
-            </div>
+        <div v-if="false" class="col-md-6 left">
         </div>
     </div>
 
     <div class="row clearfix">
-        <div class="col-md-6">
+        <div v-if="false" class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_notulen'] }}:</label>
                 <input type="file" class="form-control" name="path_notulen" id="path_notulen" value="{{ old('path_notulen', $model->path_notulen) }}">
             </div>
         </div>
 
-        <div class="col-md-6 left">
+        <div v-if="false" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_daftar_hadir'] }}:</label>
                 <input type="file" class="form-control" name="path_daftar_hadir" id="path_daftar_hadir" value="{{ old('path_daftar_hadir', $model->path_daftar_hadir) }}">
@@ -119,14 +125,14 @@
     </div>
 
     <div class="row clearfix">
-        <div class="col-md-6">
+        <div v-if="false" class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_sk'] }}:</label>
                 <input type="file" class="form-control" name="path_sk" id="path_sk" value="{{ old('path_sk', $model->path_sk) }}">
             </div>
         </div>
 
-        <div class="col-md-6 left">
+        <div v-if="false" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_st'] }}:</label>
                 <input type="file" class="form-control" name="path_st" id="path_st" value="{{ old('path_st', $model->path_st) }}">
@@ -239,7 +245,14 @@
                         }
                     })
 
-                    if(self.total_upload>=10){
+                    var maks_upload = 0;
+
+                    if(self.data_model.kode_akun=='522111' || self.data_model.kode_akun=='522112' || 
+                        self.data_model.kode_akun=='522113'){
+                        maks_upload = 3;
+                    }
+
+                    if(self.total_upload>=maks_upload){
                         $.ajax({
                             url : "{{ url('/sira/') }}",
                             method : 'post',
@@ -318,8 +331,7 @@
 
                     if(err_message.length==0){
                         var pathKak = document.querySelector('#path_kak');
-                        if(pathKak.files.length>0)
-                        {
+                        if(pathKak.files.length>0){
                             var formData = new FormData();
                             formData.append("file_data", pathKak.files[0]);
 
@@ -330,21 +342,20 @@
                                 processData: false,
                                 contentType: false,
                                 success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_kak = data.datas;
-                                    vm.sbmt()
+                                    self.total_upload += 1;
+                                    self.data_model.path_kak = data.datas;
+                                    self.sbmt()
                                 }
                             });
                         }
                         else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_kak = "";
-                            vm.sbmt()
+                            self.total_upload += 1;
+                            self.data_model.path_kak = "";
+                            self.sbmt()
                         }
 
                         var pathFormPermintaan = document.querySelector('#path_form_permintaan');
-                        if(pathFormPermintaan.files.length>0)
-                        {
+                        if(pathFormPermintaan.files.length>0){
                             var formData = new FormData();
                             formData.append("file_data", pathFormPermintaan.files[0]);
                             $.ajax({
@@ -354,16 +365,16 @@
                                 processData: false,
                                 contentType: false,
                                 success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_form_permintaan = data.datas;
-                                    vm.sbmt()
+                                    self.total_upload += 1;
+                                    self.data_model.path_form_permintaan = data.datas;
+                                    self.sbmt()
                                 }
                             });
                         }
                         else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_form_permintaan = "";
-                            vm.sbmt()
+                            self.total_upload += 1;
+                            self.data_model.path_form_permintaan = "";
+                            self.sbmt()
                         }
 
                         // var pathNotdin = document.querySelector('#path_notdin');
@@ -385,182 +396,197 @@
                         //     });
                         // }
                         // else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_notdin = "";
-                            vm.sbmt()
+                            // vm.total_upload += 1;
+                            // vm.data_model.path_notdin = "";
+                            // vm.sbmt()
                         // }
 
 
-                        var pathUndangan = document.querySelector('#path_undangan');
-                        if(pathUndangan.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathUndangan.files[0]);
-                            $.ajax({
-                                url :  my_url + "undangan/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_undangan = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
+                        if(self.data_model.kode_akun=='522111' || 
+                            self.data_model.kode_akun=='522112' || 
+                            self.data_model.kode_akun=='522113' 
+                            || self.data_model.kode_akun=='522119'
+                            || self.data_model.kode_akun=='524114' 
+                            || self.data_model.kode_akun=='524113'
+                            || self.data_model.kode_akun=='524111'
+                            || self.data_model.kode_akun=='522141'
+                            || self.data_model.kode_akun=='522151' 
+                            || self.data_model.kode_akun=='521811' 
+                            || self.data_model.kode_akun=='521219' 
+                            || self.data_model.kode_akun=='521213' 
+                            || self.data_model.kode_akun=='521211'){
+                            var pathBuktiPembayaran = document.querySelector('#path_bukti_pembayaran');
+                            if(pathBuktiPembayaran.files.length>0)
+                            {
+                                var formData = new FormData();
+                                formData.append("file_data", pathBuktiPembayaran.files[0]); 
+                                $.ajax({
+                                    url :  my_url + "bukti_pembayaran/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        self.total_upload += 1;
+                                        self.data_model.path_bukti_pembayaran = data.datas;
+                                        self.sbmt()
+                                    }
+                                });  
+                            }
+                            else{
+                                self.total_upload += 1;
+                                self.data_model.path_bukti_pembayaran = "";
+                                self.sbmt()
+                            }
                         }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_undangan = "";
-                            vm.sbmt()
-                        }
+                        
 
-                        var pathBuktiPembayaran = document.querySelector('#path_bukti_pembayaran');
-                        if(pathBuktiPembayaran.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathBuktiPembayaran.files[0]); 
-                            $.ajax({
-                                url :  my_url + "bukti_pembayaran/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_bukti_pembayaran = data.datas;
-                                    vm.sbmt()
-                                }
-                            });  
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_bukti_pembayaran = "";
-                            vm.sbmt()
-                        }
+                        // var pathKuitansi = document.querySelector('#path_kuitansi');
+                        // if(pathKuitansi.files.length>0)
+                        // {
+                        //     var formData = new FormData();
+                        //     formData.append("file_data", pathKuitansi.files[0]);
+                        //     $.ajax({
+                        //         url :  my_url + "kuitansi/upload",
+                        //         type : 'POST',
+                        //         data : formData,
+                        //         processData: false,
+                        //         contentType: false,
+                        //         success : function(data) {
+                        //             vm.total_upload += 1;
+                        //             vm.data_model.path_kuitansi = data.datas;
+                        //             vm.sbmt()
+                        //         }
+                        //     });
+                        // }
+                        // else{
+                        //     vm.total_upload += 1;
+                        //     vm.data_model.path_kuitansi = "";
+                        //     vm.sbmt()
+                        // }
 
+                        if(1==2){
+                            var pathUndangan = document.querySelector('#path_undangan');
+                            if(pathUndangan.files.length>0)
+                            {
+                                var formData = new FormData();
+                                formData.append("file_data", pathUndangan.files[0]);
+                                $.ajax({
+                                    url :  my_url + "undangan/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        vm.total_upload += 1;
+                                        vm.data_model.path_undangan = data.datas;
+                                        vm.sbmt()
+                                    }
+                                });
+                            }
+                            else{
+                                vm.total_upload += 1;
+                                vm.data_model.path_undangan = "";
+                                vm.sbmt()
+                            }
 
-                        var pathKuitansi = document.querySelector('#path_kuitansi');
-                        if(pathKuitansi.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathKuitansi.files[0]);
-                            $.ajax({
-                                url :  my_url + "kuitansi/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_kuitansi = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_kuitansi = "";
-                            vm.sbmt()
-                        }
-
-
-                        var pathNotulen = document.querySelector('#path_notulen');
-                        if(pathNotulen.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathNotulen.files[0]);
-                            $.ajax({
-                                url :  my_url + "notulen/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_notulen = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_notulen ="";
-                            vm.sbmt()
-                        }
-
-
-                        var pathDaftarHadir = document.querySelector('#path_daftar_hadir');
-                        if(pathDaftarHadir.files.length>0)
-                        {   
-                            var formData = new FormData();
-                            formData.append("file_data", pathDaftarHadir.files[0]);   
-                            $.ajax({
-                                url :  my_url + "daftar_hadir/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_daftar_hadir = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_daftar_hadir = "";
-                            vm.sbmt()
-                        }
+                            var pathNotulen = document.querySelector('#path_notulen');
+                            if(pathNotulen.files.length>0)
+                            {
+                                var formData = new FormData();
+                                formData.append("file_data", pathNotulen.files[0]);
+                                $.ajax({
+                                    url :  my_url + "notulen/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        vm.total_upload += 1;
+                                        vm.data_model.path_notulen = data.datas;
+                                        vm.sbmt()
+                                    }
+                                });
+                            }
+                            else{
+                                vm.total_upload += 1;
+                                vm.data_model.path_notulen ="";
+                                vm.sbmt()
+                            }
 
 
-                        var pathSk = document.querySelector('#path_sk');
-                        if(pathSk.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathSk.files[0]);  
-                            $.ajax({
-                                url :  my_url + "sk/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_sk = data.datas;
-                                    vm.sbmt()
-                                }
-                            }); 
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_sk = "";
-                            vm.sbmt()
-                        }
+                            var pathDaftarHadir = document.querySelector('#path_daftar_hadir');
+                            if(pathDaftarHadir.files.length>0)
+                            {   
+                                var formData = new FormData();
+                                formData.append("file_data", pathDaftarHadir.files[0]);   
+                                $.ajax({
+                                    url :  my_url + "daftar_hadir/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        vm.total_upload += 1;
+                                        vm.data_model.path_daftar_hadir = data.datas;
+                                        vm.sbmt()
+                                    }
+                                });
+                            }
+                            else{
+                                vm.total_upload += 1;
+                                vm.data_model.path_daftar_hadir = "";
+                                vm.sbmt()
+                            }
 
-                        var pathSt = document.querySelector('#path_st');
-                        if(pathSt.files.length>0)
-                        {
-                            var formData = new FormData();
-                            formData.append("file_data", pathSt.files[0]);   
-                            $.ajax({
-                                url :  my_url + "st/upload",
-                                type : 'POST',
-                                data : formData,
-                                processData: false,
-                                contentType: false,
-                                success : function(data) {
-                                    vm.total_upload += 1;
-                                    vm.data_model.path_st = data.datas;
-                                    vm.sbmt()
-                                }
-                            });
-                        }
-                        else{
-                            vm.total_upload += 1;
-                            vm.data_model.path_st = "";
-                            vm.sbmt()
+
+                            var pathSk = document.querySelector('#path_sk');
+                            if(pathSk.files.length>0)
+                            {
+                                var formData = new FormData();
+                                formData.append("file_data", pathSk.files[0]);  
+                                $.ajax({
+                                    url :  my_url + "sk/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        vm.total_upload += 1;
+                                        vm.data_model.path_sk = data.datas;
+                                        vm.sbmt()
+                                    }
+                                }); 
+                            }
+                            else{
+                                vm.total_upload += 1;
+                                vm.data_model.path_sk = "";
+                                vm.sbmt()
+                            }
+
+                            var pathSt = document.querySelector('#path_st');
+                            if(pathSt.files.length>0)
+                            {
+                                var formData = new FormData();
+                                formData.append("file_data", pathSt.files[0]);   
+                                $.ajax({
+                                    url :  my_url + "st/upload",
+                                    type : 'POST',
+                                    data : formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success : function(data) {
+                                        vm.total_upload += 1;
+                                        vm.data_model.path_st = data.datas;
+                                        vm.sbmt()
+                                    }
+                                });
+                            }
+                            else{
+                                vm.total_upload += 1;
+                                vm.data_model.path_st = "";
+                                vm.sbmt()
+                            }
                         }
 
                         return false;
