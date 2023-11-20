@@ -92,47 +92,50 @@
             </div>
         </div>
 
-        <div v-if="false" class="col-md-6 left">
+        <div v-if="data_model.kode_akun=='521211' 
+                || data_model.kode_akun=='522151' 
+                || data_model.kode_akun=='524114' 
+                || data_model.kode_akun=='524119'" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_undangan'] }}:</label>
                 <input type="file" class="form-control" name="path_undangan" id="path_undangan" value="{{ old('path_undangan', $model->path_undangan) }}">
             </div>
         </div>
-    </div>
 
-    <div class="row clearfix">
-        <div v-if="false" class="col-md-6">
-        </div>
-
-        <div v-if="false" class="col-md-6 left">
-        </div>
-    </div>
-
-    <div class="row clearfix">
-        <div v-if="false" class="col-md-6">
+        <div v-if="data_model.kode_akun=='521211' 
+                || data_model.kode_akun=='524114' 
+                || data_model.kode_akun=='524119'" class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_notulen'] }}:</label>
                 <input type="file" class="form-control" name="path_notulen" id="path_notulen" value="{{ old('path_notulen', $model->path_notulen) }}">
             </div>
         </div>
 
-        <div v-if="false" class="col-md-6 left">
+        <div v-if="data_model.kode_akun=='521211' 
+                || data_model.kode_akun=='521213' 
+                || data_model.kode_akun=='522151'  
+                || data_model.kode_akun=='524114' 
+                || data_model.kode_akun=='524119'" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_daftar_hadir'] }}:</label>
                 <input type="file" class="form-control" name="path_daftar_hadir" id="path_daftar_hadir" value="{{ old('path_daftar_hadir', $model->path_daftar_hadir) }}">
             </div>
         </div>
-    </div>
 
-    <div class="row clearfix">
-        <div v-if="false" class="col-md-6">
+        <div v-if="data_model.kode_akun=='521213' 
+                || data_model.kode_akun=='522151'" class="col-md-6">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_sk'] }}:</label>
                 <input type="file" class="form-control" name="path_sk" id="path_sk" value="{{ old('path_sk', $model->path_sk) }}">
             </div>
         </div>
 
-        <div v-if="false" class="col-md-6 left">
+        <div v-if="data_model.kode_akun=='521213' 
+                || data_model.kode_akun=='524111' 
+                || data_model.kode_akun=='524113' 
+                || data_model.kode_akun=='524114' 
+                || data_model.kode_akun=='524119' 
+                || data_model.kode_akun=='522119'" class="col-md-6 left">
             <div class="form-group">
                 <label>{{ $model->attributes()['path_st'] }}:</label>
                 <input type="file" class="form-control" name="path_st" id="path_st" value="{{ old('path_st', $model->path_st) }}">
@@ -250,6 +253,10 @@
                     if(self.data_model.kode_akun=='522111' || self.data_model.kode_akun=='522112' || 
                         self.data_model.kode_akun=='522113'){
                         maks_upload = 3;
+                    }
+
+                    if(self.data_model.kode_akun=='521211'){
+                        maks_upload = 6;
                     }
 
                     if(self.total_upload>=maks_upload){
@@ -465,7 +472,10 @@
                         //     vm.sbmt()
                         // }
 
-                        if(1==2){
+                        if(self.data_model.kode_akun=='521211' 
+                            || self.data_model.kode_akun=='522151' 
+                            || self.data_model.kode_akun=='524114' 
+                            || self.data_model.kode_akun=='524119'){
                             var pathUndangan = document.querySelector('#path_undangan');
                             if(pathUndangan.files.length>0)
                             {
@@ -478,18 +488,22 @@
                                     processData: false,
                                     contentType: false,
                                     success : function(data) {
-                                        vm.total_upload += 1;
-                                        vm.data_model.path_undangan = data.datas;
-                                        vm.sbmt()
+                                        self.total_upload += 1;
+                                        self.data_model.path_undangan = data.datas;
+                                        self.sbmt()
                                     }
                                 });
                             }
                             else{
-                                vm.total_upload += 1;
-                                vm.data_model.path_undangan = "";
-                                vm.sbmt()
+                                self.total_upload += 1;
+                                self.data_model.path_undangan = "";
+                                self.sbmt()
                             }
+                        }
 
+                        if(self.data_model.kode_akun=='521211' 
+                                || self.data_model.kode_akun=='524114' 
+                                || self.data_model.kode_akun=='524119'){
                             var pathNotulen = document.querySelector('#path_notulen');
                             if(pathNotulen.files.length>0)
                             {
@@ -502,19 +516,24 @@
                                     processData: false,
                                     contentType: false,
                                     success : function(data) {
-                                        vm.total_upload += 1;
-                                        vm.data_model.path_notulen = data.datas;
-                                        vm.sbmt()
+                                        self.total_upload += 1;
+                                        self.data_model.path_notulen = data.datas;
+                                        self.sbmt()
                                     }
                                 });
                             }
                             else{
-                                vm.total_upload += 1;
-                                vm.data_model.path_notulen ="";
-                                vm.sbmt()
+                                self.total_upload += 1;
+                                self.data_model.path_notulen ="";
+                                self.sbmt()
                             }
+                        }
 
-
+                        if(self.data_model.kode_akun=='521211' 
+                                || self.data_model.kode_akun=='521213' 
+                                || self.data_model.kode_akun=='522151'  
+                                || self.data_model.kode_akun=='524114' 
+                                || self.data_model.kode_akun=='524119'){
                             var pathDaftarHadir = document.querySelector('#path_daftar_hadir');
                             if(pathDaftarHadir.files.length>0)
                             {   
@@ -527,19 +546,21 @@
                                     processData: false,
                                     contentType: false,
                                     success : function(data) {
-                                        vm.total_upload += 1;
-                                        vm.data_model.path_daftar_hadir = data.datas;
-                                        vm.sbmt()
+                                        self.total_upload += 1;
+                                        self.data_model.path_daftar_hadir = data.datas;
+                                        self.sbmt()
                                     }
                                 });
                             }
                             else{
-                                vm.total_upload += 1;
-                                vm.data_model.path_daftar_hadir = "";
-                                vm.sbmt()
+                                self.total_upload += 1;
+                                self.data_model.path_daftar_hadir = "";
+                                self.sbmt()
                             }
+                        }
 
 
+                        if(self.data_model.kode_akun=='521213' || self.data_model.kode_akun=='522151'){
                             var pathSk = document.querySelector('#path_sk');
                             if(pathSk.files.length>0)
                             {
@@ -552,18 +573,26 @@
                                     processData: false,
                                     contentType: false,
                                     success : function(data) {
-                                        vm.total_upload += 1;
-                                        vm.data_model.path_sk = data.datas;
-                                        vm.sbmt()
+                                        self.total_upload += 1;
+                                        self.data_model.path_sk = data.datas;
+                                        self.sbmt()
                                     }
                                 }); 
                             }
                             else{
-                                vm.total_upload += 1;
-                                vm.data_model.path_sk = "";
-                                vm.sbmt()
+                                self.total_upload += 1;
+                                self.data_model.path_sk = "";
+                                self.sbmt()
                             }
+                        }
 
+                        if(self.data_model.kode_akun=='521213' 
+                            || self.data_model.kode_akun=='524111' 
+                            || self.data_model.kode_akun=='524113' 
+                            || self.data_model.kode_akun=='524114' 
+                            || self.data_model.kode_akun=='524119' 
+                            || self.data_model.kode_akun=='522119'){
+                      
                             var pathSt = document.querySelector('#path_st');
                             if(pathSt.files.length>0)
                             {
@@ -576,16 +605,16 @@
                                     processData: false,
                                     contentType: false,
                                     success : function(data) {
-                                        vm.total_upload += 1;
-                                        vm.data_model.path_st = data.datas;
-                                        vm.sbmt()
+                                        self.total_upload += 1;
+                                        self.data_model.path_st = data.datas;
+                                        self.sbmt()
                                     }
                                 });
                             }
                             else{
-                                vm.total_upload += 1;
-                                vm.data_model.path_st = "";
-                                vm.sbmt()
+                                self.total_upload += 1;
+                                self.data_model.path_st = "";
+                                self.sbmt()
                             }
                         }
 

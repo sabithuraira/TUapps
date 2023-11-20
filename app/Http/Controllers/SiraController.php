@@ -215,17 +215,53 @@ class SiraController extends Controller
 
 
         $model->path_notdin=$request->get('path_notdin');
-        $model->path_undangan=$request->get('path_undangan');
 
-        $model->path_notulen=$request->get('path_notulen');
-        $model->path_daftar_hadir=$request->get('path_daftar_hadir');
-        $model->path_sk=$request->get('path_sk');
-        $model->path_st=$request->get('path_st');
+        if($model->kode_akun=='521211' || $model->kode_akun=='522151' 
+                || $model->kode_akun=='524114' || $model->kode_akun=='524119'){
+            $model->path_undangan=$request->get('path_undangan');
+            if($model->path_undangan!='' && $model->path_undangan!=null) $bukti++;
+        }
+
+
+        if($model->kode_akun=='521211' || $model->kode_akun=='524114' || $model->kode_akun=='524119'){
+            $model->path_notulen=$request->get('path_notulen');
+            if($model->path_notulen!='' && $model->path_notulen!=null) $bukti++;
+        }
+
+
+        if($model->kode_akun=='521211' 
+                || $model->kode_akun=='521213' 
+                || $model->kode_akun=='522151'  
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119'){
+            $model->path_daftar_hadir=$request->get('path_daftar_hadir');
+            if($model->path_daftar_hadir!='' && $model->path_daftar_hadir!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521213' || $model->kode_akun=='522151'){
+            $model->path_sk=$request->get('path_sk');
+            if($model->path_sk!='' && $model->path_sk!=null) $bukti++;
+        }
+
+        
+        if($model->kode_akun=='521213' 
+                || $model->kode_akun=='524111' 
+                || $model->kode_akun=='524113' 
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119' 
+                || $model->kode_akun=='522119'){
+            $model->path_st=$request->get('path_st');
+            if($model->path_st!='' && $model->path_st!=null) $bukti++;
+        }
 
         ///////////
         if($model->kode_akun=='522111' || $model->kode_akun=='522112' || 
             $model->kode_akun=='522113'){
             $model->target_bukti = 3;
+        }
+
+        if($model->kode_akun=='521211'){
+            $model->target_bukti = 6;
         }
         ///////////
 
