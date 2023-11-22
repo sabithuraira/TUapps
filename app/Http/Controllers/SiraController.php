@@ -213,15 +213,13 @@ class SiraController extends Controller
             // $model->path_kuitansi=$request->get('path_kuitansi');
         }
 
-
-        $model->path_notdin=$request->get('path_notdin');
+        // $model->path_notdin=$request->get('path_notdin');
 
         if($model->kode_akun=='521211' || $model->kode_akun=='522151' 
                 || $model->kode_akun=='524114' || $model->kode_akun=='524119'){
             $model->path_undangan=$request->get('path_undangan');
             if($model->path_undangan!='' && $model->path_undangan!=null) $bukti++;
         }
-
 
         if($model->kode_akun=='521211' || $model->kode_akun=='524114' || $model->kode_akun=='524119'){
             $model->path_notulen=$request->get('path_notulen');
@@ -254,6 +252,134 @@ class SiraController extends Controller
             if($model->path_st!='' && $model->path_st!=null) $bukti++;
         }
 
+        if($model->kode_akun=='521213' 
+                || $model->kode_akun=='521811' 
+                || $model->kode_akun=='522141'){
+            $model->path_spk=$request->get('path_spk');
+            if($model->path_spk!='' && $model->path_spk!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521213' 
+                || $model->kode_akun=='522141' 
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119'){
+            $model->path_bast=$request->get('path_bast');
+            if($model->path_bast!='' && $model->path_bast!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521213' || $model->kode_akun=='522151'){
+            $model->path_rekap_belanja=$request->get('path_rekap_belanja');
+            if($model->path_rekap_belanja!='' && $model->path_rekap_belanja!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521213' || $model->kode_akun=='524114' || $model->kode_akun=='524119'){
+            $model->path_laporan=$request->get('path_laporan');
+            if($model->path_laporan!='' && $model->path_laporan!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521213' 
+                || $model->kode_akun=='522151' 
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119'){
+            $model->path_jadwal=$request->get('path_jadwal');
+            if($model->path_jadwal!='' && $model->path_jadwal!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521219' || $model->kode_akun=='524119'){
+            $model->path_drpp=$request->get('path_drpp');
+            if($model->path_drpp!='' && $model->path_drpp!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521219' 
+                || $model->kode_akun=='522141' 
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119'){
+            $model->path_invoice=$request->get('path_invoice');
+            if($model->path_invoice!='' && $model->path_invoice!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521219'){
+            $model->path_resi_pengiriman=$request->get('path_resi_pengiriman');
+            if($model->path_resi_pengiriman!='' && $model->path_resi_pengiriman!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521219' 
+                || $model->kode_akun=='522141'){
+            $model->path_npwp_rekkor=$request->get('path_npwp_rekkor');
+            if($model->path_npwp_rekkor!='' && $model->path_npwp_rekkor!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='521811'){
+            $model->path_tanda_terima=$request->get('path_tanda_terima');
+            if($model->path_tanda_terima!='' && $model->path_tanda_terima!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='522151'){
+            $model->path_cv=$request->get('path_cv');
+            if($model->path_cv!='' && $model->path_cv!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='522151'){
+            $model->path_bahan_paparan=$request->get('path_bahan_paparan');
+            if($model->path_bahan_paparan!='' && $model->path_bahan_paparan!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='522141'){
+            $model->path_ba_pembayaran=$request->get('path_ba_pembayaran');
+            if($model->path_ba_pembayaran!='' && $model->path_ba_pembayaran!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111' 
+                || $model->kode_akun=='524113'  
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='524119'  
+                || $model->kode_akun=='522119'){
+            $model->path_spd_visum=$request->get('path_spd_visum');
+            if($model->path_spd_visum!='' && $model->path_spd_visum!=null) $bukti++;
+
+            $model->path_presensi_uang_makan=$request->get('path_presensi_uang_makan');
+            if($model->path_presensi_uang_makan!='' && $model->path_presensi_uang_makan!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111'){
+            $model->path_rincian_perjadin=$request->get('path_rincian_perjadin');
+            if($model->path_rincian_perjadin!='' && $model->path_rincian_perjadin!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111' || $model->kode_akun=='522119'){
+            $model->path_bukti_transport=$request->get('path_bukti_transport');
+            if($model->path_bukti_transport!='' && $model->path_bukti_transport!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111'){
+            $model->path_bukti_inap=$request->get('path_bukti_inap');
+            if($model->path_bukti_inap!='' && $model->path_bukti_inap!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111' || $model->kode_akun=='524113'){
+            $model->path_lpd=$request->get('path_lpd');
+            if($model->path_lpd!='' && $model->path_lpd!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524111' 
+                || $model->kode_akun=='524113' 
+                || $model->kode_akun=='524114' 
+                || $model->kode_akun=='522119'){
+            $model->path_rekap_perjadin=$request->get('path_rekap_perjadin');
+            if($model->path_rekap_perjadin!='' && $model->path_rekap_perjadin!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524113' 
+                || $model->kode_akun=='524114'){
+            $model->path_sp_kendaraan_dinas=$request->get('path_sp_kendaraan_dinas');
+            if($model->path_sp_kendaraan_dinas!='' && $model->path_sp_kendaraan_dinas!=null) $bukti++;
+        }
+
+        if($model->kode_akun=='524113'){
+            $model->path_sp_daftar_rill=$request->get('path_sp_daftar_rill');
+            if($model->path_sp_daftar_rill!='' && $model->path_sp_daftar_rill!=null) $bukti++;
+        }
+
         ///////////
         if($model->kode_akun=='522111' || $model->kode_akun=='522112' || 
             $model->kode_akun=='522113'){
@@ -262,6 +388,28 @@ class SiraController extends Controller
 
         if($model->kode_akun=='521211'){
             $model->target_bukti = 6;
+        }
+
+        if($model->kode_akun=='521213'){
+            $model->target_bukti = 9;
+        }
+
+        if($model->kode_akun=='521219'){
+            $model->target_bukti = 7;
+        }
+
+        if($model->kode_akun=='521811'){
+            $model->target_bukti = 5;
+        }
+
+        if($model->kode_akun=='522151' || $model->kode_akun=='524113'){
+            $model->target_bukti = 10;
+        }
+
+        if($model->kode_akun=='522141' 
+            || $model->kode_akun=='522119' 
+            || $model->kode_akun=='524114'){
+            $model->target_bukti = 8;
         }
         ///////////
 

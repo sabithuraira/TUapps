@@ -162,8 +162,12 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{ round($data->realisasi_bukti/$data->target_bukti*100,2) }}%
-                                    ({{ $data->realisasi_bukti }} dari {{ $data->target_bukti }}) bukti
+                                        @if($data->target_bukti==0)
+                                            0%
+                                        @else 
+                                            {{ round($data->realisasi_bukti/$data->target_bukti*100,2) }}%
+                                        @endif
+                                        ({{ $data->realisasi_bukti }} dari {{ $data->target_bukti }}) bukti
                                     </td>
                                 </tr>
                             @endforeach
