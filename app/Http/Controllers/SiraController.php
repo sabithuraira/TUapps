@@ -376,8 +376,8 @@ class SiraController extends Controller
         }
 
         if($model->kode_akun=='524113'){
-            $model->path_sp_daftar_rill=$request->get('path_sp_daftar_rill');
-            if($model->path_sp_daftar_rill!='' && $model->path_sp_daftar_rill!=null) $bukti++;
+            $model->path_daftar_rill=$request->get('path_daftar_rill');
+            if($model->path_daftar_rill!='' && $model->path_daftar_rill!=null) $bukti++;
         }
 
         ///////////
@@ -523,7 +523,13 @@ class SiraController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-        $model = \App\PemegangBmn::find($id);
+        $model = \App\SiraAkun::find($id);
+
+        \App\SiraRincian::where('kode_mak', $model->kode_mak)
+                            ->where('kode_akun', $model->kode_akun)->delete();
+        \App\SiraAkunRealisasi::where('kode_mak', $model->kode_mak)
+                            ->where('kode_akun', $model->kode_akun)->delete();
+
         $model->delete();
         return redirect('sira')->with('success','Information has been  deleted');
     }

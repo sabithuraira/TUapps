@@ -12,7 +12,7 @@
                 <th class="text-center">{{ $datas[0]->attributes()['tahun'] }}</th>
                 <th class="text-center">Pagu & Realisasi</th>
                 <th class="text-center">Detail & Bukti Administrasi</th>
-                <th class="text-center" colspan="1">Action</th>
+                <th class="text-center" colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +35,13 @@
                         <a href="{{action('SiraController@show', $data['id'])}}"><i class="fa fa-search text-info"></i></a>
                     </td>
                     <td class="text-center"><a href="{{action('SiraController@edit_akun', $data['id'])}}"><i class="icon-pencil text-info"></i></a></td>
+                    <td class="text-center">
+                        <form action="{{action('SiraController@destroy', $data['id'])}}" method="post">
+                            @csrf
+                            <input name="_method" type="hidden" value="DELETE">
+                            <button type="submit"><i class="fa fa-trash text-danger"></i></button>
+                        </form>
+                    </td>
                     
                 </tr>
                 @endforeach
