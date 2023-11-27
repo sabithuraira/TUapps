@@ -132,7 +132,7 @@
                           show: true, //hide legend
                       },
                       padding: {
-                          bottom: 0,
+                          bottom: 40,
                           top: 0
                       },
                   });

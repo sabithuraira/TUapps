@@ -563,7 +563,7 @@
                     })
 
 
-                    // var url =  "https://st23.bpssumsel.com/api/file/";
+                    // var my_url =  "https://st23.bpssumsel.com/api/file/";
                     var my_url = "http://localhost/mon_st2023/public/api/file/";
 
                     if(self.data_model.kode_mak.length==0) err_message.push("Kode MAK tidak boleh kosong");

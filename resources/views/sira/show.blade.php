@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="row clearfix">
+<div class="row clearfix" id="app_vue">
     <div class="col-lg-12 col-md-12 left-box">
         <div class="card">
 
@@ -56,6 +56,9 @@
                                 <tr>
                                     <td>
                                         <a href="{{action('SiraController@edit_realisasi', $data_r['id'])}}"><i class="icon-pencil text-info"></i></a>
+                                        &nbsp;
+                                        <a data-id="{{ $data_r['id'] }}"  v-on:click="delRealisasi"><i class="fa fa-trash text-danger"></i>&nbsp </a>
+                                        &nbsp
                                         &nbsp;&nbsp; {{ $data_r->listFungsi[$data_r->kode_fungsi] }}
                                     </td>
                                     <td colspan="2">{{ $data_r->keterangan }}</td>
@@ -182,9 +185,37 @@
 @endsection
 
 @section('css')
-        <meta name="_token" content="{{csrf_token()}}" />
+  <meta name="_token" content="{{csrf_token()}}" />
+  <meta name="csrf-token" content="@csrf">
 @endsection
 
 @section('scripts')
+    <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+    <script>
+        var vm = new Vue({  
+            el: "#app_vue",
+            data:  {},
+            methods: {
+                delRealisasi: function (event) {
+                    var self = this;
+                    if (event) {
+                        let idnya = event.currentTarget.getAttribute('data-id');
+                        if (confirm('anda yakin mau menghapus data ini?')) {
+                            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
 
+                            $.ajax({
+                                url :  "{{ url('/sira') }}" + "/" + idnya + "/destroy_rincian",
+                                method : 'post',
+                                dataType: 'json',
+                            }).done(function (data) {
+                                window.location.reload(false); 
+                            }).fail(function (msg) {
+                                $('#wait_progres').modal('hide');
+                            });
+                        }
+                    }
+                },
+            }
+        });
+    </script>
 @endsection

@@ -533,4 +533,15 @@ class SiraController extends Controller
         $model->delete();
         return redirect('sira')->with('success','Information has been  deleted');
     }
+
+    public function destroy_rincian($id){
+        $model = \App\SiraAkunRealisasi::find($id);
+
+        $model_akun = \App\SiraAkun::where('kode_akun', $model->kode_akun)
+                        ->where('kode_mak', $model->kode_mak)->first();
+
+        $model->delete();
+        // return redirect('sira/'.$model_akun->id.'/show')->with('success','Information has been  deleted');
+        return response()->json(['status'=>'success', 'data'=>'ok']);
+    }
 }
