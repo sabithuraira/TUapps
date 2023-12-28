@@ -86,6 +86,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pok/download/{jenis}/{file_name}', 'PokController@download');
     Route::delete('pok/{id}/destroy_revisi', 'PokController@destroy_revisi');
     Route::post('pok/{id}/approve_revisi', 'PokController@approve_revisi');
+
+    Route::resource('tim', 'TimController')->except('show');
+    Route::get('tim/{id}/progres', 'TimController@progres');
 });
 
 Route::group(['middleware' => ['role:superadmin']], function () {
