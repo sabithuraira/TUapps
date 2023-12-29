@@ -129,6 +129,14 @@
                     </ul>
                 </li>
 
+                <li class="{{ request()->is('tim*') ? 'active' : '' }}">
+                    <a href="#Jadwal" class="has-arrow"><i class="icon-diamond"></i> <span>Manajemen Tim dan Pekerjaan</span></a>
+                    <ul>
+                        <li class="{{ request()->is('tim') ? 'active' : '' }}"><a
+                                href="{{ url('tim') }}">Tim</a></li>
+                    </ul>
+                </li>
+
                 @if (Auth::user()->kdkab == '00')
                     <li class="{{ request()->is('pok*') ? 'active' : '' }}">
                         <a href="#Jadwal" class="has-arrow"><i class="icon-diamond"></i> <span>Anggaran</span></a>
