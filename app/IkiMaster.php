@@ -16,6 +16,11 @@ class IkiMaster extends Model
         return $this->hasMany(IkiBukti::class, 'id_iki', 'id');
     }
 
+    public function sub_iki(): HasMany
+    {
+        return $this->hasMany(IkiMaster::class, 'referensi_sumber', 'id');
+    }
+
     public static function getListReferensiJenisAttribute()
     {
         return [

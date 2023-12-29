@@ -14,7 +14,7 @@ class CreateIkiMasterTable extends Migration
     public function up()
     {
         Schema::create('iki_master', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('ik');
             $table->integer('id_user');
             $table->string('satuan');
@@ -28,8 +28,9 @@ class CreateIkiMasterTable extends Migration
             $table->timestamps();
         });
         Schema::create('iki_bukti', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('id_iki');
+            $table->integer('id_iki_referensi')->nullable();
             $table->integer('id_user');
             $table->string('jenis_bukti_dukung');
             $table->string('link_bukti_dukung')->nullable();

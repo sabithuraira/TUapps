@@ -24,12 +24,11 @@
 
             <div class="card">
                 <div class="body">
-                    @if ($auth->id == $user)
+                    @if ($auth->hasanyrole('kepegawaian|superadmin'))
                         <a href="#modal_tambah_iki" class="btn btn-info" data-toggle="modal"
                             data-target="#modal_tambah_iki">
                             Tambah
                         </a>
-                        {{-- <a href="{{ action('IkiMasterController@create') }}" class="btn btn-info">Tambah</a> --}}
                     @endif
                     <br /><br />
                     <form action="{{ url('iki_pegawai') }}" method="get">
@@ -41,7 +40,7 @@
                                     <option value="">Pilih Pegawai</option>
                                     @foreach ($user_list as $usr)
                                         <option value="{{ $usr->id }}"
-                                            @if ($user == $usr->id) selected @endif>
+                                            @if ($request->user == $usr->id) selected @endif>
                                             {{ $usr->name }}</option>
                                     @endforeach
                                 </select>
@@ -92,18 +91,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {{-- {{ $datas }} --}}
                                     @foreach ($datas as $i => $dt)
                                         @if (sizeof($dt->ikibukti) < 1)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
-                                                <td>{{ $dt->ik }} </td>
+                                                <td style="max-width: 200px; word-wrap: break-word; white-space:normal">
+                                                    {{ $dt->ik }} </td>
                                                 <td>{{ $dt->satuan }}</td>
                                                 <td>{{ $dt->target }}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                @if ($dt->bukti_bawahan)
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+
                                                 <td>
                                                     <a class="btn btn-info" href="#modal_tambah_bukti" data-toggle="modal"
                                                         data-target="#modal_tambah_bukti" data-id_iki="{{ $dt->id }}"
@@ -130,34 +140,37 @@
                                         @elseif (sizeof($dt->ikibukti) >= 1)
                                             <tr>
                                                 <td rowspan="{{ count($dt->ikibukti) }}">{{ ++$i }}</td>
-                                                <td rowspan="{{ count($dt->ikibukti) }}">{{ $dt->ik }} </td>
+                                                <td style="max-width: 200px; word-wrap: break-word; white-space:normal"
+                                                    rowspan="{{ count($dt->ikibukti) }}">{{ $dt->ik }} </td>
                                                 <td rowspan="{{ count($dt->ikibukti) }}">{{ $dt->satuan }}</td>
                                                 <td rowspan="{{ count($dt->ikibukti) }}">{{ $dt->target }}</td>
                                                 <td>1</td>
                                                 <td>{{ $dt->ikibukti[0]->jenis_bukti_dukung }}</td>
                                                 <td>{{ $model->namaBulan[$dt->ikibukti[0]->deadline - 1] }}</td>
-                                                <td style="max-width: 250px; word-wrap: break-word; white-space:normal">
+                                                <td style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                     <a href="{{ $dt->ikibukti[0]->link_bukti_dukung }}"
                                                         target="_blank">{{ $dt->ikibukti[0]->link_bukti_dukung }}</a>
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-warning" href="#modal_edit_bukti" data-toggle="modal"
-                                                        data-target="#modal_edit_bukti"
-                                                        data-id_bukti="{{ $dt->ikibukti[0]->id }}"
-                                                        data-jenis_bukti_dukung="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
-                                                        data-deadline="{{ $dt->ikibukti[0]->deadline }}"
-                                                        data-link_bukti_dukung="{{ $dt->ikibukti[0]->link_bukti_dukung }}"
-                                                        @click="btn_edit_bukti($event)">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                    <a class="btn btn-danger" href="#modal_hapus_bukti"
-                                                        data-toggle="modal" data-target="#modal_hapus_bukti"
-                                                        data-id_bukti="{{ $dt->ikibukti[0]->id }}"
-                                                        data-ik="{{ $dt->ik }}"
-                                                        data-jenis_bukti="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
-                                                        @click="btn_hapus_bukti($event)">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
+                                                    @if ($request->user == $dt->ikibukti[0]->id_user)
+                                                        <a class="btn btn-warning" href="#modal_edit_bukti"
+                                                            data-toggle="modal" data-target="#modal_edit_bukti"
+                                                            data-id_bukti="{{ $dt->ikibukti[0]->id }}"
+                                                            data-jenis_bukti_dukung="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
+                                                            data-deadline="{{ $dt->ikibukti[0]->deadline }}"
+                                                            data-link_bukti_dukung="{{ $dt->ikibukti[0]->link_bukti_dukung }}"
+                                                            @click="btn_edit_bukti($event)">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger" href="#modal_hapus_bukti"
+                                                            data-toggle="modal" data-target="#modal_hapus_bukti"
+                                                            data-id_bukti="{{ $dt->ikibukti[0]->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            data-jenis_bukti="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
+                                                            @click="btn_hapus_bukti($event)">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td rowspan="{{ count($dt->ikibukti) }}">
                                                     <a class="btn btn-info" href="#modal_tambah_bukti"
@@ -191,28 +204,30 @@
                                                     <td>{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}</td>
                                                     <td>{{ $model->namaBulan[$dt->ikibukti[$f]->deadline - 1] }}</td>
                                                     <td
-                                                        style="max-width: 250px; word-wrap: break-word; white-space:normal">
+                                                        style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                         <a href="{{ $dt->ikibukti[$f]->link_bukti_dukung }}"
                                                             target="_blank">{{ $dt->ikibukti[$f]->link_bukti_dukung }}</a>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-warning" href="#modal_edit_bukti"
-                                                            data-toggle="modal" data-target="#modal_edit_bukti"
-                                                            data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
-                                                            data-jenis_bukti_dukung="{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}"
-                                                            data-deadline="{{ $dt->ikibukti[$f]->deadline }}"
-                                                            data-link_bukti_dukung="{{ $dt->ikibukti[$f]->link_bukti_dukung }}"
-                                                            @click="btn_edit_bukti($event)">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </a>
-                                                        <a class="btn btn-danger" href="#modal_hapus_bukti"
-                                                            data-toggle="modal" data-target="#modal_hapus_bukti"
-                                                            data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
-                                                            data-ik="{{ $dt->ik }}"
-                                                            data-jenis_bukti="{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}"
-                                                            @click="btn_hapus_bukti($event)">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
+                                                        @if ($request->user == $dt->ikibukti[$f]->id_user)
+                                                            <a class="btn btn-warning" href="#modal_edit_bukti"
+                                                                data-toggle="modal" data-target="#modal_edit_bukti"
+                                                                data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
+                                                                data-jenis_bukti_dukung="{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}"
+                                                                data-deadline="{{ $dt->ikibukti[$f]->deadline }}"
+                                                                data-link_bukti_dukung="{{ $dt->ikibukti[$f]->link_bukti_dukung }}"
+                                                                @click="btn_edit_bukti($event)">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger" href="#modal_hapus_bukti"
+                                                                data-toggle="modal" data-target="#modal_hapus_bukti"
+                                                                data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
+                                                                data-ik="{{ $dt->ik }}"
+                                                                data-jenis_bukti="{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}"
+                                                                @click="btn_hapus_bukti($event)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endfor
@@ -235,6 +250,8 @@
                     <div class="modal-body">
                         <form id="form_tambah_iki" action="{{ url('iki_pegawai') }}" method="POST">
                             @csrf
+                            <input type="text" name="id_user" id="id_user_tambah_iki" value="{{ $request->user }}"
+                                readonly hidden required>
                             <div class="form-group">
                                 <label>Nama IK</label>
                                 <input type="text" name="ik" class="form-control" required>
@@ -291,7 +308,7 @@
                                     class="form-control show-tick ms search-select">
                                     <option value="">Tidak ada referensi</option>
                                     @foreach ($iki_atasan as $iki_ats)
-                                        <option value="{{ $iki_ats }}">{{ $iki_ats }}</option>
+                                        <option value="{{ $iki_ats->id }}">{{ $iki_ats->ik }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -397,6 +414,8 @@
                     <div class="modal-body">
                         <form id="form_tambah_bukti" action="{{ url('iki_pegawai_bukti') }}" method="POST">
                             @csrf
+                            <input type="text" name="id_user" id="id_user_tambah_bukti" value="{{ $request->user }}"
+                                readonly hidden required>
                             <input type="text" name="id_iki" id="id_iki_tambah_bukti" readonly required hidden>
                             <div class="form-group">
                                 <label>Jenis Bukti Dukung</label>
@@ -509,6 +528,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="modal_hapus_bukti" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
