@@ -122,7 +122,7 @@
                                                     </a>
                                                     <a class="btn btn-danger" href="#modal_hapus_iki" data-toggle="modal"
                                                         data-target="#modal_hapus_iki" data-id_iki="{{ $dt->id }}"
-                                                        @click="btn_hapus_iki($event)">
+                                                        data-ik="{{ $dt->ik }}" @click="btn_hapus_iki($event)">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -150,9 +150,14 @@
                                                         @click="btn_edit_bukti($event)">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <button class="btn btn-danger">
+                                                    <a class="btn btn-danger" href="#modal_hapus_bukti"
+                                                        data-toggle="modal" data-target="#modal_hapus_bukti"
+                                                        data-id_bukti="{{ $dt->ikibukti[0]->id }}"
+                                                        data-ik="{{ $dt->ik }}"
+                                                        data-jenis_bukti="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
+                                                        @click="btn_hapus_bukti($event)">
                                                         <i class="fa fa-trash"></i>
-                                                    </button>
+                                                    </a>
                                                 </td>
                                                 <td rowspan="{{ count($dt->ikibukti) }}">
                                                     <a class="btn btn-info" href="#modal_tambah_bukti"
@@ -175,7 +180,7 @@
                                                     </a>
                                                     <a class="btn btn-danger" href="#modal_hapus_iki" data-toggle="modal"
                                                         data-target="#modal_hapus_iki" data-id_iki="{{ $dt->id }}"
-                                                        @click="btn_hapus_iki($event)">
+                                                        data-ik="{{ $dt->ik }}" @click="btn_hapus_iki($event)">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -200,9 +205,14 @@
                                                             @click="btn_edit_bukti($event)">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
-                                                        <button class="btn btn-danger">
+                                                        <a class="btn btn-danger" href="#modal_hapus_bukti"
+                                                            data-toggle="modal" data-target="#modal_hapus_bukti"
+                                                            data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            data-jenis_bukti="{{ $dt->ikibukti[$f]->jenis_bukti_dukung }}"
+                                                            @click="btn_hapus_bukti($event)">
                                                             <i class="fa fa-trash"></i>
-                                                        </button>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endfor
@@ -387,8 +397,7 @@
                     <div class="modal-body">
                         <form id="form_tambah_bukti" action="{{ url('iki_pegawai_bukti') }}" method="POST">
                             @csrf
-                            <input type="text" name="id_iki" id="id_iki_tambah_bukti" v-model="id_iki_tambah_bukti"
-                                disabled hidden required>
+                            <input type="text" name="id_iki" id="id_iki_tambah_bukti" readonly required hidden>
                             <div class="form-group">
                                 <label>Jenis Bukti Dukung</label>
                                 <input type="text" name="jenis_bukti_dukung" class="form-control" required>
@@ -436,8 +445,7 @@
                         <form id="form_edit_bukti" method="POST">
                             @csrf
                             @method('put')
-                            <input type="text" name="id_bukti" id="id_bukti_edit_bukti" v-model="id_bukti_edit_bukti"
-                                disabled hidden required>
+                            <input type="text" name="id_bukti" id="id_bukti_edit_bukti" readonly hidden required>
                             <div class="form-group">
                                 <label>Jenis Bukti Dukung</label>
                                 <input type="text" name="jenis_bukti_dukung" id="jenis_bukti_dukung_edit_bukti"
@@ -487,23 +495,47 @@
                             @csrf
                             @method('delete')
                             <div class="form-group">
-                                <i>Apakah Anda Yakin Ingin Menghapus IKI <b id="hapus_iki_text">a</b> ?</i>
-                                <input type="text" name="jenis_bukti_dukung" id="jenis_bukti_dukung_edit_bukti"
-                                    class="form-control" hidden>
-
+                                <i>Apakah Anda Yakin Ingin Menghapus IKI <b id="text_hapus_iki">a</b> ?</i>
+                                <input type="text" name="id_iki" id="id_iki_hapus_iki" class="form-control" hidden>
                                 <br>
                                 <i>Menghapus Iki berarti menghapus semua bukti dukung yang terkait</i>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">Hapus</button>
+                        <button type="submit" class="btn btn-danger" form="form_hapus_iki">Hapus</button>
                         <button type="button" class="btn" data-dismiss="modal">Batal</button>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="modal_hapus_bukti" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="title" id="hapus_bukti">Hapus Bukti IKI</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form_hapus_bukti" method="POST">
+                            @csrf
+                            @method('delete')
+                            <div class="form-group">
+                                <i>Apakah Anda Yakin Ingin Menghapus Bukti <b id="bukti_hapus_bukti">bukti</b> dari IKI <b
+                                        id="ik_hapus_bukti">iki</b> ?</i>
+                                <input type="text" name="id_bukti" id="id_bukti_hapus_bukti" class="form-control"
+                                    hidden>
+                                <br>
+                                <i>Menghapus Iki berarti menghapus semua bukti dukung yang terkait</i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" form="form_hapus_bukti">Hapus</button>
+                        <button type="button" class="btn" data-dismiss="modal">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -515,12 +547,10 @@
         var vm = new Vue({
             el: "#app_vue",
             data: {
-                id_iki_tambah_bukti: '',
                 id_edit_iki: '',
                 ik_edit_iki: '',
                 satuan_edit_iki: '',
                 target_edit_iki: '',
-                id_bukti_edit_bukti: '',
             },
             methods: {
                 btn_edit_iki: function(event) {
@@ -541,6 +571,7 @@
                 },
 
                 btn_tambah_bukti: function(event) {
+                    console.log(event.currentTarget.getAttribute('data-id_iki'))
                     document.getElementById('id_iki_tambah_bukti').value = event.currentTarget
                         .getAttribute('data-id_iki');
                 },
@@ -560,8 +591,24 @@
                         .pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
                 },
 
-                btn_hapus_ini: function(event) {
+                btn_hapus_iki: function(event) {
+                    document.getElementById('id_iki_hapus_iki').value = event.currentTarget.getAttribute(
+                        'data-id_iki');
+                    document.getElementById('text_hapus_iki').innerHTML = event.currentTarget.getAttribute(
+                        'data-ik');
+                    document.getElementById('form_hapus_iki').action = window.location.origin + window.location
+                        .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
+                },
 
+                btn_hapus_bukti: function(event) {
+                    document.getElementById('id_bukti_hapus_bukti').value = event.currentTarget.getAttribute(
+                        'data-id_bukti');
+                    document.getElementById('bukti_hapus_bukti').innerHTML = event.currentTarget.getAttribute(
+                        'data-jenis_bukti');
+                    document.getElementById('ik_hapus_bukti').innerHTML = event.currentTarget.getAttribute(
+                        'data-ik');
+                    document.getElementById('form_hapus_bukti').action = window.location.origin + window
+                        .location.pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
                 }
 
             }

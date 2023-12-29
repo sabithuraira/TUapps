@@ -124,4 +124,34 @@ class IkiMasterController extends Controller
             return redirect()->back()->with('error', 'Gagal Menyimpan Coba Lagi');
         }
     }
+
+
+    public function destroy($id)
+    {
+        $auth = Auth::user();
+        $model = IkiMaster::find($id);
+        if ($model) {
+            $bukti = IkiBukti::where('id_iki', $id)->get();
+            if ($bukti) {
+                $bukti->each->delete();
+            }
+            $model->delete();
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menghapus coba lagi');
+        }
+    }
+
+    public function destroy_bukti($id)
+    {
+        $auth = Auth::user();
+        $model = IkiBukti::find($id);
+        if ($model) {
+
+            $model->delete();
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menghapus coba lagi');
+        }
+    }
 }

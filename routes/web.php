@@ -238,6 +238,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('iki_pegawai', 'IkiMasterController');
     Route::post('iki_pegawai_bukti', [IkiMasterController::class, 'store_bukti']);
     Route::put('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'update_bukti']);
+    Route::delete('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'destroy_bukti']);
 
 
     //PEGAWAI ANDA
