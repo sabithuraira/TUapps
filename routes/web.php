@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\IkiMasterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -229,6 +230,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('iki', 'IkiController')->except(['show']);
     Route::post('iki/store_master', 'IkiController@store_master');
     Route::get('iki/list_json', 'IkiController@list_json');
+    Route::resource('iki_pegawai', 'IkiMasterController');
+    Route::post('iki_pegawai_bukti', [IkiMasterController::class, 'store_bukti']);
+    Route::put('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'update_bukti']);
+
 
     //PEGAWAI ANDA
     Route::resource('pegawai_anda', 'PegawaiAndaController')->except(['show']);

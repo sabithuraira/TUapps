@@ -124,6 +124,8 @@
                         @endif
                         <li class="{{ request()->is('iki*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola
                                 IKI</a></li>
+                        <li class="{{ request()->is('iki_pegawai*') ? 'active' : '' }}"><a
+                                href="{{ url('iki_pegawai') }}">IKI Pegawai</a></li>
                     </ul>
                 </li>
 
