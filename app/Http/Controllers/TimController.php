@@ -209,11 +209,10 @@ class TimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function detail($id)
-    {
+    public function detail($id){
         $real_id = Crypt::decrypt($id);
-        $model = \App\Tim::find($real_id);
-        $participant = \App\TimParticipant::where('tim_id', '=', $real_id)->get();
+        $model = \App\TimMaster::find($real_id);
+        $participant = \App\TimAnggota::where('id_tim', '=', $real_id)->get();
         
         return response()->json(['form'=>$model, 'participant'=> $participant]);
     }
@@ -235,15 +234,13 @@ class TimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $real_id = Crypt::decrypt($id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
-        $model = \App\Tim::find($real_id);
-        $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
+        $model = \App\TimMaster::find($real_id);
         return view('tim.create', compact(   
-            'list_pegawai', 'model', 'id', 'list_fungsi'
+            'list_pegawai', 'model', 'id'
         ));
     }
 
@@ -347,7 +344,7 @@ class TimController extends Controller
 
     public function destroy_participant($id)
     {
-        $model = \App\TimParticipant::find($id);
+        $model = \App\TimAnggota::find($id);
         $model->delete();
         return response()->json(['success'=>'Sukses']);
     }

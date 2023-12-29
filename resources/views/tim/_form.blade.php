@@ -203,14 +203,11 @@
                         if(data.form!=null){
                             self.form = data.form;
 
-                            $('#tanggal_mulai').val(self.form.tanggal_mulai);
-                            $('#tanggal_selesai').val(self.form.tanggal_selesai);
-
                             self.participant = data.participant;
-
+                            console.log(data.participant)
                             self.participant_old = [];
                             for(var i=0;i<self.participant.length;i++){
-                                self.participant_old.push(self.participant[i].user_nip_lama);
+                                self.participant_old.push(self.participant[i].nik_anggota);
                             }
 
                             $("#participant_select").multiSelect('select', self.participant_old);
@@ -224,20 +221,8 @@
             }
         });
         
-        $('#tanggal_mulai').change(function() {
-            vm.form.tanggal_mulai = this.value;
-        });
-        
-        $('#tanggal_selesai').change(function() {
-            vm.form.tanggal_selesai = this.value;
-        });
 
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-                // startDate: 'd',
-                format: 'yyyy-mm-dd',
-            });
-
             if(vm.id!=''){
                 vm.loadData();
             }
@@ -245,7 +230,7 @@
         
         $('#participant_select').multiSelect({
             afterSelect: function(values){
-                if (vm.participant.findIndex(x => x.user_nip_lama === values[0]) === -1) {
+                if (vm.participant.findIndex(x => x.nik_anggota === values[0]) === -1) {
                     vm.addParticipant(values[0])
                 }
             },
@@ -254,11 +239,11 @@
                     vm.deleteTempParticipant(values[0])
                 }
                 else{
-                    var cur_index = vm.participant.findIndex(x => x.user_nip_lama === values[0]);
+                    var cur_index = vm.participant.findIndex(x => x.nik_anggota === values[0]);
                     
                     if (cur_index != -1) {
                         var cur_data = vm.participant[cur_index]
-                        var confirm_var = confirm("Apakah anda yakin ingin menghapus tim '"+ cur_data.user_nama +"'");
+                        var confirm_var = confirm("Apakah anda yakin ingin menghapus tim '"+ cur_data.nama_anggota +"'");
                         if (confirm_var == true) 
                             vm.deleteData(cur_data.id)
                         else

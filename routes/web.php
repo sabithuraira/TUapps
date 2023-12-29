@@ -89,6 +89,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('tim', 'TimController')->except('show');
     Route::get('tim/{id}/progres', 'TimController@progres');
+    Route::get('tim/{id}/detail', 'TimController@detail');
+    Route::post('tim/{id}/destroy_participant', 'TimController@destroy_participant');
 });
 
 Route::group(['middleware' => ['role:superadmin']], function () {
