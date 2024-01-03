@@ -28,7 +28,10 @@ class IkiMasterController extends Controller
             $tim_user = TimAnggota::where('nik_anggota', $request->user)->join('master_tim', 'master_tim.id', '=', 'anggota_tim.id_tim')->get();
             if (count($tim_user) > 0) {
                 //list iki atasan yang berada pada tim yang sama
-                $iki_atasan = IkiMaster::WhereIn('nip', $tim_user->pluck('nik_ketua_tim')->toarray())->whereIn('id_tim', $tim_user->pluck('id_tim')->toarray())->get();
+                $iki_atasan = IkiMaster::WhereIn('nip', $tim_user->pluck('nik_ketua_tim')->toarray())
+                    ->whereIn('id_tim', $tim_user->pluck('id_tim')->toarray())
+                    ->where('nip', '!=', $request->user)
+                    ->get();
             }
         }
         $datas = IkiMaster::where('nip', $user)
@@ -57,6 +60,7 @@ class IkiMasterController extends Controller
         $model = new IkiMaster();
         $model->nip = $request->nip;
         $model->ik = $request->ik;
+        $model->id_tim = $request->id_tim;
         $model->satuan = $request->satuan;
         $model->target = $request->target;
         $model->tahun = $request->tahun;
@@ -75,6 +79,7 @@ class IkiMasterController extends Controller
         $model = IkiMaster::find($id);
         if ($model) {
             $model->ik = $request->ik;
+            $model->id_tim = $request->id_tim;
             $model->satuan = $request->satuan;
             $model->target = $request->target;
             $model->tahun = $request->tahun;
@@ -97,6 +102,7 @@ class IkiMasterController extends Controller
         $model->id_iki = $request->id_iki;
         $model->id_iki_referensi = $iki->referensi_sumber;
         $model->nip = $iki->nip;
+        $model->id_tim = $iki->id_tim;
         $model->jenis_bukti_dukung = $request->jenis_bukti_dukung;
         $model->link_bukti_dukung = $request->link_bukti_dukung;
         $model->deadline = $request->deadline;
