@@ -89,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pok/{id}/approve_revisi', 'PokController@approve_revisi');
 
     Route::resource('tim', 'TimController')->except('show');
-    Route::get('tim/{id}/progres', 'TimController@progres');
+    Route::get('tim/{id}/detail_iki', 'TimController@detail_iki');
     Route::get('tim/{id}/detail', 'TimController@detail');
     Route::post('tim/{id}/destroy_participant', 'TimController@destroy_participant');
 });
