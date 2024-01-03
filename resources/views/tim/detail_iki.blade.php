@@ -37,21 +37,38 @@
 
                         <tbody>
                             @foreach($participant as $key=>$value)
-                                <tr>
-                                    <td>
-                                        {{ $key+1 }}
-                                    </td>
-                                    <td>{{ $value->nik_anggota }} - {{ $value->nama_anggota }}</td>
-                                    
-                                    <td>
-                                    </td>
+                                @php 
+                                    $all_iki = App\IkiMaster::where('nip', $value->nik_anggota)
+                                                    ->where('id_tim', $value->id_tim)->get();
+                                    $total_iki = count($all_iki);
+                                @endphp
+                                @if($total_iki==0)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $value->nik_anggota }} - {{ $value->nama_anggota }}</td>
+                                        <td colspan="3" class="text-center">-</td>
+                                    </tr>
+                                @else 
+                                    <tr>
+                                        <td rowspan="{{ $total_iki }}">{{ $key+1 }}</td>
+                                        <td rowspan="{{ $total_iki }}">{{ $value->nik_anggota }} - {{ $value->nama_anggota }}</td>
+                                        <td>{{ $all_iki[0]->ik }}</td>
+                                        <td>{{ $all_iki[0]->target }} {{ $all_iki[0]->satuan }}</td>
+                                        <td class="text-right">{{ config('app.months')[$all_iki[0]->bulan] }} {{ $model->tahun }}</td>
+                                    </tr>
 
-                                    <td>
-                                    </td>
-
-                                    <td>
-                                    </td>
-                                </tr>
+                                    @if($total_iki>1)
+                                        @foreach($all_iki as $key2=>$value2)
+                                            @if($key2 > 0)  
+                                                <tr>
+                                                    <td>{{ $value2->ik }}</td>
+                                                    <td>{{ $value2->target }} {{ $value2->satuan }}</td>
+                                                    <td class="text-right">{{ config('app.months')[$value2->bulan] }} {{ $model->tahun }}</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                @endif 
                             @endforeach
                         </tbody>
                     </table>

@@ -88,7 +88,7 @@
                 </li>
 
                 <li
-                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || request()->is('skp*') || request()->is('iki*') ? 'active' : '' }}">
+                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || request()->is('skp*') || request()->is('iki/*') ? 'active' : '' }}">
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Pengukuran Kinerja</span></a>
                     <ul>
                         <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{ url('ckp') }}">CKP</a>
@@ -122,18 +122,18 @@
                             <li class="{{ request()->is('ckp/rekap_ckp*') ? 'active' : '' }}"><a
                                     href="{{ url('ckp/rekap_ckp') }}">Rinciap CKP Pegawai</a></li>
                         @endif
-                        <li class="{{ request()->is('iki*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola
+                        <li class="{{ request()->is('iki/*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola
                                 IKI</a></li>
-                        <li class="{{ request()->is('iki_pegawai*') ? 'active' : '' }}"><a
-                                href="{{ url('iki_pegawai') }}">IKI Pegawai</a></li>
                     </ul>
                 </li>
 
-                <li class="{{ request()->is('tim*') ? 'active' : '' }}">
-                    <a href="#Jadwal" class="has-arrow"><i class="icon-diamond"></i> <span>Manajemen Tim dan Pekerjaan</span></a>
+                <li class="{{ request()->is('tim*') || request()->is('iki_pegawai*') ? 'active' : '' }}">
+                    <a href="#Jadwal" class="has-arrow"><i class="icon-users"></i> <span>Manajemen Tim dan Pekerjaan</span></a>
                     <ul>
                         <li class="{{ request()->is('tim') ? 'active' : '' }}"><a
                                 href="{{ url('tim') }}">Tim</a></li>
+                        <li class="{{ request()->is('iki_pegawai*') ? 'active' : '' }}"><a
+                                href="{{ url('iki_pegawai') }}">Pengelolaan IKI Pegawai</a></li>
                     </ul>
                 </li>
 
