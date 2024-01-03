@@ -35,9 +35,9 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a href="{{ action('TimController@progres', Crypt::encrypt($data['id']))}}">
+                            <a href="{{ action('TimController@detail_iki', Crypt::encrypt($data['id']))}}">
                                 <i class="icon-speedometer text-primary"></i> 
-                                <p class='text-primary small'>Detail</p>
+                                <p class='text-primary small'>Detail IKI</p>
                             </a>
                         </td>
                     </tr>

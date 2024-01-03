@@ -21,7 +21,7 @@ class CreateMasterTimTable extends Migration
             $table->char("kode_kab",2);
             $table->integer("tahun");
             $table->string("nama_ketua_tim")->nullable();
-            $table->string("nik_ketua_tim")->nullabel();
+            $table->string("nik_ketua_tim")->nullabel;
             $table->integer("jumlah_anggota")->default(0);
 
             $table->integer("created_by");

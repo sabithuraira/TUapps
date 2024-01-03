@@ -142,7 +142,7 @@ class TimController extends Controller
     }
 
     public function anda(Request $request){
-        $list_tim = \App\TimParticipant::where('user_id', '=', Auth::id())->paginate();
+        $list_tim = \App\TimAnggota::where('user_id', '=', Auth::id())->paginate();
         
         return view('tim.anda', compact(
             'list_tim'
@@ -151,7 +151,7 @@ class TimController extends Controller
 
     public function storeLapor(Request $request){
         if($request->id!=0){
-            $model = \App\TimParticipant::find($request->id);
+            $model = \App\TimAnggota::find($request->id);
             if($model!=null){
                 $model->jumlah_lapor = $request->jumlah_lapor;
                 $model->tanggal_last_lapor = $request->tanggal_last_lapor;
@@ -197,7 +197,7 @@ class TimController extends Controller
         if(strlen($request->get('year'))>0)
             $year = $request->get('year');
             
-        $model = new \App\Tim;
+        $model = new \App\TimMaster;
         $datas = $model->Rekap($month, $year, $user_id);
         
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
@@ -217,11 +217,23 @@ class TimController extends Controller
         return response()->json(['form'=>$model, 'participant'=> $participant]);
     }
 
+    public function detail_iki($id){
+        $real_id = Crypt::decrypt($id);
+        // $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
+        //     ->where('kdkab', '=', Auth::user()->kdkab)->get();
+        $model = \App\TimMaster::find($real_id);
+        $participant = \App\TimAnggota::where('id_tim', '=', $real_id)->get();
+
+        return view('tim.detail_iki', compact(   
+            'participant', 'model', 'id'
+        ));
+    }
+
     public function show($id){
         $real_id = Crypt::decrypt($id);
         $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
             ->where('kdkab', '=', Auth::user()->kdkab)->get();
-        $model = \App\Tim::find($real_id);
+        $model = \App\TimMaster::find($real_id);
         $list_fungsi = \App\UnitKerja4::where('is_kabupaten', '=', 1)->get();
         return view('tim.show', compact(   
             'list_pegawai', 'model', 'id', 'list_fungsi'
@@ -244,16 +256,6 @@ class TimController extends Controller
         ));
     }
 
-    public function progres($id){
-        $real_id = Crypt::decrypt($id);
-        $list_pegawai = \App\UserModel::where('kdprop', '=', Auth::user()->kdprop)
-            ->where('kdkab', '=', Auth::user()->kdkab)->get();
-        $model = \App\Tim::find($real_id);
-        return view('tim.progres', compact(   
-            'list_pegawai', 'model', 'id'
-        ));
-    }
-
     public function store_progres(Request $request, $id){
         $real_id = Crypt::decrypt($id);
         $model = \App\Tim::find($real_id);
@@ -265,7 +267,7 @@ class TimController extends Controller
             $is_complete = 1;
             foreach($participant as $key=>$value){
                 if($value['id']!=0 || $value['id']!=''){
-                    $model_participant = \App\TimParticipant::find($value['id']);
+                    $model_participant = \App\TimAnggota::find($value['id']);
                     if($model_participant!=null){
                         $model_participant->jumlah_selesai =  $value['jumlah_selesai'];
                         if(strlen($value['tanggal_last_progress'])>0)
@@ -345,7 +347,9 @@ class TimController extends Controller
     public function destroy_participant($id)
     {
         $model = \App\TimAnggota::find($id);
-        $model->delete();
+        // $model->delete();
+        $model->is_active = 0;
+        $model->save();
         return response()->json(['success'=>'Sukses']);
     }
 }
