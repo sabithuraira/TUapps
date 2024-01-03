@@ -24,7 +24,7 @@
 
             <div class="card">
                 <div class="body">
-                    @if ($auth->hasanyrole('kepegawaian|superadmin') && $request->user)
+                    @if (($auth->hasanyrole('kepegawaian|superadmin') && $request->user) || $request->user == $auth->nip_baru)
                         <a href="#modal_tambah_iki" class="btn btn-info" data-toggle="modal"
                             data-target="#modal_tambah_iki">
                             Tambah
@@ -156,9 +156,17 @@
 
                                                         <a class="btn btn-info btn-sm" href="#modal_lihat_bukti"
                                                             data-toggle="modal" data-target="#modal_lihat_bukti"
-                                                            data-id_bukti="{{ $dt->ikibukti[0]->id }}"
+                                                            data-id_iki="{{ $dt->id }}"
                                                             data-ik="{{ $dt->ik }}"
-                                                            data-jenis_bukti="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
+                                                            data-satuan = "{{ $dt->satuan }}"
+                                                            data-target_iki="{{ $dt->target }}"
+                                                            data-bulan="{{ $dt->bulan }}"
+                                                            data-tahun="{{ $dt->tahun }}"
+                                                            data-id_tim="{{ $dt->id_tim }}"
+                                                            data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                            data-referensi_jenis="{{ $dt->referensi_jenis }}"
+                                                            data-bukti="{{ json_encode($dt->ikibukti) }}"
+                                                            data-user_name = "{{ $dt->ikibukti[0]->user->name }}"
                                                             @click="btn_lihat_bukti($event)">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
@@ -233,9 +241,17 @@
                                                         <td>
                                                             <a class="btn btn-info btn-sm" href="#modal_lihat_bukti"
                                                                 data-toggle="modal" data-target="#modal_lihat_bukti"
-                                                                data-id_bukti="{{ $dt->ikibukti[0]->id }}"
+                                                                data-id_iki="{{ $dt->id }}"
                                                                 data-ik="{{ $dt->ik }}"
-                                                                data-jenis_bukti="{{ $dt->ikibukti[0]->jenis_bukti_dukung }}"
+                                                                data-satuan = "{{ $dt->satuan }}"
+                                                                data-target_iki="{{ $dt->target }}"
+                                                                data-bulan="{{ $dt->bulan }}"
+                                                                data-tahun="{{ $dt->tahun }}"
+                                                                data-id_tim="{{ $dt->id_tim }}"
+                                                                data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                                data-referensi_jenis="{{ $dt->referensi_jenis }}"
+                                                                data-bukti="{{ json_encode($dt->ikibukti) }}"
+                                                                data-user_name = "{{ $dt->ikibukti[$f]->user->name }}"
                                                                 @click="btn_lihat_bukti($event)">
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
@@ -662,101 +678,234 @@
                 </div>
             </div>
         </div>
-    </div>
-@endsection
 
-@section('scripts')
-    <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-    <script type="text/javascript" src="{!! asset('js/pagination.js') !!}"></script>
+        <div class="modal fade" id="modal_lihat_bukti" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="title">Bukti IKI</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="responsive-table">
 
-    <script>
-        var vm = new Vue({
-            el: "#app_vue",
-            data: {
-                id_edit_iki: '',
-                ik_edit_iki: '',
-                satuan_edit_iki: '',
-                target_edit_iki: '',
-            },
-            methods: {
-                btn_edit_iki: function(event) {
-                    this.id_edit_iki = event.currentTarget.getAttribute('data-id_iki');
-                    this.ik_edit_iki = event.currentTarget.getAttribute('data-ik');
-                    this.satuan_edit_iki = event.currentTarget.getAttribute('data-satuan');
-                    this.target_edit_iki = event.currentTarget.getAttribute('data-target_iki');
-                    document.getElementById('bulan_edit_iki').value = event.currentTarget
-                        .getAttribute(
-                            'data-bulan');
-                    document.getElementById('tahun_edit_iki').value = event.currentTarget
-                        .getAttribute(
-                            'data-tahun');
-                    document.getElementById('id_tim_edit_iki').value = event.currentTarget
-                        .getAttribute(
-                            'data-id_tim');
-                    document.getElementById('referensi_jenis_edit_iki').value = event.currentTarget
-                        .getAttribute('data-referensi_jenis');
-                    document.getElementById('referensi_sumber_edit_iki').value = event.currentTarget
-                        .getAttribute('data-referensi_sumber');
-                    document.getElementById('form_edit_iki').action = window.location.origin +
-                        window.location
-                        .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>IKI</th>
+                                    <td id="ik_lihat_bukti">nama iki</td>
+                                </tr>
+                                <tr>
+                                    <th>TIM</th>
+                                    <td id="tim_lihat_bukti">nama TIM</td>
+                                </tr>
+                                <tr>
+                                    <th>Target</th>
+                                    <td id="target_lihat_bukti">target</td>
+                                </tr>
+                                <tr>
+                                    <th>Satuan</th>
+                                    <td id="satuan_lihat_bukti">satuan</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td id="tahun_lihat_bukti">tahun</td>
+                                </tr>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <td id="bulan_lihat_bukti">bulan</td>
+                                </tr>
+                                <tr>
+                                    <th>Jenis Iki</th>
+                                    <td id="jenis_lihat_bukti">jenis</td>
+                                </tr>
+                                <tr>
+                                    <th>Sumber</th>
+                                    <td id="sumber_lihat_bukti">sumber</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="responsive-table">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis Bukti</th>
+                                        <th>Pegawai</th>
+                                        <th>Deadline</th>
+                                        <th>Link Bukti</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_lihat_bukti">
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal">Batal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    @endsection
+
+    @section('scripts')
+        <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+        <script type="text/javascript" src="{!! asset('js/pagination.js') !!}"></script>
+
+        <script>
+            var timUser = @json($tim_user);
+            var ikiAtasan = @json($iki_atasan);
+            var vm = new Vue({
+                el: "#app_vue",
+                data: {
+                    id_edit_iki: '',
+                    ik_edit_iki: '',
+                    satuan_edit_iki: '',
+                    target_edit_iki: '',
+                    timUser: timUser,
+                    ikiAtasan: ikiAtasan,
                 },
+                methods: {
+                    btn_edit_iki: function(event) {
+                        this.id_edit_iki = event.currentTarget.getAttribute('data-id_iki');
+                        this.ik_edit_iki = event.currentTarget.getAttribute('data-ik');
+                        this.satuan_edit_iki = event.currentTarget.getAttribute('data-satuan');
+                        this.target_edit_iki = event.currentTarget.getAttribute('data-target_iki');
+                        document.getElementById('bulan_edit_iki').value = event.currentTarget
+                            .getAttribute(
+                                'data-bulan');
+                        document.getElementById('tahun_edit_iki').value = event.currentTarget
+                            .getAttribute(
+                                'data-tahun');
+                        document.getElementById('id_tim_edit_iki').value = event.currentTarget
+                            .getAttribute(
+                                'data-id_tim');
+                        document.getElementById('referensi_jenis_edit_iki').value = event.currentTarget
+                            .getAttribute('data-referensi_jenis');
+                        document.getElementById('referensi_sumber_edit_iki').value = event.currentTarget
+                            .getAttribute('data-referensi_sumber');
+                        document.getElementById('form_edit_iki').action = window.location.origin +
+                            window.location
+                            .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
+                    },
 
-                btn_tambah_bukti: function(event) {
-                    console.log(event.currentTarget.getAttribute('data-id_iki'))
-                    document.getElementById('id_iki_tambah_bukti').value = event.currentTarget
-                        .getAttribute('data-id_iki');
-                },
+                    btn_tambah_bukti: function(event) {
+                        // console.log(event.currentTarget.getAttribute('data-id_iki'))
+                        document.getElementById('id_iki_tambah_bukti').value = event.currentTarget
+                            .getAttribute('data-id_iki');
+                    },
 
-                btn_edit_bukti: function(event) {
-                    document.getElementById('id_bukti_edit_bukti').value = event.currentTarget
-                        .getAttribute(
-                            'data-id_bukti');
-                    document.getElementById('jenis_bukti_dukung_edit_bukti').value = event
-                        .currentTarget
-                        .getAttribute(
-                            'data-jenis_bukti_dukung');
-                    document.getElementById('link_bukti_dukung_edit_bukti').value = event
-                        .currentTarget
-                        .getAttribute(
-                            'data-link_bukti_dukung');
-                    document.getElementById('deadline_edit_bukti').value = event.currentTarget
-                        .getAttribute(
-                            'data-deadline');
-                    document.getElementById('form_edit_bukti').action = window.location.origin +
-                        window.location
-                        .pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
-                },
+                    btn_edit_bukti: function(event) {
+                        document.getElementById('id_bukti_edit_bukti').value = event.currentTarget
+                            .getAttribute(
+                                'data-id_bukti');
+                        document.getElementById('jenis_bukti_dukung_edit_bukti').value = event
+                            .currentTarget
+                            .getAttribute(
+                                'data-jenis_bukti_dukung');
+                        document.getElementById('link_bukti_dukung_edit_bukti').value = event
+                            .currentTarget
+                            .getAttribute(
+                                'data-link_bukti_dukung');
+                        document.getElementById('deadline_edit_bukti').value = event.currentTarget
+                            .getAttribute(
+                                'data-deadline');
+                        document.getElementById('form_edit_bukti').action = window.location.origin +
+                            window.location
+                            .pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
+                    },
 
-                btn_hapus_iki: function(event) {
-                    document.getElementById('id_iki_hapus_iki').value = event.currentTarget
-                        .getAttribute(
-                            'data-id_iki');
-                    document.getElementById('text_hapus_iki').innerHTML = event.currentTarget
-                        .getAttribute(
-                            'data-ik');
-                    document.getElementById('form_hapus_iki').action = window.location.origin +
-                        window.location
-                        .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
-                },
+                    btn_hapus_iki: function(event) {
+                        document.getElementById('id_iki_hapus_iki').value = event.currentTarget
+                            .getAttribute(
+                                'data-id_iki');
+                        document.getElementById('text_hapus_iki').innerHTML = event.currentTarget
+                            .getAttribute(
+                                'data-ik');
+                        document.getElementById('form_hapus_iki').action = window.location.origin +
+                            window.location
+                            .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
+                    },
 
-                btn_hapus_bukti: function(event) {
-                    document.getElementById('id_bukti_hapus_bukti').value = event.currentTarget
-                        .getAttribute(
-                            'data-id_bukti');
-                    document.getElementById('bukti_hapus_bukti').innerHTML = event.currentTarget
-                        .getAttribute(
-                            'data-jenis_bukti');
-                    document.getElementById('ik_hapus_bukti').innerHTML = event.currentTarget
-                        .getAttribute(
-                            'data-ik');
-                    document.getElementById('form_hapus_bukti').action = window.location.origin +
-                        window
-                        .location.pathname + '_bukti/' + event.currentTarget.getAttribute(
-                            'data-id_bukti');
+                    btn_hapus_bukti: function(event) {
+                        document.getElementById('id_bukti_hapus_bukti').value = event.currentTarget
+                            .getAttribute(
+                                'data-id_bukti');
+                        document.getElementById('bukti_hapus_bukti').innerHTML = event.currentTarget
+                            .getAttribute(
+                                'data-jenis_bukti');
+                        document.getElementById('ik_hapus_bukti').innerHTML = event.currentTarget
+                            .getAttribute(
+                                'data-ik');
+                        document.getElementById('form_hapus_bukti').action = window.location.origin +
+                            window
+                            .location.pathname + '_bukti/' + event.currentTarget.getAttribute(
+                                'data-id_bukti');
+                    },
+
+                    btn_lihat_bukti: function(event) {
+                        var namaTim = this.timUser.find(tim => tim.id == event.currentTarget.getAttribute(
+                            'data-id_tim'))?.nama_tim;
+                        var namaIkiSumber = "";
+                        if (event.currentTarget.getAttribute('data-referensi_sumber') != "") {
+                            var namaIkiSumber = this.ikiAtasan.find(ikiats => ikiats.id == event.currentTarget
+                                .getAttribute('data-referensi_sumber'))?.ik;
+                        }
+                        document.getElementById('ik_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-ik');
+                        document.getElementById('tim_lihat_bukti').innerHTML = namaTim ||
+                            "TIM ...";
+                        document.getElementById('target_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-target_iki');
+                        document.getElementById('satuan_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-satuan');
+                        document.getElementById('tahun_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-tahun');
+                        document.getElementById('bulan_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-bulan');
+                        document.getElementById('jenis_lihat_bukti').innerHTML = event.currentTarget
+                            .getAttribute('data-referensi_jenis');
+                        document.getElementById('sumber_lihat_bukti').innerHTML = namaIkiSumber || "IKI.."
+
+                        var buktiData = JSON.parse(event.currentTarget.getAttribute('data-bukti'));
+                        var tablehtml = "";
+                        var counter = 1;
+                        var namaBulan = {
+                            1: "Januari",
+                            2: "Februari",
+                            3: "Maret",
+                            4: "April",
+                            5: "Mei",
+                            6: "Juni",
+                            7: "Juli",
+                            8: "Agustus",
+                            9: "September",
+                            10: "Oktober",
+                            11: "November",
+                            12: "Desember"
+                        };
+                        console.log(buktiData)
+
+                        buktiData.forEach(element => {
+                            var namaBulanStr = namaBulan[element.deadline];
+                            console.log(element.user)
+                            tablehtml += "<tr><td>" + counter + "</td><td>" +
+                                element.jenis_bukti_dukung + "</td><td>" +
+                                element.user.name + "</td><td>" +
+                                namaBulanStr +
+                                "</td><td style='max-width: 200px; word-wrap: break-word; white-space:normal'><a href='" +
+                                element.link_bukti_dukung +
+                                "'' target = '_blank'>" +
+                                element.link_bukti_dukung +
+                                "</a></td></tr>";
+                            counter++;
+                        });
+                        var table = "<table>" + tablehtml + "</table>";
+                        document.getElementById('table_lihat_bukti').innerHTML = tablehtml;
+                    }
                 }
-
-            }
-        });
-    </script>
-@endsection
+            });
+        </script>
+    @endsection

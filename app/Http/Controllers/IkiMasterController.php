@@ -38,16 +38,23 @@ class IkiMasterController extends Controller
             ->where('tahun', 'LIKE', '%' . $tahun . '%')
             ->where('bulan', 'LIKE', '%' . $bulan . '%')
             ->get();
+        // d
         foreach ($datas as $i => $data) {
             $sub_ikis = $data->sub_iki;
-            foreach ($sub_ikis as $sub_iki) {
+
+            foreach ($sub_ikis as  $sub_iki) {
+
                 if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung Atasan") {
-                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->get();
+                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
                     $data->ikibukti = $data->ikibukti->merge($sub_bukti);
                 } else if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung & Realisasi Atasan") {
-                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->get();
+                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
                     $data->ikibukti = $data->ikibukti->merge($sub_bukti);
                 }
+            }
+            $bukti = $data->ikibukti;
+            foreach ($bukti as $j => $bkt) {
+                $data->ikibukti[$j]->user = $bkt->user;
             }
         }
         $model = new IkiMaster();
