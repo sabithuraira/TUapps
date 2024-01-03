@@ -19,30 +19,18 @@ class IkiMasterController extends Controller
         $user = $request->get('user');
         $tahun = $request->get('tahun');
         $bulan = $request->get('bulan');
+        // list user untuk filter
         $user_list = User::where('kdkab', $auth->kdkab)->get();
-        // mengambil status user apakah atasan atau ketua tim
-        $status_user = [];
-        // $detail_user = [];
-        // $tim_user = [];
-        $tim_user = TimAnggota::where('nik_anggota', $user)->get();
-        dd($tim_user->pluck('id_tim')->toarray());
-        $atasan = TimMaster::where('id', $tim_user->pluck('id_tim')->toarray())->get();
-        // $tim = TimMaster::where('');
-        dd($atasan);
-
-        // $iki_atasan =
-        // if ($request->user) {
-        //     // $user_detail = User::where('nip_baru', $user)->get();
-        //     // dd($user_detail);
-
-        // }
-
-        $iki_atasan = ['IKI 1', 'IKI 2']; // jika ketua tim maka iki atasan kosong
-        $iki_atasan = IkiMaster::all();
-        if ($status_user == 'anggota_tim' || $status_user == 'ketua_tim') {
-            $iki_atasan = ['IKI 1', 'IKI 2', 'IKI 3'];
+        $tim_user = [];
+        $iki_atasan = [];
+        if ($request->user) {
+            //list keanggotaan dari user yang terpilih
+            $tim_user = TimAnggota::where('nik_anggota', $request->user)->join('master_tim', 'master_tim.id', '=', 'anggota_tim.id_tim')->get();
+            if (count($tim_user) > 0) {
+                //list iki atasan yang berada pada tim yang sama
+                $iki_atasan = IkiMaster::WhereIn('nip', $tim_user->pluck('nik_ketua_tim')->toarray())->whereIn('id_tim', $tim_user->pluck('id_tim')->toarray())->get();
+            }
         }
-
         $datas = IkiMaster::where('nip', $user)
             ->where('tahun', 'LIKE', '%' . $tahun . '%')
             ->where('bulan', 'LIKE', '%' . $bulan . '%')
@@ -59,8 +47,6 @@ class IkiMasterController extends Controller
                 }
             }
         }
-
-
         $model = new IkiMaster();
         return view('iki_master.index', compact('datas', 'auth', 'model', 'user_list', 'iki_atasan', 'request', 'tim_user'));
     }

@@ -24,7 +24,7 @@
 
             <div class="card">
                 <div class="body">
-                    @if ($auth->hasanyrole('kepegawaian|superadmin'))
+                    @if ($auth->hasanyrole('kepegawaian|superadmin') && $request->user)
                         <a href="#modal_tambah_iki" class="btn btn-info" data-toggle="modal"
                             data-target="#modal_tambah_iki">
                             Tambah
@@ -100,32 +100,35 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td>
-                                                        <a class="btn btn-info btn-sm" href="#modal_tambah_bukti"
-                                                            data-toggle="modal" data-target="#modal_tambah_bukti"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            @click="btn_tambah_bukti($event)">
-                                                            <i class="fa fa-plus"></i>
-                                                        </a>
-                                                        <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
-                                                            data-toggle="modal" data-target="#modal_edit_iki"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            data-ik="{{ $dt->ik }}"
-                                                            data-satuan = "{{ $dt->satuan }}"
-                                                            data-target_iki="{{ $dt->target }}"
-                                                            data-bulan="{{ $dt->bulan }}"
-                                                            data-tahun="{{ $dt->tahun }}"
-                                                            data-id_tim="{{ $dt->id_tim }}"
-                                                            data-referensi_sumber="{{ $dt->referensi_sumber }}"
-                                                            data-referensi_jenis="{{ $dt->referensi_jenis }}"
-                                                            @click="btn_edit_iki($event)">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </a>
-                                                        <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
-                                                            data-toggle="modal" data-target="#modal_hapus_iki"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            data-ik="{{ $dt->ik }}" @click="btn_hapus_iki($event)">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
+                                                        @if ($auth->hasanyrole('kepegawaian|superadmin') || $request->user == $auth->nip_baru)
+                                                            <a class="btn btn-info btn-sm" href="#modal_tambah_bukti"
+                                                                data-toggle="modal" data-target="#modal_tambah_bukti"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                @click="btn_tambah_bukti($event)">
+                                                                <i class="fa fa-plus"></i>
+                                                            </a>
+                                                            <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
+                                                                data-toggle="modal" data-target="#modal_edit_iki"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                data-ik="{{ $dt->ik }}"
+                                                                data-satuan = "{{ $dt->satuan }}"
+                                                                data-target_iki="{{ $dt->target }}"
+                                                                data-bulan="{{ $dt->bulan }}"
+                                                                data-tahun="{{ $dt->tahun }}"
+                                                                data-id_tim="{{ $dt->id_tim }}"
+                                                                data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                                data-referensi_jenis="{{ $dt->referensi_jenis }}"
+                                                                @click="btn_edit_iki($event)">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
+                                                                data-toggle="modal" data-target="#modal_hapus_iki"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                data-ik="{{ $dt->ik }}"
+                                                                @click="btn_hapus_iki($event)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @elseif (sizeof($dt->ikibukti) >= 1)
@@ -144,10 +147,13 @@
                                                     <td>{{ $model->namaBulan[$dt->ikibukti[0]->deadline - 1] }}</td> --}}
                                                     <td style="max-width: 200px; word-wrap: break-word; white-space:normal"
                                                         class="text-left">
+                                                        {{ '(' . $dt->ikibukti[0]->user->name . ') ' }}
                                                         <a href="{{ $dt->ikibukti[0]->link_bukti_dukung }}"
-                                                            target="_blank">{{ $dt->ikibukti[0]->link_bukti_dukung }}</a>
+                                                            target="_blank">
+                                                            {{ $dt->ikibukti[0]->link_bukti_dukung }}</a>
                                                     </td>
                                                     <td>
+
                                                         <a class="btn btn-info btn-sm" href="#modal_lihat_bukti"
                                                             data-toggle="modal" data-target="#modal_lihat_bukti"
                                                             data-id_bukti="{{ $dt->ikibukti[0]->id }}"
@@ -156,7 +162,9 @@
                                                             @click="btn_lihat_bukti($event)">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        @if ($request->user == $dt->ikibukti[0]->nip)
+                                                        @if (
+                                                            ($request->user == $dt->ikibukti[0]->nip && $request->user == $auth->nip_baru) ||
+                                                                $auth->hasanyrole('kepegawaian|superadmin'))
                                                             <a class="btn btn-warning btn-sm" href="#modal_edit_bukti"
                                                                 data-toggle="modal" data-target="#modal_edit_bukti"
                                                                 data-id_bukti="{{ $dt->ikibukti[0]->id }}"
@@ -178,32 +186,35 @@
 
                                                     </td>
                                                     <td rowspan="{{ count($dt->ikibukti) }}">
-                                                        <a class="btn btn-info btn-sm" href="#modal_tambah_bukti"
-                                                            data-toggle="modal" data-target="#modal_tambah_bukti"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            @click="btn_tambah_bukti($event)">
-                                                            <i class="fa fa-plus"></i>
-                                                        </a>
-                                                        <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
-                                                            data-toggle="modal" data-target="#modal_edit_iki"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            data-ik="{{ $dt->ik }}"
-                                                            data-satuan = "{{ $dt->satuan }}"
-                                                            data-target_iki="{{ $dt->target }}"
-                                                            data-id_tim="{{ $dt->id_tim }}"
-                                                            data-bulan="{{ $dt->bulan }}"
-                                                            data-tahun="{{ $dt->tahun }}"
-                                                            data-referensi_sumber="{{ $dt->referensi_sumber }}"
-                                                            data-referensi_jenis="{{ $dt->referensi_jenis }}"
-                                                            @click="btn_edit_iki($event)">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </a>
-                                                        <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
-                                                            data-toggle="modal" data-target="#modal_hapus_iki"
-                                                            data-id_iki="{{ $dt->id }}"
-                                                            data-ik="{{ $dt->ik }}" @click="btn_hapus_iki($event)">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
+                                                        @if ($auth->hasanyrole('kepegawaian|superadmin') || $request->user == $auth->nip_baru)
+                                                            <a class="btn btn-info btn-sm" href="#modal_tambah_bukti"
+                                                                data-toggle="modal" data-target="#modal_tambah_bukti"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                @click="btn_tambah_bukti($event)">
+                                                                <i class="fa fa-plus"></i>
+                                                            </a>
+                                                            <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
+                                                                data-toggle="modal" data-target="#modal_edit_iki"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                data-ik="{{ $dt->ik }}"
+                                                                data-satuan = "{{ $dt->satuan }}"
+                                                                data-target_iki="{{ $dt->target }}"
+                                                                data-id_tim="{{ $dt->id_tim }}"
+                                                                data-bulan="{{ $dt->bulan }}"
+                                                                data-tahun="{{ $dt->tahun }}"
+                                                                data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                                data-referensi_jenis="{{ $dt->referensi_jenis }}"
+                                                                @click="btn_edit_iki($event)">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
+                                                                data-toggle="modal" data-target="#modal_hapus_iki"
+                                                                data-id_iki="{{ $dt->id }}"
+                                                                data-ik="{{ $dt->ik }}"
+                                                                @click="btn_hapus_iki($event)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @for ($f = 1; $f < count($dt->ikibukti); $f++)
@@ -215,6 +226,7 @@
                                                         <td>{{ $model->namaBulan[$dt->ikibukti[$f]->deadline - 1] }}</td> --}}
                                                         <td style="max-width: 200px; word-wrap: break-word; white-space:normal"
                                                             class="text-left">
+                                                            {{ '(' . $dt->ikibukti[$f]->user->name . ') ' }}
                                                             <a href="{{ $dt->ikibukti[$f]->link_bukti_dukung }}"
                                                                 target="_blank">{{ $dt->ikibukti[$f]->link_bukti_dukung }}</a>
                                                         </td>
@@ -227,7 +239,9 @@
                                                                 @click="btn_lihat_bukti($event)">
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
-                                                            @if ($request->user == $dt->ikibukti[$f]->nip)
+                                                            @if (
+                                                                ($request->user == $dt->ikibukti[$f]->nip && $request->user == $auth->nip_baru) ||
+                                                                    $auth->hasanyrole('kepegawaian|superadmin'))
                                                                 <a class="btn btn-warning btn-sm" href="#modal_edit_bukti"
                                                                     data-toggle="modal" data-target="#modal_edit_bukti"
                                                                     data-id_bukti="{{ $dt->ikibukti[$f]->id }}"
@@ -483,7 +497,7 @@
                                     class="form-control show-tick ms search-select">
                                     <option value="">Tidak ada referensi</option>
                                     @foreach ($iki_atasan as $iki_ats)
-                                        <option value="{{ $iki_ats }}">{{ $iki_ats }}</option>
+                                        <option value="{{ $iki_ats->id }}">{{ $iki_ats->ik }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -670,17 +684,21 @@
                     this.ik_edit_iki = event.currentTarget.getAttribute('data-ik');
                     this.satuan_edit_iki = event.currentTarget.getAttribute('data-satuan');
                     this.target_edit_iki = event.currentTarget.getAttribute('data-target_iki');
-                    document.getElementById('bulan_edit_iki').value = event.currentTarget.getAttribute(
-                        'data-bulan');
-                    document.getElementById('tahun_edit_iki').value = event.currentTarget.getAttribute(
-                        'data-tahun');
-                    document.getElementById('id_tim_edit_iki').value = event.currentTarget.getAttribute(
-                        'data-id_tim');
+                    document.getElementById('bulan_edit_iki').value = event.currentTarget
+                        .getAttribute(
+                            'data-bulan');
+                    document.getElementById('tahun_edit_iki').value = event.currentTarget
+                        .getAttribute(
+                            'data-tahun');
+                    document.getElementById('id_tim_edit_iki').value = event.currentTarget
+                        .getAttribute(
+                            'data-id_tim');
                     document.getElementById('referensi_jenis_edit_iki').value = event.currentTarget
                         .getAttribute('data-referensi_jenis');
                     document.getElementById('referensi_sumber_edit_iki').value = event.currentTarget
                         .getAttribute('data-referensi_sumber');
-                    document.getElementById('form_edit_iki').action = window.location.origin + window.location
+                    document.getElementById('form_edit_iki').action = window.location.origin +
+                        window.location
                         .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
                 },
 
@@ -691,38 +709,51 @@
                 },
 
                 btn_edit_bukti: function(event) {
-                    document.getElementById('id_bukti_edit_bukti').value = event.currentTarget.getAttribute(
-                        'data-id_bukti');
-                    document.getElementById('jenis_bukti_dukung_edit_bukti').value = event.currentTarget
+                    document.getElementById('id_bukti_edit_bukti').value = event.currentTarget
+                        .getAttribute(
+                            'data-id_bukti');
+                    document.getElementById('jenis_bukti_dukung_edit_bukti').value = event
+                        .currentTarget
                         .getAttribute(
                             'data-jenis_bukti_dukung');
-                    document.getElementById('link_bukti_dukung_edit_bukti').value = event.currentTarget
+                    document.getElementById('link_bukti_dukung_edit_bukti').value = event
+                        .currentTarget
                         .getAttribute(
                             'data-link_bukti_dukung');
-                    document.getElementById('deadline_edit_bukti').value = event.currentTarget.getAttribute(
-                        'data-deadline');
-                    document.getElementById('form_edit_bukti').action = window.location.origin + window.location
+                    document.getElementById('deadline_edit_bukti').value = event.currentTarget
+                        .getAttribute(
+                            'data-deadline');
+                    document.getElementById('form_edit_bukti').action = window.location.origin +
+                        window.location
                         .pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
                 },
 
                 btn_hapus_iki: function(event) {
-                    document.getElementById('id_iki_hapus_iki').value = event.currentTarget.getAttribute(
-                        'data-id_iki');
-                    document.getElementById('text_hapus_iki').innerHTML = event.currentTarget.getAttribute(
-                        'data-ik');
-                    document.getElementById('form_hapus_iki').action = window.location.origin + window.location
+                    document.getElementById('id_iki_hapus_iki').value = event.currentTarget
+                        .getAttribute(
+                            'data-id_iki');
+                    document.getElementById('text_hapus_iki').innerHTML = event.currentTarget
+                        .getAttribute(
+                            'data-ik');
+                    document.getElementById('form_hapus_iki').action = window.location.origin +
+                        window.location
                         .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
                 },
 
                 btn_hapus_bukti: function(event) {
-                    document.getElementById('id_bukti_hapus_bukti').value = event.currentTarget.getAttribute(
-                        'data-id_bukti');
-                    document.getElementById('bukti_hapus_bukti').innerHTML = event.currentTarget.getAttribute(
-                        'data-jenis_bukti');
-                    document.getElementById('ik_hapus_bukti').innerHTML = event.currentTarget.getAttribute(
-                        'data-ik');
-                    document.getElementById('form_hapus_bukti').action = window.location.origin + window
-                        .location.pathname + '_bukti/' + event.currentTarget.getAttribute('data-id_bukti');
+                    document.getElementById('id_bukti_hapus_bukti').value = event.currentTarget
+                        .getAttribute(
+                            'data-id_bukti');
+                    document.getElementById('bukti_hapus_bukti').innerHTML = event.currentTarget
+                        .getAttribute(
+                            'data-jenis_bukti');
+                    document.getElementById('ik_hapus_bukti').innerHTML = event.currentTarget
+                        .getAttribute(
+                            'data-ik');
+                    document.getElementById('form_hapus_bukti').action = window.location.origin +
+                        window
+                        .location.pathname + '_bukti/' + event.currentTarget.getAttribute(
+                            'data-id_bukti');
                 }
 
             }
