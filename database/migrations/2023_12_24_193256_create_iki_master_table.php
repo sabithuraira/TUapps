@@ -16,7 +16,8 @@ class CreateIkiMasterTable extends Migration
         Schema::create('iki_master', function (Blueprint $table) {
             $table->increments('id');
             $table->string('ik');
-            $table->integer('id_user');
+            $table->string('nip');
+            $table->integer('id_tim');
             $table->string('satuan');
             $table->string('target');
             $table->string('tahun');
@@ -31,7 +32,8 @@ class CreateIkiMasterTable extends Migration
             $table->increments('id');
             $table->integer('id_iki');
             $table->integer('id_iki_referensi')->nullable();
-            $table->integer('id_user');
+            $table->string('nip');
+            $table->integer('id_tim');
             $table->string('jenis_bukti_dukung');
             $table->string('link_bukti_dukung')->nullable();
             $table->string('deadline');

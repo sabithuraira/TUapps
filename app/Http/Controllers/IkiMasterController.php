@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Iki;
 use App\IkiBukti;
 use App\IkiMaster;
+use App\TimAnggota;
+use App\TimMaster;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +22,28 @@ class IkiMasterController extends Controller
         $user_list = User::where('kdkab', $auth->kdkab)->get();
         // mengambil status user apakah atasan atau ketua tim
         $status_user = [];
+        // $detail_user = [];
+        // $tim_user = [];
+        $tim_user = TimAnggota::where('nik_anggota', $user)->get();
+        dd($tim_user->pluck('id_tim')->toarray());
+        $atasan = TimMaster::where('id', $tim_user->pluck('id_tim')->toarray())->get();
+        // $tim = TimMaster::where('');
+        dd($atasan);
+
+        // $iki_atasan =
+        // if ($request->user) {
+        //     // $user_detail = User::where('nip_baru', $user)->get();
+        //     // dd($user_detail);
+
+        // }
+
         $iki_atasan = ['IKI 1', 'IKI 2']; // jika ketua tim maka iki atasan kosong
         $iki_atasan = IkiMaster::all();
         if ($status_user == 'anggota_tim' || $status_user == 'ketua_tim') {
             $iki_atasan = ['IKI 1', 'IKI 2', 'IKI 3'];
         }
-        $datas = IkiMaster::where('id_user', $user)
+
+        $datas = IkiMaster::where('nip', $user)
             ->where('tahun', 'LIKE', '%' . $tahun . '%')
             ->where('bulan', 'LIKE', '%' . $bulan . '%')
             ->get();
@@ -44,14 +62,14 @@ class IkiMasterController extends Controller
 
 
         $model = new IkiMaster();
-        return view('iki_master.index', compact('datas', 'auth', 'model', 'user_list', 'iki_atasan', 'request'));
+        return view('iki_master.index', compact('datas', 'auth', 'model', 'user_list', 'iki_atasan', 'request', 'tim_user'));
     }
 
     public function store(Request $request)
     {
         $auth = Auth::user();
         $model = new IkiMaster();
-        $model->id_user = $request->id_user;
+        $model->nip = $request->nip;
         $model->ik = $request->ik;
         $model->satuan = $request->satuan;
         $model->target = $request->target;
@@ -92,7 +110,7 @@ class IkiMasterController extends Controller
         $iki = IkiMaster::find($request->id_iki);
         $model->id_iki = $request->id_iki;
         $model->id_iki_referensi = $iki->referensi_sumber;
-        $model->id_user = $iki->id_user;
+        $model->nip = $iki->nip;
         $model->jenis_bukti_dukung = $request->jenis_bukti_dukung;
         $model->link_bukti_dukung = $request->link_bukti_dukung;
         $model->deadline = $request->deadline;
