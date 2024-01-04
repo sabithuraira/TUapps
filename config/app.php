@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -225,10 +226,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
     'months' => [
-        1 => 'Januari', 
+        1 => 'Januari',
         2 => 'Februari',
         3 => 'Maret',
         4 => 'April',
@@ -244,7 +246,7 @@ return [
     'short_months' => [
         'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
         'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des',
-      ],
+    ],
     'kode_prov' => '16',
     'unit_kerjas' => [
         '00' => 'Provinsi Sumatera Selatan',
@@ -267,6 +269,6 @@ return [
     'debug_blacklist' => [
         '_COOKIE' => array_keys($_COOKIE),
         '_SERVER' => array_keys($_SERVER),
-        '_ENV' => array_keys($_ENV),        
+        '_ENV' => array_keys($_ENV),
     ],
 ];

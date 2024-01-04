@@ -128,12 +128,15 @@
                 </li>
 
                 <li class="{{ request()->is('tim*') || request()->is('iki_pegawai*') ? 'active' : '' }}">
-                    <a href="#Jadwal" class="has-arrow"><i class="icon-users"></i> <span>Manajemen Tim dan Pekerjaan</span></a>
+                    <a href="#Jadwal" class="has-arrow"><i class="icon-users"></i> <span>Manajemen Tim dan
+                            Pekerjaan</span></a>
                     <ul>
-                        <li class="{{ request()->is('tim') ? 'active' : '' }}"><a
-                                href="{{ url('tim') }}">Tim</a></li>
+                        <li class="{{ request()->is('tim') ? 'active' : '' }}"><a href="{{ url('tim') }}">Tim</a>
+                        </li>
                         <li class="{{ request()->is('iki_pegawai*') ? 'active' : '' }}"><a
                                 href="{{ url('iki_pegawai') }}">Pengelolaan IKI Pegawai</a></li>
+                        <li class="{{ request()->is('master_pekerjaan*') ? 'active' : '' }}"><a
+                                href="{{ url('master_pekerjaan') }}">Master Pekerjaan</a></li>
                     </ul>
                 </li>
 
@@ -230,10 +233,10 @@
                     @endhasanyrole
                 @endif
 
-                @if (Auth::user()->kdkab=='00' || Auth::user()->kdkab == '04')
-                    <li
-                        class="{{ request()->is('sira*') ? 'active' : '' }}">
-                        <a href="#BuktiAdministrasi" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti Administrasi (SIRA KLASIK)</span></a>
+                @if (Auth::user()->kdkab == '00' || Auth::user()->kdkab == '04')
+                    <li class="{{ request()->is('sira*') ? 'active' : '' }}">
+                        <a href="#BuktiAdministrasi" class="has-arrow"><i class="icon-basket-loaded"></i> <span>Bukti
+                                Administrasi (SIRA KLASIK)</span></a>
                         <ul>
                             <li class="{{ request()->is('sira') ? 'active' : '' }}"><a
                                     href="{{ url('sira') }}">Daftar</a></li>
@@ -273,7 +276,8 @@
                         <ul>
                             <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
-                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a href="{{ url('uker4') }}">Unit
+                            <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
+                                    href="{{ url('uker4') }}">Unit
                                     Kerja 4</a></li>
                             <li class="{{ request()->is('angka_kredit*') ? 'active' : '' }}"><a
                                     href="{{ url('angka_kredit') }}">Angka Kredit</a></li>

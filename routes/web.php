@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\IkiMasterController;
+use App\Http\Controllers\MasterPekerjaanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -239,6 +240,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('iki_pegawai_bukti', [IkiMasterController::class, 'store_bukti']);
     Route::put('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'update_bukti']);
     Route::delete('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'destroy_bukti']);
+
+    Route::resource('master_pekerjaan', 'MasterPekerjaanController');
+    Route::post('master_pekerjaan_import', [MasterPekerjaanController::class, 'import']);
 
 
     //PEGAWAI ANDA
