@@ -39,7 +39,7 @@
                             <option value="">- Pilih Tahun -</option>
                             @for ($i=2021;$i<=date('Y');$i++) <option value="{{ $i }}" @if ($year==$i)
                                 selected="selected" @endif>{{ $i }}</option>
-                                @endfor
+                            @endfor
                         </select>
                     </div>
                 </div>

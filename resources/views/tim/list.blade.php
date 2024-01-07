@@ -26,7 +26,7 @@
                             <span class="text-muted">{{ $data['nik_ketua_tim'] }}</span>
                         </td>
                         <td class="text-center">{{ $data['jumlah_anggota'] }}</td>
-                        <td class="text-center">{{ $data['kode_kab'] }}</td>
+                        <td class="text-center">{{ config('app.unit_kerjas')[$data['kode_kab']] }}</td>
                         <td class="text-center">{{ $data['tahun'] }}</td>
                         <td class="text-center">
                             <a href="{{ action('TimController@edit', Crypt::encrypt($data['id']))}}">

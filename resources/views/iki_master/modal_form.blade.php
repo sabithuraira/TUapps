@@ -6,6 +6,13 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" v-model="form_id">
+                
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                    <b>IKI yang mengacu pada pekerjaan ini:</b><br/>
+                    @{{ form_label_iki }}<br/><br/>
+                    </div>
+                </div>
 
                 <div class="row clearfix">
                     <div class="col-md-6">
@@ -57,15 +64,6 @@
                 Hasil:
                 <div class="form-line">
                     <textarea type="text" v-model="form_hasil" class="form-control" rows=3></textarea>
-                </div>
-                
-                Pilih IKI yang mengacu pada pekerjaan ini:
-                <div class="row clearfix">
-                    <select v-model="form_id_iki" id="id_iki" class="form-control show-tick ms select2">
-                        @foreach($list_iki as $value)
-                            <option value="{{ $value->id }}">({{ $value->tahun }}) - {{ $value->ik }}</option>
-                        @endforeach
-                    </select>
                 </div>
 
                 <div class="row clearfix">

@@ -18,12 +18,16 @@
                             :data-isi="data.isi" :data-hasil="data.hasil" 
                             :data-volume="data.volume" :data-satuan="data.satuan" 
                             :data-pemberi_tugas="data.pemberi_tugas_id" 
+                            :data-id_iki="data.id_iki" 
+                            :data-jumlah_jam="data.jumlah_jam" 
+                            :data-link_bukti_dukung="data.link_bukti_dukung" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
                     &nbsp;
                     <a :data-id="data.id" v-on:click="delLogBook(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
                     &nbsp
                     @{{ index+1 }}
                 </td>
+
                 <td class="text-center">
                     <a v-if="data.ckp_id==null || data.ckp_id==''" href="#" role="button" v-on:click="sendCkpId" 
                             data-toggle="modal" :data-id="data.id" 
@@ -109,7 +113,8 @@ var vm = new Vue({
         pathname : window.location.pathname,
         form_id: 0, form_tanggal: '', form_waktu_mulai: '', form_waktu_selesai: '',
         form_isi: '', form_hasil: '', form_volume: '',  form_satuan: '',
-        form_pemberi_tugas: '', 
+        form_pemberi_tugas: '', form_id_iki:'', form_jumlah_jam: '',
+        form_link_bukti_dukung: '',
         ckp_id: 0,
     },
     methods: {
@@ -141,6 +146,9 @@ var vm = new Vue({
                 self.form_volume = '';
                 self.form_satuan = '';
                 self.form_pemberi_tugas = '';
+                self.form_id_iki = '';
+                self.form_jumlah_jam = '';
+                self.form_link_bukti_dukung = '';
             }
         },
         updateLogBook: function (event) {
@@ -156,15 +164,25 @@ var vm = new Vue({
                 self.form_volume = event.currentTarget.getAttribute('data-volume');
                 self.form_satuan = event.currentTarget.getAttribute('data-satuan');
                 self.form_pemberi_tugas = event.currentTarget.getAttribute('data-pemberi_tugas');
+
+                self.form_id_iki = event.currentTarget.getAttribute('data-id_iki');
+                self.form_jumlah_jam = event.currentTarget.getAttribute('data-jumlah_jam');
+                self.form_link_bukti_dukung = event.currentTarget.getAttribute('data-link_bukti_dukung');
             }
         },
         saveLogBook: function () {
             var self = this;
 
-            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
+            // if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
+            //     self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
+            //     self.form_pemberi_tugas.length==0){
+            //     alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+            // }
+
+            if(self.form_tanggal.length==0 ||  self.form_jumlah_jam.length==0 || 
                 self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
                 self.form_pemberi_tugas.length==0){
-                alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+                alert("Pastikan isian tanggal, waktu mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
             }
             else{
                 if(isNaN(self.form_volume)){
@@ -188,6 +206,9 @@ var vm = new Vue({
                             volume: self.form_volume,
                             satuan: self.form_satuan,
                             pemberi_tugas: self.form_pemberi_tugas,
+                            id_iki: self.form_id_iki,
+                            jumlah_jam: self.form_jumlah_jam,
+                            link_bukti_dukung: self.form_link_bukti_dukung,
                         },
                     }).done(function (data) {
                         $('#add_logbooks').modal('hide');
@@ -305,6 +326,17 @@ $('#form_waktu_mulai').change(function() {
 
 $('#form_waktu_selesai').change(function() {
     vm.form_waktu_selesai = this.value;
+});
+
+$('#pemberi_tugas').on("select2-selecting", function(e) { 
+    // console.log(e.choice.id);
+    vm.form_pemberi_tugas = e.choice.id
+    // console.log(vm.form_pemberi_tugas)
+});
+
+
+$('#id_iki').on("select2-selecting", function(e) { 
+    vm.form_id_iki = e.choice.id
 });
 </script>
 @endsection

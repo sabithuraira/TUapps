@@ -34,35 +34,50 @@ class IkiMasterController extends Controller
                     ->get();
             }
         }
+
         $datas = IkiMaster::where('nip', $user)
             ->where('tahun', 'LIKE', '%' . $tahun . '%')
             ->where('bulan', 'LIKE', '%' . $bulan . '%')
             ->get();
         // d
-        foreach ($datas as $i => $data) {
-            $sub_ikis = $data->sub_iki;
+        // foreach ($datas as $i => $data) {
+        //     $sub_ikis = $data->sub_iki;
 
-            foreach ($sub_ikis as  $sub_iki) {
+        //     foreach ($sub_ikis as  $sub_iki) {
 
-                if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung Atasan") {
-                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
-                    $data->ikibukti = $data->ikibukti->merge($sub_bukti);
-                } else if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung & Realisasi Atasan") {
-                    $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
-                    $data->ikibukti = $data->ikibukti->merge($sub_bukti);
-                }
-            }
-            $bukti = $data->ikibukti;
-            foreach ($bukti as $j => $bkt) {
-                $data->ikibukti[$j]->user = $bkt->user;
-            }
-        }
+        //         if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung Atasan") {
+        //             $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
+        //             $data->ikibukti = $data->ikibukti->merge($sub_bukti);
+        //         } else if ($sub_iki->referensi_jenis == "Masuk Bukti Dukung & Realisasi Atasan") {
+        //             $sub_bukti = IkiBukti::where('id_iki', $sub_iki->id)->with('user')->get();
+        //             $data->ikibukti = $data->ikibukti->merge($sub_bukti);
+        //         }
+        //     }
+        //     $bukti = $data->ikibukti;
+        //     foreach ($bukti as $j => $bkt) {
+        //         $data->ikibukti[$j]->user = $bkt->user;
+        //     }
+        // }
+
+        $list_pegawai = \App\UserModel::where([
+                                ['id', '<>', 1],
+                                ['kdkab', '=', Auth::user()->kdkab]
+                            ])
+                            ->orWhere([
+                                ['kdesl', '=', 2]
+                            ])
+                            ->orWhere([
+                                ['kdorg', '=', 92100],
+                            ])
+                            ->orderBy('kdorg', 'ASC')->get();
+
         $model = new IkiMaster();
-        return view('iki_master.index', compact('datas', 'auth', 'model', 'user_list', 'iki_atasan', 'request', 'tim_user'));
+        return view('iki_master.index', compact('datas', 'auth', 'model', 
+                        'user_list', 'iki_atasan', 'request', 'tim_user', 
+                        'list_pegawai'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $auth = Auth::user();
         $model = new IkiMaster();
         $model->nip = $request->nip;
@@ -72,7 +87,8 @@ class IkiMasterController extends Controller
         $model->target = $request->target;
         $model->tahun = $request->tahun;
         $model->bulan = $request->bulan;
-        $model->referensi_jenis = $request->referensi_jenis;
+        // $model->referensi_jenis = $request->referensi_jenis;
+        $model->referensi_jenis = 1;
         $model->referensi_sumber = $request->referensi_sumber;
         $model->created_by = Auth::id();
         $model->updated_by = Auth::id();
@@ -80,8 +96,7 @@ class IkiMasterController extends Controller
         return redirect()->back()->with('success', 'Data berhasil diperbaharui');
     }
 
-    public function update($id, Request $request)
-    {
+    public function update($id, Request $request){
         $auth = Auth::user();
         $model = IkiMaster::find($id);
         if ($model) {
@@ -91,7 +106,8 @@ class IkiMasterController extends Controller
             $model->target = $request->target;
             $model->tahun = $request->tahun;
             $model->bulan = $request->bulan;
-            $model->referensi_jenis = $request->referensi_jenis;
+            // $model->referensi_jenis = $request->referensi_jenis;
+            $model->referensi_jenis = 1;
             $model->referensi_sumber = $request->referensi_sumber;
             $model->updated_by = Auth::id();
             $model->save();
@@ -101,8 +117,7 @@ class IkiMasterController extends Controller
         }
     }
 
-    public function store_bukti(Request $request)
-    {
+    public function store_bukti(Request $request){
         $auth = Auth::user();
         $model = new IkiBukti();
         $iki = IkiMaster::find($request->id_iki);
@@ -119,8 +134,7 @@ class IkiMasterController extends Controller
         return redirect()->back()->with('success', 'Data berhasil diperbaharui');
     }
 
-    public function update_bukti($id, Request $request)
-    {
+    public function update_bukti($id, Request $request){
         $auth = Auth::user();
         $model = IkiBukti::find($id);
         $iki = IkiMaster::find($model->id_iki);
@@ -137,9 +151,7 @@ class IkiMasterController extends Controller
         }
     }
 
-
-    public function destroy($id)
-    {
+    public function destroy($id){
         $auth = Auth::user();
         $model = IkiMaster::find($id);
         if ($model) {
@@ -154,8 +166,7 @@ class IkiMasterController extends Controller
         }
     }
 
-    public function destroy_bukti($id)
-    {
+    public function destroy_bukti($id){
         $auth = Auth::user();
         $model = IkiBukti::find($id);
         if ($model) {
