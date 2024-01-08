@@ -82,7 +82,7 @@ class SuratKmController extends Controller
                     ['jenis_surat', '=', $jenis_surat],
                     ['kdprop', '=', Auth::user()->kdprop],
                     ['kdkab', '=', Auth::user()->kdkab],
-                    ['nomor_urut', 'regexp', '^[0-9]+$'],
+                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
                 ->first();
@@ -176,7 +176,7 @@ class SuratKmController extends Controller
                     ['jenis_surat', '=', $jenis_surat],
                     ['kdprop', '=', Auth::user()->kdprop],
                     ['kdkab', '=', Auth::user()->kdkab],
-                    ['nomor_urut', 'regexp', '^[0-9]+$'],
+                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
                 ])
                 ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
                 ->first();
@@ -277,7 +277,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan2;
             $model->kode_unit_kerja = $request->kode_unit_kerja2;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip2;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$tahun;
             $model->perihal= $request->get('perihal2');
             $model->ditetapkan_oleh = $request->ditetapkan_oleh2;
             $model->ditetapkan_nama = $request->ditetapkan_nama2;
@@ -310,7 +310,7 @@ class SuratKmController extends Controller
             $model->kode_unit_kerja = $request->kode_unit_kerja3;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip3;
             // @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} 
-            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$bulan."/".$tahun;
+            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$tahun;
             $model->ditetapkan_oleh = $request->ditetapkan_oleh3;
             $model->ditetapkan_nama = $request->ditetapkan_nama3;
             if($model->save()){
@@ -337,7 +337,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan4;
             $model->kode_unit_kerja = $request->kode_unit_kerja4;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip4;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$tahun;
             $model->ditetapkan_oleh = $request->ditetapkan_oleh4;
             $model->ditetapkan_nama = $request->ditetapkan_nama4;
             $model->ditetapkan_nip = $request->ditetapkan_nip4;
@@ -434,7 +434,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan7;
             $model->kode_unit_kerja = $request->kode_unit_kerja7;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip7;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$tahun;
             $model->ditetapkan_di = $request->ditetapkan_di7;
             $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal7));
             $model->ditetapkan_oleh = $request->ditetapkan_oleh7;
@@ -622,7 +622,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan2;
             $model->kode_unit_kerja = $request->kode_unit_kerja2;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip2;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut2."/".$request->kode_unit_kerja2."/".$request->klasifikasi_arsip2."/".$tahun;
             $model->perihal= $request->get('perihal2');
             $model->ditetapkan_oleh = $request->ditetapkan_oleh2;
             $model->ditetapkan_nama = $request->ditetapkan_nama2;
@@ -658,7 +658,7 @@ class SuratKmController extends Controller
             $model->kode_unit_kerja = $request->kode_unit_kerja3;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip3;
             // @{{ nomor_urut }}/@{{ kode_unit_kerja }}/@{{ kode_klasifikasi_arsip }}/@{{ bulan }}/@{{ tahun }} 
-            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$bulan."/".$tahun;
+            $model->nomor= $request->nomor_urut3."/".$request->kode_unit_kerja3."/".$request->klasifikasi_arsip3."/".$tahun;
             $model->ditetapkan_oleh = $request->ditetapkan_oleh3;
             $model->ditetapkan_nama = $request->ditetapkan_nama3;
             if($model->save()){
@@ -688,7 +688,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan4;
             $model->kode_unit_kerja = $request->kode_unit_kerja4;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip4;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut4."/".$request->kode_unit_kerja4."/".$request->klasifikasi_arsip4."/".$tahun;
             $model->ditetapkan_oleh = $request->ditetapkan_oleh4;
             $model->ditetapkan_nama = $request->ditetapkan_nama4;
             $model->ditetapkan_nip = $request->ditetapkan_nip4;
@@ -807,7 +807,7 @@ class SuratKmController extends Controller
             $model->tingkat_keamanan = $request->tingkat_keamanan7;
             $model->kode_unit_kerja = $request->kode_unit_kerja7;
             $model->klasifikasi_arsip = $request->klasifikasi_arsip7;
-            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$bulan."/".$tahun;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut7."/".$request->kode_unit_kerja7."/".$request->klasifikasi_arsip7."/".$tahun;
             $model->ditetapkan_di = $request->ditetapkan_di7;
             $model->ditetapkan_tanggal = date('Y-m-d', strtotime($request->ditetapkan_tanggal7));
             $model->ditetapkan_oleh = $request->ditetapkan_oleh7;
