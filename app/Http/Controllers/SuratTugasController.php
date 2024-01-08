@@ -297,10 +297,10 @@ class SuratTugasController extends Controller
                         $nomor_st = $prev_nomor_st + 1;
                     }
 
-                    while (strlen($nomor_st) < 4)
-                        $nomor_st = '0' . $nomor_st;
+                    // while (strlen($nomor_st) < 4)
+                    //     $nomor_st = '0' . $nomor_st;
 
-                    $model_r->nomor_st = $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                    $model_r->nomor_st = $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . $model_r->kode_klasifikasi .'/' . date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $datas_spd = \App\SuratTugasRincian::where([
@@ -317,8 +317,8 @@ class SuratTugasController extends Controller
                             $nomor_spd = $prev_nomor_spd + 1;
                         }
 
-                        while (strlen($nomor_spd) < 4)
-                            $nomor_spd = '0' . $nomor_spd;
+                        // while (strlen($nomor_spd) < 4)
+                        //     $nomor_spd = '0' . $nomor_spd;
                     }
                    
                     //////////
@@ -326,12 +326,12 @@ class SuratTugasController extends Controller
                         $model_r->status_aktif = 1;
                         if (Auth::user()->kdkab != '00') {
                             if ($unit_kerja->kode == Auth::user()->kdprop . '00') {
-                                $model_r->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                                $model_r->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/'. date('Y');
                             } else {
-                                $model_r->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/' . $model_r->kode_klasifikasi .'/'  . date('m') . '/' . date('Y');
+                                $model_r->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/' . $model_r->kode_klasifikasi .'/' . date('Y');
                             }
                         } else {
-                            $model_r->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/' . $model_r->kode_klasifikasi .'/'  . date('m') . '/' . date('Y');
+                            $model_r->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/' . $model_r->kode_klasifikasi .'/' . date('Y');
                         }
                     } else {
                         $model_r->status_aktif = 7;
@@ -448,8 +448,8 @@ class SuratTugasController extends Controller
             $nomor_st = $prev_nomor_st + 1;
         }
 
-        while (strlen($nomor_st) < 4)
-            $nomor_st = '0' . $nomor_st;
+        // while (strlen($nomor_st) < 4)
+        //     $nomor_st = '0' . $nomor_st;
         ////////
         $nomor_spd = 1;
         $datas_spd = \App\SuratTugasRincian::where('nomor_spd', '<>', '')
@@ -466,8 +466,8 @@ class SuratTugasController extends Controller
             $nomor_spd = $prev_nomor_spd + 1;
         }
 
-        while (strlen($nomor_spd) < 4)
-            $nomor_spd = '0' . $nomor_spd;
+        // while (strlen($nomor_spd) < 4)
+        //     $nomor_spd = '0' . $nomor_spd;
         ////////////
 
         if ($model->save()) {
@@ -505,7 +505,7 @@ class SuratTugasController extends Controller
                     if ($i == 1) $model_r->kategori_petugas = 1;
                     else $model_r->kategori_petugas = 2;
 
-                    $model_r->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/' . $model_r->kode_klasifikasi .'/'  . date('m') . '/' . date('Y');
+                    $model_r->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/' . $model_r->kode_klasifikasi .'/'. date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $model_r->status_aktif = 1;
@@ -515,12 +515,12 @@ class SuratTugasController extends Controller
                         //     $model_r->nomor_spd = $nomor_spd.'.'.$nomor_ujung_spd.'/'.Auth::user()->kdprop.'00/'.$unit_kerja->kode.'/SPD/'.date('m').'/'.date('Y');
                         if (Auth::user()->kdkab != '00') {
                             if ($unit_kerja->kode == Auth::user()->kdprop . '00') {
-                                $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                                $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/'  . date('Y');
                             } else {
-                                $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                                $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                             }
                         } else {
-                            $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                            $model_r->nomor_spd = $nomor_spd . '.' . $nomor_ujung_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                         }
 
                         $nomor_ujung_spd++;
@@ -689,20 +689,20 @@ class SuratTugasController extends Controller
 
                 $nomor_st_label = $nomor_st;
                 $nomor_spd_label = $nomor_spd;
-                while (strlen($nomor_st_label) < 4)
-                    $nomor_st_label = '0' . $nomor_st_label;
-                while (strlen($nomor_spd_label) < 4)
-                    $nomor_spd_label = '0' . $nomor_spd_label;
+                // while (strlen($nomor_st_label) < 4)
+                //     $nomor_st_label = '0' . $nomor_st_label;
+                // while (strlen($nomor_spd_label) < 4)
+                //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r->nomor_st = $nomor_st_label . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                $model_r->nomor_st = $nomor_st_label . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
-                        $model_r->nomor_spd = $nomor_spd_label . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r->nomor_spd = $nomor_spd_label . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                     else
-                        $model_r->nomor_spd = $nomor_spd_label . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r->nomor_spd = $nomor_spd_label . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/'. date('Y');
                 } else {
-                    $model_r->nomor_spd = $nomor_spd_label . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                    $model_r->nomor_spd = $nomor_spd_label . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/'. date('Y');
                 }
                 $model_r->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
                 $model_r->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
@@ -737,20 +737,20 @@ class SuratTugasController extends Controller
 
                 $nomor_st_label = $nomor_st;
                 $nomor_spd_label = $nomor_spd;
-                while (strlen($nomor_st_label) < 4)
-                    $nomor_st_label = '0' . $nomor_st_label;
-                while (strlen($nomor_spd_label) < 4)
-                    $nomor_spd_label = '0' . $nomor_spd_label;
+                // while (strlen($nomor_st_label) < 4)
+                //     $nomor_st_label = '0' . $nomor_st_label;
+                // while (strlen($nomor_spd_label) < 4)
+                //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r2->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                $model_r2->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r2->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
-                        $model_r2->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r2->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                     else
-                        $model_r2->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r2->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/'.date('Y');
                 } else {
-                    $model_r2->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                    $model_r2->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/'. date('Y');
                 }
                 $model_r2->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
                 $model_r2->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
@@ -785,20 +785,20 @@ class SuratTugasController extends Controller
 
                 $nomor_st_label = $nomor_st;
                 $nomor_spd_label = $nomor_spd;
-                while (strlen($nomor_st_label) < 4)
-                    $nomor_st_label = '0' . $nomor_st_label;
-                while (strlen($nomor_spd_label) < 4)
-                    $nomor_spd_label = '0' . $nomor_spd_label;
+                // while (strlen($nomor_st_label) < 4)
+                //     $nomor_st_label = '0' . $nomor_st_label;
+                // while (strlen($nomor_spd_label) < 4)
+                //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r3->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                $model_r3->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r3->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
-                        $model_r3->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r3->nomor_spd = $nomor_spd . '/' . Auth::user()->kdprop . '00/' . Auth::user()->kdprop . Auth::user()->kdkab . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                     else
-                        $model_r3->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                        $model_r3->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 } else {
-                    $model_r3->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('m') . '/' . date('Y');
+                    $model_r3->nomor_spd = $nomor_spd . '/' . $unit_kerja->kode . '/SPD/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 }
                 $model_r3->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
                 $model_r3->unit_kerja_ttd  = $request->get('unit_kerja_ttd');
@@ -1304,14 +1304,14 @@ class SuratTugasController extends Controller
 
         $explode_st = explode("/",$model_rincian->nomor_st);
 
-        if(count($explode_st)==5) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[3] . '/' . $explode_st[4];
+        if(count($explode_st)==4) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[3] . '/' . $explode_st[4];
 
         $explode_spd = explode("/",$model_rincian->nomor_spd);
         if(count($explode_spd)>0){
-            if(count($explode_spd)==6){
+            if(count($explode_spd)==5){
                 $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[4]. '/' . $explode_spd[5];
             }
-            else if(count($explode_spd)==7){
+            else if(count($explode_spd)==6){
                 $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/' . $explode_spd[2] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[5]. '/' . $explode_spd[6];
             }
         }
