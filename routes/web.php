@@ -243,6 +243,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('master_pekerjaan', 'MasterPekerjaanController');
     Route::post('master_pekerjaan_import', [MasterPekerjaanController::class, 'import']);
+    Route::post('master_pekerjaan/search_data', 'MasterPekerjaanController@search_data');
 
 
     //PEGAWAI ANDA

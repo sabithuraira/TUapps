@@ -141,8 +141,12 @@ class LogBookController extends Controller
                             ])
                             ->orderBy('kdorg', 'ASC')->get();
 
+        $list_iki = \App\IkiMaster::where('nip', Auth::user()->nip_baru)
+                            ->where('tahun', [date('Y'), (date('Y')-1)])->get();
+
         return view('log_book.index', compact('model', 
-            'datas', 'start', 'end', 'pemberi_tugas', 'list_pegawai'));
+            'datas', 'start', 'end', 'pemberi_tugas', 
+            'list_pegawai', 'list_iki'));
     }
 
     public function rekap_pegawai(Request $request){
@@ -250,8 +254,12 @@ class LogBookController extends Controller
         }
 
         $model->tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
-        $model->waktu_mulai = date("H:i", strtotime($request->get('waktu_mulai')));
-        $model->waktu_selesai = date("H:i", strtotime($request->get('waktu_selesai')));
+        // $model->waktu_mulai = date("H:i", strtotime($request->get('waktu_mulai')));
+        // $model->waktu_selesai = date("H:i", strtotime($request->get('waktu_selesai')));
+        
+        $model->waktu_mulai = date("H:i");
+        $model->waktu_selesai = date("H:i");
+
         $model->isi = $request->get('isi');
         $model->hasil = $request->get('hasil');
         $model->volume = $request->get('volume');
@@ -260,6 +268,11 @@ class LogBookController extends Controller
         $data_user = \App\UserModel::where('email', '=', $request->get("pemberi_tugas"))->first();
         $model->pemberi_tugas = $data_user->name;
         $model->pemberi_tugas_jabatan = $data_user->nmjab;
+
+        $model->id_iki = $request->get('id_iki');
+        $model->jumlah_jam = $request->get('jumlah_jam');
+        $model->link_bukti_dukung = $request->get('link_bukti_dukung');
+
         $model->updated_by=Auth::id();
         $model->save();
         

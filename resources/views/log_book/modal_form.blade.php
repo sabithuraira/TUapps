@@ -48,10 +48,15 @@
                         </div>
                     </div>
                 </div>
+                <br/>
 
                 Isi: <span class="text-danger">*</span>
+                <a href="#" role="button" data-toggle="modal" data-target="#select_kegiatan"> 
+                    <i class="icon-magnifier"></i>
+                    <b class='text-muted small'>Pilih Kegiatan</b>
+                </a>
                 <div class="form-line">
-                    <textarea type="text" v-model="form_isi" class="form-control" rows=3></textarea>
+                    <textarea disabled type="text" v-model="form_isi" class="form-control" rows=3></textarea>
                 </div>
             
                 Hasil:
@@ -86,6 +91,59 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="saveLogBook">SAVE</button>
+                <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="select_kegiatan" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b>Pilih Kegiatan</b>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="search" @keypress.enter="searchKegiatan" v-model="keyword_kegiatan" placeholder="Search..">
+
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="button" @click="searchKegiatan"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <table class="table-bordered m-b-0" style="width:100%;min-width:100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th></th>
+                                <th class="text-center">Sub Kegiatan</th>
+                                <th class="text-center">Uraian Pekerjaan</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="(data, index) in list_kegiatan" :key="data.id">
+                                <td>
+                                    @{{ index+1 }}
+                                </td>
+                                <td>
+                                    <a href="#" role="button" v-on:click="selectKegiatan" 
+                                        class="ml-2 mr-2" 
+                                        :data-id="data.id" :data-subkegiatan="data.subkegiatan"
+                                        :data-uraian_pekerjaan="data.uraian_pekerjaan"
+                                        > <i class="icon-check"></i></a>
+                                </td>
+                                <td>@{{ data.subkegiatan }}</td>
+                                <td>@{{ data.uraian_pekerjaan }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
             </div>
         </div>

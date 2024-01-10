@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table-bordered m-b-0">
+    <table class="table-bordered m-b-0"  style="min-width:100%">
         <thead>
             <tr>
                 <th>No</th><th></th>
@@ -21,6 +21,7 @@
                             :data-id_iki="data.id_iki" 
                             :data-jumlah_jam="data.jumlah_jam" 
                             :data-link_bukti_dukung="data.link_bukti_dukung" 
+                            :data-id_kegiatan="data.id_kegiatan" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
                     &nbsp;
                     <a :data-id="data.id" v-on:click="delLogBook(data.id)"><i class="fa fa-trash text-danger"></i>&nbsp </a>
@@ -46,10 +47,9 @@
                 </td>
 
                 <td class="text-center">
-                    <span class="badge badge-pill badge-dark">@{{ durasi(data.waktu_selesai, data.waktu_mulai) }}</span>
-                    <br/>
                     @{{ data.tanggal }}
-                    <p class="text-muted">Pukul: @{{ data.waktu_mulai }} - @{{ data.waktu_selesai }}</p>
+                    <p class="text-muted" v-if="data.jumlah_jam.length>0">Durasi: @{{ data.jumlah_jam }} Jam</p>
+                    <p class="text-muted" v-else>Durasi: - Jam</p>
                 </td>
                 <td>
                     @{{ data.isi }}
@@ -115,7 +115,11 @@ var vm = new Vue({
         form_isi: '', form_hasil: '', form_volume: '',  form_satuan: '',
         form_pemberi_tugas: '', form_id_iki:'', form_jumlah_jam: '',
         form_link_bukti_dukung: '',
+        form_id_kegiatan: '',
+        keyword_kegiatan: '',
         ckp_id: 0,
+
+        list_kegiatan: [],
     },
     methods: {
         durasi: function(val1, val2){
@@ -149,6 +153,7 @@ var vm = new Vue({
                 self.form_id_iki = '';
                 self.form_jumlah_jam = '';
                 self.form_link_bukti_dukung = '';
+                self.form_id_kegiatan = '';
             }
         },
         updateLogBook: function (event) {
@@ -168,6 +173,7 @@ var vm = new Vue({
                 self.form_id_iki = event.currentTarget.getAttribute('data-id_iki');
                 self.form_jumlah_jam = event.currentTarget.getAttribute('data-jumlah_jam');
                 self.form_link_bukti_dukung = event.currentTarget.getAttribute('data-link_bukti_dukung');
+                self.form_id_kegiatan = event.currentTarget.getAttribute('data-id_kegiatan');
             }
         },
         saveLogBook: function () {
@@ -209,6 +215,7 @@ var vm = new Vue({
                             id_iki: self.form_id_iki,
                             jumlah_jam: self.form_jumlah_jam,
                             link_bukti_dukung: self.form_link_bukti_dukung,
+                            id_kegiatan: self.form_id_kegiatan,
                         },
                     }).done(function (data) {
                         $('#add_logbooks').modal('hide');
@@ -286,7 +293,35 @@ var vm = new Vue({
                 },
             }).done(function (data) {
                 self.datas = data.datas;
+                console.log(self.datas)
                 $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        }, 
+        selectKegiatan: function (event) {
+            var self = this;
+            if (event) {
+                self.form_isi = event.currentTarget.getAttribute('data-subkegiatan') + " - " + event.currentTarget.getAttribute('data-uraian_pekerjaan');
+                self.form_id_kegiatan = event.currentTarget.getAttribute('data-id');
+
+                $('#select_kegiatan').modal('hide');
+            }
+        },
+        searchKegiatan: function(){
+            var self = this;
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  "{{ url('master_pekerjaan/search_data') }}",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    keyword: self.keyword_kegiatan,
+                },
+            }).done(function (data) {
+                self.list_kegiatan = data.datas.data;
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
@@ -299,6 +334,7 @@ $(document).ready(function() {
     $('.time24').inputmask('hh:mm', { placeholder: '__:__', alias: 'time24', hourFormat: '24' });
     $('.select2').select2();
     vm.setDatas();
+    vm.searchKegiatan();
     
     $('.datepicker').datepicker({
         endDate: 'd',
@@ -333,7 +369,6 @@ $('#pemberi_tugas').on("select2-selecting", function(e) {
     vm.form_pemberi_tugas = e.choice.id
     // console.log(vm.form_pemberi_tugas)
 });
-
 
 $('#id_iki').on("select2-selecting", function(e) { 
     vm.form_id_iki = e.choice.id

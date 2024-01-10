@@ -25,8 +25,15 @@ class MasterPekerjaanController extends Controller
         return view('master_pekerjaan.index', compact('auth', 'request', 'datas'));
     }
 
-    public function store(Request $request)
-    {
+    public function search_data(Request $request){
+        $datas = MasterPekerjaan::where('subkegiatan', 'LIKE', '%' . $request->keyword . '%')
+                    ->orWhere('uraian_pekerjaan', 'LIKE', '%' . $request->keyword . '%')
+                    ->paginate(30);
+
+        return response()->json(['status'=>'Success', 'datas' => $datas]);
+    }
+
+    public function store(Request $request){
         $auth = Auth::user();
         $model = new MasterPekerjaan();
         $model->tahun = $request->tahun;

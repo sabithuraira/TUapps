@@ -72,8 +72,8 @@
                     <br>
                     <div class="row px-2">
                         <div class="col table-responsive">
-                            <table class="table table-sm table-bordered text-center" style="font-size: small">
-                                <thead>
+                            <table class="table-bordered" style="font-size: small">
+                                <thead class="text-center">
                                     <tr>
                                         <th rowspan="2">No</th>
                                         <th rowspan="2">IK</th>
@@ -97,10 +97,10 @@
 
                                             @if($total_logbook==0)
                                                 <tr>
-                                                    <td>{{  $i+1 }}</td>
-                                                    <td style="max-width: 200px; word-wrap: break-word; white-space:normal">
+                                                    <td class="text-center">{{  $i+1 }}</td>
+                                                    <td class="text-center" style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                         {{ $dt->ik }} </td>
-                                                    <td>{{ $dt->target . ' ' . $dt->satuan }}</td>
+                                                    <td class="text-center">{{ $dt->target . ' ' . $dt->satuan }}</td>
                                                     <td colspan="3">
                                                         @if ($request->user == $auth->nip_baru)
                                                         <a href="#" role="button" v-on:click="addLogBook"  
@@ -114,11 +114,11 @@
                                                 </tr>
                                             @else 
                                                 <tr>
-                                                    <td rowspan="{{ $total_logbook+1 }}">{{ $i+1 }}</td>
-                                                    <td rowspan="{{ $total_logbook+1 }}" style="max-width: 200px; word-wrap: break-word; white-space:normal">
+                                                    <td class="text-center" rowspan="{{ $total_logbook+1 }}">{{ $i+1 }}</td>
+                                                    <td class="text-center" rowspan="{{ $total_logbook+1 }}" style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                         {{ $dt->ik }} </td>
-                                                    <td rowspan="{{ $total_logbook+1 }}">{{ $dt->target . ' ' . $dt->satuan }}</td>
-                                                    <td colspan="3">
+                                                    <td class="text-center" rowspan="{{ $total_logbook+1 }}">{{ $dt->target . ' ' . $dt->satuan }}</td>
+                                                    <td class="text-center" colspan="3">
                                                         @if ($request->user == $auth->nip_baru)
                                                         <a href="#" role="button" v-on:click="addLogBook"  
                                                             class="btn btn-sm btn-primary" data-toggle="modal" 
@@ -355,6 +355,10 @@
                     form_id_iki:'', form_label_iki:'', 
                     form_jumlah_jam: '',
                     form_link_bukti_dukung: '',
+                    form_id_kegiatan: '',
+                    keyword_kegiatan: '',
+
+                    list_kegiatan: [],
                 },
                 methods: {
                     addLogBook: function (event) {
@@ -371,6 +375,7 @@
                             self.form_pemberi_tugas = '';
                             self.form_jumlah_jam = '';
                             self.form_link_bukti_dukung = '';
+                            self.form_id_kegiatan = '';
                             self.form_label_iki = event.currentTarget.getAttribute('data-label_iki');
                             self.form_id_iki = event.currentTarget.getAttribute('data-id_iki');
                         }
@@ -409,6 +414,7 @@
                                         id_iki: self.form_id_iki,
                                         jumlah_jam: self.form_jumlah_jam,
                                         link_bukti_dukung: self.form_link_bukti_dukung,
+                                        id_kegiatan: self.form_id_kegiatan,
                                     },
                                 }).done(function (data) {
                                     $('#add_logbooks').modal('hide');
@@ -453,6 +459,34 @@
                             window.location
                             .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
                     },
+
+                    selectKegiatan: function (event) {
+                        var self = this;
+                        if (event) {
+                            self.form_isi = event.currentTarget.getAttribute('data-subkegiatan') + " - " + event.currentTarget.getAttribute('data-uraian_pekerjaan');
+                            self.form_id_kegiatan = event.currentTarget.getAttribute('data-id');
+
+                            $('#select_kegiatan').modal('hide');
+                        }
+                    },
+                    searchKegiatan: function(){
+                        var self = this;
+                        $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+                        $.ajax({
+                            url :  "{{ url('master_pekerjaan/search_data') }}",
+                            method : 'post',
+                            dataType: 'json',
+                            data:{
+                                keyword: self.keyword_kegiatan,
+                            },
+                        }).done(function (data) {
+                            self.list_kegiatan = data.datas.data;
+                        }).fail(function (msg) {
+                            console.log(JSON.stringify(msg));
+                            $('#wait_progres').modal('hide');
+                        });
+                    }
                 }
             });
 
@@ -461,7 +495,7 @@
                 $('.datepicker').datepicker({
                     endDate: 'd',
                 });
-                
+                vm.searchKegiatan();
             });
 
             $('#form_tanggal').change(function() {
