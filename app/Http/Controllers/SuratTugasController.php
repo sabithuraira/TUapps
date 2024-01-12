@@ -1304,15 +1304,15 @@ class SuratTugasController extends Controller
 
         $explode_st = explode("/",$model_rincian->nomor_st);
 
-        if(count($explode_st)==4) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[3] . '/' . $explode_st[4];
+        if(count($explode_st)==4) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[2] . '/' . $explode_st[3];
 
         $explode_spd = explode("/",$model_rincian->nomor_spd);
         if(count($explode_spd)>0){
             if(count($explode_spd)==5){
-                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[4]. '/' . $explode_spd[5];
+                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[3]. '/' . $explode_spd[4];
             }
             else if(count($explode_spd)==6){
-                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/' . $explode_spd[2] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[5]. '/' . $explode_spd[6];
+                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/' . $explode_spd[2] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[4]. '/' . $explode_spd[5];
             }
         }
 

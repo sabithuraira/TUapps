@@ -39,7 +39,7 @@
 
                     <br>
                     <button type="submit" class="btn btn-primary">Simpan</button> &nbsp; &nbsp;
-                    <a href="https://laci.bps.go.id/s/mgTJ5a68wqNPmy3">Unduh Template Mata Anggaran</a>
+                    <a href="https://docs.google.com/spreadsheets/d/14K6XzAIOOJ--NTPfPCyxhiHNObjP0psE/edit?usp=sharing&ouid=118352400916187049744&rtpof=true&sd=true">Unduh Template Mata Anggaran</a>
                     
                 </form>
           </div>
