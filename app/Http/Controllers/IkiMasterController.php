@@ -78,21 +78,26 @@ class IkiMasterController extends Controller
     }
 
     public function store(Request $request){
+        // print_r($request->bulan);die();
+        $bulan = $request->bulan;
         $auth = Auth::user();
-        $model = new IkiMaster();
-        $model->nip = $request->nip;
-        $model->ik = $request->ik;
-        $model->id_tim = $request->id_tim;
-        $model->satuan = $request->satuan;
-        $model->target = $request->target;
-        $model->tahun = $request->tahun;
-        $model->bulan = $request->bulan;
-        // $model->referensi_jenis = $request->referensi_jenis;
-        $model->referensi_jenis = 1;
-        $model->referensi_sumber = $request->referensi_sumber;
-        $model->created_by = Auth::id();
-        $model->updated_by = Auth::id();
-        $model->save();
+        foreach($bulan as $key=>$value){
+            $model = new IkiMaster();
+            $model->nip = $request->nip;
+            $model->ik = $request->ik;
+            $model->id_tim = $request->id_tim;
+            $model->satuan = $request->satuan;
+            $model->target = $request->target;
+            $model->tahun = $request->tahun;
+            $model->bulan = $value;
+            // $model->referensi_jenis = $request->referensi_jenis;
+            $model->referensi_jenis = 1;
+            $model->referensi_sumber = $request->referensi_sumber;
+            $model->created_by = Auth::id();
+            $model->updated_by = Auth::id();
+            $model->save();
+        }
+
         return redirect()->back()->with('success', 'Data berhasil diperbaharui');
     }
 
