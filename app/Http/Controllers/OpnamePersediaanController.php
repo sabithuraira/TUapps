@@ -347,7 +347,7 @@ class OpnamePersediaanController extends Controller
         $pdf = PDF::loadView('opname_persediaan.print_kartukendali_q', compact('month', 
             'year', 'barang', 'datas', 'detail_barang', 'persediaan',
             'monthName'))
-            ->setPaper('a4', 'landscape');
+            ->setPaper('a4', 'portrait');
         
         $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
         $nama_file .= $month .'_'.$year.'.pdf';

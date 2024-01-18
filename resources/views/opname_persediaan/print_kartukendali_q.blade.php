@@ -42,7 +42,7 @@
         <br/><br/>
     
     <table width="100%">
-        <tr><td width="15%">BULAN</td><td>: {{ $monthName }} {{ $year }}</td></tr>
+        <tr><td width="25%">BULAN</td><td>: {{ $monthName }} {{ $year }}</td></tr>
         <tr><td>NAMA BARANG</td><td>: {{ $detail_barang->nama_barang }}</td></tr>
         <tr><td>SATUAN BARANG</td><td>: {{ $detail_barang->satuan }}</td></tr>
     </table>
@@ -51,7 +51,7 @@
         <thead>
             <tr align="center">
                 <td>TGL</td>
-                <td>URAIAN</td>
+                <td width="50%">URAIAN</td>
                 <td>JUMLAH BARANG MASUK (DEBET)</td>
                 <td>JUMLAH BARANG KELUAR (DEBET)</td>
                 <td>JUMLAH BARANG SALDO</td>
@@ -70,10 +70,8 @@
             @if (isset($persediaan->saldo_awal))
                 <tr>
                     <td colspan="2">SALDO AWAL</td>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                    <td></td><td></td>
                     <td align="right">{{ $persediaan->saldo_awal }}</td>
-                    <td align="right">{{ number_format($persediaan->harga_awal,0,",",".") }}</td>
-                    <td align="right">{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
                 </tr>
 
                 @foreach ($datas as $key=>$data)
@@ -87,38 +85,24 @@
                             @endif  
                         </td>
                         @if ($data->jenis==2)
-                            <td></td><td></td><td></td>
+                            <td></td>
                             <td>{{ $data->jumlah }}</td>
-                            <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
-                            <td>{{ number_format($data->harga,0,",",".") }}</td>
                         @endif
                         
                         @if ($data->jenis==1)
                             <td>{{ $data->jumlah }}</td>
-                            <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
-                            <td>{{ number_format($data->harga,0,",",".") }}</td>
-                            <td></td><td></td><td></td>
+                            <td></td>
                         @endif
                         
                         <td>{{ $data->saldo_jumlah }}</td>
-                        <td>{{ number_format($data->saldo_harga,0,",",".") }}</td>
-                        <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
                     </tr>
                 @endforeach
                 
                 <tr align="right">
                     <td align="center" colspan="2">JUMLAH</td>
                     <td>{{ $persediaan->saldo_tambah }}</td>
-                    <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
-                    <td>{{ number_format($persediaan->harga_tambah,0,",",".") }}</td>
-
                     <td>{{ $persediaan->saldo_kurang }}</td>
-                    <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
-                    <td>{{ number_format($persediaan->harga_kurang,0,",",".") }}</td>
-                    
                     <td>{{ $persediaan->saldo_tambah+$persediaan->saldo_awal-$persediaan->saldo_kurang }}</td>
-                    <td>{{ number_format(((float)$persediaan->harga_tambah+(float)$persediaan->harga_awal-(float)$persediaan->harga_kurang),0,",",".") }}</td>
-                    <td>{{ number_format($detail_barang->harga_satuan,0,",",".") }}</td>
                 </tr>
             @endif
         </tbody>
