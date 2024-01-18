@@ -176,7 +176,8 @@ class Opnamepersediaan extends Model
                 FROM opname_persediaan as o 
                 WHERE tahun = $year 
                 GROUP BY o.id_barang
-            ) op ON op.id_barang=mb.id ";
+            ) op ON op.id_barang=mb.id 
+            ORDER BY mb.nama_barang";
 
         $result = DB::select(DB::raw($sql));
 
