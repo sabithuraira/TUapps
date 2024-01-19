@@ -241,6 +241,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'update_bukti']);
     Route::delete('iki_pegawai_bukti/{id}', [IkiMasterController::class, 'destroy_bukti']);
 
+    Route::resource('iki_report', 'IkiReportController');
+
     Route::resource('master_pekerjaan', 'MasterPekerjaanController');
     Route::post('master_pekerjaan_import', [MasterPekerjaanController::class, 'import']);
     Route::post('master_pekerjaan/search_data', 'MasterPekerjaanController@search_data');

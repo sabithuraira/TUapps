@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\PegawaiScope;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -39,11 +40,12 @@ class User extends Authenticatable
     //     static::addGlobalScope(new PegawaiScope);
     // }
 
-    public function getFotoUrlAttribute(){
+    public function getFotoUrlAttribute()
+    {
         $nip_id = substr($this->email, -5);
 
-        if($this->is_foto_exist("https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email)){
-            return "https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email; 
+        if ($this->is_foto_exist("https://simpeg.bps.go.id/apis/pegawai/avatar/" . $this->email)) {
+            return "https://simpeg.bps.go.id/apis/pegawai/avatar/" . $this->email;
         }
         // if(strlen($this->foto)>0){
         //     if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
@@ -67,9 +69,10 @@ class User extends Authenticatable
         // }
     }
 
-    public function getPimpinanAttribute(){
+    public function getPimpinanAttribute()
+    {
         $bos = $this::find($this->pimpinan_id);
-        if($bos==null) $bos = new UserModel;
+        if ($bos == null) $bos = new UserModel;
         return $bos;
         // if($this->kdstjab<4){
         //     if($this->kdstjab==2 && $this->kdgol>32 && $this->kdgol<40){
@@ -135,8 +138,9 @@ class User extends Authenticatable
         // }
     }
 
-    function getEselon3(){
-        $kdorg = substr($this->kdorg, 0,3).'00';
+    function getEselon3()
+    {
+        $kdorg = substr($this->kdorg, 0, 3) . '00';
         $bos = $this::where([
             ['kdorg', '=', $kdorg],
             ['kdesl', '=', 3],
@@ -147,8 +151,9 @@ class User extends Authenticatable
         return $bos;
     }
 
-    function getEselon2(){
-        $kdorg = substr($this->kdorg, 0,2).'000';
+    function getEselon2()
+    {
+        $kdorg = substr($this->kdorg, 0, 2) . '000';
         $bos = $this::where([
             ['kdorg', '=', $kdorg],
             ['kdesl', '=', 2],
@@ -159,7 +164,8 @@ class User extends Authenticatable
         return $bos;
     }
 
-    function getBosRI(){
+    function getBosRI()
+    {
         $bos = new User;
         $bos->name = 'Dr. Suhariyanto';
         $bos->nip_baru = '196106151983121001';
@@ -168,71 +174,69 @@ class User extends Authenticatable
         return $bos;
     }
 
-    function getPegawaiAnda($keyword){
+    function getPegawaiAnda($keyword)
+    {
         $pegawai = array();
 
         $arr_where = [];
         $arr_where[] = ['kdprop', '=', $this->kdprop];
         $arr_where[] = ['id', '<>', $this->id];
 
-        if(strlen($keyword)>0){
+        if (strlen($keyword) > 0) {
             $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
         }
 
         // if($this->kdstjab==4){
-            // if($this->kdesl==4){
+        // if($this->kdesl==4){
 
-            //     $arr_where[] = ['kdorg', '=', $this->kdorg];
-            //     $arr_where[] = ['kdstjab', '<>', 4];
-            //     $arr_where[] = ['kdkab', '=',  $this->kdkab];
+        //     $arr_where[] = ['kdorg', '=', $this->kdorg];
+        //     $arr_where[] = ['kdstjab', '<>', 4];
+        //     $arr_where[] = ['kdkab', '=',  $this->kdkab];
 
-            //     $or_where[] = ['kdorg', '=', 92870];
-            //     $or_where[] = ['kdstjab', '<>', 4];
-            //     $or_where[] = ['kdkab', '=',  $this->kdkab];
+        //     $or_where[] = ['kdorg', '=', 92870];
+        //     $or_where[] = ['kdstjab', '<>', 4];
+        //     $or_where[] = ['kdkab', '=',  $this->kdkab];
 
-            //     $pegawai = $this::where($arr_where)
-            //         ->orWhere(
-            //             (function ($query) use ($or_where) {
-            //                 $query->where($or_where);
-            //             })
-            //         )->paginate();
-            // }
-            if($this->kdesl==3){
-                if($this->kdkab=='00'){
-                    $or_where1 = [];
-                    $or_where2 = [];
+        //     $pegawai = $this::where($arr_where)
+        //         ->orWhere(
+        //             (function ($query) use ($or_where) {
+        //                 $query->where($or_where);
+        //             })
+        //         )->paginate();
+        // }
+        if ($this->kdesl == 3) {
+            if ($this->kdkab == '00') {
+                $or_where1 = [];
+                $or_where2 = [];
 
-                    $or_where1[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
-                    $or_where1[] = ['kdkab', '=',  $this->kdkab];
+                $or_where1[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg, 0, 3)];
+                $or_where1[] = ['kdkab', '=',  $this->kdkab];
 
-                    $or_where2[] = ['kdkab', '<>', '00'];
-                    $or_where2[] = ['kdesl', '=', '3'];
+                $or_where2[] = ['kdkab', '<>', '00'];
+                $or_where2[] = ['kdesl', '=', '3'];
 
-                    $pegawai = $this::where($arr_where)
-                        ->where(
-                            (function ($query) use ($or_where1, $or_where2) {
-                                $query->where($or_where1)
-                                    ->orWhere($or_where2);
-                            })
-                        )
-                        ->orderBy('kdorg')
-                        ->paginate();
-                }
-                else{
-                    $arr_where[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg,0,3)];
-                    $arr_where[] = ['kdkab', '=',  $this->kdkab];
-                    $pegawai = $this::where($arr_where)->paginate();
-                }
+                $pegawai = $this::where($arr_where)
+                    ->where(
+                        (function ($query) use ($or_where1, $or_where2) {
+                            $query->where($or_where1)
+                                ->orWhere($or_where2);
+                        })
+                    )
+                    ->orderBy('kdorg')
+                    ->paginate();
+            } else {
+                $arr_where[] = [\DB::raw('substr(kdorg, 1, 3)'), '=', substr($this->kdorg, 0, 3)];
+                $arr_where[] = ['kdkab', '=',  $this->kdkab];
+                $pegawai = $this::where($arr_where)->paginate();
             }
-            else if($this->kdesl==2){
-                $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
-                $pegawai = $this::where($arr_where)->orderBy('kdorg')->paginate();
-            }
-            else{
-                $pegawai = $this::where([
-                    ['pimpinan_id', '=', $this->id],
-                ])->orderBy('kdorg')->paginate();
-            }
+        } else if ($this->kdesl == 2) {
+            $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg, 0, 2)];
+            $pegawai = $this::where($arr_where)->orderBy('kdorg')->paginate();
+        } else {
+            $pegawai = $this::where([
+                ['pimpinan_id', '=', $this->id],
+            ])->orderBy('kdorg')->paginate();
+        }
         // }
         // else{
         //     $pegawai = $this::where([
@@ -240,26 +244,27 @@ class User extends Authenticatable
         //     ])->paginate();
         // }
 
-        if(Auth::user()->hasRole('superadmin')){
+        if (Auth::user()->hasRole('superadmin')) {
             $arr_where = [];
             $arr_where[] = ['kdprop', '=', $this->kdprop];
             // $arr_where[] = ['id', '<>', $this->id];
 
-            if(strlen($keyword)>0){
+            if (strlen($keyword) > 0) {
                 $arr_where[] = ['name', 'LIKE', '%' . $keyword . '%'];
             }
 
             // $arr_where[] = [\DB::raw('substr(kdorg, 1, 2)'), '=', substr($this->kdorg,0,2)];
             $pegawai = $this::where($arr_where)
-                            ->orderBy('kdorg')->paginate();
+                ->orderBy('kdorg')->paginate();
         }
 
         return $pegawai;
     }
 
-    function is_foto_exist($url){
+    function is_foto_exist($url)
+    {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_NOBODY, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
@@ -267,9 +272,14 @@ class User extends Authenticatable
 
         $result = curl_exec($ch);
         curl_close($ch);
-        if($result !== FALSE) return true;
+        if ($result !== FALSE) return true;
         else return false;
         // $headers=get_headers($url);
         // return stripos($headers[0],"200 OK")?true:false;
+    }
+
+    public function iki(): HasMany
+    {
+        return $this->hasMany(IkiMaster::class, 'nip', 'nip_baru');
     }
 }

@@ -135,6 +135,8 @@
                         </li>
                         <li class="{{ request()->is('iki_pegawai*') ? 'active' : '' }}"><a
                                 href="{{ url('iki_pegawai') }}">Pengelolaan IKI Pegawai</a></li>
+                        <li class="{{ request()->is('iki_report*') ? 'active' : '' }}"><a
+                                href="{{ url('iki_report') }}">Report IKI</a></li>
                         <li class="{{ request()->is('master_pekerjaan*') ? 'active' : '' }}"><a
                                 href="{{ url('master_pekerjaan') }}">Master Pekerjaan</a></li>
                     </ul>
@@ -274,7 +276,8 @@
                         class="{{ request()->is('uker*') || request()->is('uker4*') || request()->is('angka_kredit*') || request()->is('type_kredit*') || request()->is('rincian_kredit*') ? 'active' : '' }}">
                         <a href="#Dashboard" class="has-arrow"><i class="icon-layers"></i> <span>Master Data</span></a>
                         <ul>
-                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a href="{{ url('uker') }}">Unit
+                            <li class="{{ request()->is('uker*') ? 'active' : '' }}"><a
+                                    href="{{ url('uker') }}">Unit
                                     Kerja</a></li>
                             <li class="{{ request()->is('uker4*') ? 'active' : '' }}"><a
                                     href="{{ url('uker4') }}">Unit
