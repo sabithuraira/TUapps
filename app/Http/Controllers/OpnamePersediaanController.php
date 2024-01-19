@@ -76,18 +76,34 @@ class OpnamePersediaanController extends Controller
         //     'year', 'datas', 'monthName', 'last_day_month',
         //     'prevMonthName', 'last_day_prev_month'))
         //     ->setPaper('a4', 'landscape');
-        
+
+
+        $type = $_POST['action'];
+
         $nama_file = 'opname_persediaan_';
-        $nama_file .= $month .'_'.$year.'_'. '.xlsx';
+        if($type==2){
+            $nama_file .= $month .'_'.$year.'_'. '.xlsx';
+    
+            // return $pdf->download($nama_file);
+    
+    
+            return Excel::download(new \App\Exports\OpnamePersediaanExport($month, $year), $nama_file);
+    
+            // return view('opname_persediaan.print_persediaan', compact('month', 
+            //      'year', 'datas', 'monthName', 'last_day_month',
+            //      'prevMonthName', 'last_day_prev_month'));
+        }
+        else{
+            $nama_file .= $month .'_'.$year.'_'. '.pdf';
 
-        // return $pdf->download($nama_file);
+            $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
+                 'year', 'datas', 'monthName', 'last_day_month',
+                 'prevMonthName', 'last_day_prev_month'))
+                ->setPaper('a4', 'portrait');
 
-
-        return Excel::download(new \App\Exports\OpnamePersediaanExport($month, $year), $nama_file);
-
-        // return view('opname_persediaan.print_persediaan', compact('month', 
-        //      'year', 'datas', 'monthName', 'last_day_month',
-        //      'prevMonthName', 'last_day_prev_month'));
+            return $pdf->download($nama_file);
+        }
+        
     }
 
     public function loadData(Request $request){
