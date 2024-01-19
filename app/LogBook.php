@@ -89,6 +89,7 @@ class LogBook extends Model
                 'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
                 'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
                 'status_penyelesaian' =>$value->status_penyelesaian,
+                'jumlah_jam' =>$value->jumlah_jam,
             );
         }
 
@@ -130,6 +131,7 @@ class LogBook extends Model
                 'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
                 'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
                 'status_penyelesaian' =>$value->status_penyelesaian,
+                'jumlah_jam' =>$value->jumlah_jam,
             );
         }
 
@@ -182,6 +184,7 @@ class LogBook extends Model
                 'pemberi_tugas_id'     =>$value->pemberi_tugas_id,
                 'pemberi_tugas_jabatan'     =>$value->pemberi_tugas_jabatan,
                 'status_penyelesaian' =>$value->status_penyelesaian,
+                'jumlah_jam' =>$value->jumlah_jam,
             );
         }
 

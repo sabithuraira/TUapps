@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MasterBarangRequest;
 use PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OpnamePersediaanController extends Controller
 {
@@ -75,18 +76,34 @@ class OpnamePersediaanController extends Controller
         //     'year', 'datas', 'monthName', 'last_day_month',
         //     'prevMonthName', 'last_day_prev_month'))
         //     ->setPaper('a4', 'landscape');
-        
+
+
+        $type = $_POST['action'];
+
         $nama_file = 'opname_persediaan_';
-        $nama_file .= $month .'_'.$year.'_'. '.xlsx';
+        if($type==2){
+            $nama_file .= $month .'_'.$year.'_'. '.xlsx';
+    
+            // return $pdf->download($nama_file);
+    
+    
+            return Excel::download(new \App\Exports\OpnamePersediaanExport($month, $year), $nama_file);
+    
+            // return view('opname_persediaan.print_persediaan', compact('month', 
+            //      'year', 'datas', 'monthName', 'last_day_month',
+            //      'prevMonthName', 'last_day_prev_month'));
+        }
+        else{
+            $nama_file .= $month .'_'.$year.'_'. '.pdf';
 
-        // return $pdf->download($nama_file);
+            $pdf = PDF::loadView('opname_persediaan.print_persediaan', compact('month', 
+                 'year', 'datas', 'monthName', 'last_day_month',
+                 'prevMonthName', 'last_day_prev_month'))
+                ->setPaper('a4', 'portrait');
 
-
-        return Excel::download(new \App\Exports\OpnamePersediaanExport($month, $year), $name_file);
-
-        // return view('opname_persediaan.print_persediaan', compact('month', 
-        //      'year', 'datas', 'monthName', 'last_day_month',
-        //      'prevMonthName', 'last_day_prev_month'));
+            return $pdf->download($nama_file);
+        }
+        
     }
 
     public function loadData(Request $request){
@@ -157,6 +174,17 @@ class OpnamePersediaanController extends Controller
         $list_barang = \App\MasterBarang::all();
 
         return view('opname_persediaan.kartu_kendali',compact('barang','month', 
+                'year', 'list_barang'));
+    }
+
+    public function kartu_kendali_q(Request $request){
+        $barang = \App\MasterBarang::first()->id;
+        $month = date('m');
+        $year = date('Y');
+        
+        $list_barang = \App\MasterBarang::all();
+
+        return view('opname_persediaan.kartu_kendali_q',compact('barang','month', 
                 'year', 'list_barang'));
     }
 
@@ -272,6 +300,70 @@ class OpnamePersediaanController extends Controller
             'year', 'barang', 'datas', 'detail_barang', 'persediaan',
             'monthName'))
             ->setPaper('a4', 'landscape');
+        
+        $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
+        $nama_file .= $month .'_'.$year.'.pdf';
+
+        return $pdf->download($nama_file);
+    }
+
+    public function print_kartukendali_q(Request $request){
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+        $barang = \App\MasterBarang::first()->id;
+
+        if(strlen($request->get('p_month'))>0)
+            $month = $request->get('p_month');
+
+        if(strlen($request->get('p_year'))>0)
+            $year = $request->get('p_year');
+            
+        if(strlen($request->get('p_barang'))>0)
+            $barang = $request->get('p_barang');
+
+        $model = new \App\Opnamepersediaan();
+        
+        $persediaan = \App\OpnamePersediaan::where('id_barang', '=' ,$barang)
+                ->where('bulan', '=', $month)
+                ->where('tahun', '=', $year)   
+                ->first();
+
+        $detail_barang = \App\MasterBarang::find($barang);
+
+        if($persediaan!=null){
+            $datas = $model->KartuKendali($barang, $month, $year);
+
+            $saldo_jumlah = $persediaan->saldo_awal;
+            $saldo_harga = $persediaan->harga_awal;
+
+            $total_jumlah = 0;
+            $total_harga = 0;
+
+            foreach($datas as $key=>$value){
+                if($value->jenis==2){
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah - $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga - $value->harga;    
+                }
+                else{
+                    $datas[$key]->saldo_jumlah = $saldo_jumlah + $value->jumlah;
+                    $datas[$key]->saldo_harga = $saldo_harga + $value->harga;    
+                }
+
+                $saldo_jumlah = $datas[$key]->saldo_jumlah;
+                $saldo_harga = $datas[$key]->saldo_harga;
+            }
+        }
+        else{
+            $persediaan = (object) array();
+        }
+        
+        $monthName = date("F", mktime(0, 0, 0, $month, 10));
+
+        $pdf = PDF::loadView('opname_persediaan.print_kartukendali_q', compact('month', 
+            'year', 'barang', 'datas', 'detail_barang', 'persediaan',
+            'monthName'))
+            ->setPaper('a4', 'portrait');
         
         $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
         $nama_file .= $month .'_'.$year.'.pdf';

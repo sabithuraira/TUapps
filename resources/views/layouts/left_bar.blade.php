@@ -221,6 +221,8 @@
                                 </li>
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
                                         href="{{ url('opname_persediaan/kartu_kendali') }}">Kartu Kendali</a></li>
+                                <li class="{{ request()->is('opname_persediaan/kartu_kendali_q') ? 'active' : '' }}"><a
+                                        href="{{ url('opname_persediaan/kartu_kendali_q') }}">Kartu Kendali Kuantitas</a></li>
                                 @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
                                     <li class="{{ request()->is('pemegang_bmn*') ? 'active' : '' }}">
                                         <a href="{{ url('pemegang_bmn') }}"> <span>Pemegang BMN</span></a>

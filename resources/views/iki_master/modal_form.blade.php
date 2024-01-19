@@ -94,7 +94,6 @@
     </div>
 </div>
 
-
 <div class="modal" id="select_kegiatan" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

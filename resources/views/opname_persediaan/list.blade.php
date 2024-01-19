@@ -3,7 +3,8 @@
         @csrf 
         <input type="hidden"  v-model="month" name="p_month">
         <input type="hidden"  v-model="year" name="p_year">
-        <button name="action" class="float-right" type="submit" value="2"><i class="icon-printer"></i>&nbsp Cetak &nbsp</button>
+        <button name="action" class="float-right ml-1 mr-1" type="submit" value="2"><i class="fa fa-file-excel-o"></i>&nbsp Cetak Excel&nbsp</button>
+        <button name="action" class="float-right ml-1 mr-1" type="submit" value="3"><i class="fa fa-file-pdf-o"></i>&nbsp Cetak PDF&nbsp</button> 
     </form>
     <br/><br/>
     <table class="table-bordered" style="min-width:100%">

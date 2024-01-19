@@ -72,11 +72,12 @@
                     <br>
                     <div class="row px-2">
                         <div class="col table-responsive">
-                            <table class="table-bordered" style="font-size: small">
+                            <table class="table-bordered" style="font-size: small;width:100%;min-width:100%">
                                 <thead class="text-center">
                                     <tr>
                                         <th rowspan="2">No</th>
                                         <th rowspan="2">IK</th>
+                                        <th rowspan="2">Bulan</th>
                                         <th rowspan="2">Target & Satuan</th>
                                         <th colspan="3">Rincian Logbook</th>
                                     </tr>
@@ -100,15 +101,39 @@
                                                     <td class="text-center">{{  $i+1 }}</td>
                                                     <td class="text-center" style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                         {{ $dt->ik }} </td>
+                                                    <td class="text-center">
+                                                        {{ config('app.months')[$dt->bulan] }}<br/>
+                                                        {{ $dt->tahun }}
+                                                    </td>
                                                     <td class="text-center">{{ $dt->target . ' ' . $dt->satuan }}</td>
-                                                    <td colspan="3">
+                                                    <td class="text-center pb-2 pt-2" colspan="3">
                                                         @if ($request->user == $auth->nip_baru)
                                                         <a href="#" role="button" v-on:click="addLogBook"  
                                                             class="btn btn-sm btn-primary" data-toggle="modal" 
-                                                            data-label_iki="{{ $dt->ik }}"
+                                                            data-label_iki="{{ $dt->ik }} [{{ config('app.months')[$dt->bulan] }} {{ $dt->tahun }}]"
                                                             data-id_iki="{{ $dt->id }}" 
                                                             data-target="#add_logbooks">
-                                                        <i class="fa fa-plus-circle"></i> <span>Tambah Log Book</span></a>
+                                                        <i class="fa fa-plus-circle"></i> <span>Log Book</span></a>
+
+                                                        <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
+                                                            data-toggle="modal" data-target="#modal_edit_iki"
+                                                            data-id_iki="{{ $dt->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            data-satuan = "{{ $dt->satuan }}"
+                                                            data-target_iki="{{ $dt->target }}"
+                                                            data-bulan="{{ $dt->bulan }}"
+                                                            data-tahun="{{ $dt->tahun }}"
+                                                            data-id_tim="{{ $dt->id_tim }}"
+                                                            data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                            @click="btn_edit_iki($event)">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
+                                                            data-toggle="modal" data-target="#modal_hapus_iki"
+                                                            data-id_iki="{{ $dt->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            @click="btn_hapus_iki($event)">
+                                                            <i class="fa fa-trash"></i>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -117,15 +142,39 @@
                                                     <td class="text-center" rowspan="{{ $total_logbook+1 }}">{{ $i+1 }}</td>
                                                     <td class="text-center" rowspan="{{ $total_logbook+1 }}" style="max-width: 200px; word-wrap: break-word; white-space:normal">
                                                         {{ $dt->ik }} </td>
+                                                    <td class="text-center" rowspan="{{ $total_logbook+1 }}">
+                                                        {{ config('app.months')[$dt->bulan] }}<br/>
+                                                        {{ $dt->tahun }}
+                                                    </td>
                                                     <td class="text-center" rowspan="{{ $total_logbook+1 }}">{{ $dt->target . ' ' . $dt->satuan }}</td>
-                                                    <td class="text-center" colspan="3">
+                                                    <td class="text-center pb-2 pt-2" colspan="3">
                                                         @if ($request->user == $auth->nip_baru)
                                                         <a href="#" role="button" v-on:click="addLogBook"  
                                                             class="btn btn-sm btn-primary" data-toggle="modal" 
-                                                            data-label_iki="{{ $dt->ik }}"
+                                                            data-label_iki="{{ $dt->ik }} [{{ config('app.months')[$dt->bulan] }} {{ $dt->tahun }}]"
                                                             data-id_iki="{{ $dt->id }}" 
                                                             data-target="#add_logbooks">
-                                                        <i class="fa fa-plus-circle"></i> <span>Tambah Log Book</span></a>
+                                                        <i class="fa fa-plus-circle"></i> <span>Log Book</span></a>
+
+                                                        <a class="btn btn-warning btn-sm" href="#modal_edit_iki"
+                                                            data-toggle="modal" data-target="#modal_edit_iki"
+                                                            data-id_iki="{{ $dt->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            data-satuan = "{{ $dt->satuan }}"
+                                                            data-target_iki="{{ $dt->target }}"
+                                                            data-bulan="{{ $dt->bulan }}"
+                                                            data-tahun="{{ $dt->tahun }}"
+                                                            data-id_tim="{{ $dt->id_tim }}"
+                                                            data-referensi_sumber="{{ $dt->referensi_sumber }}"
+                                                            @click="btn_edit_iki($event)">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger btn-sm" href="#modal_hapus_iki"
+                                                            data-toggle="modal" data-target="#modal_hapus_iki"
+                                                            data-id_iki="{{ $dt->id }}"
+                                                            data-ik="{{ $dt->ik }}"
+                                                            @click="btn_hapus_iki($event)">
+                                                            <i class="fa fa-trash"></i>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -164,52 +213,47 @@
                     <div class="modal-body">
                         <form id="form_tambah_iki" action="{{ url('iki_pegawai') }}" method="POST">
                             @csrf
-                            <input type="text" name="nip" id="nip_tambah_iki" value="{{ $request->user }}"
-                                readonly hidden required>
+                            <input type="text" name="nip" id="nip_tambah_iki" 
+                                v-model="form_iki.nip" readonly hidden required>
                             <div class="form-group">
                                 <label>Nama IK</label>
-                                <input type="text" name="ik" class="form-control" required>
+                                <input type="text" name="ik" v-model="form_iki.nama_iki" 
+                                    class="form-control" required>
                             </div>
+
                             <div class="form-group">
                                 <label>Satuan</label>
-                                <input type="text" name="satuan" class="form-control" required>
+                                <input type="text" name="satuan"  v-model="form_iki.satuan" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Target</label>
-                                <input type="text" name="target" class="form-control" required>
+                                <input type="text" name="target" v-model="form_iki.target" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun</label>
                                 <select name="tahun" id="tahun_tambah_iki"
+                                    v-model="form_iki.tahun"
                                     class="form-control show-tick ms search-select">
-                                    <option value="">Semua</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024" selected>2024</option>
+                                    <option value="">- Pilih Tahun -</option>
+                                    @for ($i=date('Y');$i>=2023;$i--)
+                                        <option  value="{{ $i }}">
+                                            {{ $i }}
+                                        </option>
+                                    @endfor
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Bulan</label>
-                                <select name="bulan" id="bulan_tambah_iki"
-                                    class="form-control show-tick ms search-select">
-                                    <option value="1">Januari</option>
-                                    <option value="2">Februari</option>
-                                    <option value="3">Maret</option>
-                                    <option value="4">April</option>
-                                    <option value="5">Mei</option>
-                                    <option value="6">Juni</option>
-                                    <option value="7">Juli</option>
-                                    <option value="8">Agustus</option>
-                                    <option value="9">September</option>
-                                    <option value="10">Oktober</option>
-                                    <option value="11">November</option>
-                                    <option value="12">Desember</option>
-                                </select>
+                                <label>Bulan</label> <span class="text-muted">(cek pada bulan yang aktif untuk IKI ini)</span><br/>
+                                @foreach ( config('app.months') as $key=>$value)
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" v-model="form_iki.bulan" name="bulan[]" type="checkbox" value="{{ $key }}">
+                                        <span class="form-check-label">{{ $value }}</span>
+                                    </div>
+                                @endforeach
                             </div>
-
                             <div class="form-group">
                                 <label> Tim</label>
-                                <select name="id_tim" id="id_tim_tambah_iki"
+                                <select name="id_tim" id="id_tim_tambah_iki" v-model="form_iki.tim" 
                                     class="form-control show-tick ms search-select">
                                     @foreach ($tim_user as $tim)
                                         <option value="{{ $tim->id }}"> {{ $tim->nama_tim }}</option>
@@ -219,6 +263,7 @@
                             <div class="form-group">
                                 <label>Referensi Sumber IKI</label>
                                 <select name="referensi_sumber" id="referensi_sumber_tambah_iki"
+                                    v-model="form_iki.referensi" 
                                     class="form-control show-tick ms search-select">
                                     <option value="">Tidak ada referensi</option>
                                     @foreach ($iki_atasan as $iki_ats)
@@ -265,28 +310,22 @@
                                 <label>Tahun</label>
                                 <select name="tahun" id="tahun_edit_iki"
                                     class="form-control show-tick ms search-select">
-                                    <option value="">Semua</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024" selected>2024</option>
+                                    <option value="">- Pilih Tahun -</option>
+                                    @for ($i=date('Y');$i>=2023;$i--)
+                                        <option  value="{{ $i }}">
+                                            {{ $i }}
+                                        </option>
+                                    @endfor
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Bulan</label>
                                 <select name="bulan" id="bulan_edit_iki"
                                     class="form-control show-tick ms search-select">
-                                    <option value="1">Januari</option>
-                                    <option value="2">Februari</option>
-                                    <option value="3">Maret</option>
-                                    <option value="4">April</option>
-                                    <option value="5">Mei</option>
-                                    <option value="6">Juni</option>
-                                    <option value="7">Juli</option>
-                                    <option value="8">Agustus</option>
-                                    <option value="9">September</option>
-                                    <option value="10">Oktober</option>
-                                    <option value="11">November</option>
-                                    <option value="12">Desember</option>
+                                    <option value="">- Pilih Bulan -</option>
+                                    @foreach ( config('app.months') as $key=>$value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -359,6 +398,11 @@
                     keyword_kegiatan: '',
 
                     list_kegiatan: [],
+                    form_iki: {
+                        nip: {!! json_encode($request->user) !!}, 
+                        nama_iki: '', satuan: '', target: '',
+                        tahun: '', bulan: [], tim: '', referensi: ''
+                    },
                 },
                 methods: {
                     addLogBook: function (event) {
@@ -380,7 +424,6 @@
                             self.form_id_iki = event.currentTarget.getAttribute('data-id_iki');
                         }
                     },
-
                     saveLogBook: function () {
                         var self = this;
 
@@ -427,10 +470,13 @@
                         }
                     },
                     btn_edit_iki: function(event) {
-                        this.id_edit_iki = event.currentTarget.getAttribute('data-id_iki');
-                        this.ik_edit_iki = event.currentTarget.getAttribute('data-ik');
-                        this.satuan_edit_iki = event.currentTarget.getAttribute('data-satuan');
-                        this.target_edit_iki = event.currentTarget.getAttribute('data-target_iki');
+                        var self = this;
+
+                        self.id_edit_iki = event.currentTarget.getAttribute('data-id_iki');
+                        self.ik_edit_iki = event.currentTarget.getAttribute('data-ik');
+                        self.satuan_edit_iki = event.currentTarget.getAttribute('data-satuan');
+                        self.target_edit_iki = event.currentTarget.getAttribute('data-target_iki');
+
                         document.getElementById('bulan_edit_iki').value = event.currentTarget
                             .getAttribute(
                                 'data-bulan');
@@ -438,12 +484,10 @@
                             .getAttribute(
                                 'data-tahun');
                         document.getElementById('id_tim_edit_iki').value = event.currentTarget
-                            .getAttribute(
-                                'data-id_tim');
-                        document.getElementById('referensi_jenis_edit_iki').value = event.currentTarget
-                            .getAttribute('data-referensi_jenis');
+                            .getAttribute('data-id_tim');
                         document.getElementById('referensi_sumber_edit_iki').value = event.currentTarget
                             .getAttribute('data-referensi_sumber');
+
                         document.getElementById('form_edit_iki').action = window.location.origin +
                             window.location
                             .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
@@ -459,7 +503,6 @@
                             window.location
                             .pathname + '/' + event.currentTarget.getAttribute('data-id_iki');
                     },
-
                     selectKegiatan: function (event) {
                         var self = this;
                         if (event) {
@@ -486,6 +529,23 @@
                             console.log(JSON.stringify(msg));
                             $('#wait_progres').modal('hide');
                         });
+                    },
+                    validateSubmit:function(){
+                        var self = this;
+
+                        let err_msg = []
+                        if(self.form_iki.nama_iki.length==0 || self.form_iki.nama_iki==null) err_msg.push("Nama IKI tidak boleh kosong")
+                        if(self.form_iki.satuan.length==0 || self.form_iki.satuan==null) err_msg.push("Satuan tidak boleh kosong")
+                        if(self.form_iki.target.length==0 || self.form_iki.target==null) err_msg.push("Target tidak boleh kosong")
+                        if(self.form_iki.tahun.length==0 || self.form_iki.tahun==null) err_msg.push("Tahun tidak boleh kosong")
+                        if(self.form_iki.bulan.length==0) err_msg.push("Bulan minimal dipilih 1")
+                        if(self.form_iki.tim.length==0 || self.form_iki.tim==null) err_msg.push("Informasi TIM tidak boleh kosong")
+
+                        if(err_msg.length==0) return true
+                        else{
+                            alert(err_msg.join())
+                            return false
+                        }
                     }
                 }
             });
@@ -496,6 +556,10 @@
                     endDate: 'd',
                 });
                 vm.searchKegiatan();
+            });
+
+            $('#form_tambah_iki').on('submit', function() {
+                return vm.validateSubmit();
             });
 
             $('#form_tanggal').change(function() {
