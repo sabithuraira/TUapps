@@ -50,6 +50,33 @@
     </div>
 
     <div class="form-group">
+        <label>{{ $model->attributes()['menimbang']}}:</label>
+        <textarea id="menimbang" class="summernote form-control {{($errors->first('menimbang') ? ' parsley-error' : '')}}" name="menimbang" value="{{ old('menimbang', $model->menimbang) }}" rows="3"></textarea>
+        <small class="text-info">
+            <u>Informasi ini dapat berisi banyak rincian, gunakan baris baru (enter) sebagai pemisah setiap rincian. Contoh:</u><br/>
+            Bahwa untuk kelancaran pelaksanaan ....<br/>
+            Bahwa untuk terwujudnya kegiatan ....
+        </small>
+        
+        @foreach ($errors->get('menimbang') as $msg)
+            <p class="text-danger">{{ $msg }}</p>
+        @endforeach
+    </div>
+
+    <div class="form-group">
+        <label>{{ $model->attributes()['mengingat']}}:</label>
+        <textarea id="mengingat" class="summernote form-control {{($errors->first('mengingat') ? ' parsley-error' : '')}}" name="mengingat" value="{{ old('mengingat', $model->mengingat) }}" rows="5"></textarea>
+        <small class="text-info">
+        <u>Informasi ini dapat berisi banyak rincian, gunakan baris baru (enter) sebagai pemisah setiap rincian. Contoh:</u><br/>
+            Surat Pemanggilan Peserta Pelatihan ....<br/>
+            Surat Permintaan ....
+        </small>
+        @foreach ($errors->get('mengingat') as $msg)
+            <p class="text-danger">{{ $msg }}</p>
+        @endforeach
+    </div>
+
+    <div class="form-group">
         <label>{{ $model->attributes()['mak'] }}:</label>
         <select class="form-control {{($errors->first('mak') ? ' parsley-error' : '')}}" id="mak" name="mak" :disabled="sumber_anggaran==3">
             <option v-for="(value, index) in list_select_anggaran" :value="value.id">
@@ -435,6 +462,31 @@
             // startDate: 'd',
             format: 'yyyy-mm-dd',
         });
+    });
+
+    $('#menimbang').summernote({
+        placeholder: 'Silahkan ikuti format yang ada pada keterangan di bawah',
+        height: 120,
+        toolbar: [
+          ['font', ['bold', 'underline', 'clear']],
+        ]
+      });
+
+    $('#mengingat').summernote({
+        placeholder: 'Silahkan ikuti format yang ada pada keterangan di bawah',
+        height: 120,
+        toolbar: [
+          ['font', ['bold', 'underline', 'clear']],
+        ]
+      });
+
+
+    $(function() {
+        var initMenimbang = {!! json_encode(old('menimbang', $model->menimbang)) !!};
+        $('#menimbang').summernote('code', initMenimbang);
+        
+        var initMengingat = {!! json_encode(old('mengingat', $model->mengingat)) !!};
+        $('#mengingat').summernote('code', initMengingat);
     });
 
     $(".frep").on("submit", function(){

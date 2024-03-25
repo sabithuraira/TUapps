@@ -37,6 +37,8 @@ class SuratTugasRequest extends FormRequest
             'sumber_anggaran' => 'Sumber Anggaran',
             'mak' => 'MAK',
             'tugas' => 'Tugas',
+            'menimbang' => 'Menimbang',
+            'mengingat' => 'Mengingat',
             'unit_kerja' => 'Unit Kerja',
             'created_by' => 'Dibuat oleh',
             'upated_by' => 'Terakhir diperbaharui oleh',

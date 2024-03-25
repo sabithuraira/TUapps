@@ -234,6 +234,15 @@ class SuratTugasController extends Controller
         $model->sumber_anggaran = $request->get('sumber_anggaran');
         $model->mak = $request->get('mak');
         $model->tugas = $request->get('tugas');
+
+        $menimbang = str_replace("<p>", "<li>", $request->get('menimbang'));
+        $menimbang = str_replace("</p>", "</li>", $menimbang);
+        $model->menimbang = $menimbang;
+
+        $mengingat = str_replace("<p>", "<li>", $request->get('mengingat'));
+        $mengingat = str_replace("</p>", "</li>", $mengingat);
+        $model->mengingat = $mengingat;
+
         $model->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
         $model->kategori = 1;
         $model->created_by = Auth::id();
@@ -1007,22 +1016,30 @@ class SuratTugasController extends Controller
         $ketua = \App\SuratTugasRincian::where('id_surtug', '=', $model->id)
             ->where('kategori_petugas', '=', 1)->first();
 
-        $pdf = PDF::loadView('surat_tugas.print_st', compact(
-            'real_id',
-            'model_rincian',
-            'model',
-            'unit_kerja',
-            'unit_kerja_ttd',
-            'list_anggota',
-            'ketua',
-            'user_ttd'
-        ))->setPaper('a4', 'potrait');
+        // $pdf = PDF::loadView('surat_tugas.print_st', compact(
+        //     'real_id',
+        //     'model_rincian',
+        //     'model',
+        //     'unit_kerja',
+        //     'unit_kerja_ttd',
+        //     'list_anggota',
+        //     'ketua',
+        //     'user_ttd'
+        // ))->setPaper('a4', 'potrait');
 
-        $nama_file = 'st_' . $model_rincian->nomor_st . '.pdf';
-        return $pdf->download($nama_file);
+        // $nama_file = 'st_' . $model_rincian->nomor_st . '.pdf';
+        // return $pdf->download($nama_file);
 
-        // return view('surat_tugas.print_st',compact('real_id', 
-        //     'model_rincian', 'model', 'unit_kerja'));
+        return view('surat_tugas.print_st',compact(
+                'real_id',
+                'model_rincian',
+                'model',
+                'unit_kerja',
+                'unit_kerja_ttd',
+                'list_anggota',
+                'ketua',
+                'user_ttd'
+            ));
     }
 
     public function print_st_pelatihan($id){
@@ -1287,6 +1304,10 @@ class SuratTugasController extends Controller
         $model->sumber_anggaran = $request->get('sumber_anggaran');
         $model->mak = $request->get('mak');
         $model->tugas = $request->get('tugas');
+
+        $model->menimbang = $request->get('menimbang');
+        $model->mengingat = $request->get('mengingat');
+
         $model->updated_by = Auth::id();
         // $model->created_at = date('Y-m-d H:i:s', strtotime($request->get('created_at')));
         $model->save();
