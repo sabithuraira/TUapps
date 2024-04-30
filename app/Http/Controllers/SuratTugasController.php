@@ -11,6 +11,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use iio\libmergepdf\Merger;
 
+
+
 class SuratTugasController extends Controller
 {
     /**
@@ -235,12 +237,24 @@ class SuratTugasController extends Controller
         $model->mak = $request->get('mak');
         $model->tugas = $request->get('tugas');
 
-        $menimbang = str_replace("<p>", "<li>", $request->get('menimbang'));
-        $menimbang = str_replace("</p>", "</li>", $menimbang);
+        $menimbang = "";
+        if(str_contains($request->get('menimbang'), '<p')){
+            $menimbang = str_replace("<p", "<li", $request->get('menimbang'));
+            $menimbang = str_replace("/p>", "/li>", $menimbang);
+        }
+        else{
+            $menimbang = "<li>".$request->get('menimbang')."</li>";
+        }
         $model->menimbang = $menimbang;
 
-        $mengingat = str_replace("<p>", "<li>", $request->get('mengingat'));
-        $mengingat = str_replace("</p>", "</li>", $mengingat);
+        $mengingat = "";
+        if(str_contains($request->get('menimbang'), '<p')){
+            $mengingat = str_replace("<p", "<li", $request->get('mengingat'));
+            $mengingat = str_replace("/p>", "/li>", $mengingat);
+        }
+        else{
+            $mengingat = "<li>".$request->get('mengingat')."</li>";
+        }
         $model->mengingat = $mengingat;
 
         $model->unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
@@ -301,7 +315,13 @@ class SuratTugasController extends Controller
                         ])->orderBy('id', 'desc')->first();
 
                     if ($datas != null) {
-                        $exp_nomor_st = explode("/", $datas->nomor_st)[0];
+                        // $exp_nomor_st = explode("/", $datas->nomor_st)[0];
+                        $exp_nomor_st1 = explode("/", $datas->nomor_st)[0];
+                        $exp_nomor_st = $exp_nomor_st1;
+                        if(count(explode("-",$exp_nomor_st1))>1){
+                            $exp_nomor_st = explode("-", $exp_nomor_st1)[1];
+                        }
+
                         $prev_nomor_st = (int)$exp_nomor_st;
                         $nomor_st = $prev_nomor_st + 1;
                     }
@@ -309,7 +329,7 @@ class SuratTugasController extends Controller
                     // while (strlen($nomor_st) < 4)
                     //     $nomor_st = '0' . $nomor_st;
 
-                    $model_r->nomor_st = $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . $model_r->kode_klasifikasi .'/' . date('Y');
+                    $model_r->nomor_st = 'B-' . $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . $model_r->kode_klasifikasi .'/' . date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $datas_spd = \App\SuratTugasRincian::where([
@@ -452,7 +472,12 @@ class SuratTugasController extends Controller
             ->orderBy('id', 'desc')->first();
 
         if ($datas != null) {
-            $exp_nomor_st = explode("/", $datas->nomor_st)[0];
+            $exp_nomor_st1 = explode("/", $datas->nomor_st)[0];
+            $exp_nomor_st = $exp_nomor_st1;
+            if(count(explode("-",$exp_nomor_st1))>1){
+                $exp_nomor_st = explode("-", $exp_nomor_st1)[1];
+            }
+            
             $prev_nomor_st = (int)$exp_nomor_st;
             $nomor_st = $prev_nomor_st + 1;
         }
@@ -514,7 +539,7 @@ class SuratTugasController extends Controller
                     if ($i == 1) $model_r->kategori_petugas = 1;
                     else $model_r->kategori_petugas = 2;
 
-                    $model_r->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/' . $model_r->kode_klasifikasi .'/'. date('Y');
+                    $model_r->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/' . $model_r->kode_klasifikasi .'/'. date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $model_r->status_aktif = 1;
@@ -652,7 +677,13 @@ class SuratTugasController extends Controller
             ->orderBy('id', 'desc')->first();
 
         if ($datas != null) {
-            $exp_nomor_st = explode("/", $datas->nomor_st)[0];
+            // $exp_nomor_st = explode("/", $datas->nomor_st)[0];
+            $exp_nomor_st1 = explode("/", $datas->nomor_st)[0];
+            $exp_nomor_st = $exp_nomor_st1;
+            if(count(explode("-",$exp_nomor_st1))>1){
+                $exp_nomor_st = explode("-", $exp_nomor_st1)[1];
+            }
+
             $prev_nomor_st = (int)$exp_nomor_st;
             $nomor_st = $prev_nomor_st + 1;
         }
@@ -703,7 +734,7 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r->nomor_st = $nomor_st_label . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r->nomor_st = 'B-' . $nomor_st_label . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
@@ -751,7 +782,7 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r2->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r2->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r2->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
@@ -799,7 +830,7 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r3->nomor_st = $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r3->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r3->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
@@ -1325,12 +1356,12 @@ class SuratTugasController extends Controller
 
         $explode_st = explode("/",$model_rincian->nomor_st);
 
-        if(count($explode_st)==4) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[2] . '/' . $explode_st[3];
+        if(count($explode_st)==4) $model_rincian->nomor_st = $explode_st[0] . '/' . $explode_st[1] . '/' . $model_rincian->kode_klasifikasi .'/'  . $explode_st[3];
 
         $explode_spd = explode("/",$model_rincian->nomor_spd);
         if(count($explode_spd)>0){
             if(count($explode_spd)==5){
-                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[3]. '/' . $explode_spd[4];
+                $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/'  . $explode_spd[4];
             }
             else if(count($explode_spd)==6){
                 $model_rincian->nomor_spd = $explode_spd[0] . '/' . $explode_spd[1] . '/' . $explode_spd[2] . '/SPD/'  . $model_rincian->kode_klasifikasi . '/' . $explode_spd[4]. '/' . $explode_spd[5];
