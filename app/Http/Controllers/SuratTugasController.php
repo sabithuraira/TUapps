@@ -238,7 +238,7 @@ class SuratTugasController extends Controller
         $model->tugas = $request->get('tugas');
 
         $menimbang = "";
-        if(str_contains($request->get('menimbang'), '<p')){
+        if($request->get('menimbang')!=null && str_contains($request->get('menimbang'), '<p')){
             $menimbang = str_replace("<p", "<li", $request->get('menimbang'));
             $menimbang = str_replace("/p>", "/li>", $menimbang);
         }
@@ -248,7 +248,7 @@ class SuratTugasController extends Controller
         $model->menimbang = $menimbang;
 
         $mengingat = "";
-        if(str_contains($request->get('menimbang'), '<p')){
+        if($request->get('mengingat')!=null && str_contains($request->get('mengingat'), '<p')){
             $mengingat = str_replace("<p", "<li", $request->get('mengingat'));
             $mengingat = str_replace("/p>", "/li>", $mengingat);
         }
