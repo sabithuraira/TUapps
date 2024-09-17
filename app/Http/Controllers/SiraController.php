@@ -516,6 +516,16 @@ class SiraController extends Controller
         return redirect('sira');
     }
 
+    public function syncAll(Request $request){
+
+        $model = new \App\SiraAkun();
+        $all = \App\SiraAkun::all();
+
+        foreach($all as $value){
+            $model->syncRealisasi($value->id);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -531,6 +541,7 @@ class SiraController extends Controller
                             ->where('kode_akun', $model->kode_akun)->delete();
 
         $model->delete();
+
         return redirect('sira')->with('success','Information has been  deleted');
     }
 
@@ -541,6 +552,7 @@ class SiraController extends Controller
                         ->where('kode_mak', $model->kode_mak)->first();
 
         $model->delete();
+        $model_akun->syncRealisasi($model_akun->id);
         // return redirect('sira/'.$model_akun->id.'/show')->with('success','Information has been  deleted');
         return response()->json(['status'=>'success', 'data'=>'ok']);
     }
