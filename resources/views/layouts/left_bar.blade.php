@@ -28,41 +28,22 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
 
-                <li class="{{ request()->is('dashboard*') ? 'active' : '' }}">
+                <li class="{{ request()->is('dashboard/index') ? 'active' : '' }}">
+                    <a href="{{ url('dashboard/index') }}"><i class="icon-home"></i>
+                        <span>Beranda</span></a>
+                </li>
+                <li class="{{ (request()->is('dashboard*') && !request()->is('dashboard/index')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
                         <span>Dashboard</span></a>
                     <ul>
-                        <li class="{{ request()->is('dashboard/index*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/index') }}">PL-KUMKM</a></li>
+                        <li class="{{ request()->is('dashboard/umkm*') ? 'active' : '' }}"><a
+                                href="{{ url('dashboard/umkm') }}">PL-KUMKM</a></li>
                         <li class="{{ request()->is('dashboard/pes_st2023*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/pes_st2023') }}">PES ST2023</a></li>
                         <li class="{{ request()->is('dashboard/st2023*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/st2023') }}">ST 2023</a></li>
-                        {{-- <li class="{{ request()->is('dashboard/waktu*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/waktu') }}">Dashboard Waktu</a></li>
-                        <li class="{{ request()->is('dashboard/lokasi*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/lokasi') }}">Dashboard Lokasi</a></li>
-                        <li class="{{ request()->is('dashboard/target*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/target') }}">Dashboard Target</a></li>
-                        <li class="{{ request()->is('dashboard/koseka*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/koseka') }}">Dashboard Koseka</a></li>
-                        <li class="{{ request()->is('dashboard/pendampingan*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/pendampingan') }}">Dashboard pendampingan</a></li>
-                        <li class="{{ request()->is('dashboard/alokasi*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/alokasi') }}">Alokasi ST2023</a></li>
-                        <li class="{{ request()->is('dashboard/daftar_ruta*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/daftar_ruta') }}">Pindah Ruta ST2023</a></li>
-                        <li class="{{ request()->is('dashboard/petugas*') ? 'active' : '' }}"><a
-                                href="{{ url('dashboard/petugas') }}">Petugas ST2023</a></li> --}}
                     </ul>
                 </li>
-
-                {{-- @hasanyrole('superadmin|pengelola_regsosek')
-                    <li class="{{ request()->is('regsosek*') ? 'active' : '' }}">
-                        <a href="{{ url('regsosek') }}"> <i class="icon-doc"></i><span>SLS Regsosek</span></a>
-                    </li>
-                @endhasanyrole --}}
-
                 <li
                     class="{{ request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
