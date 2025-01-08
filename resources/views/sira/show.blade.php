@@ -163,10 +163,164 @@
                                             @endphp 
                                             - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Surat Tugas</a><br/>
                                         @endif
+
+                                        @if($data->path_spk!='' && $data->path_spk!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_spk);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh SPK</a><br/>
+                                        @endif
+
+                                        @if($data->path_bast!='' && $data->path_bast!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_bast);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh BAST</a><br/>
+                                        @endif
+
+                                        @if($data->path_rekap_belanja!='' && $data->path_rekap_belanja!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_rekap_belanja);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Rekap Belanja</a><br/>
+                                        @endif
+
+                                        @if($data->path_laporan!='' && $data->path_laporan!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_laporan);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Laporan</a><br/>
+                                        @endif
+
+                                        @if($data->path_jadwal!='' && $data->path_jadwal!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_jadwal);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Jadwal</a><br/>
+                                        @endif
+
+                                        @if($data->path_drpp!='' && $data->path_drpp!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_drpp);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh DRPP</a><br/>
+                                        @endif
+
+                                        @if($data->path_invoice!='' && $data->path_invoice!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_invoice);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Invoice</a><br/>
+                                        @endif
+
+                                        @if($data->path_resi_pengiriman!='' && $data->path_resi_pengiriman!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_resi_pengiriman);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Resi Pengiriman</a><br/>
+                                        @endif
+
+                                        @if($data->path_npwp_rekkor!='' && $data->path_npwp_rekkor!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_npwp_rekkor);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh NPWP Rekkor</a><br/>
+                                        @endif
+
+                                        @if($data->path_tanda_terima!='' && $data->path_tanda_terima!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_tanda_terima);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Tanda Terima</a><br/>
+                                        @endif
+
+                                        @if($data->path_cv!='' && $data->path_cv!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_cv);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh CV</a><br/>
+                                        @endif
+
+                                        @if($data->path_bahan_paparan!='' && $data->path_bahan_paparan!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_bahan_paparan);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Bahan Paparan</a><br/>
+                                        @endif
+
+                                        @if($data->path_ba_pembayaran!='' && $data->path_ba_pembayaran!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_ba_pembayaran);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh BA Pembayaran</a><br/>
+                                        @endif
+
+                                        @if($data->path_spd_visum!='' && $data->path_spd_visum!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_spd_visum);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh SPD Visum</a><br/>
+                                        @endif
+
+                                        @if($data->path_presensi_uang_makan!='' && $data->path_presensi_uang_makan!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_presensi_uang_makan);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Presensi Uang Makan</a><br/>
+                                        @endif
+
+                                        @if($data->path_rincian_perjadin!='' && $data->path_rincian_perjadin!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_rincian_perjadin);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Rincian Perjadin</a><br/>
+                                        @endif
+
+                                        @if($data->path_bukti_transport!='' && $data->path_bukti_transport!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_bukti_transport);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Bukti Transport</a><br/>
+                                        @endif
+
+                                        @if($data->path_bukti_inap!='' && $data->path_bukti_inap!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_bukti_inap);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Bukti Inap</a><br/>
+                                        @endif
+
+                                        @if($data->path_lpd!='' && $data->path_lpd!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_lpd);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh LPD</a><br/>
+                                        @endif
+
+                                        @if($data->path_rekap_perjadin!='' && $data->path_rekap_perjadin!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_rekap_perjadin);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Rekap Perjadin</a><br/>
+                                        @endif
+
+                                        @if($data->path_sp_kendaraan_dinas!='' && $data->path_sp_kendaraan_dinas!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_sp_kendaraan_dinas);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh SP Kendaraan Dinas</a><br/>
+                                        @endif
+
+                                        @if($data->path_daftar_rill!='' && $data->path_daftar_rill!=null)
+                                            @php 
+                                                $explodeData = explode("/", $data->path_daftar_rill);
+                                            @endphp 
+                                            - <a href="{{ $myUrl.$explodeData[0].'/'.$explodeData[1].'/get_data' }}">Unduh Daftar Rill</a><br/>
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         @if($data->target_bukti==0)
-                                            0%
+                                            100 %
                                         @else 
                                             {{ round($data->realisasi_bukti/$data->target_bukti*100,2) }}%
                                         @endif

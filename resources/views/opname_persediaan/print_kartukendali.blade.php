@@ -43,6 +43,7 @@
     
     <table width="100%">
         <tr><td width="15%">BULAN</td><td>: {{ $monthName }} {{ $year }}</td></tr>
+        <tr><td>KODE BARANG</td><td>: {{ $detail_barang->kode_barang }}</td></tr>
         <tr><td>NAMA BARANG</td><td>: {{ $detail_barang->nama_barang }}</td></tr>
         <tr><td>SATUAN BARANG</td><td>: {{ $detail_barang->satuan }}</td></tr>
     </table>

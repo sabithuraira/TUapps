@@ -13,12 +13,16 @@ class MasterBarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $keyword = $request->get('search');
-        $datas = \App\MasterBarang::where('nama_barang', 'LIKE', '%' . $keyword . '%')
-            ->where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
-            ->paginate();
+
+        $datas = \App\MasterBarang::where('unit_kerja', '=', Auth::user()->kdprop.Auth::user()->kdkab)
+            ->where(
+                (function ($query) use ($keyword) {
+                    $query-> where('nama_barang', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('kode_barang', 'LIKE', '%' . $keyword . '%');
+                })
+            )->paginate();
 
         $datas->withPath('master_barang');
         $datas->appends($request->all());
@@ -35,8 +39,7 @@ class MasterBarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $model= new \App\MasterBarang;
         return view('master_barang.create', 
             compact('model'));
@@ -48,8 +51,7 @@ class MasterBarangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MasterBarangRequest $request)
-    {
+    public function store(MasterBarangRequest $request){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('master_barang/create')
                         ->withErrors($validator)
@@ -59,6 +61,7 @@ class MasterBarangController extends Controller
         
         $model= new \App\MasterBarang;
         $model->nama_barang=$request->get('nama_barang');
+        $model->kode_barang=$request->get('kode_barang');
         $model->unit_kerja= Auth::user()->kdprop.Auth::user()->kdkab;
         $model->satuan=$request->get('satuan');
         $model->harga_satuan=$request->get('harga_satuan');
@@ -75,8 +78,7 @@ class MasterBarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -86,8 +88,7 @@ class MasterBarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $model = \App\MasterBarang::find($id);
         return view('master_barang.edit',compact('model','id'));
     }
@@ -99,8 +100,7 @@ class MasterBarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MasterBarangRequest $request, $id)
-    {
+    public function update(MasterBarangRequest $request, $id){
         if (isset($request->validator) && $request->validator->fails()) {
             return redirect('master_barang/edit',$id)
                         ->withErrors($validator)
@@ -110,6 +110,7 @@ class MasterBarangController extends Controller
         $model= \App\MasterBarang::find($id);
 
         $model->nama_barang=$request->get('nama_barang');
+        $model->kode_barang=$request->get('kode_barang');
         $model->unit_kerja= Auth::user()->kdprop.Auth::user()->kdkab;
         $model->satuan=$request->get('satuan');
         $model->harga_satuan=$request->get('harga_satuan');
@@ -125,8 +126,7 @@ class MasterBarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $model = \App\MasterBarang::find($id);
         $model->delete();
         return redirect('master_barang')->with('success','Data berhasil dihapus');

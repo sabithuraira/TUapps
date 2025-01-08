@@ -15,9 +15,13 @@
             padding-left: 8px;
         }
 
-        .list-normal{
-            padding-left: 0;
+        ol.list-normal{
+            padding-left: 15px;
             margin-top: 0;
+        }
+
+        ol.alphabetic-list {
+            list-style-type: lower-alpha;
         }
 
         .pepet {
@@ -64,48 +68,47 @@
 </head>
 
 <body>
-    <header>
-        <table width="100%">
-            <tr>
-                <td align="center">
-                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
-                    <br/>
-                    <i><b>BADAN PUSAT STATISTIK</b></i><br />
-                    <i><b>
-                            @if ($unit_kerja_ttd != null)
-                                {{ strtoupper($unit_kerja_ttd->nama) }}
-                            @else
-                                {{ strtoupper($unit_kerja->nama) }}
-                            @endif
-                </td>
-            </tr>
-        </table>
-    </header>
+    <table width="100%">
+        <tr>
+            <td align="center">
+                <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
+                <br/>
+                <i><b>BADAN PUSAT STATISTIK</b></i><br />
+                <i><b>
+                        @if ($unit_kerja_ttd != null)
+                            {{ strtoupper($unit_kerja_ttd->nama) }}
+                        @else
+                            {{ strtoupper($unit_kerja->nama) }}
+                        @endif
+            </td>
+        </tr>
+    </table>
 
-    <br /><br /><br /><br /><br /><br/>
+    <br /><br />
 
     <p align="center">SURAT TUGAS</p>
     <p align="center">NOMOR  {{ $model_rincian->nomor_st }}</p>
 
     <br /><br />
 
+    
     <table width="100%">
         <tr>
-            <td width="10%"></td>
+            <td width="5%"></td>
             <td width="25%" valign="top">Menimbang<br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="47%">
+            <td width="62%">
                 <ol type="a" class="list-normal">
                     {!! $model->menimbang !!}
                 </ol>
             </td>
-            <td width="15%"></td>
+            <td width="5%"></td>
         </tr>
         <tr>
-            <td width="10%"></td>
+            <td width="5%"></td>
             <td width="25%" valign="top">Mengingat<br/></td>
             <td width="3%" valign="top">:</td>
-            <td width="47%">
+            <td width="62%">
                 <ol class="list-normal">
                     <li>Undang – Undang Nomor 16 Tahun 1997 Tentang Statistik</li>
                     <li>Peraturan Pemerintah Nomor 51 Tahun 1999 Tentang Penyelenggaraan Statistik;</li>
@@ -115,20 +118,20 @@
                     {!! $model->mengingat !!}
                 </ol>
             </td>
-            <td width="15%"></td>
+            <td width="5%"></td>
         </tr>
 
         <tr>
-            <td width="10%"></td>
+            <td width="5%"></td>
             <td colspan="3" align="center">Memberi Tugas<br /><br /></td>
-            <td width="15%"></td>
+            <td width="5%"></td>
         </tr>
 
         <tr>
-            <td width="10%"></td>
+            <td width="5%"></td>
             <td width="25%" valign="top">Kepada<br /><br /></td>
             <td width="3%" valign="top">:</td>
-            <td width="47%">
+            <td width="62%">
                 @if ($model->kategori == 2)
                     {{ $ketua->nama }}
                 @else
@@ -145,13 +148,13 @@
                 @endif
                 <br /><br />
             </td>
-            <td width="15%"></td>
+            <td width="5%"></td>
         </tr>
         <tr>
-            <td width="10%"></td>
+            <td width="5%"></td>
             <td width="25%" valign="top">Untuk<br /><br /></td>
             <td width="3%" valign="top">:</td>
-            <td width="47%">
+            <td width="62%">
                 @if (strlen($model_rincian->tujuan_tugas) > 0 && $model_rincian->tujuan_tugas!='-')
                     {{ $model->tugas }} ke {{ $model_rincian->tujuan_tugas }}
                 @else
@@ -183,38 +186,38 @@
                 @endif
                 <br /><br />
             </td>
-            <td width="15%"></td>
+            <td width="5%"></td>
         </tr>
 
         @if (($model->kategori == 2) & (count($list_anggota) > 0))
             <tr>
-                <td width="10%"></td>
+                <td width="5%"></td>
                 <td width="25%" valign="top">Anggota<br /><br /></td>
                 <td width="3%" valign="top">:</td>
-                <td width="47%">
+                <td width="62%">
                     @if ($list_anggota[0]->jenis_petugas == 2)
                         1. {{ $list_anggota[0]->nama }} / Mitra
                     @else
                         1. {{ $list_anggota[0]->nama }} / {{ $list_anggota[0]->jabatan }}
                     @endif
                 </td>
-                <td width="15%"></td>
+                <td width="5%"></td>
             </tr>
 
             @foreach ($list_anggota as $k => $v)
                 @if (!$loop->first)
                     <tr>
-                        <td width="10%"></td>
+                        <td width="5%"></td>
                         <td width="25%" valign="top"><br /><br /></td>
                         <td width="3%" valign="top"></td>
-                        <td width="47%">
+                        <td width="62%">
                             @if ($v->jenis_petugas == 2)
                                 {{ $k + 1 }}. {{ $v->nama }} / Mitra
                             @else
                                 {{ $k + 1 }}. {{ $v->nama }} / {{ $v->jabatan }}
                             @endif
                         </td>
-                        <td width="15%"></td>
+                        <td width="5%"></td>
                     </tr>
                 @endif
             @endforeach
@@ -225,10 +228,10 @@
 
     <table width="100%">
         <tr>
-            <td width="15%"></td>
-            <td width="25%" align="center"></td>
-            <td width="10%"></td>
-            <td width="35%" align="left">
+            <td width="5%"></td>
+            <td width="45%" align="center"></td>
+            <td width="5%"></td>
+            <td width="40%" align="left">
                 @if ($unit_kerja_ttd != null)
                     {{ $unit_kerja_ttd->ibu_kota }}
                 @else
@@ -265,9 +268,9 @@
                 <br /><br />
                 <br />
                 <br />
-                {{ $model_rincian->pejabat_ttd_nama }}</>
+                {{ $model_rincian->pejabat_ttd_nama }}<br/>
             </td>
-            <td width="10%"></td>
+            <td width="5%"></td>
         </tr>
     </table>
 </body>

@@ -8,6 +8,7 @@
             <thead>
                 <tr>
                 <th>{{ $datas[0]->attributes()['nama_barang'] }}</th>
+                <th>{{ $datas[0]->attributes()['kode_barang'] }}</th>
                 <th>{{ $datas[0]->attributes()['satuan'] }}</th>
                 <th>{{ $datas[0]->attributes()['harga_satuan'] }}</th>
                 <th class="text-center" colspan="2">Action</th>
@@ -17,6 +18,7 @@
                 @foreach($datas as $data)
                 <tr>
                     <td>{{$data['nama_barang']}}</td>
+                    <td>{{$data['kode_barang']}}</td>
                     <td>{{$data['satuan']}}</td>
                     <td>Rp. {{ number_format($data['harga_satuan'],0,",",".") }}</td>
                     

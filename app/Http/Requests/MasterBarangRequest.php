@@ -41,6 +41,7 @@ class MasterBarangRequest extends FormRequest
     {
         return [
             'nama_barang' => 'Nama Barang',
+            'kode_barang' => 'Kode Barang',
             'unit_kerja' => 'Unit Kerja',
             'harga_satuan' => 'Harga Satuan',
             'satuan' => 'Satuan',

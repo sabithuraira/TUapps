@@ -7,6 +7,14 @@
 </div>
 
 <div class="form-group">
+    <label>{{ $model->attributes()['kode_barang'] }}:</label>
+    <input type="text" class="form-control {{($errors->first('kode_barang') ? ' parsley-error' : '')}}" name="kode_barang" value="{{ old('kode_barang', $model->kode_barang) }}">
+    @foreach ($errors->get('kode_barang') as $msg)
+        <p class="text-danger">{{ $msg }}</p>
+    @endforeach
+</div>
+
+<div class="form-group">
     <label>{{ $model->attributes()['satuan'] }}:</label>
     <input type="text" class="form-control {{($errors->first('satuan') ? ' parsley-error' : '')}}" name="satuan" value="{{ old('satuan', $model->satuan) }}">
     @foreach ($errors->get('satuan') as $msg)
