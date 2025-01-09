@@ -38,7 +38,21 @@
 </head>
     <body>
 
-    <h3 align="center">KARTU PERSEDIAAN BARANG PAKAI HABIS (ATMARK)</h3>
+        <table width="100%">
+            <tr>
+                <td width="10%">
+                    <img src="{!! asset('lucid/assets/images/bps-sumsel.png') !!}" style="width:120px">
+                </td>
+                <td>
+                    <i><h2>
+                    BADAN PUSAT STATISTIK<br/>
+                    {{ strtoupper($unit_kerja->nama) }}
+                    </h2></i>
+                </td>
+            </tr>
+        </table>
+
+    <h3 align="center">KARTU PERSEDIAAN BARANG HABIS PAKAI</h3>
         <br/><br/>
     
     <table width="100%">
@@ -54,7 +68,7 @@
                 <td>TGL</td>
                 <td width="50%">URAIAN</td>
                 <td>JUMLAH BARANG MASUK (DEBET)</td>
-                <td>JUMLAH BARANG KELUAR (DEBET)</td>
+                <td>JUMLAH BARANG KELUAR (KREDIT)</td>
                 <td>JUMLAH BARANG SALDO</td>
             </tr>
             
@@ -108,5 +122,24 @@
             @endif
         </tbody>
     </table>
+
+        <br/>
+    
+        <table width="100%">
+            <tr>
+                <td width="15%"></td>
+                <td width="25%" align="center"></td>
+                <td width="20%"></td>
+                <td width="25%" align="center">
+                    <p>Dibuat Oleh</p>
+                    <br/>
+                    <br/>
+                    {{ $unit_kerja->persediaan_nama }}<br/>
+                    NIP.   {{ $unit_kerja->persediaan_nip }} <br/>
+                </td>
+                <td width="15%"></td>
+            </tr>
+
+        </table>
     </body>
 </html>

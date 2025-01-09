@@ -53,7 +53,7 @@
             </tr>
         </table>
         
-        <h3 align="center">KARTU PERSEDIAAN BARANG PAKAI HABIS (ATMARK)</h3>
+        <h3 align="center">KARTU PERSEDIAAN BARANG HABIS PAKAI</h3>
         
         <table width="100%">
             <tr><td width="15%">BULAN</td><td>: {{ $monthName }} {{ $year }}</td></tr>
@@ -68,7 +68,7 @@
                     <td rowspan="2">TGL</td>
                     <td rowspan="2">URAIAN</td>
                     <td colspan="3">MASUK (DEBET)</td>
-                    <td colspan="3">KELUAR (DEBET)</td>
+                    <td colspan="3">KELUAR (KREDIT)</td>
                     <td colspan="3">SALDO</td>
                 </tr>
 

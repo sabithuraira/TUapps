@@ -335,6 +335,7 @@ class OpnamePersediaanController extends Controller
             $barang = $request->get('p_barang');
 
         $model = new \App\Opnamepersediaan();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
         
         $persediaan = \App\OpnamePersediaan::where('id_barang', '=' ,$barang)
                 ->where('bulan', '=', $month)
@@ -374,7 +375,7 @@ class OpnamePersediaanController extends Controller
 
         $pdf = PDF::loadView('opname_persediaan.print_kartukendali_q', compact('month', 
             'year', 'barang', 'datas', 'detail_barang', 'persediaan',
-            'monthName'))
+            'monthName', 'unit_kerja'))
             ->setPaper('a4', 'portrait');
         
         $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';
