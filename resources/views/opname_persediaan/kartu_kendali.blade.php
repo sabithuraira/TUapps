@@ -20,6 +20,8 @@
       <div class="card" id="app_vue">
         <div class="body">
           <a href="{{action('OpnamePersediaanController@index')}}" class="btn btn-primary"><i class="fa fa-list"></i> <span>Rekap Persediaan</span></a>
+          
+          <button class="btn btn-success" data-toggle="modal" data-target="#update_dibuat_oleh"><span><i class="fa fa-user"></i>  Pembuat Daftar</span></button>
           <br/><br/>
           
           <div class="row clearfix">
@@ -115,6 +117,10 @@
           'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
           'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des',
         ],
+        form: {
+            nama: {!! json_encode($unit_kerja->persediaan_nama) !!}, 
+            nip: {!! json_encode($unit_kerja->persediaan_nip) !!},
+        },
         pathname : window.location.pathname.replace("/kartu_kendali", ""),
       },
       watch: {
@@ -151,40 +157,60 @@
 
           return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");      
         },
-        
-          setDatas: function(){
-              var self = this;
-              $('#wait_progres').modal('show');
-              $.ajaxSetup({
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                  }
-              })
+        setDatas: function(){
+            var self = this;
+            $('#wait_progres').modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
 
-              $.ajax({
-                  url : self.pathname+"/load_kartukendali",
-                  method : 'post',
-                  dataType: 'json',
-                  data:{
-                      month: self.month,
-                      year: self.year,
-                      barang: self.barang,
-                  },
-              }).done(function (data) {
-                  self.datas = data.datas;
-                  self.persediaan = data.persediaan;
-                  self.detail_barang = data.detail_barang;
-                    if(typeof self.persediaan.saldo_awal=='undefined'){
-                        alert("Barang ini belum tersedia pada bulan yang dipilih");
-                    }
-
-                    console.log(self.datas)
+            $.ajax({
+                url : self.pathname+"/load_kartukendali",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    month: self.month,
+                    year: self.year,
+                    barang: self.barang,
+                },
+            }).done(function (data) {
+                self.datas = data.datas;
+                self.persediaan = data.persediaan;
+                self.detail_barang = data.detail_barang;
+                if(typeof self.persediaan.saldo_awal=='undefined'){
+                    alert("Barang ini belum tersedia pada bulan yang dipilih");
+                }
+            $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
-              }).fail(function (msg) {
-                  console.log(JSON.stringify(msg));
-                  $('#wait_progres').modal('hide');
-              });
-          },
+            });
+        },
+        savePembuatDaftar: function(){
+            var self = this;
+
+            $('#wait_progres').modal('show');
+            console.log("masuk sini")
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')} })
+
+            $.ajax({
+                url :  self.pathname + "/update_unit_kerja",
+                method : 'post',
+                dataType: 'json',
+                data:{
+                    persediaan_nip: self.form.nip,
+                    persediaan_nama: self.form.nama,
+                },
+            }).done(function (data) {
+                $('#wait_progres').modal('hide');
+                $('#update_dibuat_oleh').modal('hide');
+            }).fail(function (msg) {
+                console.log(JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+            });
+        },
       }
   });
 

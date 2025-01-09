@@ -172,9 +172,20 @@ class OpnamePersediaanController extends Controller
         $year = date('Y');
         
         $list_barang = \App\MasterBarang::all();
+        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
 
         return view('opname_persediaan.kartu_kendali',compact('barang','month', 
-                'year', 'list_barang'));
+                'year', 'list_barang', 'unit_kerja'));
+    }
+
+    public function update_unit_kerja(Request $request){
+        $model = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
+        $model->persediaan_nip  = $request->get('persediaan_nip');
+        $model->persediaan_nama = $request->get('persediaan_nama');
+        $model->updated_by = Auth::id();
+        $model->save();
+        // return redirect('kartu_kendali')->with('success', 'Data berhasil diperbaharui');
+        return response()->json(['success'=>'1']);
     }
 
     public function kartu_kendali_q(Request $request){
@@ -266,6 +277,7 @@ class OpnamePersediaanController extends Controller
                 ->first();
 
         $detail_barang = \App\MasterBarang::find($barang);
+        $unit_kerja = \App\UnitKerja::where('kode', '=', Auth::user()->kdprop . Auth::user()->kdkab)->first();
 
         if($persediaan!=null){
             $datas = $model->KartuKendali($barang, $month, $year);
@@ -298,7 +310,7 @@ class OpnamePersediaanController extends Controller
 
         $pdf = PDF::loadView('opname_persediaan.print_kartukendali', compact('month', 
             'year', 'barang', 'datas', 'detail_barang', 'persediaan',
-            'monthName'))
+            'monthName', 'unit_kerja'))
             ->setPaper('a4', 'landscape');
         
         $nama_file = 'kartukendali_'.$detail_barang->nama_barang.'_';

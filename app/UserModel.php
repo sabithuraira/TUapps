@@ -23,7 +23,8 @@ class UserModel extends Model
             'IV/b' => 'Pembina Tingkat I',  
             'IV/c' => 'Pembina Utama Muda',  
             'IV/d' => 'Pembina Utama Madya',
-            'IV/e' => 'Pembina Utama'
+            'IV/e' => 'Pembina Utama',
+            'VII' => 'Pengatur'
         );
 	}
 

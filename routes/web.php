@@ -54,6 +54,7 @@ Route::group(['middleware' => ['role:superadmin|subbag-umum']], function () {
     Route::post('opname_persediaan/print_persediaan', array('as' => 'print_persediaan', 'uses' => 'OpnamePersediaanController@print_persediaan'));
     Route::post('opname_persediaan/print_kartukendali', array('as' => 'print_kartukendali', 'uses' => 'OpnamePersediaanController@print_kartukendali'));
     Route::post('opname_persediaan/print_kartukendali_q', array('as' => 'print_kartukendali_q', 'uses' => 'OpnamePersediaanController@print_kartukendali_q'));
+    Route::post('opname_persediaan/update_unit_kerja', 'OpnamePersediaanController@update_unit_kerja');
 });
 
 Route::group(['middleware' => ['role:superadmin|subbag-umum|subbag-keuangan']], function () {

@@ -99,4 +99,6 @@
             </tbody>
         </table>
     </div>
+
+    @include('opname_persediaan.modal_kartu_kendali')
 </div>

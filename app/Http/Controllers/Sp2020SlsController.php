@@ -11,6 +11,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Sp2020LfPartialImport;
 use App\Imports\Sp2020LfPenggantiImport;
 use App\Imports\RegsosekPartialImport;
+use App\Imports\PesSt2023Import;
+use App\Imports\SlsUmkmImport;
 
 class Sp2020SlsController extends Controller
 {
@@ -22,7 +24,8 @@ class Sp2020SlsController extends Controller
     public function import_some(Request $request){
         // Excel::import(new Sp2020SlsPartialImport(), $request->file('excel_file'));
         // Excel::import(new Sp2020LfAllImport(), $request->file('excel_file'));
-        Excel::import(new RegsosekPartialImport(), $request->file('excel_file'));
+        // Excel::import(new PesSt2023Import(), $request->file('excel_file'));
+        Excel::import(new SlsUmkmImport(), $request->file('excel_file'));
         return redirect('sp2020sls/import_some')->with('success', 'Information has been added');
     }
 

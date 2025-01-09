@@ -55,38 +55,6 @@
                     </div>
                 </div>
 
-                <div class="alert alert-primary" role="alert">
-                    Hai! Ada beberapa mekanisme yang berubah pada MUSI terkait alur penilaian pegawai.
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        Lihat selengkapnya
-                    </button>
-                </div>
-
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Alur Monitoring Kinerja Pegawai</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <ol>
-                                <li>Pengelolaan Logbook terkoneksi dengan IKI pegawai dan setiap IKI melekat pada TIM pegawai tersebut</li>
-                                <li>Pengelolaan TIM dapat dilakukan pada menu "Manajemen TIM dan Pekerjaan" - "Tim"</li>
-                                <li>Setelah pegawai menjadi anggota salah satu TIM, pegawai dapat mengelola IKI pada menu "Manajemen TIM dan Pekerjaan" - "Pengelolaan IKI Pegawai". Rincian IKI disalin dari aplikasi KipApp</li>
-                                <li>Pembuatan "Logbook" dapat dilakukan melalui halaman pengelolaan IKI atau halaman pengelolaan Logbook</li>
-                                <li>Input "Logbook" akan meminta informasi IKI dari Logbook tersebut (saat ini tidak diwajibkan)</li>
-                                <li>Slide penjelasan dapat dilihat pada tautan berikut <a href="https://docs.google.com/presentation/d/1EjfO-RVnARKd_OadtAocgynPbXoqdZSJKtbzsq6u_Ac/edit?usp=sharing" target="_blank">disini</a></li>
-                            </ol>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
                 @yield('content')
 
             </div>
