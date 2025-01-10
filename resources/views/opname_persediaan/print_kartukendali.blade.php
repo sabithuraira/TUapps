@@ -67,7 +67,7 @@
                 <tr align="center">
                     <td rowspan="2">TGL</td>
                     <td rowspan="2">URAIAN</td>
-                    <td colspan="3">MASUK (DEBET)</td>
+                    <td colspan="3">MASUK (DEBIT)</td>
                     <td colspan="3">KELUAR (KREDIT)</td>
                     <td colspan="3">SALDO</td>
                 </tr>

@@ -52,8 +52,7 @@
             </tr>
         </table>
 
-    <h3 align="center">KARTU PERSEDIAAN BARANG HABIS PAKAI</h3>
-        <br/><br/>
+    <h4 align="center">KARTU PERSEDIAAN BARANG HABIS PAKAI</h4>
     
     <table width="100%">
         <tr><td width="25%">BULAN</td><td>: {{ $monthName }} {{ $year }}</td></tr>
@@ -61,7 +60,7 @@
         <tr><td>NAMA BARANG</td><td>: {{ $detail_barang->nama_barang }}</td></tr>
         <tr><td>SATUAN BARANG</td><td>: {{ $detail_barang->satuan }}</td></tr>
     </table>
-    <br/><br/>
+    <br/>
     <table width="100%" class="table-border">
         <thead>
             <tr align="center">
