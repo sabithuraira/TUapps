@@ -3,9 +3,9 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Jabatan</th>
-                <th>Email</th>
-                <th class="text-center" colspan="2">Action</th>
+                <th>Atasan Langsung</th>
+                <th>Status Aktif</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -15,17 +15,10 @@
                             {{ $data['name'] }}
                         </a>
                     </td>
-                    <td>{{ $data['nmjab'] }}</td>
-                    <td>{{ $data['email'] }}</td>
-
+                    <td>{{ $data['pimpinan_nama'] }}</td>
+                    <td>{{  $data->statusAktif[$data['is_active']] }}</td>
                     <td class="text-center"><a href="{{ action('UserController@edit', $data['id']) }}"><i
-                                class="icon-pencil text-info"></i></a></td>
-                    <td class="text-center">
-                        <form action="{{ action('UserController@destroy', $data['id']) }}" method="post">
-                            @csrf
-                            <input name="_method" type="hidden" value="DELETE">
-                            <button type="submit"><i class="icon-trash text-danger"></i></button>
-                        </form>
+                                class="icon-pencil text-info"></i></a>
                     </td>
                 </tr>
             @endforeach

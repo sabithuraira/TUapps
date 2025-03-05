@@ -76,6 +76,20 @@
                                 <p class="text-danger">{{ $msg }}</p>
                             @endforeach
                         </div>
+
+
+                        <div class="form-group">
+                            <label>Status Aktif:</label>
+                            <select class="form-control  form-control-sm  {{ $errors->first('is_active') ? ' parsley-error' : '' }}" name="is_active">
+                                <option value="1"
+                                            @if (old('is_active', $model->is_active)==1) selected="selected" @endif>Aktif</option>  
+                                <option value="2"
+                                            @if (old('is_active', $model->is_active)==2) selected="selected" @endif>Pindah/Pensiun</option>
+                            </select>
+                            @foreach ($errors->get('is_active') as $msg)
+                                <p class="text-danger">{{ $msg }}</p>
+                            @endforeach
+                        </div>
                         <br>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>

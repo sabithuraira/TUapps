@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $token = $request->session()->get('token');
         $keyword = $request->get('search');
-        $datas = \App\User::where('name', 'LIKE', '%' . $keyword . '%')
+        $datas = \App\UserModel::where('name', 'LIKE', '%' . $keyword . '%')
             ->orWhere('email', 'LIKE', '%' . $keyword . '%')
             ->paginate();
 
@@ -96,7 +96,6 @@ class UserController extends Controller
             // die();
         }
     }
-
 
     public function load_data_pegawai(Request $request)
     {
@@ -236,6 +235,7 @@ class UserController extends Controller
         }
 
         $model = \App\UserModel::find($id);
+        $model->is_active = $request->is_active;
         $pimpinan = \App\UserModel::find($request->pimpinan_id);
         if ($pimpinan != null) {
             $model->pimpinan_id    = $pimpinan->id;

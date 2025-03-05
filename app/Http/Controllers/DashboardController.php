@@ -24,11 +24,25 @@ class DashboardController extends Controller
         $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
 
         $dl_per_uk = UnitKerja::rekapDlPerUk();
+
+        $birthday = UserModel::where(DB::raw('SUBSTRING(nip_baru, 5, 2)'), date('m'))
+                        ->where(DB::raw('SUBSTRING(nip_baru, 7, 2)'), date('d'))
+                        ->where('is_active', 1)
+                        ->get();
+
+        // $mengabdi = UserModel::where(DB::raw('SUBSTRING(nip_baru, 13, 2)'), date('m'))
+        //             ->where('is_active', 1)
+        //             ->get();
+        
+        // inRandomOrder()->first();
+
         return view('dashboard.index', compact(
             'random_user',
             'unit_kerja',
             'dl_per_uk',
             'request',
+            'birthday', 
+            // 'mengabdi'
         ));
     }
 
