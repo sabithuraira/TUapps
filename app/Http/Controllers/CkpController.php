@@ -193,6 +193,7 @@ class CkpController extends Controller
     public function show($id){}
 
     public function print(Request $request){
+        ini_set('memory_limit', '2048M');
         $user = Auth::user();
         $user_id =  Auth::user()->email;
 
