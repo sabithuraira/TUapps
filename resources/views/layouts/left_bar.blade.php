@@ -42,6 +42,8 @@
                                 href="{{ url('dashboard/pes_st2023') }}">PES ST2023</a></li>
                         <li class="{{ request()->is('dashboard/st2023*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/st2023') }}">ST 2023</a></li>
+
+                        <li><a href="https://pengolahan.bps.go.id/">PENGOLAHAN <span class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
                 <li
@@ -65,6 +67,13 @@
                             <li class="{{ request()->is('mata_anggaran/index*') ? 'active' : '' }}"><a
                                     href="{{ url('mata_anggaran/index') }}">MAK</a></li>
                         @endhasanyrole
+
+                        <li><a href="https://simpeg.bps.go.id/">SIMPEG <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://sdm.bps.go.id/siimut/web/">SIIMUT <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://sipecut.bps.go.id/app/">SIPECUT <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://backoffice.bps.go.id/">BOS <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span class="badge badge-info float-right">ANRI</span></a></li>
+                        
                     </ul>
                 </li>
 
@@ -105,6 +114,18 @@
                         @endif
                         <li class="{{ request()->is('iki/*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola
                                 IKI</a></li>
+
+                        <li><a href="https://webapps.bps.go.id/kipapp/#/">KIPAPP <span class="badge badge-info float-right">BPS RI</span></a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#App" class="has-arrow"><i class="icon-direction"></i> < <span>Tautan Lainnya</span></a>
+                    <ul>
+                    
+                        <li><a href="https://gojags.web.bps.go.id">Diklat <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://mail.bps.go.id/">Email <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://manajemen-mitra.bps.go.id/">Mitra <span class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
 
@@ -244,8 +265,15 @@
                     </ul>
                 </li>
 
+                
                 <li class="{{ request()->is('surat_km*') ? 'active' : '' }}">
-                    <a href="{{ url('surat_km') }}"> <i class="icon-doc"></i><span>Surat Menyurat</span></a>
+                    <a href="#Dashboard" class="has-arrow"><i class="icon-doc"></i>
+                        <span>Surat Menyurat</span></a>
+                    <ul>
+                        <li class="{{ request()->is('surat_km/*') ? 'active' : '' }}"><a
+                                href="{{ url('surat_km') }}">Daftar</a></li>
+                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span class="badge badge-info float-right">ANRI</span></a></li>
+                    </ul>
                 </li>
 
                 @hasanyrole('superadmin|tatausaha')
