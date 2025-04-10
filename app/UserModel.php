@@ -28,6 +28,11 @@ class UserModel extends Model
         );
 	}
 
+    public $statusAktif = [
+            1 => 'Aktif', 
+            2 => 'Pindah/Pensiun', 
+    ];
+
     public function getJumlahDl(){
         $nip = $this->nip_baru;
         // $sql = "SELECT SUM(DATEDIFF(str.tanggal_selesai, str.tanggal_mulai)+1) as total_hari

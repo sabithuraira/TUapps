@@ -119,7 +119,8 @@ class CkpLogBulanan extends Model
             ckp_log_bulanan.kecepatan, 
             ckp_log_bulanan.ketepatan, 
             ckp_log_bulanan.ketuntasan, 
-            ckp_log_bulanan.penilaian_pimpinan
+            ckp_log_bulanan.penilaian_pimpinan,
+            DATE_FORMAT(ckp_log_bulanan.updated_at, '%d %b %Y') as last_updated
             
             FROM `users` u 
             LEFT JOIN ckp_log_bulanan ON ckp_log_bulanan.user_id=u.email 
@@ -127,7 +128,7 @@ class CkpLogBulanan extends Model
                 AND ckp_log_bulanan.year=$year 
             
             WHERE $str_where
-            ORDER by kdorg";
+            ORDER by user_id DESC";
             
         $result = DB::select(DB::raw($sql));
         return $result;

@@ -12,6 +12,7 @@
                     <td>Ketuntasan</td>
                     <td>Penilaian Pimpinan</td>
                     <th>NILAI CKP</th>
+                    <th>Terakhir Diperbaharui</th>
                 </tr>
             </thead>
 
@@ -27,6 +28,7 @@
                     <td class="text-center">@{{ data.ketuntasan }}</td>
                     <td class="text-center">@{{ data.penilaian_pimpinan }}</td>
                     <td class="text-center">@{{ (data.realisasi_kuantitas==0) ? 0 : (((data.realisasi_kuantitas/data.target_kuantitas*100)+data.kualitas)/2).toFixed(2) }}</td>
+                    <td class="text-center">@{{ data.last_updated }}</td>
                 </tr>
             </tbody>
         </table>
