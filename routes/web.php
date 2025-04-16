@@ -321,6 +321,17 @@ Route::group(['middleware' => ['role:superadmin|pengelola_regsosek']], function 
     Route::resource('regsosek', 'RegsosekController')->except('show');
 });
 
+Route::group(['middleware' => ['role:superadmin|change_agent']], function () {
+    // Route::get('bulletin', 'BulletinController@index');
+    // Route::post('bulletin', 'BulletinController@store');
+    // Route::get('bulletin/{id}', 'BulletinController@show');
+    // Route::put('bulletin/{id}', 'BulletinController@update');
+    // Route::delete('bulletin/{id}', 'BulletinController@delete');
+
+    Route::post('bulletin/data_bulletin', 'BulletinController@dataBulletin');
+    Route::resource('bulletin', 'BulletinController');
+});
+
 Auth::routes();
 
 Route::get('/d4ft4r_2612', 'HomeController@d4ft4r_2612');

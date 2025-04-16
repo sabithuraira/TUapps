@@ -32,7 +32,7 @@
                     <a href="{{ url('dashboard/index') }}"><i class="icon-home"></i>
                         <span>Beranda</span></a>
                 </li>
-                <li class="{{ (request()->is('dashboard*') && !request()->is('dashboard/index')) ? 'active' : '' }}">
+                <li class="{{ request()->is('dashboard*') && !request()->is('dashboard/index') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-speedometer"></i>
                         <span>Dashboard</span></a>
                     <ul>
@@ -43,11 +43,12 @@
                         <li class="{{ request()->is('dashboard/st2023*') ? 'active' : '' }}"><a
                                 href="{{ url('dashboard/st2023') }}">ST 2023</a></li>
 
-                        <li><a href="https://pengolahan.bps.go.id/">PENGOLAHAN <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://pengolahan.bps.go.id/">PENGOLAHAN <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
                 <li
-                    class="{{ request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' }}">
+                    class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' || request()->is('bulletin*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
                         <span>Operasionalisasi SDM</span></a>
                     <ul>
@@ -68,12 +69,23 @@
                                     href="{{ url('mata_anggaran/index') }}">MAK</a></li>
                         @endhasanyrole
 
-                        <li><a href="https://simpeg.bps.go.id/">SIMPEG <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://sdm.bps.go.id/siimut/web/">SIIMUT <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://sipecut.bps.go.id/app/">SIPECUT <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://backoffice.bps.go.id/">BOS <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span class="badge badge-info float-right">ANRI</span></a></li>
-                        
+                        @hasanyrole('superadmin|change_agent')
+                            <li class="{{ request()->is('bulletin*') ? 'active' : '' }}"><a
+                                    href="{{ url('bulletin') }}">Bulletin & Announcement</a></li>
+                        @endhasanyrole
+
+
+                        <li><a href="https://simpeg.bps.go.id/">SIMPEG <span class="badge badge-info float-right">BPS
+                                    RI</span></a></li>
+                        <li><a href="https://sdm.bps.go.id/siimut/web/">SIIMUT <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://sipecut.bps.go.id/app/">SIPECUT <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://backoffice.bps.go.id/">BOS <span class="badge badge-info float-right">BPS
+                                    RI</span></a></li>
+                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span
+                                    class="badge badge-info float-right">ANRI</span></a></li>
+
                     </ul>
                 </li>
 
@@ -100,32 +112,35 @@
                         <li class="{{ request()->is('log_book/laporan_wfh*') ? 'active' : '' }}"><a
                                 href="{{ url('log_book/laporan_wfh') }}">Laporan WFH</a></li>
 
-                        @if (strlen(auth()->user()->kdesl) > 0 ||
-                                auth()->user()->hasRole('superadmin') ||
-                                auth()->user()->hasRole('binagram'))
+                        @if (strlen(auth()->user()->kdesl) > 0 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('binagram'))
                             <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a
                                     href="{{ url('log_book/rekap_pegawai') }}">Rekap Kerja Seluruh Pegawai</a></li>
                         @endif
 
-                        @if (auth()->user()->hasRole('superadmin') ||
-                                auth()->user()->hasRole('kepegawaian'))
+                        @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('kepegawaian'))
                             <li class="{{ request()->is('ckp/rekap_ckp*') ? 'active' : '' }}"><a
                                     href="{{ url('ckp/rekap_ckp') }}">Rinciap CKP Pegawai</a></li>
                         @endif
                         <li class="{{ request()->is('iki/*') ? 'active' : '' }}"><a href="{{ url('iki') }}">Kelola
                                 IKI</a></li>
 
-                        <li><a href="https://webapps.bps.go.id/kipapp/#/">KIPAPP <span class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://webapps.bps.go.id/kipapp/#/">KIPAPP <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="#App" class="has-arrow"><i class="icon-direction"></i> < <span>Tautan Lainnya</span></a>
+                    <a href="#App" class="has-arrow"><i class="icon-direction"></i>
+                        < <span>Tautan Lainnya</span>
+                    </a>
                     <ul>
-                    
-                        <li><a href="https://gojags.web.bps.go.id">Diklat <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://mail.bps.go.id/">Email <span class="badge badge-info float-right">BPS RI</span></a></li>
-                        <li><a href="https://manajemen-mitra.bps.go.id/">Mitra <span class="badge badge-info float-right">BPS RI</span></a></li>
+
+                        <li><a href="https://gojags.web.bps.go.id">Diklat <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
+                        <li><a href="https://mail.bps.go.id/">Email <span class="badge badge-info float-right">BPS
+                                    RI</span></a></li>
+                        <li><a href="https://manajemen-mitra.bps.go.id/">Mitra <span
+                                    class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
 
@@ -224,7 +239,8 @@
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
                                         href="{{ url('opname_persediaan/kartu_kendali') }}">Kartu Kendali</a></li>
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali_q') ? 'active' : '' }}"><a
-                                        href="{{ url('opname_persediaan/kartu_kendali_q') }}">Kartu Kendali Kuantitas</a></li>
+                                        href="{{ url('opname_persediaan/kartu_kendali_q') }}">Kartu Kendali Kuantitas</a>
+                                </li>
                                 @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
                                     <li class="{{ request()->is('pemegang_bmn*') ? 'active' : '' }}">
                                         <a href="{{ url('pemegang_bmn') }}"> <span>Pemegang BMN</span></a>
@@ -265,14 +281,15 @@
                     </ul>
                 </li>
 
-                
+
                 <li class="{{ request()->is('surat_km*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-doc"></i>
                         <span>Surat Menyurat</span></a>
                     <ul>
                         <li class="{{ request()->is('surat_km/*') ? 'active' : '' }}"><a
                                 href="{{ url('surat_km') }}">Daftar</a></li>
-                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span class="badge badge-info float-right">ANRI</span></a></li>
+                        <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span
+                                    class="badge badge-info float-right">ANRI</span></a></li>
                     </ul>
                 </li>
 

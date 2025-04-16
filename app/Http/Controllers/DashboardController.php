@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bulletin;
 use App\Kabs;
 use App\Pdesa;
 use App\Pkab;
@@ -20,28 +21,32 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $auth = Auth::user();
+        // dd($auth->roles);
         $random_user = UserModel::inRandomOrder()->first();
         $unit_kerja = UnitKerja::where('kode', '=', $random_user->kdprop . $random_user->kdkab)->first();
 
         $dl_per_uk = UnitKerja::rekapDlPerUk();
 
         $birthday = UserModel::where(DB::raw('SUBSTRING(nip_baru, 5, 2)'), date('m'))
-                        ->where(DB::raw('SUBSTRING(nip_baru, 7, 2)'), date('d'))
-                        ->where('is_active', 1)
-                        ->get();
+            ->where(DB::raw('SUBSTRING(nip_baru, 7, 2)'), date('d'))
+            ->where('is_active', 1)
+            ->get();
 
+        $bulletin = Bulletin::where('start_date', "<=", date('Y-m-d'))->where('end_date', ">=", date('Y-m-d'))->get();
         // $mengabdi = UserModel::where(DB::raw('SUBSTRING(nip_baru, 13, 2)'), date('m'))
         //             ->where('is_active', 1)
         //             ->get();
-        
-        // inRandomOrder()->first();
 
+        // inRandomOrder()->first();\
+        $bulletin_header = new Bulletin();
         return view('dashboard.index', compact(
             'random_user',
             'unit_kerja',
             'dl_per_uk',
             'request',
-            'birthday', 
+            'birthday',
+            'bulletin',
+            'bulletin_header'
             // 'mengabdi'
         ));
     }
@@ -108,7 +113,6 @@ class DashboardController extends Controller
             'kabs',
             'list_kab_filter'
         ));
-        
     }
 
     public function st2023(Request $request)
@@ -1533,7 +1537,8 @@ class DashboardController extends Controller
         }
 
         $data_st = \App\SuratTugasRincian::where([
-            ['nip', '=', $real_id], ['status_aktif', '<>', '2']
+            ['nip', '=', $real_id],
+            ['status_aktif', '<>', '2']
         ])
             ->where(
                 (function ($query) use ($year) {
@@ -1558,10 +1563,11 @@ class DashboardController extends Controller
         ));
     }
 
-    public function pegawai($id){
+    public function pegawai($id)
+    {
         $model = \App\UserModel::where('email', '=', $id)->first();
         $unit_kerja = \App\UnitKerja::where('kode', '=', $model->kdprop . $model->kdkab)->first();
-      
+
         return view('dashboard.pegawai', compact(
             'id',
             'model',

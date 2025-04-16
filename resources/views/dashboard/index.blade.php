@@ -13,6 +13,9 @@
             <div class="row clearfix">
                 @include('dashboard.congrats')
             </div>
+            <div class="row clearfix">
+                @include('dashboard.bulletin')
+            </div>
         </div>
         <div class="col-lg-12 col-md-12">
             <div class="row clearfix">
