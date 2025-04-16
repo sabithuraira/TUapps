@@ -130,9 +130,7 @@
                 </li>
 
                 <li>
-                    <a href="#App" class="has-arrow"><i class="icon-direction"></i>
-                        < <span>Tautan Lainnya</span>
-                    </a>
+                    <a href="#App" class="has-arrow"><i class="icon-direction"></i> <span>Tautan Lainnya</span></a>
                     <ul>
 
                         <li><a href="https://gojags.web.bps.go.id">Diklat <span
