@@ -6,7 +6,9 @@
         </div> --}}
             {!! $bulletin_header->bulletinCardHeader[$val->judul] !!}
             <div class="member-img">
-                <a href="javascript:void(0);"><img src="{{ $val->fotoUrl }}" class="rounded-circle" alt="profile-image"></a>
+                <a href="javascript:void(0);">
+                    <img src="{{ $val->user->foto }}" class="rounded-circle" alt="profile-image">
+                </a>
             </div>
             <div class="body">
                 <div class="col-12">

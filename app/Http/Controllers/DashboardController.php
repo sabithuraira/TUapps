@@ -33,6 +33,7 @@ class DashboardController extends Controller
             ->get();
 
         $bulletin = Bulletin::where('start_date', "<=", date('Y-m-d'))->where('end_date', ">=", date('Y-m-d'))->get();
+        // dd($bulletin[0]->user->foto);
         // $mengabdi = UserModel::where(DB::raw('SUBSTRING(nip_baru, 13, 2)'), date('m'))
         //             ->where('is_active', 1)
         //             ->get();
