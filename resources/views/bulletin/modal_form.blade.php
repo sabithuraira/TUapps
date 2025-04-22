@@ -36,7 +36,7 @@
 
                 <div class="row clearfix mb-2">
                     <div class="col-md-6">
-                        Tanggal Mulai: <span class="text-danger">*</span>
+                        Ditampilkan dari: <span class="text-danger">*</span>
                         <div class="form-line">
                             <div class="input-group">
                                 <input type="text" class="datepicker form-control" id="form_waktu_mulai"
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        Tanggal Selesai: <span class="text-danger">*</span>
+                        hingga: <span class="text-danger">*</span>
                         <div class="form-line">
                             <div class="input-group">
                                 <input type="text" class="datepicker form-control" id="form_waktu_selesai"

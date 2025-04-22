@@ -16,8 +16,8 @@ class CreateAttendanceTable extends Migration
         Schema::create('attendance', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama');
-            $table->date_time('open');
-            $table->date_time('close');
+            $table->dateTime('open');
+            $table->dateTime('close');
             $table->integer("created_by")->nullable();
             $table->integer("updated_by")->nullable();
             $table->timestamps();

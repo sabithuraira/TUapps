@@ -1,5 +1,5 @@
 @foreach ($bulletin as $val)
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-12 col-md-12">
         <div class="card member-card">
             {{-- <div class="header bg-success">
             <h5 class="m-t-10 text-light">{{ $val->judul }}</h5>
