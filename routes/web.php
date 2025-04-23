@@ -219,7 +219,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     //////////////////////////Izin Keluar
     Route::resource('izin_keluar', 'IzinKeluarController')->only(['index', 'store']);
-    // Route::get('izin_keluar/rekap_pegawai', 'IzinKeluarController@rekap_pegawai');
+    Route::get('izin_keluar/rekap', 'IzinKeluarController@rekap');
+    Route::post('izin_keluar/data_rekap', 'IzinKeluarController@data_rekap');
     // Route::get('izin_keluar/destroy_izinkeluar/{id}', 'IzinKeluarController@destroy_IzinKeluar');
 
     ///////////////

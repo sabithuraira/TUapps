@@ -54,6 +54,38 @@ class IzinKeluarController extends Controller
             'month', 'year'));
     }
 
+    public function rekap(Request $request){
+        $month = date('n');
+        $year = date("Y");
+        $unit_kerja = Auth::user()->kdkab;
+
+        $model = new \App\IzinKeluar;
+        return view('izin_keluar.rekap', compact( 
+            'month', 'year', 'unit_kerja'));
+    }
+
+    public function data_rekap(Request $request){
+        $unit_kerja = Auth::user()->kdkab;
+
+        $datas=array();
+        $month = date('m');
+        $year = date('Y');
+
+        if(strlen($request->get('unit_kerja'))>0)
+            $unit_kerja = $request->get('unit_kerja');
+
+        if(strlen($request->get('month'))>0)
+            $month = $request->get('month');
+
+        if(strlen($request->get('year'))>0)
+            $year = $request->get('year');
+
+        $izin_keluar = new \App\IzinKeluar;
+        $datas = $izin_keluar->ReportBulanan($month, $year, $unit_kerja);
+
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
     public function index_eks(Request $request){
         $month = date('n');
         $year = date("Y");
@@ -66,30 +98,6 @@ class IzinKeluarController extends Controller
         $model = new \App\IzinKeluar;
         return view('izin_keluar.index_eks', compact('model', 
             'month', 'year', 'list_pegawai', 'form_user'));
-    }
-
-    public function rekap_pegawai(Request $request){
-        if(strlen(Auth::user()->kdesl)>0 || Auth::user()->hasRole('superadmin')  || Auth::user()->hasRole('binagram')){
-            $tanggal = date('Y-m-d');
-            $unit_kerja = Auth::user()->kdkab;
-
-            if(strlen($request->get('tanggal'))>0){
-                $tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
-            }
-            
-            if(strlen($request->get('unit_kerja'))>0){
-                $unit_kerja= $request->get('unit_kerja');
-            }
-
-            $model = new \App\IzinKeluar;
-            $datas = $model->RekapPerUnitKerjaPerHari($unit_kerja, $tanggal);
-
-            return view('log_book.rekap_pegawai', compact('model', 'unit_kerja',
-                'tanggal', 'datas'));
-        }
-        else{
-            abort(403, 'Anda tidak berhak mengakses halaman ini');
-        }
     }
 
     public function destroy_izinkeluar($id){
@@ -131,7 +139,6 @@ class IzinKeluarController extends Controller
         
         return response()->json(['success'=>'Data berhasil ditambah']);
     }
-
 
     public function store_eks(Request $request){
         $model = \App\IzinKeluar::find($request->get("id"));

@@ -17,7 +17,16 @@
 
       <div class="card" id="app_vue">
         <div class="body">
-          <a href="#" role="button" v-on:click="addIzinKeluar"  class="btn btn-primary" data-toggle="modal" data-target="#add_izin_keluars"><i class="fa fa-plus-circle"></i> <span>Tambah Permohonan Izin Keluar</span></a>
+
+          <div class="row clearfix">
+            <div class="col-lg-6 col-md-12 left-box">
+              <a href="#" role="button" v-on:click="addIzinKeluar"  class="btn btn-primary" data-toggle="modal" data-target="#add_izin_keluars"><i class="fa fa-plus-circle"></i> <span>Tambah Permohonan Izin Keluar</span></a>
+            </div>
+
+            <div class="col-lg-6 col-md-12 left-box">
+              <a href="{{ url('izin_keluar/rekap') }}" class="btn btn-success float-right"><i class="fa fa-list"></i> <span>Lihat Rekap</span></a>
+            </div>
+          </div>
           <br/><br/>
           <div class="row clearfix">
                 <div class="col-lg-6 col-md-12 left-box">
