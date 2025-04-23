@@ -90,7 +90,8 @@
                 </li>
 
                 <li
-                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || request()->is('skp*') || request()->is('iki/*') ? 'active' : '' }}">
+                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || 
+                        request()->is('skp*') || request()->is('iki/*') || request()->is('izin_keluar/*') ? 'active' : '' }}">
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Pengukuran Kinerja</span></a>
                     <ul>
                         <li class="{{ request()->is('ckp*') ? 'active' : '' }}"><a href="{{ url('ckp') }}">CKP</a>
@@ -109,8 +110,7 @@
                                 href="{{ url('log_book') }}">Log Book</a></li>
                         <li class="{{ request()->is('rencana_kerja') ? 'active' : '' }}"><a
                                 href="{{ url('rencana_kerja') }}">Rencana Kerja</a></li>
-                        <li class="{{ request()->is('log_book/laporan_wfh*') ? 'active' : '' }}"><a
-                                href="{{ url('log_book/laporan_wfh') }}">Laporan WFH</a></li>
+                        <li class="{{ request()->is('izin_keluar') ? 'active' : '' }}"><a href="{{ url('izin_keluar') }}">Permohonan Izin Keluar</a></li>
 
                         @if (strlen(auth()->user()->kdesl) > 0 || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('binagram'))
                             <li class="{{ request()->is('log_book/rekap_pegawai*') ? 'active' : '' }}"><a

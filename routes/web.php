@@ -168,6 +168,12 @@ Route::group(['middleware' => ['role:superadmin|admin_uker']], function () {
     Route::patch('penugasan/{id}/user_role_update', 'PenugasanController@user_role_update');
 });
 
+
+Route::get('izin_keluar/index_eks', 'IzinKeluarController@index_eks');
+Route::post('izin_keluar/index_eks', 'IzinKeluarController@store_eks');
+Route::post('izin_keluar/data_izin_keluar', 'IzinKeluarController@dataIzinKeluar');
+// Route::post('izin_keluar/data_izin_keluar', 'IzinKeluarController@dataIzinKeluar');
+
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('sira', 'SiraController')->except(['show']);
     Route::get('sira/{id}/show', 'SiraController@show');
@@ -210,6 +216,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
     Route::post('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
     Route::get('log_book/laporan_wfh', 'LogBookController@laporan_wfh');
+
+    //////////////////////////Izin Keluar
+    Route::resource('izin_keluar', 'IzinKeluarController')->only(['index', 'store']);
+    // Route::get('izin_keluar/rekap_pegawai', 'IzinKeluarController@rekap_pegawai');
+    // Route::get('izin_keluar/destroy_izinkeluar/{id}', 'IzinKeluarController@destroy_IzinKeluar');
+
     ///////////////
     Route::resource('rencana_kerja', 'RencanaKerjaController')->except(['show']);
     Route::post('rencana_kerja/data_rencana_kerja', 'RencanaKerjaController@dataRencanaKerja');

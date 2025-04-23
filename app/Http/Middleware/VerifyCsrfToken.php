@@ -24,5 +24,7 @@ class VerifyCsrfToken extends Middleware
         '/telegram/sp2020lf',
         '/telegram/regsosek',
         '/telegram/regsosek_set_unduh',
+        '/izin_keluar/data_izin_keluar',
+        '/izin_keluar/index_eks',
     ];
 }
