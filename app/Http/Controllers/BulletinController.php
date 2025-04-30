@@ -36,8 +36,9 @@ class BulletinController extends Controller
         $model = new Bulletin();
         $list_pegawai = \App\UserModel::where([
             ['id', '<>', 1],
-            ['kdkab', '=', substr($unit_kerja, 2)]
-        ])->orderby('nip_baru', 'asc')->get();
+            // ['kdkab', '=', substr($unit_kerja, 2)],
+            ['is_active', 1]
+        ])->orderby('kdkab', 'asc')->orderby('nip_baru')->get();
 
         $list_judul = $model->getListJudul();
         return view('bulletin.index', compact(

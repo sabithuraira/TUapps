@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    protected $appends = ['foto', 'pimpinan'];
+    protected $appends = ['fotoUrl', 'pimpinan'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,7 +43,7 @@ class User extends Authenticatable
     //     static::addGlobalScope(new PegawaiScope);
     // }
 
-    public function getFotoAttribute()
+    public function getFotoUrlAttribute()
     {
         $nip_id = substr($this->email, -5);
 
@@ -267,18 +267,21 @@ class User extends Authenticatable
     function is_foto_exist($url)
     {
         $ch = curl_init();
+
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_NOBODY, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_NOBODY, true); // hanya cek header
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+
+        // Tambahkan timeout (dalam detik)
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2); // timeout saat koneksi
+        curl_setopt($ch, CURLOPT_TIMEOUT, 4); // total timeout
 
         $result = curl_exec($ch);
         curl_close($ch);
-        if ($result !== FALSE) return true;
-        else return false;
-        // $headers=get_headers($url);
-        // return stripos($headers[0],"200 OK")?true:false;
+
+        return $result !== false;
     }
 
     public function iki(): HasMany

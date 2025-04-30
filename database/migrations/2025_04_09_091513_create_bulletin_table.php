@@ -17,7 +17,7 @@ class CreateBulletinTable extends Migration
             $table->increments('id');
             $table->string('judul');
             $table->integer('user_id');
-            $table->string('deskripsi')->nullable();
+            $table->text('deskripsi')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('created_by');

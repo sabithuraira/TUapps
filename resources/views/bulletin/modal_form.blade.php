@@ -6,8 +6,6 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" v-model="form_id">
-
-
                 <div class="row clearfix mb-2">
                     <div class="col-md-12">
                         Judul <span class="text-danger">*</span>
@@ -19,7 +17,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="row clearfix mb-2">
                     <div class="col-md-12">
                         Pegawai <span class="text-danger">*</span>
@@ -33,7 +30,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row clearfix mb-2">
                     <div class="col-md-6">
                         Ditampilkan dari: <span class="text-danger">*</span>
@@ -62,8 +58,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row clearfix mb-2">
                     <div class="col-md-12">
                         Isi: <span class="text-danger">*</span>
@@ -73,7 +67,6 @@
 
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="saveBulletin">SAVE</button>
