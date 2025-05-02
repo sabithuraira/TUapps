@@ -73,7 +73,6 @@ class PegawaiAndaController extends Controller
         ]);
     }
 
-
     public function store(Request $request, $id){
         // $user = \App\User::find($id);
         $real_id = Crypt::decrypt($id);
@@ -127,6 +126,8 @@ class PegawaiAndaController extends Controller
                     $model_utama->kualitas = ((int)$model_utama->kecepatan + (int)$model_utama->ketepatan + (int)$model_utama->ketuntasan)/3;
                 }
                 $model_utama->catatan_koreksi = $request->get('u_catatan_koreksi'.$data->id);
+
+                $model_utama->updated_by=Auth::id();
                 $model_utama->save();
             // }
         }
@@ -148,6 +149,8 @@ class PegawaiAndaController extends Controller
                     $model_tambahan->kualitas = ((int)$model_tambahan->kecepatan + (int)$model_tambahan->ketepatan + (int)$model_tambahan->ketuntasan)/3;
                 }
                 $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksi'.$data->id);
+
+                $model_tambahan->updated_by=Auth::id();
                 $model_tambahan->save();
             // }
         }

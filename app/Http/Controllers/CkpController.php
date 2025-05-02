@@ -176,7 +176,8 @@ class CkpController extends Controller
 
         $list_pegawai = \App\UserModel::where([
                             ['id', '<>', 1],
-                            ['kdkab', '=', Auth::user()->kdkab]
+                            ['kdkab', '=', Auth::user()->kdkab],
+                            ['is_active', '=', 1]
                         ])
                         ->orWhere([
                             ['kdesl', '=', 2],
@@ -310,6 +311,7 @@ class CkpController extends Controller
                 // $model_utama->catatan_koreksi = $request->get('u_catatan_koreksi'.$data->id);
                 $model_utama->iki = $request->get('u_iki'.$data->id);
 
+                $model_utama->updated_by=Auth::id();
                 $model_utama->save();
             }
         }
@@ -342,6 +344,7 @@ class CkpController extends Controller
                 // $model_tambahan->catatan_koreksi = $request->get('t_catatan_koreksi'.$data->id);
                 $model_tambahan->iki = $request->get('t_iki'.$data->id);
 
+                $model_tambahan->updated_by=Auth::id();
                 $model_tambahan->save();
             }
         }
