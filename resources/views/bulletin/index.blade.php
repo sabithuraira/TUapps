@@ -31,10 +31,10 @@
                             <div class="col-md-4 left">
                                 <select class="form-control  form-control-sm" name="unit_kerja" id="unit_kerja_filter"
                                     onchange="this.form.submit()">
+                                    <option @if ($unit_kerja === '') selected @endif value="">
+                                        Tampilkan Semua</option>
                                     @foreach (config('app.unit_kerjas') as $key => $value)
-                                        {{-- {{ $key == substr($unit_kerja, 2, 2) }} --}}
-                                        {{ $unit_kerja . $key }}
-                                        <option @if ($key == substr($unit_kerja, 2, 2)) selected @endif
+                                        <option @if ($key === $unit_kerja) selected @endif
                                             value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>

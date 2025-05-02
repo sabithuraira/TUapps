@@ -25,7 +25,7 @@ class Bulletin extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id')->select(['id', 'name', 'email']);
+        return $this->belongsTo(User::class, 'user_id', 'id')->select(['id', 'name', 'email', 'kdkab']);
     }
 
     public function getNameAttribute()

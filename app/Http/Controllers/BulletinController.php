@@ -23,23 +23,30 @@ class BulletinController extends Controller
     public function index(Request $request)
     {
         $auth = Auth::user();
-        $unit_kerja = Auth::user()->kdprop . Auth::user()->kdkab;
-        if ($request->get('unit_kerja')) {
-            $unit_kerja = '16' . $request->get('unit_kerja');
+        $unit_kerja = Auth::user()->kdkab;
+
+        if ($request->all() == []) {
+            $unit_kerja = Auth::user()->kdkab;
+        } else {
+            $unit_kerja = $request->get('unit_kerja');
         }
+
         $judul = $request->get('judul');
         $user = $request->get('user_id');
 
-        $datas = Bulletin::where('judul', "LIKE", "%" . $judul . "%")->orderby("id", 'desc')->paginate(15);
+        $datas = Bulletin::where('judul', "LIKE", "%" . $judul . "%")
+            ->join('users', 'users.id', '=', 'bulletin.user_id')
+            ->where('users.kdkab', 'LIKE', '%' . $request->get('unit_kerja') . "%")
+            ->orderby("bulletin.id", 'desc')->paginate(15);
+
         $datas->withPath('bulletin');
         $datas->appends($request->all());
         $model = new Bulletin();
         $list_pegawai = \App\UserModel::where([
             ['id', '<>', 1],
-            // ['kdkab', '=', substr($unit_kerja, 2)],
+            // ['kdkab', '=', $unit_kerja],
             ['is_active', 1]
         ])->orderby('kdkab', 'asc')->orderby('nip_baru')->get();
-
         $list_judul = $model->getListJudul();
         return view('bulletin.index', compact(
             'auth',
