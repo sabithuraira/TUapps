@@ -24,7 +24,8 @@
             </div>
 
             <div class="col-lg-6 col-md-12 left-box">
-              <a href="{{ url('izin_keluar/rekap') }}" class="btn btn-success float-right"><i class="fa fa-list"></i> <span>Lihat Rekap</span></a>
+              <a href="{{ url('izin_keluar/rekap') }}" class="btn btn-success float-right"><i class="fa fa-list"></i> <span>Rekap Bulanan</span></a> &nbsp;
+              <a href="{{ url('izin_keluar/rekap_today') }}" class="btn btn-success float-right mx-1"><i class="fa fa-users"></i> <span>Pegawai Izin Hari Ini</span></a>
             </div>
           </div>
           <br/><br/>

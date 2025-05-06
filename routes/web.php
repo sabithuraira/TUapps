@@ -221,6 +221,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('izin_keluar', 'IzinKeluarController')->only(['index', 'store']);
     Route::get('izin_keluar/rekap', 'IzinKeluarController@rekap');
     Route::post('izin_keluar/data_rekap', 'IzinKeluarController@data_rekap');
+    Route::get('izin_keluar/rekap_today', 'IzinKeluarController@rekap_today');
+    Route::post('izin_keluar/data_rekap_today', 'IzinKeluarController@data_rekap_today');
     // Route::get('izin_keluar/destroy_izinkeluar/{id}', 'IzinKeluarController@destroy_IzinKeluar');
 
     ///////////////

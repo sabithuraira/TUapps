@@ -86,6 +86,24 @@ class IzinKeluarController extends Controller
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
 
+    public function rekap_today(Request $request){
+        $today = date('Y-m-d');
+        $unit_kerja = Auth::user()->kdkab;
+
+        $model = new \App\IzinKeluar;
+        return view('izin_keluar.rekap_today', compact('unit_kerja'));
+    }
+
+    public function data_rekap_today(Request $request){
+        $today =  date('Y-m-d');
+        $unit_kerja = Auth::user()->kdkab;
+
+        $izin_keluar = new \App\IzinKeluar;
+        $datas = $izin_keluar->IzinKeluarDay($today, $unit_kerja);
+
+        return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
+    }
+
     public function index_eks(Request $request){
         $month = date('n');
         $year = date("Y");
