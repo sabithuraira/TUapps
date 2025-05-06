@@ -20,11 +20,20 @@ class IzinKeluar extends Model
     }
 
     public function ReportBulanan($month, $year, $kode_kab){
-        $sql = "SELECT SUM(total_minutes) jumlah_menit, users.name, users.nip_baru 
+        $sql = "SELECT SUM(total_minutes) jumlah_menit, 
+                    users.name, users.nip_baru , 
+                    GROUP_CONCAT(all_ket SEPARATOR '<br/>') as keterangan
                     FROM `users` 
-                    LEFT JOIN izin_keluar ON (users.nip_baru=izin_keluar.pegawai_nip 
-                                AND MONTH(izin_keluar.tanggal)='$month' 
-                                AND YEAR(izin_keluar.tanggal)='$year')
+                    -- LEFT JOIN izin_keluar ON (users.nip_baru=izin_keluar.pegawai_nip 
+                    --         AND MONTH(izin_keluar.tanggal)='$month' 
+                    --         AND YEAR(izin_keluar.tanggal)='$year')
+
+                    LEFT JOIN (SELECT *, CONCAT('[<b>', tanggal, ' ', TIME_FORMAT(start, '%H:%i') 
+                            , '-', TIME_FORMAT(end, '%H:%i')  ,'</b>] ' ,keterangan) 
+                            as all_ket FROM izin_keluar) as ik2
+                    	 ON (users.nip_baru=ik2.pegawai_nip 
+                                AND MONTH(ik2.tanggal)='$month' 
+                                AND YEAR(ik2.tanggal)='$year')
                     WHERE kdkab='$kode_kab' AND is_active=1 
                     GROUP BY users.name, users.nip_baru
                     ORDER BY jumlah_menit DESC;";
