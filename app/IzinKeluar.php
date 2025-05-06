@@ -80,4 +80,43 @@ class IzinKeluar extends Model
 
         return $result;
     }
+
+    //rekap seluruh pegawai keluar hari ini
+    //$day format = "Y-m-d" example: "2025-05-02"
+    public function IzinKeluarDay($day, $kode_kab){
+        $result = array();
+        $datas = array();
+
+        $arr_condition = [
+            // [\DB::raw('MONTH(tanggal)'), '=', $month],
+            // [\DB::raw('YEAR(tanggal)'), '=', $year]
+            ['tanggal', '=', $day],
+            ['kode_kab', '=', $kode_kab]
+        ];
+        $datas = DB::table('izin_keluar')
+            ->leftJoin('users', 'izin_keluar.pegawai_nip', '=', 'users.nip_baru')
+            ->where($arr_condition)
+            ->select('izin_keluar.*', 'users.name')
+            // ->orderBy('izin_keluar.tanggal', 'desc')
+            ->get();
+
+        foreach($datas as $key=>$value){
+            $result[]=array(
+                'id'                =>$value->id,
+                'pegawai_nip'       =>$value->pegawai_nip,
+                'name'              => $value->name,
+                'kode_prov'         =>$value->kode_prov,
+                'kode_kab'          =>$value->kode_kab,
+                'tanggal'           => date('d M Y', strtotime($value->tanggal)),
+                'start'             => ($value->start!=null) ? date('H:i', strtotime($value->start)) : "...",
+                'end'               => ($value->end!=null) ? date('H:i', strtotime($value->end)) : "...",
+                'total_minutes'     =>$value->total_minutes,
+                'keterangan'        =>$value->keterangan,
+                'created_by'        =>$value->created_by,
+                'updated_by'        =>$value->updated_by,
+            );
+        }
+
+        return $result;
+    }
 }
