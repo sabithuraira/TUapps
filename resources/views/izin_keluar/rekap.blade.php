@@ -35,6 +35,52 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-3 col-md-12 left-box">
+                        <div class="form-group">
+                            <label>Bulan:</label>
+
+                            <div class="input-group">
+                                <select class="form-control  form-control-sm" v-model="month" name="month">
+                                    @foreach ( config('app.months') as $key=>$value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-12 right-box">
+                        <div class="form-group">
+                            <label>Tahun:</label>
+
+                            <div class="input-group">
+                            <select class="form-control  form-control-sm"  v-model="year" name="year">
+                                @for ($i=2019;$i<=date('Y');$i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12 right-box">
+                        <div class="form-group">
+                            <label>Keperluan:</label>
+
+                            <div class="input-group">
+                            <select class="form-control  form-control-sm"  v-model="jenis_keperluan">
+                                <option value="0">- Pilih -</option>
+                                <option value="1">Keperluan Dinas</option>
+                                <option value="2">Keperluan Pribadi</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            @else
+                <div class="row clearfix">
+
                     <div class="col-lg-4 col-md-12 left-box">
                         <div class="form-group">
                             <label>Bulan:</label>
@@ -55,46 +101,29 @@
                             <label>Tahun:</label>
 
                             <div class="input-group">
-                            <select class="form-control  form-control-sm"  v-model="year" name="year">
-                                @for ($i=2019;$i<=date('Y');$i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="row clearfix">
-
-                    <div class="col-lg-6 col-md-12 left-box">
-                        <div class="form-group">
-                            <label>Bulan:</label>
-
-                            <div class="input-group">
-                            <select class="form-control  form-control-sm" v-model="month" name="month">
-                                    @foreach ( config('app.months') as $key=>$value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
+                                <select class="form-control  form-control-sm"  v-model="year" name="year">
+                                    @for ($i=2019;$i<=date('Y');$i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
                                 </select>
-
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-12 right-box">
+                    <div class="col-lg-4 col-md-12 right-box">
                         <div class="form-group">
-                            <label>Tahun:</label>
+                            <label>Keperluan:</label>
 
                             <div class="input-group">
-                            <select class="form-control  form-control-sm"  v-model="year" name="year">
-                                @for ($i=2019;$i<=date('Y');$i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
+                            <select class="form-control  form-control-sm"  v-model="jenis_keperluan">
+                                <option value="0">- Pilih -</option>
+                                <option value="1">Keperluan Dinas</option>
+                                <option value="2">Keperluan Pribadi</option>
                             </select>
                             </div>
                         </div>
                     </div>
+
                 </div>
             @endif
             
@@ -133,12 +162,14 @@
             datas: [],
             month: parseInt({!! json_encode($month) !!}),
             year: {!! json_encode($year) !!},
+            jenis_keperluan: 0,
             unit_kerja: {!! json_encode($unit_kerja) !!},
         },
         watch: {
             month: function (val) { this.setDatas(); },
             year: function (val) { this.setDatas(); },
             unit_kerja: function (val) { this.setDatas(); },
+            jenis_keperluan: function (val) { this.setDatas(); },
         },
         methods: {
             setDatas: function(){
@@ -157,6 +188,7 @@
                         unit_kerja: self.unit_kerja,
                         month: self.month, 
                         year: self.year, 
+                        jenis_keperluan: self.jenis_keperluan, 
                     },
                 }).done(function (data) {
                     self.datas = data.datas;

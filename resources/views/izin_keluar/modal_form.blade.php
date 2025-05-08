@@ -21,7 +21,12 @@
                     </div>
                     
                     <div class="col-md-6">
-                        
+                        Jenis Keperluan <span class="text-danger">*</span>
+                        <select v-model="form.jenis_keperluan" class="form-control">
+                            <option value="">- Pilih -</option>
+                            <option value="1">Keperluan Dinas</option>
+                            <option value="1">Keperluan Pribadi</option>
+                        </select>
                     </div>
                 </div>
                 <br/>

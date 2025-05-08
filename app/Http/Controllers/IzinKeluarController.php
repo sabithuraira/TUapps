@@ -70,18 +70,16 @@ class IzinKeluarController extends Controller
         $datas=array();
         $month = date('m');
         $year = date('Y');
+        $jenis_keperluan = 0;
 
-        if(strlen($request->get('unit_kerja'))>0)
-            $unit_kerja = $request->get('unit_kerja');
+        if(strlen($request->get('unit_kerja'))>0) $unit_kerja = $request->get('unit_kerja');
+        if(strlen($request->get('month'))>0) $month = $request->get('month');
+        if(strlen($request->get('year'))>0) $year = $request->get('year');
+        if(strlen($request->get('jenis_keperluan'))>0) $jenis_keperluan = $request->get('jenis_keperluan');
 
-        if(strlen($request->get('month'))>0)
-            $month = $request->get('month');
-
-        if(strlen($request->get('year'))>0)
-            $year = $request->get('year');
 
         $izin_keluar = new \App\IzinKeluar;
-        $datas = $izin_keluar->ReportBulanan($month, $year, $unit_kerja);
+        $datas = $izin_keluar->ReportBulanan($month, $year, $unit_kerja, $jenis_keperluan);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -97,9 +95,12 @@ class IzinKeluarController extends Controller
     public function data_rekap_today(Request $request){
         $today =  date('Y-m-d');
         $unit_kerja = Auth::user()->kdkab;
+        $jenis_keperluan = 0;
+
+        if(strlen($request->get('jenis_keperluan'))>0) $jenis_keperluan = $request->get('jenis_keperluan');
 
         $izin_keluar = new \App\IzinKeluar;
-        $datas = $izin_keluar->IzinKeluarDay($today, $unit_kerja);
+        $datas = $izin_keluar->IzinKeluarDay($today, $unit_kerja, $jenis_keperluan);
 
         return response()->json(['success'=>'Sukses', 'datas'=>$datas]);
     }
@@ -152,6 +153,7 @@ class IzinKeluarController extends Controller
         }
 
         $model->keterangan = $request->get('keterangan');
+        $model->jenis_keperluan = $request->get('jenis_keperluan');
         $model->updated_by= Auth::id();
         $model->save();
         
@@ -186,6 +188,7 @@ class IzinKeluarController extends Controller
         }
 
         $model->keterangan = $request->get('keterangan');
+        $model->jenis_keperluan = $request->get('jenis_keperluan');
         $model->updated_by= 0;
         $model->save();
         

@@ -14,7 +14,9 @@
                     <a href="#" role="button" v-on:click="updateIzinKeluar" data-toggle="modal" 
                             :data-id="data.id" :data-tanggal="data.tanggal" 
                             :data-start="data.start" :data-end="data.end" 
-                            :data-keterangan="data.keterangan" :data-pegawai_nip="data.pegawai_nip" 
+                            :data-keterangan="data.keterangan" 
+                            :data-jenis_keperluan="data.jenis_keperluan" 
+                            :data-pegawai_nip="data.pegawai_nip" 
                             :data-total_minutes="data.total_minutes" 
                             data-target="#add_izin_keluars"> <i class="icon-pencil"></i></a>
                     
@@ -81,7 +83,7 @@ var vm = new Vue({
         pathname : window.location.pathname,
         form: {
             id: 0, pegawai_nip: '', keterangan: '',
-            tanggal: '', start: '', end: '', pegawai_nip: '',
+            tanggal: '', start: '', end: '', pegawai_nip: '', jenis_keperluan: 2
         }
     },
     watch: {
@@ -101,7 +103,7 @@ var vm = new Vue({
             if (event) {
                 self.form = {
                     id: 0, pegawai_nip: '', keterangan: '',
-                    tanggal: '', start: '', end: '', pegawai_nip: '',
+                    tanggal: '', start: '', end: '', pegawai_nip: '', jenis_keperluan: 2
                 }
                 $('#form_tanggal').val(self.form.tanggal);
                 $('#form_start').removeAttr('disabled');
@@ -113,6 +115,7 @@ var vm = new Vue({
             if (event) {
                 self.form.id = event.currentTarget.getAttribute('data-id');
                 self.form.keterangan = event.currentTarget.getAttribute('data-keterangan');
+                self.form.jenis_keperluan = event.currentTarget.getAttribute('data-jenis_keperluan');
                 self.form.pegawai_nip = event.currentTarget.getAttribute('data-pegawai_nip');
                 $('#form_pegawai_nip').val(event.currentTarget.getAttribute('data-pegawai_nip')).trigger('change');
                 self.form.tanggal = event.currentTarget.getAttribute('data-tanggal');
@@ -149,6 +152,7 @@ var vm = new Vue({
                         start: self.form.start,
                         end: self.form.end, 
                         keterangan: self.form.keterangan, 
+                        jenis_keperluan: self.form.jenis_keperluan, 
                         pegawai_nip: self.form.pegawai_nip, 
                     },
                 }).done(function (data) {

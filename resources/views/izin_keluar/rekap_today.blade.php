@@ -19,6 +19,28 @@
       <div class="card" id="app_vue">
         <div class="body">
           <h4 class="text-center">Daftar Pegawai Izin Keluar Hari Ini</h4>
+          <br/>
+          <div class="row clearfix">
+              <div class="col-lg-8 col-md-12 left-box"></div>
+
+              <div class="col-lg-4 col-md-12 right-box">
+                  <div class="form-group">
+                      <div class="input-group">
+                        <select class="form-control  form-control-sm" v-model="form_jenis_keperluan" name="year">
+                            <option value="0">- Pilih -</option>
+                            <option value="1">Keperluan Dinas</option>
+                            <option value="2">Keperluan Pribadi</option>
+                        </select>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+
+
+
+
           <section class="datas">
               <div class="table-responsive">
                 <table class="table-bordered m-b-0"  style="min-width:100%">
@@ -92,6 +114,12 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
         datas: [],
+        form_jenis_keperluan: 0,
+    },
+    watch: {
+        form_jenis_keperluan: function (val) {
+            this.setDatas();
+        },
     },
     methods: {
         setDatas: function(){
@@ -104,9 +132,11 @@ var vm = new Vue({
                 url :  "{{ url('/izin_keluar/data_rekap_today') }}",
                 method : 'post',
                 dataType: 'json',
+                data:{ 
+                    jenis_keperluan: self.form_jenis_keperluan, 
+                },
             }).done(function (data) {
                 self.datas = data.datas;
-                // console.log(self.datas)
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
