@@ -181,6 +181,7 @@ class SuratTugasController extends Controller
         if(Auth::user()->kdkab=='00'){            
             $list_pejabat = \App\UserModel::where('kdprop', '=', config('app.kode_prov'))
                         ->where('kdkab','=',Auth::user()->kdkab)
+                        ->where('is_active', '=', 1)
                         ->where(
                             (function ($query) {
                                 $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
@@ -191,6 +192,7 @@ class SuratTugasController extends Controller
                         (function ($query) {
                             $query->where('kdprop', '=', config('app.kode_prov'))
                                 ->where('kdkab', '=', Auth::user()->kdkab)
+                                ->where('is_active', '=', 1)
                                 ->where(
                                     (function ($query) {
                                         $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 4);
@@ -200,6 +202,7 @@ class SuratTugasController extends Controller
                         (function ($query) {
                             $query->where('kdprop', '=', config('app.kode_prov'))
                                 ->where('kdkab', '=', '00')
+                                ->where('is_active', '=', 1)
                                 ->where(
                                     (function ($query) {
                                         $query->where('kdesl', '=', 3)->orWhere('kdesl', '=', 2);
