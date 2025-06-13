@@ -60,6 +60,10 @@
                 <template v-if="jenis_surat==7">
                     @include('surat_km._show_surat_keterangan')
                 </template>
+
+                <template v-if="jenis_surat==8">
+                    @include('surat_km._show_surat_spk')
+                </template>
             </div>
         </div>
     </div>

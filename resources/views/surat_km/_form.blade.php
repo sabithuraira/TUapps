@@ -47,6 +47,10 @@
         @include('surat_km._form_surat_keterangan')
     </div>
 
+    <div v-show="form.jenis_surat==8">
+        @include('surat_km._form_surat_spk')
+    </div>
+
     <br>
     <button type="submit" class="btn btn-primary">Simpan</button>
 

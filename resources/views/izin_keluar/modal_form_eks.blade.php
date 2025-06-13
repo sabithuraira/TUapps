@@ -40,7 +40,7 @@
                         <select v-model="form.jenis_keperluan" class="form-control">
                             <option value="">- Pilih -</option>
                             <option value="1">Keperluan Dinas</option>
-                            <option value="1">Keperluan Pribadi</option>
+                            <option value="2">Keperluan Pribadi</option>
                         </select>
                     </div>
                     

@@ -448,6 +448,21 @@ class SuratKmController extends Controller
                 }
             }
         }
+        else if($model->jenis_surat==8){
+            if($request->has('tanggal8')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal8')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal8')));
+            $tahun = date('Y', strtotime($request->get('tanggal8')));
+
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->tingkat_keamanan = $request->tingkat_keamanan8;
+            $model->kode_unit_kerja = $request->kode_unit_kerja8;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip8;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut8."/".$request->kode_unit_kerja8."/".$request->klasifikasi_arsip8."/".$tahun;
+            $model->perihal= $request->get('perihal8');
+            $model->save();
+        }
        
         return redirect('surat_km')->with('success', 'Information has been added');
     }
@@ -823,6 +838,23 @@ class SuratKmController extends Controller
                     $model_rincian->save();
                 }
             }
+        }
+        else if($model->jenis_surat==8){
+            if($request->has('tanggal8')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal8')));
+        
+            $bulan = date('m', strtotime($request->get('tanggal8')));
+            $tahun = date('Y', strtotime($request->get('tanggal8')));
+
+            $model->tanggal= $tanggal_format;
+            $model->nomor_urut= $request->nomor_urut8;
+            $model->tingkat_keamanan = $request->tingkat_keamanan8;
+            $model->kode_unit_kerja = $request->kode_unit_kerja8;
+            $model->klasifikasi_arsip = $request->klasifikasi_arsip8;
+            $model->nomor= $model->tingkat_keamanan."-".$request->nomor_urut8."/".$request->kode_unit_kerja8."/".$request->klasifikasi_arsip8."/".$tahun;
+            $model->perihal= $request->get('perihal8');
+            $model->ditetapkan_oleh = $request->ditetapkan_oleh8;
+            $model->ditetapkan_nama = $request->ditetapkan_nama8;
+            $model->save();
         }
         /////////////
         return redirect('surat_km');
