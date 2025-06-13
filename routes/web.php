@@ -356,6 +356,7 @@ Route::get('guest', 'HomeController@guest')->name('guest');
 Route::post('telegram/sp2020lf', 'TelegramController@sp2020lf');
 Route::post('telegram/regsosek', 'TelegramController@regsosek');
 Route::post('telegram/pes_st2023', 'TelegramController@pes_st2023');
+Route::post('telegram/wilker_2025', 'TelegramController@wilker_2025');
 Route::get('telegram/regsosek_belum_unduh', 'TelegramController@regsosek_belum_unduh');
 Route::post('telegram/regsosek_set_unduh', 'TelegramController@regsosek_set_unduh');
 Route::get('dashboard/{id}/pegawai', 'DashboardController@pegawai');

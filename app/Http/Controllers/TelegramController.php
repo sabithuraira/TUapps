@@ -866,4 +866,112 @@ class TelegramController extends Controller
         }
 
     }
+
+    
+    public function wilker_2025(Request $request){
+        //////////////FOR PRODUCTION
+        $client = new \GuzzleHttp\Client();
+        $update = json_decode($request->getContent());
+        Log::info('info request:', ['isi'=>$update]);
+        $chatID = $update->message->chat->id;
+        /////////////FOR TESTING
+        // $message = "WILKERSTAT-1601052001000100-1-2-102/80/3/10/2/19";
+        //WILKERSTAT-kode sls-status penyelesaian SLS-status perubahan batas-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan
+
+        $awal = date('Y-m-d', strtotime('2025-08-01'));
+        $akhir = date('Y-m-d', strtotime('2025-08-31'));
+
+        if(isset($update->message->text)){
+            $message = $update->message->text;
+
+            if(strtolower(str_replace(' ', '', $message))=='panduan'){
+                $pesan = urlencode("Kirim laporan progres WILKERSTAT 2025 dengan format berikut: \n
+                    <strong>WILKERSTAT-kode sls-status penyelesaian SLS (jika selesai isi 1, belum 2)-status perubahan batas(jika berubah batas isi 1, tidak 2)-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan.</strong> Contoh: <pre>WILKERSTAT-1691052001000100-1-2-102/80/3/10/2/19</pre>");
+            }
+            else{
+                $lower_msg = strtolower($message);
+                $rincian_msg = explode("-", $lower_msg);
+    
+                if(count($rincian_msg)==5 && $rincian_msg[0]=='wilkerstat'){
+                    $msg_error = [];
+                    
+                    // $cur_date = date('Y-m-d', strtotime('2022-10-18'));
+                    $cur_date = date('Y-m-d');
+
+                    if($cur_date<$awal || $cur_date>$akhir){
+                        $pesan = "Gagal!! Pelaporan hanya dapat dilakukan pada rentang 1 Agustus 2025 - 31 Agustus 2025";  
+                    }
+                    else{
+                        $str_laporan_jumlah = $rincian_msg[4];
+                        $arr_laporan_jumlah = explode("/", $str_laporan_jumlah);
+
+                        if(count($arr_laporan_jumlah)==6){
+                            $id_sls = str_replace(' ', '', $rincian_msg[1]);
+                            $kd_prov = substr($id_sls, 0,2);
+                            $kd_kab = substr($id_sls, 2,2);
+                            $kd_kec = substr($id_sls, 4,3);
+                            $kd_desa = substr($id_sls, 7,3);
+                            $kd_sls = substr($id_sls, 10,4);
+                            $kd_sub_sls = substr($id_sls, 14,2);
+
+                            $data = \App\BsPemetaan2025::where([
+                                    ['kode_prov', '=', $kd_prov],
+                                    ['kode_kab', '=', $kd_kab],
+                                    ['kode_kec', '=', $kd_kec],
+                                    ['kode_desa', '=', $kd_desa],
+                                    ['kode_sls', '=', $kd_sls],
+                                    ['kode_subsls', '=', $kd_sub_sls]
+                                ])->first();
+                                    
+                            if($data==null){
+                                $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
+                            }
+                            else{
+                                $status_selesai = str_replace(' ', '', $rincian_msg[2]);
+                                $status_berubah_batas = str_replace(' ', '', $rincian_msg[3]);
+                                $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_btt = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_btt_kosong = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_ = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                            
+                                if(!is_numeric($jumlah_rt)) $msg_error[] = "Isian 'Jumlah Ruta Tani' Harus Angka";
+                                if(!is_numeric($jumlah_art)) $msg_error[] = "Isian 'Jumlah ART Tani' Harus Angka";
+                                if(!is_numeric($is_selesai)) $msg_error[] = "Isian 'Informasi apakah selesai' Harus Angka";
+                                
+        //WILKERSTAT-kode sls-status penyelesaian SLS-status perubahan batas-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan
+            
+                                if(count($msg_error)>0){
+                                    $pesan = "Error!! berikut rincian errornya : ".join(",", $msg_error);
+                                }
+                                else{
+                                    $data->jml_ruta_pes = $jumlah_rt;
+                                    $data->jml_art_pes = $jumlah_art;
+                                    $data->status_selesai = $is_selesai;
+                                    $data->save();
+                                    $pesan = "Sukses!! Laporan berhasil disimpan.";  
+                                }
+                            }
+                            
+                        }
+                        else{
+                            $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+                        }
+                    }
+                }
+                else{
+                    $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+                }
+            }
+        }
+        else{
+            $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
+        }
+
+        $API_message = "https://api.telegram.org/bot".env('TELEGRAM_TOKEN_REGSOSEK')."/sendmessage?chat_id=".$chatID."&text=".$pesan."&parse_mode=HTML";        
+        $res = $client->get($API_message);
+
+        return 1;
+    }
 }
