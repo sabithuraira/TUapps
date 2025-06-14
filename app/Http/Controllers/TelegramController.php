@@ -878,7 +878,7 @@ class TelegramController extends Controller
         // $message = "WILKERSTAT-1601052001000100-1-2-102/80/3/10/2/19";
         //WILKERSTAT-kode sls-status penyelesaian SLS-status perubahan batas-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan
 
-        $awal = date('Y-m-d', strtotime('2025-08-01'));
+        $awal = date('Y-m-d', strtotime('2025-06-01'));
         $akhir = date('Y-m-d', strtotime('2025-08-31'));
 
         if(isset($update->message->text)){
@@ -932,28 +932,37 @@ class TelegramController extends Controller
                                 $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
                                 $jumlah_btt = str_replace(' ', '', $arr_laporan_jumlah[0]);
                                 $jumlah_btt_kosong = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_ = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_bku = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_btt_non_usaha = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_muatan = str_replace(' ', '', $arr_laporan_jumlah[0]);
                             
-                                if(!is_numeric($jumlah_rt)) $msg_error[] = "Isian 'Jumlah Ruta Tani' Harus Angka";
-                                if(!is_numeric($jumlah_art)) $msg_error[] = "Isian 'Jumlah ART Tani' Harus Angka";
-                                if(!is_numeric($is_selesai)) $msg_error[] = "Isian 'Informasi apakah selesai' Harus Angka";
+                                if(!is_numeric($status_selesai)) $msg_error[] = "Isian 'Status Penyelesaian' Harus Angka";
+                                if(!is_numeric($status_berubah_batas)) $msg_error[] = "Isian 'Status Perubahan Batas' Harus Angka";
+                                if(!is_numeric($jumlah_kk)) $msg_error[] = "Isian 'Jumlah KK' Harus Angka";
+                                if(!is_numeric($jumlah_btt)) $msg_error[] = "Isian 'Jumlah BTT' Harus Angka";
+                                if(!is_numeric($jumlah_btt_kosong)) $msg_error[] = "Isian 'Jumlah BTT Kosong' Harus Angka";
+                                if(!is_numeric($jumlah_bku)) $msg_error[] = "Isian 'Jumlah BKU' Harus Angka";
+                                if(!is_numeric($jumlah_btt_non_usaha)) $msg_error[] = "Isian 'Jumlah BTT Non Usaha' Harus Angka";
+                                if(!is_numeric($jumlah_muatan)) $msg_error[] = "Isian 'Perkiraan Jumlah Muatan' Harus Angka";
                                 
-        //WILKERSTAT-kode sls-status penyelesaian SLS-status perubahan batas-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan
+                                //WILKERSTAT-kode sls-status penyelesaian SLS-status perubahan batas-perkiraan jumlah KK/Jumlah BTT/Jumlah BTT Kosong/Jumlah BKU/Jumlah BBTT Non Usaha/Perkiraan Jumlah Muatan
             
                                 if(count($msg_error)>0){
                                     $pesan = "Error!! berikut rincian errornya : ".join(",", $msg_error);
                                 }
                                 else{
-                                    $data->jml_ruta_pes = $jumlah_rt;
-                                    $data->jml_art_pes = $jumlah_art;
-                                    $data->status_selesai = $is_selesai;
+                                    $data->status_selesai = $status_selesai;
+                                    $data->status_perubahan_batas = $status_berubah_batas;
+                                    $data->laporan_jumlah_kk = $jumlah_kk;
+                                    $data->laporan_jumlah_btt = $jumlah_btt;
+                                    $data->laporan_jumlah_btt_kosong = $jumlah_btt_kosong;
+                                    $data->laporan_jumlah_bku = $jumlah_bku;
+                                    $data->laporan_jumlah_bbttn_non = $jumlah_bbttn_non;
+                                    $data->laporan_perkiraan_jumlah = $jumlah_muatan;
                                     $data->save();
                                     $pesan = "Sukses!! Laporan berhasil disimpan.";  
                                 }
                             }
-                            
                         }
                         else{
                             $pesan = "Format pesan anda salah. Balas pesan ini dengan pesan 'panduan' untuk bantuan format yang benar";  
