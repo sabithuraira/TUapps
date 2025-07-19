@@ -477,6 +477,7 @@ class OpnamePersediaanController extends Controller
         else $model->unit_kerja4 = $request->form_unit_kerja;
 
         $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
+        $model->tanggal_dokumen = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal_dokumen));
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         if($model->save()){
@@ -511,6 +512,7 @@ class OpnamePersediaanController extends Controller
 
         $model->nama_penyedia = $request->form_nama_penyedia;
         $model->tanggal = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal));
+        $model->tanggal_dokumen = date('Y-m-d', strtotime($request->form_year."-".$request->form_month."-".$request->form_tanggal_dokumen));
         $model->created_by=Auth::id();
         $model->updated_by=Auth::id();
         if($model->save())

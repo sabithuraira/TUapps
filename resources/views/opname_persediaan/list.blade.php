@@ -64,6 +64,7 @@
                         <tr class="text-center">
                             <th>No</th>
                             <th>Tgl</th>
+                            <th>Tgl Dokumen</th>
                             <th v-if="form_current_jenis==1">Penyedia</th>
                             <th v-if="form_current_jenis==2">Unit Kerja</th>
                             <th>Jumlah</th>
@@ -75,6 +76,7 @@
                         <tr v-for="(data, index) in list_detail" :key="data.id">
                             <td class="text-center">@{{ index+1 }}</td>
                             <td class="text-center">@{{ dateOnlyFormat(data.tanggal) }}</td>
+                            <td class="text-center">@{{ dateOnlyFormat(data.tanggal_dokumen) }}</td>
                             <template v-if="form_current_jenis==1">
                                 <td>@{{ data.nama_penyedia }}</td>
                                 <td class="text-center">@{{ data.jumlah_tambah }}</td>
@@ -83,6 +85,7 @@
                                     <a href="#" v-on:click="updateBarangMasuk" :data-id="data.id" 
                                         :data-idbarang="data.id_barang" :data-jumlah="data.jumlah_tambah" 
                                         :data-namapenyedia="data.nama_penyedia" :data-tanggal="data.tanggal"
+                                        :data-tanggal_dokumen="data.tanggal_dokumen"
                                         :data-totalharga="data.harga_tambah"
                                         data-toggle="modal" data-target="#add_pengurangan"> <i class="fa fa-pencil-square-o"></i></a>
                                 </td>
@@ -102,6 +105,7 @@
                                     <a href="#" v-on:click="updateBarangKeluar" :data-id="data.id" 
                                         :data-idbarang="data.id_barang" :data-jumlah="data.jumlah_kurang" 
                                         :data-unitkerja="data.unit_kerja4" :data-tanggal="data.tanggal"
+                                        :data-tanggal_dokumen="data.tanggal_dokumen"
                                         
                                         :data-keterangan_usang="data.keterangan_usang"
                                         data-toggle="modal" data-target="#add_pengurangan"> <i class="fa fa-pencil-square-o"></i></a>

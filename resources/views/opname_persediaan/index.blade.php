@@ -142,9 +142,23 @@
                     </div>
 
                     <div class="form-group">
-                        Tanggal:
+                        Tanggal Keluar:
                         <div class="form-line">
                             <select class="form-control"  v-model="form_tanggal" autofocus>
+                                <option value="">- Pilih Tanggal -</option>
+                                @for($i=1;$i<=31;++$i)
+                                    <option value="{{ $i }}">{{ $i }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        Tanggal Dokumen:
+                        <div class="form-line">
+                            <select class="form-control"  v-model="form_tanggal_dokumen" autofocus>
                                 <option value="">- Pilih Tanggal -</option>
                                 @for($i=1;$i<=31;++$i)
                                     <option value="{{ $i }}">{{ $i }}
@@ -203,6 +217,7 @@ var vm = new Vue({
       form_unit_kerja: '',
       form_nama_penyedia: '',
       form_tanggal: '',
+      form_tanggal_dokumen: '',
       form_is_usang: '',
       form_keterangan_usang: '',
       form_message_usang: '',
@@ -294,6 +309,7 @@ var vm = new Vue({
                 self.form_jumlah = '';
                 self.form_unit_kerja = '';
                 self.form_tanggal = '';
+                self.form_tanggal_dokumen = '';
                 self.form_is_usang = '';
                 self.form_keterangan_usang = '';
                 self.form_message_usang = '';
@@ -313,6 +329,8 @@ var vm = new Vue({
                 if(self.form_keterangan_usang!='' && self.form_keterangan_usang!=null) self.form_is_usang = true;
                 var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
+                var temp_tanggal_dokumen = event.currentTarget.getAttribute('data-tanggal_dokumen');
+                self.form_tanggal_dokumen = parseInt(temp_tanggal_dokumen.split('-')[2]);
             }
         },
         addBarangMasuk: function (event) {
@@ -324,6 +342,7 @@ var vm = new Vue({
                 self.form_jumlah = '';
                 self.form_nama_penyedia = '';
                 self.form_tanggal = '';
+                self.form_tanggal_dokumen = '';
             }
         },
         updateBarangMasuk: function (event) {
@@ -337,6 +356,8 @@ var vm = new Vue({
                 self.form_nama_penyedia = event.currentTarget.getAttribute('data-namapenyedia');
                 var temp_tanggal = event.currentTarget.getAttribute('data-tanggal');
                 self.form_tanggal = parseInt(temp_tanggal.split('-')[2]);
+                var temp_tanggal_dokumen = event.currentTarget.getAttribute('data-tanggal_dokumen');
+                self.form_tanggal_dokumen = parseInt(temp_tanggal_dokumen.split('-')[2]);
 
             }
         },
@@ -361,7 +382,8 @@ var vm = new Vue({
                         form_id_barang: self.form_id_barang, 
                         form_jumlah: self.form_jumlah, 
                         form_nama_penyedia: self.form_nama_penyedia,
-                        form_tanggal: self.form_tanggal
+                        form_tanggal: self.form_tanggal,
+                        form_tanggal_dokumen: self.form_tanggal_dokumen
                     },
                 }).done(function (data) {
                     $('#add_pengurangan').modal('hide');
@@ -393,6 +415,7 @@ var vm = new Vue({
                             form_unit_kerja: self.form_unit_kerja, 
                             form_keterangan_usang: self.form_keterangan_usang,
                             form_tanggal: self.form_tanggal, 
+                            form_tanggal_dokumen: self.form_tanggal_dokumen, 
                             form_is_usang: is_usang,
                             form_keterangan_usang: self.form_keterangan_usang
                         },
