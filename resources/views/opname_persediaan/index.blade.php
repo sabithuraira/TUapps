@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="form-group">
-                        Tanggal Keluar:
+                        Tanggal Buku:
                         <div class="form-line">
                             <select class="form-control"  v-model="form_tanggal" autofocus>
                                 <option value="">- Pilih Tanggal -</option>
@@ -153,7 +153,6 @@
                             </select>
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         Tanggal Dokumen:

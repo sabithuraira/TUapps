@@ -53,7 +53,7 @@
 </div>
 
 <div class="modal" id="detail_tambah" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <b class="title" id="defaultModalLabel">@{{ headerOnDetail }}</b>
@@ -63,7 +63,7 @@
                     <thead>
                         <tr class="text-center">
                             <th>No</th>
-                            <th>Tgl</th>
+                            <th>Tgl Buku</th>
                             <th>Tgl Dokumen</th>
                             <th v-if="form_current_jenis==1">Penyedia</th>
                             <th v-if="form_current_jenis==2">Unit Kerja</th>
