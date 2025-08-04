@@ -1681,4 +1681,17 @@ class DashboardController extends Controller
             'label_desa'
         ));
     }
+
+    public function dashboard_wilker2025(Request $request){
+        $kab = '';
+        $kec = '';
+        $desa = '';
+
+        if(strlen($request->get('kab'))>0) $kab = $request->get('kab');
+        if(strlen($request->get('kec'))>0) $kec = $request->get('kec');
+        if(strlen($request->get('desa'))>0) $desa = $request->get('desa');
+
+        return view('dashboard.wilker2025', compact(
+            'kab', 'kec', 'desa'));
+    }
 }
