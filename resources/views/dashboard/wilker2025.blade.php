@@ -50,7 +50,7 @@
                                 <th class="text-center">BTT<br/>Kosong</th>
                                 <th class="text-center">BKU</th>
                                 <th class="text-center">BBTTN<br/>Non</th>
-                                <th class="text-center">Perkiraan<br/>Muatan</th>
+                                <th class="text-center">Perkiraan<br/>Muatan<br/>Usaha</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -1585,25 +1585,25 @@ class DashboardController extends Controller
         $kab = $request->get('kab');
         $kec = $request->get('kec');
         $desa = $request->get('desa');
-        $bs = $request->get('bs');
+        $sls = $request->get('sls');
         if (strlen($kab) == 0) $kab = null;
         if (strlen($kec) == 0) $kec = null;
         if (strlen($desa) == 0) $desa = null;
-        if (strlen($bs) == 0) $bs = null;
+        if (strlen($sls) == 0) $sls = null;
 
-        $model = new \App\BsPemetaan2025();
-        if ($bs != null) {
-            $label = 'bs';
-            $model_kab = \App\Kab::where('id_kab', '=', $kab)->first();
+        $model = new \App\Models\BsPemetaan2025();
+        if ($sls != null) {
+            $label = 'sls';
+            $model_kab = \App\Models\Kabs::where('id_kab', '=', $kab)->first();
             if ($model_kab != null) $label_kab = $model_kab->nama_kab;
 
-            $model_kec = \App\Kec::where([
+            $model_kec = \App\Models\Kecs::where([
                 ['id_kab', '=', $kab],
                 ['id_kec', '=', $kec]
             ])->first();
             if ($model_kec != null) $label_kec = $model_kec->nama_kec;
 
-            $model_desa = \App\Desa::where([
+            $model_desa = \App\Models\Desas::where([
                 ['id_kab', '=', $kab],
                 ['id_kec', '=', $kec],
                 ['id_desa', '=', $desa],
@@ -1611,41 +1611,41 @@ class DashboardController extends Controller
             if ($model_desa != null) $label_desa = $model_desa->nama_desa;
 
             $datas = $model->Rekapitulasi($kab, $kec, $desa);
-        } else if ($bs == null && $desa != null) {
+        } else if ($sls == null && $desa != null) {
             $label = 'desa';
-            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $model_kab = \App\Models\Kabs::where('id_kab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nama_kab;
 
-            $model_kec = \App\Pkec::where([
-                ['idKab', '=', $kab],
-                ['idKec', '=', $kec]
+            $model_kec = \App\Models\Kecs::where([
+                ['id_kab', '=', $kab],
+                ['id_kec', '=', $kec]
             ])->first();
-            if ($model_kec != null) $label_kec = $model_kec->nmKec;
+            if ($model_kec != null) $label_kec = $model_kec->nama_kec;
 
-            $model_desa = \App\Pdesa::where([
-                ['idKab', '=', $kab],
-                ['idKec', '=', $kec],
-                ['idDesa', '=', $desa],
+            $model_desa = \App\Models\Desas::where([
+                ['id_kab', '=', $kab],
+                ['id_kec', '=', $kec],
+                ['id_desa', '=', $desa],
             ])->first();
-            if ($model_desa != null) $label_desa = $model_desa->nmDesa;
+            if ($model_desa != null) $label_desa = $model_desa->nama_desa;
 
             $datas = $model->Rekapitulasi($kab, $kec, $desa);
-        } else if ($bs == null && $desa == null && $kec != null) {
+        } else if ($sls == null && $desa == null && $kec != null) {
             $label = 'kec';
-            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $model_kab = \App\Models\Kabs::where('id_kab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nama_kab;
 
-            $model_kec = \App\Pkec::where([
-                ['idKab', '=', $kab],
-                ['idKec', '=', $kec]
+            $model_kec = \App\Models\Kecs::where([
+                ['id_kab', '=', $kab],
+                ['id_kec', '=', $kec]
             ])->first();
-            if ($model_kec != null) $label_kec = $model_kec->nmKec;
+            if ($model_kec != null) $label_kec = $model_kec->nama_kec;
 
             $datas = $model->Rekapitulasi($kab, $kec);
-        } else if ($bs == null && $desa == null && $kec == null && $kab != null) {
+        } else if ($sls == null && $desa == null && $kec == null && $kab != null) {
             $label = 'kab';
-            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
-            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+            $model_kab = \App\Models\Kabs::where('id_kab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nama_kab;
 
             $datas = $model->Rekapitulasi($kab);
         } else {
@@ -1653,33 +1653,39 @@ class DashboardController extends Controller
         }
         $labels = [];
         $persens = [];
-        // foreach ($datas as $key => $data) {
-        //     $labels[] = $data->nama;
-        //     $persen = 100;
 
-        //     if ($data->total == 0) $persen = 0;
-        //     else $persen = round(($data->terlapor / $data->total * 100), 3);
-
-        //     $persens[] = $persen;
-        // }
         /////////////
-        return view('dashboard.index', compact(
-            'random_user',
-            'unit_kerja',
-            'dl_per_uk',
-            'model',
-            'datas',
-            'labels',
-            'persens',
-            'kab',
-            'kec',
-            'desa',
-            'bs',
-            'label',
-            'label_kab',
-            'label_kec',
-            'label_desa'
-        ));
+        // return view('dashboard.index', compact(
+        //     'random_user',
+        //     'unit_kerja',
+        //     'dl_per_uk',
+        //     'model',
+        //     'datas',
+        //     'labels',
+        //     'persens',
+        //     'kab',
+        //     'kec',
+        //     'desa',
+        //     'bs',
+        //     'label',
+        //     'label_kab',
+        //     'label_kec',
+        //     'label_desa'
+        // ));
+
+        return response()->json(['success'=>'Sukses', 
+            'datas'=>$datas,
+            'labels' => $labels,
+            'persens'=> $persens,
+            'kab' => $kab,
+            'kec'=> $kec,
+            'desa' => $desa,
+            'sls' => $sls,
+            'label' => $label,
+            'label_kab' => $label_kab,
+            'label_kec' => $label_kec,
+            'label_desa' => $label_desa
+        ]);
     }
 
     public function dashboard_wilker2025(Request $request){
