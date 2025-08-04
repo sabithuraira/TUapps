@@ -1575,4 +1575,110 @@ class DashboardController extends Controller
             'unit_kerja',
         ));
     }
+
+    public function wilkerstat2025(Request $request){
+        //////////////
+        $label = 'prov';
+        $label_kab = '';
+        $label_kec = '';
+        $label_desa = '';
+        $kab = $request->get('kab');
+        $kec = $request->get('kec');
+        $desa = $request->get('desa');
+        $bs = $request->get('bs');
+        if (strlen($kab) == 0) $kab = null;
+        if (strlen($kec) == 0) $kec = null;
+        if (strlen($desa) == 0) $desa = null;
+        if (strlen($bs) == 0) $bs = null;
+
+        $model = new \App\BsPemetaan2025();
+        if ($bs != null) {
+            $label = 'bs';
+            $model_kab = \App\Kab::where('id_kab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nama_kab;
+
+            $model_kec = \App\Kec::where([
+                ['id_kab', '=', $kab],
+                ['id_kec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nama_kec;
+
+            $model_desa = \App\Desa::where([
+                ['id_kab', '=', $kab],
+                ['id_kec', '=', $kec],
+                ['id_desa', '=', $desa],
+            ])->first();
+            if ($model_desa != null) $label_desa = $model_desa->nama_desa;
+
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+        } else if ($bs == null && $desa != null) {
+            $label = 'desa';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nmKec;
+
+            $model_desa = \App\Pdesa::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec],
+                ['idDesa', '=', $desa],
+            ])->first();
+            if ($model_desa != null) $label_desa = $model_desa->nmDesa;
+
+            $datas = $model->Rekapitulasi($kab, $kec, $desa);
+        } else if ($bs == null && $desa == null && $kec != null) {
+            $label = 'kec';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+
+            $model_kec = \App\Pkec::where([
+                ['idKab', '=', $kab],
+                ['idKec', '=', $kec]
+            ])->first();
+            if ($model_kec != null) $label_kec = $model_kec->nmKec;
+
+            $datas = $model->Rekapitulasi($kab, $kec);
+        } else if ($bs == null && $desa == null && $kec == null && $kab != null) {
+            $label = 'kab';
+            $model_kab = \App\Pkab::where('idKab', '=', $kab)->first();
+            if ($model_kab != null) $label_kab = $model_kab->nmKab;
+
+            $datas = $model->Rekapitulasi($kab);
+        } else {
+            $datas = $model->Rekapitulasi();
+        }
+        $labels = [];
+        $persens = [];
+        // foreach ($datas as $key => $data) {
+        //     $labels[] = $data->nama;
+        //     $persen = 100;
+
+        //     if ($data->total == 0) $persen = 0;
+        //     else $persen = round(($data->terlapor / $data->total * 100), 3);
+
+        //     $persens[] = $persen;
+        // }
+        /////////////
+        return view('dashboard.index', compact(
+            'random_user',
+            'unit_kerja',
+            'dl_per_uk',
+            'model',
+            'datas',
+            'labels',
+            'persens',
+            'kab',
+            'kec',
+            'desa',
+            'bs',
+            'label',
+            'label_kab',
+            'label_kec',
+            'label_desa'
+        ));
+    }
 }

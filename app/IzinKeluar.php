@@ -30,7 +30,9 @@ class IzinKeluar extends Model
                     --         AND MONTH(izin_keluar.tanggal)='$month' 
                     --         AND YEAR(izin_keluar.tanggal)='$year')
 
-                    LEFT JOIN (SELECT *, CONCAT('[<b>', tanggal, ' ', TIME_FORMAT(start, '%H:%i') 
+                    LEFT JOIN (SELECT *, CONCAT('[<b>', 
+                            DATE_FORMAT(tanggal, '%e %b %Y'), ' ', 
+                            TIME_FORMAT(start, '%H:%i') 
                             , '-', TIME_FORMAT(end, '%H:%i')  ,'</b>] ' ,keterangan) 
                             as all_ket FROM izin_keluar) as ik2
                     	 ON (users.nip_baru=ik2.pegawai_nip 
