@@ -930,11 +930,11 @@ class TelegramController extends Controller
                                 $status_selesai = str_replace(' ', '', $rincian_msg[2]);
                                 $status_berubah_batas = str_replace(' ', '', $rincian_msg[3]);
                                 $jumlah_kk = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_btt = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_btt_kosong = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_bku = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_btt_non_usaha = str_replace(' ', '', $arr_laporan_jumlah[0]);
-                                $jumlah_muatan = str_replace(' ', '', $arr_laporan_jumlah[0]);
+                                $jumlah_btt = str_replace(' ', '', $arr_laporan_jumlah[1]);
+                                $jumlah_btt_kosong = str_replace(' ', '', $arr_laporan_jumlah[2]);
+                                $jumlah_bku = str_replace(' ', '', $arr_laporan_jumlah[3]);
+                                $jumlah_btt_non_usaha = str_replace(' ', '', $arr_laporan_jumlah[4]);
+                                $jumlah_muatan = str_replace(' ', '', $arr_laporan_jumlah[5]);
                             
                                 if(!is_numeric($status_selesai)) $msg_error[] = "Isian 'Status Penyelesaian' Harus Angka";
                                 if(!is_numeric($status_berubah_batas)) $msg_error[] = "Isian 'Status Perubahan Batas' Harus Angka";
@@ -957,7 +957,7 @@ class TelegramController extends Controller
                                     $data->laporan_jumlah_btt = $jumlah_btt;
                                     $data->laporan_jumlah_btt_kosong = $jumlah_btt_kosong;
                                     $data->laporan_jumlah_bku = $jumlah_bku;
-                                    $data->laporan_jumlah_bbttn_non = $jumlah_bbttn_non;
+                                    $data->laporan_jumlah_bbttn_non = $jumlah_btt_non_usaha;
                                     $data->laporan_perkiraan_jumlah = $jumlah_muatan;
                                     $data->save();
                                     $pesan = "Sukses!! Laporan berhasil disimpan.";  
