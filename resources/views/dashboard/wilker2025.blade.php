@@ -37,20 +37,22 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" class="text-center">Wilayah</th>
-                                <th colspan="3" class="text-center">SLS</th>
-                                <th colspan="6" class="text-center">Jumlah</th>
+                                <th colspan="4" class="text-center">SLS</th>
+                                <th colspan="7" class="text-center">Jumlah</th>
                             </tr>
 
                             <tr>
                                 <th class="text-center">Target</th>
                                 <th class="text-center">Selesai</th>
                                 <th class="text-center">Berubah<br/>Batas</th>
+                                <th class="text-center">% Selesai</th>
                                 <th class="text-center">KK</th>
                                 <th class="text-center">BTT</th>
                                 <th class="text-center">BTT<br/>Kosong</th>
                                 <th class="text-center">BKU</th>
                                 <th class="text-center">BBTTN<br/>Non</th>
                                 <th class="text-center">Perkiraan<br/>Muatan<br/>Usaha</th>
+                                <th class="text-center">Total Muatan<br/>(Maks(KK, BTT) + BTT Kosong +<br/>BBTT NonUsaha + Muatan Usaha)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,20 +74,20 @@
                                 <td class="text-center">@{{ data.total }}</td>
                                 <td class="text-center">@{{ data.jumlah_selesai }}</td>
                                 <td class="text-center">@{{ data.jumlah_berubah_batas }}</td>
+                                <td class="text-center"><b>@{{ (data.jumlah_selesai/data.total*100).toFixed(2) }} %</b></td>
                                 <td class="text-center">@{{ data.laporan_jumlah_kk }}</td>
                                 <td class="text-center">@{{ data.laporan_jumlah_btt }}</td>
                                 <td class="text-center">@{{ data.laporan_jumlah_btt_kosong }}</td>
                                 <td class="text-center">@{{ data.laporan_jumlah_bku }}</td>
                                 <td class="text-center">@{{ data.laporan_jumlah_bbttn_non }}</td>
                                 <td class="text-center">@{{ data.laporan_perkiraan_jumlah }}</td>
+                                <td class="text-center"><b>@{{ parseInt(data.laporan_jumlah_kk)+parseInt(data.laporan_jumlah_btt)+parseInt(data.laporan_jumlah_btt_kosong)+parseInt(data.laporan_jumlah_bbttn_non)+parseInt(data.laporan_perkiraan_jumlah) }}</b></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
             </div>
-
-
             <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">

@@ -26,8 +26,8 @@ class BsPemetaan2025 extends Model
 
         if($desa!=null){ //sls in desaa
             $label_select = "s.id_sls as idw, s.nama_sls as nama,
-                SUM(if(s.status_selesai<>0, 1, 0)) AS jumlah_selesai, 
-                SUM(if(s.status_perubahan_batas<>0, 1, 0)) AS jumlah_berubah_batas, 
+                SUM(if(s.status_selesai=1, 1, 0)) AS jumlah_selesai, 
+                SUM(if(s.status_perubahan_batas=1, 1, 0)) AS jumlah_berubah_batas, 
                 SUM(s.jumlah_kk) AS jumlah_kk,
                 SUM(s.jumlah_bstt) AS jumlah_bstt,
                 SUM(s.jumlah_bsbtt) AS jumlah_bsbtt,
@@ -47,8 +47,8 @@ class BsPemetaan2025 extends Model
         }
         else if($desa==null && $kec!=null){ //desa in kecamatan
             $label_select = "w.id_desa as idw, w.nama_desa as nama, 
-                SUM(if(s.status_selesai<>0, 1, 0)) AS jumlah_selesai, 
-                SUM(if(s.status_perubahan_batas<>0, 1, 0)) AS jumlah_berubah_batas, 
+                SUM(if(s.status_selesai=1, 1, 0)) AS jumlah_selesai, 
+                SUM(if(s.status_perubahan_batas=1, 1, 0)) AS jumlah_berubah_batas, 
                 SUM(s.jumlah_kk) AS jumlah_kk,
                 SUM(s.jumlah_bstt) AS jumlah_bstt,
                 SUM(s.jumlah_bsbtt) AS jumlah_bsbtt,
@@ -70,8 +70,8 @@ class BsPemetaan2025 extends Model
         else if($desa==null && $kec==null && $kab!=null){ //kecamatan in kabupaten
 
             $label_select = "w.id_kec as idw, w.nama_kec as nama, 
-                SUM(if(s.status_selesai<>0, 1, 0)) AS jumlah_selesai, 
-                SUM(if(s.status_perubahan_batas<>0, 1, 0)) AS jumlah_berubah_batas, 
+                SUM(if(s.status_selesai=1, 1, 0)) AS jumlah_selesai, 
+                SUM(if(s.status_perubahan_batas=1, 1, 0)) AS jumlah_berubah_batas, 
                 SUM(s.jumlah_kk) AS jumlah_kk,
                 SUM(s.jumlah_bstt) AS jumlah_bstt,
                 SUM(s.jumlah_bsbtt) AS jumlah_bsbtt,
@@ -91,8 +91,8 @@ class BsPemetaan2025 extends Model
         }
         else{ // all kabupaten in provinsi
             $label_select = "w.id_kab as idw, w.nama_kec as nama, 
-                SUM(if(s.status_selesai<>0, 1, 0)) AS jumlah_selesai, 
-                SUM(if(s.status_perubahan_batas<>0, 1, 0)) AS jumlah_berubah_batas, 
+                SUM(if(s.status_selesai=1, 1, 0)) AS jumlah_selesai, 
+                SUM(if(s.status_perubahan_batas=1, 1, 0)) AS jumlah_berubah_batas, 
                 SUM(s.jumlah_kk) AS jumlah_kk,
                 SUM(s.jumlah_bstt) AS jumlah_bstt,
                 SUM(s.jumlah_bsbtt) AS jumlah_bsbtt,

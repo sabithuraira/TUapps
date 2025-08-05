@@ -40,6 +40,16 @@ class DashboardController extends Controller
 
         // inRandomOrder()->first();\
         $bulletin_header = new Bulletin();
+
+        
+        $kab = '';
+        $kec = '';
+        $desa = '';
+
+        if(strlen($request->get('kab'))>0) $kab = $request->get('kab');
+        if(strlen($request->get('kec'))>0) $kec = $request->get('kec');
+        if(strlen($request->get('desa'))>0) $desa = $request->get('desa');
+
         return view('dashboard.index', compact(
             'random_user',
             'unit_kerja',
@@ -47,7 +57,8 @@ class DashboardController extends Controller
             'request',
             'birthday',
             'bulletin',
-            'bulletin_header'
+            'bulletin_header',
+            'kab', 'kec', 'desa',
             // 'mengabdi'
         ));
     }
