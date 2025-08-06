@@ -31,6 +31,9 @@
                     - @{{ label_desa }}   
                 </template>
                 <br/><br/>
+                
+                <a :href="api_download_url+'?kab=' + kab + '&kec=' + kec + '&desa=' + desa" class="'btn btn-info btn-sm"><i class='fa fa-excel'></i>Download Data SLS</a>
+                <br /><br />
 
                 <div class="table-responsive">
                     <table class="table-bordered m-b-0"  style="min-width:100%">
@@ -122,6 +125,7 @@ var vm = new Vue({
         label_kec: '',
         label_desa: '',
         api_url: 'https://st23.bpssumsel.com/api/dashboard/wilkerstat2025',
+        api_download_url: 'https://st23.bpssumsel.com/api/dashboard/download_wilkerstat2025',
         curr_url: {!! json_encode(url('dashboard/data/wilker2025')) !!}
     },
     methods: {

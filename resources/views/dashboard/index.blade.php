@@ -39,6 +39,9 @@
                         - @{{ label_desa }}   
                     </template>
                     <br/><br/>
+                    
+                    <a :href="api_download_url+'?kab=' + kab + '&kec=' + kec + '&desa=' + desa" class="'btn btn-info btn-sm"><i class='fa fa-file-excel-o'></i> Download Data SLS</a>
+                    <br /><br />
 
                     <div class="table-responsive">
                         <table class="table-bordered m-b-0"  style="min-width:100%">
@@ -138,6 +141,7 @@
             label_kec: '',
             label_desa: '',
             api_url: 'https://4ae21a443869.ngrok-free.app/api/dashboard/wilkerstat2025',
+            api_download_url: 'https://4ae21a443869.ngrok-free.app/api/dashboard/download_wilkerstat2025',
             curr_url: {!! json_encode(url('dashboard/index')) !!}
         },
         methods: {
