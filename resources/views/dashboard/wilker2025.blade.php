@@ -81,7 +81,11 @@
                                 <td class="text-center">@{{ data.laporan_jumlah_bku }}</td>
                                 <td class="text-center">@{{ data.laporan_jumlah_bbttn_non }}</td>
                                 <td class="text-center">@{{ data.laporan_perkiraan_jumlah }}</td>
-                                <td class="text-center"><b>@{{ parseInt(data.laporan_jumlah_kk)+parseInt(data.laporan_jumlah_btt)+parseInt(data.laporan_jumlah_btt_kosong)+parseInt(data.laporan_jumlah_bbttn_non)+parseInt(data.laporan_perkiraan_jumlah) }}</b></td>
+                                <td class="text-center">
+                                    <b>
+                                        @{{ parseInt(data.laporan_jumlah_maks)+parseInt(data.laporan_jumlah_btt_kosong)+parseInt(data.laporan_jumlah_bbttn_non)+parseInt(data.laporan_perkiraan_jumlah) }}
+                                    </b>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
