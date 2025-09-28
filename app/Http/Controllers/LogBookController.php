@@ -173,6 +173,23 @@ class LogBookController extends Controller
         }
     }
 
+    public function rekap_uker_perbulan(Request $request){
+        $month = date('n');
+        $year = date('Y');
+        $uker = '00';
+
+        if(strlen($request->get('month'))>0) $month = $request->get('month');
+        if(strlen($request->get('year'))>0) $year = $request->get('year');
+        if(strlen($request->get('uker'))>0) $uker = $request->get('uker');
+
+        $model = new \App\LogBook;
+        $datas = $model->RekapUkerPerBulan($uker, $month, $year);
+
+        return view('log_book.rekap_uker_perbulan', compact('model', 'uker',
+            'month', 'year', 'datas'));
+    }
+    
+
     public function send_to_ckp(Request $request){
         if($request->form_id_data!=''){
             $model = \App\LogBook::find($request->form_id_data);

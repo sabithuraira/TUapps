@@ -108,6 +108,8 @@
                         <!-- <li class="{{ request()->is('skp*') ? 'active' : '' }}"><a href="{{ url('skp') }}">SKP <span class="badge badge-warning float-right">Uji Coba</span></a></li> -->
                         <li class="{{ request()->is('log_book') ? 'active' : '' }}"><a
                                 href="{{ url('log_book') }}">Log Book</a></li>
+                        <li class="{{ request()->is('log_book/rekap_uker_perbulan') ? 'active' : '' }}"><a
+                                href="{{ url('log_book/rekap_uker_perbulan') }}">Log Book Rekap Bulanan</a></li>
                         <li class="{{ request()->is('rencana_kerja') ? 'active' : '' }}"><a
                                 href="{{ url('rencana_kerja') }}">Rencana Kerja</a></li>
                         <li class="{{ request()->is('izin_keluar') ? 'active' : '' }}"><a href="{{ url('izin_keluar') }}">Permohonan Izin Keluar</a></li>

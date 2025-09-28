@@ -212,6 +212,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('log_book/save_komentar', 'LogBookController@saveKomentar');
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
     Route::get('log_book/rekap_pegawai', 'LogBookController@rekap_pegawai');
+    Route::get('log_book/rekap_uker_perbulan', 'LogBookController@rekap_uker_perbulan');
     Route::get('log_book/destroy_logbook/{id}', 'LogBookController@destroy_logbook');
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
     Route::post('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
@@ -360,3 +361,5 @@ Route::post('telegram/wilker_2025', 'TelegramController@wilker_2025');
 Route::get('telegram/regsosek_belum_unduh', 'TelegramController@regsosek_belum_unduh');
 Route::post('telegram/regsosek_set_unduh', 'TelegramController@regsosek_set_unduh');
 Route::get('dashboard/{id}/pegawai', 'DashboardController@pegawai');
+
+Route::get('dashboard/data/wilker2025', 'DashboardController@dashboard_wilker2025');
