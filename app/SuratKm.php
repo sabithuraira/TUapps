@@ -23,7 +23,8 @@ class SuratKm extends Model
             5 => 'Disposisi', 
             6 => 'Surat Keputusan', 
             7 => 'Surat Keterangan', 
-            8 => 'SPK', 
+            8 => 'Surat Perjanjian Kerja', 
+            9 => 'MOU/Kerja Sama', 
         );
     }
 

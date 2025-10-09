@@ -176,7 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
+        // Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -226,7 +226,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        // 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
     'months' => [
@@ -261,6 +261,8 @@ return [
         '09' => 'Kabupaten OKU Timur',
         '10' => 'Kabupaten Ogan Ilir',
         '11' => 'Kabupaten Empat Lawang',
+        '12' => 'Kabupaten PALI',
+        '13' => 'Kabupaten Musi Rawas Utara',
         '71' => 'Kota Palembang',
         '72' => 'Kota Prabumulih',
         '73' => 'Kota Pagaralam',

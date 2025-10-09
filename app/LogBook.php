@@ -41,6 +41,23 @@ class LogBook extends Model
         return $result;
     }
 
+    public  function RekapUkerPerBulan($unit_kerja, $month, $year){
+        $sql = "SELECT u.id, u.name, u.nip_baru, COUNT(log_books.id) as total_logbook
+            FROM `users` u 
+            LEFT JOIN log_books ON (log_books.user_id=u.email 
+            	AND MONTH(log_books.tanggal)=$month 
+                AND YEAR(log_books.tanggal)=$year 
+                AND (log_books.is_rencana=0 OR log_books.is_rencana IS NULL))
+            
+            WHERE u.kdkab = '$unit_kerja' 
+            	AND u.is_active=1
+            GROUP BY u.id, u.name, u.nip_baru
+            ORDER by total_logbook DESC";
+
+        $result = DB::select(DB::raw($sql));
+        return $result;
+    }
+
     //rekap per pegawai dalam rentang waktu tertentu
     public function LogBookRekap($start_date, $end_date, $user_id){
         $result = array();
