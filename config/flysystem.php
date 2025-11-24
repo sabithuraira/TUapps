@@ -159,10 +159,6 @@ return [
         ],
 
         'webdav' => [
-            'driver'     => 'webdav',
-            'baseUri'    => 'https://drivex.pusri.co.id/remote.php/webdav/',
-            'userName'   => 'app.sekuriti',
-            'password'   => 'Palembang1',
             // 'visibility' => 'public',
             // 'pirate'     => false,
             // 'eventable'  => true,
