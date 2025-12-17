@@ -23,7 +23,7 @@
                             <p class="badge badge-info">{{ date('d F Y', strtotime($data['tanggal'])) }}</p>
                         </td>
                         <td>
-                            @if(($data['jenis_surat']>=1 && $data['jenis_surat']<=3) || $data['jenis_surat']==8)
+                            @if(($data['jenis_surat']>=1 && $data['jenis_surat']<=3) || $data['jenis_surat']==8 || $data['jenis_surat']==9)
                                 <h6 class="m-b-0">{{ $data['perihal'] }}</h6>
                                 <p class="m-b-0">Nomor: {{ $data['nomor'] }}</p>
                             @elseif($data['jenis_surat']==4)

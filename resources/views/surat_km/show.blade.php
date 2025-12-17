@@ -64,6 +64,10 @@
                 <template v-if="jenis_surat==8">
                     @include('surat_km._show_surat_spk')
                 </template>
+                
+                <template v-if="jenis_surat==9">
+                    @include('surat_km._show_surat_mou')
+                </template>
             </div>
         </div>
     </div>

@@ -448,7 +448,7 @@ class SuratKmController extends Controller
                 }
             }
         }
-        else if($model->jenis_surat==8){
+        else if($model->jenis_surat==8 || $model->jenis_surat==9){
             if($request->has('tanggal8')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal8')));
         
             $bulan = date('m', strtotime($request->get('tanggal8')));
