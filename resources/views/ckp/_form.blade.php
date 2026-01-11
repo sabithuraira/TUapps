@@ -112,7 +112,7 @@
                             </td>
                             <td><input class="form-control  form-control-sm" type="text" :name="'t_uraian'+data.id" v-model="data.uraian"></td>
                             <td>
-                                <select class="form-control  form-control-sm" :name="'t_pemberi_tugas_id'+data.id" v-model="data.pemberi_tugas_id">
+                                <select class="form-control  form-control-sm show-tick ms select2" :name="'t_pemberi_tugas_id'+data.id" v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
                                         <option value="{{ $value->email }}">{{ $value->name }}</option>
                                     @endforeach
@@ -171,7 +171,7 @@
                             <td>@{{ index+1 }}</td>
                             <td><div style="width:300px"></div>@{{ data.uraian }}</td>
                             <td>
-                                <select class="form-control  form-control-sm" disabled v-model="data.pemberi_tugas_id">
+                                <select class="form-control  form-control-sm show-tick ms select2" disabled v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
                                         <option value="{{ $value->email }}">{{ $value->name }}</option>
                                     @endforeach
@@ -195,7 +195,7 @@
                             <td>@{{ index+1 }}</td>
                             <td>@{{ data.uraian }}</td>
                             <td>
-                                <select class="form-control  form-control-sm" disabled v-model="data.pemberi_tugas_id">
+                                <select class="form-control  form-control-sm show-tick ms select2" disabled v-model="data.pemberi_tugas_id">
                                     @foreach($list_pegawai as $value)
                                         <option value="{{ $value->email }}">{{ $value->name }}</option>
                                     @endforeach
@@ -234,8 +234,40 @@
     </div>
 </div>
 
+
+@section('css')
+    <meta name="_token" content="{{csrf_token()}}" />
+    <meta name="csrf-token" content="@csrf">
+    <link rel="stylesheet" href="{!! asset('lucid/assets/vendor/select2/select2.css') !!}" />
+    <style type="text/css">
+        * {
+            font-family: Segoe UI, Arial, sans-serif;
+        }
+        table{
+            font-size: small;
+            border-collapse: collapse;
+        }
+
+        tfoot tr td{
+            font-weight: bold;
+            font-size: small;
+        }
+
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+    </style>
+@endsection
+
 @section('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{!! asset('lucid/assets/vendor/select2/select2.min.js') !!}"></script>
 <script>
 var vm = new Vue({  
     el: "#app_vue",
@@ -550,7 +582,6 @@ var vm = new Vue({
                             'catatan_koreksi': current_tambahan.catatan_koreksi,
                         });
                     }
-
                     
                     self.kegiatan_utama.push({
                         'id': 'au'+(self.kegiatan_utama.length+1),
@@ -639,6 +670,7 @@ var vm = new Vue({
     $(document).ready(function() {
         vm.setDatas();
         vm.refreshIki();
+        $('.select2').select2();
     });
 
 
@@ -668,33 +700,4 @@ var vm = new Vue({
         vm.setDatas();
     });
 </script>
-@endsection
-
-@section('css')
-    <meta name="_token" content="{{csrf_token()}}" />
-    <meta name="csrf-token" content="@csrf">
-    <style type="text/css">
-        * {
-            font-family: Segoe UI, Arial, sans-serif;
-        }
-        table{
-            font-size: small;
-            border-collapse: collapse;
-        }
-
-        tfoot tr td{
-            font-weight: bold;
-            font-size: small;
-        }
-
-        input[type='number'] {
-            -moz-appearance:textfield;
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-
-    </style>
 @endsection

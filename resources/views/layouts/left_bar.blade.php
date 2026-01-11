@@ -236,6 +236,10 @@
                                     class="{{ request()->is('opname_persediaan') || request()->is('opname_persediaan/create') ? 'active' : '' }}">
                                     <a href="{{ url('opname_persediaan') }}">Opname Persediaan</a>
                                 </li>
+                                <li
+                                    class="{{ request()->is('opname_permintaan') || request()->is('opname_permintaan/create') ? 'active' : '' }}">
+                                    <a href="{{ url('opname_permintaan') }}">Permintaan Barang</a>
+                                </li>
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
                                         href="{{ url('opname_persediaan/kartu_kendali') }}">Kartu Kendali</a></li>
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali_q') ? 'active' : '' }}"><a
