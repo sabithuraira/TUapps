@@ -47,6 +47,25 @@
                                     class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
                 </li>
+
+
+                @hasanyrole('superadmin|change_ambassador')
+                <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}">
+                    <a href="#SuasanaKantor" class="has-arrow"><i class="icon-bubbles"></i>
+                        <span>Suasana Kantor</span>
+                        @php
+                            $curhat_pending_count = \App\CurhatAnon::where('status_verifikasi', 1)->count();
+                        @endphp
+                        @if($curhat_pending_count > 0)
+                            <span class="badge badge-warning float-right">{{ $curhat_pending_count }}</span>
+                        @endif
+                    </a>
+                    <ul>
+                        <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}"><a
+                                href="{{ url('curhat_anon') }}">Curhat Anon</a></li>
+                    </ul>
+                </li>
+                @endhasanyrole
                 <li
                     class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' || request()->is('bulletin*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
@@ -219,6 +238,10 @@
                 @endhasanyrole
 
                 @if (Auth::user()->kdkab == '00')
+                    <li
+                        class="{{ request()->is('opname_permintaan') || request()->is('opname_permintaan/create') ? 'active' : '' }}">
+                        <a href="{{ url('opname_permintaan') }}">Permintaan Barang</a>
+                    </li>
                     @hasanyrole('superadmin|subbag-umum')
                         <li
                             class="{{ request()->is('master_barang*') ||
@@ -235,10 +258,6 @@
                                 <li
                                     class="{{ request()->is('opname_persediaan') || request()->is('opname_persediaan/create') ? 'active' : '' }}">
                                     <a href="{{ url('opname_persediaan') }}">Opname Persediaan</a>
-                                </li>
-                                <li
-                                    class="{{ request()->is('opname_permintaan') || request()->is('opname_permintaan/create') ? 'active' : '' }}">
-                                    <a href="{{ url('opname_permintaan') }}">Permintaan Barang</a>
                                 </li>
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali') ? 'active' : '' }}"><a
                                         href="{{ url('opname_persediaan/kartu_kendali') }}">Kartu Kendali</a></li>
@@ -284,7 +303,6 @@
                                 href="{{ url('meeting/kalender') }}">Kalender</a></li>
                     </ul>
                 </li>
-
 
                 <li class="{{ request()->is('surat_km*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-doc"></i>

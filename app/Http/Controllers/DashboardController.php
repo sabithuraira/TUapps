@@ -1599,4 +1599,31 @@ class DashboardController extends Controller
         return view('dashboard.wilker2025', compact(
             'kab', 'kec', 'desa'));
     }
+
+    public function dinding_berbicara(Request $request){
+        return view('dashboard.dinding_berbicara');
+    }
+
+    public function api_birthday(Request $request){
+        $birthday = UserModel::where(DB::raw('SUBSTRING(nip_baru, 5, 2)'), date('m'))
+            ->where(DB::raw('SUBSTRING(nip_baru, 7, 2)'), date('d'))
+            ->where('is_active', 1)
+            ->get();
+
+        if ($birthday->isNotEmpty()) {
+            $res = [
+                'success' => '1',
+                'message' => 'success',
+                'data' => $birthday
+            ];
+            return response()->json($res);
+        } else {
+            $res = [
+                'success' => '0',
+                'message' => 'Tidak ada data ulang tahun hari ini',
+                'data' => []
+            ];
+            return response()->json($res);
+        }
+    }
 }

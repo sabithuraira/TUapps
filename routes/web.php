@@ -352,6 +352,12 @@ Route::group(['middleware' => ['role:superadmin|change_agent']], function () {
     Route::resource('bulletin', 'BulletinController');
 });
 
+Route::group(['middleware' => ['role:superadmin|change_ambassador']], function () {
+    Route::resource('curhat_anon', 'CurhatAnonController')->except(['show', 'destroy']);
+    Route::post('curhat_anon/load_data', 'CurhatAnonController@loadData');
+    Route::post('curhat_anon/destroy', 'CurhatAnonController@destroy');
+});
+
 Auth::routes();
 
 Route::get('/d4ft4r_2612', 'HomeController@d4ft4r_2612');
@@ -367,3 +373,6 @@ Route::post('telegram/regsosek_set_unduh', 'TelegramController@regsosek_set_undu
 Route::get('dashboard/{id}/pegawai', 'DashboardController@pegawai');
 
 Route::get('dashboard/data/wilker2025', 'DashboardController@dashboard_wilker2025');
+Route::get('dashboard/dinding_berbicara', 'DashboardController@dinding_berbicara');
+Route::get('dashboard/api/birthday', 'DashboardController@api_birthday');
+Route::get('curhat_anon/api/approved', 'CurhatAnonController@getApprovedCurhats');

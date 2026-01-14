@@ -10,6 +10,33 @@
 @section('content')
     <div class="container" id="app_vue">
         <div class="col-lg-12 col-md-12">
+            <!-- Dinding Bercerita Information -->
+            <div class="row clearfix">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="header bg-info">
+                            <h2 class="text-light"><strong>DINDING BERCERITA</strong></h2>
+                        </div>
+                        <div class="body">
+                            <p class="m-b-0">
+                                <i class="fa fa-quote-left text-info"></i> 
+                                Ada kesah yang terlalu sunyi untuk diceritakan..<br/>
+                                Tak semua beban menemukan telinga untuk mendengarkan..<br/>
+                                Namun kamu tak harus memikulnya sendirian..<br/>
+                                Di sini, semua hadir tanpa nama, tanpa penghakiman..<br/>
+                                Hanya kata.. dan tautan perasaan kepedulian..
+                                <i class="fa fa-quote-right text-info"></i>
+                            </p>
+                            <div class="m-t-15">
+                                <a href="#" class="btn btn-info" data-toggle="modal" data-target="#curhat_modal" v-on:click="addCurhat">
+                                    <i class="fa fa-commenting-o"></i> Bercerita Sekarang
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="row clearfix">
                 @include('dashboard.congrats')
             </div>
@@ -123,11 +150,41 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Form Curhat Anonim -->
+        <div class="modal" id="curhat_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <b class="title" id="defaultModalLabel">Bercerita Anonim</b>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" v-model="curhat_form_id_data">
+                        
+                        <div class="form-group">
+                            <label>Ceritakan apa yang ingin Anda sampaikan: <span class="text-danger">*</span></label>
+                            <div class="form-line">
+                                <textarea v-model="curhat_form_content" class="form-control" rows="8" placeholder="Tuliskan cerita Anda di sini... Identitas Anda tidak kami catat."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle"></i> 
+                            <strong>Catatan:</strong> Semua curhat yang masuk akan melalui proses verifikasi terlebih dahulu sebelum ditampilkan.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="save-curhat-btn">KIRIM</button>
+                        <button type="button" class="btn btn-simple" data-dismiss="modal">TUTUP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('scripts')
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-        
+
     <script>
     var vm = new Vue({  
         el: "#app_vue",
@@ -140,9 +197,11 @@
             label_kab: '',
             label_kec: '',
             label_desa: '',
-            api_url: 'https://4ae21a443869.ngrok-free.app/api/dashboard/wilkerstat2025',
-            api_download_url: 'https://4ae21a443869.ngrok-free.app/api/dashboard/download_wilkerstat2025',
-            curr_url: {!! json_encode(url('dashboard/index')) !!}
+            api_url: 'https://st23.bpssumsel.com/api/dashboard/wilkerstat2025',
+            curr_url: {!! json_encode(url('dashboard/data/wilker2025')) !!},
+            curhat_form_id_data: '',
+            curhat_form_content: '',
+            curhat_form_status_verifikasi: 1,
         },
         methods: {
             setDatas: function(){
@@ -170,12 +229,63 @@
                     console.log(JSON.stringify(msg));
                     $('#wait_progres').modal('hide');
                 });
-            }, 
+            },
+            addCurhat: function (event) {
+                var self = this;
+                if (event) {
+                    self.curhat_form_id_data = '';
+                    self.curhat_form_content = '';
+                    self.curhat_form_status_verifikasi = 1;
+                }
+            },
+            saveCurhat: function () {
+                var self = this;
+                
+                // Validate content
+                if (!self.curhat_form_content || self.curhat_form_content.trim() === '') {
+                    alert('Mohon isi cerita Anda terlebih dahulu.');
+                    return;
+                }
+                
+                $('#wait_progres').modal('show');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                
+                $.ajax({
+                    url : "{{ url('/curhat_anon') }}",
+                    method : 'post',
+                    dataType: 'json',
+                    data: {
+                        form_id_data: self.curhat_form_id_data || '',
+                        form_content: self.curhat_form_content,
+                        form_status_verifikasi: self.curhat_form_status_verifikasi || 1 // Default to 1 (Belum Verifikasi) for anonymous submissions
+                    },
+                }).done(function (data) {
+                    $('#curhat_modal').modal('hide');
+                    $('#wait_progres').modal('hide');
+                    alert('Terima kasih! Curhat Anda telah terkirim dan akan melalui proses verifikasi.');
+                    self.curhat_form_content = '';
+                    self.curhat_form_id_data = '';
+                    self.curhat_form_status_verifikasi = 1;
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    $('#wait_progres').modal('hide');
+                    alert('Maaf, terjadi kesalahan saat mengirim curhat. Silakan coba lagi.');
+                });
+            },
         }
     });
 
     $(document).ready(function() {
         vm.setDatas(); 
+    });
+
+    // Handle save curhat button click
+    $( "#save-curhat-btn" ).click(function(e) {
+        vm.saveCurhat();
     });
     </script>
 @endsection
