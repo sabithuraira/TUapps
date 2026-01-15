@@ -21,7 +21,7 @@ class LogBook extends Model
 
     //rekap per unit kerja per hari
     public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal, $separate=' <br/> '){
-        $str_where = "kdkab = '$unit_kerja'";
+        $str_where = "kdkab = '$unit_kerja' AND is_active=1";
 
         if($unit_kerja==111) $str_where = "kdesl='2' || kdesl='3'";
 

@@ -66,6 +66,7 @@
                     </ul>
                 </li>
                 @endhasanyrole
+                
                 <li
                     class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' || request()->is('bulletin*')) ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-calendar"></i>
@@ -246,6 +247,7 @@
                         <li
                             class="{{ request()->is('master_barang*') ||
                             request()->is('opname_persediaan*') ||
+                            request()->is('opname_permintaan/proses*') ||
                             request()->is('pemegang_bmn*') ||
                             request()->is('vicon*')
                                 ? 'active'
@@ -264,6 +266,10 @@
                                 <li class="{{ request()->is('opname_persediaan/kartu_kendali_q') ? 'active' : '' }}"><a
                                         href="{{ url('opname_persediaan/kartu_kendali_q') }}">Kartu Kendali Kuantitas</a>
                                 </li>
+                                @hasrole('subbag-umum')
+                                <li class="{{ request()->is('opname_permintaan/proses*') ? 'active' : '' }}"><a
+                                        href="{{ url('opname_permintaan/proses') }}">Proses Permintaan Barang</a></li>
+                                @endhasrole
                                 @hasanyrole('superadmin|subbag-umum|subbag-keuangan')
                                     <li class="{{ request()->is('pemegang_bmn*') ? 'active' : '' }}">
                                         <a href="{{ url('pemegang_bmn') }}"> <span>Pemegang BMN</span></a>

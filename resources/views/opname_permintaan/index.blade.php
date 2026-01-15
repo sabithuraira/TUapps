@@ -64,37 +64,17 @@
                     </div>
 
                     <div class="form-group">
-                        Tanggal Penyerahan:
-                        <div class="form-line">
-                            <input type="date" v-model="form_tanggal_penyerahan" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         Jumlah Diminta:
                         <div class="form-line">
                             <input type="number" v-model="form_jumlah_diminta" class="form-control" placeholder="Jumlah diminta">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        Jumlah Disetujui:
-                        <div class="form-line">
-                            <input type="number" v-model="form_jumlah_disetujui" class="form-control" placeholder="Jumlah disetujui">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        Unit Kerja:
-                        <div class="form-line">
-                            <select class="form-control" v-model="form_unit_kerja" autofocus>
-                                <option value="">- Pilih Unit Kerja -</option>
-                                @foreach ($unit_kerja ?? [] as $key=>$value)
-                                    <option value="{{ $value->id }}">{{ $value->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    <!-- Hidden fields -->
+                    <input type="hidden" v-model="form_tanggal_penyerahan">
+                    <input type="hidden" v-model="form_jumlah_disetujui">
+                    <input type="hidden" v-model="form_status_aktif">
+                    <input type="hidden" v-model="form_unit_kerja">
 
                     <div class="form-group">
                         Unit Kerja 4:
@@ -104,16 +84,6 @@
                                 @foreach ($unit_kerja4 ?? [] as $key=>$value)
                                     <option value="{{ $value->id }}">{{ $value->nama }}</option>
                                 @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        Status Aktif:
-                        <div class="form-line">
-                            <select class="form-control" v-model="form_status_aktif" autofocus>
-                                <option value="1">Diajukan</option>
-                                <option value="2">Disetujui</option>
                             </select>
                         </div>
                     </div>
@@ -157,10 +127,10 @@ var vm = new Vue({
       form_id_data: '',
       form_id_barang: '',
       form_tanggal_permintaan: '',
-      form_tanggal_penyerahan: '',
+      form_tanggal_penyerahan: null,
       form_jumlah_diminta: '',
-      form_jumlah_disetujui: '',
-      form_unit_kerja: '',
+      form_jumlah_disetujui: null,
+      form_unit_kerja: '18',
       form_unit_kerja4: '',
       form_status_aktif: 1,
     },
@@ -191,10 +161,10 @@ var vm = new Vue({
                 self.form_id_data = '';
                 self.form_id_barang = '';
                 self.form_tanggal_permintaan = '';
-                self.form_tanggal_penyerahan = '';
+                self.form_tanggal_penyerahan = null;
                 self.form_jumlah_diminta = '';
-                self.form_jumlah_disetujui = '';
-                self.form_unit_kerja = '';
+                self.form_jumlah_disetujui = null;
+                self.form_unit_kerja = '1600';
                 self.form_unit_kerja4 = '';
                 self.form_status_aktif = 1;
             }
@@ -206,18 +176,18 @@ var vm = new Vue({
                 self.form_id_data = target.getAttribute('data-id');
                 self.form_id_barang = target.getAttribute('data-id-barang');
                 self.form_tanggal_permintaan = target.getAttribute('data-tanggal-permintaan');
-                self.form_tanggal_penyerahan = target.getAttribute('data-tanggal-penyerahan') || '';
+                self.form_tanggal_penyerahan = target.getAttribute('data-tanggal-penyerahan') || null;
                 self.form_jumlah_diminta = target.getAttribute('data-jumlah-diminta');
-                self.form_jumlah_disetujui = target.getAttribute('data-jumlah-disetujui') || '';
+                self.form_jumlah_disetujui = target.getAttribute('data-jumlah-disetujui') || null;
                 
-                // Get unit_kerja and unit_kerja4 from the data object
+                // Get unit_kerja4 from the data object
                 var dataId = target.getAttribute('data-id');
                 var dataObj = self.datas.find(function(item) { return item.id == dataId; });
                 if (dataObj) {
-                    self.form_unit_kerja = dataObj.unit_kerja ? dataObj.unit_kerja.id : '';
+                    self.form_unit_kerja = '1600'; // Always set to 1600
                     self.form_unit_kerja4 = dataObj.unit_kerja4 ? dataObj.unit_kerja4.id : '';
                 } else {
-                    self.form_unit_kerja = '';
+                    self.form_unit_kerja = '1600';
                     self.form_unit_kerja4 = '';
                 }
                 
@@ -245,12 +215,12 @@ var vm = new Vue({
                     form_id_data: self.form_id_data,
                     form_id_barang: self.form_id_barang, 
                     form_tanggal_permintaan: self.form_tanggal_permintaan,
-                    form_tanggal_penyerahan: self.form_tanggal_penyerahan,
+                    form_tanggal_penyerahan: self.form_tanggal_penyerahan || null,
                     form_jumlah_diminta: self.form_jumlah_diminta,
-                    form_jumlah_disetujui: self.form_jumlah_disetujui,
+                    form_jumlah_disetujui: self.form_jumlah_disetujui || null,
                     form_unit_kerja: self.form_unit_kerja,
                     form_unit_kerja4: self.form_unit_kerja4,
-                    form_status_aktif: self.form_status_aktif
+                    form_status_aktif: self.form_status_aktif || 1
                 },
             }).done(function (data) {
                 $('#form_modal').modal('hide');

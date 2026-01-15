@@ -15,7 +15,7 @@
         </thead>
         <tbody>
             <tr v-if="datas.length == 0">
-                <td colspan="10" class="text-center">Tidak ada data</td>
+                <td colspan="9" class="text-center">Tidak ada data</td>
             </tr>
             <tr v-for="(data, index) in datas" :key="data.id">
                 <td class="text-center">@{{ index+1 }}</td>
@@ -35,23 +35,15 @@
                     <span v-if="data.status_aktif == 2" class="badge badge-success">Disetujui</span>
                 </td>
                 <td class="text-center">
-                    <a href="#" v-if="data.status_aktif != 2" v-on:click="updateData" 
+                    <a href="#" v-on:click="updateData" 
                         :data-id="data.id"
-                        :data-id-barang="data.id_barang"
-                        :data-tanggal-permintaan="data.tanggal_permintaan"
-                        :data-tanggal-penyerahan="data.tanggal_penyerahan || ''"
-                        :data-jumlah-diminta="data.jumlah_diminta"
-                        :data-jumlah-disetujui="data.jumlah_disetujui || ''"
-                        :data-unit-kerja="data.unit_kerja"
-                        :data-unit-kerja4="data.unit_kerja4"
-                        :data-status-aktif="data.status_aktif"
                         data-toggle="modal" 
                         data-target="#form_modal">
                         <i class="fa fa-pencil-square-o text-info"></i>
                     </a>
-                    <span v-if="data.status_aktif == 2" class="text-muted">-</span>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+

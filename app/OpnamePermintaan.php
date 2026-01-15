@@ -51,6 +51,11 @@ class OpnamePermintaan extends Model
         return $this->belongsTo('App\UnitKerja4', 'unit_kerja4');
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo('App\UserModel', 'created_by', 'id');
+    }
+
     public function attributes()
     {
         return (new \App\Http\Requests\OpnamePermintaanRequest())->attributes();
