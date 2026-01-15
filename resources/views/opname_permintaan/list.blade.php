@@ -49,7 +49,9 @@
                         data-target="#form_modal">
                         <i class="fa fa-pencil-square-o text-info"></i>
                     </a>
-                    <span v-if="data.status_aktif == 2" class="text-muted">-</span>
+                    <a :href="'{{ url('opname_permintaan/print') }}/' + data.id" class="ml-1" target="_blank" title="Cetak PDF">
+                        <i class="fa fa-file-pdf-o text-danger"></i>
+                    </a>
                 </td>
             </tr>
         </tbody>

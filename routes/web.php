@@ -61,6 +61,7 @@ Route::group(['middleware' => ['kdkab:00']], function () {
     Route::resource('opname_permintaan', 'OpnamePermintaanController')->except(['show', 'destroy']);
     Route::post('opname_permintaan/load_data', 'OpnamePermintaanController@loadData');
     Route::post('opname_permintaan/destroy', 'OpnamePermintaanController@destroy');
+    Route::get('opname_permintaan/print/{id}', 'OpnamePermintaanController@print');
 });
 
 Route::group(['middleware' => ['role:subbag-umum', 'kdkab:00']], function () {

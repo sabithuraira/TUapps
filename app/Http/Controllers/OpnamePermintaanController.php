@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\OpnamePermintaan;
 use App\OpnamePengurangan;
+use PDF;
 
 class OpnamePermintaanController extends Controller
 {
@@ -321,6 +322,48 @@ class OpnamePermintaanController extends Controller
         }
 
         return response()->json(['success' => '0', 'message' => 'Gagal memperbarui data']);
+    }
+
+    /**
+     * Print permintaan barang to PDF
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function print($id)
+    {
+        $model = OpnamePermintaan::with(['masterBarang', 'unitKerja', 'unitKerja4', 'createdBy'])
+            ->find($id);
+
+        if ($model == null) {
+            abort(404, 'Data tidak ditemukan');
+        }
+
+        $unit_kerja = $model->unitKerja4 ? $model->unitKerja4->nama : '-';
+        $penerima_nama = $model->createdBy ? $model->createdBy->name : '-';
+        $penerima_nip = $model->createdBy ? $model->createdBy->nip_baru : '-';
+
+        $tanggal_permintaan = $model->tanggal_permintaan ?: date('Y-m-d');
+        $months = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+        $tanggal_label = date('d', strtotime($tanggal_permintaan)) . ' ' .
+            ($months[(int) date('m', strtotime($tanggal_permintaan))] ?? date('F')) . ' ' .
+            date('Y', strtotime($tanggal_permintaan));
+
+        $pdf = PDF::loadView('opname_permintaan.print_permintaan', compact(
+            'model',
+            'unit_kerja',
+            'penerima_nama',
+            'penerima_nip',
+            'tanggal_label'
+        ))->setPaper('a4', 'portrait');
+
+        $nama_file = 'permintaan_barang_' . $model->id . '.pdf';
+
+        return $pdf->download($nama_file);
     }
 }
 
