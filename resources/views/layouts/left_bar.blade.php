@@ -66,6 +66,17 @@
                     </ul>
                 </li>
                 @endhasanyrole
+
+                <li class="{{ request()->is('arsip_klasifikasi*') || request()->is('arsip_jenis*') ? 'active' : '' }}">
+                    <a href="#ArsipData" class="has-arrow"><i class="icon-folder"></i>
+                        <span>Arsip Data</span></a>
+                    <ul>
+                        <li class="{{ request()->is('arsip_klasifikasi*') ? 'active' : '' }}"><a
+                                href="{{ url('arsip_klasifikasi') }}">Kode Klasifikasi</a></li>
+                        <li class="{{ request()->is('arsip_jenis*') ? 'active' : '' }}"><a
+                                href="{{ url('arsip_jenis') }}">Jenis Arsip</a></li>
+                    </ul>
+                </li>
                 
                 <li
                     class="{{ (request()->is('rekap_dl*') || request()->is('surat_tugas*') || request()->is('cuti*') ? 'active' : '' || request()->is('bulletin*')) ? 'active' : '' }}">

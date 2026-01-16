@@ -367,6 +367,16 @@ Route::group(['middleware' => ['role:superadmin|change_ambassador']], function (
     Route::post('curhat_anon/destroy', 'CurhatAnonController@destroy');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('arsip_klasifikasi', 'ArsipKlasifikasiController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::post('arsip_klasifikasi/load_data', 'ArsipKlasifikasiController@loadData');
+    Route::delete('arsip_klasifikasi/{id}', 'ArsipKlasifikasiController@destroy');
+    
+    Route::resource('arsip_jenis', 'ArsipJenisController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::post('arsip_jenis/load_data', 'ArsipJenisController@loadData');
+    Route::delete('arsip_jenis/{id}', 'ArsipJenisController@destroy');
+});
+
 Auth::routes();
 
 Route::get('/d4ft4r_2612', 'HomeController@d4ft4r_2612');
