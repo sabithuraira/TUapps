@@ -34,9 +34,61 @@
               </select>
             </div>
           </div>
-          <section class="datas">
-              @include('curhat_anon.list')
+          <section class="datas" v-html="tableHtml">
           </section>
+          
+          <!-- Modal Form -->
+          <div class="modal" id="form_modal" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <b class="title" id="defaultModalLabel">Form Curhat Anonim</b>
+                      </div>
+                      <div class="modal-body">
+                          <input type="hidden" v-model="form_id_data">
+                          
+                          <div class="form-group">
+                              Content: <span class="text-danger">*</span>
+                              <div class="form-line">
+                                  <textarea v-model="form_content" class="form-control" rows="5" placeholder="Masukkan curhat..."></textarea>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                              Status Verifikasi:
+                              <div class="form-line">
+                                  <select class="form-control" v-model="form_status_verifikasi">
+                                      @if(isset($list_status_verifikasi))
+                                          @foreach($list_status_verifikasi as $key => $value)
+                                              <option value="{{ $key }}">{{ $value }}</option>
+                                          @endforeach
+                                      @else
+                                          <option value="1">Belum Verifikasi</option>
+                                          <option value="2">Disetujui</option>
+                                          <option value="3">Tidak Disetujui</option>
+                                      @endif
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" id="save-btn">SAVE</button>
+                          <button type="button" class="btn btn-simple" data-dismiss="modal">CLOSE</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="modal hide" id="wait_progres" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-body">
+                          <div class="text-center"><img src="{!! asset('lucid/assets/images/loading.gif') !!}" width="200" height="200" alt="Loading..."></div>
+                          <h4 class="text-center">Please wait...</h4>
+                      </div>
+                  </div>
+              </div>
+          </div>
           
           <!-- Pagination -->
           <div class="row m-t-15" v-if="pagination && pagination.last_page > 1">
@@ -103,7 +155,7 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
       datas: [],
-      pathname : window.location.pathname,
+      apiBaseUrl: window.API_CONFIG ? window.API_CONFIG.MADING_CURHAT_ANON_API : 'http://mading.farifam.com/api/curhat-anon',
       form_id_data: '',
       form_content: '',
       form_status_verifikasi: 1,
@@ -111,6 +163,7 @@ var vm = new Vue({
       pagination: null,
       current_page: 1,
       per_page: 10,
+      tableHtml: '',
     },
     methods: {
         setDatas: function(page){
@@ -119,27 +172,37 @@ var vm = new Vue({
                 self.current_page = page;
             }
             $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
+            // Note: External API calls don't need CSRF token
             $.ajax({
-                url : self.pathname+"/load_data",
-                method : 'post',
+                url : self.apiBaseUrl,
+                method : 'get',
                 dataType: 'json',
+                crossDomain: true,
                 data: {
                     filter_status_verifikasi: self.filter_status_verifikasi || '',
                     page: self.current_page,
                     per_page: self.per_page
                 }
-            }).done(function (data) {
-                self.datas = data.datas;
-                self.pagination = data.pagination;
+            }).done(function (response) {
+                console.log('API Response:', response); // Debug log
+                if (response.success == '1' || response.datas) {
+                    self.datas = response.datas || [];
+                    self.pagination = response.pagination || null;
+                    self.renderTable();
+                } else {
+                    self.datas = [];
+                    self.pagination = null;
+                    self.tableHtml = '<div class="alert alert-warning">Tidak ada data</div>';
+                    console.error('API returned error:', response);
+                }
                 $('#wait_progres').modal('hide');
             }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
+                console.log('AJAX Error:', JSON.stringify(msg));
+                self.datas = [];
+                self.pagination = null;
+                self.tableHtml = '<div class="alert alert-danger">Gagal memuat data</div>';
                 $('#wait_progres').modal('hide');
+                alert('Gagal memuat data. Silakan coba lagi.');
             });
         },
         changePage: function(page) {
@@ -194,26 +257,42 @@ var vm = new Vue({
         saveData: function () {
             var self = this;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
+            // Note: External API calls don't need CSRF token
+            var isUpdate = self.form_id_data && self.form_id_data != '' && self.form_id_data != '0';
+            var apiUrl = self.apiBaseUrl;
+            var method = 'post';
+            
+            // If updating, use PUT method with ID
+            if (isUpdate) {
+                apiUrl = self.apiBaseUrl + '/' + self.form_id_data;
+                method = 'put';
+            }
+            
+            // Note: External API calls don't need CSRF token
             $.ajax({
-                url : "{{ url('/curhat_anon') }}",
-                method : 'post',
+                url : apiUrl,
+                method : method,
                 dataType: 'json',
+                crossDomain: true,
                 data:{
-                    form_id_data: self.form_id_data,
+                    form_id_data: self.form_id_data || 0,
                     form_content: self.form_content,
                     form_status_verifikasi: self.form_status_verifikasi
                 },
-            }).done(function (data) {
-                $('#form_modal').modal('hide');
-                self.setDatas();
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
+            }).done(function (response) {
+                console.log('Save Response:', response);
+                if (response.success == '1') {
+                    $('#form_modal').modal('hide');
+                    self.setDatas(self.current_page);
+                    alert('Data berhasil disimpan');
+                } else {
+                    alert('Gagal menyimpan data: ' + (response.message || 'Unknown error'));
+                }
                 $('#wait_progres').modal('hide');
+            }).fail(function (msg) {
+                console.log('Save Error:', JSON.stringify(msg));
+                $('#wait_progres').modal('hide');
+                alert('Gagal menyimpan data. Silakan coba lagi.');
             });
         },
         formatDate: function(dateString) {
@@ -224,11 +303,65 @@ var vm = new Vue({
             var year = date.getFullYear();
             return day + '/' + month + '/' + year;
         },
+        renderTable: function() {
+            var self = this;
+            var html = '<div class="table-responsive">';
+            html += '<table class="table-bordered m-b-0" style="min-width:100%">';
+            html += '<thead><tr>';
+            html += '<th>No</th>';
+            html += '<th class="text-center">Content</th>';
+            html += '<th class="text-center">Status Verifikasi</th>';
+            html += '<th class="text-center">Tanggal</th>';
+            html += '<th class="text-center">Action</th>';
+            html += '</tr></thead><tbody>';
+            
+            if (self.datas.length == 0) {
+                html += '<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                for (var i = 0; i < self.datas.length; i++) {
+                    var data = self.datas[i];
+                    var no = (self.pagination && self.pagination.from) ? (self.pagination.from + i) : (i + 1);
+                    var statusBadge = '';
+                    if (data.status_verifikasi == 1) {
+                        statusBadge = '<span class="badge badge-warning">Belum Verifikasi</span>';
+                    } else if (data.status_verifikasi == 2) {
+                        statusBadge = '<span class="badge badge-success">Disetujui</span>';
+                    } else if (data.status_verifikasi == 3) {
+                        statusBadge = '<span class="badge badge-danger">Tidak Disetujui</span>';
+                    }
+                    
+                    html += '<tr>';
+                    html += '<td class="text-center">' + no + '</td>';
+                    html += '<td>' + (data.content || '') + '</td>';
+                    html += '<td class="text-center">' + statusBadge + '</td>';
+                    html += '<td class="text-center">' + self.formatDate(data.created_at) + '</td>';
+                    html += '<td class="text-center">';
+                    var escapedContent = (data.content || '').replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/\n/g, " ");
+                    html += '<a href="#" role="button" onclick="event.preventDefault(); vm.updateDataFromTable(' + data.id + ', \'' + escapedContent + '\', ' + data.status_verifikasi + '); $(\'#form_modal\').modal(\'show\');">';
+                    html += '<i class="icon-pencil text-info"></i>';
+                    html += '</a>';
+                    html += '</td>';
+                    html += '</tr>';
+                }
+            }
+            
+            html += '</tbody></table></div>';
+            self.tableHtml = html;
+        },
+        updateDataFromTable: function(id, content, statusVerifikasi) {
+            var self = this;
+            self.form_id_data = id;
+            // Decode HTML entities
+            self.form_content = content.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+            self.form_status_verifikasi = parseInt(statusVerifikasi) || 1;
+        },
     }
 });
 
 $(document).ready(function() {
     vm.setDatas();
+    // Make updateDataFromTable accessible globally
+    window.vm = vm;
 });
 
 $( "#save-btn" ).click(function(e) {

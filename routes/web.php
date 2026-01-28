@@ -64,7 +64,7 @@ Route::group(['middleware' => ['kdkab:00']], function () {
     Route::get('opname_permintaan/print/{id}', 'OpnamePermintaanController@print');
 });
 
-Route::group(['middleware' => ['role:subbag-umum', 'kdkab:00']], function () {
+Route::group(['middleware' => ['role:superadmin|subbag-umum', 'kdkab:00']], function () {
     Route::get('opname_permintaan/proses', 'OpnamePermintaanController@proses');
     Route::post('opname_permintaan/load_data_proses', 'OpnamePermintaanController@loadDataProses');
     Route::post('opname_permintaan/update_proses', 'OpnamePermintaanController@updateProses');
@@ -375,6 +375,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('arsip_jenis', 'ArsipJenisController')->except(['show', 'create', 'edit', 'destroy']);
     Route::post('arsip_jenis/load_data', 'ArsipJenisController@loadData');
     Route::delete('arsip_jenis/{id}', 'ArsipJenisController@destroy');
+    
+    // Daily Standup routes
+    Route::get('daily_standup/create-by-tim', 'DailyStandupController@createByTim');
+    Route::get('daily_standup/get-anggota-by-tim', 'DailyStandupController@getAnggotaByTim');
+    Route::post('daily_standup/store-by-tim', 'DailyStandupController@storeByTim');
+    Route::get('daily_standup', 'DailyStandupController@index');
+    Route::post('daily_standup', 'DailyStandupController@store');
+    Route::post('daily_standup/bulk-store', 'DailyStandupController@bulkStore');
+    Route::put('daily_standup/{id}', 'DailyStandupController@update');
+    Route::post('daily_standup/bulk-update', 'DailyStandupController@bulkUpdate');
+    Route::delete('daily_standup/{id}', 'DailyStandupController@destroy');
 });
 
 Auth::routes();

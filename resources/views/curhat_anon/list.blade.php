@@ -13,8 +13,8 @@
             <tr v-if="datas.length == 0">
                 <td colspan="5" class="text-center">Tidak ada data</td>
             </tr>
-            <tr v-for="(data, index) in datas" :key="data.id">
-                <td class="text-center">@{{ index+1 }}</td>
+            <tr v-for="(data, index) in datas" :key="data.id || index">
+                <td class="text-center">@{{ (pagination && pagination.from) ? (pagination.from + index) : (index + 1) }}</td>
                 <td>@{{ data.content }}</td>
                 <td class="text-center">
                     <span v-if="data.status_verifikasi == 1" class="badge badge-warning">Belum Verifikasi</span>

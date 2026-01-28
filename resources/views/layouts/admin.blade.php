@@ -87,6 +87,16 @@
     <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
     {{-- <script src="{!! asset('assets/js/index.js') !!}"></script> --}}
 
+    <!-- Global API Configuration -->
+    <script>
+        // Global API configuration - accessible from all pages
+        window.API_CONFIG = {
+            MADING_BASE_URL: 'http://mading.farifam.com',
+            MADING_API_URL: 'http://mading.farifam.com/api',
+            MADING_CURHAT_ANON_API: 'http://mading.farifam.com/api/curhat-anon'
+        };
+    </script>
+
     @yield('scripts')
 </body>
 
