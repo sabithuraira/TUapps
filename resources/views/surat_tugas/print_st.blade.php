@@ -110,11 +110,13 @@
             <td width="3%" valign="top">:</td>
             <td width="62%">
                 <ol class="list-normal">
-                    <li>Undang – Undang Nomor 16 Tahun 1997 Tentang Statistik</li>
-                    <li>Peraturan Pemerintah Nomor 51 Tahun 1999 Tentang Penyelenggaraan Statistik;</li>
-                    <li>Peraturan Presiden Republik Indonesia Nomor 86 Tahun 2007 Tentang Badan Pusat Statistik;</li>
-                    <li>Peraturan Badan Pusat Statistik Nomor 7 Tahun 2020 tentang Organisasi dan Tata Kerja Badan Pusat Statistik;</li>
-                    <li>Peraturan Badan Pusat Statistik Nomor 5 Tahun 2023 tentang Organisasi dan Tata Kerja Badan Pusat Statistik Provinsi dan Badan Pusat Statistik Kabupaten/Kota;</li>
+                    <li>Undang-Undang Nomor 16 Tahun 1997 tentang Statistik   (Lembaran Negara Republik Indonesia Tahun 1997 Nomor 39, Tambahan Lembaran Negara Republik Indonesia Nomor 3683);</li>
+                    <li>Peraturan Pemerintah Nomor 51 Tahun 1999 tentang Penyelenggaraan Statistik (Lembaran Negara Republik Indonesia Tahun 1999 Nomor 96, Tambahan Lembaran Negara Republik Indonesia Nomor 3854);</li>
+                    <li>Peraturan Presiden Republik Indonesia Nomor 86 Tahun 2007 tentang Badan Pusat Statistik sebagaimana telah diubah dengan Peraturan Presiden Republik Indonesia Nomor 1 Tahun 2025 tentang Perubahan atas Peraturan Presiden Nomor 86 Tahun 2007 tentang Badan Pusat Statistik;</li>
+                    <li>Peraturan Badan Pusat Statistik Nomor 5 Tahun 2023 tentang Organisasi dan Tata Kerja Badan Pusat Statistik Provinsi dan Badan Pusat Statistik Kabupaten/Kota sebagaimana telah diubah dengan Peraturan Badan Pusat Statistik Nomor 3 Tahun 2025 tentang Perubahan atas Peraturan Badan Pusat Statistik Nomor 5 Tahun 2023 tentang Organisasi dan Tata Kerja Badan Pusat Statistik Provinsi dan Badan Pusat Statistik Kabupaten/Kota;</li>
+                    <li>Peraturan Badan Pusat Statistik Nomor 6 Tahun 2024 tentang Pedoman Pelaksanaan Perjalanan Dinas Jabatan di Lingkungan Badan Pusat Statistik;</li>
+
+
                     {!! $model->mengingat !!}
                 </ol>
             </td>
