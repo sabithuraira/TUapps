@@ -52,6 +52,7 @@ class OpnamePersediaanController extends Controller
                 'year', 'month'));
     }
 
+
     public function print_persediaan(Request $request){
         $datas=array();
         $month = date('m');

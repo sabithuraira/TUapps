@@ -923,7 +923,7 @@ class TelegramController extends Controller
                                     ['kode_subsls', '=', $kd_sub_sls]
                                 ])->first();
                                     
-                            if($data==null){
+                            if($data==null || strlen($id_sls)!=16){
                                 $pesan = "Identitas SLS/Non SLS ini tidak ditemukan, silahkan perbaiki.";
                             }
                             else{

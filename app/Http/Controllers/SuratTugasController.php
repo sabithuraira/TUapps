@@ -332,7 +332,7 @@ class SuratTugasController extends Controller
                     // while (strlen($nomor_st) < 4)
                     //     $nomor_st = '0' . $nomor_st;
 
-                    $model_r->nomor_st = 'B-' . $nomor_st . '/BPS' . $model_r->unit_kerja_ttd . '/' . $model_r->kode_klasifikasi .'/' . date('Y');
+                    $model_r->nomor_st = 'B-' . $nomor_st . '/' . $model_r->unit_kerja_ttd . '0/' . $model_r->kode_klasifikasi .'/' . date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $datas_spd = \App\SuratTugasRincian::where([
@@ -542,7 +542,7 @@ class SuratTugasController extends Controller
                     if ($i == 1) $model_r->kategori_petugas = 1;
                     else $model_r->kategori_petugas = 2;
 
-                    $model_r->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/' . $model_r->kode_klasifikasi .'/'. date('Y');
+                    $model_r->nomor_st = 'B-' . $nomor_st . '/' . $request->get('unit_kerja_ttd') . '0/' . $model_r->kode_klasifikasi .'/'. date('Y');
 
                     if ($model_r->jenis_petugas == 1 && $model->jenis_st != 3 && $model->jenis_st != 4) {
                         $model_r->status_aktif = 1;
@@ -737,7 +737,7 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r->nomor_st = 'B-' . $nomor_st_label . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r->nomor_st = 'B-' . $nomor_st_label . '/' . $request->get('unit_kerja_ttd') . '0/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
@@ -785,7 +785,8 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r2->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r2->nomor_st = 'B-' . $nomor_st . '/' . $request->get('unit_kerja_ttd') . '0
+                /'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r2->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')
@@ -833,7 +834,7 @@ class SuratTugasController extends Controller
                 // while (strlen($nomor_spd_label) < 4)
                 //     $nomor_spd_label = '0' . $nomor_spd_label;
 
-                $model_r3->nomor_st = 'B-' . $nomor_st . '/BPS' . $request->get('unit_kerja_ttd') . '/'  . $model_r->kode_klasifikasi .'/' . date('Y');
+                $model_r3->nomor_st = 'B-' . $nomor_st . '/' . $request->get('unit_kerja_ttd') . '0/'  . $model_r->kode_klasifikasi .'/' . date('Y');
                 $model_r3->status_aktif = 1;
                 if (Auth::user()->kdkab != '00') {
                     if ($unit_kerja->kode == Auth::user()->kdprop . '00')

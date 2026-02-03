@@ -14,13 +14,16 @@
             <div class="row clearfix">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="header bg-info">
-                            <h2 class="text-light"><strong>DINDING BERCERITA</strong></h2>
+                        <div class="header bg-info d-flex justify-content-between align-items-center">
+                            <h2 class="text-light m-0"><strong>DINDING BERCERITA</strong></h2>
+                            <a href="http://mading.farifam.com/" target="_blank" rel="noopener noreferrer" class="btn btn-light btn-sm">
+                                <i class="fa fa-external-link"></i> Buka Dinding Bercerita
+                            </a>
                         </div>
                         <div class="body">
                             <p class="m-b-0">
                                 <i class="fa fa-quote-left text-info"></i> 
-                                Ada kesah yang terlalu sunyi untuk diceritakan..<br/>
+                                Ada kesah yang sunyi untuk diceritakan..<br/>
                                 Tak semua beban menemukan telinga untuk mendengarkan..<br/>
                                 Namun kamu tak harus memikulnya sendirian..<br/>
                                 Di sini, semua hadir tanpa nama, tanpa penghakiman..<br/>

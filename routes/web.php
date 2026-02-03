@@ -365,6 +365,14 @@ Route::group(['middleware' => ['role:superadmin|change_ambassador']], function (
     Route::resource('curhat_anon', 'CurhatAnonController')->except(['show', 'destroy']);
     Route::post('curhat_anon/load_data', 'CurhatAnonController@loadData');
     Route::post('curhat_anon/destroy', 'CurhatAnonController@destroy');
+
+    Route::resource('dopamin_motivasi', 'DopaminMotivasiController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::post('dopamin_motivasi/load_data', 'DopaminMotivasiController@loadData');
+    Route::delete('dopamin_motivasi/{id}', 'DopaminMotivasiController@destroy');
+
+    Route::resource('dopamin_spada', 'DopaminSpadaController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::post('dopamin_spada/load_data', 'DopaminSpadaController@loadData');
+    Route::delete('dopamin_spada/{id}', 'DopaminSpadaController@destroy');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -375,6 +383,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('arsip_jenis', 'ArsipJenisController')->except(['show', 'create', 'edit', 'destroy']);
     Route::post('arsip_jenis/load_data', 'ArsipJenisController@loadData');
     Route::delete('arsip_jenis/{id}', 'ArsipJenisController@destroy');
+    
+    Route::resource('arsip_jra', 'ArsipJraController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::post('arsip_jra/load_data', 'ArsipJraController@loadData');
+    Route::delete('arsip_jra/{id}', 'ArsipJraController@destroy');
     
     // Daily Standup routes
     Route::get('daily_standup/create-by-tim', 'DailyStandupController@createByTim');

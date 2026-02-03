@@ -52,7 +52,7 @@
                 @hasanyrole('superadmin|change_ambassador')
                 <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}">
                     <a href="#SuasanaKantor" class="has-arrow"><i class="icon-bubbles"></i>
-                        <span>Suasana Kantor</span>
+                        <span>Go Dopamin</span>
                         @php
                             $curhat_pending_count = \App\Http\Controllers\CurhatAnonController::getPendingCount();
                         @endphp
@@ -63,6 +63,12 @@
                     <ul>
                         <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}"><a
                                 href="{{ url('curhat_anon') }}">Curhat Anon</a></li>
+
+                        <li class="{{ request()->is('dopamin_motivasi*') ? 'active' : '' }}"><a
+                                href="{{ url('dopamin_motivasi') }}">Kata Motivasi</a></li>
+
+                        <li class="{{ request()->is('dopamin_spada*') ? 'active' : '' }}"><a
+                                href="{{ url('dopamin_spada') }}">SPADA</a></li>
                     </ul>
                 </li>
                 @endhasanyrole
@@ -75,6 +81,15 @@
                                 href="{{ url('arsip_klasifikasi') }}">Kode Klasifikasi</a></li>
                         <li class="{{ request()->is('arsip_jenis*') ? 'active' : '' }}"><a
                                 href="{{ url('arsip_jenis') }}">Jenis Arsip</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ request()->is('arsip_jra*') ? 'active' : '' }}">
+                    <a href="#Arsiparis" class="has-arrow"><i class="icon-docs"></i>
+                        <span>Arsiparis</span></a>
+                    <ul>
+                        <li class="{{ request()->is('arsip_jra*') ? 'active' : '' }}"><a
+                                href="{{ url('arsip_jra') }}">JRA</a></li>
                     </ul>
                 </li>
                 
