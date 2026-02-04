@@ -55,12 +55,7 @@
                         request()->is('dopamin_spada*')   ? 'active' : '' }}">
                     <a href="#SuasanaKantor" class="has-arrow"><i class="icon-bubbles"></i>
                         <span>Go Dopamin</span>
-                        @php
-                            $curhat_pending_count = \App\Http\Controllers\CurhatAnonController::getPendingCount();
-                        @endphp
-                        @if($curhat_pending_count > 0)
-                            <span class="badge badge-warning float-right">{{ $curhat_pending_count }}</span>
-                        @endif
+                        <span id="curhat-pending-badge" class="badge badge-warning float-right" style="display:none;"></span>
                     </a>
                     <ul>
                         <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}"><a
@@ -404,3 +399,25 @@
         </nav>
     </div>
 </div>
+<script>
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var apiUrl = (window.API_CONFIG && window.API_CONFIG.MADING_CURHAT_ANON_API) || 'http://mading.farifam.com/api/curhat-anon';
+        var badge = document.getElementById('curhat-pending-badge');
+        if (!badge) return;
+        $.ajax({
+            url: apiUrl,
+            method: 'GET',
+            dataType: 'json',
+            crossDomain: true,
+            data: { filter_status_verifikasi: 1, per_page: 1, page: 1 }
+        }).done(function(data) {
+            var total = (data.pagination && data.pagination.total) ? parseInt(data.pagination.total, 10) : 0;
+            if (total > 0) {
+                badge.textContent = total;
+                badge.style.display = '';
+            }
+        }).fail(function() {});
+    });
+})();
+</script>
