@@ -91,9 +91,11 @@
     <script>
         // Global API configuration - accessible from all pages
         window.API_CONFIG = {
-            MADING_BASE_URL: 'http://mading.farifam.com',
-            MADING_API_URL: 'http://mading.farifam.com/api',
-            MADING_CURHAT_ANON_API: 'http://mading.farifam.com/api/curhat-anon'
+            MADING_BASE_URL: 'https://mading.farifam.com',
+            MADING_API_URL: 'https://mading.farifam.com/api',
+            MADING_CURHAT_ANON_API: 'https://mading.farifam.com/api/curhat-anon',
+            MADING_KATA_MOTIVASI_API: 'https://mading.farifam.com/api/kata-motivasi',
+            MADING_SPADA_QUESTION_API: 'https://mading.farifam.com/api/spada-question'
         };
     </script>
 

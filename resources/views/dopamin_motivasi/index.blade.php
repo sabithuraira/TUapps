@@ -113,7 +113,6 @@
                             </select>
                         </div>
                     </div>
-                    <p class="text-muted small">Created NIP akan diisi otomatis dari email login Anda.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="save-btn">SAVE</button>
@@ -151,7 +150,7 @@ var vm = new Vue({
     el: "#app_vue",
     data: {
         datas: [],
-        pathname: window.location.pathname,
+        apiBaseUrl: window.API_CONFIG ? window.API_CONFIG.MADING_KATA_MOTIVASI_API : 'http://mading.farifam.com/api/kata-motivasi',
         form: {
             id_data: '',
             kata_motivasi: '',
@@ -169,11 +168,11 @@ var vm = new Vue({
             var self = this;
             if (page) self.current_page = page;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
             $.ajax({
-                url: self.pathname + "/load_data",
-                method: 'post',
+                url: self.apiBaseUrl,
+                method: 'get',
                 dataType: 'json',
+                crossDomain: true,
                 data: {
                     filter_is_active: self.filter_is_active || '',
                     keyword: self.keyword || '',
@@ -181,7 +180,6 @@ var vm = new Vue({
                     per_page: self.per_page,
                 },
             }).done(function (data) {
-                // API may return datas as array or { data: [] } (Laravel Resource collection)
                 var raw = data.datas;
                 self.datas = Array.isArray(raw) ? raw : (raw && raw.data ? raw.data : []);
                 self.pagination = data.pagination || null;
@@ -189,6 +187,7 @@ var vm = new Vue({
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
+                alert('Gagal memuat data. Silakan coba lagi.');
             });
         },
         changePage: function (page) {
@@ -234,23 +233,26 @@ var vm = new Vue({
         },
         saveData: function () {
             var self = this;
-            console.log(self.form)
             if (!self.form.kata_motivasi || !self.form.kata_motivasi.trim()) {
                 alert('Kata motivasi harus diisi');
                 return;
             }
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
+            var isUpdate = self.form.id_data && self.form.id_data != '' && self.form.id_data != '0';
+            var apiUrl = isUpdate ? self.apiBaseUrl + '/' + self.form.id_data : self.apiBaseUrl;
+            var method = isUpdate ? 'put' : 'post';
+            var payload = {
+                kata_motivasi: self.form.kata_motivasi,
+                dikutip_dari: self.form.dikutip_dari || '',
+                is_active: parseInt(self.form.is_active, 10) || 1,
+            };
             $.ajax({
-                url: "{{ url('dopamin_motivasi') }}",
-                method: 'post',
+                url: apiUrl,
+                method: method,
                 dataType: 'json',
-                data: {
-                    form_id_data: self.form.id_data || 0,
-                    form_kata_motivasi: self.form.kata_motivasi,
-                    form_dikutip_dari: self.form.dikutip_dari,
-                    form_is_active: self.form.is_active,
-                },
+                crossDomain: true,
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
             }).done(function (data) {
                 if (data.success == '1') {
                     $('#form_modal').modal('hide');
@@ -269,11 +271,11 @@ var vm = new Vue({
             if (!confirm('Anda yakin ingin menghapus data ini?')) return;
             var self = this;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
             $.ajax({
-                url: "{{ url('dopamin_motivasi') }}/" + id,
+                url: self.apiBaseUrl + '/' + id,
                 method: 'delete',
                 dataType: 'json',
+                crossDomain: true,
             }).done(function (data) {
                 if (data.success == '1') self.setDatas(self.current_page);
                 else alert(data.message || 'Gagal menghapus data');

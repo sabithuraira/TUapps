@@ -165,7 +165,7 @@ var vm = new Vue({
     el: "#app_vue",
     data: {
         datas: [],
-        pathname: window.location.pathname,
+        apiBaseUrl: window.API_CONFIG ? window.API_CONFIG.MADING_SPADA_QUESTION_API : 'http://mading.farifam.com/api/spada-question',
         form: {
             id_data: '',
             question: '',
@@ -185,11 +185,11 @@ var vm = new Vue({
             var self = this;
             if (page) self.current_page = page;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
             $.ajax({
-                url: self.pathname + "/load_data",
-                method: 'post',
+                url: self.apiBaseUrl,
+                method: 'get',
                 dataType: 'json',
+                crossDomain: true,
                 data: {
                     keyword: self.keyword || '',
                     page: self.current_page,
@@ -203,6 +203,7 @@ var vm = new Vue({
             }).fail(function (msg) {
                 console.log(JSON.stringify(msg));
                 $('#wait_progres').modal('hide');
+                alert('Gagal memuat data. Silakan coba lagi.');
             });
         },
         changePage: function (page) {
@@ -264,20 +265,24 @@ var vm = new Vue({
                 return;
             }
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
+            var isUpdate = self.form.id_data && self.form.id_data != '' && self.form.id_data != '0';
+            var apiUrl = isUpdate ? self.apiBaseUrl + '/' + self.form.id_data : self.apiBaseUrl;
+            var method = isUpdate ? 'put' : 'post';
+            var payload = {
+                question: self.form.question,
+                type_question: parseInt(self.form.type_question, 10) || 1,
+                start_active: self.form.start_active || null,
+                last_active: self.form.last_active || null,
+                validate_rule: self.form.validate_rule || null,
+                satker: self.form.satker || null,
+            };
             $.ajax({
-                url: "{{ url('dopamin_spada') }}",
-                method: 'post',
+                url: apiUrl,
+                method: method,
                 dataType: 'json',
-                data: {
-                    form_id_data: self.form.id_data || 0,
-                    form_question: self.form.question,
-                    form_type_question: self.form.type_question,
-                    form_start_active: self.form.start_active,
-                    form_last_active: self.form.last_active,
-                    form_validate_rule: self.form.validate_rule,
-                    form_satker: self.form.satker,
-                },
+                crossDomain: true,
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
             }).done(function (data) {
                 if (data.success == '1') {
                     $('#form_modal').modal('hide');
@@ -296,11 +301,11 @@ var vm = new Vue({
             if (!confirm('Anda yakin ingin menghapus data ini?')) return;
             var self = this;
             $('#wait_progres').modal('show');
-            $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') } });
             $.ajax({
-                url: "{{ url('dopamin_spada') }}/" + id,
+                url: self.apiBaseUrl + '/' + id,
                 method: 'delete',
                 dataType: 'json',
+                crossDomain: true,
             }).done(function (data) {
                 if (data.success == '1') self.setDatas(self.current_page);
                 else alert(data.message || 'Gagal menghapus data');

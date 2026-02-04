@@ -155,7 +155,7 @@ var vm = new Vue({
     el: "#app_vue",
     data:  {
       datas: [],
-      apiBaseUrl: window.API_CONFIG ? window.API_CONFIG.MADING_CURHAT_ANON_API : 'http://mading.farifam.com/api/curhat-anon',
+      apiBaseUrl: window.API_CONFIG ? window.API_CONFIG.MADING_CURHAT_ANON_API : 'https://mading.farifam.com/api/curhat-anon',
       form_id_data: '',
       form_content: '',
       form_status_verifikasi: 1,

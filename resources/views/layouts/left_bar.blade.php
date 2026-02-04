@@ -50,7 +50,9 @@
 
 
                 @hasanyrole('superadmin|change_ambassador')
-                <li class="{{ request()->is('curhat_anon*') ? 'active' : '' }}">
+                <li class="{{ request()->is('curhat_anon*') || 
+                        request()->is('dopamin_motivasi*') || 
+                        request()->is('dopamin_spada*')   ? 'active' : '' }}">
                     <a href="#SuasanaKantor" class="has-arrow"><i class="icon-bubbles"></i>
                         <span>Go Dopamin</span>
                         @php

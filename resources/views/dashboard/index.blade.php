@@ -177,8 +177,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="save-curhat-btn">KIRIM</button>
-                        <button type="button" class="btn btn-simple" data-dismiss="modal">TUTUP</button>
+                        <button type="button" class="btn btn-primary" id="save-curhat-btn" :disabled="curhatSubmitting">
+                            <span v-if="!curhatSubmitting"><i class="fa fa-send"></i> KIRIM</span>
+                            <span v-else><i class="fa fa-spinner fa-spin"></i> Mengirim...</span>
+                        </button>
+                        <button type="button" class="btn btn-simple" data-dismiss="modal" :disabled="curhatSubmitting">TUTUP</button>
                     </div>
                 </div>
             </div>
@@ -205,6 +208,8 @@
             curhat_form_id_data: '',
             curhat_form_content: '',
             curhat_form_status_verifikasi: 1,
+            curhatSubmitting: false,
+            curhatApiUrl: window.API_CONFIG ? window.API_CONFIG.MADING_CURHAT_ANON_API : 'http://mading.farifam.com/api/curhat-anon',
         },
         methods: {
             setDatas: function(){
@@ -250,25 +255,23 @@
                     return;
                 }
                 
+                self.curhatSubmitting = true;
                 $('#wait_progres').modal('show');
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
                 
                 $.ajax({
-                    url : "{{ url('/curhat_anon') }}",
-                    method : 'post',
+                    url: self.curhatApiUrl,
+                    method: 'post',
                     dataType: 'json',
+                    crossDomain: true,
                     data: {
-                        form_id_data: self.curhat_form_id_data || '',
+                        form_id_data: self.curhat_form_id_data || 0,
                         form_content: self.curhat_form_content,
-                        form_status_verifikasi: self.curhat_form_status_verifikasi || 1 // Default to 1 (Belum Verifikasi) for anonymous submissions
+                        form_status_verifikasi: self.curhat_form_status_verifikasi || 1
                     },
                 }).done(function (data) {
-                    $('#curhat_modal').modal('hide');
                     $('#wait_progres').modal('hide');
+                    self.curhatSubmitting = false;
+                    $('#curhat_modal').modal('hide');
                     alert('Terima kasih! Curhat Anda telah terkirim dan akan melalui proses verifikasi.');
                     self.curhat_form_content = '';
                     self.curhat_form_id_data = '';
@@ -276,6 +279,7 @@
                 }).fail(function (msg) {
                     console.log(JSON.stringify(msg));
                     $('#wait_progres').modal('hide');
+                    self.curhatSubmitting = false;
                     alert('Maaf, terjadi kesalahan saat mengirim curhat. Silakan coba lagi.');
                 });
             },
