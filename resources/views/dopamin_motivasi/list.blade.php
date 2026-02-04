@@ -5,7 +5,6 @@
                 <th>No</th>
                 <th class="text-center">Kata Motivasi</th>
                 <th class="text-center">Dikutip Dari</th>
-                <th class="text-center">Created NIP</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -18,7 +17,6 @@
                 <td class="text-center">@{{ (pagination ? (pagination.current_page - 1) * pagination.per_page + index + 1 : index + 1) }}</td>
                 <td>@{{ data.kata_motivasi }}</td>
                 <td>@{{ data.dikutip_dari }}</td>
-                <td class="text-center">@{{ data.created_nip }}</td>
                 <td class="text-center">
                     <span v-if="data.is_active == 1" class="badge badge-success">Aktif</span>
                     <span v-else class="badge badge-secondary">Nonaktif</span>
