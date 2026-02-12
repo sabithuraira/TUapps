@@ -147,6 +147,7 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 
@@ -181,6 +182,13 @@ var vm = new Vue({
         per_page: 10,
     },
     methods: {
+        formatDateId: function (dateStr) {
+            if (!dateStr) return '-';
+            var d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        },
         setDatas: function (page) {
             var self = this;
             if (page) self.current_page = page;
@@ -315,6 +323,10 @@ var vm = new Vue({
                 alert('Terjadi kesalahan saat menghapus data');
                 $('#wait_progres').modal('hide');
             });
+        },
+        getHasilUrl: function (questionId) {
+            var base = '{{ url("dopamin_spada") }}';
+            return base + '/hasil/' + questionId;
         },
     },
 });

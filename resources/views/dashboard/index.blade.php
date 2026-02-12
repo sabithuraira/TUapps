@@ -10,9 +10,9 @@
 @section('content')
     <div class="container" id="app_vue">
         <div class="col-lg-12 col-md-12">
-            <!-- Dinding Bercerita Information -->
+            <!-- Dinding Bercerita & SPADA - 50% / 50% -->
             <div class="row clearfix">
-                <div class="col-lg-12">
+                <div class="col-lg-6 col-md-6" :class="{ 'col-12': !spadaQuestion }">
                     <div class="card">
                         <div class="header bg-info d-flex justify-content-between align-items-center">
                             <h2 class="text-light m-0"><strong>DINDING BERCERITA</strong></h2>
@@ -34,6 +34,33 @@
                                 <a href="#" class="btn btn-info" data-toggle="modal" data-target="#curhat_modal" v-on:click="addCurhat">
                                     <i class="fa fa-commenting-o"></i> Bercerita Sekarang
                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6" v-if="spadaQuestion">
+                    <div class="card">
+                        <div class="header bg-primary d-flex justify-content-between align-items-center">
+                            <h2 class="text-light m-0"><strong>SPADA, Satu Pertanyaan Aspirasi dan Afirmasi</strong></h2>
+                        </div>
+                        <div class="body">
+                            <p class="spada-question-text font-weight-bold text-dark m-b-20" style="font-size: 1.1rem; line-height: 1.6;">
+                                @{{ spadaQuestion.question }}
+                            </p>
+                            <div class="form-group">
+                                <label class="control-label">Jawaban Anda:</label>
+                                <textarea v-if="spadaQuestion.type_question == 1" v-model="spadaAnswer" class="form-control" rows="4" placeholder="Tulis jawaban Anda..."></textarea>
+                                <input v-else type="text" v-model="spadaAnswer" class="form-control" placeholder="Tulis jawaban Anda (maks. 200 karakter)" maxlength="200">
+                                <small v-if="spadaQuestion.type_question != 1" class="text-muted">@{{ (spadaAnswer || '').length }}/200 karakter</small>
+                            </div>
+                            <div class="m-t-15">
+                                <button type="button" class="btn btn-primary" :disabled="spadaSubmitting" @click="submitSpadaAnswer">
+                                    <span v-if="!spadaSubmitting"><i class="fa fa-paper-plane"></i> Kirim Jawaban</span>
+                                    <span v-else><i class="fa fa-spinner fa-spin"></i> Mengirim...</span>
+                                </button>
+                            </div>
+                            <div v-if="spadaSuccessMessage" class="alert alert-success m-t-15 m-b-0">
+                                <i class="fa fa-check-circle"></i> @{{ spadaSuccessMessage }}
                             </div>
                         </div>
                     </div>
@@ -123,6 +150,12 @@
             curhat_form_status_verifikasi: 1,
             curhatSubmitting: false,
             curhatApiUrl: window.API_CONFIG ? window.API_CONFIG.MADING_CURHAT_ANON_API : 'https://mading.farifam.com/api/curhat-anon',
+            spadaQuestion: null,
+            spadaAnswer: '',
+            spadaSubmitting: false,
+            spadaSuccessMessage: '',
+            spadaActiveTodayUrl: (window.API_CONFIG && window.API_CONFIG.MADING_SPADA_QUESTION_API) ? (window.API_CONFIG.MADING_SPADA_QUESTION_API + '/active-today') : 'http://mading.farifam.com/api/spada-question/active-today',
+            spadaAnswerUrl: (window.API_CONFIG && window.API_CONFIG.MADING_API_URL) ? (window.API_CONFIG.MADING_API_URL + '/spada-answer') : 'http://mading.farifam.com/api/spada-answer',
         },
         methods: {
             setDatas: function(){
@@ -196,11 +229,61 @@
                     alert('Maaf, terjadi kesalahan saat mengirim curhat. Silakan coba lagi.');
                 });
             },
+            loadSpadaActiveToday: function () {
+                var self = this;
+                $.ajax({
+                    url: self.spadaActiveTodayUrl,
+                    method: 'GET',
+                    dataType: 'json',
+                    crossDomain: true,
+                }).done(function (data) {
+                    var q = (data && data.data) ? data.data : (data && (data.id || data.question) ? data : null);
+                    self.spadaQuestion = q;
+                }).fail(function () {
+                    self.spadaQuestion = null;
+                });
+            },
+            submitSpadaAnswer: function () {
+                var self = this;
+                if (!self.spadaQuestion || !self.spadaQuestion.id) return;
+                var answer = (self.spadaAnswer || '').trim();
+                if (!answer) {
+                    alert('Mohon isi jawaban Anda.');
+                    return;
+                }
+                if (self.spadaQuestion.type_question != 1 && answer.length > 200) {
+                    alert('Jawaban maksimal 200 karakter.');
+                    return;
+                }
+                self.spadaSubmitting = true;
+                self.spadaSuccessMessage = '';
+                $.ajax({
+                    url: self.spadaAnswerUrl,
+                    method: 'POST',
+                    dataType: 'json',
+                    crossDomain: true,
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        question_id: self.spadaQuestion.id,
+                        answer: answer,
+                        status_approve: 2,
+                    }),
+                }).done(function (data) {
+                    self.spadaSubmitting = false;
+                    self.spadaSuccessMessage = 'Terima kasih! Jawaban Anda telah berhasil dikirim.';
+                    self.spadaAnswer = '';
+                }).fail(function (msg) {
+                    console.log(JSON.stringify(msg));
+                    self.spadaSubmitting = false;
+                    alert('Gagal mengirim jawaban. Silakan coba lagi.');
+                });
+            },
         }
     });
 
     $(document).ready(function() {
-        vm.setDatas(); 
+        vm.setDatas();
+        vm.loadSpadaActiveToday();
     });
 
     // Handle save curhat button click

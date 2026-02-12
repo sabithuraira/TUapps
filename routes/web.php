@@ -371,6 +371,7 @@ Route::group(['middleware' => ['role:superadmin|change_ambassador']], function (
     Route::delete('dopamin_motivasi/{id}', 'DopaminMotivasiController@destroy');
 
     Route::resource('dopamin_spada', 'DopaminSpadaController')->except(['show', 'create', 'edit', 'destroy']);
+    Route::get('dopamin_spada/hasil/{questionId}', 'DopaminSpadaController@showHasil')->name('dopamin_spada.hasil');
     Route::post('dopamin_spada/load_data', 'DopaminSpadaController@loadData');
     Route::delete('dopamin_spada/{id}', 'DopaminSpadaController@destroy');
 });

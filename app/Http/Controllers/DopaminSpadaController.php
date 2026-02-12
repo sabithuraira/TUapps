@@ -37,6 +37,19 @@ class DopaminSpadaController extends Controller
     }
 
     /**
+     * Show hasil (list of answers) for a question - dedicated page.
+     *
+     * @param  int  $questionId
+     * @return \Illuminate\Http\Response
+     */
+    public function showHasil($questionId)
+    {
+        return view('dopamin_spada.hasil', [
+            'questionId' => $questionId,
+        ]);
+    }
+
+    /**
      * Load data for AJAX requests (proxies to external API).
      *
      * @param  \Illuminate\Http\Request  $request
