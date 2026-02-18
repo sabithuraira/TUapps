@@ -19,6 +19,7 @@
         <div class="card">
             <div class="body">
                 <a href="#" role="button" v-on:click="addData" class="btn btn-primary" data-toggle="modal" data-target="#form_modal"><i class="fa fa-plus-circle"></i> <span>Tambah Pertanyaan Spada</span></a>
+                <a href="https://mading.farifam.com/spada-form" target="_blank" rel="noopener noreferrer" class="btn btn-info"><i class="fa fa-external-link"></i> <span>Form SPADA</span></a>
                 <br/><br/>
 
                 <div class="row m-b-15">

@@ -12,7 +12,7 @@
         <div class="col-lg-12 col-md-12">
             <!-- Dinding Bercerita & SPADA - 50% / 50% -->
             <div class="row clearfix">
-                <div class="col-lg-6 col-md-6" :class="{ 'col-12': !spadaQuestion }">
+                <div :class="spadaQuestion ? 'col-lg-6 col-md-6' : 'col-lg-12 col-md-12'">
                     <div class="card">
                         <div class="header bg-info d-flex justify-content-between align-items-center">
                             <h2 class="text-light m-0"><strong>DINDING BERCERITA</strong></h2>
@@ -48,10 +48,10 @@
                                 @{{ spadaQuestion.question }}
                             </p>
                             <div class="form-group">
-                                <label class="control-label">Jawaban Anda:</label>
-                                <textarea v-if="spadaQuestion.type_question == 1" v-model="spadaAnswer" class="form-control" rows="4" placeholder="Tulis jawaban Anda..."></textarea>
-                                <input v-else type="text" v-model="spadaAnswer" class="form-control" placeholder="Tulis jawaban Anda (maks. 200 karakter)" maxlength="200">
-                                <small v-if="spadaQuestion.type_question != 1" class="text-muted">@{{ (spadaAnswer || '').length }}/200 karakter</small>
+                                <label class="control-label">Jawaban Anda (maks. @{{ spadaMaxLength }} karakter):</label>
+                                <input v-if="spadaMaxLength <= 200" type="text" v-model="spadaAnswer" class="form-control" :maxlength="spadaMaxLength" :placeholder="'Ketik jawaban di sini (maks. ' + spadaMaxLength + ' karakter)...'">
+                                <textarea v-else v-model="spadaAnswer" class="form-control" :maxlength="spadaMaxLength" rows="4" placeholder="Ketik jawaban di sini..."></textarea>
+                                <small class="text-muted">@{{ (spadaAnswer || '').length }} / @{{ spadaMaxLength }} karakter</small>
                             </div>
                             <div class="m-t-15">
                                 <button type="button" class="btn btn-primary" :disabled="spadaSubmitting" @click="submitSpadaAnswer">
@@ -157,6 +157,30 @@
             spadaActiveTodayUrl: (window.API_CONFIG && window.API_CONFIG.MADING_SPADA_QUESTION_API) ? (window.API_CONFIG.MADING_SPADA_QUESTION_API + '/active-today') : 'http://mading.farifam.com/api/spada-question/active-today',
             spadaAnswerUrl: (window.API_CONFIG && window.API_CONFIG.MADING_API_URL) ? (window.API_CONFIG.MADING_API_URL + '/spada-answer') : 'http://mading.farifam.com/api/spada-answer',
         },
+        computed: {
+            spadaMaxLength: function () {
+                var q = this.spadaQuestion;
+                if (!q) return 1000;
+                var rule = q.validate_rule;
+                if (rule !== null && rule !== undefined && rule !== '') {
+                    try {
+                        var decoded = JSON.parse(rule);
+                        if (typeof decoded === 'object') {
+                            var arr = Array.isArray(decoded) ? decoded : Object.keys(decoded).map(function(k) { return decoded[k]; });
+                            for (var i = 0; i < arr.length; i++) {
+                                var v = arr[i];
+                                if (typeof v === 'number' && v > 0) return v;
+                                if (typeof v === 'string' && /^\d+$/.test(v)) return parseInt(v, 10);
+                            }
+                        }
+                    } catch (e) {}
+                    var m = String(rule).match(/\d+/);
+                    if (m) return parseInt(m[0], 10);
+                }
+                if (q.type_question == 2 || q.type_question === '2') return 200;
+                return 1000;
+            },
+        },
         methods: {
             setDatas: function(){
                 var self = this;
@@ -251,8 +275,9 @@
                     alert('Mohon isi jawaban Anda.');
                     return;
                 }
-                if (self.spadaQuestion.type_question != 1 && answer.length > 200) {
-                    alert('Jawaban maksimal 200 karakter.');
+                var maxLen = self.spadaMaxLength;
+                if (answer.length > maxLen) {
+                    alert('Jawaban maksimal ' + maxLen + ' karakter.');
                     return;
                 }
                 self.spadaSubmitting = true;
