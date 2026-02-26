@@ -226,6 +226,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('log_book/send_to_ckp', 'LogBookController@send_to_ckp');
     Route::get('log_book/rekap_pegawai', 'LogBookController@rekap_pegawai');
     Route::get('log_book/rekap_uker_perbulan', 'LogBookController@rekap_uker_perbulan');
+    Route::get('log_book/rekap_detail', 'LogBookController@rekap_detail');
     Route::get('log_book/destroy_logbook/{id}', 'LogBookController@destroy_logbook');
     Route::get('log_book/download/{tanggal}/{unit_kerja}', 'LogBookController@downloadExcel');
     Route::post('log_book/download_wfh', 'LogBookController@downloadExcelWfh');
@@ -317,6 +318,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/alokasi/{id}', 'DashboardController@alokasi_show');
     Route::get('dashboard/rekap_dl', 'DashboardController@rekap_dl');
     Route::get('dashboard/{id}/profile', 'DashboardController@profile');
+    Route::get('faq', 'DashboardController@faq')->name('faq');
+    Route::get('faq/knowledge/{id}', 'DashboardController@knowledgeDetail')->name('faq.knowledge_detail');
     Route::get('download_sp2020', 'HomeController@downloadSp2020');
 
     //Cuti
@@ -388,6 +391,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('arsip_jra', 'ArsipJraController')->except(['show', 'create', 'edit', 'destroy']);
     Route::post('arsip_jra/load_data', 'ArsipJraController@loadData');
     Route::delete('arsip_jra/{id}', 'ArsipJraController@destroy');
+
+    Route::resource('knowledge_info', 'KnowledgeInfoController')->except(['destroy']);
+    Route::post('knowledge_info/load_data', 'KnowledgeInfoController@loadData');
+    Route::delete('knowledge_info/{id}', 'KnowledgeInfoController@destroy');
     
     // Daily Standup routes
     Route::get('daily_standup/create-by-tim', 'DailyStandupController@createByTim');

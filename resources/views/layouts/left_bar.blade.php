@@ -25,6 +25,15 @@
             </div>
         </div>
 
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#leftbar-menu">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#leftbar-knowledge" title="Knowledge"><i class="icon-book-open"></i></a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content p-l-0 p-r-0">
+            <div class="tab-pane active" id="leftbar-menu">
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
 
@@ -133,7 +142,7 @@
                 </li>
 
                 <li
-                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') || 
+                    class="{{ request()->is('log_book*') || request()->is('ckp*') || request()->is('rencana_kerja*') ||
                         request()->is('skp*') || request()->is('iki/*') || request()->is('izin_keluar/*') ? 'active' : '' }}">
                     <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Pengukuran Kinerja</span></a>
                     <ul>
@@ -153,6 +162,8 @@
                                 href="{{ url('log_book') }}">Log Book</a></li>
                         <li class="{{ request()->is('log_book/rekap_uker_perbulan') ? 'active' : '' }}"><a
                                 href="{{ url('log_book/rekap_uker_perbulan') }}">Log Book Rekap Bulanan</a></li>
+                        <li class="{{ request()->is('log_book/rekap_uker_perbulan') ? 'active' : '' }}"><a
+                                href="{{ url('log_book/rekap_uker_perbulan') }}">Log Book Rekap Harian</a></li>
                         <li class="{{ request()->is('rencana_kerja') ? 'active' : '' }}"><a
                                 href="{{ url('rencana_kerja') }}">Rencana Kerja</a></li>
                         <li class="{{ request()->is('izin_keluar') ? 'active' : '' }}"><a href="{{ url('izin_keluar') }}">Permohonan Izin Keluar</a></li>
@@ -172,6 +183,10 @@
                         <li><a href="https://webapps.bps.go.id/kipapp/#/">KIPAPP <span
                                     class="badge badge-info float-right">BPS RI</span></a></li>
                     </ul>
+                </li>
+
+                <li class="{{ request()->is('knowledge_info/*') ? 'active' : '' }}">
+                    <a href="{{ url('knowledge_info') }}"><i class="icon-book-open"></i> <span>Kelola Knowledge</span></a>
                 </li>
 
                 <li>
@@ -397,6 +412,15 @@
 
             </ul>
         </nav>
+            </div>
+            <div class="tab-pane p-l-15 p-r-15" id="leftbar-knowledge">
+                <ul id="main-menu" class="metismenu list-unstyled">
+                    <li class="{{ request()->is('faq*') ? 'active' : '' }}">
+                        <a href="{{ url('faq') }}"><i class="icon-book-open"></i> <span>FAQ Pekerjaan</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 <script>

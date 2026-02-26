@@ -188,7 +188,52 @@ class LogBookController extends Controller
         return view('log_book.rekap_uker_perbulan', compact('model', 'uker',
             'month', 'year', 'datas'));
     }
-    
+
+    /**
+     * Rekap detail: total logbook per date per user (same uker as rekap_uker_perbulan).
+     * Table: rows = users, columns = each date in month; cell = count, yellow if 0 else green.
+     */
+    public function rekap_detail(Request $request)
+    {
+        $month = (int) date('n');
+        $year = (int) date('Y');
+        $uker = '00';
+
+        if (strlen($request->get('month')) > 0) {
+            $month = (int) $request->get('month');
+        }
+        if (strlen($request->get('year')) > 0) {
+            $year = (int) $request->get('year');
+        }
+        if (strlen($request->get('uker')) > 0) {
+            $uker = $request->get('uker');
+        }
+        if (Auth::check() && Auth::user()->kdkab != '00') {
+            $uker = Auth::user()->kdkab;
+        }
+
+        $model = new \App\LogBook;
+        $users = $model->RekapUkerPerBulan($uker, $month, $year);
+        $countsByUserDate = $model->RekapUkerPerDate($uker, $month, $year);
+
+        $daysInMonth = (int) cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $dates = range(1, $daysInMonth);
+
+        $matrix = [];
+        foreach ($users as $i => $user) {
+            $matrix[$i] = [];
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $dateStr = sprintf('%04d-%02d-%02d', $year, $month, $day);
+                $matrix[$i][$day] = isset($countsByUserDate[$user->id][$dateStr])
+                    ? (int) $countsByUserDate[$user->id][$dateStr]
+                    : 0;
+            }
+        }
+
+        return view('log_book.rekap_detail', compact(
+            'model', 'uker', 'month', 'year', 'users', 'dates', 'matrix', 'daysInMonth'
+        ));
+    }
 
     public function send_to_ckp(Request $request){
         if($request->form_id_data!=''){

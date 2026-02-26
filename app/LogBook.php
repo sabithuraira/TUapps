@@ -58,6 +58,33 @@ class LogBook extends Model
         return $result;
     }
 
+    /**
+     * Rekap total logbook per date per user for a unit kerja in a month.
+     * Returns array keyed by user id, then by date (Y-m-d), value = count.
+     */
+    public function RekapUkerPerDate($unit_kerja, $month, $year)
+    {
+        $sql = "SELECT u.id, DATE(lb.tanggal) as d, COUNT(lb.id) as cnt
+            FROM users u
+            INNER JOIN log_books lb ON lb.user_id = u.email
+                AND MONTH(lb.tanggal) = ?
+                AND YEAR(lb.tanggal) = ?
+                AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)
+            WHERE u.kdkab = ?
+                AND u.is_active = 1
+            GROUP BY u.id, d";
+        $rows = DB::select(DB::raw($sql), [$month, $year, $unit_kerja]);
+
+        $counts = [];
+        foreach ($rows as $r) {
+            if (!isset($counts[$r->id])) {
+                $counts[$r->id] = [];
+            }
+            $counts[$r->id][$r->d] = (int) $r->cnt;
+        }
+        return $counts;
+    }
+
     //rekap per pegawai dalam rentang waktu tertentu
     public function LogBookRekap($start_date, $end_date, $user_id){
         $result = array();
