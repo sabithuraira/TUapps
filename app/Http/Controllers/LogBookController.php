@@ -190,8 +190,9 @@ class LogBookController extends Controller
     }
 
     /**
-     * Rekap detail: total logbook per date per user (same uker as rekap_uker_perbulan).
-     * Table: rows = users, columns = each date in month; cell = count, yellow if 0 else green.
+     * Rekap detail: total logbook per date per user.
+     * List pegawai is filtered by kdkab: when user has kdkab != '00' only pegawai with same kdkab are shown;
+     * when user has kdkab = '00' they can select unit kerja from dropdown.
      */
     public function rekap_detail(Request $request)
     {
@@ -199,17 +200,20 @@ class LogBookController extends Controller
         $year = (int) date('Y');
         $uker = '00';
 
+        // Pegawai list follows user's kdkab: non-00 users see only their kab
+        if (Auth::check() && Auth::user()->kdkab != '00') {
+            $uker = Auth::user()->kdkab;
+        } else {
+            if (strlen($request->get('uker')) > 0) {
+                $uker = $request->get('uker');
+            }
+        }
+
         if (strlen($request->get('month')) > 0) {
             $month = (int) $request->get('month');
         }
         if (strlen($request->get('year')) > 0) {
             $year = (int) $request->get('year');
-        }
-        if (strlen($request->get('uker')) > 0) {
-            $uker = $request->get('uker');
-        }
-        if (Auth::check() && Auth::user()->kdkab != '00') {
-            $uker = Auth::user()->kdkab;
         }
 
         $model = new \App\LogBook;

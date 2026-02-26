@@ -103,6 +103,14 @@
                 </div>
             </form>
 
+            <p class="text-muted small m-b-15">
+                @if(auth()->user()->kdkab != '00')
+                    Menampilkan pegawai dengan kdkab = <strong>{{ $uker }}</strong> (unit kerja Anda).
+                @else
+                    Menampilkan pegawai unit kerja: <strong>{{ config('app.unit_kerjas')[$uker] ?? 'Kode ' . $uker }}</strong> (kdkab = {{ $uker }}).
+                @endif
+            </p>
+
           <section class="datas">
                 <div id="load">
                     <div class="table-responsive">
