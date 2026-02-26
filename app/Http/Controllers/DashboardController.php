@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bulletin;
+use App\KnowledgeInfo;
 use App\Kabs;
 use App\Pdesa;
 use App\Pkab;
@@ -61,6 +62,42 @@ class DashboardController extends Controller
             'kab', 'kec', 'desa',
             // 'mengabdi'
         ));
+    }
+
+    /**
+     * FAQ page - list knowledge_info by title with pagination and search.
+     */
+    public function faq(Request $request)
+    {
+        $keyword = $request->get('keyword', '');
+        $perPage = $request->get('per_page', 15);
+
+        $query = KnowledgeInfo::orderBy('id', 'desc');
+
+        if ($keyword !== '') {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('content', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('category', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('tag', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+
+        $items = $query->paginate($perPage)->appends($request->except('page'));
+
+        return view('dashboard.faq', compact('items', 'keyword', 'perPage'));
+    }
+
+    /**
+     * Knowledge detail page - single knowledge_info in news style.
+     */
+    public function knowledgeDetail($id)
+    {
+        $model = KnowledgeInfo::find($id);
+        if ($model == null) {
+            return redirect()->route('faq')->with('error', 'Data tidak ditemukan.');
+        }
+        return view('dashboard.knowledge_detail', compact('model'));
     }
 
     public function umkm(Request $request)
