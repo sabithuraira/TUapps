@@ -377,6 +377,8 @@ Route::group(['middleware' => ['role:superadmin|change_ambassador']], function (
     Route::get('dopamin_spada/hasil/{questionId}', 'DopaminSpadaController@showHasil')->name('dopamin_spada.hasil');
     Route::post('dopamin_spada/load_data', 'DopaminSpadaController@loadData');
     Route::delete('dopamin_spada/{id}', 'DopaminSpadaController@destroy');
+
+    Route::resource('dopamin_picture', 'DopaminPictureController')->only(['index']);
 });
 
 Route::group(['middleware' => 'auth'], function () {

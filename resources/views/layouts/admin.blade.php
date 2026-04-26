@@ -95,7 +95,8 @@
             MADING_API_URL: 'https://mading.farifam.com/api',
             MADING_CURHAT_ANON_API: 'https://mading.farifam.com/api/curhat-anon',
             MADING_KATA_MOTIVASI_API: 'https://mading.farifam.com/api/kata-motivasi',
-            MADING_SPADA_QUESTION_API: 'https://mading.farifam.com/api/spada-question'
+            MADING_SPADA_QUESTION_API: 'https://mading.farifam.com/api/spada-question',
+            MADING_PROMOTING_PICTURE_API: 'https://mading.farifam.com/api/promoting-picture'
         };
     </script>
 

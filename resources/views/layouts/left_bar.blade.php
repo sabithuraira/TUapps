@@ -61,7 +61,8 @@
                 @hasanyrole('superadmin|change_ambassador')
                 <li class="{{ request()->is('curhat_anon*') || 
                         request()->is('dopamin_motivasi*') || 
-                        request()->is('dopamin_spada*')   ? 'active' : '' }}">
+                        request()->is('dopamin_spada*') ||
+                        request()->is('dopamin_picture*') ? 'active' : '' }}">
                     <a href="#SuasanaKantor" class="has-arrow"><i class="icon-bubbles"></i>
                         <span>Go Dopamin</span>
                         <span id="curhat-pending-badge" class="badge badge-warning float-right" style="display:none;"></span>
@@ -75,6 +76,8 @@
 
                         <li class="{{ request()->is('dopamin_spada*') ? 'active' : '' }}"><a
                                 href="{{ url('dopamin_spada') }}">SPADA</a></li>
+                        <li class="{{ request()->is('dopamin_picture*') ? 'active' : '' }}"><a
+                                href="{{ url('dopamin_picture') }}">Posting Poster</a></li>
                     </ul>
                 </li>
                 @endhasanyrole
