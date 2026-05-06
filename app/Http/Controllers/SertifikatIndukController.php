@@ -30,8 +30,6 @@ class SertifikatIndukController extends Controller
         $list->withPath('sertifikat_induk');
         $list->appends($request->all());
 
-        $model = new SertifikatInduk;
-
         return view('sertifikat_induk.index', compact('list', 'keyword'));
     }
 
@@ -155,12 +153,31 @@ class SertifikatIndukController extends Controller
         return $names;
     }
 
+    /**
+     * Nomor urut peserta berlanjut per tahun kalender (dari tanggal induk).
+     * Mengabaikan baris peserta milik induk ini agar penyimpanan ulang tidak melonjak nomor.
+     */
+    private function nextNomorUrutStartForYear(SertifikatInduk $induk)
+    {
+        $year = \Carbon\Carbon::parse($induk->tanggal)->year;
+
+        $maxUrut = SertifikatPeserta::query()
+            ->join('sertifikat_induk', 'sertifikat_peserta.sertifikat_induk_id', '=', 'sertifikat_induk.id')
+            ->whereYear('sertifikat_induk.tanggal', $year)
+            ->where('sertifikat_induk.id', '!=', $induk->id)
+            ->max('sertifikat_peserta.nomor_urut');
+
+        return $maxUrut !== null ? (int) $maxUrut + 1 : 1;
+    }
+
     private function replacePesertaForInduk(SertifikatInduk $induk, array $names)
     {
+        $startUrut = $this->nextNomorUrutStartForYear($induk);
+
         $induk->peserta()->delete();
 
         foreach ($names as $idx => $nama) {
-            $urut = $idx + 1;
+            $urut = $startUrut + $idx;
             SertifikatPeserta::create([
                 'sertifikat_induk_id' => $induk->id,
                 'nama_peserta' => $nama,
