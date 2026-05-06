@@ -350,12 +350,14 @@
                     </ul>
                 </li>
 
-                <li class="{{ request()->is('surat_km*') ? 'active' : '' }}">
+                <li class="{{ request()->is('surat_km*') || request()->is('sertifikat_induk*') ? 'active' : '' }}">
                     <a href="#Dashboard" class="has-arrow"><i class="icon-doc"></i>
                         <span>Surat Menyurat</span></a>
                     <ul>
                         <li class="{{ request()->is('surat_km/*') ? 'active' : '' }}"><a
                                 href="{{ url('surat_km') }}">Daftar</a></li>
+                        <li class="{{ request()->is('sertifikat_induk*') ? 'active' : '' }}"><a
+                                href="{{ url('sertifikat_induk') }}">Sertifikat</a></li>
                         <li><a href="https://srikandi.arsip.go.id/">SRIKANDI <span
                                     class="badge badge-info float-right">ANRI</span></a></li>
                     </ul>
