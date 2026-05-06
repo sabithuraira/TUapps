@@ -218,6 +218,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('surat_km/{id}/print', 'SuratKmController@print');
     Route::post('surat_km/nomor_urut', 'SuratKmController@getNomorUrut');
 
+    Route::post('sertifikat_induk/import_peserta_excel', 'SertifikatIndukController@importPesertaExcel');
+    Route::resource('sertifikat_induk', 'SertifikatIndukController');
+
     //////////////////////////
     Route::resource('log_book', 'LogBookController')->except(['show']);
     Route::post('log_book/data_log_book', 'LogBookController@dataLogBook');
