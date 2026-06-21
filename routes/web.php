@@ -252,6 +252,7 @@ Route::group(['middleware' => 'auth'], function () {
     //////////////////
 
     //CKP
+    Route::post('ckp/import', 'CkpController@import');
     Route::resource('ckp', 'CkpController');
     Route::post('ckp/data_ckp', 'CkpController@dataCkp');
     Route::post('ckp/data_profile', 'CkpController@dataProfile');

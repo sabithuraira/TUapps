@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CkpImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class CkpController extends Controller
@@ -479,5 +481,28 @@ class CkpController extends Controller
         $model = \App\Ckp::find($id);
         $model->delete();
         return response()->json(['success'=>'Sukses']);
+    }
+
+    public function import(Request $request){
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls',
+            'month' => 'required|integer|min:1|max:12',
+            'year' => 'required|integer|min:2019',
+        ]);
+
+        $user = Auth::user();
+        $month = $request->get('month');
+        $year = $request->get('year');
+
+        Excel::import(
+            new CkpImport($user->email, $month, $year, $user->id),
+            $request->file('excel_file')
+        );
+
+        $ckp_log = new \App\CkpLogBulanan();
+        $ckp_log->triggerCkp($user->email, $user->id, $month, $year);
+
+        return redirect('/ckp?month='.$month.'&year='.$year)
+            ->with('success', 'Data CKP berhasil diimport dari Excel');
     }
 }
