@@ -14,6 +14,16 @@ class CkpController extends Controller
         $this->middleware('auth');
     }
 
+    protected function canCreateCkp()
+    {
+        return Auth::user()->kdkab != '10';
+    }
+
+    protected function denyCreateCkp()
+    {
+        return redirect('/ckp')->with('error', 'Anda tidak memiliki akses untuk membuat CKP.');
+    }
+
     // public function print($id){
     //     $model= \App\Sppk::find($id);
 
@@ -104,9 +114,10 @@ class CkpController extends Controller
             $type = $request->get('type');
 
         $model = new \App\Ckp;
+        $can_create = $this->canCreateCkp();
 
         return view('ckp.index', compact('model', 'month', 
-            'year', 'type'));
+            'year', 'type', 'can_create'));
     }
 
     public function pemantau_ckp(Request $request){
@@ -169,6 +180,10 @@ class CkpController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
+        if (!$this->canCreateCkp()) {
+            return $this->denyCreateCkp();
+        }
+
         $month = date('m');
         $year = date('Y');
 
@@ -258,6 +273,10 @@ class CkpController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
+        if (!$this->canCreateCkp()) {
+            return $this->denyCreateCkp();
+        }
+
         $user = Auth::user();
         $user_id =  Auth::user()->email;
 

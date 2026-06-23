@@ -15,13 +15,22 @@
                 <p>{{ \Session::get('success') }}</p>
             </div><br />
         @endif
+        @if (\Session::has('error'))
+            <div class="alert alert-danger">
+                <p>{{ \Session::get('error') }}</p>
+            </div><br />
+        @endif
 
         <div class="card">
             <div class="body">
+                @if ($can_create)
                 <a href="{{action('CkpController@create')}}" class="btn btn-info">Buat CKP</a>
+                @endif
                 <button type="button" class="btn btn-success" id="btn_import_ckp">Import Excel</button>
                 <br/>
+                @if ($can_create)
                 <p class="text-small text-muted font-italic float-left">*Klik "Buat CKP" untuk merubah, menambah atau menghapus rincian CKP.</p>
+                @endif
                 <br/><br/>
                 <div class="row clearfix">
                     <div class="col-lg-6 col-md-12 left-box">
