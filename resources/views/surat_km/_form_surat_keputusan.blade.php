@@ -16,7 +16,8 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Nomor Urut:</label>
-            <input type="text" class="form-control" name="nomor_urut6" v-model="form.nomor_urut">
+            <input type="text" class="form-control" name="nomor_urut6" v-model="form.nomor_urut" :readonly="id_data==''">
+            <small class="text-muted" v-if="id_data==''">Dibuat otomatis dari tanggal, tahun, dan jenis surat. Tanggal mundur memakai suffix A, B, C.</small>
         </div>
     </div>
 

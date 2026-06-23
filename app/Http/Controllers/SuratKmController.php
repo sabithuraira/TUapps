@@ -51,97 +51,25 @@ class SuratKmController extends Controller
 
     public function getNomorUrut(Request $request){
         $jenis_surat = 1;
-        // $nomor_petunjuk = 0;
         $tanggal = date('Y-m-d');
-        $total=1;
 
         if(strlen($request->get('jenis_surat'))>0)
             $jenis_surat = $request->get('jenis_surat');
-
-        // if(strlen($request->get('nomor_petunjuk'))>0)
-        //     $nomor_petunjuk = $request->get('nomor_petunjuk');
 
         if(strlen($request->get('tanggal'))>0){
             $tanggal = date('Y-m-d', strtotime($request->get('tanggal')));
         }
 
-        // $tahun = date('Y', strtotime($tanggal));
-
-        $total_after = \App\SuratKm::where([
-                ['tanggal', '>', $tanggal],
-                ['jenis_surat', '=', $jenis_surat],
-                ['kdprop', '=', Auth::user()->kdprop],
-                ['kdkab', '=', Auth::user()->kdkab],
-                // [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-            ])->count();
-        
-        // return response()->json(['success'=>'Sukses', 'total'=>$total_after, 'tanggal' => $tanggal, 'kdprop' => Auth::user()->kdprop, 'kdkab'=>Auth::user()->kdkab]);
-        if ($total_after == 0) {
-            $last_data = \App\SuratKm::where([
-                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-                    ['jenis_surat', '=', $jenis_surat],
-                    ['kdprop', '=', Auth::user()->kdprop],
-                    ['kdkab', '=', Auth::user()->kdkab],
-                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
-                ])
-                ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
-                ->first();
-
-            // $nomor_terakhir = $last_data->nomor_urut;
-
-            // if(!is_numeric($nomor_terakhir)){
-            //     $exp = explode(".", $nomor_terakhir);
-            //     $nomor_terakhir = $exp[0];
-            // }
-
-            // if($last_data!=null) $total = $nomor_terakhir + 1;
-            // else $total = 1;
-            
-            if($last_data!=null) $total =  $last_data->nomor_urut + 1;
-            else $total = 1;
+        try {
+            $total = $this->resolveNomorUrut($tanggal, $jenis_surat);
+            return response()->json(['success'=>'Sukses', 'total'=>$total]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => 'Error',
+                'message' => $e->getMessage(),
+                'total' => 0,
+            ], 422);
         }
-        else{
-            $first_after = \App\SuratKm::where([
-                    ['tanggal', '>', $tanggal],
-                    ['jenis_surat', '=', $jenis_surat],
-                    ['kdprop', '=', Auth::user()->kdprop],
-                    ['kdkab', '=', Auth::user()->kdkab],
-                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
-                ])
-                ->orderBy('tanggal', 'asc')
-                ->orderBy('nomor_urut', 'asc')
-                ->first();
-
-            $first_number_after = $first_after->nomor_urut;
-
-            // if the number not numeric, ex: 306.A, 90.C,
-            // we will explode by "." char and take the numeric only
-            if(!is_numeric($first_number_after)){
-                $exp = explode(".", $first_number_after);
-                $first_number_after = $exp[0];
-            }
-
-            $current_number = $first_number_after - 1;
-
-            $total_current_number = \App\SuratKm::where([
-                ['nomor_urut', 'LIKE', $current_number.'%'],
-                ['jenis_surat', '=', $jenis_surat],
-                ['kdprop', '=', Auth::user()->kdprop],
-                ['kdkab', '=', Auth::user()->kdkab],
-                [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-            ])
-            ->count();
-
-            $alphabet = range('A', 'Z');
-            
-            if($current_number==0 || $total_current_number<=0)
-                $total = 0;
-            else
-                $total = $current_number.'.'.$alphabet[$total_current_number-1];
-        }
-
-        return response()->json(['success'=>'Sukses', 'total'=>$total]);
     }
 
     /**
@@ -159,74 +87,100 @@ class SuratKmController extends Controller
         return view('surat_km.create',compact('model', 'id', 'model_rincian', 'list_keputusan'));
     }
 
-    function getNomorUrutDirect($date_surat, $jenis_surat){
-        $total=1;
-        $tanggal =  date('Y-m-d', strtotime($date_surat));
+    function getNomorUrutDirect($date_surat, $jenis_surat, $excludeId = null){
+        return $this->resolveNomorUrut($date_surat, $jenis_surat, $excludeId);
+    }
 
-        $total_after = \App\SuratKm::where([
-                ['tanggal', '>', $tanggal],
-                ['jenis_surat', '=', $jenis_surat],
-                ['kdprop', '=', Auth::user()->kdprop],
-                ['kdkab', '=', Auth::user()->kdkab],
-            ])->count();
-        
-        if ($total_after == 0) {
-            $last_data = \App\SuratKm::where([
-                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-                    ['jenis_surat', '=', $jenis_surat],
-                    ['kdprop', '=', Auth::user()->kdprop],
-                    ['kdkab', '=', Auth::user()->kdkab],
-                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
-                ])
-                ->orderBy(DB::raw('CAST(nomor_urut as unsigned)'), 'desc')
-                ->first();
-            
-            if($last_data!=null) $total =  $last_data->nomor_urut + 1;
-            else $total = 1;
+    protected function resolveNomorUrut($date_surat, $jenis_surat, $excludeId = null){
+        $tanggal = date('Y-m-d', strtotime($date_surat));
+        $year = date('Y', strtotime($tanggal));
+        $baseQuery = $this->suratKmBaseQuery($jenis_surat, $year, $excludeId);
+
+        $hasLaterDate = (clone $baseQuery)->where('tanggal', '>', $tanggal)->exists();
+
+        if (!$hasLaterDate) {
+            return $this->getMaxNomorUrutBase(clone $baseQuery) + 1;
         }
-        else{
-            $first_after = \App\SuratKm::where([
-                    ['tanggal', '>', $tanggal],
-                    ['jenis_surat', '=', $jenis_surat],
-                    ['kdprop', '=', Auth::user()->kdprop],
-                    ['kdkab', '=', Auth::user()->kdkab],
-                    [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-                    // ['nomor_urut', 'regexp', '^[0-9]+$'],
-                ])
-                ->orderBy('tanggal', 'asc')
-                ->orderBy('nomor_urut', 'asc')
-                ->first();
 
-            $first_number_after = $first_after->nomor_urut;
+        $firstAfter = (clone $baseQuery)
+            ->where('tanggal', '>', $tanggal)
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('nomor_urut', 'asc')
+            ->first();
 
-            // if the number not numeric, ex: 306.A, 90.C,
-            // we will explode by "." char and take the numeric only
-            if(!is_numeric($first_number_after)){
-                $exp = explode(".", $first_number_after);
-                $first_number_after = $exp[0];
+        if ($firstAfter === null) {
+            return $this->getMaxNomorUrutBase(clone $baseQuery) + 1;
+        }
+
+        $slotNumber = $this->extractNomorUrutBase($firstAfter->nomor_urut) - 1;
+
+        if ($slotNumber <= 0) {
+            throw new \RuntimeException('Tidak dapat menghasilkan nomor urut untuk tanggal ini.');
+        }
+
+        $usedCount = $this->countNomorUrutSlots(clone $baseQuery, $slotNumber);
+
+        return $this->buildBackwardNomorUrut($slotNumber, $usedCount);
+    }
+
+    protected function suratKmBaseQuery($jenis_surat, $year, $excludeId = null){
+        $query = \App\SuratKm::where([
+            ['jenis_surat', '=', $jenis_surat],
+            ['kdprop', '=', Auth::user()->kdprop],
+            ['kdkab', '=', Auth::user()->kdkab],
+            [DB::raw('YEAR(tanggal)'), '=', $year],
+        ]);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query;
+    }
+
+    protected function extractNomorUrutBase($nomor_urut){
+        $nomor_urut = trim((string) $nomor_urut);
+        if ($nomor_urut === '') {
+            return 0;
+        }
+
+        if (is_numeric($nomor_urut)) {
+            return (int) $nomor_urut;
+        }
+
+        $parts = explode('.', $nomor_urut, 2);
+
+        return (int) $parts[0];
+    }
+
+    protected function getMaxNomorUrutBase($query){
+        $max = 0;
+
+        foreach ($query->pluck('nomor_urut') as $nomor_urut) {
+            $base = $this->extractNomorUrutBase($nomor_urut);
+            if ($base > $max) {
+                $max = $base;
             }
-
-            $current_number = $first_number_after - 1;
-
-            $total_current_number = \App\SuratKm::where([
-                ['nomor_urut', 'LIKE', $current_number.'%'],
-                ['jenis_surat', '=', $jenis_surat],
-                ['kdprop', '=', Auth::user()->kdprop],
-                ['kdkab', '=', Auth::user()->kdkab],
-                [DB::raw('YEAR(tanggal)'), '=', date('Y', strtotime($tanggal))],
-            ])
-            ->count();
-
-
-            $alphabet = range('A', 'Z');
-            
-            if($current_number==0 || $total_current_number<=0)
-                $total = 0;
-            else
-                $total = $current_number.'.'.$alphabet[$total_current_number-1];
         }
 
-        return $total;
+        return $max;
+    }
+
+    protected function countNomorUrutSlots($query, $slotNumber){
+        return $query->where(function ($sub) use ($slotNumber) {
+            $sub->where('nomor_urut', '=', (string) $slotNumber)
+                ->orWhere('nomor_urut', 'LIKE', $slotNumber.'.%');
+        })->count();
+    }
+
+    protected function buildBackwardNomorUrut($slotNumber, $usedCount){
+        $alphabet = range('A', 'Z');
+
+        if (!isset($alphabet[$usedCount])) {
+            throw new \RuntimeException('Nomor urut suffix melebihi batas (Z).');
+        }
+
+        return $slotNumber.'.'.$alphabet[$usedCount];
     }
 
     /**
@@ -404,7 +358,9 @@ class SuratKmController extends Controller
             if($request->has('tanggal6')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal6')));
 
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $is_update ? $request->nomor_urut6 : $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->nomor_urut= $is_update
+                ? $request->nomor_urut6
+                : $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
             $model->nomor= $request->nomor6;
             $model->ditetapkan_di= $request->ditetapkan_di6;
             $model->ditetapkan_tanggal= $request->ditetapkan_tanggal6

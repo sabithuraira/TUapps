@@ -221,8 +221,12 @@ var vm = new Vue({
                 }
 
                 $('#wait_progres').modal('hide');
-            }).fail(function (msg) {
-                console.log(JSON.stringify(msg));
+            }).fail(function (xhr) {
+                var message = 'Gagal menghasilkan nomor urut.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    message = xhr.responseJSON.message;
+                }
+                alert(message);
                 $('#wait_progres').modal('hide');
             });
         },
