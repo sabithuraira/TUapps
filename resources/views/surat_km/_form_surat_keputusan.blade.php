@@ -1,6 +1,20 @@
 <div class="row clearfix">
     <div class="col-md-6">
         <div class="form-group">
+            <label>Tanggal:</label>
+            <div class="input-group date" data-date-autoclose="true" data-provide="datepicker">
+                <input type="text" class="datepicker form-control" name="tanggal6" id="tanggal" v-model="form.tanggal">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-md-6">
+        <div class="form-group">
             <label>Nomor Urut:</label>
             <input type="text" class="form-control" name="nomor_urut6" v-model="form.nomor_urut">
         </div>

@@ -16,6 +16,20 @@
               <h2>Tambah Rincian Surat</h2>
           </div>
           <div class="body">
+              @if (\Session::has('error'))
+                  <div class="alert alert-danger">
+                      <p>{{ \Session::get('error') }}</p>
+                  </div>
+              @endif
+              @if ($errors->any())
+                  <div class="alert alert-danger">
+                      <ul class="m-b-0">
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+              @endif
               <form method="post" action="{{url('surat_km')}}" enctype="multipart/form-data">
               @csrf
               @include('surat_km._form')

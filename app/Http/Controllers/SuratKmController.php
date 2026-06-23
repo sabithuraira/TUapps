@@ -236,18 +236,31 @@ class SuratKmController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(SuratKmRequest $request){
-        if (isset($request->validator) && $request->validator->fails()) {
+        if ($request->validator && $request->validator->fails()) {
             return redirect('surat_km/create')
-                        ->withErrors($validator)
+                        ->withErrors($request->validator)
                         ->withInput();
         }
 
-        $model= new \App\SuratKm;
+        try {
+            return $this->persistSuratKm($request, new \App\SuratKm);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect('surat_km/create')
+                ->withInput()
+                ->with('error', 'Gagal menyimpan data: '.$e->getMessage());
+        }
+    }
+
+    protected function persistSuratKm(SuratKmRequest $request, \App\SuratKm $model, $is_update = false){
         $model->jenis_surat = $request->jenis_surat;
-        $model->kdprop =Auth::user()->kdprop;
-        $model->kdkab =Auth::user()->kdkab;
-        $model->created_by=Auth::id();
-        $model->updated_by=Auth::id();
+        if (!$is_update) {
+            $model->kdprop = Auth::user()->kdprop;
+            $model->kdkab = Auth::user()->kdkab;
+            $model->created_by = Auth::id();
+        }
+        $model->updated_by = Auth::id();
 
         $tanggal_format = date('Y-m-d');
 
@@ -389,37 +402,59 @@ class SuratKmController extends Controller
         }
         else if($model->jenis_surat==6){
             if($request->has('tanggal6')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal6')));
-        
-            $bulan = date('m', strtotime($request->get('tanggal6')));
-            $tahun = date('Y', strtotime($request->get('tanggal6')));
 
             $model->tanggal= $tanggal_format;
-            $model->nomor_urut= $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
+            $model->nomor_urut= $is_update ? $request->nomor_urut6 : $this->getNomorUrutDirect($model->tanggal, $model->jenis_surat);
             $model->nomor= $request->nomor6;
             $model->ditetapkan_di= $request->ditetapkan_di6;
-            $model->ditetapkan_tanggal= date('Y-m-d', strtotime($request->ditetapkan_tanggal6));
+            $model->ditetapkan_tanggal= $request->ditetapkan_tanggal6
+                ? date('Y-m-d', strtotime($request->ditetapkan_tanggal6))
+                : null;
             $model->ditetapkan_oleh= $request->ditetapkan_oleh6;
             $model->ditetapkan_nama= $request->ditetapkan_nama6;
             if($model->save()){
-                if(strlen($request->tentang6)>0 && strlen($request->menimbang6)>0 && 
-                    strlen($request->mengingat6)>0 && strlen($request->menetapkan6)>0
-                    && strlen($request->tembusan6)>0 && strlen($request->jumlah_keputusan6)>0){
-                    $model_rincian = new \App\SuratKmRincianSuratKeputusan;
-                    $model_rincian->induk_id = $model->id;
+                if(strlen((string) $request->tentang6) > 0 && strlen((string) $request->menimbang6) > 0 &&
+                    strlen((string) $request->mengingat6) > 0 && strlen((string) $request->menetapkan6) > 0
+                    && strlen((string) $request->tembusan6) > 0 && strlen((string) $request->jumlah_keputusan) > 0){
+                    $model_rincian = $is_update
+                        ? \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $model->id)->first()
+                        : new \App\SuratKmRincianSuratKeputusan;
+
+                    if ($model_rincian === null) {
+                        $model_rincian = new \App\SuratKmRincianSuratKeputusan;
+                        $model_rincian->induk_id = $model->id;
+                    }
+
                     $model_rincian->tentang = $request->tentang6;
                     $model_rincian->menimbang = $request->menimbang6;
                     $model_rincian->mengingat = $request->mengingat6;
                     $model_rincian->menetapkan = $request->menetapkan6;
                     $model_rincian->tembusan = $request->tembusan6;
                     $model_rincian->save();
-    
-                    $jumlah_keputusan = $request->jumlah_keputusan;
-                    for($i=0;$i<$jumlah_keputusan;$i++){
+
+                    $jumlah_keputusan = (int) $request->jumlah_keputusan;
+                    for($i = 0; $i < $jumlah_keputusan; $i++){
+                        $current_id = $request->get('keputusan_'.$i);
+                        $isi = $request->get('keputusan_isi'.$current_id);
+
+                        if($isi === null || $isi === ''){
+                            continue;
+                        }
+
+                        if($is_update && is_numeric($current_id)){
+                            $model_keputusan = \App\SuratKmRincianListKeputusan::where('id', '=', $current_id)->first();
+                            if($model_keputusan != null){
+                                $model_keputusan->isi = $isi;
+                                $model_keputusan->save();
+                                continue;
+                            }
+                        }
+
                         $model_keputusan = new \App\SuratKmRincianListKeputusan;
                         $model_keputusan->induk_id = $model->id;
-                        $model_keputusan->isi = $request->get("keputusana".$i);
+                        $model_keputusan->isi = $isi;
                         $model_keputusan->save();
-                    } 
+                    }
                 }
             }
         }
@@ -598,22 +633,23 @@ class SuratKmController extends Controller
      */
     public function update(SuratKmRequest $request, $id){
         $real_id = Crypt::decrypt($id);
-        if (isset($request->validator) && $request->validator->fails()) {
-            return redirect('surat_km/edit',$id)
-                        ->withErrors($validator)
+
+        if ($request->validator && $request->validator->fails()) {
+            return redirect('surat_km/'.$id.'/edit')
+                        ->withErrors($request->validator)
                         ->withInput();
         }
-        
-        $model= \App\SuratKm::find($real_id);
-        $model->updated_by=Auth::id();
 
-        $tanggal_format = date('Y-m-d');
-        // if($request->has('tanggal')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal')));
-    
-        // $bulan = date('m', strtotime($request->get('tanggal')));
-        // $tahun = date('Y', strtotime($request->get('tanggal')));
+        try {
+            $model = \App\SuratKm::find($real_id);
+            if ($model === null) {
+                return redirect('surat_km')->with('error', 'Data surat tidak ditemukan.');
+            }
 
-        if($model->jenis_surat==1){
+            $model->updated_by = Auth::id();
+            $tanggal_format = date('Y-m-d');
+
+            if($model->jenis_surat==1){
             if($request->has('tanggal1')) $tanggal_format = date('Y-m-d', strtotime($request->get('tanggal1')));
             $bulan = date('m', strtotime($request->get('tanggal1')));
             $tahun = date('Y', strtotime($request->get('tanggal1')));
@@ -773,9 +809,9 @@ class SuratKmController extends Controller
             $model->ditetapkan_oleh= $request->ditetapkan_oleh6;
             $model->ditetapkan_nama= $request->ditetapkan_nama6;
             if($model->save()){
-                if(strlen($request->tentang6)>0 && strlen($request->menimbang6)>0 && 
-                    strlen($request->mengingat6)>0 && strlen($request->menetapkan6)>0
-                    && strlen($request->tembusan6)>0 && strlen($request->jumlah_keputusan6)>0){
+                if(strlen((string) $request->tentang6)>0 && strlen((string) $request->menimbang6)>0 && 
+                    strlen((string) $request->mengingat6)>0 && strlen((string) $request->menetapkan6)>0
+                    && strlen((string) $request->tembusan6)>0 && strlen((string) $request->jumlah_keputusan)>0){
                     $model_rincian = \App\SuratKmRincianSuratKeputusan::where('induk_id', '=', $model->id)->first();
                     if($model_rincian==null){
                         $model_rincian = new \App\SuratKmRincianSuratKeputusan;
@@ -856,8 +892,14 @@ class SuratKmController extends Controller
             $model->ditetapkan_nama = $request->ditetapkan_nama8;
             $model->save();
         }
-        /////////////
-        return redirect('surat_km');
+            return redirect('surat_km')->with('success', 'Information has been updated');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect('surat_km/'.$id.'/edit')
+                ->withInput()
+                ->with('error', 'Gagal menyimpan data: '.$e->getMessage());
+        }
     }
 
     /**
