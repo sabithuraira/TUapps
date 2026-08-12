@@ -51,7 +51,7 @@ class LogBook extends Model
                 COUNT(DISTINCT u.id) AS total_anggota,
                 COUNT(DISTINCT lb.user_id) AS user_isi_logbook
             FROM users u
-            INNER JOIN users leader ON leader.nip_baru = u.pimpinan_nik
+            INNER JOIN users leader ON leader.nip_baru = u.pimpinan_nik AND leader.kdkab = '00'
             LEFT JOIN log_books lb ON lb.user_id = u.email AND $dateJoin
             WHERE u.pimpinan_nik IS NOT NULL
                 AND u.pimpinan_nik <> ''
@@ -98,6 +98,7 @@ class LogBook extends Model
         $sql = "SELECT DATE(lb.tanggal) AS d, COUNT(DISTINCT lb.user_id) AS total
             FROM log_books lb
             INNER JOIN users u ON u.email = lb.user_id
+            INNER JOIN users leader ON leader.nip_baru = u.pimpinan_nik AND leader.kdkab = '00'
             WHERE u.pimpinan_nik IS NOT NULL
                 AND u.pimpinan_nik <> ''
                 AND u.is_active = 1

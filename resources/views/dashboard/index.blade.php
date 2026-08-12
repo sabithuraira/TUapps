@@ -331,8 +331,7 @@
         var apiUrl = {!! json_encode(url('dashboard/api/logbook_rekap_pimpinan')) !!};
 
         function percentColor(pct) {
-            if (pct >= 80) return '#28a745';
-            if (pct >= 50) return '#17a2b8';
+            if (pct > 75) return '#28a745';
             if (pct >= 25) return '#ffc107';
             return '#dc3545';
         }
@@ -396,12 +395,17 @@
                         '<td>' + (row.leader_nip || '-') + '</td>' +
                         '<td class="text-center">' + row.total_anggota + '</td>' +
                         '<td class="text-center"><strong>' + row.user_isi_logbook + '</strong></td>' +
-                        '<td>' +
-                            '<div class="d-flex align-items-center">' +
-                                '<div class="progress flex-grow-1 m-b-0 m-r-10" style="height:10px; border-radius:8px; background:#e9ecef;">' +
-                                    '<div class="progress-bar" style="width:' + pct + '%; background:' + color + '; border-radius:8px;"></div>' +
+                        '<td class="text-center">' +
+                            '<div style="min-width:140px;">' +
+                                '<div class="d-flex justify-content-between m-b-5">' +
+                                    '<small class="text-muted">' + row.user_isi_logbook + '/' + row.total_anggota + '</small>' +
+                                    '<strong style="color:' + color + ';">' + pct.toFixed(1) + '%</strong>' +
                                 '</div>' +
-                                '<strong style="color:' + color + '; min-width:52px; text-align:right;">' + pct.toFixed(1) + '%</strong>' +
+                                '<div class="progress m-b-0" style="height:14px; border-radius:10px; background:#e9ecef; overflow:hidden;">' +
+                                    '<div class="progress-bar" role="progressbar" ' +
+                                        'style="width:' + Math.max(pct, pct > 0 ? 2 : 0) + '%; background-color:' + color + '; border-radius:10px;" ' +
+                                        'aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"></div>' +
+                                '</div>' +
                             '</div>' +
                         '</td>' +
                         '</tr>';
@@ -436,8 +440,11 @@
                 data: {
                     columns: [values],
                     type: 'bar',
-                    colors: {
-                        Persentase: '#17a2b8'
+                    color: function (color, d) {
+                        if (d && typeof d.value !== 'undefined') {
+                            return percentColor(Number(d.value));
+                        }
+                        return color;
                     },
                     labels: {
                         format: function (v) {
