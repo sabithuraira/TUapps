@@ -124,14 +124,33 @@ class LogBook extends Model
 
         $rows = DB::select(DB::raw($sql), $bindings);
 
-        $result = [];
+        $grouped = [];
         foreach ($rows as $row) {
+            $key = $row->user_email ?: $row->user_nip;
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'user_name' => $row->user_name,
+                    'user_nip' => $row->user_nip,
+                    'user_email' => $row->user_email,
+                    'tanggal' => [],
+                    'isi' => [],
+                ];
+            }
+
+            if ($row->tanggal) {
+                $grouped[$key]['tanggal'][] = date('Y-m-d', strtotime($row->tanggal));
+                $grouped[$key]['isi'][] = $row->isi;
+            }
+        }
+
+        $result = [];
+        foreach ($grouped as $item) {
             $result[] = [
-                'user_name' => $row->user_name,
-                'user_nip' => $row->user_nip,
-                'user_email' => $row->user_email,
-                'tanggal' => $row->tanggal ? date('Y-m-d', strtotime($row->tanggal)) : null,
-                'isi' => $row->isi,
+                'user_name' => $item['user_name'],
+                'user_nip' => $item['user_nip'],
+                'user_email' => $item['user_email'],
+                'tanggal' => $item['tanggal'],
+                'isi' => $item['isi'],
             ];
         }
 

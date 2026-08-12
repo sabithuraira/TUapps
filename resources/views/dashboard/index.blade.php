@@ -413,11 +413,19 @@
             } else {
                 for (var i = 0; i < datas.length; i++) {
                     var row = datas[i];
+                    var tanggalList = Array.isArray(row.tanggal) ? row.tanggal : (row.tanggal ? [row.tanggal] : []);
+                    var isiList = Array.isArray(row.isi) ? row.isi : (row.isi ? [row.isi] : []);
+                    var tanggalHtml = tanggalList.length
+                        ? tanggalList.map(function (t) { return escapeHtml(t); }).join('<br>')
+                        : '-';
+                    var isiHtml = isiList.length
+                        ? isiList.map(function (t) { return escapeHtml(t == null ? '' : t); }).join('<br>')
+                        : '-';
                     html += '<tr>' +
                         '<td class="text-center">' + (i + 1) + '</td>' +
                         '<td>' + escapeHtml(row.user_name || '-') + '</td>' +
-                        '<td>' + escapeHtml(row.tanggal || '-') + '</td>' +
-                        '<td style="white-space:pre-wrap;">' + escapeHtml(row.isi || '-') + '</td>' +
+                        '<td>' + tanggalHtml + '</td>' +
+                        '<td style="white-space:pre-wrap;">' + isiHtml + '</td>' +
                         '</tr>';
                 }
             }
