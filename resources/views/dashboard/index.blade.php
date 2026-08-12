@@ -133,9 +133,6 @@
 @endsection
 @section('scripts')
     <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
-    @if (!empty($show_logbook_rekap))
-    <script src="{!! asset('assets/bundles/c3.bundle.js') !!}"></script>
-    @endif
 
     <script>
     var vm = new Vue({  
@@ -326,9 +323,17 @@
     @if (!empty($show_logbook_rekap))
     <script>
     (function () {
-        var lbBarChart = null;
-        var lbLineChart = null;
         var apiUrl = {!! json_encode(url('dashboard/api/logbook_rekap_pimpinan')) !!};
+        var detailUrl = {!! json_encode(url('dashboard/api/logbook_rekap_pimpinan_detail')) !!};
+
+        function escapeHtml(str) {
+            return String(str == null ? '' : str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         function percentColor(pct) {
             if (pct > 75) return '#28a745';
@@ -347,43 +352,19 @@
             if (mode === 'month') {
                 $('#lb_rekap_day_filter').hide();
                 $('#lb_rekap_month_filter, #lb_rekap_year_filter').show();
-                $('#lb_rekap_side_title').text('Tren Pegawai Isi Logbook (Harian)');
-                $('#lb_rekap_percent_list').hide();
-                $('#lb_rekap_chart_line, #lb_rekap_line_hint').show();
             } else {
                 $('#lb_rekap_day_filter').show();
                 $('#lb_rekap_month_filter, #lb_rekap_year_filter').hide();
-                $('#lb_rekap_side_title').text('Ringkasan Persentase');
-                $('#lb_rekap_percent_list').show();
-                $('#lb_rekap_chart_line, #lb_rekap_line_hint').hide();
             }
         }
 
-        function renderPercentList(datas) {
-            var html = '';
-            if (!datas || !datas.length) {
-                html = '<div class="text-muted text-center" style="padding-top:120px;">Tidak ada data</div>';
-            } else {
-                for (var i = 0; i < datas.length; i++) {
-                    var row = datas[i];
-                    var pct = Number(row.persentase || 0);
-                    var color = percentColor(pct);
-                    var icon = percentIcon(pct);
-                    var name = row.leader_name || row.leader_nip || ('Ketua Tim ' + (i + 1));
-                    html += '<div class="m-b-15">' +
-                        '<div class="d-flex justify-content-between">' +
-                            '<span><i class="fa ' + icon + ' m-r-5" style="color:' + color + ';"></i><strong>' + name + '</strong></span>' +
-                            '<span class="font-weight-bold" style="color:' + color + ';">' + pct.toFixed(1) + '%</span>' +
-                        '</div>' +
-                        '<div class="progress" style="height:12px; border-radius:8px; background:#e9ecef;">' +
-                            '<div class="progress-bar" role="progressbar" style="width:' + pct + '%; background:' + color + '; border-radius:8px;" ' +
-                                'aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"></div>' +
-                        '</div>' +
-                        '<small class="text-muted">' + row.user_isi_logbook + ' / ' + row.total_anggota + ' pegawai isi logbook</small>' +
-                    '</div>';
-                }
-            }
-            $('#lb_rekap_percent_list').html(html);
+        function currentFilterParams() {
+            return {
+                mode: $('#lb_rekap_mode').val(),
+                tanggal: $('#lb_rekap_tanggal').val(),
+                month: $('#lb_rekap_month').val(),
+                year: $('#lb_rekap_year').val()
+            };
         }
 
         function renderTable(datas) {
@@ -396,11 +377,13 @@
                     var pct = Number(row.persentase || 0);
                     var color = percentColor(pct);
                     var icon = percentIcon(pct);
+                    var leaderName = row.leader_name || '-';
+                    var leaderNip = row.leader_nip || '';
                     html += '<tr>' +
                         '<td class="text-center">' + (i + 1) + '</td>' +
-                        '<td>' + (row.leader_name || '-') + '</td>' +
-                        '<td>' + (row.leader_jabatan || '-') + '</td>' +
-                        '<td>' + (row.leader_nip || '-') + '</td>' +
+                        '<td><a href="javascript:void(0);" class="lb-rekap-leader-link" data-leader-nip="' + escapeHtml(leaderNip) + '" data-leader-name="' + escapeHtml(leaderName) + '">' + escapeHtml(leaderName) + '</a></td>' +
+                        '<td>' + escapeHtml(row.leader_jabatan || '-') + '</td>' +
+                        '<td>' + escapeHtml(leaderNip || '-') + '</td>' +
                         '<td class="text-center">' + row.total_anggota + '</td>' +
                         '<td class="text-center"><strong>' + row.user_isi_logbook + '</strong></td>' +
                         '<td class="text-center">' +
@@ -423,137 +406,57 @@
             $('#lb_rekap_table_body').html(html);
         }
 
-        function renderBarChart(datas) {
-            var labels = [];
-            var values = ['Persentase'];
-            for (var i = 0; i < datas.length; i++) {
-                var name = datas[i].leader_name || datas[i].leader_nip || ('Ketua Tim ' + (i + 1));
-                if (name.length > 22) {
-                    name = name.substring(0, 20) + '..';
+        function renderDetailTable(datas) {
+            var html = '';
+            if (!datas || !datas.length) {
+                html = '<tr><td colspan="4" class="text-center text-muted">Tidak ada anggota / logbook</td></tr>';
+            } else {
+                for (var i = 0; i < datas.length; i++) {
+                    var row = datas[i];
+                    html += '<tr>' +
+                        '<td class="text-center">' + (i + 1) + '</td>' +
+                        '<td>' + escapeHtml(row.user_name || '-') + '</td>' +
+                        '<td>' + escapeHtml(row.tanggal || '-') + '</td>' +
+                        '<td style="white-space:pre-wrap;">' + escapeHtml(row.isi || '-') + '</td>' +
+                        '</tr>';
                 }
-                labels.push(name);
-                values.push(Number(datas[i].persentase || 0));
             }
-
-            if (!labels.length) {
-                labels = ['Tidak ada data'];
-                values = ['Persentase', 0];
-            }
-
-            if (lbBarChart) {
-                lbBarChart.destroy();
-            }
-
-            lbBarChart = c3.generate({
-                bindto: '#lb_rekap_chart_bar',
-                data: {
-                    columns: [values],
-                    type: 'bar',
-                    color: function (color, d) {
-                        if (d && typeof d.value !== 'undefined') {
-                            return percentColor(Number(d.value));
-                        }
-                        return color;
-                    },
-                    labels: {
-                        format: function (v) {
-                            return Number(v).toFixed(1) + '%';
-                        }
-                    }
-                },
-                axis: {
-                    rotated: true,
-                    x: {
-                        type: 'category',
-                        categories: labels
-                    },
-                    y: {
-                        min: 0,
-                        max: 100,
-                        padding: { top: 0, bottom: 0 },
-                        label: {
-                            text: '% Pegawai Isi Logbook',
-                            position: 'outer-middle'
-                        },
-                        tick: {
-                            format: function (v) {
-                                return v + '%';
-                            }
-                        }
-                    }
-                },
-                bar: {
-                    width: { ratio: 0.6 }
-                },
-                grid: {
-                    y: { show: true }
-                },
-                legend: { show: false },
-                padding: { bottom: 10, right: 30 }
-            });
+            $('#lb_rekap_detail_body').html(html);
         }
 
-        function renderLineChart(daily, mode) {
-            if (mode !== 'month') {
-                if (lbLineChart) {
-                    lbLineChart.destroy();
-                    lbLineChart = null;
+        function openLeaderDetail(leaderNip, leaderName) {
+            var params = currentFilterParams();
+            params.leader_nip = leaderNip;
+
+            $('#lb_rekap_detail_title').text('Detail Logbook — ' + (leaderName || leaderNip));
+            var periodText = params.mode === 'month'
+                ? ('Bulan ' + params.month + '/' + params.year)
+                : ('Tanggal ' + params.tanggal);
+            $('#lb_rekap_detail_subtitle').text(periodText);
+            $('#lb_rekap_detail_body').html('<tr><td colspan="4" class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Memuat data...</td></tr>');
+            $('#lb_rekap_detail_modal').modal('show');
+
+            $.ajax({
+                url: detailUrl,
+                method: 'GET',
+                dataType: 'json',
+                data: params
+            }).done(function (res) {
+                if (res.leader && res.leader.name) {
+                    $('#lb_rekap_detail_title').text('Detail Logbook — ' + res.leader.name);
                 }
-                return;
-            }
-
-            var labels = [];
-            var values = ['Pegawai Isi Logbook'];
-            for (var i = 0; i < daily.length; i++) {
-                var d = daily[i].date || '';
-                labels.push(d.length >= 10 ? d.substring(8, 10) : d);
-                values.push(daily[i].total);
-            }
-
-            if (!labels.length) {
-                labels = ['-'];
-                values = ['Pegawai Isi Logbook', 0];
-            }
-
-            if (lbLineChart) {
-                lbLineChart.destroy();
-            }
-
-            lbLineChart = c3.generate({
-                bindto: '#lb_rekap_chart_line',
-                data: {
-                    columns: [values],
-                    type: 'area',
-                    colors: {
-                        'Pegawai Isi Logbook': '#28a745'
-                    }
-                },
-                axis: {
-                    x: {
-                        type: 'category',
-                        categories: labels,
-                        label: { text: 'Tanggal', position: 'outer-center' }
-                    },
-                    y: {
-                        min: 0,
-                        padding: { bottom: 0 },
-                        label: { text: 'Jumlah Pegawai', position: 'outer-middle' }
-                    }
-                },
-                legend: { show: false },
-                point: { r: 3 },
-                padding: { bottom: 10, right: 20 }
+                renderDetailTable(res.datas || []);
+            }).fail(function (xhr) {
+                var msg = 'Gagal memuat detail logbook.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                $('#lb_rekap_detail_body').html('<tr><td colspan="4" class="text-center text-danger">' + escapeHtml(msg) + '</td></tr>');
             });
         }
 
         function loadRekap() {
-            var mode = $('#lb_rekap_mode').val();
-            var params = {
-                mode: mode,
-                tanggal: $('#lb_rekap_tanggal').val(),
-                month: $('#lb_rekap_month').val(),
-                year: $('#lb_rekap_year').val()
-            };
+            var params = currentFilterParams();
 
             $('#lb_rekap_table_body').html('<tr><td colspan="7" class="text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Memuat data...</td></tr>');
 
@@ -563,17 +466,13 @@
                 dataType: 'json',
                 data: params
             }).done(function (res) {
-                var datas = res.datas || [];
-                renderTable(datas);
-                renderBarChart(datas);
-                renderPercentList(datas);
-                renderLineChart(res.daily || [], res.mode || mode);
+                renderTable(res.datas || []);
             }).fail(function (xhr) {
                 var msg = 'Gagal memuat rekap logbook.';
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     msg = xhr.responseJSON.message;
                 }
-                $('#lb_rekap_table_body').html('<tr><td colspan="7" class="text-center text-danger">' + msg + '</td></tr>');
+                $('#lb_rekap_table_body').html('<tr><td colspan="7" class="text-center text-danger">' + escapeHtml(msg) + '</td></tr>');
             });
         }
 
@@ -604,6 +503,11 @@
                 if ($('#lb_rekap_mode').val() === 'day') {
                     loadRekap();
                 }
+            });
+
+            $(document).on('click', '.lb-rekap-leader-link', function (e) {
+                e.preventDefault();
+                openLeaderDetail($(this).data('leader-nip'), $(this).data('leader-name'));
             });
         });
     })();

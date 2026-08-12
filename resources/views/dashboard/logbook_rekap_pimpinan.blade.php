@@ -52,20 +52,7 @@
                 </div>
             </div>
 
-            <div class="row clearfix">
-                <div class="col-lg-7 col-md-12">
-                    <h6 class="m-b-15">% Pegawai Isi Logbook per Ketua Tim</h6>
-                    <div id="lb_rekap_chart_bar" style="height: 360px;"></div>
-                </div>
-                <div class="col-lg-5 col-md-12">
-                    <h6 class="m-b-15" id="lb_rekap_side_title">Ringkasan Persentase</h6>
-                    <div id="lb_rekap_percent_list" style="max-height: 360px; overflow-y: auto;"></div>
-                    <div id="lb_rekap_chart_line" style="height: 280px; display:none;"></div>
-                    <p class="text-muted text-small m-t-10" id="lb_rekap_line_hint" style="display:none;">Tren jumlah pegawai yang mengisi logbook per hari.</p>
-                </div>
-            </div>
-
-            <div class="table-responsive m-t-20">
+            <div class="table-responsive m-t-10">
                 <table class="table table-bordered table-striped table-hover table-sm m-b-0">
                     <thead>
                         <tr>
@@ -75,7 +62,7 @@
                             <th>NIP</th>
                             <th class="text-center">Anggota</th>
                             <th class="text-center">Pegawai Isi Logbook</th>
-                            <th class="text-center" style="min-width:160px;">Persentase</th>
+                            <th class="text-center" style="min-width:180px;">Persentase</th>
                         </tr>
                     </thead>
                     <tbody id="lb_rekap_table_body">
@@ -84,6 +71,42 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="lb_rekap_detail_modal" tabindex="-1" role="dialog" aria-labelledby="lb_rekap_detail_title" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lb_rekap_detail_title">Detail Logbook Anggota</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted m-b-10" id="lb_rekap_detail_subtitle"></p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover table-sm m-b-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:50px;">No</th>
+                                <th style="min-width:160px;">Nama Pegawai</th>
+                                <th style="width:120px;">Tanggal</th>
+                                <th>Isi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb_rekap_detail_body">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>

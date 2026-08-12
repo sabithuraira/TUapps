@@ -138,6 +138,68 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function api_logbook_rekap_pimpinan_detail(Request $request)
+    {
+        $auth = Auth::user();
+        if (!$auth || $auth->kdkab != '00') {
+            return response()->json([
+                'success' => '0',
+                'message' => 'Akses ditolak',
+                'datas' => [],
+            ], 403);
+        }
+
+        $leaderNip = trim((string) $request->get('leader_nip', ''));
+        if ($leaderNip === '') {
+            return response()->json([
+                'success' => '0',
+                'message' => 'NIP ketua tim wajib diisi',
+                'datas' => [],
+            ], 422);
+        }
+
+        $mode = $request->get('mode', 'day');
+        if (!in_array($mode, ['day', 'month'], true)) {
+            $mode = 'day';
+        }
+
+        $tanggal = $request->get('tanggal', date('Y-m-d'));
+        $month = (int) $request->get('month', date('n'));
+        $year = (int) $request->get('year', date('Y'));
+
+        if ($month < 1 || $month > 12) {
+            $month = (int) date('n');
+        }
+        if ($year < 2019 || $year > ((int) date('Y') + 1)) {
+            $year = (int) date('Y');
+        }
+
+        $parsedTanggal = date('Y-m-d', strtotime($tanggal));
+        if (!$parsedTanggal || $parsedTanggal === '1970-01-01') {
+            $parsedTanggal = date('Y-m-d');
+        }
+
+        $logBook = new \App\LogBook;
+        $datas = $logBook->DetailLogbookPerPimpinan($leaderNip, $mode, $parsedTanggal, $month, $year);
+
+        $leader = UserModel::where('nip_baru', $leaderNip)->where('kdkab', '00')->first();
+
+        return response()->json([
+            'success' => '1',
+            'message' => 'success',
+            'mode' => $mode,
+            'tanggal' => $parsedTanggal,
+            'month' => $month,
+            'year' => $year,
+            'leader' => [
+                'nip' => $leaderNip,
+                'name' => $leader ? $leader->name : $leaderNip,
+                'jabatan' => $leader ? $leader->nmjab : null,
+            ],
+            'datas' => $datas,
+        ]);
+    }
+
     /**
      * FAQ page - list knowledge_info by title with pagination and search.
      */

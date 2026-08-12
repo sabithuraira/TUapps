@@ -307,6 +307,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('hai', 'HomeController@hai')->name('hai');
     Route::get('dashboard/index', 'DashboardController@index');
     Route::get('dashboard/api/logbook_rekap_pimpinan', 'DashboardController@api_logbook_rekap_pimpinan');
+    Route::get('dashboard/api/logbook_rekap_pimpinan_detail', 'DashboardController@api_logbook_rekap_pimpinan_detail');
     Route::get('dashboard/pes_st2023', 'DashboardController@pes_st2023');
     Route::get('dashboard/st2023', 'DashboardController@st2023');
     Route::get('dashboard/umkm', 'DashboardController@umkm');

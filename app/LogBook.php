@@ -85,6 +85,60 @@ class LogBook extends Model
     }
 
     /**
+     * Detail anggota + logbook (tanggal, isi) under a ketua tim for day/month filter.
+     *
+     * @param string $leaderNip
+     * @param string $mode day|month
+     * @param string|null $tanggal
+     * @param int|null $month
+     * @param int|null $year
+     * @return array
+     */
+    public function DetailLogbookPerPimpinan($leaderNip, $mode = 'day', $tanggal = null, $month = null, $year = null)
+    {
+        if ($mode === 'month') {
+            $month = (int) $month;
+            $year = (int) $year;
+            $dateJoin = "MONTH(lb.tanggal) = ? AND YEAR(lb.tanggal) = ? AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)";
+            $bindings = [$month, $year, $leaderNip];
+        } else {
+            $tanggal = date('Y-m-d', strtotime($tanggal ?: date('Y-m-d')));
+            $dateJoin = "DATE(lb.tanggal) = ? AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)";
+            $bindings = [$tanggal, $leaderNip];
+        }
+
+        $sql = "SELECT
+                u.name AS user_name,
+                u.nip_baru AS user_nip,
+                u.email AS user_email,
+                lb.tanggal AS tanggal,
+                lb.isi AS isi
+            FROM users u
+            LEFT JOIN log_books lb ON lb.user_id = u.email AND $dateJoin
+            WHERE u.pimpinan_nik = ?
+                AND u.pimpinan_nik IS NOT NULL
+                AND u.pimpinan_nik <> ''
+                AND u.is_active = 1
+                AND u.kdkab = '00'
+            ORDER BY u.name ASC, lb.tanggal ASC, lb.id ASC";
+
+        $rows = DB::select(DB::raw($sql), $bindings);
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'user_name' => $row->user_name,
+                'user_nip' => $row->user_nip,
+                'user_email' => $row->user_email,
+                'tanggal' => $row->tanggal ? date('Y-m-d', strtotime($row->tanggal)) : null,
+                'isi' => $row->isi,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * Daily unique users who filled logbook (subordinates with a ketua tim) for a month.
      *
      * @param int $month
