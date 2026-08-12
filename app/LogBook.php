@@ -19,6 +19,107 @@ class LogBook extends Model
         return $this->hasOne('App\User', 'id', 'user_id');
     }
 
+    /**
+     * Rekap pengisian logbook per ketua tim (leader).
+     * Leaders = distinct users.pimpinan_nik joined to users.nip_baru.
+     * Counts distinct subordinates who filled logbook (not row count).
+     *
+     * @param string $mode day|month
+     * @param string|null $tanggal Y-m-d (for day)
+     * @param int|null $month
+     * @param int|null $year
+     * @return array
+     */
+    public function RekapPerPimpinan($mode = 'day', $tanggal = null, $month = null, $year = null)
+    {
+        if ($mode === 'month') {
+            $month = (int) $month;
+            $year = (int) $year;
+            $dateJoin = "MONTH(lb.tanggal) = ? AND YEAR(lb.tanggal) = ? AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)";
+            $bindings = [$month, $year];
+        } else {
+            $tanggal = date('Y-m-d', strtotime($tanggal ?: date('Y-m-d')));
+            $dateJoin = "DATE(lb.tanggal) = ? AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)";
+            $bindings = [$tanggal];
+        }
+
+        $sql = "SELECT
+                leader.nip_baru AS leader_nip,
+                leader.name AS leader_name,
+                leader.nmjab AS leader_jabatan,
+                leader.email AS leader_email,
+                COUNT(DISTINCT u.id) AS total_anggota,
+                COUNT(DISTINCT lb.user_id) AS user_isi_logbook
+            FROM users u
+            INNER JOIN users leader ON leader.nip_baru = u.pimpinan_nik
+            LEFT JOIN log_books lb ON lb.user_id = u.email AND $dateJoin
+            WHERE u.pimpinan_nik IS NOT NULL
+                AND u.pimpinan_nik <> ''
+                AND u.is_active = 1
+            GROUP BY leader.nip_baru, leader.name, leader.nmjab, leader.email
+            ORDER BY user_isi_logbook DESC, leader.name ASC";
+
+        $rows = DB::select(DB::raw($sql), $bindings);
+
+        $result = [];
+        foreach ($rows as $row) {
+            $totalAnggota = (int) $row->total_anggota;
+            $userIsi = (int) $row->user_isi_logbook;
+            $persen = $totalAnggota > 0
+                ? round(($userIsi / $totalAnggota) * 100, 1)
+                : 0;
+
+            $result[] = [
+                'leader_nip' => $row->leader_nip,
+                'leader_name' => $row->leader_name,
+                'leader_jabatan' => $row->leader_jabatan,
+                'leader_email' => $row->leader_email,
+                'total_anggota' => $totalAnggota,
+                'user_isi_logbook' => $userIsi,
+                'persentase' => $persen,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Daily unique users who filled logbook (subordinates with a ketua tim) for a month.
+     *
+     * @param int $month
+     * @param int $year
+     * @return array list of ['date' => Y-m-d, 'total' => int]
+     */
+    public function RekapHarianSemuaPimpinan($month, $year)
+    {
+        $month = (int) $month;
+        $year = (int) $year;
+
+        $sql = "SELECT DATE(lb.tanggal) AS d, COUNT(DISTINCT lb.user_id) AS total
+            FROM log_books lb
+            INNER JOIN users u ON u.email = lb.user_id
+            WHERE u.pimpinan_nik IS NOT NULL
+                AND u.pimpinan_nik <> ''
+                AND u.is_active = 1
+                AND MONTH(lb.tanggal) = ?
+                AND YEAR(lb.tanggal) = ?
+                AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)
+            GROUP BY d
+            ORDER BY d ASC";
+
+        $rows = DB::select(DB::raw($sql), [$month, $year]);
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'date' => $row->d,
+                'total' => (int) $row->total,
+            ];
+        }
+
+        return $result;
+    }
+
     //rekap per unit kerja per hari
     public function RekapPerUnitKerjaPerHari($unit_kerja, $tanggal, $separate=' <br/> '){
         $str_where = "kdkab = '$unit_kerja' AND is_active=1";

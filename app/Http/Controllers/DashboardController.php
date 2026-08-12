@@ -51,6 +51,8 @@ class DashboardController extends Controller
         if(strlen($request->get('kec'))>0) $kec = $request->get('kec');
         if(strlen($request->get('desa'))>0) $desa = $request->get('desa');
 
+        $show_logbook_rekap = ($auth && $auth->kdkab == '00');
+
         return view('dashboard.index', compact(
             'random_user',
             'unit_kerja',
@@ -60,8 +62,80 @@ class DashboardController extends Controller
             'bulletin',
             'bulletin_header',
             'kab', 'kec', 'desa',
+            'show_logbook_rekap',
             // 'mengabdi'
         ));
+    }
+
+    /**
+     * API rekap logbook per pimpinan (kdkab=00 only).
+     * mode=day|month, tanggal=Y-m-d, month=1-12, year=YYYY
+     */
+    public function api_logbook_rekap_pimpinan(Request $request)
+    {
+        $auth = Auth::user();
+        if (!$auth || $auth->kdkab != '00') {
+            return response()->json([
+                'success' => '0',
+                'message' => 'Akses ditolak',
+                'datas' => [],
+                'daily' => [],
+            ], 403);
+        }
+
+        $mode = $request->get('mode', 'day');
+        if (!in_array($mode, ['day', 'month'], true)) {
+            $mode = 'day';
+        }
+
+        $tanggal = $request->get('tanggal', date('Y-m-d'));
+        $month = (int) $request->get('month', date('n'));
+        $year = (int) $request->get('year', date('Y'));
+
+        if ($month < 1 || $month > 12) {
+            $month = (int) date('n');
+        }
+        if ($year < 2019 || $year > ((int) date('Y') + 1)) {
+            $year = (int) date('Y');
+        }
+
+        $parsedTanggal = date('Y-m-d', strtotime($tanggal));
+        if (!$parsedTanggal || $parsedTanggal === '1970-01-01') {
+            $parsedTanggal = date('Y-m-d');
+        }
+
+        $logBook = new \App\LogBook;
+        $datas = $logBook->RekapPerPimpinan($mode, $parsedTanggal, $month, $year);
+        $daily = [];
+        if ($mode === 'month') {
+            $daily = $logBook->RekapHarianSemuaPimpinan($month, $year);
+        }
+
+        $total_user_isi = 0;
+        $total_anggota = 0;
+        foreach ($datas as $row) {
+            $total_user_isi += $row['user_isi_logbook'];
+            $total_anggota += $row['total_anggota'];
+        }
+
+        return response()->json([
+            'success' => '1',
+            'message' => 'success',
+            'mode' => $mode,
+            'tanggal' => $parsedTanggal,
+            'month' => $month,
+            'year' => $year,
+            'summary' => [
+                'total_ketua_tim' => count($datas),
+                'total_anggota' => $total_anggota,
+                'total_user_isi' => $total_user_isi,
+                'persentase' => $total_anggota > 0
+                    ? round(($total_user_isi / $total_anggota) * 100, 1)
+                    : 0,
+            ],
+            'datas' => $datas,
+            'daily' => $daily,
+        ]);
     }
 
     /**
