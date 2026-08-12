@@ -336,6 +336,12 @@
             return '#dc3545';
         }
 
+        function percentIcon(pct) {
+            if (pct > 75) return 'fa-smile-o';
+            if (pct >= 25) return 'fa-meh-o';
+            return 'fa-frown-o';
+        }
+
         function toggleFilters() {
             var mode = $('#lb_rekap_mode').val();
             if (mode === 'month') {
@@ -362,10 +368,11 @@
                     var row = datas[i];
                     var pct = Number(row.persentase || 0);
                     var color = percentColor(pct);
+                    var icon = percentIcon(pct);
                     var name = row.leader_name || row.leader_nip || ('Ketua Tim ' + (i + 1));
                     html += '<div class="m-b-15">' +
                         '<div class="d-flex justify-content-between">' +
-                            '<span><strong>' + name + '</strong></span>' +
+                            '<span><i class="fa ' + icon + ' m-r-5" style="color:' + color + ';"></i><strong>' + name + '</strong></span>' +
                             '<span class="font-weight-bold" style="color:' + color + ';">' + pct.toFixed(1) + '%</span>' +
                         '</div>' +
                         '<div class="progress" style="height:12px; border-radius:8px; background:#e9ecef;">' +
@@ -388,6 +395,7 @@
                     var row = datas[i];
                     var pct = Number(row.persentase || 0);
                     var color = percentColor(pct);
+                    var icon = percentIcon(pct);
                     html += '<tr>' +
                         '<td class="text-center">' + (i + 1) + '</td>' +
                         '<td>' + (row.leader_name || '-') + '</td>' +
@@ -396,8 +404,9 @@
                         '<td class="text-center">' + row.total_anggota + '</td>' +
                         '<td class="text-center"><strong>' + row.user_isi_logbook + '</strong></td>' +
                         '<td class="text-center">' +
-                            '<div style="min-width:140px;">' +
-                                '<div class="d-flex justify-content-between m-b-5">' +
+                            '<div style="min-width:160px;">' +
+                                '<div class="d-flex justify-content-between align-items-center m-b-5">' +
+                                    '<span><i class="fa ' + icon + '" style="color:' + color + '; font-size:20px;"></i></span>' +
                                     '<small class="text-muted">' + row.user_isi_logbook + '/' + row.total_anggota + '</small>' +
                                     '<strong style="color:' + color + ';">' + pct.toFixed(1) + '%</strong>' +
                                 '</div>' +

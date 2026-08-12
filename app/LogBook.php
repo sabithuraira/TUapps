@@ -56,6 +56,7 @@ class LogBook extends Model
             WHERE u.pimpinan_nik IS NOT NULL
                 AND u.pimpinan_nik <> ''
                 AND u.is_active = 1
+                AND u.kdkab = '00'
             GROUP BY leader.nip_baru, leader.name, leader.nmjab, leader.email
             ORDER BY user_isi_logbook DESC, leader.name ASC";
 
@@ -102,6 +103,7 @@ class LogBook extends Model
             WHERE u.pimpinan_nik IS NOT NULL
                 AND u.pimpinan_nik <> ''
                 AND u.is_active = 1
+                AND u.kdkab = '00'
                 AND MONTH(lb.tanggal) = ?
                 AND YEAR(lb.tanggal) = ?
                 AND (lb.is_rencana = 0 OR lb.is_rencana IS NULL)
