@@ -115,52 +115,39 @@ class UserModel extends Model
     }
 
     public function getFotoUrlAttribute(){
-        $nip_id = substr($this->email, -5);
-
-        if($this->is_foto_exist("https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email)){
-            return "https://simpeg.bps.go.id/apis/pegawai/avatar/".$this->email; 
+        $simpegUrl = "https://simpeg.bps.go.id/apis/pegawai/avatar/" . $this->email;
+        if ($this->is_foto_exist($simpegUrl)) {
+            return $simpegUrl;
         }
-        // if(strlen($this->foto)>0){
-        //     if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$this->foto)){
-        //         return "https://community.bps.go.id/images/avatar/".$this->foto; 
-        //     }
-        //     else if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
-        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-        //     }
-        //     else{
-        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
-        //     }
-        // }
-        // else{
-        //     // $nip_id = '10080'; //10080 55914
-        //     if($this->is_foto_exist("https://community.bps.go.id/images/avatar/".$nip_id.".JPG")){
-        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".JPG";
-        //     }
-        //     else{
-        //         return "https://community.bps.go.id/images/avatar/".$nip_id.".jpg";    
-        //     }
-        // }
+
+        // Fallback: community avatar by nip lama (stored in email)
+        $nipLama = $this->email;
+        $communityJpg = "https://community.bps.go.id/images/avatar/" . $nipLama . ".jpg";
+        $communityJPG = "https://community.bps.go.id/images/avatar/" . $nipLama . ".JPG";
+
+        if ($this->is_foto_exist($communityJpg)) {
+            return $communityJpg;
+        }
+        if ($this->is_foto_exist($communityJPG)) {
+            return $communityJPG;
+        }
+
+        return $communityJpg;
     }
 
     function is_foto_exist($url){
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_NOBODY, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+
         $result = curl_exec($ch);
         curl_close($ch);
-        if($result !== FALSE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-        // $headers=get_headers($url);
-        // return stripos($headers[0],"200 OK")?true:false;
+
+        return $result !== false;
     }
 }
