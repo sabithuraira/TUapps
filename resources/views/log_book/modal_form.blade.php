@@ -35,6 +35,22 @@
 
                 <div class="row clearfix">
                     <div class="col-md-6">
+                        Waktu mulai: <span class="text-danger">*</span>
+                        <div class="form-line">
+                            <input type="text" class="form-control time24" id="form_waktu_mulai" placeholder="HH:mm">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        Waktu selesai: <span class="text-danger">*</span>
+                        <div class="form-line">
+                            <input type="text" class="form-control time24" id="form_waktu_selesai" placeholder="HH:mm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-md-6">
                         Volume: <span class="text-danger">*</span>
                         <div class="form-line">
                             <input type="text" v-model="form_volume" class="form-control">
@@ -74,17 +90,10 @@
                 </div>
 
                 <div class="row clearfix">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         Bukti Dukung IKI:
                         <div class="form-line">
                             <textarea type="text" v-model="form_link_bukti_dukung" class="form-control" rows=3></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        Jumlah Jam: <span class="text-danger">*</span>
-                        <div class="form-line">
-                            <input type="number" v-model="form_jumlah_jam" class="form-control">
                         </div>
                     </div>
                 </div>

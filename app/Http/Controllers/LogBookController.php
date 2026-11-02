@@ -320,11 +320,8 @@ class LogBookController extends Controller
         }
 
         $model->tanggal=date("Y-m-d", strtotime($request->get('tanggal')));
-        // $model->waktu_mulai = date("H:i", strtotime($request->get('waktu_mulai')));
-        // $model->waktu_selesai = date("H:i", strtotime($request->get('waktu_selesai')));
-        
-        $model->waktu_mulai = date("H:i");
-        $model->waktu_selesai = date("H:i");
+        $model->waktu_mulai = date("H:i", strtotime($request->get('waktu_mulai')));
+        $model->waktu_selesai = date("H:i", strtotime($request->get('waktu_selesai')));
 
         $model->isi = $request->get('isi');
         $model->hasil = $request->get('hasil');
@@ -336,7 +333,6 @@ class LogBookController extends Controller
         $model->pemberi_tugas_jabatan = $data_user->nmjab;
 
         $model->id_iki = $request->get('id_iki');
-        $model->jumlah_jam = $request->get('jumlah_jam');
         $model->link_bukti_dukung = $request->get('link_bukti_dukung');
 
         $model->updated_by=Auth::id();

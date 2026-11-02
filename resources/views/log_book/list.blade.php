@@ -19,7 +19,6 @@
                             :data-volume="data.volume" :data-satuan="data.satuan" 
                             :data-pemberi_tugas="data.pemberi_tugas_id" 
                             :data-id_iki="data.id_iki" 
-                            :data-jumlah_jam="data.jumlah_jam" 
                             :data-link_bukti_dukung="data.link_bukti_dukung" 
                             :data-id_kegiatan="data.id_kegiatan" 
                             data-target="#add_logbooks"> <i class="icon-pencil"></i></a>
@@ -48,8 +47,8 @@
 
                 <td class="text-center">
                     @{{ data.tanggal }}
-                    <p class="text-muted" v-if="data.jumlah_jam.length>0">Durasi: @{{ data.jumlah_jam }} Jam</p>
-                    <p class="text-muted" v-else>Durasi: - Jam</p>
+                    <p class="text-muted m-b-0">@{{ data.waktu_mulai }} - @{{ data.waktu_selesai }}</p>
+                    <p class="text-muted">Durasi: @{{ durasi(data.waktu_selesai, data.waktu_mulai) }}</p>
                 </td>
                 <td>
                     @{{ data.isi }}
@@ -113,7 +112,7 @@ var vm = new Vue({
         pathname : window.location.pathname,
         form_id: 0, form_tanggal: '', form_waktu_mulai: '', form_waktu_selesai: '',
         form_isi: '', form_hasil: '', form_volume: '',  form_satuan: '',
-        form_pemberi_tugas: '', form_id_iki:'', form_jumlah_jam: '',
+        form_pemberi_tugas: '', form_id_iki:'',
         form_link_bukti_dukung: '',
         form_id_kegiatan: '',
         keyword_kegiatan: '',
@@ -145,13 +144,14 @@ var vm = new Vue({
                 $('#form_tanggal').val(self.form_tanggal);
                 self.form_waktu_mulai = '';
                 self.form_waktu_selesai = '';
+                $('#form_waktu_mulai').val('');
+                $('#form_waktu_selesai').val('');
                 self.form_isi = '';
                 self.form_hasil = '';
                 self.form_volume = '';
                 self.form_satuan = '';
                 // Keep previous Pemberi Tugas so user does not need to re-select
                 self.form_id_iki = '';
-                self.form_jumlah_jam = '';
                 self.form_link_bukti_dukung = '';
                 self.form_id_kegiatan = '';
 
@@ -170,6 +170,8 @@ var vm = new Vue({
                 $('#form_tanggal').val(self.form_tanggal);
                 self.form_waktu_mulai = event.currentTarget.getAttribute('data-waktu_mulai');
                 self.form_waktu_selesai = event.currentTarget.getAttribute('data-waktu_selesai');
+                $('#form_waktu_mulai').val(self.form_waktu_mulai);
+                $('#form_waktu_selesai').val(self.form_waktu_selesai);
                 self.form_isi = event.currentTarget.getAttribute('data-isi');
                 self.form_hasil = event.currentTarget.getAttribute('data-hasil');
                 self.form_volume = event.currentTarget.getAttribute('data-volume');
@@ -177,7 +179,6 @@ var vm = new Vue({
                 self.form_pemberi_tugas = event.currentTarget.getAttribute('data-pemberi_tugas');
 
                 self.form_id_iki = event.currentTarget.getAttribute('data-id_iki');
-                self.form_jumlah_jam = event.currentTarget.getAttribute('data-jumlah_jam');
                 self.form_link_bukti_dukung = event.currentTarget.getAttribute('data-link_bukti_dukung');
                 self.form_id_kegiatan = event.currentTarget.getAttribute('data-id_kegiatan');
             }
@@ -188,13 +189,8 @@ var vm = new Vue({
             if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
                 self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
                 self.form_pemberi_tugas.length==0){
-                alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+                alert("Pastikan isian tanggal, waktu mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
             }
-            // if(self.form_tanggal.length==0 ||  self.form_jumlah_jam.length==0 || 
-            //     self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
-            //     self.form_pemberi_tugas.length==0){
-            //     alert("Pastikan isian tanggal, waktu mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
-            // }
             else{
                 if(isNaN(self.form_volume)){
                     alert("Isian 'Volume' harus angka");    
@@ -218,7 +214,6 @@ var vm = new Vue({
                             satuan: self.form_satuan,
                             pemberi_tugas: self.form_pemberi_tugas,
                             id_iki: self.form_id_iki,
-                            jumlah_jam: self.form_jumlah_jam,
                             link_bukti_dukung: self.form_link_bukti_dukung,
                             id_kegiatan: self.form_id_kegiatan,
                         },
