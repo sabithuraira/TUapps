@@ -185,17 +185,16 @@ var vm = new Vue({
         saveLogBook: function () {
             var self = this;
 
-            // if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
-            //     self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
-            //     self.form_pemberi_tugas.length==0){
-            //     alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
-            // }
-
-            if(self.form_tanggal.length==0 ||  self.form_jumlah_jam.length==0 || 
+            if(self.form_tanggal.length==0 || self.form_waktu_mulai.length==0 || self.form_waktu_selesai.length==0 || 
                 self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
                 self.form_pemberi_tugas.length==0){
-                alert("Pastikan isian tanggal, waktu mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+                alert("Pastikan isian tanggal, waku mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
             }
+            // if(self.form_tanggal.length==0 ||  self.form_jumlah_jam.length==0 || 
+            //     self.form_isi.length==0 || self.form_volume.length==0 || self.form_satuan.length==0 || 
+            //     self.form_pemberi_tugas.length==0){
+            //     alert("Pastikan isian tanggal, waktu mulai - selesai, isi, volume, satuan dan pemberi tugas telah diisi");
+            // }
             else{
                 if(isNaN(self.form_volume)){
                     alert("Isian 'Volume' harus angka");    
