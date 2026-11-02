@@ -50,19 +50,39 @@ class User extends Authenticatable
             return $simpegUrl;
         }
 
-        // Fallback: community avatar by nip lama (stored in email)
+        $base = "https://community.bps.go.id/images/avatar/";
         $nipLama = $this->email;
-        $communityJpg = "https://community.bps.go.id/images/avatar/" . $nipLama . ".jpg";
-        $communityJPG = "https://community.bps.go.id/images/avatar/" . $nipLama . ".JPG";
+        $nipBaru = $this->nip_baru;
+        $candidates = [];
 
-        if ($this->is_foto_exist($communityJpg)) {
-            return $communityJpg;
-        }
-        if ($this->is_foto_exist($communityJPG)) {
-            return $communityJPG;
+        // Stored filename, e.g. 340065304_20261014041047.jpg
+        if (strlen((string) $this->foto) > 0) {
+            $foto = $this->foto;
+            if (!preg_match('/\.(jpe?g|png|gif)$/i', $foto)) {
+                $foto .= '.jpg';
+            }
+            $candidates[] = $base . $foto;
         }
 
-        return $communityJpg;
+        // nip lama + nip baru
+        if (strlen((string) $nipLama) > 0 && strlen((string) $nipBaru) > 0) {
+            $candidates[] = $base . $nipLama . '_' . $nipBaru . '.jpg';
+            $candidates[] = $base . $nipLama . '_' . $nipBaru . '.JPG';
+        }
+
+        // nip lama only
+        if (strlen((string) $nipLama) > 0) {
+            $candidates[] = $base . $nipLama . '.jpg';
+            $candidates[] = $base . $nipLama . '.JPG';
+        }
+
+        foreach ($candidates as $url) {
+            if ($this->is_foto_exist($url)) {
+                return $url;
+            }
+        }
+
+        return !empty($candidates) ? $candidates[0] : $simpegUrl;
     }
 
     public function getPimpinanAttribute()
