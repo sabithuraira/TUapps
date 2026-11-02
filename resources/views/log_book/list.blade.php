@@ -149,11 +149,17 @@ var vm = new Vue({
                 self.form_hasil = '';
                 self.form_volume = '';
                 self.form_satuan = '';
-                self.form_pemberi_tugas = '';
+                // Keep previous Pemberi Tugas so user does not need to re-select
                 self.form_id_iki = '';
                 self.form_jumlah_jam = '';
                 self.form_link_bukti_dukung = '';
                 self.form_id_kegiatan = '';
+
+                setTimeout(function () {
+                    if (self.form_pemberi_tugas) {
+                        $('#pemberi_tugas').val(self.form_pemberi_tugas).trigger('change');
+                    }
+                }, 0);
             }
         },
         updateLogBook: function (event) {
