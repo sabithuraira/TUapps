@@ -158,95 +158,156 @@ class Home2Controller extends Controller
             return redirect()->route('guest');
         }
 
-        // Sync pegawai from SIMPEG
-        $curl_response = $this->ssoRequest('https://backoffice.bps.go.id/simpeg_api/bps16', [
-            'apiKey'   => '4vl8i/WeNeRlRxM4KDk93VqdT0/LZ9g+GBITo+OiHVs=',
-            'kategori' => 'view_pegawai',
-            'nip'      => $c_nip,
-        ], [], false);
+        // SIMPEG + login: keep old API style. If SIMPEG fails, still login from SSO data.
+        $service_url    = 'https://backoffice.bps.go.id/simpeg_api/bps16';
+        $curl           = curl_init($service_url);
+        $curl_post_data = array(
+            "apiKey" => '4vl8i/WeNeRlRxM4KDk93VqdT0/LZ9g+GBITo+OiHVs=',
+            "kategori"=> 'view_pegawai',
+            "nip" => $c_nip,
+        );
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
+        $curl_response = json_decode(curl_exec($curl));
 
-        if (!is_object($curl_response) || isset($curl_response->error) || empty($curl_response->total)) {
-            \Log::error('SSO SIMPEG pegawai gagal / kosong', [
+        $model = null;
+        $data_request = null;
+
+        if (!isset($curl_response->error) && !empty($curl_response->total)) {
+            $model = \App\User::where('email', '=', $c_nip)->first();
+            $c_model = $curl_response->pegawai[0];
+
+            if ($model == null) {
+                $model = new \App\User;
+                $model->email = $c_model->niplama;
+                $model->nip_baru = $c_model->nipbaru;
+                $model->name = $c_model->namagelar;
+                $model->password = Hash::make($c_model->niplama);
+            }
+
+            $model->urutreog = $c_model->urutreog;
+            $model->kdorg = $c_model->kdorg;
+            $model->nmorg = $c_model->nmorg;
+            $model->nmjab = $c_model->nmjab;
+            $model->flagwil = $c_model->flagwil;
+            $model->kdprop = $c_model->kdprop;
+            $model->kdkab = $c_model->kdkab;
+            $model->kdkec = $c_model->kdkec;
+            $model->nmwil = $c_model->nmwil;
+            $model->kdgol = $c_model->kdgol;
+            $model->nmgol = $c_model->nmgol;
+            $model->kdstjab = $c_model->kdstjab;
+            $model->nmstjab = $c_model->nmstjab;
+            $model->kdesl = $c_model->kdesl;
+            $model->foto = $c_model->foto;
+            $model->password = Hash::make($c_model->niplama);
+            $model->save();
+
+            $data_request = array(
+                $this->username() => $model->email,
+                'password'  => $model->email
+            );
+
+            try {
+                $service_url    = 'https://simpeg.bps.go.id/api/bps16';
+                $curl           = curl_init($service_url);
+                $curl_post_data = array(
+                    "apiKey" =>  "L2cvVWtDaE5sczVzTHFPaHBZT0Rzdz09.".$accessToken,
+                    "kategori"=> 'view_jabatan',
+                    "nip" => $c_nip,
+                );
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post_data);
+                $curl_response = json_decode(curl_exec($curl));
+                if (!isset($curl_response->error)) {
+                    if (sizeof($curl_response) == 0) {
+                        // no riwayat data
+                    } else {
+                        foreach ($curl_response as $res) {
+                            $tmt = date("Y-m-d", strtotime($res->tmt));
+                            $tglsk = null;
+                            if ($res->tglsk) {
+                                $tglsk = date("Y-m-d", strtotime($res->tglsk));
+                            }
+                            DB::table('riwayat_sk')->updateOrInsert(
+                                ['niplama' => $res->niplama, 'nosk' => $res->nosk],
+                                [
+                                    'flagstjab' => $res->flagstjab,
+                                    'kdstjab' => $res->kdstjab,
+                                    'urutreog' => $res->urutreog,
+                                    'kdorg' => $res->kdorg,
+                                    'flagwil' => $res->flagwil,
+                                    'kdprop' => $res->kdprop,
+                                    'kdkab' => $res->kdkab,
+                                    'kdkec' => $res->kdkec,
+                                    'tmt' => $tmt,
+                                    'tglsk' => $tglsk,
+                                    'penugasan' => $res->penugasan,
+                                    'kdstkerja' => $res->kdstkerja,
+                                    'nmstjab' => $res->nmstjab,
+                                    'nmorg' => $res->nmorg,
+                                    'nmwil' => $res->nmwil,
+                                    'created_by' => 1,
+                                ]
+                            );
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                \Log::error('Gagal Mendapatkan Riwayat SK: '.$e->getMessage());
+            }
+        } else {
+            // SIMPEG failed/empty -> still login using SSO profile
+            \Log::warning('SSO SIMPEG pegawai gagal / kosong, login pakai data SSO', [
                 'nip' => $c_nip,
                 'response' => $curl_response,
             ]);
-            return redirect()->route('guest');
-        }
 
-        $c_model = $curl_response->pegawai[0];
-        $model = \App\User::where('email', '=', $c_model->niplama)->first();
-        if ($model == null) {
-            $model = new \App\User;
-            $model->email = $c_model->niplama;
-            $model->nip_baru = $c_model->nipbaru;
-            $model->name = $c_model->namagelar;
-            $model->password = Hash::make($c_model->niplama);
-        }
-
-        $model->urutreog = $c_model->urutreog;
-        $model->kdorg = $c_model->kdorg;
-        $model->nmorg = $c_model->nmorg;
-        $model->nmjab = $c_model->nmjab;
-        $model->flagwil = $c_model->flagwil;
-        $model->kdprop = $c_model->kdprop;
-        $model->kdkab = $c_model->kdkab;
-        $model->kdkec = $c_model->kdkec;
-        $model->nmwil = $c_model->nmwil;
-        $model->kdgol = $c_model->kdgol;
-        $model->nmgol = $c_model->nmgol;
-        $model->kdstjab = $c_model->kdstjab;
-        $model->nmstjab = $c_model->nmstjab;
-        $model->kdesl = $c_model->kdesl;
-        $model->foto = $c_model->foto;
-        $model->save();
-
-        // Sync riwayat jabatan (best effort: failure must not block login)
-        try {
-            $riwayat = $this->ssoRequest('https://simpeg.bps.go.id/api/bps16', [
-                'apiKey'   => 'L2cvVWtDaE5sczVzTHFPaHBZT0Rzdz09.' . $accessToken,
-                'kategori' => 'view_jabatan',
-                'nip'      => $c_nip,
-            ], [], false);
-
-            if (is_array($riwayat) || is_object($riwayat)) {
-                foreach ($riwayat as $res) {
-                    $tmt = date('Y-m-d', strtotime($res->tmt));
-                    $tglsk = $res->tglsk ? date('Y-m-d', strtotime($res->tglsk)) : null;
-                    DB::table('riwayat_sk')->updateOrInsert(
-                        ['niplama' => $res->niplama, 'nosk' => $res->nosk],
-                        [
-                            'flagstjab'  => $res->flagstjab,
-                            'kdstjab'    => $res->kdstjab,
-                            'urutreog'   => $res->urutreog,
-                            'kdorg'      => $res->kdorg,
-                            'flagwil'    => $res->flagwil,
-                            'kdprop'     => $res->kdprop,
-                            'kdkab'      => $res->kdkab,
-                            'kdkec'      => $res->kdkec,
-                            'tmt'        => $tmt,
-                            'tglsk'      => $tglsk,
-                            'penugasan'  => $res->penugasan,
-                            'kdstkerja'  => $res->kdstkerja,
-                            'nmstjab'    => $res->nmstjab,
-                            'nmorg'      => $res->nmorg,
-                            'nmwil'      => $res->nmwil,
-                            'created_by' => 1,
-                        ]
-                    );
-                }
+            $model = \App\User::where('email', '=', $c_nip)->first();
+            if ($model == null) {
+                $model = new \App\User;
+                $model->email = $c_nip;
             }
-        } catch (Exception $e) {
-            \Log::error('Gagal sync riwayat SK: ' . $e->getMessage());
+
+            $model->name = !empty($userInfo['name'])
+                ? $userInfo['name']
+                : trim(($userInfo['given_name'] ?? '') . ' ' . ($userInfo['family_name'] ?? ''));
+            if ($model->name === '') {
+                $model->name = $c_nip;
+            }
+            $model->nip_baru = $userInfo['nip'] ?? $model->nip_baru;
+            $model->nmjab = $userInfo['jabatan'] ?? $model->nmjab;
+            $model->nmgol = $userInfo['golongan'] ?? $model->nmgol;
+            $model->kdesl = $userInfo['eselon'] ?? $model->kdesl;
+            $model->nmwil = $userInfo['kabupaten'] ?? ($userInfo['provinsi'] ?? $model->nmwil);
+            $model->foto = $userInfo['foto'] ?? $model->foto;
+            if (!empty($userInfo['organisasi'])) {
+                $org = (string) $userInfo['organisasi'];
+                $model->kdorg = $org;
+                $model->kdprop = substr($org, 0, 2);
+                $model->kdkab = strlen($org) >= 4 ? substr($org, 2, 2) : $model->kdkab;
+            }
+            $model->password = Hash::make($c_nip);
+            $model->save();
+
+            $data_request = array(
+                $this->username() => $model->email,
+                'password'  => $model->email
+            );
         }
 
-        // Identity already verified by SSO — do not rely on password attempt
-        Auth::login($model, true);
-        $request->session()->regenerate();
+        if ($data_request && $this->attemptLogin($data_request)) {
+            return $this->sendLoginResponse($data_request);
+        }
 
-        return $this->sendLoginResponse([
-            $this->username() => $model->email,
-            'password'        => $model->email,
+        \Log::error('SSO attemptLogin gagal', [
+            'email' => $model ? $model->email : null,
+            'nip' => $c_nip,
         ]);
+
+        return redirect()->route('guest');
     }
 
     /**
@@ -465,6 +526,7 @@ class Home2Controller extends Controller
 
     protected function sendLoginResponse($params)
     {
+        request()->session()->regenerate();
         return redirect('hai');
     }
 
