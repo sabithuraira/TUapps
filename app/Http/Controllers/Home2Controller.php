@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class Home2Controller extends Controller
@@ -113,13 +115,17 @@ class Home2Controller extends Controller
         }
 
         // Exchange code -> token
-        $tokenData = $this->ssoRequest($base . '/token', [
-            'grant_type'    => 'authorization_code',
-            'client_id'     => config('sso.client_id'),
-            'client_secret' => config('sso.client_secret'),
-            'code'          => $request->get('code'),
-            'redirect_uri'  => $redirectUri,
-        ]);
+        $tokenData = $this->ssoRequest(
+            $base . '/token',
+            [
+                'grant_type'    => 'authorization_code',
+                'client_id'     => config('sso.client_id'),
+                'client_secret' => config('sso.client_secret'),
+                'code'          => $request->get('code'),
+                'redirect_uri'  => $redirectUri,
+            ],
+            ['Content-Type: application/x-www-form-urlencoded']
+        );
 
         if (empty($tokenData['access_token'])) {
             \Log::error('SSO token error', ['response' => $tokenData]);
@@ -135,16 +141,20 @@ class Home2Controller extends Controller
             return redirect()->route('guest');
         }
 
-        // NIP lama from SSO profile (claim name can differ per realm/client)
+        // BPS SSO: nip-lama = NIP lama (login key), nip = NIP baru
+        // Prefer nip-lama. Do NOT use "nip" first (that is nip baru).
         $c_nip = null;
-        foreach (['nip', 'nip_lama', 'nip-lama', 'niplama', 'nipLama'] as $claim) {
+        foreach (['nip-lama', 'nip_lama', 'niplama', 'nipLama', 'preferred_username', 'username'] as $claim) {
             if (!empty($userInfo[$claim])) {
                 $c_nip = $userInfo[$claim];
                 break;
             }
         }
         if ($c_nip === null) {
-            \Log::error('SSO userinfo tidak berisi NIP', ['claims' => array_keys($userInfo)]);
+            \Log::error('SSO userinfo tidak berisi NIP lama', [
+                'claims' => array_keys($userInfo),
+                'sample' => $userInfo,
+            ]);
             return redirect()->route('guest');
         }
 
@@ -156,17 +166,21 @@ class Home2Controller extends Controller
         ], [], false);
 
         if (!is_object($curl_response) || isset($curl_response->error) || empty($curl_response->total)) {
+            \Log::error('SSO SIMPEG pegawai gagal / kosong', [
+                'nip' => $c_nip,
+                'response' => $curl_response,
+            ]);
             return redirect()->route('guest');
         }
 
         $c_model = $curl_response->pegawai[0];
-        $model = \App\User::where('email', '=', $c_nip)->first();
+        $model = \App\User::where('email', '=', $c_model->niplama)->first();
         if ($model == null) {
             $model = new \App\User;
             $model->email = $c_model->niplama;
             $model->nip_baru = $c_model->nipbaru;
             $model->name = $c_model->namagelar;
-            $model->password = \Illuminate\Support\Facades\Hash::make($c_model->niplama);
+            $model->password = Hash::make($c_model->niplama);
         }
 
         $model->urutreog = $c_model->urutreog;
@@ -194,7 +208,7 @@ class Home2Controller extends Controller
                 'nip'      => $c_nip,
             ], [], false);
 
-            if (is_array($riwayat)) {
+            if (is_array($riwayat) || is_object($riwayat)) {
                 foreach ($riwayat as $res) {
                     $tmt = date('Y-m-d', strtotime($res->tmt));
                     $tglsk = $res->tglsk ? date('Y-m-d', strtotime($res->tglsk)) : null;
@@ -225,15 +239,14 @@ class Home2Controller extends Controller
             \Log::error('Gagal sync riwayat SK: ' . $e->getMessage());
         }
 
-        $data_request = [
+        // Identity already verified by SSO — do not rely on password attempt
+        Auth::login($model, true);
+        $request->session()->regenerate();
+
+        return $this->sendLoginResponse([
             $this->username() => $model->email,
             'password'        => $model->email,
-        ];
-        if ($this->attemptLogin($data_request)) {
-            return $this->sendLoginResponse($data_request);
-        }
-
-        return redirect()->route('guest');
+        ]);
     }
 
     /**
